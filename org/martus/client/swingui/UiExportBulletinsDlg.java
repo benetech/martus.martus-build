@@ -57,7 +57,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 	{
 		mainWindow = mainWindowToUse;
 		bulletins = findBulletins(selectedBulletins);
-
+		
 		setModal(true);
 		setTitle(mainWindow.getApp().getWindowTitle("ExportBulletins"));
 
