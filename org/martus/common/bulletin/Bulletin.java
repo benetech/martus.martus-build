@@ -123,6 +123,12 @@ public class Bulletin implements BulletinConstants
 	
 	public boolean hasUnknownTags()
 	{
+		if(getBulletinHeaderPacket().hasUnknownTags())
+			return true;
+		if(getFieldDataPacket().hasUnknownTags())
+			return true;
+		if(getPrivateFieldDataPacket().hasUnknownTags())
+			return true;
 		return false;
 	}
 

@@ -107,6 +107,26 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("field data account?", security.getPublicKeyString(), b.getFieldDataPacket().getAccountId());
 
 	}
+	
+	public void testUnknownTags()
+	{
+		Bulletin b = new Bulletin(security);
+		assertFalse("already has unknown?", b.hasUnknownTags());
+		
+		b.getBulletinHeaderPacket().setHasUnknownTags(true);
+		assertTrue("header unknown", b.hasUnknownTags());
+		b.getBulletinHeaderPacket().setHasUnknownTags(false);
+		
+		b.getFieldDataPacket().setHasUnknownTags(true);
+		assertTrue("fdp unknown", b.hasUnknownTags());
+		b.getFieldDataPacket().setHasUnknownTags(false);
+		
+		b.getPrivateFieldDataPacket().setHasUnknownTags(true);
+		assertTrue("private fdp unknown", b.hasUnknownTags());
+		b.getPrivateFieldDataPacket().setHasUnknownTags(false);
+
+		assertFalse("not back to normal?", b.hasUnknownTags());
+	}
 
 	public void testAllPrivate()
 	{

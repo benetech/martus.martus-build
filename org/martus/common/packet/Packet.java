@@ -131,6 +131,11 @@ public class Packet
 	{
 		return hasUnknown;
 	}
+	
+	public void setHasUnknownTags(boolean newState)
+	{
+		hasUnknown = newState;
+	}
 
 	public byte[] writeXml(OutputStream out, MartusCrypto signer) throws IOException
 	{
@@ -399,7 +404,7 @@ public class Packet
 		}
 		else
 		{
-			//System.out.println(elementName);
+			//System.out.println("Packet.setFromXml unknown tag: " + elementName);
 			hasUnknown = true;
 		}
 	}
