@@ -42,8 +42,6 @@ import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
-import java.awt.print.PageFormat;
-import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
@@ -56,13 +54,7 @@ import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import javax.print.attribute.Attribute;
 import javax.print.attribute.HashPrintRequestAttributeSet;
-import javax.print.attribute.standard.Media;
-import javax.print.attribute.standard.MediaPrintableArea;
-import javax.print.attribute.standard.MediaSize;
-import javax.print.attribute.standard.MediaSizeName;
-import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -860,83 +852,34 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class PrintPageFormat extends PageFormat
-	{
-
-		private void setFromAttributes(HashPrintRequestAttributeSet attributes)
-		{
-			boolean otherMediaSet = false;
-			boolean paperSizeSet = false;
-			final int FRACTIONS_INCH = 72;
-			Paper paper = new Paper();
-			Attribute all[] = attributes.toArray();
-			for(int i=0; i < all.length; ++i)
-			{
-				if(all[i].getCategory().equals(MediaPrintableArea.class))
-				{
-					MediaPrintableArea area = (MediaPrintableArea)(all[i]);
-					paper.setImageableArea(	area.getX(MediaPrintableArea.INCH) * FRACTIONS_INCH,
-											area.getY(MediaPrintableArea.INCH) * FRACTIONS_INCH,
-											area.getWidth(MediaPrintableArea.INCH) * FRACTIONS_INCH,
-											area.getHeight(MediaPrintableArea.INCH) * FRACTIONS_INCH);
-				}
-				if(all[i].getCategory().equals(Media.class))
-				{
-					try
-					{
-						MediaSizeName mediaSizeName = (MediaSizeName)(all[i]);
-						MediaSize size = MediaSize.getMediaSizeForName(mediaSizeName);
-						paper.setSize(	size.getX(MediaSize.INCH) * FRACTIONS_INCH,
-										size.getY(MediaSize.INCH) * FRACTIONS_INCH);
-						paperSizeSet = true;
-					} catch (RuntimeException e)
-					{
-						otherMediaSet = true;
-						//Not a MediaSizeName
-					}
-				}
-				if(all[i].getCategory().equals(OrientationRequested.class))
-				{
-					OrientationRequested orientation = (OrientationRequested)(all[i]);
-					if(orientation.equals(OrientationRequested.LANDSCAPE))
-						setOrientation(LANDSCAPE);
-					if(orientation.equals(OrientationRequested.PORTRAIT))
-						setOrientation(PORTRAIT);
-					if(orientation.equals(OrientationRequested.REVERSE_LANDSCAPE))
-						setOrientation(REVERSE_LANDSCAPE);
-				}
-			}
-			setPaper(paper);
-			if(otherMediaSet && !paperSizeSet)
-				mustWarnUser = true;
-			else
-				mustWarnUser = false;
-		}
-		private boolean mustWarnUser;
-	}
-
 	void doPrint()
 	{
-		boolean printCancelled = false;
 		Bulletin currentBulletin = table.getSingleSelectedBulletin();
 		if(currentBulletin == null)
 			return;
 
-		int width = preview.getView().getWidth();
+		printBulletin(currentBulletin);
+		requestFocus(true);
+	}
 
+	void printBulletin(Bulletin currentBulletin)
+	{
+		int width = preview.getView().getWidth();
+		
 		BulletinHtmlGenerator generator = new BulletinHtmlGenerator(width, app);
 		String html = generator.getHtmlString(currentBulletin);
 		JComponent view = new JLabel(html);
-
+		
 		JFrame frame = new JFrame();
 		frame.getContentPane().add(view);
 		frame.pack();
-
+		
 		PrintPageFormat format = new PrintPageFormat();
 		JComponentVista vista = new JComponentVista(view, format);
 		PrinterJob job = PrinterJob.getPrinterJob();
 		job.setPageable(vista);
 		HashPrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+		boolean printCancelled = false;
 		while(true)
 		{
 			if (job.printDialog(attributes))
@@ -949,7 +892,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				}
 				vista.scaleToFitX();
 				job.setPageable(vista);
-				requestFocus(true);
 				break;
 			}
 			else
@@ -970,7 +912,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				e.printStackTrace();
 			}
 		}
-		requestFocus(true);
 	}
 
 	void doLocalize()
