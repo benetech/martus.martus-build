@@ -53,7 +53,6 @@ import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
-import org.martus.common.Packet.WrongAccountException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
 public class MartusServer implements NetworkInterfaceConstants
@@ -62,20 +61,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	public static void main(String[] args)
 	{
 		System.out.println("MartusServer");
-
-		File dataDirectory = getDefaultDataDirectory();		
 		
-		Database diskDatabase = null;
-		try
-		{
-			diskDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"));
-		}
-		catch(FileDatabase.MissingAccountMapException e)
-		{
-			e.printStackTrace();
-			System.out.println("Missing Account Map File");
-			System.exit(7);
-		}
+		File dataDirectory = getDefaultDataDirectory();
 		
 		MartusServer server = null;
 		boolean secureMode = false;
@@ -106,7 +93,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		System.out.println("Initializing...this will take a few seconds...");
 		try
 		{
-			server = new MartusServer(diskDatabase, dataDirectory);
+			server = new MartusServer(dataDirectory);
 		} 
 		catch(CryptoInitializationException e) 
 		{
@@ -180,6 +167,26 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.exit(3);
 		}
 		
+		Database diskDatabase = null;
+		try
+		{
+			diskDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"), server.getSecurity());
+		}
+		catch(FileDatabase.MissingAccountMapException e)
+		{
+			e.printStackTrace();
+			System.out.println("Missing Account Map File");
+			System.exit(7);
+		}
+		catch(FileVerificationException e)
+		{
+			e.printStackTrace();
+			System.out.println("Account Map did not verify against signature file");
+			System.exit(8);
+		}
+		
+		server.setDatabase(diskDatabase);
+		
 		File runningFile = new File(dataDirectory, "running");
 		runningFile.delete();
 		if(secureMode)
@@ -225,10 +232,9 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 
 
-	MartusServer(Database databaseToUse, File dataDirectory) throws 
+	MartusServer(File dataDirectory) throws 
 					MartusCrypto.CryptoInitializationException
 	{
-		database = databaseToUse;
 		security = new MartusSecurity();
 		
 		nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
@@ -288,6 +294,16 @@ public class MartusServer implements NetworkInterfaceConstants
 	public Database getDatabase()
 	{
 		return database;
+	}
+	
+	public void setDatabase(Database databaseToUse)
+	{
+		database = databaseToUse;
+	}
+	
+	public MartusCrypto getSecurity()
+	{
+		return security;
 	}
 	
 	NetworkInterfaceForNonSSL getNonSSLServerHandler()

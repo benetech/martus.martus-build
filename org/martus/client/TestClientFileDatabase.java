@@ -22,11 +22,12 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 	public void testFindLegacyRecords() throws Exception
 	{
 		Database mockDatabase = new MockClientDatabase();
+		MartusCrypto security = new MockMartusSecurity();
 		
 		File tempDir = createTempFile();
 		tempDir.delete();
 		tempDir.mkdir();
-		Database clientFileDatabase = new ClientFileDatabase(tempDir);
+		Database clientFileDatabase = new ClientFileDatabase(tempDir, security);
 		
 		internalTestFindLegacyRecords(mockDatabase);
 		internalTestFindLegacyRecords(clientFileDatabase);

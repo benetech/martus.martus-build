@@ -18,7 +18,8 @@ public class MockMartusServer extends MartusServer
 	
 	public MockMartusServer(File dataDir) throws Exception
 	{
-		super(new MockServerDatabase(), dataDir);
+		super(dataDir);
+		setDatabase(new MockServerDatabase());
 		dataDirectoryString = dataDir.getPath();
 	}
 	

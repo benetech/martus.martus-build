@@ -45,10 +45,10 @@ import org.xml.sax.helpers.DefaultHandler;
 */
 public class BulletinStore
 {
-	public BulletinStore(File baseDirectory) throws FileDatabase.MissingAccountMapException
+	public BulletinStore(File baseDirectory) throws FileDatabase.MissingAccountMapException, MartusUtilities.FileVerificationException
 	{
 		File dbDirectory = new File(baseDirectory, "packets");
-		Database db = new ClientFileDatabase(dbDirectory);
+		Database db = new ClientFileDatabase(dbDirectory, signer);
 		initialize(baseDirectory, db);
 	}
 	

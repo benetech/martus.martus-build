@@ -26,7 +26,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		File goodDir2 = createTempFile();
 		goodDir2.delete();
 		goodDir2.mkdir();
-		serverFileDb = new ServerFileDatabase(goodDir2);
+		serverFileDb = new ServerFileDatabase(goodDir2, security);
 	}
 	
 	public void testBasics() throws Exception
@@ -36,7 +36,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		File dir = File.createTempFile("$$$MartusTestServerFileDatabase", null);
 		dir.delete();
 		dir.mkdir();
-		ServerFileDatabase db = new ServerFileDatabase(dir);
+		ServerFileDatabase db = new ServerFileDatabase(dir, security);
 				
 		key.setSealed();
 		File sealedFile = db.getFileForRecord(key);

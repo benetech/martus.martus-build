@@ -32,20 +32,19 @@ public class TestDatabase extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		mockDb = new MockServerDatabase();
+		security = new MockMartusSecurity();
 
 		goodDir1 = createTempFile();
 		goodDir1.delete();
 		goodDir1.mkdir();
-		clientFileDb = new ClientFileDatabase(goodDir1);
+		clientFileDb = new ClientFileDatabase(goodDir1, security);
 		
 		goodDir2 = createTempFile();
 		goodDir2.delete();
 		goodDir2.mkdir();
-		serverFileDb = new ServerFileDatabase(goodDir2);
+		serverFileDb = new ServerFileDatabase(goodDir2, security);
 		
 		largeBytes = largeString.getBytes("UTF-8");
-
-		security = new MockMartusSecurity();
 	}
 
 	public void tearDown()

@@ -92,6 +92,10 @@ public class MartusApp
 		{
 			throw new MartusAppInitializationException("ErrorCryptoInitialization");
 		}
+		catch(MartusUtilities.FileVerificationException e)
+		{
+			throw new MartusAppInitializationException("ErrorAccountMapVerification");
+		}
 
 		File languageFlag = new File(getDataDirectory(),"lang.es");
 		if(languageFlag.exists())

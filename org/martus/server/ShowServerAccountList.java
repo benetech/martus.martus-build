@@ -4,17 +4,20 @@ import java.io.File;
 
 import org.martus.common.Database;
 import org.martus.common.FileDatabase;
+import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MartusCrypto.CryptoInitializationException;
 
 public class ShowServerAccountList 
 {
 	
 
-	public static void main(String[] args) throws FileDatabase.MissingAccountMapException
+	public static void main(String[] args)
+		throws FileDatabase.MissingAccountMapException, MartusUtilities.FileVerificationException, CryptoInitializationException
 	{
 		File dataDirectory = MartusServer.getDefaultDataDirectory();		
 		
-		FileDatabase fileDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"));
+		FileDatabase fileDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"), new MartusSecurity());
 		fileDatabase.visitAllAccounts(new AccountVisitor());
 	}
 

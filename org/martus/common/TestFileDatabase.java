@@ -21,11 +21,11 @@ public class TestFileDatabase extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
+		security = new MockMartusSecurity();
 		dir = File.createTempFile("$$$MartusTestFileDatabaseSetup", null);
 		dir.delete();
 		dir.mkdir();
-		db = new FileDatabase(dir);
-		security = new MockMartusSecurity();
+		db = new FileDatabase(dir, security);
 	}
 	
 	public void tearDown()
@@ -70,7 +70,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db.accountMapFile.delete();
 		try
 		{
-			new FileDatabase(dir);
+			new FileDatabase(dir, security);
 			fail("Should have thrown");
 		}
 		catch(FileDatabase.MissingAccountMapException ignoreExpectedException)
@@ -170,7 +170,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertEquals("count not two?", 2, getRecordCount());
 		db.discardRecord(otherKey);
 
-		db = new FileDatabase(dir);
+		db = new FileDatabase(dir, security);
 		assertEquals("count not back to one?", 1, getRecordCount());
 		
 		assertTrue("missing short?", db.doesRecordExist(shortKey));
@@ -351,6 +351,29 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db.writeRecord(key, "Other record text");
 		assertEquals("account file grew?", lastLength, mapFile.length());
 		assertEquals("account file touched?", lastModified, mapFile.lastModified());
+	}
+	
+	public void testAccountMapSigning()  throws Exception
+	{
+		security = new MockMartusSecurity();
+
+		File tmpDataDir = createTempFile();
+		if( tmpDataDir.exists() ) tmpDataDir.delete();
+		tmpDataDir.mkdir();
+		FileDatabase fileDb = new FileDatabase(tmpDataDir, security);
+		
+		String bogusAccountId = "A false account id";
+		fileDb.getFolderForAccount(bogusAccountId);
+		
+		File acctMapFile = fileDb.accountMapFile;
+		assertTrue("missing acctmap?", acctMapFile.exists());
+		
+		File mapSigFile = fileDb.accountMapSignatureFile;
+		assertTrue("missing acctmap signature?", mapSigFile.exists());
+		
+		MartusUtilities.verifyFileAndSignature(acctMapFile, mapSigFile, security, security.getPublicKeyString());
+		
+		fileDb.deleteAllData();
 	}
 	
 	public void testVisitAllAccounts() throws Exception

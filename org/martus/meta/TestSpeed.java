@@ -22,7 +22,6 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.Stopwatch;
 import org.martus.common.StringInputStream;
@@ -226,7 +225,7 @@ public class TestSpeed extends TestCaseEnhanced
 		File dir = createTempFile();
 		dir.delete();
 		dir.mkdirs();
-		Database db = new ClientFileDatabase(dir);
+		Database db = new ClientFileDatabase(dir, security);
 
 		timeAttachments(db, 1);
 		timeAttachments(db, 100 * 1024);

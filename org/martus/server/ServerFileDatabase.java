@@ -1,17 +1,18 @@
 package org.martus.server;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileDatabase;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities.FileVerificationException;
 
 public class ServerFileDatabase extends FileDatabase 
 {
-	public ServerFileDatabase(File directory)
-		throws MissingAccountMapException 
+	public ServerFileDatabase(File directory, MartusCrypto security)
+		throws MissingAccountMapException, FileVerificationException 
 	{
-		super(directory);
+		super(directory, security);
 	}
 
 	protected String getBucketPrefix(DatabaseKey key) 

@@ -1,7 +1,6 @@
 package org.martus.common;
 
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -10,8 +9,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -20,15 +17,20 @@ import java.util.TreeMap;
 
 import org.martus.common.Database.AccountVisitor;
 import org.martus.common.Database.PacketVisitor;
+import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.MartusUtilities.FileVerificationException;
 
 
 public class FileDatabase implements Database
 {
-	public FileDatabase(File directory) throws MissingAccountMapException
+	public FileDatabase(File directory, MartusCrypto securityToUse) throws MissingAccountMapException, FileVerificationException
 	{
+		security = securityToUse;
+
 		accountMap = new TreeMap();
 		absoluteBaseDir = directory;
-		accountMapFile = new File(absoluteBaseDir, "acctmap.txt");
+		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
+		accountMapSignatureFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME + ".sig");
 		if(absoluteBaseDir.exists() && !accountMapFile.exists())
 		{
 			int fileCount = absoluteBaseDir.list().length;
@@ -46,7 +48,16 @@ public class FileDatabase implements Database
 		deleteAllPackets();
 
 		accountMapFile.delete();
-		loadAccountMap();
+		if(accountMapSignatureFile.exists())
+			accountMapSignatureFile.delete();
+		try
+		{
+			loadAccountMap();
+		}
+		catch (FileVerificationException e)
+		{
+			;
+		}
 	}
 
 	public void writeRecord(DatabaseKey key, String record) throws IOException
@@ -484,11 +495,35 @@ public class FileDatabase implements Database
 			out.flush();
 			out.getFD().sync();
 			writer.close();
+			
+			try
+			{
+				signAccountMap();
+			}
+			catch (MartusSignatureException e)
+			{
+				System.out.println("FileDatabase.appendAccountToMapFile: " + e);
+			}
 		}
 	}
 
-	synchronized void loadAccountMap()
+	synchronized void loadAccountMap() throws FileVerificationException
 	{
+
+		try
+		{
+			verifyAccountMap();
+		}
+		catch(FileNotFoundException e)
+		{
+			;
+		}
+		catch(Exception e)
+		{
+			System.out.println("FileDatabase.verifyAccountMap: " + e);
+			throw new FileVerificationException();
+		}
+
 		accountMap.clear();
 		try
 		{
@@ -714,14 +749,34 @@ public class FileDatabase implements Database
 		}
 		directory.delete();				
 	}
+	
+	private void signAccountMap() throws IOException, MartusCrypto.MartusSignatureException
+	{
+		accountMapSignatureFile = MartusUtilities.createSignatureFileFromFile(accountMapFile, security);
+	}
+	
+	private void verifyAccountMap() throws MartusUtilities.FileVerificationException, IOException, MartusCrypto.MartusSignatureException
+	{
+		if( !accountMapSignatureFile.exists() )
+		{
+			accountMapSignatureFile = MartusUtilities.createSignatureFileFromFile(accountMapFile, security);
+			return;
+		}
+		
+		MartusUtilities.verifyFileAndSignature(accountMapFile, accountMapSignatureFile, security, security.getPublicKeyString());
+	}
 
 	protected static final String defaultBucketPrefix = "p";
 	protected static final String draftQuarantinePrefix = "qd-p";
 	protected static final String sealedQuarantinePrefix = "qs-p";
 	protected static final String INTERIM_FOLDER_NAME = "interim";
 	protected static final String CONTACTINFO_FOLDER_NAME = "contactInfo";
+	protected static final String ACCOUNTMAP_FILENAME = "acctmap.txt";
+	
+	public MartusCrypto security;
 	
 	File absoluteBaseDir;
 	Map accountMap;
 	File accountMapFile;
+	File accountMapSignatureFile;
 }
