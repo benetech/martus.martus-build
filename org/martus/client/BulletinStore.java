@@ -214,7 +214,7 @@ public class BulletinStore
 		removeBulletinFromStore(id);
 	}
 	
-	public void removeBulletinFromStore(UniversalId uid)
+	public synchronized void removeBulletinFromStore(UniversalId uid)
 	{
 		Bulletin foundBulletin = findBulletinByUniversalId(uid);
 		foundBulletin.removeBulletinFromDatabase(database, getSignatureVerifier());
