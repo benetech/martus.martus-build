@@ -34,6 +34,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.HashMap;
 
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -78,9 +79,9 @@ public class AttachmentPacket extends Packet
 		writer.close();
 
 		DatabaseKey headerKey = new DatabaseKey(getUniversalId());
-		BufferedInputStream in = new BufferedInputStream(new FileInputStream(temp));
-		db.writeRecord(headerKey, in);
-		in.close();
+		HashMap importMap = new HashMap();
+		importMap.put(headerKey, temp);
+		db.importFiles(importMap);
 		temp.delete();
 		return sig;
 	}
