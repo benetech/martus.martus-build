@@ -1,9 +1,12 @@
 package org.martus.server.tools;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.martus.common.Base64;
+import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
@@ -49,6 +52,7 @@ public class RetrievePublicKey
 	{
 		String publicKey = (String)publicInfo.get(0);
 		String sig = (String)publicInfo.get(1);
+		verifyPublicInfo(publicKey, sig);
 		File outputFile = new File(outputFileName);
 		try
 		{
@@ -63,6 +67,32 @@ public class RetrievePublicKey
 			System.exit(3);
 		}
 		
+	}
+	
+	void verifyPublicInfo(String publicKeyString, String sig)
+	{
+		try
+		{
+			if(!publicCode.equals(MartusUtilities.computePublicCode(publicKeyString)))
+			{
+				System.out.println("Error Retrieved Public Key doesn't match public code!");
+				System.exit(3);
+			}
+			MartusSecurity security = new MartusSecurity();
+			byte[] publicKeyBytes = Base64.decode(publicKeyString);
+			ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
+			if(!security.isSignatureValid(publicKeyString, in, Base64.decode(sig)))
+			{
+				System.out.println("Error Retrieved Public Key bad signature!");
+				System.exit(3);
+			}
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			System.out.println("Error Retrieved Public Key invalid!");
+			System.exit(3);
+		}
 	}
 	
 	Vector retrievePublicInfo()
