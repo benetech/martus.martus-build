@@ -15,7 +15,7 @@ import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
 
 public class IsPassphraseValid
 {
-	public static void main(String[] args)// throws Exception
+	public static void main(String[] args)
 	{
 			if( !args[0].startsWith("--file") ) error("incorrect argument");
 
