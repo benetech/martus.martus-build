@@ -58,7 +58,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	public TestMartusServer(String name) throws Exception
 	{
 		super(name);
-		
+		VERBOSE = false;
 
 /*
  * This code creates a key pair and prints it, so you can 
@@ -73,6 +73,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void setUp() throws Exception
 	{
+		TRACE_BEGIN("setUp");
+
 		if(clientSecurity == null)
 		{
 			clientSecurity = new MartusSecurity();
@@ -161,17 +163,24 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.initialize();
 		testServerInterface = new ServerSideNetworkHandler(testServer);
 		db = (MockServerDatabase)testServer.getDatabase();
+
+		TRACE_END();
 	}
 	
 	public void tearDown() throws Exception
 	{
-		testServerSecurity = null;
+		TRACE_BEGIN("tearDown");
+
 		assertEquals("isShutdownRequested", false, testServer.isShutdownRequested());
 		testServer.deleteAllFiles();
+
+		TRACE_END();
 	}
 
 	public void testGetNews() throws Exception
 	{
+		TRACE_BEGIN("testGetNews");
+
 		String clientAccountId = clientSecurity.getPublicKeyString();
 		Vector noNews = testServer.getNews(clientAccountId);
 		assertEquals(2, noNews.size());
@@ -189,10 +198,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertContains("Administrator", (String)newsItems.get(0));
 		
 		testServer.clientsBanned.remove(clientAccountId);
+
+		TRACE_END();
 	}
 	
 	public void testLegacyApiMethodNamesNonSSL()
 	{
+		TRACE_BEGIN("testLegacyApiMethodNamesNonSSL");
+
 		Method[] methods = ServerSideNetworkHandlerForNonSSL.class.getMethods();
 		Vector names = new Vector();
 		for(int i=0; i < methods.length; ++i)
@@ -204,10 +217,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertContains(NetworkInterfaceXmlRpcConstants.CMD_UPLOAD, names);
 		assertContains(NetworkInterfaceXmlRpcConstants.CMD_DOWNLOAD, names);
 		assertContains(NetworkInterfaceXmlRpcConstants.CMD_MY_SUMMARIES, names);
+
+		TRACE_END();
 	}
+
 
 	public void testLegacyApiMethodNamesSSL()
 	{
+		TRACE_BEGIN("testLegacyApiMethodNamesSSL");
+
 		Method[] methods = ServerSideNetworkHandler.class.getMethods();
 		Vector names = new Vector();
 		for(int i=0; i < methods.length; ++i)
@@ -223,16 +241,24 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertContains(NetworkInterfaceXmlRpcConstants.CMD_FIELD_OFFICE_SUMMARIES, names);
 		assertContains(NetworkInterfaceXmlRpcConstants.CMD_FIELD_OFFICE_ACCOUNTS, names);
 		assertContains(NetworkInterfaceXmlRpcConstants.CMD_DOWNLOAD_FIELD_DATA_PACKET, names);
+
+		TRACE_END();
 	}
 
 
 	public void testPing() throws Exception
 	{
+		TRACE_BEGIN("testPing");
+
 		assertEquals(NetworkInterfaceConstants.VERSION, testServer.ping());
+
+		TRACE_END();
 	}
 	
 	public void testCreateInterimBulletinFile() throws Exception
 	{
+		TRACE_BEGIN("testCreateInterimBulletinFile");
+
 		testServer.setSecurity(serverSecurity);
 		File nullZipFile = createTempFile("$$$MartusServerBulletinZip");
 		File nullZipSignatureFile = MartusUtilities.getSignatureFileFromFile(nullZipFile);
@@ -258,10 +284,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertTrue("Valid zip with cooresponding signature file did not verify?", testServer.verifyBulletinInterimFile(validZipFile, ZipSignatureFile, serverSecurity.getPublicKeyString()));
 	
+
+		TRACE_END();
 	}
 	
 	public void testPutContactInfo() throws Exception
 	{
+		TRACE_BEGIN("testPutContactInfo");
+
 		Vector contactInfo = new Vector();
 		String clientId = store.getAccountId();
 		String resultIncomplete = testServer.putContactInfo(clientId, contactInfo);
@@ -315,10 +345,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		contactFile.delete();
 		contactFile.getParentFile().delete();
+
+		TRACE_END();
 	}
 	
 	public void testPutContactInfoThroughHandler() throws Exception
 	{
+		TRACE_BEGIN("testPutContactInfoThroughHandler");
+
 		Vector parameters = new Vector();
 		parameters.add(store.getAccountId());
 		parameters.add(new Integer(1));
@@ -336,11 +370,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		contactFile.delete();
 		contactFile.getParentFile().delete();
+
+		TRACE_END();
 	}
 
 
 	public void testGetAccountInformation() throws Exception
 	{
+		TRACE_BEGIN("testGetAccountInformation");
+
 		testServer.setSecurity(serverSecurity);
 
 		String knownAccountId = testServer.getAccountId();
@@ -355,16 +393,22 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertEquals("Got wrong account back?", knownAccountId, accountId);
 		verifyAccountInfo("bad test sig?", accountId, sig);
+
+		TRACE_END();
 	}
 	
 	public void testGetAccountInformationNoAccount() throws Exception
 	{
+		TRACE_BEGIN("testGetAccountInformationNoAccount");
+
 		testServer.security.clearKeyPair();
 
 		Vector errorInfo = testServer.getServerInformation();
 		assertEquals(2, errorInfo.size());
 		assertEquals(NetworkInterfaceConstants.SERVER_ERROR, errorInfo.get(0));
 
+
+		TRACE_END();
 	}
 
 	private void verifyAccountInfo(String label, String accountId, String sig) throws 
@@ -389,15 +433,21 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	
 	public void testUploadBulletinUnauthorizedAccount() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinUnauthorizedAccount");
+
 		testServer.clientsThatCanUpload.clear();
 
 		String wrongAccount = clientSecurity.getPublicKeyString();
 		assertEquals(NetworkInterfaceConstants.REJECTED, testServer.uploadBulletin(wrongAccount, b1.getLocalId(), b1ZipString));
 		assertEquals(NetworkInterfaceConstants.REJECTED, uploadBulletinChunk(testServerInterface, wrongAccount, b1.getLocalId(), 10000, 0, 10000, b1ZipString, clientSecurity));
+
+		TRACE_END();
 	}
 	
 	public void testUploadBulletinNotYourBulletin() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinNotYourBulletin");
+
 		testServer.clientsThatCanUpload.clear();
 		String wrongAccount = serverSecurity.getPublicKeyString();
 		testServer.allowUploads(wrongAccount);
@@ -405,10 +455,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, wrongAccount, b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, serverSecurity));
 		assertEquals(NetworkInterfaceConstants.NOTYOURBULLETIN, uploadBulletinChunk(testServerInterface, wrongAccount, b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, serverSecurity));
+
+		TRACE_END();
 	}
 	
 	public void testUploadBulletin() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletin");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.OK, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString));
@@ -420,10 +474,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("id", b1.getLocalId(), got.getLocalId());
 
 		assertEquals(NetworkInterfaceConstants.DUPLICATE, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString));
+
+		TRACE_END();
 	}
 
 	public void testUploadBulletinOneChunkOnly() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinOneChunkOnly");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
@@ -435,18 +493,26 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("id", b1.getLocalId(), got.getLocalId());
 
 		assertEquals(NetworkInterfaceConstants.DUPLICATE, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
+
+		TRACE_END();
 	}
 	
 	public void testUploadBulletinChunks() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinChunks");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
+
+		TRACE_END();
 	}	
 
 	public void testUploadTwoBulletinsByChunks() throws Exception
 	{
+		TRACE_BEGIN("testUploadTwoBulletinsByChunks");
+
 		String b2ZipString = MockBulletin.saveToZipString(b2);
 
 		byte[] b2ZipBytes = Base64.decode(b2ZipString);
@@ -463,19 +529,27 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b2.getLocalId(), b2ZipBytes.length, 0, b2ChunkBytes0.length, b2ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b2.getLocalId(), b2ZipBytes.length, b2ChunkBytes0.length, b2ChunkBytes1.length, b2ChunkData1, clientSecurity));
+
+		TRACE_END();
 	}
 
 	public void testUploadBulletinChunkAtZeroRestarts() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinChunkAtZeroRestarts");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
+
+		TRACE_END();
 	}
 
 	public void testUploadBulletinChunkTooLarge() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinChunkTooLarge");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), NetworkInterfaceConstants.MAX_CHUNK_SIZE*2, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
@@ -487,20 +561,28 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
 
+
+		TRACE_END();
 	}
 
 	public void testUploadBulletinTotalSizeWrong() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinTotalSizeWrong");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), 90, 0, 100, "", clientSecurity));
 
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length-1, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
+
+		TRACE_END();
 	}
 	
 	public void testUploadBulletinChunkInvalidOffset() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinChunkInvalidOffset");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals("1 chunk invalid offset -1",NetworkInterfaceConstants.INVALID_DATA, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, -1, b1ZipBytes.length, b1ZipString, clientSecurity));
@@ -511,10 +593,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length+1, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
+
+		TRACE_END();
 	}
 	
 	public void testUploadBulletinChunkDataLengthIncorrect() throws Exception
 	{
+		TRACE_BEGIN("testUploadBulletinChunkDataLengthIncorrect");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 
@@ -524,10 +610,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length+1, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
+
+		TRACE_END();
 	}
 	
 	public void testUploadChunkBadRequestSignature() throws Exception
 	{
+		TRACE_BEGIN("testUploadChunkBadRequestSignature");
+
 		testServer.clientsThatCanUpload.clear();
 		String authorId = clientSecurity.getPublicKeyString();
 		testServer.allowUploads(authorId);
@@ -543,6 +633,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		byte[] sigBytes = serverSecurity.createSignature(new ByteArrayInputStream(bytesToSign));
 		String signature = Base64.encode(sigBytes);
 		assertEquals("allowed wrong sig?", NetworkInterfaceConstants.SIG_ERROR, testServer.uploadBulletinChunk(authorId, localId, totalLength, 0, chunkLength, b1ChunkData0, signature));
+
+		TRACE_END();
 	}
 	
 	public void testUploadChunkIOError()
@@ -577,6 +669,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void testUploadDraft() throws Exception
 	{
+		TRACE_BEGIN("testUploadDraft");
+
 		Bulletin draft = store.createEmptyBulletin();
 		draft.set(Bulletin.TAGTITLE, "Title1");
 		draft.set(Bulletin.TAGPUBLICINFO, "Details1");
@@ -593,11 +687,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), draft.getLocalId(), draftZipBytes.length, 0, draftZipBytes.length, draftZipString, clientSecurity));
 		testServer.setDatabase(originalDatabase);
+
+		TRACE_END();
 	}
 
 
 	public void testUploadDuplicates() throws Exception
 	{
+		TRACE_BEGIN("testUploadDuplicates");
+
 		Bulletin b = store.createEmptyBulletin();
 		b.set(Bulletin.TAGTITLE, "Title1");
 		b.set(Bulletin.TAGPUBLICINFO, "Details1");
@@ -694,10 +792,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(NetworkInterfaceConstants.DUPLICATE, uploadBulletinChunk(testServerInterface, 
 			clientSecurity.getPublicKeyString(), b.getLocalId(), sealedZipBytes.length, 0, 
 			sealedZipBytes.length, sealedZipString, clientSecurity));
+
+		TRACE_END();
 	}
 
 	public void testUploadSealedStatus() throws Exception
 	{
+		TRACE_BEGIN("testUploadSealedStatus");
+
 
 		Database originalDatabase = testServer.getDatabase();
 		testServer.setDatabase(new MockSealedDatabase());
@@ -705,10 +807,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
 		testServer.setDatabase(originalDatabase);
+
+		TRACE_END();
 	}
 
 	public void testBadlySignedBulletinUpload() throws Exception
 	{
+		TRACE_BEGIN("testBadlySignedBulletinUpload");
+
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		MockMartusSecurity mockServerSecurity = new MockMartusSecurity();
 		mockServerSecurity.fakeSigVerifyFailure = true;
@@ -724,10 +830,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.security = serverSecurity;
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
+
+		TRACE_END();
 	}
 	
 	public void testInvalidDataUpload() throws Exception
 	{
+		TRACE_BEGIN("testInvalidDataUpload");
+
 		String authorClientId = clientSecurity.getPublicKeyString();
 		testServer.allowUploads(authorClientId);
 		String bulletinLocalId = b1.getLocalId();
@@ -750,18 +860,26 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		zipWithBadEntry.close();
 		String zipWithBadEntryString = Base64.encode(out2.toByteArray());
 		assertEquals("zip bad entry", NetworkInterfaceConstants.INVALID_DATA, testServer.uploadBulletin(authorClientId, "yah", zipWithBadEntryString));
+
+		TRACE_END();
 	}
 
 	public void testDownloadBulletinFail() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinFail");
+
 		Vector result = testServer.downloadBulletin("clientid","bulletinid");
 		assertNotNull("result null", result);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
+
+		TRACE_END();
 	}
 
 	public void testDownloadBulletinOk() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinOk");
+
 		testServer.setSecurity(clientSecurity);
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		Bulletin bulletin = store.createEmptyBulletin();
@@ -781,18 +899,26 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("id", bulletin.getLocalId(), got.getLocalId());
 		assertEquals("public", bulletin.get(Bulletin.TAGPUBLICINFO), got.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private ", bulletin.get(Bulletin.TAGPRIVATEINFO), got.get(Bulletin.TAGPRIVATEINFO));
+
+		TRACE_END();
 	}
 	
 	public void testDownloadBulletinChunkBadId() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinOk");
+
 		Vector result = downloadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), "bulletinid", 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertNotNull("result null", result);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
+
+		TRACE_END();
 	}
 	
 	public void testDownloadBulletinChunkBadRequestSignature() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinChunkBadRequestSignature");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
@@ -811,18 +937,26 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotNull("result2 null", result2);
 		assertEquals(1, result2.size());
 		assertEquals(NetworkInterfaceConstants.SIG_ERROR, result2.get(0));
+
+		TRACE_END();
 	}
 
 	public void testDownloadFieldOfficeBulletinChunkBadId() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkBadId");
+
 		Vector result = downloadFieldOfficeBulletinChunk(testServerInterface, hqSecurity, clientSecurity.getPublicKeyString(), "bulletinid", 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertNotNull("result null", result);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
+
+		TRACE_END();
 	}
 	
 	public void testDownloadFieldOfficeBulletinChunkBadRequestSignature() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkBadId");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
@@ -840,11 +974,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotNull("result2 null", result2);
 		assertEquals(1, result2.size());
 		assertEquals(NetworkInterfaceConstants.SIG_ERROR, result2.get(0));
+
+		TRACE_END();
 	}
 	
 	
 	public void testDownloadFieldOfficeBulletinChunkNotAuthorized() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkNotAuthorized");
+
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
@@ -857,10 +995,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotNull("result2 null", notMineResult);
 		assertEquals(1, notMineResult.size());
 		assertEquals(NetworkInterfaceConstants.NOTYOURBULLETIN, notMineResult.get(0));
+
+		TRACE_END();
 	}
 
 	public void testExtractPacketsToZipStream() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkNotAuthorized");
+
 		uploadSampleBulletin();
 		DatabaseKey[] packetKeys = MartusUtilities.getAllPacketKeys(b1.getBulletinHeaderPacket());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -869,6 +1011,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		String zipString = Base64.encode(out.toByteArray());
 		assertEquals("zips different?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
+
+		TRACE_END();
 	}
 
 	String getZipEntryNamesAndCrcs(String zipString) throws 
@@ -893,6 +1037,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 	public void testDownloadBulletinChunkDraftWholeBulletin() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinChunkDraftWholeBulletin");
+
 		String draftZipString = uploadSampleDraftBulletin(draft);
 		byte[] draftZipBytes = Base64.decode(draftZipString);
 		
@@ -904,10 +1050,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(draftZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
 		MockBulletin.loadFromZipString(loaded, zipString);
+
+		TRACE_END();
 	}
 
 	public void testDownloadBulletinChunkWholeBulletin() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinChunkWholeBulletin");
+
 		uploadSampleBulletin();
 		Vector result = downloadBulletinChunk(testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertEquals("failed?", NetworkInterfaceConstants.OK, result.get(0));
@@ -917,6 +1067,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
 		MockBulletin.loadFromZipString(loaded, zipString);
+
+		TRACE_END();
 	}
 
 	Vector getBulletinChunk(MartusSecurity securityToUse, NetworkInterface server, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
@@ -933,6 +1085,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void testGetNotMyBulletin() throws Exception
 	{
+		TRACE_BEGIN("testGetNotMyBulletin");
+
 		testServer.security = serverSecurity;
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
@@ -943,10 +1097,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector result = getBulletinChunk(newClientSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertEquals("Succeeded?  You are not the owner or the HQ", NetworkInterfaceConstants.NOTYOURBULLETIN, result.get(0));
+
+		TRACE_END();
 	}
 
 	public void testGetHQBulletin() throws Exception
 	{
+		TRACE_BEGIN("testGetHQBulletin");
+
 		testServer.security = serverSecurity;
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
@@ -954,10 +1112,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		Vector result = getBulletinChunk(hqSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertEquals("Failed? You are the HQ", NetworkInterfaceConstants.OK, result.get(0));
+
+		TRACE_END();
 	}
 
 	public void testGetMyBulletin() throws Exception
 	{
+		TRACE_BEGIN("testGetHQBulletin");
+
 		testServer.security = serverSecurity;
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
@@ -965,9 +1127,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		Vector result = getBulletinChunk(clientSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertEquals("Failed? I am the author", NetworkInterfaceConstants.OK, result.get(0));
+
+		TRACE_END();
 	}
+
 	public void testDownloadBulletinChunkWholeBulletinLegacySignature() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinChunkWholeBulletinLegacySignature");
+
 		uploadSampleBulletin();
 		String legacyStringToSign = b1.getAccount() + "," + b1.getLocalId() + "," + "0" + "," +
 					Integer.toString(0) + "," + Integer.toString(NetworkInterfaceConstants.MAX_CHUNK_SIZE);
@@ -977,10 +1144,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("failed?", NetworkInterfaceConstants.OK, result.get(0));
 		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result.get(1));
 		assertEquals("wrong chunk size?", new Integer(b1ZipBytes.length), result.get(2));
+
+		TRACE_END();
 	}
 
 	public void testDownloadBulletinChunk2LegacySignature() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinChunkWholeBulletinLegacySignature");
+
 		uploadSampleBulletin();
 		int chunkSize = b1ZipBytes.length / 5 * 2;
 		String legacyStringToSign = b1.getAccount() + "," + b1.getLocalId() + "," + 
@@ -993,10 +1164,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result.get(0));
 		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result.get(1));
 		assertEquals("wrong chunk size?", new Integer(chunkSize), result.get(2));
+
+		TRACE_END();
 	}
 
 	public void testDownloadBulletinThreeChunks() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinThreeChunks");
+
 		uploadSampleBulletin();
 		int chunkSize = b1ZipBytes.length / 5 * 2;
 		Vector result1 = downloadBulletinChunk(testServerInterface, b1.getAccount(), b1.getLocalId(), 0, chunkSize);
@@ -1023,10 +1198,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
 		MockBulletin.loadFromZipString(loaded, zipString);
+
+		TRACE_END();
 	}
 	
 	public void testDownloadFieldOfficeBulletinThreeChunks() throws Exception
 	{
+		TRACE_BEGIN("testDownloadBulletinThreeChunks");
+
 		uploadSampleBulletin();
 
 		int chunkSize = b1ZipBytes.length / 5 * 2;
@@ -1054,12 +1233,16 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
 		MockBulletin.loadFromZipString(loaded, zipString);
+
+		TRACE_END();
 	}
 	
 	// TODO: This is only needed to support the Guatemala HQ's. It should be removed
 	// after all those have been updated to newer software!
 	public void testLegacyDownloadFieldOfficeBulletinAsMyBulletin() throws Exception
 	{
+		TRACE_BEGIN("testLegacyDownloadFieldOfficeBulletinAsMyBulletin");
+
 		uploadSampleBulletin();
 
 		int chunkSize = b1ZipBytes.length / 5 * 2;
@@ -1087,10 +1270,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
 		MockBulletin.loadFromZipString(loaded, zipString);
+
+		TRACE_END();
 	}
 	
 	public void testListFieldOfficeSealedBulletinIds() throws Exception
 	{
+		TRACE_BEGIN("testListFieldOfficeSealedBulletinIds");
+
 		testServer.security = serverSecurity;
 
 		MartusSecurity fieldSecurity1 = clientSecurity;
@@ -1134,10 +1321,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String privateBulletinSummary = privateBulletin.getLocalId() + "=" + privateBulletin.getFieldDataPacket().getLocalId();
 		assertContains("missing b1?",b1Summary , list2);
 		assertContains("missing privateBulletin?",privateBulletinSummary, list2);
+
+		TRACE_END();
 	}
 
 	public void testListFieldOfficeDraftBulletinIds() throws Exception
 	{
+		TRACE_BEGIN("testListFieldOfficeDraftBulletinIds");
+
 		testServer.security = serverSecurity;
 
 		MartusSecurity fieldSecurity1 = clientSecurity;
@@ -1175,11 +1366,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
 		String b1Summary = bulletinDraft.getLocalId() + "=" + bulletinDraft.getFieldDataPacket().getLocalId();
 		assertContains("missing bulletin Draft?",b1Summary , (Vector)list2.get(1));
+
+		TRACE_END();
 	}
 
 
 	public void testListFieldOfficeAccountsErrorCondition() throws Exception
 	{
+		TRACE_BEGIN("testListFieldOfficeAccountsErrorCondition");
+
 		class MyMock extends MartusSecurity
 		{
 			public MyMock() throws Exception
@@ -1225,10 +1420,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("wrong length", 2, list2.size());
 		assertNotNull("null id1 [0]", list2.get(0));
 		assertEquals(NetworkInterfaceConstants.SERVER_ERROR, list2.get(0));
+
+		TRACE_END();
 	}
 
 	public void testListFieldOfficeAccounts() throws Exception
 	{
+		TRACE_BEGIN("testListFieldOfficeAccounts");
+
 		testServer.security = serverSecurity;
 
 		MartusSecurity nonFieldSecurity = new MockMartusSecurity();
@@ -1266,9 +1465,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
 		assertEquals("Wrong Key?", fieldSecurity1.getPublicKeyString(), list2.get(1));
 		
+
+		TRACE_END();
 	}
+
 	public void testListMyBulletinSummaries() throws Exception
 	{
+		TRACE_BEGIN("testListMyBulletinSummaries");
+
 		testServer.security = serverSecurity;
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 
@@ -1335,10 +1539,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("id2", privateBulletin.getLocalId(), id2);
 		assertEquals("summary2", privateBulletin.getFieldDataPacket().getLocalId(), summary2);
 		assertEquals("Wrong size of Bulletin 2", b2RealSize , bulletinSize2);
+
+		TRACE_END();
 	}
 	
 	public void testDownloadFieldDataPacketWrongSig() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldDataPacketWrongSig");
+
 		uploadSampleBulletin();
 		String authorId = b1.getAccount();
 		String headerPacketLocalId = b1.getLocalId();
@@ -1353,10 +1561,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String signature2 = MartusUtilities.createSignature(stringToSign+"x", hqSecurity);
 		Vector result2 = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, hqAccountId, signature2);
 		assertEquals("Allowed download signed wrong data?", NetworkInterfaceConstants.SIG_ERROR, result2.get(0));
+
+		TRACE_END();
 	}
 
 	public void testDownloadFieldDataPacketNotFieldDataPacket() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldDataPacketNotFieldDataPacket");
+
 		uploadSampleBulletin();
 		String authorId = b1.getAccount();
 		String headerPacketLocalId = b1.getLocalId();
@@ -1366,10 +1578,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String signature = MartusUtilities.createSignature(stringToSign, hqSecurity);
 		Vector result = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, headerPacketLocalId, hqAccountId, signature);
 		assertEquals("Allowed download non-field packet?", NetworkInterfaceConstants.INVALID_DATA, result.get(0));
+
+		TRACE_END();
 	}
 
 	public void testDownloadFieldDataPacketNotFound() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldDataPacketNotFieldDataPacket");
+
 		uploadSampleBulletin();
 		String authorId = b1.getAccount();
 		String headerPacketLocalId = b1.getLocalId();
@@ -1387,10 +1603,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String wrongDataSignature = MartusUtilities.createSignature(wrongDataStringToSign, hqSecurity);
 		Vector result2 = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, wrongDataLocalId, hqAccountId, wrongDataSignature);
 		assertEquals("Allowed download when data not found?", NetworkInterfaceConstants.NOT_FOUND, result2.get(0));
+
+		TRACE_END();
 	}
 
 	public void testDownloadFieldDataPacketNotAuthorized() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldDataPacketNotAuthorized");
+
 		uploadSampleBulletin();
 		String authorId = b1.getAccount();
 		String headerPacketLocalId = b1.getLocalId();
@@ -1401,10 +1621,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String signature = MartusUtilities.createSignature(stringToSign, serverSecurity);
 		Vector result = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, myAccountId, signature);
 		assertEquals("Allowed non-author, non-hq to download packet?", NetworkInterfaceConstants.NOTYOURBULLETIN, result.get(0));
+
+		TRACE_END();
 	}
 
 	public void testDownloadFieldDataPacketByAuthor() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldDataPacketByAuthor");
+
 		uploadSampleBulletin();
 		String authorId = b1.getAccount();
 		String headerPacketLocalId = b1.getLocalId();
@@ -1423,10 +1647,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(Bulletin.TAGPUBLICINFO), gotPacket.get(Bulletin.TAGPUBLICINFO));
 
+
+		TRACE_END();
 	}
 
 	public void testDownloadFieldDataPacketByHq() throws Exception
 	{
+		TRACE_BEGIN("testDownloadFieldDataPacketByAuthor");
+
 		uploadSampleBulletin();
 		String authorId = b1.getAccount();
 		String headerPacketLocalId = b1.getLocalId();
@@ -1444,10 +1672,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(Bulletin.TAGPUBLICINFO), gotPacket.get(Bulletin.TAGPUBLICINFO));
+
+		TRACE_END();
 	}
 
 	public void testDownloadAuthorizedPacket() throws Exception
 	{
+		TRACE_BEGIN("testDownloadAuthorizedPacket");
+
 		uploadSampleBulletin();
 
 		String clientId = clientSecurity.getPublicKeyString();
@@ -1498,11 +1730,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		String fdpXml = new String(packetBytes);
 		assertEquals("wrong data?", foundResult.get(1), fdpXml);
+
+		TRACE_END();
 	}
 
 
 	public void testDownloadPacket() throws Exception
 	{
+		TRACE_BEGIN("testDownloadPacket");
+
 		uploadSampleBulletin();
 
 		String clientId = clientSecurity.getPublicKeyString();
@@ -1536,27 +1772,39 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		String fdpXml = new String(packetBytes);
 		assertEquals("wrong data?", foundResult.get(1), fdpXml);
+
+		TRACE_END();
 	}
 
 	public void testDownloadPacketAttachment()
 	{
+		TRACE_BEGIN("testDownloadPacketAttachment");
+
 		uploadSampleBulletin();
 		
 		String attachmentLocalId = b1.getBulletinHeaderPacket().getPublicAttachmentIds()[0];
 		
 		Vector result = testServer.legacyDownloadPacket(b1.getAccount(), attachmentLocalId);
 		assertEquals("didn't return invalid data?", NetworkInterfaceConstants.INVALID_DATA, result.get(0));
+
+		TRACE_END();
 	}
 
 	public void testDeleteDraftBulletinsEmptyList() throws Exception
 	{
+		TRACE_BEGIN("testDeleteDraftBulletinsEmptyList");
+
 		String[] allIds = {};
 		String resultAllOk = testServer.deleteDraftBulletins(store.getAccountId(), allIds);
 		assertEquals("Empty not ok?", OK, resultAllOk);
+
+		TRACE_END();
 	}
 	
 	public void testDeleteDraftBulletinsThroughHandler() throws Exception
 	{
+		TRACE_BEGIN("testDeleteDraftBulletinsThroughHandler");
+
 		String[] allIds = uploadSampleDrafts();
 		Vector parameters = new Vector();
 		parameters.add(new Integer(allIds.length));
@@ -1567,10 +1815,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Vector result = testServerInterface.deleteDraftBulletins(store.getAccountId(), parameters, sig);
 		assertEquals("Result size?", 1, result.size());
 		assertEquals("Result not ok?", OK, result.get(0));
+
+		TRACE_END();
 	}
 		
 	public void testDeleteDraftBulletins() throws Exception
 	{
+		TRACE_BEGIN("testDeleteDraftBulletinsThroughHandler");
+
 		String[] allIds = uploadSampleDrafts();
 		String resultAllOk = testServer.deleteDraftBulletins(store.getAccountId(), allIds);
 		assertEquals("Good 3 not ok?", OK, resultAllOk);
@@ -1589,6 +1841,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.deleteDraftBulletins(store.getAccountId(), justSealed);
 		assertEquals("Sealed not ok?", OK, resultAllOk);
 		assertEquals("Deleted sealed?", newRecordCount, db.getRecordCount());
+
+		TRACE_END();
 	}
 
 	String[] uploadSampleDrafts() throws Exception
@@ -1609,15 +1863,25 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void testKeyBelongsToClient()
 	{
+		TRACE_BEGIN("testKeyBelongsToClient");
+
 		UniversalId uid = UniversalId.createFromAccountAndLocalId("a", "b");
 		DatabaseKey key = DatabaseKey.createSealedKey(uid);
 		assertEquals("doesn't belong ", false, MartusServer.keyBelongsToClient(key, "b"));
 		assertEquals("belongs ", true, MartusServer.keyBelongsToClient(key, "a"));
+
+		TRACE_END();
 	}
 
 	public void testAllowUploads() throws Exception
 	{
+		TRACE_BEGIN("testAllowUploads");
+
+		File uploadsFile = testServer.allowUploadFile;
+
 		testServer.clientsThatCanUpload.clear();
+		uploadsFile.delete();
+		assertFalse("Couldn't delete uploadsok?", uploadsFile.exists());
 
 		String clientId = "some client";
 		String clientId2 = "another client";
@@ -1634,10 +1898,19 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.allowUploads(clientId2);
 		assertEquals("clientId2", true, testServer.canClientUpload(clientId2));
 		assertEquals("clientId still", true, testServer.canClientUpload(clientId));
+
+		uploadsFile.delete();
+		assertFalse("Couldn't delete uploadsok?", uploadsFile.exists());
+
+		testServer.deleteAllFiles();
+
+		TRACE_END();
 	}
 
 	public void testLoadUploadList() throws Exception
 	{
+		TRACE_BEGIN("testLoadUploadList");
+
 		testServer.clientsThatCanUpload.clear();
 
 		String clientId = "some client";
@@ -1650,10 +1923,18 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("clientId still out", false, testServer.canClientUpload(clientId));
 		assertEquals("clientId2 now in", true, testServer.canClientUpload(clientId2));
 		assertEquals("empty still out", false, testServer.canClientUpload(""));
+
+		File uploadsFile = testServer.allowUploadFile;
+		uploadsFile.delete();
+		assertFalse("Couldn't delete uploadsok?", uploadsFile.exists());
+
+		TRACE_END();
 	}
 	
 	public void testAllowUploadsWritingToDisk() throws Exception
 	{
+		TRACE_BEGIN("testAllowUploadsWritingToDisk");
+
 		testServer.clientsThatCanUpload.clear();
 		
 		File file = File.createTempFile("$$$MartusTestServer", null);
@@ -1693,10 +1974,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("reading changed the file?", lastUpdate, file.lastModified());
 		
 		file.delete();
+
+		TRACE_END();
 	}
 	
 	public void testAllowUploadsPersistToNextSession() throws Exception
 	{
+		TRACE_BEGIN("testAllowUploadsPersistToNextSession");
+
 		testServer.clientsThatCanUpload.clear();
 		
 		String sampleId = "2345235";
@@ -1707,10 +1992,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		other.initialize();
 		assertEquals("didn't get saved/loaded?", true, other.canClientUpload(sampleId));
 		other.deleteAllFiles();
+
+		TRACE_END();
 	}
 	
 	public void testRequestUploadRights() throws Exception
 	{
+		TRACE_BEGIN("testRequestUploadRights");
+
 		String sampleId = "384759896";
 		String sampleMagicWord = "bliflfji";
 
@@ -1725,10 +2014,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		String worked = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+
+		TRACE_END();
 	}
 	
 	public void testTooManyUploadRequests() throws Exception
 	{
+		TRACE_BEGIN("testTooManyUploadRequests");
+
 		String sampleId = "384759896";
 		String sampleMagicWord = "bliflfji";
 
@@ -1765,10 +2058,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord+ "x");
 		assertEquals("upload request 7?", NetworkInterfaceConstants.REJECTED, result);
 		assertEquals("counter 6?", 2, testServer.getNumFailedUploadRequest());
+
+		TRACE_END();
 	}
 	
 	public void testLoadingMagicWords() throws Exception
 	{		
+		TRACE_BEGIN("testLoadingMagicWords");
+
 		String sampleMagicWord1 = "kef7873n2";
 		String sampleMagicWord2 = "fjk5dlkg8";
 		String nonExistentMagicWord = "ThisIsNotAMagicWord";
@@ -1793,10 +2090,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("didn't work?", NetworkInterfaceConstants.REJECTED, worked);
 		
 		other.deleteAllFiles();
+
+		TRACE_END();
 	}
 
 	public void testGetAllPacketKeysSealed() throws Exception
 	{
+		TRACE_BEGIN("testGetAllPacketKeysSealed");
+
 		BulletinHeaderPacket bhp = b1.getBulletinHeaderPacket();
 		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
 		
@@ -1828,10 +2129,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertTrue("private id?", foundPrivateData);
 		assertTrue("attachment public id?", foundPublicAttachment);
 		assertTrue("attachment private id?", foundPrivateAttachment);
+
+		TRACE_END();
 	}
 	
 	public void testGetAllPacketKeysDraft() throws Exception
 	{
+		TRACE_BEGIN("testGetAllPacketKeysDraft");
+
 		BulletinHeaderPacket bhp = draft.getBulletinHeaderPacket();
 		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
 		
@@ -1855,10 +2160,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertTrue("header id?", foundHeader);
 		assertTrue("data id?", foundPublicData);
 		assertTrue("private id?", foundPrivateData);
+
+		TRACE_END();
 	}
 
 	public void testAuthenticateServer() throws Exception
 	{
+		TRACE_BEGIN("testAuthenticateServer");
+
 		String notBase64 = "this is not base 64 ";
 		String result = testServer.authenticateServer(notBase64);
 		assertEquals("error not correct?", NetworkInterfaceConstants.INVALID_DATA, result);
@@ -1875,11 +2184,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertTrue("Invalid signature?", clientSecurity.isSignatureValid(server.security.getPublicKeyString(), in, signature));
 		
 		server.deleteAllFiles();
+
+		TRACE_END();
 	}
 	
 	public void testBannedClients()
 		throws Exception
 	{
+		TRACE_BEGIN("testBannedClients");
+
 		String clientId = clientSecurity.getPublicKeyString();
 		String hqId = hqSecurity.getPublicKeyString();
 		File tempBanned = createTempFile();
@@ -1972,10 +2285,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		vecResult = testServer.downloadFieldOfficeBulletinChunk(bogusStringParameter, bogusStringParameter, clientId, 0, 0, bogusStringParameter);
 		verifyErrorResult("downloadFieldOfficeBulletinChunk2", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("downloadFieldOfficeBulletinChunk2", 0, testServer.getNumberActiveClients() );	
+
+		TRACE_END();
 	}
 	
 	public void testServerShutdown() throws Exception
 	{
+		TRACE_BEGIN("testServerShutdown");
+
 		String clientId = clientSecurity.getPublicKeyString();
 		String hqId = hqSecurity.getPublicKeyString();	
 		String bogusStringParameter = "this is never used in this call. right?";
@@ -2063,10 +2380,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 				
 		testServer.decrementActiveClientsCounter();
 		assertEquals("testServerShutdown: clientCount", 0, testServer.getNumberActiveClients() );	
+
+		TRACE_END();
 	}
 	
 	public void testClientCounter()
 	{
+		TRACE_BEGIN("testClientCounter");
+
 		assertEquals("getNumberActiveClients 1", 0, testServer.getNumberActiveClients());
 		
 		testServer.incrementActiveClientsCounter();
@@ -2076,10 +2397,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.decrementActiveClientsCounter();
 		testServer.decrementActiveClientsCounter();
 		assertEquals("getNumberActiveClients 3", 0, testServer.getNumberActiveClients());
+
+		TRACE_END();
 	}
 	
 	public void testServerConnectionDuringShutdown() throws Exception
 	{
+		TRACE_BEGIN("testServerConnectionDuringShutdown");
+
 		Vector reply;
 		
 		testServer.incrementActiveClientsCounter();
@@ -2091,6 +2416,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		exitFile.delete();
 		testServer.decrementActiveClientsCounter();
+
+		TRACE_END();
 	}
 	
 	void verifyErrorResult(String label, Vector vector, String expected )
@@ -2098,6 +2425,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals( label + " error size not 1?", 1, vector.size());
 		assertEquals( label + " error wrong result code", expected, vector.get(0));
 	}
+
 	void uploadSampleBulletin() 
 	{
 		testServer.security = serverSecurity;
