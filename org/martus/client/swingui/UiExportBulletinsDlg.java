@@ -42,6 +42,7 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.JScrollPane;
 
 import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinXmlExporter;
@@ -75,12 +76,16 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		
 		String[] titles = extractTitles(bulletins);
 		JList bulletinList = new JList(titles);
+		JScrollPane tocMsgAreaScrollPane = new JScrollPane(bulletinList, 
+				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+		tocMsgAreaScrollPane.setPreferredSize(new Dimension(580, 100));
 		
 		Box upperStuff = Box.createVerticalBox();
 		upperStuff.add(new JLabel(" "));
 		upperStuff.add(new JLabel(getApp().getFieldLabel("ExportDetails")));
 		upperStuff.add(new JLabel(" "));
-		upperStuff.add(bulletinList);
+		upperStuff.add(tocMsgAreaScrollPane);
 		upperStuff.add(new JLabel(" "));
 		upperStuff.add(includePrivate);
 		upperStuff.add(new JLabel(" "));
