@@ -79,6 +79,11 @@ public class UiDateEditor extends UiField
 		return component;
 	}
 
+	public JComponent[] getFocusableComponents()
+	{
+		return new JComponent[]{dayCombo, monthCombo, yearCombo};
+	}
+
 	public String getText()
 	{
 		Calendar cal = new GregorianCalendar();

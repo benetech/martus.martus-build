@@ -45,6 +45,11 @@ public class UiBoolEditor extends UiField implements ChangeListener
 		return widget;
 	}
 
+	public JComponent[] getFocusableComponents()
+	{
+		return new JComponent[]{widget};
+	}
+
 	public String getText()
 	{
 		if(widget.isSelected())

@@ -44,6 +44,11 @@ public class UiChoiceEditor extends UiField
 		return widget;
 	}
 
+	public JComponent[] getFocusableComponents()
+	{
+		return new JComponent[]{widget};
+	}
+
 	public String getText()
 	{
 		ChoiceItem item = (ChoiceItem)widget.getSelectedItem();

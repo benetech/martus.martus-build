@@ -28,6 +28,8 @@ package org.martus.client.swingui.fields;
 
 import java.awt.Font;
 
+import javax.swing.JComponent;
+
 import org.martus.client.swingui.UiConstants;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.swing.UiTextArea;
@@ -43,5 +45,10 @@ public class UiNormalTextEditor extends UiNormalTextField
 		widget.setFont(new Font("SansSerif", Font.PLAIN, UiConstants.defaultFontSize));
 		supportContextMenu();
 	}
+	public JComponent[] getFocusableComponents()
+	{
+		return new JComponent[]{widget};
+	}
 }
+
 

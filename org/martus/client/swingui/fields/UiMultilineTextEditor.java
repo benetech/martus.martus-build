@@ -56,6 +56,11 @@ public class UiMultilineTextEditor extends UiTextField
 		return widget;
 	}
 
+	public JComponent[] getFocusableComponents()
+	{
+		return new JComponent[]{editor};
+	}
+
 	public JTextComponent getEditor()
 	{
 		return editor;

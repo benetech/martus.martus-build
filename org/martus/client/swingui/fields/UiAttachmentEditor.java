@@ -34,6 +34,7 @@ import java.util.Vector;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -81,6 +82,11 @@ public class UiAttachmentEditor extends JPanel
 		int rowHeight = table.getRowHeight() + table.getRowMargin() ;
 		d.height = VISIBLE_ROW_COUNT * rowHeight;
 		table.setPreferredScrollableViewportSize(d);
+	}
+
+	public JComponent[] getFocusableComponents()
+	{
+		return new JComponent[]{table};
 	}
 
 	public AttachmentProxy[] getAttachments()

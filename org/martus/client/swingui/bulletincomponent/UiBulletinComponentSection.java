@@ -83,7 +83,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
 		{
 			fields[fieldNum] = createField(tags[fieldNum]);
-
+			fields[fieldNum].initalize();
 			target.add(createLabel(tags[fieldNum]), ParagraphLayout.NEW_PARAGRAPH);
 			target.add(fields[fieldNum].getComponent());
 		}
