@@ -21,6 +21,7 @@
         <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
     </path>
 
     <fileset id="server.nosrc.files" dir="${martus.server.class.root}">

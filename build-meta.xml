@@ -139,6 +139,7 @@
                 <fileset refid="thirdparty.common.files"/>
                 <fileset refid="thirdparty.server.files"/>
                 <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
             </classpath>
             <formatter type="brief" usefile="no" />
             <test name="org.martus.meta.TestAll"/>
