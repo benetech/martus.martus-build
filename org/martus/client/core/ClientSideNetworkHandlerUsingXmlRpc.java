@@ -181,6 +181,10 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 			{
 				final String serverUrl = "https://" + serverName + ":" + port + "/RPC2";
 				//System.out.println("ServerInterfaceXmlRpcHandler:callServer serverUrl=" + serverUrl);
+
+				// NOTE: We **MUST** create a new XmlRpcClient for each call, because
+				// there is a memory leak in apache xmlrpc 1.1 that will cause out of 
+				// memory exceptions if we reuse an XmlRpcClient object
 				XmlRpcClient client = new XmlRpcClient(serverUrl);
 				return client.execute("MartusServer." + method, params);
 			}

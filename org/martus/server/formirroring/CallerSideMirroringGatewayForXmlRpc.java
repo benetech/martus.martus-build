@@ -24,8 +24,7 @@ public class CallerSideMirroringGatewayForXmlRpc implements MirroringInterface
 			tm = new SimpleX509TrustManager();
 			HttpsURLConnection.setDefaultSSLSocketFactory(MartusUtilities.createSocketFactory(tm));
 			HttpsURLConnection.setDefaultHostnameVerifier(new SimpleHostnameVerifier());
-			final String serverUrl = "https://" + serverName + ":" + port + "/RPC2";
-			xmlRpc = new XmlRpcClient(serverUrl);
+			serverUrl = "https://" + serverName + ":" + port + "/RPC2";
 		}
 		catch (Exception e)
 		{
@@ -69,10 +68,14 @@ public class CallerSideMirroringGatewayForXmlRpc implements MirroringInterface
 	Object callServer(String method, Vector params) throws 
 		XmlRpcException, IOException
 	{
+		// NOTE: We **MUST** create a new XmlRpcClient for each call, because
+		// there is a memory leak in apache xmlrpc 1.1 that will cause out of 
+		// memory exceptions if we reuse an XmlRpcClient object
+		XmlRpcClient xmlRpc = new XmlRpcClient(serverUrl);
 		return xmlRpc.execute(MirroringInterface.DEST_OBJECT_NAME + "." + method, params);
 	}
 
-	XmlRpcClient xmlRpc;
+	String serverUrl;
 	SimpleX509TrustManager tm;
 	String server;
 	int port;

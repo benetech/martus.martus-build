@@ -91,6 +91,10 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 	{
 		final String serverUrl = "http://" + serverName + ":" + port + "/RPC2";
 		logging("MartusServerProxyViaXmlRpc:callServer serverUrl=" + serverUrl);
+
+		// NOTE: We **MUST** create a new XmlRpcClient for each call, because
+		// there is a memory leak in apache xmlrpc 1.1 that will cause out of 
+		// memory exceptions if we reuse an XmlRpcClient object
 		XmlRpcClient client = new XmlRpcClientLite(serverUrl);
 		return client.execute("MartusServer." + method, params);
 	}
