@@ -31,7 +31,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		app = owner.getApp();
 		setTitle(app.getWindowTitle("about"));
 		getContentPane().setLayout(new BorderLayout());
-		JLabel icon = new JLabel(new ImageIcon(UiAboutDlg.class.getResource("MartusLogo.jpg")),JLabel.LEFT);
+		JLabel icon = new JLabel(new ImageIcon(UiAboutDlg.class.getResource("MartusLogo.gif")),JLabel.LEFT);
 		getContentPane().add(icon, BorderLayout.NORTH);
 
 		getContentPane().add(new JLabel("   "), BorderLayout.WEST);
