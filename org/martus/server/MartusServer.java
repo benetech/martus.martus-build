@@ -820,35 +820,15 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
-		Vector result = new Vector();
-		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
-		DatabaseKey headerKey = new DatabaseKey(uid);
-		headerKey.setSealed();
-		if(!getDatabase().doesRecordExist(headerKey))
-			headerKey.setDraft();
-
-		if(!getDatabase().doesRecordExist(headerKey))
-		{
-			logging("  NOT_FOUND");
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-			return result;
-		}
-		
-		try
-		{
-			result = buildBulletinChunkResponse(headerKey, chunkOffset, maxChunkSize);
-		}
-		catch(Exception e)
-		{
-			logging("  SERVER_ERROR " + e);
-			//System.out.println("MartusServer.download: " + e);
-			result.add(NetworkInterfaceConstants.SERVER_ERROR);
-		}
+		Vector result = getBulletinChunkWithoutVerifyingCaller(
+					authorAccountId, bulletinLocalId,
+					chunkOffset, maxChunkSize);
 		
 		if(serverMaxLogging)
 			logging("  exit: " + result.get(0));
 		return result;
 	}
+
 
 	public Vector legacyListMySealedBulletinIds(String clientId)
 	{
@@ -1527,6 +1507,36 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 	}
 	
+	Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
+				int chunkOffset, int maxChunkSize)
+	{
+		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
+		DatabaseKey headerKey = new DatabaseKey(uid);
+		headerKey.setSealed();
+		if(!getDatabase().doesRecordExist(headerKey))
+			headerKey.setDraft();
+		
+		Vector result = new Vector();
+		if(!getDatabase().doesRecordExist(headerKey))
+		{
+			logging("getBulletinChunkWithoutVerifyingCaller:  NOT_FOUND");
+			result.add(NetworkInterfaceConstants.NOT_FOUND);
+			return result;
+		}
+		
+		try
+		{
+			result = buildBulletinChunkResponse(headerKey, chunkOffset, maxChunkSize);
+		}
+		catch(Exception e)
+		{
+			logging("getBulletinChunkWithoutVerifyingCaller:  SERVER_ERROR " + e);
+			//System.out.println("MartusServer.download: " + e);
+			result.add(NetworkInterfaceConstants.SERVER_ERROR);
+		}
+		return result;
+	}
+
 	private String saveUploadedBulletinZipFile(String authorAccountId, File zipFile) 
 	{
 		String result = NetworkInterfaceConstants.OK;
