@@ -89,13 +89,13 @@ public class MartusSecurity implements MartusCrypto
 
 		try
 		{
-			sigEngine = Signature.getInstance(SIGN_ALGORITHM);
-			rsaCipherEngine = Cipher.getInstance(RSA_ALGORITHM);
-			pbeCipherEngine = Cipher.getInstance(PBE_ALGORITHM);
-			sessionCipherEngine = Cipher.getInstance(SESSION_ALGORITHM);
+			sigEngine = Signature.getInstance(SIGN_ALGORITHM, "BC");
+			rsaCipherEngine = Cipher.getInstance(RSA_ALGORITHM, "BC");
+			pbeCipherEngine = Cipher.getInstance(PBE_ALGORITHM, "BC");
+			sessionCipherEngine = Cipher.getInstance(SESSION_ALGORITHM, "BC");
 			keyPairGenerator = KeyPairGenerator.getInstance(RSA_ALGORITHM_NAME, "BC");
-			sessionKeyGenerator = KeyGenerator.getInstance(SESSION_ALGORITHM_NAME);
-			keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
+			sessionKeyGenerator = KeyGenerator.getInstance(SESSION_ALGORITHM_NAME, "BC");
+			keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM, "BC");
 		}
 		catch(Exception e)
 		{
