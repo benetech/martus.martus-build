@@ -477,15 +477,12 @@ public class FileDatabase implements Database
 	synchronized void loadAccountMap()
 	{
 		accountMap.clear();
-		boolean foundAbsolutePath = false;
 		try
 		{
 			UnicodeReader reader = new UnicodeReader(accountMapFile);
 			String entry = null;
 			while( (entry = reader.readLine()) != null)
 			{
-				if(startsWithAbsolutePath(entry))
-					foundAbsolutePath = true;
 				addParsedAccountEntry(accountMap, entry);
 			}
 			reader.close();
@@ -498,29 +495,6 @@ public class FileDatabase implements Database
 		{
 			System.out.println("FileDatabase.loadMap: " + e);
 			return;
-		}
-		if(foundAbsolutePath)
-		{
-			//One time migration of old AccountMap.txt files
-			File backupFile = new File(accountMapFile.getPath() + ".bak");
-			accountMapFile.renameTo(backupFile);
-			try 
-			{
-				Set accountStrings = accountMap.keySet();
-				Iterator iterator = accountStrings.iterator();
-				while(iterator.hasNext())
-				{
-					String accountString = (String)iterator.next();
-					String accountDir = (String)accountMap.get(accountString);
-					appendAccountToMapFile(accountString, accountDir);
-				}
-			} 
-			catch (IOException e) 
-			{
-				System.out.println("FileDatabase.loadMap: migration " + e);
-				accountMapFile.delete();
-				backupFile.renameTo(accountMapFile);
-			}
 		}
 	}
 	
