@@ -70,7 +70,8 @@ public class CreateBadBulletins
 			System.exit(1);
 		}
 		app.doAfterSigninInitalization();
-		
+		app.loadFolders();
+
 		BulletinForTesting.clearShoulds();
 		BulletinForTesting.shouldCreateUnknownTagInHeader = true;
 		createAndSaveBulletin(app, "Unknown tag in header");
