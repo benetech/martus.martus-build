@@ -8,13 +8,15 @@ import org.martus.client.MartusApp.ServerErrorException;
 
 public class RetrieveHQDraftsTableModel extends RetrieveTableModel 
 {
-	public RetrieveHQDraftsTableModel(MartusApp appToUse, UiProgressRetrieveSummariesDlg retriever)
+	public RetrieveHQDraftsTableModel(MartusApp appToUse)
 	{
-		super(appToUse, retriever);
+		super(appToUse);
 	}
 
-	public void initialize() throws ServerErrorException
+	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
 	{
+		setProgressDialog(progressDlg);
+
 		Vector accounts = app.getFieldOfficeAccounts();
 		for(int a = 0; a < accounts.size(); ++a)
 		{

@@ -13,17 +13,21 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 
 abstract public class RetrieveTableModel extends AbstractTableModel
 {
-	public RetrieveTableModel(MartusApp appToUse, UiProgressRetrieveSummariesDlg retriever)
+	public RetrieveTableModel(MartusApp appToUse)
 	{
 		app = appToUse;
 		downloadableSummaries = new Vector();
 		store = app.getStore();
-		retrieverDlg = retriever;
 		allSummaries = new Vector();
 	}
 
-	abstract public void initialize() throws ServerErrorException;
+	abstract public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException;
 
+	protected void setProgressDialog(UiProgressRetrieveSummariesDlg progressDlg)
+	{
+		retrieverDlg = progressDlg;
+	}
+	
 	protected void setCurrentSummaries()
 	{
 		downloadableSummaries = getSummariesForBulletinsNotInStore(allSummaries);

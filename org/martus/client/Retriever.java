@@ -12,7 +12,7 @@ public class Retriever
 	{
 		super();
 		app = appToUse;
-		retrieveDlg = retrieve;
+		progressDlg = retrieve;
 		result = NetworkInterfaceConstants.INCOMPLETE;
 	}
 	
@@ -27,7 +27,7 @@ public class Retriever
 		RetrieveThread worker = new RetrieveThread(uidList, retrievedFolder);
 		worker.start();
 
-		if(retrieveDlg == null)
+		if(progressDlg == null)
 			waitForThreadToTerminate(worker);
 	}
 
@@ -44,8 +44,8 @@ public class Retriever
 	
 	public void finishedRetrieve()
 	{
-		if(retrieveDlg != null)
-			retrieveDlg.finishedRetrieve();
+		if(progressDlg != null)
+			progressDlg.finishedRetrieve();
 	}
 
 	public String getResult()
@@ -67,14 +67,14 @@ public class Retriever
 			int i = 0;
 			int size = uidList.size();
 			UiProgressMeter progressMeter = null;
-			if(retrieveDlg != null)
-				progressMeter = retrieveDlg.getChunkCountMeter();
+			if(progressDlg != null)
+				progressMeter = progressDlg.getChunkCountMeter();
 			for(i = 0; i < size; ++i)
 			{
 				try
 				{
-					if(retrieveDlg != null)
-						retrieveDlg.updateBulletinCountMeter(i, size);
+					if(progressDlg != null)
+						progressDlg.updateBulletinCountMeter(i, size);
 					UniversalId uid = (UniversalId)uidList.get(i);
 					if(app.getStore().findBulletinByUniversalId(uid) != null)
 						continue;
@@ -88,8 +88,8 @@ public class Retriever
 				}
 			}
 			result = NetworkInterfaceConstants.OK;
-			if(retrieveDlg != null)
-				retrieveDlg.updateBulletinCountMeter(i, size);
+			if(progressDlg != null)
+				progressDlg.updateBulletinCountMeter(i, size);
 			finishedRetrieve();
 		}
 
@@ -99,5 +99,5 @@ public class Retriever
 		
 	private String result;
 	private MartusApp app;
-	public UiProgressRetrieveDlg retrieveDlg;
+	public UiProgressRetrieveDlg progressDlg;
 }

@@ -8,13 +8,15 @@ import org.martus.client.MartusApp.ServerErrorException;
 
 public class RetrieveMyDraftsTableModel extends RetrieveTableModel 
 {
-	public RetrieveMyDraftsTableModel(MartusApp appToUse, UiProgressRetrieveSummariesDlg retriever)
+	public RetrieveMyDraftsTableModel(MartusApp appToUse)
 	{
-		super(appToUse, retriever);
+		super(appToUse);
 	}
 
-	public void initialize() throws ServerErrorException 
+	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
 	{
+		setProgressDialog(progressDlg);
+
 		getMyDraftSummaries();
 		setCurrentSummaries();
 	}

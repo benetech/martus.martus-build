@@ -35,11 +35,11 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		app.setSSLServerForTesting(testSSLServerInterface);
-		modelWithoutData = new RetrieveMyTableModel(app, null);
-		modelWithoutData.initialize();
+		modelWithoutData = new RetrieveMyTableModel(app);
+		modelWithoutData.initialize(null);
 		app.getStore().deleteAllData();
-		modelWithData = new RetrieveMyTableModel(app, null);
-		modelWithData.initialize();
+		modelWithData = new RetrieveMyTableModel(app);
+		modelWithData.initialize(null);
 	}
 	
 	public void tearDown() throws Exception

@@ -43,12 +43,12 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		app.setSSLServerForTesting(testSSLServerInterface);
 
 		testServer.hasData = false;
-		modelWithoutData = new DeleteMyServerDraftsTableModel(app, null);
-		modelWithoutData.initialize();
+		modelWithoutData = new DeleteMyServerDraftsTableModel(app);
+		modelWithoutData.initialize(null);
 		
 		testServer.hasData = true;
-		modelWithData = new DeleteMyServerDraftsTableModel(app, null);
-		modelWithData.initialize();
+		modelWithData = new DeleteMyServerDraftsTableModel(app);
+		modelWithData.initialize(null);
 	}
 	
 	public void tearDown() throws Exception

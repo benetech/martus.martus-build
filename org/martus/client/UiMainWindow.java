@@ -927,10 +927,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveMySealedBulletinProgress";
 		String folderName = app.getNameOfFolderRetrieved();
 
-		UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag );
-		RetrieveTableModel model = new RetrieveMyTableModel(app, dlg);
-
-		retrieveBulletins(dlgTitleTag, retrieverProgressTag, model, folderName);
+		RetrieveTableModel model = new RetrieveMyTableModel(app);
+		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
 	private void doRetrieveMyDraftBulletins()
@@ -940,39 +938,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveMyDraftBulletinProgress";
 		String folderName = app.getNameOfFolderRetrieved();
 
-		UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag);
-		RetrieveTableModel model = new RetrieveMyDraftsTableModel(app, dlg);
-
-		retrieveBulletins(dlgTitleTag, retrieverProgressTag, model, folderName);
-	}
-
-	private void doDeleteServerDraftBulletins()
-	{
-		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
-
-		UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag );
-		RetrieveTableModel model = new DeleteMyServerDraftsTableModel(app, dlg);
-
-		try 
-		{
-			model.initialize();
-			Vector uidList = displayDeleteServerDraftsDlg(model);
-			if(uidList == null)
-				return;
-				
-//			Retriever retriever = createRetriever("DeleteMyServerDraftBulletinProgress");
-//			String result = getMyBulletins(retriever, uidList);
-//			if(!result.equals(NetworkInterfaceConstants.OK))
-//			{
-//				notifyDlg(this, "DeleteServerDraftsFailed");
-//				return;
-//			}
-		} 
-		catch(ServerErrorException e) 
-		{
-			notifyDlg(this, "ServerError");
-			return;
-		}
+		RetrieveTableModel model = new RetrieveMyDraftsTableModel(app);
+		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
 	private void doRetrieveHQBulletins()
@@ -982,10 +949,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveHQSealedBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedFieldOffice();
 
-		UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag);
-		RetrieveTableModel model = new RetrieveHQTableModel(app, dlg);
-
-		retrieveBulletins(dlgTitleTag, retrieverProgressTag, model, folderName);
+		RetrieveTableModel model = new RetrieveHQTableModel(app);
+		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
 	private void doRetrieveHQDraftsBulletins()
@@ -995,41 +960,32 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveHQDraftBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedFieldOffice();
 
-		UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag);
-		RetrieveTableModel model = new RetrieveHQDraftsTableModel(app, dlg);
-
-		retrieveBulletins(dlgTitleTag, retrieverProgressTag, model, folderName);
+		RetrieveTableModel model = new RetrieveHQDraftsTableModel(app);
+		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	private void retrieveBulletins(String dlgTitleTag, String retrieverProgressTag,
-						RetrieveTableModel model, String folderName)
+	private void doDeleteServerDraftBulletins()
 	{
-		if(!app.isSSLServerAvailable())
-		{
-			notifyDlg(this, "retrievenoserver");
-			return;
-		}
-		
+		String dlgTitleTag = "DeleteServerDrafts";
+		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
+		String retrieverProgressTag = "RetrieveMyDraftBulletinProgress";
+
+		RetrieveTableModel model = new DeleteMyServerDraftsTableModel(app);
+		deleteServerDrafts(model, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
+	}
+
+	private void retrieveBulletins(RetrieveTableModel model, String folderName,
+						String dlgTitleTag, String summariesProgressTag, String retrieverProgressTag)
+	{
+		String topMessageTag = "RetrieveSummariesMessage";
+		String okButtonTag = "retrieve";
+		String noneSelectedTag = "retrievenothing";
+
 		try 
 		{
-			model.initialize();
-
-			UiRetrieveDlg retrieveDlg = new UiRetrieveDlg(this, model, dlgTitleTag);
-	
-			// the following is required (for unknown reasons)
-			// to get the window to redraw after the dialog
-			// is closed. Yuck! kbs.
-			repaint();
-			
-			if(!retrieveDlg.getResult())
+			Vector uidList = displaySummariesDlg(model, dlgTitleTag, topMessageTag, okButtonTag, noneSelectedTag, summariesProgressTag);
+			if(uidList == null)
 				return;
-			
-			Vector uidList = retrieveDlg.getUniversalIdList();
-			if( uidList.size() == 0)
-			{
-				notifyDlg(this, "retrievenothing");
-				return;
-			}
 		
 			BulletinFolder retrievedFolder = app.createOrFindFolder(folderName);
 			app.getStore().saveFolders();
@@ -1037,7 +993,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			UiProgressRetrieveDlg progressDlg = new UiProgressRetrieveDlg(this, retrieverProgressTag);	
 			Retriever retriever = new Retriever(app, progressDlg);
 			retriever.retrieveBulletins(uidList, retrievedFolder);
-			retriever.retrieveDlg.show();
+			retriever.progressDlg.show();
 			String result = retriever.getResult();
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
@@ -1052,34 +1008,67 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			notifyDlg(this, "ServerError");
 			return;
 		}
-		return;
 	}
 
-	private Vector displayDeleteServerDraftsDlg(RetrieveTableModel model) 
+	private void deleteServerDrafts(RetrieveTableModel model, 
+						String dlgTitleTag, String summariesProgressTag, String retrieverProgressTag)
+	{
+		String topMessageTag = "DeleteServerDraftsMessage";
+		String okButtonTag = "DeleteServerDrafts";
+		String noneSelectedTag = "DeleteServerDraftsNone";
+
+		try 
+		{
+			Vector uidList = displaySummariesDlg(model, dlgTitleTag, topMessageTag, okButtonTag, noneSelectedTag, summariesProgressTag);
+			if(uidList == null)
+				return;
+
+			System.out.println("TODO: Need to actually delete uidList drafts off the server here!");
+//			ServerDraftDeleter deleter = new ServerDraftDeleter(app, progressDlg);
+//			deleter.deleteBulletins(uidList);
+//			deleter.progressDlg.show();
+//			String result = deleter.getResult();
+//			if(!result.equals(NetworkInterfaceConstants.OK))
+//			{
+//				notifyDlg(this, "DeleteServerDraftsFailed");
+//				return;
+//			}
+		} 
+		catch(ServerErrorException e) 
+		{
+			notifyDlg(this, "ServerError");
+			return;
+		}
+	}
+		
+
+	private Vector displaySummariesDlg(RetrieveTableModel model, String dlgTitleTag, String topMessageTag, String okButtonTag, String noneSelectedTag, String summariesProgressTag) throws
+		ServerErrorException
 	{
 		if(!app.isSSLServerAvailable())
 		{
 			notifyDlg(this, "retrievenoserver");
 			return null;
 		}
-		
-		UiServerSummariesDlg dlg = new UiDeleteServerDraftsDlg(this, model);
-		
+
+		model.initialize(new UiProgressRetrieveSummariesDlg(this, summariesProgressTag));
+		UiServerSummariesDlg summariesDlg = new UiServerSummariesDlg(this, model, dlgTitleTag, topMessageTag, okButtonTag);
+
 		// the following is required (for unknown reasons)
 		// to get the window to redraw after the dialog
 		// is closed. Yuck! kbs.
 		repaint();
 		
-		if(!dlg.getResult())
+		if(!summariesDlg.getResult())
 			return null;
 		
-		Vector uidList = dlg.getUniversalIdList();
+		Vector uidList = summariesDlg.getUniversalIdList();
 		if( uidList.size() == 0)
 		{
-			notifyDlg(this, "DeleteServerDraftsNone");
+			notifyDlg(this, noneSelectedTag);
 			return null;
 		}
-		
+
 		return uidList;
 	}
 

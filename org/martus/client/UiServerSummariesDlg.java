@@ -21,20 +21,22 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
 
-abstract public class UiServerSummariesDlg extends JDialog
+public class UiServerSummariesDlg extends JDialog
 {
-	public UiServerSummariesDlg(UiMainWindow owner, RetrieveTableModel tableModel, String windowTitleTag)
+	public UiServerSummariesDlg(UiMainWindow owner, RetrieveTableModel tableModel, 
+			String windowTitleTag, String topMessageTag, String okButtonTag)
 	{
 		super(owner, owner.getApp().getWindowTitle(windowTitleTag), true);
 		mainWindow = owner;
 		model = tableModel;
+		initialize(topMessageTag, okButtonTag);
 	}
 
-	void initialize()
+	void initialize(String topMessageTag, String okButtonTag)
 	{
 		disabledBackgroundColor = getBackground();
 		JLabel label = new JLabel(getApp().getFieldLabel(""));
-		String topMessageText = getApp().getFieldLabel(getTopMessageTextTag());
+		String topMessageText = getApp().getFieldLabel(topMessageTag);
 		UiWrappedTextArea retrieveMessage = new UiWrappedTextArea(mainWindow, topMessageText);
 		Box tableBox = Box.createVerticalBox();
 		JTable table = new JTable(model);
@@ -61,7 +63,7 @@ abstract public class UiServerSummariesDlg extends JDialog
 		radioPanel.add(downloadableSummaries);
 		radioPanel.add(allSummaries);		
 		
-		JButton ok = new JButton(getApp().getButtonLabel(getOkButtonTextTag()));
+		JButton ok = new JButton(getApp().getButtonLabel(okButtonTag));
 		ok.addActionListener(new OkHandler());
 		JButton cancel = new JButton(getApp().getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
@@ -92,9 +94,6 @@ abstract public class UiServerSummariesDlg extends JDialog
 		setResizable(true);
 		show();
 	}
-
-	abstract String getTopMessageTextTag();
-	abstract String getOkButtonTextTag();
 
 	public boolean getResult()
 	{
