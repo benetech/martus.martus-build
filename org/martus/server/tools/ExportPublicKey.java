@@ -38,13 +38,13 @@ public class ExportPublicKey
 		
 		if(keypair == null || outputfile == null)
 		{
-			System.err.println("Incorrect arguments: ExportPublicKey [--no-prompt] --keypair=keypair.dat --file=pubkey.dat");
+			System.err.println("Incorrect arguments: ExportPublicKey [--no-prompt] --keypair=keypair.dat --file=pubkey.dat\n");
 			System.exit(2);
 		}
 		
 		if(!keypair.exists())
 		{
-			System.err.println("Unable to find keypair");
+			System.err.println("Unable to find keypair\n");
 			System.exit(3);
 		}
 		
@@ -63,7 +63,7 @@ public class ExportPublicKey
 		}
 		catch(Exception e)
 		{
-			System.err.println("ExportPublicKey.main: " + e);
+			System.err.println("ExportPublicKey.main: " + e + "\n");
 			System.exit(3);
 		}
 		
@@ -73,23 +73,23 @@ public class ExportPublicKey
 		}
 		catch (MartusSignatureException e)
 		{
-			System.err.println("ExportPublicKey.main: " + e);
+			System.err.println("ExportPublicKey.main: " + e + "\n");
 			System.exit(3);
 		}
 		catch (InvalidBase64Exception e)
 		{
-			System.err.println("ExportPublicKey.main: " + e);
+			System.err.println("ExportPublicKey.main: " + e + "\n");
 			System.exit(3);
 		}
 		catch (IOException e)
 		{
-			System.err.println("ExportPublicKey.main: " + e);
+			System.err.println("ExportPublicKey.main: " + e + "\n");
 			System.exit(3);
 		}
 
 		if(prompt)
 		{
-			System.out.println("Public key exported to file " + outputfile.getAbsolutePath());
+			System.out.println("Public key exported to file " + outputfile.getAbsolutePath() + "\n");
 			System.out.flush();
 		}
 		System.exit(0);
