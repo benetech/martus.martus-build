@@ -26,6 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui.dialogs;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -33,8 +34,8 @@ import javax.swing.Box;
 import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
 import javax.swing.JTabbedPane;
+import javax.swing.border.EmptyBorder;
 
 import org.martus.client.swingui.UiConstants;
 import org.martus.client.swingui.UiLocalization;
@@ -67,44 +68,51 @@ public class UiSigninDlg extends JDialog
 		String title = getTextForTitle(localization, mode);
 		setTitle(title);
 		
-		JTabbedPane tabbedPane = new JTabbedPane();
-		contentPane = new UiSigninPanel(this, mode, username);
-		tabbedPane.add(contentPane);
-		tabbedPane.setTitleAt(0, "Sign In");  
+		signinPane = new UiSigninPanel(this, mode, username);
 
 		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(new OkHandler());
 		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
 		Box buttonBox = Box.createHorizontalBox();
+		buttonBox.add(Box.createHorizontalGlue());
 		buttonBox.add(ok);
 		buttonBox.add(cancel);
+		buttonBox.add(Box.createHorizontalGlue());
+		buttonBox.setBorder(new EmptyBorder(5,5,5,5));
 		
-		Box vbox = Box.createVerticalBox();
-		vbox.add(tabbedPane);
-		vbox.add(new JLabel(" "));
-		vbox.add(buttonBox);
-		vbox.add(new JLabel(" "));
-		getContentPane().add(vbox);
+		if(shouldUseTabs(mode))
+		{
+			JTabbedPane tabbedPane = new JTabbedPane();
+			tabbedPane.add(signinPane);
+			tabbedPane.setTitleAt(0, "Sign In");  
+			getContentPane().add(tabbedPane);
+		}
+		else
+		{
+			getContentPane().add(signinPane);
+		}
+
+		getContentPane().add(buttonBox, BorderLayout.SOUTH);
 
 		getRootPane().setDefaultButton(ok);
+		signinPane.refreshForNewVirtualMode();
 		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}
 
-/*
- We don't know if this is being called. Maybe it should be deleted.
- 
-	public void updateUI()
-	{
-		getRootPane().setDefaultButton(ok);
-		super.updateUI();
-	}
-*/
 	public UiMainWindow getMainWindow()
 	{
 		return mainWindow;
+	}
+	
+	public boolean shouldUseTabs(int mode)
+	{
+		if(mode == INITIAL)
+			return true;
+			
+		return false;
 	}
 	
 	public static String getTextForTitle(UiLocalization localization, int mode)
@@ -137,12 +145,12 @@ public class UiSigninDlg extends JDialog
 
 	public String getName()
 	{
-		return contentPane.getName();
+		return signinPane.getName();
 	}
 
 	public String getPassword()
 	{
-		return contentPane.getPassword();
+		return signinPane.getPassword();
 	}
 	
 	public void sizeHasChanged()
@@ -152,7 +160,7 @@ public class UiSigninDlg extends JDialog
 	
 	public void virtualPasswordHasChanged()
 	{
-		ok.requestFocus();
+		getRootPane().setDefaultButton(ok);
 	}
 
 	class OkHandler implements ActionListener
@@ -172,7 +180,7 @@ public class UiSigninDlg extends JDialog
 		}
 	}
 
-	UiSigninPanel contentPane;
+	UiSigninPanel signinPane;
 	private UiMainWindow mainWindow;
 	private boolean result;
 	private JButton ok;

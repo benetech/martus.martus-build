@@ -126,6 +126,7 @@ public class UiSigninPanel extends JPanel implements VirtualKeyboardHandler
 		passwordArea.updateUI();
 		userNameDescription.updateUI();
 		nameField.requestFocus();
+		owner.virtualPasswordHasChanged();
 	}
 
 	public void UpdatePasswordArea()
