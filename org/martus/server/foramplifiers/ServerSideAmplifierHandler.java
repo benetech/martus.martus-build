@@ -58,6 +58,9 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 				return result;
 			}
 			
+			if(!server.isAuthorizedAmp(myAccountId))
+				return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
+
 			log("Amp getAccountIds: " + publicCode);
 			AccountVisitor visitor = new AccountVisitor();
 			server.getDatabase().visitAllAccounts(visitor);
@@ -85,8 +88,12 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			return result;
 		}
 		
-		UniversidlIdOfPublicBulletinsCollector collector = new UniversidlIdOfPublicBulletinsCollector();
+		if(!server.isAuthorizedAmp(myAccountId))
+			return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
+
 		String accountString = (String) parameters.get(0);
+
+		UniversidlIdOfPublicBulletinsCollector collector = new UniversidlIdOfPublicBulletinsCollector();
 		Database db = server.getDatabase();
 		db.visitAllRecordsForAccount(collector, accountString);
 		

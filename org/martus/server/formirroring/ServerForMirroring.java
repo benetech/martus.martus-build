@@ -84,7 +84,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 		log("InactiveSleep (millis): " + inactiveSleepMillis);
 
 		File authorizedCallersDir = getAuthorizedCallersDirectory();
-		authorizedCallers = coreServer.loadServerPublicKeys(authorizedCallersDir);
+		authorizedCallers = coreServer.loadServerPublicKeys(authorizedCallersDir, "Mirror");
 		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
 	}
 

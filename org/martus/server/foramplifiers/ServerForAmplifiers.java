@@ -5,7 +5,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
@@ -13,6 +12,8 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.XmlRpcThread;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
+import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
@@ -193,9 +194,17 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		return getSecurity().getPublicKeyString();
 	}
 	
-	public void loadConfigurationFiles() throws IOException
+	public void loadConfigurationFiles() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
 	{
+		File authorizedAmplifiersDir = getAuthorizedAmplifiersDirectory();
+		authorizedAmps = coreServer.loadServerPublicKeys(authorizedAmplifiersDir, "Amp");
+		log("Authorized " + authorizedAmps.size() + " amplifiers to call us");
 		
+	}
+	
+	public File getAuthorizedAmplifiersDirectory()
+	{
+		return new File(coreServer.getStartupConfigDirectory(), "ampsWhoCallUs");
 	}
 	
 	public void createAmplifierXmlRpcServer()
@@ -243,50 +252,6 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 	}
 
 
-	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
-	{
-		log("downloadBulletin " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			
-		if( coreServer.isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-
-		Vector result = new Vector();
-		
-		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
-		DatabaseKey headerKey = DatabaseKey.createSealedKey(uid);
-		if(!getDatabase().doesRecordExist(headerKey))
-		{
-			log("downloadBulletin NOT_FOUND");
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-		}
-		else
-		{
-			try
-			{
-				File tempFile = createInterimBulletinFile(headerKey);
-				//TODO: if file is bigger than one chunk, should return an error here!
-				
-				StringWriter writer = new StringWriter();
-				FileInputStream in = new FileInputStream(tempFile);
-				Base64.encode(in, writer);
-				in.close();
-				String zipString = writer.toString();
-	
-				MartusUtilities.deleteInterimFileAndSignature(tempFile);
-				result.add(NetworkInterfaceConstants.OK);
-				result.add(zipString);
-				log("downloadBulletin : Exit OK");
-			}
-			catch(Exception e)
-			{
-				log("downloadBulletin SERVER_ERROR " + e);
-				//System.out.println("MartusAmplifierServer.download: " + e);
-				result.add(NetworkInterfaceConstants.SERVER_ERROR);
-			}
-		}
-		return result;
-	}
-
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId,
 		int chunkOffset, int maxChunkSize) 
 	{
@@ -297,9 +262,12 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
 			log(logMsg.toString());
 		}
-	
+		
 		if( coreServer.isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+
+		if(!isAuthorizedAmp(myAccountId))
+			return returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
 
 		DatabaseKey headerKey =	findHeaderKeyInDatabase(authorAccountId, bulletinLocalId);
 		if(headerKey == null)
@@ -311,6 +279,11 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		
 		log("  exit: " + result.get(0));
 		return result;
+	}
+
+	boolean isAuthorizedAmp(String myAccountId)
+	{
+		return authorizedAmps.contains(myAccountId);
 	}
 
 	public String authenticateServer(String tokenToSign)
@@ -363,7 +336,7 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		getSecurity().readKeyPair(in, passphrase);
 	}
 	
-	private Vector returnSingleResponseAndLog( String message, String responseCode )
+	Vector returnSingleResponseAndLog( String message, String responseCode )
 	{
 		if( message.length() > 0 )
 			log( message.toString());
@@ -556,4 +529,5 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 	MartusServer coreServer;
 
 	ServerSideAmplifierHandler amplifierHandler;
+	Vector authorizedAmps;
 }

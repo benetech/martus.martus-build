@@ -1383,7 +1383,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return serverName;
 	}
 
-	public Vector loadServerPublicKeys(File directoryContainingPublicKeyFiles) throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
+	public Vector loadServerPublicKeys(File directoryContainingPublicKeyFiles, String label) throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
 	{
 		Vector servers = new Vector();
 
@@ -1402,7 +1402,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				if(thisFile.exists())
 					throw new IOException("delete failed: " + thisFile);
 			}
-			log("Authorized to call us: " + thisFile.getName());
+			log(label + " authorized to call us: " + thisFile.getName());
 		}
 		
 		return servers;
