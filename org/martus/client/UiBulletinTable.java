@@ -261,6 +261,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				if(file != null)
 					dropAdapter.attemptDropFile(file, folder);
 				worked = true;
+				if(confirmDeletionOfFile(file.getPath()))
+					file.delete();
 			} 
 			catch (InvalidPacketException e) 
 			{
@@ -303,6 +305,24 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 	}
 
+	public boolean confirmDeletionOfFile(String filePath) 
+	{
+		MartusApp app = mainWindow.getApp();
+		String title = app.getWindowTitle("DeleteBulletinFile");
+		String msg1 = app.getFieldLabel("DeleteBulletinFileMsg1");
+		String msg2 = app.getFieldLabel("DeleteBulletinFileMsg2");
+		String[] contents = {msg1, filePath, msg2};
+		
+		String delete = app.getButtonLabel("Delete");
+		String leave = app.getButtonLabel("Leave");
+		String[] buttons = {delete, leave};
+		
+		UiNotifyDlg notify = new UiNotifyDlg(mainWindow, mainWindow, title, contents, buttons);
+		String result = notify.getResult();
+		if(result != null && result.equals(delete))
+			return true;
+		return false;
+	}
 
 	public void doPopupMenu(JComponent component, int x, int y)
 	{
