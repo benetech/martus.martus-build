@@ -14,7 +14,7 @@ import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.formirroring.CallerSideMirroringGateway;
-import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc;
+import org.martus.server.formirroring.MirroringUtilities;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException;
 
 public class RetrievePublicKey
@@ -34,7 +34,21 @@ public class RetrievePublicKey
 		System.out.println("Success");
 		System.exit(0);
 	}
-	
+
+	private void createGateway()
+	{
+		try
+		{
+			gateway = MirroringUtilities.createRealMirroringGateway(ip, port, publicCode);
+		}
+		catch (SSLSocketSetupException e)
+		{
+			e.printStackTrace();
+			System.out.println("Error setting up socket");
+			System.exit(3);
+		}
+	}
+
 	void writePublicInfo(Vector publicInfo)
 	{
 		String publicKey = (String)publicInfo.get(0);
@@ -111,24 +125,6 @@ public class RetrievePublicKey
 		} 
 	}
 	
-	CallerSideMirroringGateway createGateway()
-	{
-		try
-		{
-			xmlRpcGateway = new CallerSideMirroringGatewayForXmlRpc(ip, port); 
-			xmlRpcGateway.setExpectedPublicCode(publicCode);
-			gateway = new CallerSideMirroringGateway(xmlRpcGateway);
-			return gateway;		
-		}
-		catch (SSLSocketSetupException e)
-		{
-			e.printStackTrace();
-			System.out.println("Error setting up socket");
-			System.exit(3);
-			return null;
-		}
-	}
-	
 	void processArgs(String[] args)
 	{
 		for (int i = 0; i < args.length; i++)
@@ -172,6 +168,5 @@ public class RetrievePublicKey
 	String keyPairFileName;
 
 	MartusCrypto security; 
-	CallerSideMirroringGatewayForXmlRpc xmlRpcGateway;
 	CallerSideMirroringGateway gateway; 
 }
