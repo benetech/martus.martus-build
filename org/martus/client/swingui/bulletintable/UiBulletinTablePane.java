@@ -51,7 +51,7 @@ public class UiBulletinTablePane extends JScrollPane
 		getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
 		getViewport().add(table);
 
-		dropTarget = new DropTarget(getViewport(), table.getDropAdapter());
+		new DropTarget(getViewport(), table.getDropAdapter());
 		addMouseListener(new TablePaneMouseAdapter());
 
 	}
@@ -182,5 +182,4 @@ public class UiBulletinTablePane extends JScrollPane
 	UiMainWindow parent;
 
 	private UiBulletinTable table;
-	private DropTarget dropTarget;
 }

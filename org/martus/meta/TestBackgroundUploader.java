@@ -43,11 +43,9 @@ import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.network.NetworkInterface;
 import org.martus.common.network.NetworkInterfaceConstants;
-import org.martus.common.network.NetworkInterfaceForNonSSL;
 import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
-import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
 import org.martus.util.Base64;
 import org.martus.util.UnicodeReader;
 
@@ -71,7 +69,6 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		mockServer = new MockMartusServer();
 		mockServer.verifyAndLoadConfigurationFiles();
 		mockServer.setSecurity(mockSecurityForServer);
-		mockNonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(mockServer);
 		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer);
 
 		if(appWithoutServer == null)
@@ -315,7 +312,6 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 	private MockMartusApp appWithServer;
 
 	private MockMartusServer mockServer;
-	private NetworkInterfaceForNonSSL mockNonSSLServerHandler;
 	private MockServerInterfaceHandler mockSSLServerHandler;
 	
 	private BackgroundUploader uploaderWithServer;

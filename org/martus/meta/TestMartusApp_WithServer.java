@@ -82,7 +82,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploaderWithServer = new BackgroundUploader(appWithServer, nullProgressMeter);		
-		uploaderWithoutServer = new BackgroundUploader(appWithoutServer, nullProgressMeter);		
 		mockServer.deleteAllData();
 
 		TRACE_END();
@@ -1178,7 +1177,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private MockServerInterfaceHandler mockSSLServerHandler;
 	
 	private BackgroundUploader uploaderWithServer;
-	private BackgroundUploader uploaderWithoutServer;
 	static final String sampleMagicWord = "beans!";
 }
 

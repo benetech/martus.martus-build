@@ -270,22 +270,6 @@ public class UiFolderTreePane extends JScrollPane
 	}
 
 
-	private BulletinFolder getFolderAt(TreePath path)
-	{
-		FolderTreeNode node = (FolderTreeNode)path.getLastPathComponent();
-		if (node == null)
-		{
-			return null;
-		}
-		if (!node.isLeaf())
-		{
-			return null;
-		}
-
-		String name = node.getInternalName();
-		return store.findFolder(name);
-	}
-
 	TreePath getPathOfNode(FolderTreeNode node)
 	{
 		TreePath rootPath = new TreePath(model.getRoot());

@@ -39,7 +39,6 @@ import javax.swing.JLabel;
 import javax.swing.JTree;
 import javax.swing.event.CellEditorListener;
 import javax.swing.event.ChangeEvent;
-import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
 import javax.swing.text.JTextComponent;
@@ -154,43 +153,6 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		if(folder != null)
 			observer.folderSelectionHasChanged(folder);
     }
-
-	private FolderTreeNode getActualNode(TreeModelEvent event)
-	{
-		FolderTreeNode node = getChildNodeIfAny(event);
-
-		if(node == null)
-		{
-			TreePath path = event.getTreePath();
-			node = (FolderTreeNode)path.getLastPathComponent();
-		}
-
-		return node;
-	}
-
-	private TreePath getActualPath(TreeModelEvent event)
-	{
-		TreePath path = event.getTreePath();
-		FolderTreeNode node = getChildNodeIfAny(event);
-		if(node != null)
-			path = path.pathByAddingChild(node);
-
-		return path;
-	}
-
-	private FolderTreeNode getChildNodeIfAny(TreeModelEvent event)
-	{
-		FolderTreeNode child = null;
-		TreePath path = event.getTreePath();
-		FolderTreeNode parent = (FolderTreeNode)path.getLastPathComponent();
-
-		// we may get passed the parent node, with a child index
-		int[] children = event.getChildIndices();
-		if(children != null && children.length > 0)
-			child = (FolderTreeNode)parent.getChildAt(children[0]);
-
-		return child;
-	}
 
 	TreePath getPathOfNode(FolderTreeNode node)
 	{
