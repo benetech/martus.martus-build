@@ -192,7 +192,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 			db.writeRecordEncrypted(shortKey, null, security);
 			fail("should have thrown for null string");
 		} 
-		catch(IOException ignoreExpectedException) 
+		catch(NullPointerException nullPointerExpectedException) 
 		{
 		}
 		

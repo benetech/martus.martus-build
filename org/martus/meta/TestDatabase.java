@@ -223,7 +223,10 @@ public class TestDatabase extends TestCaseEnhanced
 			db.writeRecord(smallKey, (String)null);
 			fail(db.toString()+"should have thrown for null string");
 		}
-		catch(IOException ignoreExpectedException)
+		catch(NullPointerException nullPointerExpectedException)
+		{
+		}
+		catch(IOException nullParameterExpectedException)
 		{
 		}
 
