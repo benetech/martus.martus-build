@@ -82,7 +82,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		getContentPane().add(cancel);
 
 		getRootPane().setDefaultButton(ok);
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(false);
 	}
 
@@ -101,7 +101,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 			String[] contents = {helpMsg, "", "",helpMsgExample, helpMsgExample1, "", helpMsgExample2, "", helpMsgExampleEtc};
 			String[] buttons = {ok};
 
-			new UiNotifyDlg(mainWindow, mainWindow, title, contents, buttons);
+			new UiNotifyDlg(mainWindow, title, contents, buttons);
 		}
 	}
 

@@ -28,11 +28,16 @@ package org.martus.client.swingui;
 
 import java.awt.Dimension;
 import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.net.URL;
 
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+
+import org.martus.client.core.MartusApp;
 
 public class UiUtilities
 {
@@ -86,6 +91,59 @@ public class UiUtilities
 		{
 			// We don't care if this gets interrupted
 		}
+	}
+
+	static void notifyDlg(MartusApp app, JFrame parent, String baseTag, String titleTag)
+	{
+		String title = app.getWindowTitle(titleTag);
+		String cause = app.getFieldLabel("notify" + baseTag + "cause");
+		String ok = app.getButtonLabel("ok");
+		String[] contents = {cause};
+		String[] buttons = {ok};
+
+		new UiNotifyDlg(parent, title, contents, buttons);
+	}
+
+	static void messageDlg(MartusApp app, JFrame parent, String baseTag, String message)
+	{
+		String title = app.getWindowTitle(baseTag);
+		String cause = app.getFieldLabel("message" + baseTag + "cause");
+		String ok = app.getButtonLabel("ok");
+		String[] contents = {cause, "", message};
+		String[] buttons = {ok};
+
+		new UiNotifyDlg(parent, title, contents, buttons);
+	}
+
+	static boolean confirmDlg(MartusApp app, JFrame parent, String baseTag)
+	{
+		String title = app.getWindowTitle("confirm" + baseTag);
+		String cause = app.getFieldLabel("confirm" + baseTag + "cause");
+		String effect = app.getFieldLabel("confirm" + baseTag + "effect");
+		String question = app.getFieldLabel("confirmquestion");
+		String[] contents = {cause, "", effect, "", question};
+		return confirmDlg(app, parent, title, contents);
+	}
+
+	static boolean confirmDlg(MartusApp app, JFrame parent, String title, String[] contents)
+	{
+		String yes = app.getButtonLabel("yes");
+		String no = app.getButtonLabel("no");
+		String[] buttons = {yes, no};
+
+		UiNotifyDlg notify = new UiNotifyDlg(parent, title, contents, buttons);
+		String result = notify.getResult();
+		if(result == null)
+			return false;
+		return(result.equals(yes));
+	}
+
+	public static void centerDlg(JDialog dlg)
+	{
+		dlg.pack();
+		Dimension size = dlg.getSize();
+		Rectangle screen = new Rectangle(new Point(0, 0), Toolkit.getDefaultToolkit().getScreenSize());
+		dlg.setLocation(MartusApp.center(size, screen));
 	}
 
 	static class Delay extends Thread

@@ -33,7 +33,6 @@ import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -223,6 +222,18 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return getApp().getStore();
 	}
 
+	public void resetCursor(Cursor originalCursor)
+	{
+		setCursor(originalCursor);
+	}
+
+	public Cursor setWaitingCursor()
+	{
+		Cursor originalCursor = getCursor();
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		return originalCursor;
+	}
+
 	public void bulletinSelectionHasChanged()
 	{
 		Bulletin b = table.getSingleSelectedBulletin();
@@ -242,18 +253,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		Cursor originalCursor = setWaitingCursor();
 		table.setFolder(f);
 		resetCursor(originalCursor);
-	}
-
-	public void resetCursor(Cursor originalCursor)
-	{
-		setCursor(originalCursor);
-	}
-
-	public Cursor setWaitingCursor()
-	{
-		Cursor originalCursor = getCursor();
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		return originalCursor;
 	}
 
 	public void folderContentsHaveChanged(BulletinFolder f)
@@ -279,6 +278,30 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return false;
 	}
 
+	public boolean canPaste()
+	{
+		if(UiClipboardUtilities.getClipboardTransferableBulletin() != null)
+			return true;
+
+		if(UiClipboardUtilities.getClipboardTransferableFile() != null)
+			return true;
+
+		return false;
+	}
+
+	boolean canModifyCurrentFolder()
+	{
+		BulletinFolder folder = folders.getSelectedFolder();
+		return canModifyFolder(folder);
+	}
+
+	boolean canModifyFolder(BulletinFolder folder)
+	{
+		if(folder == null)
+			return false;
+		return folder.canRename();
+	}
+
 	public void selectSentFolder()
 	{
 		BulletinStore store = getStore();
@@ -301,35 +324,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean confirmDlg(JFrame parent, String baseTag)
 	{
-		return confirmDlg(getApp(), parent, baseTag);
+		return UiUtilities.confirmDlg(getApp(), parent, baseTag);
 	}
 
 	public boolean confirmDlg(JFrame parent, String title, String[] contents)
 	{
-		return confirmDlg(getApp(), parent, title, contents);
-	}
-
-	private boolean confirmDlg(MartusApp app, JFrame parent, String baseTag)
-	{
-		String title = app.getWindowTitle("confirm" + baseTag);
-		String cause = app.getFieldLabel("confirm" + baseTag + "cause");
-		String effect = app.getFieldLabel("confirm" + baseTag + "effect");
-		String question = app.getFieldLabel("confirmquestion");
-		String[] contents = {cause, "", effect, "", question};
-		return confirmDlg(app, parent, title, contents);
-	}
-
-	private boolean confirmDlg(MartusApp app, JFrame parent, String title, String[] contents)
-	{
-		String yes = app.getButtonLabel("yes");
-		String no = app.getButtonLabel("no");
-		String[] buttons = {yes, no};
-		
-		UiNotifyDlg notify = new UiNotifyDlg(this, parent, title, contents, buttons);
-		String result = notify.getResult();
-		if(result == null)
-			return false;
-		return(result.equals(yes));
+		return UiUtilities.confirmDlg(getApp(), parent, title, contents);
 	}
 
 	public void notifyDlg(JFrame parent, String baseTag)
@@ -339,55 +339,32 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void notifyDlg(JFrame parent, String baseTag, String titleTag)
 	{
-		String title = app.getWindowTitle(titleTag);
-		String cause = app.getFieldLabel("notify" + baseTag + "cause");
-		String ok = app.getButtonLabel("ok");
-		String[] contents = {cause};
-		String[] buttons = {ok};
-
-		new UiNotifyDlg(this, parent, title, contents, buttons);
+		UiUtilities.notifyDlg(getApp(), parent, baseTag, titleTag);
 	}
 
 	public void messageDlg(JFrame parent, String baseTag, String message)
 	{
-		String title = app.getWindowTitle(baseTag);
-		String cause = app.getFieldLabel("message" + baseTag + "cause");
-		String ok = app.getButtonLabel("ok");
-		String[] contents = {cause, "", message};
-		String[] buttons = {ok};
-
-		new UiNotifyDlg(this, parent, title, contents, buttons);
+		UiUtilities.messageDlg(getApp(), parent, baseTag, message);
 	}
 
 	private void initializationErrorDlg(String message)
 	{
-			String title = "Error Starting Martus";
-			String cause = "Unable to start Martus: " + message;
-			String ok = "OK";
-			String[] buttons = { ok };
-			JOptionPane pane = new JOptionPane(cause, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION,
-									null, buttons);
-			JDialog dialog = pane.createDialog(null, title);
-			dialog.show();
-			System.exit(1);
+		String title = "Error Starting Martus";
+		String cause = "Unable to start Martus: " + message;
+		String ok = "OK";
+		String[] buttons = { ok };
+		JOptionPane pane = new JOptionPane(cause, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION,
+								null, buttons);
+		JDialog dialog = pane.createDialog(null, title);
+		dialog.show();
+		System.exit(1);
 	}
 
 	public String getStringInput(String baseTag, String description, String defaultText)
 	{
-		UiStringInputDlg inputDlg = new UiStringInputDlg(this, baseTag, description, defaultText);
+		UiStringInputDlg inputDlg = new UiStringInputDlg(this, getApp(), baseTag, description, defaultText);
 		inputDlg.show();
 		return inputDlg.getResult();
-	}
-
-	public boolean canPaste()
-	{
-		if(UiClipboardUtilities.getClipboardTransferableBulletin() != null)
-			return true;
-			
-		if(UiClipboardUtilities.getClipboardTransferableFile() != null)
-			return true;
-			
-		return false;
 	}
 
 	public AbstractAction getActionMenuEdit()
@@ -469,15 +446,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		uiState.setCurrentEditorMaximized(maximized);
 	}
-
-	public void centerDlg(JDialog dlg)
-	{
-		dlg.pack();
-		Dimension size = dlg.getSize();
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		dlg.setLocation(MartusApp.center(size, screen));
-	}
-
 
 	public void saveCurrentUiState() throws IOException
 	{
@@ -734,19 +702,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		folders.deleteCurrentFolderIfPossible();
 	}
 	
-	boolean canModifyCurrentFolder()
-	{
-		BulletinFolder folder = folders.getSelectedFolder();
-		return canModifyFolder(folder);
-	}
-	
-	boolean canModifyFolder(BulletinFolder folder)
-	{
-		if(folder == null)
-			return false;
-		return folder.canRename();
-	}
-
 	void doSearch()
 	{
 		UiSearchDlg searchDlg = new UiSearchDlg(this);
@@ -807,7 +762,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String[] contents = {userName, " ", keyDescription, keyContents," ", codeDescription, formattedCodeContents};
 		String[] buttons = {ok};
 
-		new UiNotifyDlg(this, this, title, contents, buttons);
+		new UiNotifyDlg(this, title, contents, buttons);
 	}
 
 	void displayHelpMessage()
@@ -969,7 +924,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String[] contents = {serverSelected, uploadGranted};
 			String[] buttons = {ok};
 
-			new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
+			new UiNotifyDlg(currentActiveFrame, title, contents, buttons);
 			if(magicAccepted)
 				requestToUpdateContactInfoOnServerAndSaveInfo();
 			inConfigServer = false;
@@ -1255,7 +1210,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String ok = app.getButtonLabel("ok");
 			String[] contents = {msg, export.getCanonicalPath()};
 			String[] buttons = {ok};
-			new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
+			new UiNotifyDlg(currentActiveFrame, title, contents, buttons);
 		}
 		catch(Exception e)
 		{

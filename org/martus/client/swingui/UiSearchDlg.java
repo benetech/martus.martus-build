@@ -53,7 +53,7 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 		getContentPane().setLayout(new ParagraphLayout());
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(new UiWrappedTextArea(owner, app.getFieldLabel("SearchBulletinRules")));
+		getContentPane().add(new UiWrappedTextArea(app.getFieldLabel("SearchBulletinRules")));
 
 		searchField = new JTextField(40);
 		searchField.setText(searchString);
@@ -78,7 +78,7 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 		getContentPane().add(search);
 		getContentPane().add(cancel);
 
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 

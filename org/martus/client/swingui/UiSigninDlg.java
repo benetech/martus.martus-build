@@ -107,7 +107,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 			getContentPane().add(createNewUserNamePassword);
 
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(window, app.getFieldLabel("HelpOnCreatingNewPassword"));
+			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(app.getFieldLabel("HelpOnCreatingNewPassword"));
 			getContentPane().add(helpOnCreatingPassword);
 
 		}
@@ -128,7 +128,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.addActionListener(new switchKeyboardHandler());
 		passwordArea = new JPanel();
 		getContentPane().add(passwordArea);
-		keyboard = new UiVirtualKeyboard(mainWindow, this);
+		keyboard = new UiVirtualKeyboard(app, this);
 		UpdatePasswordArea();
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
@@ -138,7 +138,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		getRootPane().setDefaultButton(ok);
 		if(username.length() > 0)
 			passwordField.requestFocus();
-		mainWindow.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}
@@ -227,7 +227,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.setText(app.getButtonLabel("VirtualKeyboardSwitchToNormal"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
-		mainWindow.centerDlg((JDialog)this);
+		UiUtilities.centerDlg(this);
 	}
 
 	public void displayPasswordAreaUsingNormalKeyboard()
@@ -254,7 +254,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.setText(app.getButtonLabel("VirtualKeyboardSwitchToVirtual"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
-		mainWindow.centerDlg(this);
+		UiUtilities.centerDlg(this);
 	}
 	public void updateUI()
 	{

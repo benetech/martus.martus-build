@@ -74,7 +74,7 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 
 		getRootPane().setDefaultButton(ok);
 
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

@@ -75,7 +75,7 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
 
 		getRootPane().setDefaultButton(ok);
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

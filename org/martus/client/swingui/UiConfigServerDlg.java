@@ -88,7 +88,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		getContentPane().add(cancel);
 		getRootPane().setDefaultButton(ok);
 
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

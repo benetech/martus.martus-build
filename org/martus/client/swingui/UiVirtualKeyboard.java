@@ -45,9 +45,8 @@ import org.martus.client.core.MartusApp;
 public class UiVirtualKeyboard
 {
 
-	public UiVirtualKeyboard(UiMainWindow mainWindow, VirtualKeyboardHandler uiHandler)
+	public UiVirtualKeyboard(MartusApp app, VirtualKeyboardHandler uiHandler)
 	{
-		MartusApp app = mainWindow.getApp();
 		handler = uiHandler;
 		password = "";
 		String keys = app.getFieldLabel("VirtualKeyboardKeys");

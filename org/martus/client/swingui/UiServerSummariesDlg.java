@@ -69,7 +69,7 @@ public class UiServerSummariesDlg extends JDialog
 		disabledBackgroundColor = getBackground();
 		JLabel label = new JLabel("");
 		String topMessageText = getApp().getFieldLabel(topMessageTag);
-		UiWrappedTextArea retrieveMessage = new UiWrappedTextArea(mainWindow, topMessageText);
+		UiWrappedTextArea retrieveMessage = new UiWrappedTextArea(topMessageText);
 		tableBox = Box.createVerticalBox();
 		table = new RetrieveJTable(model);
 		oldBooleanRenderer = table.getDefaultRenderer(Boolean.class);
@@ -128,7 +128,7 @@ public class UiServerSummariesDlg extends JDialog
 
 
 		getRootPane().setDefaultButton(ok);
-		mainWindow.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

@@ -37,16 +37,12 @@ import javax.swing.JTextField;
 
 import org.martus.client.core.MartusApp;
 
-
-
 public class UiStringInputDlg extends JDialog
 {
-	public UiStringInputDlg(UiMainWindow owner, String baseTag, String descriptionTag, String defaultText)
+	public UiStringInputDlg(JFrame owner, MartusApp app, String baseTag, String descriptionTag, String defaultText)
 	{
 		super(owner, "", true);
-		mainWindow = owner;
 
-		MartusApp app = owner.getApp();
 		setTitle(app.getWindowTitle("input" + baseTag));
 
 		JLabel label = new JLabel(app.getFieldLabel("input" + baseTag + "entry"));
@@ -74,7 +70,7 @@ public class UiStringInputDlg extends JDialog
 
 		getRootPane().setDefaultButton(ok);
 
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(false);
 	}
 
@@ -100,7 +96,6 @@ public class UiStringInputDlg extends JDialog
 		return result;
 	}
 
-	JFrame mainWindow;
 	JTextField text;
 	String result = null;
 }

@@ -42,10 +42,9 @@ import javax.swing.JTextArea;
 public class UiNotifyDlg extends JDialog implements ActionListener
 {
 
-	public UiNotifyDlg(UiMainWindow main, JFrame owner, String title, String[] contents, String[] buttons)
+	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons)
 	{
 		super(owner, title , true);
-		mainWindow = main;
 		getContentPane().add(new JLabel("      "), BorderLayout.WEST);
 		getContentPane().add(new JLabel("      "), BorderLayout.EAST);
 
@@ -70,7 +69,7 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 		vbox.add(new JLabel(" "));
 
 		getContentPane().add(vbox, BorderLayout.CENTER);
-		main.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		getRootPane().setDefaultButton(ok);
 		ok.requestFocus(true);
@@ -79,7 +78,7 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 
 	private JTextArea createWrappedTextArea(String message)
 	{
-		UiWrappedTextArea msgArea = new UiWrappedTextArea(mainWindow, message);
+		UiWrappedTextArea msgArea = new UiWrappedTextArea(message);
 		msgArea.addKeyListener(new TabToOkButton());
 		return msgArea;
 	}
@@ -116,5 +115,4 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 
 	String result;
 	JButton ok;
-	UiMainWindow mainWindow;
 }

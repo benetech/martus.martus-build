@@ -90,7 +90,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 					RSANOTICE + "\n" + IBMNOTICE + "\n" + APACHENOTICE;
 
 		Box vBoxDetails = Box.createVerticalBox();
-		vBoxDetails.add(new UiWrappedTextArea(this, notice));
+		vBoxDetails.add(new UiWrappedTextArea(notice));
 		vBoxDetails.add(hBoxOk);
 
 		Box hBoxDetails = Box.createHorizontalBox();

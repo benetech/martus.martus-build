@@ -26,19 +26,18 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
-import java.awt.Window;
-
+import javax.swing.JFrame;
 import javax.swing.JTextArea;
 
 public class UiWrappedTextArea extends JTextArea
 {
-	public UiWrappedTextArea(Window mainWindow, String message)
+	public UiWrappedTextArea(String message)
 	{
-		this(mainWindow, message, 80);
+		this(message, 80);
 	}
 
 
-	public UiWrappedTextArea(Window mainWindow, String message, int maxChars)
+	public UiWrappedTextArea(String message, int maxChars)
 	{
 		super(message);
 		int messageLength = message.length();
@@ -72,8 +71,9 @@ public class UiWrappedTextArea extends JTextArea
 		setFocusable(true);
 		setWrapStyleWord(true);
 		setLineWrap(true);
-		setBackground(mainWindow.getBackground());
-		setForeground(mainWindow.getForeground());
+		JFrame sampleWindow = new JFrame();
+		setBackground(sampleWindow.getBackground());
+		setForeground(sampleWindow.getForeground());
 	}
 
 }

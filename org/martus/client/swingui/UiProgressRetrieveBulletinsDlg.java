@@ -44,7 +44,7 @@ public class UiProgressRetrieveBulletinsDlg extends UiProgressRetrieveDlg
 		vBox.add(cancel);
 		vBox.add(new JLabel("    "));
 		getContentPane().add(vBox);
-		window.centerDlg(this);
+		UiUtilities.centerDlg(this);
 	}
 
 	public UiProgressMeter getChunkCountMeter()

@@ -89,7 +89,7 @@ class UiSetupDlg extends JDialog implements ActionListener
 
 		getRootPane().setDefaultButton(ok);
 
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

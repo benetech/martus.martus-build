@@ -66,7 +66,7 @@ public class UiDisplayFileDlg extends JDialog
 			return;
 		}
 
-		msgArea = new UiWrappedTextArea(owner, message);
+		msgArea = new UiWrappedTextArea(message);
 		msgArea.addKeyListener(new TabToOkButton());
 		msgArea.setRows(14);
 		msgArea.setColumns(80);
@@ -98,7 +98,7 @@ public class UiDisplayFileDlg extends JDialog
 		getRootPane().setDefaultButton(ok);
 		ok.requestFocus();
 
-		owner.centerDlg(this);
+		UiUtilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}
