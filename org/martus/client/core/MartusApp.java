@@ -1592,6 +1592,7 @@ public class MartusApp
 	private int maxNewFolders;
 
 	public static final String PUBLIC_INFO_EXTENSION = ".mpi";
+	public static final String DEFAULT_DETAILS_EXTENSION = ".mdd";
 	public static final String AUTHENTICATE_SERVER_FAILED = "Failed to Authenticate Server";
 	public static final String KEYPAIR_FILENAME = "MartusKeyPair.dat";
 

@@ -28,11 +28,17 @@ package org.martus.client.swingui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.InputStreamReader;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
+import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
@@ -54,8 +60,10 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		cancel.addActionListener(this);
 		JButton help = new JButton(app.getButtonLabel("help"));
 		help.addActionListener(new helpHandler());
+		JButton loadFromFile = new JButton(app.getButtonLabel("loadTemplateFromFile"));
+		loadFromFile.addActionListener(new loadFileHandler());
 
-		details = new UiTextArea(5, 50);
+		details = new UiTextArea(15, 65);
 		details.setLineWrap(true);
 		details.setWrapStyleWord(true);
 		JScrollPane detailScrollPane = new JScrollPane(details, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
@@ -68,9 +76,11 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		getContentPane().add(detailScrollPane);
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(help);
+		getContentPane().add(loadFromFile);
+		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(ok);
 		getContentPane().add(cancel);
-		getContentPane().add(help);
 
 		getRootPane().setDefaultButton(ok);
 		owner.centerDlg(this);
@@ -97,6 +107,71 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		}
 	}
 	
+	class loadFileHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent ae)
+		{
+			JFileChooser chooser = new JFileChooser();
+			chooser.setApproveButtonText(app.getButtonLabel("inputLoadDefaultDetailsok"));
+			chooser.setFileFilter(new DefaultDetailsFilter());
+			chooser.setDialogTitle(app.getWindowTitle("LoadDefaultDetails"));
+			chooser.setCurrentDirectory(new File(app.getDataDirectory()));
+			int returnVal = chooser.showOpenDialog(mainWindow);
+			if(returnVal == JFileChooser.APPROVE_OPTION)
+			{
+				File importFile = chooser.getSelectedFile();
+				String fileContent = RetrieveTextData(importFile);
+				if(fileContent != null)
+				{
+					details.setText(fileContent);
+				}		
+			}
+		}
+		
+	}
+
+	public String RetrieveTextData(File importFile)
+	{
+		String details = "";
+		try
+		{
+			InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(importFile));
+			BufferedReader reader = new BufferedReader(inputStreamReader);
+			while(true)
+			{
+				String line = reader.readLine();
+				if(line == null)
+					break;
+				details += line;
+				details += "\n";
+			}
+			inputStreamReader.close();
+			mainWindow.notifyDlg(mainWindow, "ConfirmCorrectDefaultDetailsData");
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
+		return details;
+	}
+
+	class DefaultDetailsFilter extends FileFilter
+	{
+		public boolean accept(File pathname)
+		{
+			if(pathname.isDirectory())
+				return true;
+			return(pathname.getName().endsWith(MartusApp.DEFAULT_DETAILS_EXTENSION));
+		}
+
+		public String getDescription()
+		{
+			return app.getFieldLabel("DefaultDetailFiles");
+		}
+	}
+	
+
 	public boolean getResult()
 	{
 		return result;

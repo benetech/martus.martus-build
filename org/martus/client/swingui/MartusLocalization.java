@@ -398,6 +398,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyPreviewOneBulletinOnly=Preview One Bulletin Only");
 		addEnglishTranslation("wintitle:notifyPreviewNoBulletinsSelected=No Bulletin Selected");
 		addEnglishTranslation("wintitle:notifyRetrievedOnlySomeSummaries=Error During Retrieve");
+		addEnglishTranslation("wintitle:notifyConfirmCorrectDefaultDetailsData=Confirm Correct Default Details Content");
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
@@ -433,7 +434,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:DeleteBulletinFile=Delete Bulletin File");
 		addEnglishTranslation("wintitle:ImportHQPublicKey=Import Headquater's Public Key File");
 		addEnglishTranslation("wintitle:ServerNews=Server News");
-
+		addEnglishTranslation("wintitle:LoadDefaultDetails=Load Default Details Field Content");
+				
 		addEnglishTranslation("button:help=Help");
 		addEnglishTranslation("button:create=Create");
 		addEnglishTranslation("button:search=Search");
@@ -448,7 +450,8 @@ public class MartusLocalization
 		addEnglishTranslation("button:inputservermagicwordok=OK");
 		addEnglishTranslation("button:inputExportMyPublicKeyok=Export");
 		addEnglishTranslation("button:inputImportPublicCodeok=Import");
-		
+		addEnglishTranslation("button:inputLoadDefaultDetailsok=Load");
+				
 		addEnglishTranslation("button:cancel=Cancel");
 		addEnglishTranslation("button:browse=Browse...");
 		addEnglishTranslation("button:yes=Yes");
@@ -469,6 +472,7 @@ public class MartusLocalization
 		addEnglishTranslation("button:Delete=Delete");
 		addEnglishTranslation("button:Leave=Leave");
 		addEnglishTranslation("button:modify=Modify");
+		addEnglishTranslation("button:loadTemplateFromFile=Load From File");
 
 		addEnglishTranslation("menu:file=File");
 		addEnglishTranslation("menu:CreateNewBulletin=Create New Bulletin");
@@ -623,7 +627,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:OnlineHelpMessage=Details:");
 		addEnglishTranslation("field:OnlineHelpTOCMessage=Topics:");
 		addEnglishTranslation("field:OnlineHelpTOCMessageDescription=Click on topic to display details.");
-		
+		addEnglishTranslation("field:DefaultDetailFiles=Default Details");
+				
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");
 		addEnglishTranslation("field:VirtualKeyboardKeys=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-+=!@#$%^&*()_,.[]{}<>\\/?|;:~");
@@ -730,7 +735,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyPreviewOneBulletinOnlycause=You may only preview one bulletin at a time.  Please only select one bulletin to preview.");
 		addEnglishTranslation("field:notifyPreviewNoBulletinsSelectedcause=No bulletin selected.  Please select the bulletin you wish to preview.");
 		addEnglishTranslation("field:notifyRetrievedOnlySomeSummariescause=Errors occured while retrieving bulletin summaries.  Some of the bulletins on the server will not be shown.");
-		
+		addEnglishTranslation("field:notifyConfirmCorrectDefaultDetailsDatacause=Please confirm that the default details retrieved are correct.");
+				
 		addEnglishTranslation("field:messageServerNewscause=The current server has sent this message:");
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
