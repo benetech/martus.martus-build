@@ -1,8 +1,9 @@
 package org.martus.common;
 
+import java.io.Serializable;
 import java.rmi.server.UID;
 
-public class UniversalId implements Comparable
+public class UniversalId implements Comparable, Serializable
 {
 	public static class NotUniversalIdException extends Exception {}
 	

@@ -1,5 +1,15 @@
 package org.martus.client;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.util.HashMap;
+
+import org.martus.common.ByteArrayInputStreamWithSeek;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 
@@ -71,5 +81,36 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		assertEquals("Date not found in cache?", "1020", cache.getFieldData(uid2, b2.TAGEVENTDATE));
 		cache.removeFieldData(uid2);
 		assertNull("Date still in cache?", cache.getFieldData(uid2, b2.TAGEVENTDATE));
+	}
+	
+	public void testSaveAndLoadCache() throws Exception
+	{
+		MartusSecurity security = new MartusSecurity();
+		security.createKeyPair(512);
+		
+		CacheOfSortableFields cache = new CacheOfSortableFields();
+		Bulletin b = new Bulletin((BulletinStore)null);
+		b.set(b.TAGEVENTDATE, "1020");
+		UniversalId uid = b.getUniversalId();
+		cache.setFieldData(b);
+
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		cache.save(out, security);
+		byte[] savedBytes = out.toByteArray();
+		CacheOfSortableFields cache2 = new CacheOfSortableFields();
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(savedBytes);
+		cache2.load(in, security);
+		assertEquals("Data not saved?", "1020", cache2.getFieldData(uid, b.TAGEVENTDATE));
+		
+		ByteArrayInputStream nonCipherIn = new ByteArrayInputStream(savedBytes);
+		try 
+		{
+			ObjectInputStream dataIn = new ObjectInputStream(nonCipherIn);
+			dataIn.readObject();
+			fail("This should have thrown, should be encrypted");
+		} 
+		catch (Exception expectedException) 
+		{
+		}
 	}
 }

@@ -12,6 +12,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.math.BigInteger;
+import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.Key;
 import java.security.KeyFactory;
@@ -186,25 +187,9 @@ public class MartusSecurity implements MartusCrypto
 		if(publicKey == null)
 			throw new NoKeyPairException();
 
+		CipherOutputStream cos = createCipherOutputStream(cipherStream, sessionKeyBytes);
 		try
 		{
-			byte[] ivBytes = new byte[IV_BYTE_COUNT];
-			rand.nextBytes(ivBytes);
-		
-			byte[] encryptedKeyBytes = encryptSessionKey(sessionKeyBytes, getPublicKeyString());
-		
-			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
-			IvParameterSpec spec = new IvParameterSpec(ivBytes);
-			sessionCipherEngine.init(Cipher.ENCRYPT_MODE, sessionKey, spec, rand);
-
-			OutputStream bufferedCipherStream = new BufferedOutputStream(cipherStream);
-			DataOutputStream output = new DataOutputStream(bufferedCipherStream);
-			output.writeInt(encryptedKeyBytes.length);
-			output.write(encryptedKeyBytes);
-			output.writeInt(ivBytes.length);
-			output.write(ivBytes);
-		
-			CipherOutputStream cos = new CipherOutputStream(output, sessionCipherEngine);
 			InputStream bufferedPlainStream = new BufferedInputStream(plainStream);
 			
 			byte[] buffer = new byte[MartusConstants.streamBufferCopySize];
@@ -215,11 +200,41 @@ public class MartusSecurity implements MartusCrypto
 			}
 			
 			cos.close();
-			bufferedCipherStream.flush();
 		}
 		catch(Exception e)
 		{
 			//System.out.println("MartusSecurity.encrypt: " + e);
+			throw new EncryptionException();
+		}
+	}
+
+	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
+		throws EncryptionException
+	{
+		try
+		{
+			byte[] ivBytes = new byte[IV_BYTE_COUNT];
+			rand.nextBytes(ivBytes);
+			
+			byte[] encryptedKeyBytes = encryptSessionKey(sessionKeyBytes, getPublicKeyString());
+			
+			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
+			IvParameterSpec spec = new IvParameterSpec(ivBytes);
+			sessionCipherEngine.init(Cipher.ENCRYPT_MODE, sessionKey, spec, rand);
+			
+			OutputStream bufferedCipherStream = new BufferedOutputStream(cipherStream);
+			DataOutputStream output = new DataOutputStream(bufferedCipherStream);
+			output.writeInt(encryptedKeyBytes.length);
+			output.write(encryptedKeyBytes);
+			output.writeInt(ivBytes.length);
+			output.write(ivBytes);
+			
+			CipherOutputStream cos = new CipherOutputStream(output, sessionCipherEngine);
+			return cos;
+		}
+		catch(Exception e)
+		{
+			//System.out.println("MartusSecurity.createCipherOutputStream: " + e);
 			throw new EncryptionException();
 		}
 	}
@@ -290,26 +305,9 @@ public class MartusSecurity implements MartusCrypto
 	public synchronized void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
 			DecryptionException 
 	{
+		CipherInputStream cis = createCipherInputStream(cipherStream, sessionKeyBytes);		BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
 		try
 		{
-			DataInputStream dis = new DataInputStream(cipherStream);
-			byte[] storedSessionKey = readSessionKey(dis);
-			if(sessionKeyBytes == null)
-			{
-				sessionKeyBytes = decryptSessionKey(storedSessionKey);
-			}
-		
-			int ivByteCount = dis.readInt();
-			byte[] iv = new byte[ivByteCount];
-			dis.readFully(iv);
-		
-			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
-			IvParameterSpec spec = new IvParameterSpec(iv);
-		
-			sessionCipherEngine.init(Cipher.DECRYPT_MODE, sessionKey, spec, rand);
-			CipherInputStream cis = new CipherInputStream(dis, sessionCipherEngine);
-			BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
-			
 			final int SIZE = MartusConstants.streamBufferCopySize;
 			byte[] chunk = new byte[SIZE];
 			int count = 0;
@@ -323,6 +321,37 @@ public class MartusSecurity implements MartusCrypto
 		catch(Exception e)
 		{
 			//System.out.println("MartusSecurity.decrypt: " + e);
+			throw new DecryptionException();
+		}
+	}
+
+	public CipherInputStream createCipherInputStream(InputStreamWithSeek cipherStream, byte[] sessionKeyBytes)
+		throws	DecryptionException
+	{
+		try
+		{
+			DataInputStream dis = new DataInputStream(cipherStream);
+			byte[] storedSessionKey = readSessionKey(dis);
+			if(sessionKeyBytes == null)
+			{
+				sessionKeyBytes = decryptSessionKey(storedSessionKey);
+			}
+			
+			int ivByteCount = dis.readInt();
+			byte[] iv = new byte[ivByteCount];
+			dis.readFully(iv);
+			
+			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
+			IvParameterSpec spec = new IvParameterSpec(iv);
+			
+			sessionCipherEngine.init(Cipher.DECRYPT_MODE, sessionKey, spec, rand);
+			CipherInputStream cis = new CipherInputStream(dis, sessionCipherEngine);
+			
+			return cis;
+		}
+		catch(Exception e)
+		{
+			//System.out.println("MartusSecurity.createCipherInputStream: " + e);
 			throw new DecryptionException();
 		}
 	}

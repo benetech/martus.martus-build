@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import javax.crypto.CipherInputStream;
+import javax.crypto.CipherOutputStream;
 import javax.net.ssl.KeyManager;
 
 public interface MartusCrypto
@@ -70,6 +72,12 @@ public interface MartusCrypto
 
 	public byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws 
 		DecryptionException;
+
+	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
+		throws EncryptionException;
+
+	public CipherInputStream createCipherInputStream(InputStreamWithSeek cipherStream, byte[] sessionKeyBytes)
+		throws	DecryptionException;
 
 	public String createRandomToken();
 	
