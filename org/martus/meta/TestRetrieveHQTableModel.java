@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.RetrieveHQTableModel;
+import org.martus.client.test.*;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinZipUtilities;

@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.meta;
+package org.martus.client.test;
 
 import java.io.File;
 import java.io.IOException;

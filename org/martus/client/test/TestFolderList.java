@@ -33,7 +33,6 @@ import org.martus.client.swingui.FolderList;
 import org.martus.client.swingui.FolderTreeNode;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.common.MockClientDatabase;
-import org.martus.meta.MockUiLocalization;
 
 public class TestFolderList extends TestCase
 {

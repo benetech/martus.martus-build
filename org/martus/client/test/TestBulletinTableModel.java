@@ -34,7 +34,6 @@ import org.martus.client.swingui.BulletinTableModel;
 import org.martus.common.Bulletin;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.UniversalId;
-import org.martus.meta.MockUiLocalization;
 
 public class TestBulletinTableModel extends TestCase
 {
