@@ -75,6 +75,7 @@ import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
+import org.martus.client.swingui.tablemodels.*;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.NetworkInterfaceConstants;

@@ -3,7 +3,7 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.swingui.DeleteMyServerDraftsTableModel;
+import org.martus.client.swingui.tablemodels.DeleteMyServerDraftsTableModel;
 import org.martus.client.test.*;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;

@@ -5,7 +5,7 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.core.BulletinStore;
-import org.martus.client.swingui.RetrieveHQDraftsTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
 import org.martus.client.test.*;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;

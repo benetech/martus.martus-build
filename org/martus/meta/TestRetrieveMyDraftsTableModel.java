@@ -3,8 +3,8 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.swingui.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.UiLocalization;
+import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.test.*;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;

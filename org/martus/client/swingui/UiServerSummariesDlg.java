@@ -49,6 +49,7 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
+import org.martus.client.swingui.tablemodels.*;
 import org.martus.common.FieldDataPacket;
 import org.martus.swing.*;
 

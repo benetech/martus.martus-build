@@ -24,17 +24,16 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui;
+package org.martus.client.swingui.tablemodels;
 
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.core.MartusApp;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.common.Bulletin;
 
+public abstract class RetrieveTableModelHQ extends RetrieveTableModel {
 
-
-abstract public class RetrieveTableModelNonHQ extends RetrieveTableModel {
-
-	public RetrieveTableModelNonHQ(MartusApp appToUse, UiLocalization localizationToUse)
+	public RetrieveTableModelHQ(MartusApp appToUse, UiLocalization localizationToUse)
 	{
 		super(appToUse, localizationToUse);
 	}
@@ -43,19 +42,22 @@ abstract public class RetrieveTableModelNonHQ extends RetrieveTableModel {
 	{
 		switch(column)
 		{
-		case 0:
-			return getLocalization().getFieldLabel("retrieveflag");
-		case 1:
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		case 2:
-		default:
-			return getLocalization().getFieldLabel("BulletinSize");
+			case 0:
+				return getLocalization().getFieldLabel("retrieveflag");
+			case 1:
+				return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
+			case 2:
+				return getLocalization().getFieldLabel(Bulletin.TAGAUTHOR);
+			case 3:
+				return getLocalization().getFieldLabel("BulletinSize");
+			default:
+				return "";
 		}
 	}
 
 	public int getColumnCount()
 	{
-		return 3;
+		return 4;
 	}
 
 	public Object getValueAt(int row, int column)
@@ -63,36 +65,43 @@ abstract public class RetrieveTableModelNonHQ extends RetrieveTableModel {
 		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
 		switch(column)
 		{
-		case 0:
-			return new Boolean(summary.isChecked());
-		case 1:
-			return summary.getTitle();
-		case 2:
+			case 0:
+				return new Boolean(summary.isChecked());
+			case 1:
+				return summary.getTitle();
+			case 2:
+				return summary.getAuthor();
+			case 3:
 				return getSizeInKbytes(summary.getSize());
-		default:
-			return "";
+			default:
+				return "";
 		}
 	}
+
 
 	public void setValueAt(Object value, int row, int column)
 	{
 		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
 		if(column == 0)
+		{
 			summary.setChecked(((Boolean)value).booleanValue());
+		}
 	}
 
 	public Class getColumnClass(int column)
 	{
 		switch(column)
 		{
-		case 0:
-			return Boolean.class;
-		case 1:
-			return String.class;
-		case 2:
-			return Integer.class;
-		default:
-			return null;
+			case 0:
+				return Boolean.class;
+			case 1:
+				return String.class;
+			case 2:
+				return String.class;
+			case 3:
+				return Integer.class;
+			default:
+				return null;
 		}
 	}
 }

@@ -4,7 +4,7 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.RetrieveMyTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.test.*;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
