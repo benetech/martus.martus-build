@@ -27,7 +27,7 @@
     </path>
 
     <target name="notify-swing">
-        <echo message="This is not a standalone build file. Please run these tasks thru the main meta-build.xml."/>
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
     </target>
 
   <!-- ================================================================== -->

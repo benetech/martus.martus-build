@@ -55,11 +55,11 @@
     <!-- B U I L D                                                          -->
     <!-- ================================================================== -->
     <target depends="init" name="make.release.nosign" description="Executes subproject that builds martus without signing jars">
-        <ant antfile="meta-build.xml" dir="." target="test.release"/>
+        <ant antfile="build-meta.xml" dir="." target="test.release"/>
     </target>
 
     <target depends="init" name="make.release" description="Executes subproject that builds martus">
-        <ant antfile="meta-build.xml" dir="." target="release"/>
+        <ant antfile="build-meta.xml" dir="." target="release"/>
     </target>
 
     <!-- ================================================================== -->

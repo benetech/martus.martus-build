@@ -273,9 +273,9 @@ startAntBuild()
 	cd "$CVS_HOME"
 	if [ $cvs_tag = 1 ]; then
 		#ant md5
-		ant -f martus/build.xml release
+		ant -f martus/build-meta.xml release
 	else
-		ant -f martus/build.xml release
+		ant -f martus/build-meta.xml release
 	fi
 	status=$?
 	
