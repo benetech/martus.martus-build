@@ -367,8 +367,7 @@ public class Bulletin implements BulletinConstants
 	{
 		this.clear();
 
-		String status = other.getStatus();
-		setStatus(status);
+		setDraft();
 		setAllPrivate(other.isAllPrivate());
 
 		{
@@ -392,7 +391,7 @@ public class Bulletin implements BulletinConstants
 		for(int aIndex = 0; aIndex < attachmentPublicProxies.length; ++aIndex)
 		{
 			AttachmentProxy ap = attachmentPublicProxies[aIndex];
-			ap = getAsFileProxy(ap, otherDatabase, status, security);
+			ap = getAsFileProxy(ap, otherDatabase, Bulletin.STATUSDRAFT, security);
 			addPublicAttachment(ap);
 		}
 
@@ -400,7 +399,7 @@ public class Bulletin implements BulletinConstants
 		for(int aIndex = 0; aIndex < attachmentPrivateProxies.length; ++aIndex)
 		{
 			AttachmentProxy ap = attachmentPrivateProxies[aIndex];
-			ap = getAsFileProxy(ap, otherDatabase, status, security);
+			ap = getAsFileProxy(ap, otherDatabase, Bulletin.STATUSDRAFT, security);
 			addPrivateAttachment(ap);
 		}
 

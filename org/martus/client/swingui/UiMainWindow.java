@@ -91,6 +91,8 @@ import org.martus.client.core.CurrentUiState;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
+import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
+import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -1584,14 +1586,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void createBulletin()
 	{
 		Bulletin b = app.createBulletin();
-		modifyBulletin(b);
+		modifyBulletin(b, new DoNothingOnCancel());
 	}
 
-	public boolean modifyBulletin(Bulletin b)
+	public boolean modifyBulletin(Bulletin b, CancelHandler cancelHandler)
 	{
 		modifyingBulletin = true;
 		setEnabled(false);
-		UiModifyBulletinDlg dlg = new UiModifyBulletinDlg(b, this);
+		UiModifyBulletinDlg dlg = new UiModifyBulletinDlg(b, cancelHandler, this);
 		currentActiveFrame = dlg;
 		return dlg.wasBulletinSaved();
 	}

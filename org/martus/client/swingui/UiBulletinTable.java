@@ -63,6 +63,9 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
+import org.martus.client.swingui.UiModifyBulletinDlg.DeleteBulletinOnCancel;
+import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
+import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.common.Bulletin;
 import org.martus.common.DatabaseKey;
 import org.martus.common.UniversalId;
@@ -232,6 +235,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 
 		BulletinStore store = mainWindow.getApp().getStore();
+		CancelHandler handler = new DoNothingOnCancel();
 		if(createClone)
 		{
 			Bulletin clone = store.createEmptyBulletin();
@@ -239,11 +243,11 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			{
 				clone.pullDataFrom(b, store.getDatabase());
 				clone.setDraft();
-DatabaseKey akey = DatabaseKey.createKey(clone.getPublicAttachments()[0].getUniversalId(),clone.getStatus());
-store.getDatabase().doesRecordExist(akey);
+
 				store.saveBulletin(clone);
 				DatabaseKey key = DatabaseKey.createKey(clone.getUniversalId(),clone.getStatus());
 				b = store.loadFromDatabase(key);
+				handler = new DeleteBulletinOnCancel();
 			}
 			catch (Exception e)
 			{
@@ -251,11 +255,8 @@ store.getDatabase().doesRecordExist(akey);
 				return;
 			}
 		}
-		boolean bulletinWasSaved = mainWindow.modifyBulletin(b);
-		if(createClone && ! bulletinWasSaved)
-		{
-			store.destroyBulletin(b);
-		}			
+
+		mainWindow.modifyBulletin(b, handler);
 	}
 
 	public void doCutBulletins()

@@ -267,7 +267,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("id unchanged", false, b2.getLocalId().equals(b1.getLocalId()));
 		assertEquals("public info", b1.get(Bulletin.TAGPUBLICINFO), b2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info", b1.get(Bulletin.TAGPRIVATEINFO), b2.get(Bulletin.TAGPRIVATEINFO));
-		assertEquals("wrong status?", b1.getStatus(), b2.getStatus());
+		assertEquals("wrong status?", Bulletin.STATUSDRAFT, b2.getStatus());
 		assertEquals("wrong private?", b1.isAllPrivate(), b2.isAllPrivate());
 
 		AttachmentProxy a1 = new AttachmentProxy(tempFile1);

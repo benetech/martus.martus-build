@@ -51,9 +51,11 @@ import org.martus.common.MartusCrypto;
 
 class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListener, EncryptionChangeListener
 {
-	public UiModifyBulletinDlg(Bulletin b, UiMainWindow observerToUse)
+	public UiModifyBulletinDlg(Bulletin b, CancelHandler cancelHandlerToUse, UiMainWindow observerToUse)
 	{
 		observer = observerToUse;
+		cancelHandler = cancelHandlerToUse;
+		
 		MartusApp app = getApp();
 		setTitle(app.getWindowTitle("create"));
 		observer.updateIcon(this);
@@ -239,7 +241,30 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 	{
 		if(observer.confirmDlg(this, "CancelModifyBulletin"))
 		{
+			cancelHandler.onCancel(observer.getStore(), bulletin);
 			cleanupAndExit();
+		}
+	}
+
+	public interface CancelHandler
+	{
+		public void onCancel(BulletinStore store,Bulletin b);
+	}
+
+	public static class DoNothingOnCancel implements CancelHandler
+	{
+		public void onCancel(BulletinStore store,Bulletin b)
+		{
+			// do nothing
+		}
+	}
+	
+	public static class DeleteBulletinOnCancel implements CancelHandler
+	{
+		public void onCancel(BulletinStore store, Bulletin b)
+		{
+System.out.println("Destroying cancelled bulletin");
+			store.destroyBulletin(b);
 		}
 	}
 
@@ -254,5 +279,6 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 	JButton cancel;
 	
 	boolean wasBulletinSavedFlag;
+	CancelHandler cancelHandler;
 }
 
