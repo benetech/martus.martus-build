@@ -126,8 +126,7 @@ public class UiDateEditor extends UiField
 				mCombo.getSelectedIndex(),
 				dCombo.getSelectedIndex()+1);
 		
-		Date d = cal.getTime();
-		return d;
+		return (Date) cal.getTime();
 	}
 
 	public void setText(String newText)
@@ -138,7 +137,7 @@ public class UiDateEditor extends UiField
 	public static void setDate(String dateText, JComboBox yCombo, JComboBox mCombo, JComboBox dCombo)
 	{
 		DateFormat df = Bulletin.getStoredDateFormat();
-		Date d;
+		Date d = null;
 		try
 		{
 			d = df.parse(dateText);

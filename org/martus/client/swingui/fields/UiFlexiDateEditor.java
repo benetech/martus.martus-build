@@ -87,8 +87,7 @@ public class UiFlexiDateEditor extends UiField
 	private JPanel buildExactDatePanel()
 	{		
 		extDatePanel = new JPanel();																
-		buildBeginDateBox();
-			
+	
 		extDatePanel.add(new JLabel(" "));				
 		extDatePanel.add( buildBeginDateBox());
 		
@@ -111,9 +110,12 @@ public class UiFlexiDateEditor extends UiField
 	private Box buildEndDateBox()
 	{
 		Box endDateBox = Box.createHorizontalBox();
-		endDayCombo = new JComboBox();	
-		endMonthCombo = new JComboBox(localizationToUse.getMonthLabels());
-		endYearCombo = new JComboBox();				
+		if (endDayCombo == null)
+		{		
+			endDayCombo = new JComboBox();	
+			endMonthCombo = new JComboBox(localizationToUse.getMonthLabels());
+			endYearCombo = new JComboBox();
+		}				
 		UiDateEditor.buildDate(endDateBox, localizationToUse, endYearCombo, endMonthCombo, endDayCombo);
 		return endDateBox;		
 	}
@@ -186,7 +188,6 @@ public class UiFlexiDateEditor extends UiField
 		String dateText = df.format(getBeginDate());
 		
 		if (isFlexiDate())	
-//			dateText += DateUtilities.DATE_RANGE_SEPARATER+	df.format(getEndDate());
 			dateText += DateUtilities.DATE_RANGE_SEPARATER + toFlexidate();							
 		return dateText;
 	}	
@@ -199,7 +200,7 @@ public class UiFlexiDateEditor extends UiField
 	
 	private String fromFlexidate(String date)
 	{
-		if (date.indexOf(MartusFlexidate.PLUS) <=0 )
+		if (date.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER) <=0 )
 			return date;
 			
 		MartusFlexidate mf = new MartusFlexidate(date);				

@@ -30,18 +30,17 @@ import java.util.Calendar;
 import java.util.Date;
 
 import org.hrvd.util.date.Flexidate;
-import org.hrvd.util.date.FlexidateFormat;
 
 public class MartusFlexidate
 {
 	public MartusFlexidate(String dateStr)
-	{
-		parseString(dateStr);			
+	{		
+		parseString(dateStr);		
 	}		
 	
-	public MartusFlexidate(Date bDate, Date eDate)
+	public MartusFlexidate(Date beginDate, Date endDate)
 	{
-		setDateRange(bDate, eDate);
+		setDateRange(beginDate, endDate);
 	}
 		
 	private void setDate(Date date, int range)
@@ -54,51 +53,45 @@ public class MartusFlexidate
 		flexiDate = new Flexidate(beginDate, endDate);	
 	}
 	
-	private void parseString(String str)
+	private void parseString(String flexiDateStr)
 	{
-		int plus = str.indexOf(PLUS);
-		String dateStr = null;
+		int plus = flexiDateStr.indexOf(FLEXIDATE_RANGE_DELIMITER);
+		String dateStr = flexiDateStr;
 		int range =0;
 		Date date = null;
 			
 		if (plus > 0)
 		{
-			dateStr = str.substring(0, plus);
-			String rangeStr = str.substring(plus+1);
+			dateStr = flexiDateStr.substring(0, plus);
+			String rangeStr = flexiDateStr.substring(plus+1);
 			range = new Integer(rangeStr).intValue();			
-		}					
+		}							
+		
 		flexiDate = new Flexidate(new Long(dateStr).longValue(), range);
 	}	
-	
-	public String getMatusFlexidate()
-	{		
-		return flexiDate.getDateAsNumber()+PLUS+flexiDate.getRange();
+		
+	public String getMatusFlexidate() 
+	{				
+		return flexiDate.getDateAsNumber()+FLEXIDATE_RANGE_DELIMITER+flexiDate.getRange();
 	}	
 	
-	public Date getBegingDate()
+	public Date getBeginDate()
 	{	
-		Calendar cal = flexiDate.getCalendarLow();	
-						
+		Calendar cal = flexiDate.getCalendarLow();							
 		return (Date)cal.getTime();		
 	}
 	
 	public Date getEndDate()
 	{			
-		Calendar cal = flexiDate.getCalendarHigh();
-		
-		return (Date) ((hasDateRange())? cal.getTime(): getBegingDate());
+		Calendar cal = flexiDate.getCalendarHigh();		
+		return (Date) ((hasDateRange())? cal.getTime(): getBeginDate());
 	}	
 	
 	private boolean hasDateRange()
 	{
 		return (flexiDate.getRange() > 0)? true:false;
-	}	
-	
-	private FlexidateFormat getFormat()
-	{
-		return FlexidateFormat.getFormat();
-	}
+	}		
 		
 	Flexidate flexiDate;
-	public static final String PLUS = "+";	
+	public static final String FLEXIDATE_RANGE_DELIMITER = "+";	
 }

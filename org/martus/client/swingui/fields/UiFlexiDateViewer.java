@@ -70,12 +70,12 @@ public class UiFlexiDateViewer extends UiField
 			label.setText("  " + value + "  ");
 	}
 	
-	private String convertEndDate(String eDate)	
+	private String convertEndDate(String endDate)	
 	{
-		if (eDate.indexOf(MartusFlexidate.PLUS) <=0)
-			return eDate;
+		if (endDate.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER) <=0)
+			return endDate;
 			
-		MartusFlexidate mf = new MartusFlexidate(eDate);
+		MartusFlexidate mf = new MartusFlexidate(endDate);
 		DateFormat df = Bulletin.getStoredDateFormat();				
 
 		return df.format(mf.getEndDate());
