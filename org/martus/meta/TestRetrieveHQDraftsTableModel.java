@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Database;
@@ -36,12 +37,14 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		MartusCrypto fieldSecurity1 = new MockMartusSecurity();
 		fieldSecurity1.createKeyPair();
 		fieldApp1 = MockMartusApp.create(fieldSecurity1);
-		Database db1 = fieldApp1.getStore().getDatabase();
+		final BulletinStore store1 = fieldApp1.getStore();
+		Database db1 = store1.getDatabase();
 
 		MartusCrypto fieldSecurity2 = new MockMartusSecurity();
 		fieldSecurity2.createKeyPair();
 		fieldApp2 = MockMartusApp.create(fieldSecurity2);
-		Database db2 = fieldApp2.getStore().getDatabase();
+		final BulletinStore store2 = fieldApp2.getStore();
+		Database db2 = store2.getDatabase();
 
 		assertNotEquals("account Id's equal?", fieldApp1.getAccountId(), fieldApp2.getAccountId());
 
@@ -51,8 +54,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b0.setAllPrivate(true);
 		b0.setHQPublicKey(hqApp.getAccountId());
 		b0.setDraft();
-		fieldApp1.getStore().saveBulletin(b0);
-		b0Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b0.getBulletinHeaderPacket());
+		store1.saveBulletin(b0);
+		b0Size = MartusUtilities.getBulletinSize(store1.getDatabase(), b0.getBulletinHeaderPacket());
 
 		b1 = fieldApp1.createBulletin();
 		b1.set(Bulletin.TAGTITLE, title1);
@@ -60,8 +63,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(false);
 		b1.setHQPublicKey(hqApp.getAccountId());
 		b1.setSealed();
-		fieldApp1.getStore().saveBulletin(b1);
-		b1Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b1.getBulletinHeaderPacket());
+		store1.saveBulletin(b1);
+		b1Size = MartusUtilities.getBulletinSize(store1.getDatabase(), b1.getBulletinHeaderPacket());
 
 		b2 = fieldApp2.createBulletin();
 		b2.set(Bulletin.TAGTITLE, title2);
@@ -69,7 +72,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b2.setAllPrivate(true);
 		b2.setHQPublicKey(hqApp.getAccountId());
 		b2.setDraft();
-		fieldApp2.getStore().saveBulletin(b2);
+		store2.saveBulletin(b2);
 		b2Size = 2300;
 		testServer = new MockServer();
 		testServer.initialize();
@@ -78,20 +81,19 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		modelWithData = new RetrieveHQDraftsTableModel(hqApp);
 		modelWithData.initialize(null);
 		
-		importBulletinFromFieldOfficeToHq(db1, b0);
-		importBulletinFromFieldOfficeToHq(db1,b1);
-		importBulletinFromFieldOfficeToHq(db2, b2);
+		importBulletinFromFieldOfficeToHq(db1, b0, fieldSecurity1);
+		importBulletinFromFieldOfficeToHq(db1, b1, fieldSecurity1);
+		importBulletinFromFieldOfficeToHq(db2, b2, fieldSecurity2);
 		
 		modelWithoutData = new RetrieveHQDraftsTableModel(hqApp);
 		modelWithoutData.initialize(null);
 	}
 	
-	void importBulletinFromFieldOfficeToHq(Database db, Bulletin b) throws Exception
+	void importBulletinFromFieldOfficeToHq(Database db, Bulletin b, MartusCrypto sigVerifier) throws Exception
 	{
 		File tempFile = createTempFile();
 		DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
-		MartusCrypto security = b.getSignatureGenerator();
-		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
+		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, sigVerifier);
 		hqApp.getStore().importZipFileToStoreWithSameUids(tempFile);
 	}
 	

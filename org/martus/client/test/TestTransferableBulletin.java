@@ -76,7 +76,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		Bulletin b1 = store.createEmptyBulletin();
 		Bulletin b2 = store.createEmptyBulletin();
 		Bulletin[] bulletins = {b1, b2};
-		TransferableBulletinList list = new TransferableBulletinList(store.getDatabase(), bulletins, folder);
+		TransferableBulletinList list = new TransferableBulletinList(store, bulletins, folder);
 		
 		Bulletin[] got = list.getBulletins();
 		assertEquals("wrong count?", 2, got.length);
@@ -182,7 +182,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		b.set(Bulletin.TAGTITLE, title);
 		store.saveBulletin(b);
 		Bulletin[] bulletins = new Bulletin[] {b};
-		TransferableBulletinList localTB = new TransferableBulletinList(store.getDatabase(), bulletins, folder);
+		TransferableBulletinList localTB = new TransferableBulletinList(store, bulletins, folder);
 		Bulletin[] got = localTB.getBulletins();
 		assertEquals("id after create", b.getLocalId(), got[0].getLocalId());
 		return localTB;

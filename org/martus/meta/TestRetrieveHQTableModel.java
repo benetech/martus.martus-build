@@ -76,21 +76,20 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		modelWithData = new RetrieveHQTableModel(hqApp);
 		modelWithData.initialize(null);
 
-		importBulletinFromFieldOfficeToHq(db1, b0);
-		importBulletinFromFieldOfficeToHq(db1, b1);
-		importBulletinFromFieldOfficeToHq(db2, b2);
+		importBulletinFromFieldOfficeToHq(db1, b0, fieldSecurity1);
+		importBulletinFromFieldOfficeToHq(db1, b1, fieldSecurity1);
+		importBulletinFromFieldOfficeToHq(db2, b2, fieldSecurity2);
 		
 		modelWithoutData = new RetrieveHQTableModel(hqApp);
 		modelWithoutData.initialize(null);
 		assertEquals(0, modelWithoutData.getRowCount());
 	}
 
-	void importBulletinFromFieldOfficeToHq(Database db, Bulletin b) throws Exception
+	void importBulletinFromFieldOfficeToHq(Database db, Bulletin b, MartusCrypto sigVerifier) throws Exception
 	{
 		File tempFile = createTempFile();
 		DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
-		MartusCrypto security = b.getSignatureGenerator();
-		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
+		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, sigVerifier);
 		hqApp.getStore().importZipFileToStoreWithSameUids(tempFile);
 	}
 	

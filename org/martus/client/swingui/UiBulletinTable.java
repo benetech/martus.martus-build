@@ -65,7 +65,6 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
-import org.martus.common.Database;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.Packet.InvalidPacketException;
@@ -105,9 +104,9 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		return dropAdapter;
 	}
 	
-	public Database getDatabase()
+	public BulletinStore getStore()
 	{
-		return mainWindow.getStore().getDatabase();
+		return mainWindow.getStore();
 	}
 
 	public BulletinFolder getFolder()
@@ -198,7 +197,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			return;
 
 		Bulletin[] bulletinsBeingDragged = getSelectedBulletins();
-		TransferableBulletinList dragable = new TransferableBulletinList(getDatabase(), bulletinsBeingDragged, getFolder());
+		TransferableBulletinList dragable = new TransferableBulletinList(getStore(), bulletinsBeingDragged, getFolder());
 		dragGestureEvent.startDrag(DragSource.DefaultCopyDrop, dragable, this);
 	}
 
@@ -263,7 +262,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		Bulletin[] selected = getSelectedBulletins();
 		BulletinFolder folder = getFolder();
-		TransferableBulletinList tb = new TransferableBulletinList(getDatabase(), selected, folder);
+		TransferableBulletinList tb = new TransferableBulletinList(getStore(), selected, folder);
 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Clipboard clipboard = toolkit.getSystemClipboard();

@@ -44,14 +44,10 @@ import org.martus.common.MartusUtilities;
 
 public class TransferableBulletinList implements Transferable
 {
-	public TransferableBulletinList(Database databaseToUse, Bulletin thisBulletin, BulletinFolder fromFolder)
+	public TransferableBulletinList(BulletinStore store, Bulletin[] bulletinsToUse, BulletinFolder fromFolder)
 	{
-		this(databaseToUse, new Bulletin[] {thisBulletin}, fromFolder);
-	}
-	
-	public TransferableBulletinList(Database databaseToUse, Bulletin[] bulletinsToUse, BulletinFolder fromFolder)
-	{
-		db = databaseToUse;
+		db = store.getDatabase();
+		sigVerifier = store.getSignatureVerifier();
 		bulletins = bulletinsToUse;
 		folder = fromFolder;
 	}
@@ -70,8 +66,7 @@ public class TransferableBulletinList implements Transferable
 				file.deleteOnExit();
 				files.add(file);
 				DatabaseKey headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
-				MartusCrypto security = bulletin.getSignatureGenerator();
-				MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
+				MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, sigVerifier);
 			}
 		}
 		catch(Exception e)
@@ -220,6 +215,7 @@ public class TransferableBulletinList implements Transferable
 	private static final String BULLETIN_FILE_EXTENSION = ".mba";
 	static DataFlavor bulletinListDataFlavor = new DataFlavor(TransferableBulletinList.class, "Martus Bulletins");
 	Vector files;
+	MartusCrypto sigVerifier;
 	Database db;
 	BulletinFolder folder;
 	Bulletin[] bulletins;

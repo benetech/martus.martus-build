@@ -75,7 +75,7 @@ public class MockBulletin extends Bulletin
 		}
 	}
 
-	public static String saveToZipString(Database db, Bulletin b, MartusCrypto sigVerifier) throws
+	public static String saveToZipString(Database db, Bulletin b, MartusCrypto security) throws
 		IOException,
 		MartusCrypto.CryptoException
 	{
@@ -83,7 +83,7 @@ public class MockBulletin extends Bulletin
 		try
 		{
 			tempFile.deleteOnExit();
-			saveToFile(db, b, tempFile, sigVerifier);
+			saveToFile(db, b, tempFile, security);
 			FileInputStream inputStream = new FileInputStream(tempFile);
 			int len = inputStream.available();
 			byte[] rawBytes = new byte[len];
@@ -98,7 +98,7 @@ public class MockBulletin extends Bulletin
 
 	}
 
-	public static void saveToFile(Database db, Bulletin b, File destFile, MartusCrypto sigVerifier) throws
+	public static void saveToFile(Database db, Bulletin b, File destFile, MartusCrypto security) throws
 		IOException,
 		MartusCrypto.CryptoException
 	{
@@ -112,16 +112,16 @@ public class MockBulletin extends Bulletin
 		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
 		try
 		{
-			byte[] dataSig = writePacketToZip(b, zipOut, b.getFieldDataPacket());
+			byte[] dataSig = writePacketToZip(b, zipOut, b.getFieldDataPacket(), security);
 			header.setFieldDataSignature(dataSig);
 
-			byte[] privateDataSig = writePacketToZip(b, zipOut, b.getPrivateFieldDataPacket());
+			byte[] privateDataSig = writePacketToZip(b, zipOut, b.getPrivateFieldDataPacket(), security);
 			header.setPrivateFieldDataSignature(privateDataSig);
 
-			writeAttachmentsToZip(db, b, zipOut, b.getPublicAttachments(), sigVerifier);
-			writeAttachmentsToZip(db, b, zipOut, b.getPrivateAttachments(), sigVerifier);
+			writeAttachmentsToZip(db, b, zipOut, b.getPublicAttachments(), security);
+			writeAttachmentsToZip(db, b, zipOut, b.getPrivateAttachments(), security);
 
-			writePacketToZip(b, zipOut, header);
+			writePacketToZip(b, zipOut, header, security);
 		}
 		finally
 		{
@@ -151,15 +151,14 @@ public class MockBulletin extends Bulletin
 		}
 	}
 
-	static byte[] writePacketToZip(Bulletin b, ZipOutputStream zipOut, Packet packet) throws
+	static byte[] writePacketToZip(Bulletin b, ZipOutputStream zipOut, Packet packet, MartusCrypto security) throws
 		IOException
 	{
 		ZipEntry entry = new ZipEntry(packet.getLocalId());
 		zipOut.putNextEntry(entry);
 
-		MartusCrypto signer = b.getSignatureGenerator();
 		UnicodeWriter writer = new UnicodeWriter(zipOut);
-		byte[] sig = packet.writeXml(writer, signer);
+		byte[] sig = packet.writeXml(writer, security);
 		writer.flush();
 		return sig;
 	}

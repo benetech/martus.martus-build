@@ -905,7 +905,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTestStoreImportZip", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
+		MockBulletin.saveToFile(db,b, tempFile, creator.getSignatureVerifier());
 		
 		creator.importZipFileBulletin(tempFile, creator.getFolderOutbox(), false);
 		assertEquals("Didn't fully import?", 1, creator.getBulletinCount());
