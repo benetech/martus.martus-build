@@ -19,9 +19,10 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.common.*;
 import org.martus.common.AttachmentPacket;
+import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
+import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -43,6 +44,10 @@ import org.martus.common.Packet.WrongPacketTypeException;
 
 public class Bulletin implements BulletinConstants
 {
+	
+	public static class DamagedBulletinException extends Exception
+	{
+	}
 
 	public Bulletin(BulletinStore bulletinStore)
 	{
@@ -456,50 +461,78 @@ public class Bulletin implements BulletinConstants
 		}
 	}
 
-	public void loadFromDatabase(Database database, DatabaseKey key) throws 
+	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key) throws 
 		IOException,
+		DamagedBulletinException,
 		MartusCrypto.NoKeyPairException
 	{
-		loadFromDatabase(database, key, store.getSignatureVerifier());
+		return loadFromDatabase(store, key, store.getSignatureVerifier());
 	}
 
-	protected void loadFromDatabase(Database database, DatabaseKey key, MartusCrypto verifier) throws 
-			IOException, 
+	protected static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key, MartusCrypto verifier) throws 
+			IOException,
+			DamagedBulletinException,
 			NoKeyPairException 
 	{
-		clear();
-		isValidFlag = true;
-		db = database;
+		Bulletin b = new Bulletin(store);
+		b.clear();
+		b.isValidFlag = true;
+		b.db = store.getDatabase();
+		
+		boolean isHeaderValid = true;
 
-		BulletinHeaderPacket headerPacket = getBulletinHeaderPacket();
+		BulletinHeaderPacket headerPacket = b.getBulletinHeaderPacket();
 		DatabaseKey headerKey = key;
-		loadAnotherPacket(headerPacket, headerKey, null, verifier);
-		if(!isValidFlag)
-			return;
+		b.loadAnotherPacket(headerPacket, headerKey, null, verifier);
+		if(!b.isValid())
+			isHeaderValid = false;
+		
+		if(isHeaderValid)
+		{
+			FieldDataPacket dataPacket = b.getFieldDataPacket();
+			FieldDataPacket privateDataPacket = b.getPrivateFieldDataPacket();
+		
+			DatabaseKey dataKey = b.getDatabaseKeyForLocalId(headerPacket.getFieldDataPacketId());
 	
-		DatabaseKey dataKey = getDatabaseKeyForLocalId(headerPacket.getFieldDataPacketId());
-		FieldDataPacket dataPacket = getFieldDataPacket();
-		byte[] dataSig = headerPacket.getFieldDataSignature();
-		loadAnotherPacket(dataPacket, dataKey, dataSig, verifier);
-	
-		DatabaseKey privateDataKey = getDatabaseKeyForLocalId(headerPacket.getPrivateFieldDataPacketId());
-		FieldDataPacket privateDataPacket = getPrivateFieldDataPacket();
-		byte[] privateDataSig = headerPacket.getPrivateFieldDataSignature();
-		loadAnotherPacket(privateDataPacket, privateDataKey, privateDataSig, verifier);
+			byte[] dataSig = headerPacket.getFieldDataSignature();
+			b.loadAnotherPacket(dataPacket, dataKey, dataSig, verifier);
+		
+			DatabaseKey privateDataKey = b.getDatabaseKeyForLocalId(headerPacket.getPrivateFieldDataPacketId());
+			byte[] privateDataSig = headerPacket.getPrivateFieldDataSignature();
+			b.loadAnotherPacket(privateDataPacket, privateDataKey, privateDataSig, verifier);
 
-		if(isValidFlag)
-			setHQPublicKey(headerPacket.getHQPublicKey());
+		}
+
+		if(b.isValid())
+		{
+			b.setHQPublicKey(headerPacket.getHQPublicKey());
+		}
 		else
-			setHQPublicKey("");
+		{
+			b.setHQPublicKey("");
+			if(!isHeaderValid)
+			{
+				//System.out.println("Bulletin.loadFromDatabase: Header invalid");
+				throw new DamagedBulletinException();
+			}
+		}
+
+		return b;
 	}
 
 	void loadAnotherPacket(Packet packet, DatabaseKey key, byte[] expectedSig, MartusCrypto verifier) throws 
 			IOException, 
 			NoKeyPairException 
 	{
+		packet.setUniversalId(key.getUniversalId());
 		try
 		{
 			InputStream in = db.openInputStream(key, verifier);
+			if(in == null)
+			{
+				isValidFlag = false;
+				throw new IOException("Packet not found");
+			}
 			packet.loadFromXml(in, expectedSig, verifier);
 		}
 		catch(IOException e)
@@ -515,6 +548,7 @@ public class Bulletin implements BulletinConstants
 		}
 		catch(Exception e)
 		{
+			//e.printStackTrace();
 			isValidFlag = false;
 		}
 	}

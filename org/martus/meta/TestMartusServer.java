@@ -111,7 +111,7 @@ public class TestMartusServer extends TestCaseEnhanced
 			b1.setHQPublicKey(hqSecurity.getPublicKeyString());
 			b1.setSealed();
 			b1.save();
-			b1.loadFromDatabase(store.getDatabase(), new DatabaseKey(b1.getUniversalId()));
+			b1 = Bulletin.loadFromDatabase(store, new DatabaseKey(b1.getUniversalId()));
 	
 			b2 = store.createEmptyBulletin();
 			b2.set(b2.TAGTITLE, "Title2");
@@ -274,9 +274,8 @@ public class TestMartusServer extends TestCaseEnhanced
 
 		Database db = testServer.getDatabase();
 		assertNotNull("no database?", db);
-		Bulletin got = store.createEmptyBulletin();
 		DatabaseKey key = new DatabaseKey(b1.getUniversalId());
-		got.loadFromDatabase(db, key);
+		Bulletin got = Bulletin.loadFromDatabase(store, key);
 		assertEquals("id", b1.getLocalId(), got.getLocalId());
 
 		assertEquals(NetworkInterfaceConstants.DUPLICATE, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString));
@@ -290,9 +289,8 @@ public class TestMartusServer extends TestCaseEnhanced
 
 		Database db = testServer.getDatabase();
 		assertNotNull("no database?", db);
-		Bulletin got = store.createEmptyBulletin();
 		DatabaseKey key = new DatabaseKey(b1.getUniversalId());
-		got.loadFromDatabase(db, key);
+		Bulletin got = Bulletin.loadFromDatabase(store, key);
 		assertEquals("id", b1.getLocalId(), got.getLocalId());
 
 		assertEquals(NetworkInterfaceConstants.DUPLICATE, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
@@ -444,7 +442,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		draft.set(draft.TAGPRIVATEINFO, "PrivateDetails1");
 		draft.setHQPublicKey(hqSecurity.getPublicKeyString());
 		draft.save();
-		draft.loadFromDatabase(store.getDatabase(), new DatabaseKey(draft.getUniversalId()));
+		draft = Bulletin.loadFromDatabase(store, new DatabaseKey(draft.getUniversalId()));
 		String draftZipString = draft.saveToZipString();
 		byte[] draftZipBytes = Base64.decode(draftZipString);
 
@@ -471,7 +469,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		b.setHQPublicKey(hqSecurity.getPublicKeyString());
 		b.setDraft();
 		b.save();
-		b.loadFromDatabase(store.getDatabase(), new DatabaseKey(b.getUniversalId()));
+		b = Bulletin.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		UniversalId attachmentUid1 = b.getPublicAttachments()[0].getUniversalId();
 		DatabaseKey draftHeader1 = new DatabaseKey(b.getUniversalId());
 		draftHeader1.setDraft();
@@ -486,7 +484,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		out2.close();
 		b.addPublicAttachment(new AttachmentProxy(attachment));
 		b.save();
-		b.loadFromDatabase(store.getDatabase(), new DatabaseKey(b.getUniversalId()));
+		b = Bulletin.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		UniversalId attachmentUid2 = b.getPublicAttachments()[0].getUniversalId();
 		DatabaseKey attachmentKey2 = new DatabaseKey(attachmentUid2);
 		DatabaseKey draftHeader2 = new DatabaseKey(b.getUniversalId());
@@ -502,7 +500,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		b.addPublicAttachment(new AttachmentProxy(attachment));
 		b.setSealed();
 		b.save();
-		b.loadFromDatabase(store.getDatabase(), new DatabaseKey(b.getUniversalId()));
+		b = Bulletin.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		UniversalId attachmentUid3 = b.getPublicAttachments()[0].getUniversalId();
 		DatabaseKey attachmentKey3 = new DatabaseKey(attachmentUid3);
 		DatabaseKey sealedHeader3 = new DatabaseKey(b.getUniversalId());

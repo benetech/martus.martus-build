@@ -18,8 +18,8 @@ import javax.swing.border.LineBorder;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.martus.client.*;
-import org.martus.common.*;
+import org.martus.common.AttachmentProxy;
+import org.martus.common.MartusCrypto;
 
 abstract public class UiBulletinComponent extends JPanel implements Scrollable, ChangeListener
 {
@@ -31,10 +31,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		publicStuff = new Section(NOT_ENCRYPTED);
 		privateStuff = new Section(ENCRYPTED);
-
-		add(publicStuff, BorderLayout.NORTH);
-		add(privateStuff, BorderLayout.SOUTH);
 		privateStuff.setBorder(new LineBorder(Color.red, 5));
+
 		allPrivateField = createBoolField();
 		publicStuff.add(createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
 		publicStuff.add(allPrivateField.getComponent());
@@ -60,6 +58,9 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		publicStuff.matchFirstColumnWidth(privateStuff);
 		privateStuff.matchFirstColumnWidth(publicStuff);
+
+		add(publicStuff, BorderLayout.NORTH);
+		add(privateStuff, BorderLayout.SOUTH);
 	}
 
 	public UiMainWindow getMainWindow()
@@ -128,12 +129,22 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			for(int i = 0 ; i < privateAttachments.length ; ++i)
 				addPrivateAttachment(privateAttachments[i]);	
 		}
+		
+		boolean isDamaged = false;
+		if(currentBulletin != null && !currentBulletin.isValid())
+		{
+			System.out.println("Damaged: " + currentBulletin.getLocalId());
+			isDamaged = true;
+		}
+
+		publicStuff.updateDamagedIndicator(isDamaged);
+		privateStuff.updateDamagedIndicator(isDamaged);
 	}
 
-	public void updateEncryptionVisualIndication(boolean encrypted)
+	public void updateEncryptedIndicator(boolean isEncrypted)
 	{
-		publicStuff.updateEncryptionVisualIndication(encrypted);
-		if(encrypted)
+		publicStuff.updateEncryptedIndicator(isEncrypted);
+		if(isEncrypted)
 			publicStuff.setBorder(new LineBorder(Color.red, 5));
 		else
 			publicStuff.setBorder(new LineBorder(Color.lightGray, 5));
@@ -262,26 +273,43 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 			setBorder(new EtchedBorder());
 
-			label = new JLabel("", null, JLabel.LEFT);
-			updateEncryptionVisualIndication(encrypted);
-			label.setVerticalTextPosition(JLabel.TOP);
-			label.setFont(label.getFont().deriveFont(Font.BOLD));
-			add(label);
+			encryptedIndicator = new JLabel("", null, JLabel.LEFT);
+			encryptedIndicator.setVerticalTextPosition(JLabel.TOP);
+			encryptedIndicator.setFont(encryptedIndicator.getFont().deriveFont(Font.BOLD));
+			
+			damagedIndicator = new JLabel("", null, JLabel.LEFT);
+			damagedIndicator.setVerticalTextPosition(JLabel.TOP);
+			damagedIndicator.setText("Warning: Missing or damaged information");
+			damagedIndicator.setFont(damagedIndicator.getFont().deriveFont(Font.BOLD));
+			damagedIndicator.setBackground(Color.yellow);
+			damagedIndicator.setForeground(Color.black);
+			damagedIndicator.setOpaque(true);
+			damagedIndicator.setBorder(new LineBorder(Color.black, 2));
+
+			updateEncryptedIndicator(encrypted);
+			updateDamagedIndicator(false);
+			add(encryptedIndicator);
+			add(damagedIndicator);
 		}
 		
-		public void updateEncryptionVisualIndication(boolean encrypted)
+		public void updateEncryptedIndicator(boolean isEncrypted)
 		{
 			String iconFileName = "unlocked.jpg";
 			String title = getApp().getFieldLabel("publicsection");
-			if(encrypted == ENCRYPTED)
+			if(isEncrypted == ENCRYPTED)
 			{
 				iconFileName = "locked.jpg";
 				title = getApp().getFieldLabel("privatesection");
 			}
 			
 			Icon icon = new ImageIcon(Section.class.getResource(iconFileName));
-			label.setIcon(icon);
-			label.setText(title);
+			encryptedIndicator.setIcon(icon);
+			encryptedIndicator.setText(title);
+		}
+		
+		public void updateDamagedIndicator(boolean isDamaged)
+		{
+			damagedIndicator.setVisible(isDamaged);
 		}
 		
 		ParagraphLayout getParagraphLayout()
@@ -301,7 +329,9 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			if(otherWidth > thisWidth)
 				getParagraphLayout().setFirstColumnWidth(otherWidth);
 		}
-		JLabel label;
+		
+		JLabel encryptedIndicator;
+		JLabel damagedIndicator;
 	}
 
 	UiMainWindow mainWindow;

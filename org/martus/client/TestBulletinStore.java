@@ -708,8 +708,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.saveToDatabase(db);
 		File zipFile = File.createTempFile("$$$MartusTestZipSealed", null);
 		zipFile.deleteOnExit();
-		Bulletin loaded = store.createEmptyBulletin();
-		loaded.loadFromDatabase(db, originalKey);
+		Bulletin loaded = Bulletin.loadFromDatabase(store, originalKey);
 		loaded.saveToFile(zipFile);
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getSealedRecordCount());
@@ -731,8 +730,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("Attachment Packet missing", db.doesRecordExist(attachmentKey));
 		assertTrue("Attachment Private Packet missing", db.doesRecordExist(attachmentPrivateKey));
 		
-		Bulletin reloaded = store.createEmptyBulletin();
-		reloaded.loadFromDatabase(db, originalKey);
+		Bulletin reloaded = Bulletin.loadFromDatabase(store, originalKey);
 		assertEquals("public?", original.get(original.TAGTITLE), reloaded.get(reloaded.TAGTITLE));
 		assertEquals("private?", original.get(original.TAGPRIVATEINFO), reloaded.get(reloaded.TAGPRIVATEINFO));
 		
@@ -880,8 +878,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.addPrivateAttachment(aPrivate);
 		original.saveToDatabase(db);
 		
-		Bulletin loaded = store.createEmptyBulletin();
-		loaded.loadFromDatabase(db, originalKey);
+		Bulletin loaded = Bulletin.loadFromDatabase(store, originalKey);
 
 		File zipFile = File.createTempFile("$$$MartusTestZipDraft", null);
 		zipFile.deleteOnExit();
@@ -907,8 +904,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("Attachment Public Packet present?", false, db.doesRecordExist(attachmentKey));
 		assertEquals("Attachment Private Packet present?", false, db.doesRecordExist(attachmentPrivateKey));
 
-		Bulletin reloaded = store.createEmptyBulletin();
-		reloaded.loadFromDatabase(db, new DatabaseKey(savedAsId));
+		Bulletin reloaded = Bulletin.loadFromDatabase(store, new DatabaseKey(savedAsId));
 		
 		assertEquals("public?", original.get(original.TAGTITLE), reloaded.get(reloaded.TAGTITLE));
 		assertEquals("private?", original.get(original.TAGPRIVATEINFO), reloaded.get(reloaded.TAGPRIVATEINFO));

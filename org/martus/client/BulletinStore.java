@@ -236,10 +236,9 @@ public class BulletinStore
 			return null;
 		}
 			
-		Bulletin b = createEmptyBulletin();
 		try
 		{
-			b.loadFromDatabase(db, key);
+			Bulletin b = Bulletin.loadFromDatabase(this, key);
 			addToCache(b);
 			return b;
 		}

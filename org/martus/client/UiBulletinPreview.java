@@ -75,7 +75,7 @@ public class UiBulletinPreview extends JScrollPane
 
 	private void indicateEncrypted(boolean isEncrypted)
 	{
-		view.updateEncryptionVisualIndication(isEncrypted);
+		view.updateEncryptedIndicator(isEncrypted);
 	}
 
 	Bulletin bulletin;

@@ -3,8 +3,15 @@ package org.martus.common;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
+
+import org.martus.common.MartusCrypto.DecryptionException;
+import org.martus.common.MartusCrypto.NoKeyPairException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongPacketTypeException;
 
 
 
@@ -445,6 +452,27 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 //		AttachmentInfo a2 = new AttachmentInfo(id2, label2);
 //		
 //	}
+
+	public void testLoadDamaged() throws Exception
+	{
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		fdp.writeXml(out, security);
+		byte[] bytes = out.toByteArray();
+		bytes[50] ^= 255;
+		
+		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		UniversalId newUid = UniversalId.createDummyUniversalId();
+		FieldDataPacket loadedBad = new FieldDataPacket(newUid, fieldTags);
+		try 
+		{
+			loadedBad.loadFromXml(in, security);
+			fail("Should have thrown!");
+		} 
+		catch (SignatureVerificationException ignoreExpectedException) 
+		{
+		}
+		assertNotEquals("Set the uid?", fdp.getUniversalId(), loadedBad.getUniversalId());
+	}
 		
 	void verifyLoadException(byte[] input, Class expectedExceptionClass)
 	{
