@@ -59,7 +59,6 @@ public class TestPacket extends TestCaseEnhanced
 
 	public void testIsValidVersion()
 	{
-		assertContains(MartusXml.packetFormatVersion, MartusXml.packetStartCommentEnd);
 		assertFalse("Valid null comment?", Packet.isValidStartComment(null));
 		assertFalse("No End Comment is valid?", Packet.isValidStartComment(MartusXml.packetStartCommentStart));
 		assertFalse("No Start Comment is valid?", Packet.isValidStartComment(MartusXml.packetStartCommentEnd));
@@ -93,7 +92,8 @@ public class TestPacket extends TestCaseEnhanced
 		int endCommentPosition = result.indexOf(MartusXml.packetStartCommentEnd);
 		assertTrue("No end startComment?", endCommentPosition >= startCommentLength);
 		String version = result.substring(startCommentLength, endCommentPosition);
-		assertEquals("Invalid Version", MartusUtilities.getVersionDate() , version);
+		String fullExpectedVersion = MartusUtilities.getVersionDate() + MartusXml.packetFormatVersion; 
+		assertEquals("Invalid Version", fullExpectedVersion, version);
 
 		assertContains(packet.getLocalId(), result);
 		assertContains(packet.getAccountId(), result);
@@ -353,7 +353,10 @@ public class TestPacket extends TestCaseEnhanced
 
 		byte[] bytes = out.toByteArray();
 
-		int corruptDataAt = MartusXml.packetStartCommentStart.length() + MartusXml.packetStartCommentEnd.length() + 15;
+		int corruptDataAt = MartusXml.packetStartCommentStart.length() +
+							20 + // allow for build date
+							MartusXml.packetFormatVersion.length() + 
+							MartusXml.packetStartCommentEnd.length() + 15;
 		try
 		{
 			bytes[corruptDataAt] ^= 0xFF;
