@@ -55,7 +55,7 @@ import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
-public class MartusServer implements NetworkInterfaceConstants
+public class MartusServer implements NetworkInterfaceConstants, ServerSupplierInterface
 {
 
 	public static void main(String[] args)
@@ -1507,7 +1507,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 	}
 	
-	Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
+	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 				int chunkOffset, int maxChunkSize)
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);

@@ -285,7 +285,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	}
 
 	FakeServerSupplier supplier;
-	MockServerDatabase db;
+	Database db;
 	MartusCrypto supplierSecurity;
 	SupplierSideMirroringHandler handler;
 	MartusCrypto callerSecurity;
@@ -302,7 +302,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 		security = new MockMartusSecurity();
 	}
 	
-	public MockServerDatabase getDatabase()
+	public Database getDatabase()
 	{
 		return db;
 	}
