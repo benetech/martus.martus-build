@@ -31,12 +31,12 @@ import java.util.Vector;
 
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.common.database.*;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockServerDatabase;
+import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.packet.UniversalId;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 
 public class TestServerFileDatabase extends TestCaseEnhanced 
 {

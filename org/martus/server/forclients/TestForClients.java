@@ -29,6 +29,8 @@ package org.martus.server.forclients;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.martus.common.test.TestMartusServerUtilities;
+
 public class TestForClients
 {
 	public static void main(String[] args) 

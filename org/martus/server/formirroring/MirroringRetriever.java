@@ -43,7 +43,7 @@ import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.network.NetworkResponse;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.UniversalId;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.Base64.InvalidBase64Exception;
 
 public class MirroringRetriever

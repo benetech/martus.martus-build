@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 
 public class ChangeKeypairPassphrase
 {

@@ -59,9 +59,11 @@ import org.martus.common.crypto.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.crypto.MartusCrypto.CryptoInitializationException;
 import org.martus.common.crypto.MartusCrypto.DecryptionException;
+import org.martus.common.crypto.MartusCrypto.DuplicatePacketException;
 import org.martus.common.crypto.MartusCrypto.InvalidKeyPairFileVersionException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
+import org.martus.common.crypto.MartusCrypto.SealedPacketExistsException;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.FileDatabase;
@@ -76,6 +78,7 @@ import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.server.core.ServerConstants;
 import org.martus.server.foramplifiers.ServerForAmplifiers;
 import org.martus.server.formirroring.ServerForMirroring;
@@ -1480,21 +1483,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return bhp;
 	}
 
-	public static class DuplicatePacketException extends Exception
-	{
-		public DuplicatePacketException(String message)
-		{
-			super(message);
-		}
-	}
-	
-	public static class SealedPacketExistsException extends Exception
-	{
-		public SealedPacketExistsException(String message)
-		{
-			super(message);
-		}
-	}
 	class UnexpectedExitException extends Exception{}
 	
 	public void serverExit(int exitCode) throws UnexpectedExitException 

@@ -43,7 +43,7 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.test.TestCaseEnhanced;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.server.forclients.MockMartusServer;
 
 public class TestServerForAmplifiers extends TestCaseEnhanced

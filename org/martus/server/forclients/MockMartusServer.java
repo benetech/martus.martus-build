@@ -37,6 +37,7 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.database.Database;
 import org.martus.common.database.MockServerDatabase;
 import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.Base64;
 
 public class MockMartusServer extends MartusServer implements ServerForClientsInterface, ServerForNonSSLClientsInterface

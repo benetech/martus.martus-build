@@ -35,8 +35,8 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.server.forclients.MartusServerUtilities;
-import org.martus.server.forclients.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
+import org.martus.common.utilities.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
 import org.martus.util.FileOutputStreamViaTemp;
 
 public class ServerFileDatabase extends FileDatabase 

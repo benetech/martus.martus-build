@@ -36,8 +36,8 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.UniversalId;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.server.forclients.MartusServer;
-import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.util.InputStreamWithSeek;
 
 public class ListPacketsForBulletin

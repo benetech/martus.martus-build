@@ -39,7 +39,7 @@ import org.martus.common.database.FileDatabase;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.FileDatabase.MissingAccountMapException;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 
 public class ShowServerAccountList 
 {

@@ -36,7 +36,7 @@ import java.util.Vector;
 
 import org.martus.common.MartusUtilities;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.Base64;
 import org.martus.util.UnicodeWriter;
 

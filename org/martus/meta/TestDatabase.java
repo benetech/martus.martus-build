@@ -20,7 +20,7 @@ import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.TestCaseEnhanced;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.UnicodeWriter;
 
 

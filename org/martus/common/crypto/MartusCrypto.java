@@ -184,4 +184,20 @@ public abstract class MartusCrypto
 	public static class CreateDigestException extends CryptoException {}
 	public static class KeyShareException extends Exception	{}
 
+	public static class DuplicatePacketException extends Exception
+	{
+		public DuplicatePacketException(String message)
+		{
+			super(message);
+		}
+	}
+	
+	public static class SealedPacketExistsException extends Exception
+	{
+		public SealedPacketExistsException(String message)
+		{
+			super(message);
+		}
+	}
+
 }

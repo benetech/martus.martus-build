@@ -35,7 +35,7 @@ import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.BulletinHeaderPacket;
-import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.ByteArrayInputStreamWithSeek;
 import org.martus.util.Base64.InvalidBase64Exception;
 

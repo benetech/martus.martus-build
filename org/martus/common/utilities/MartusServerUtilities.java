@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.forclients;
+package org.martus.common.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -74,8 +74,8 @@ public class MartusServerUtilities
 			Database.RecordHiddenException,
 			Packet.InvalidPacketException,
 			Packet.SignatureVerificationException,
-			MartusServer.SealedPacketExistsException,
-			MartusServer.DuplicatePacketException,
+			MartusCrypto.SealedPacketExistsException,
+			MartusCrypto.DuplicatePacketException,
 			Packet.WrongAccountException,
 			MartusCrypto.DecryptionException
 	{
@@ -99,8 +99,8 @@ public class MartusServerUtilities
 			Packet.InvalidPacketException,
 			IOException,
 			Packet.SignatureVerificationException,
-			MartusServer.SealedPacketExistsException,
-			MartusServer.DuplicatePacketException,
+			MartusCrypto.SealedPacketExistsException,
+			MartusCrypto.DuplicatePacketException,
 			Packet.WrongAccountException,
 			MartusCrypto.DecryptionException 
 	{
@@ -118,9 +118,9 @@ public class MartusServerUtilities
 			{
 				DatabaseKey newKey = header.createKeyWithHeaderStatus(uid);
 				if(newKey.isDraft())
-					throw new MartusServer.SealedPacketExistsException(entry.getName());
+					throw new MartusCrypto.SealedPacketExistsException(entry.getName());
 				else
-					throw new MartusServer.DuplicatePacketException(entry.getName());
+					throw new MartusCrypto.DuplicatePacketException(entry.getName());
 			}
 		}
 		
