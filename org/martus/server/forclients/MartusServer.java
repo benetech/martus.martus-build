@@ -28,6 +28,7 @@ package org.martus.server.forclients;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -766,6 +767,61 @@ public class MartusServer implements NetworkInterfaceConstants
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		}
 		return NetworkInterfaceConstants.OK;
+	}
+
+	public Vector getContactInfo(String accountId)
+	{
+		Vector results = new Vector();
+		File contactFile;
+		try
+		{
+			contactFile = database.getContactInfoFile(accountId);
+			if(!contactFile.exists())
+			{
+				results.add(NetworkInterfaceConstants.NOT_FOUND);
+				return results;
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			results.add(NetworkInterfaceConstants.NOT_FOUND);
+			return results;
+		}
+		
+		
+		Vector contactInfo = new Vector();
+		try
+		{
+			FileInputStream contactFileInputStream = new FileInputStream(contactFile);
+			DataInputStream in = new DataInputStream(contactFileInputStream);
+
+			contactInfo.add(in.readUTF());
+			int inputDataCount = in.readInt();
+			contactInfo.add(new Integer(inputDataCount));
+			for(int i = 0; i < inputDataCount; ++i)
+			{
+				contactInfo.add(in.readUTF());
+			}			
+			String signature = in.readUTF();
+			in.close();
+			if(!security.verifySignatureOfVectorOfStrings(contactInfo, accountId, signature))
+			{
+				log("getContactInfo:"+accountId +" : Signature failed");
+				results.add(NetworkInterfaceConstants.SIG_ERROR);
+				return results;
+			}
+			contactInfo.add(signature);
+			results.add(NetworkInterfaceConstants.OK);
+			results.add(contactInfo);
+			return results;
+		}
+		catch (Exception e1)
+		{
+			e1.printStackTrace();
+			results.add(NetworkInterfaceConstants.SERVER_ERROR);
+			return results;
+		}
 	}
 
 	public Vector getNews(String accountId, String versionLabel, String versionBuildDate)

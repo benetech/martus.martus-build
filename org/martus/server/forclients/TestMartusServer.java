@@ -51,10 +51,10 @@ import org.martus.common.LoggerForTesting;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinZipUtilities;
-import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -517,6 +517,39 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
+	public void testGetContactInfo() throws Exception
+	{
+		TRACE_BEGIN("testGetContactInfo");
+
+		Vector contactInfo = new Vector();
+		String clientId = clientSecurity.getPublicKeyString();
+
+		contactInfo.add(clientId);
+		contactInfo.add(new Integer(2));
+		String data1 = "Data";
+		contactInfo.add(data1);
+		String data2 = "Data2";
+		contactInfo.add(data2);
+		String signature = clientSecurity.createSignatureOfVectorOfStrings(contactInfo);
+		contactInfo.add(signature);
+
+		Vector nothingReturned = testServer.getContactInfo(clientId);
+		assertEquals("No contactInfo should return null", NetworkInterfaceConstants.NOT_FOUND, nothingReturned.get(0));
+
+		testServer.putContactInfo(clientId, contactInfo);
+		Vector infoReturned = testServer.getContactInfo(clientId);
+		assertEquals("Should be ok", NetworkInterfaceConstants.OK, infoReturned.get(0));	
+		Vector contactInfoReturned = (Vector)infoReturned.get(1);
+			
+		assertEquals("Incorrect size",contactInfo.size(), contactInfoReturned.size());
+		assertEquals("Public key doesn't match", clientId, contactInfoReturned.get(0));
+		assertEquals("data size not two?", 2, ((Integer)contactInfoReturned.get(1)).intValue());
+		assertEquals("data not correct?", data1, contactInfoReturned.get(2));
+		assertEquals("data2 not correct?", data2, contactInfoReturned.get(3));
+		assertEquals("signature doesn't match?", signature, contactInfoReturned.get(4));		
+
+		TRACE_END();
+	}
 
 	public void testGetAccountInformation() throws Exception
 	{

@@ -41,6 +41,7 @@ import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
+import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.forclients.MockMartusServer;
@@ -134,6 +135,65 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		otherServer.deleteAllFiles();
 	}
 	
+	public void testAmplifierGetContactInfo() throws Exception
+	{
+		MockMartusSecurity amplifier = MockMartusSecurity.createAmplifier();
+
+		Vector parameters = new Vector();
+		parameters.add(clientSecurity.getPublicKeyString());
+		String signature = amplifier.createSignatureOfVectorOfStrings(parameters);
+
+		File compliance = new File(coreServer.getStartupConfigDirectory(), "compliance.txt");
+		compliance.deleteOnExit();
+		compliance.createNewFile();
+		File ampsWhoCallUs = new File(coreServer.getStartupConfigDirectory(), "AmpsWhoCallUs");
+		ampsWhoCallUs.deleteOnExit();
+		ampsWhoCallUs.mkdirs();
+		File pubKeyFile1 = new File(ampsWhoCallUs, "code=1.2.3.4.5-ip=1.2.3.4.txt");
+		pubKeyFile1.deleteOnExit();
+		MartusUtilities.exportServerPublicKey(amplifier, pubKeyFile1);
+		
+		coreServer.loadConfigurationFiles();
+		compliance.delete();
+		pubKeyFile1.delete();
+		ampsWhoCallUs.delete();
+		
+		Vector invalidNumberOfParameters = new Vector();
+		String invalidNumberOfParamsSig = amplifier.createSignatureOfVectorOfStrings(invalidNumberOfParameters);
+
+		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), invalidNumberOfParameters, invalidNumberOfParamsSig);
+		assertEquals("Incomplete request should have been retuned", ServerForAmplifiers.INCOMPLETE, response.get(0));
+
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), parameters, "bad sig");
+		assertEquals("Bad Signature should have been returned", ServerForAmplifiers.SIG_ERROR, response.get(0));
+
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), parameters, signature);
+		assertEquals("Should not have found contact info since it hasn't been uploaded yet", ServerForAmplifiers.NOT_FOUND, response.get(0));
+
+		String clientId = clientSecurity.getPublicKeyString();
+		String data1 = "data1";
+		String data2 = "data2";
+		Vector contactInfo = new Vector();
+		contactInfo.add(clientId);
+		contactInfo.add(new Integer(2));
+		contactInfo.add(data1);
+		contactInfo.add(data2);
+		String infoSignature = clientSecurity.createSignatureOfVectorOfStrings(contactInfo);
+		contactInfo.add(infoSignature);
+		String result = coreServer.putContactInfo(clientId, contactInfo);
+		assertEquals("Not ok?", NetworkInterfaceConstants.OK, result);
+		
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), parameters, signature);
+		assertEquals("Should have found contact info since it has been uploaded", ServerForAmplifiers.OK, response.get(0));
+		Vector infoReturned = (Vector)response.get(1);
+		assertEquals("Should be same size as was put in", contactInfo.size(), infoReturned.size());
+		assertEquals("Public key doesn't match", clientId, infoReturned.get(0));
+		assertEquals("data size not two?", 2, ((Integer)infoReturned.get(1)).intValue());
+		assertEquals("data not correct?", data1, infoReturned.get(2));
+		assertEquals("data2 not correct?", data2, infoReturned.get(3));
+		assertEquals("signature doesn't match?", infoSignature, infoReturned.get(4));		
+	}
+
 
 	public void testIsAuthorizedForAmplifying() throws Exception
 	{
