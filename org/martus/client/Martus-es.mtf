@@ -158,6 +158,7 @@ field:entrydate=Fecha de introducción
 field:eventdate=Fecha del evento
 field:inputImportPublicCodeentry=Escriba el Código de identificación público:
 field:inputservermagicwordentry=Escriba la palabra mágica si quiere poder enviar boletines a este servidor:
+field:inputExportMyPublicKeyentry=
 field:keywords=Palabras mágicas
 field:language=Idioma
 field:location=Lugar

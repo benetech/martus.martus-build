@@ -700,7 +700,8 @@ public class MartusLocalization
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
 		addEnglishTranslation("field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:");
-		
+		addEnglishTranslation("field:inputExportMyPublicKeyentry=");
+				
 		addEnglishTranslation("field:username=Username");
 		addEnglishTranslation("field:password1=Password");
 		addEnglishTranslation("field:password2=(same password again)");
