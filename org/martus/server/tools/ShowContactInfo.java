@@ -16,7 +16,7 @@ public class ShowContactInfo
 		{
 			if(args[i].startsWith("--field-names"))
 			{
-				System.out.println("author \torganization\temail\twebpage\tphone\taddress ");
+				System.out.println("author\torganization\temail\twebpage\tphone\taddress");
 				System.out.flush();
 				System.exit(0);
 			}
