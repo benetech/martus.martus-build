@@ -25,15 +25,20 @@ Boston, MA 02111-1307, USA.
 */
 
 /* $Id: SearchParser.java,v 1.3 2002/04/18 20:42:55 charles Exp $ */
-package org.martus.client.core;
+package org.martus.common;
 
-import org.martus.common.SearchTreeNode;
 
 public class SearchParser
 {
-	public SearchParser(MartusApp appToUse)
+	public static SearchParser createEnglishParser()
 	{
-		app = appToUse;
+		return new SearchParser("and", "or");
+	}
+
+	public SearchParser(String andKeyword, String orKeyword)
+	{
+		andString = " " + andKeyword + " ";
+		orString = " " + orKeyword + " ";
 	}
 
 	public SearchTreeNode parse(String expression)
@@ -45,10 +50,8 @@ public class SearchParser
 
 	private void recursiveParse(SearchTreeNode node)
 	{
-		final String orString = " " + app.getKeyword("or") + " ";
 		final int orLen = orString.length();
 
-		final String andString = " " + app.getKeyword("and") + " ";
 		final int andLen = andString.length();
 
 		String lowerText = node.getValue().toLowerCase();
@@ -74,5 +77,6 @@ public class SearchParser
 		}
 	}
 
-	MartusApp app;
+	String andString;
+	String orString;
 }

@@ -24,18 +24,10 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.common;
 
 import java.io.IOException;
 
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusCrypto;
-import org.martus.common.Packet;
 
 public class BulletinLoader
 {

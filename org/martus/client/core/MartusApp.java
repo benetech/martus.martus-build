@@ -59,6 +59,7 @@ import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
+import org.martus.common.BulletinSearcher;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -74,6 +75,7 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.NetworkResponse;
+import org.martus.common.SearchParser;
 import org.martus.common.SearchTreeNode;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
@@ -607,8 +609,9 @@ public class MartusApp
 
 	public void search(String searchFor, String startDate, String endDate)
 	{
-		SearchParser parser = new SearchParser(this);
+		SearchParser parser = new SearchParser(getKeyword("and"), getKeyword("or"));
 		SearchTreeNode searchNode = parser.parse(searchFor);
+		BulletinSearcher matcher = new BulletinSearcher(searchNode, startDate, endDate);
 
 		BulletinFolder searchFolder = createOrFindFolder(store.getSearchFolderName());
 		searchFolder.removeAll();
@@ -618,7 +621,7 @@ public class MartusApp
 		{
 			UniversalId uid = (UniversalId)uids.get(i);
 			Bulletin b = store.findBulletinByUniversalId(uid);
-			if(b.matches(searchNode, startDate, endDate))
+			if(matcher.doesMatch(b))
 				store.addBulletinToFolder(b.getUniversalId(), searchFolder);
 		}
 		store.saveFolders();

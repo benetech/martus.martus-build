@@ -24,11 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.test;
-
-import org.martus.client.core.SearchParser;
-import org.martus.common.SearchTreeNode;
-import org.martus.common.TestCaseEnhanced;
+package org.martus.common;
 
 public class TestSearchParser extends TestCaseEnhanced
 {
@@ -37,19 +33,9 @@ public class TestSearchParser extends TestCaseEnhanced
         super(name);
     }
 
-    public void setUp() throws Exception
-    {
-		app = MockMartusApp.create();
-		parser = new SearchParser(app);
-    }
-
-    public void tearDown() throws Exception
-    {
-    	app.deleteAllFiles();
-    }
-
 	public void testSimpleSearch()
 	{
+		SearchParser parser = SearchParser.createEnglishParser();
 		SearchTreeNode rootNode = parser.parse("blah");
 		assertNotNull("Null root", rootNode);
 		assertEquals(SearchTreeNode.VALUE, rootNode.getOperation());
@@ -57,6 +43,7 @@ public class TestSearchParser extends TestCaseEnhanced
 
 	public void testSimpleOr()
 	{
+		SearchParser parser = SearchParser.createEnglishParser();
 		SearchTreeNode rootNode = parser.parse("this or that");
 		assertNotNull("Null root", rootNode);
 		assertEquals(SearchTreeNode.OR, rootNode.getOperation());
@@ -72,6 +59,7 @@ public class TestSearchParser extends TestCaseEnhanced
 
 	public void testSimpleAnd()
 	{
+		SearchParser parser = SearchParser.createEnglishParser();
 		SearchTreeNode rootNode = parser.parse(" tweedledee  and  tweedledum ");
 		assertNotNull("Null root", rootNode);
 		assertEquals(SearchTreeNode.AND, rootNode.getOperation());
@@ -87,6 +75,7 @@ public class TestSearchParser extends TestCaseEnhanced
 
 	public void testComplex()
 	{
+		SearchParser parser = SearchParser.createEnglishParser();
 		// a AND (b AND c)
 		SearchTreeNode abc = parser.parse("a and b and c");
 		assertNotNull("Null root", abc);
@@ -102,6 +91,7 @@ public class TestSearchParser extends TestCaseEnhanced
 
 	public void testReallyComplex()
 	{
+		SearchParser parser = SearchParser.createEnglishParser();
 		// (a and b) OR ( ( (c AND (d and e) OR f)
 		SearchTreeNode rootNode = parser.parse("a and b or c and d and e or f");
 		assertNotNull("Null root", rootNode);
@@ -132,10 +122,8 @@ public class TestSearchParser extends TestCaseEnhanced
 
 	public void testSpanish()
 	{
-		String oldLanguage = app.getCurrentLanguage();
-		app.setCurrentLanguage("es");
-
 		// a OR (b AND c)
+		SearchParser parser = new SearchParser("y", "o");
 		SearchTreeNode abc = parser.parse("a o b y c");
 		assertNotNull("Null root", abc);
 		assertEquals("rootNode", SearchTreeNode.OR, abc.getOperation());
@@ -146,11 +134,5 @@ public class TestSearchParser extends TestCaseEnhanced
 		assertEquals("bc", SearchTreeNode.AND, bc.getOperation());
 		assertEquals("b", bc.getLeft().getValue());
 		assertEquals("c", bc.getRight().getValue());
-
-		app.setCurrentLanguage(oldLanguage);
 	}
-
-	MockMartusApp app;
-	SearchParser parser;
-
 }

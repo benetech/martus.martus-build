@@ -226,27 +226,7 @@ public class Bulletin implements BulletinConstants
 		getPrivateFieldDataPacket().clearAttachments();
 	}
 
-	public boolean matches(SearchTreeNode node, String beginDate, String endDate)
-	{
-		if(node.getOperation() == SearchTreeNode.VALUE)
-		{
-			if(contains(node.getValue()))
-			{
-				return withinDates(beginDate, endDate);
-			}
-			return false;
-		}
-
-		if(node.getOperation() == SearchTreeNode.AND)
-			return matches(node.getLeft(), beginDate, endDate) && matches(node.getRight(), beginDate, endDate);
-
-		if(node.getOperation() == SearchTreeNode.OR)
-			return matches(node.getLeft(), beginDate, endDate) || matches(node.getRight(), beginDate, endDate);
-
-		return false;
-	}
-
-	private boolean contains(String lookFor)
+	public boolean contains(String lookFor)
 	{
 		String fields[] = fieldData.getFieldTags();
 		String lookForLowerCase = lookFor.toLowerCase();
@@ -259,7 +239,7 @@ public class Bulletin implements BulletinConstants
 		return false;
 	}
 
-	private boolean withinDates(String beginDate, String endDate)
+	public boolean withinDates(String beginDate, String endDate)
 	{
 		String eventDate = fieldData.get(Bulletin.TAGEVENTDATE);
 		String entryDate = fieldData.get(Bulletin.TAGENTRYDATE);
