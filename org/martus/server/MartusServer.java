@@ -50,6 +50,7 @@ import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.MartusUtilities.FileTooLargeException;
+import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
@@ -624,6 +625,8 @@ public class MartusServer implements NetworkInterfaceConstants
 				String zipString = writer.toString();
 	
 				tempFile.delete();
+				File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
+				tempFileSignature.delete();
 				result.add(NetworkInterfaceConstants.OK);
 				result.add(zipString);
 				if(serverMaxLogging)
@@ -760,6 +763,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
 				DatabaseKey headerKey = new DatabaseKey(uid);
 				File tempFile = createInterimBulletinFile(headerKey);
+				
 				int totalLength = MartusUtilities.getCappedFileLength(tempFile);
 				String legacySignedString = authorAccountId + "," + bulletinLocalId + "," +
 							Integer.toString(totalLength) + "," + Integer.toString(chunkOffset) + "," +
@@ -1483,7 +1487,8 @@ public class MartusServer implements NetworkInterfaceConstants
 			DecryptionException,
 			NoKeyPairException,
 			FileNotFoundException,
-			FileTooLargeException 
+			FileTooLargeException,
+			MartusUtilities.FileVerificationException 
 	{
 		Vector result = new Vector();
 		if(serverMaxLogging)
@@ -1511,6 +1516,8 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(endPosition >= totalLength)
 		{
 			tempFile.delete();
+			File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
+			tempFileSignature.delete();
 			result.add(NetworkInterfaceConstants.OK);
 		}
 		else
@@ -1525,7 +1532,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return result;
 	}
 
-	private File createInterimBulletinFile(DatabaseKey headerKey) throws
+	public File createInterimBulletinFile(DatabaseKey headerKey) throws
 			IOException,
 			CryptoException,
 			UnsupportedEncodingException,
@@ -1534,33 +1541,42 @@ public class MartusServer implements NetworkInterfaceConstants
 			SignatureVerificationException,
 			DecryptionException,
 			NoKeyPairException,
-			FileNotFoundException 
+			FileNotFoundException,
+			MartusUtilities.FileVerificationException
 	{
 		File tempFile = getDatabase().getOutgoingInterimFile(headerKey);
-		if(tempFile.exists())
+		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
+		if(tempFile.exists() && tempFileSignature.exists())
 		{
-			ZipFile zip = new ZipFile(tempFile);
-			try 
-			{
-				MartusUtilities.validateIntegrityOfZipFilePackets(getDatabase(), headerKey.getAccountId(), zip, security);
-				zip.close();
+			if(verifyBulletinInterimFile(tempFile, tempFileSignature))
 				return tempFile;
-			} 
-			catch (Throwable e) 
-			{
-				logging("    Invalid Interim File: "+ tempFile.getPath() + e);
-			}
-			zip.close();
-			tempFile.delete();
 		}
+		tempFile.delete();
+		tempFileSignature.delete();
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
+		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
+		if(!verifyBulletinInterimFile(tempFile, tempFileSignature))
+			throw new MartusUtilities.FileVerificationException();
 		if(serverMaxLogging)
 			logging("    Total file size =" + tempFile.length());
 		
 		return tempFile;
 	}
 
-
+	public boolean verifyBulletinInterimFile(File bulletinZipFile, File bulletinSignatureFile)
+	{
+			try 
+			{
+				MartusUtilities.verifyFileAndSignature(bulletinZipFile, bulletinSignatureFile, (MartusSecurity)security);
+				return true;
+			} 
+			catch (MartusUtilities.FileVerificationException e) 
+			{
+				logging("    verifyBulletinInterimFile: " + e);
+			}
+		return false;	
+	}
+	
 	private boolean isSignatureCorrect(String signedString, String signature, String signerPublicKey)
 	{
 		try

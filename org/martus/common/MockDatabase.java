@@ -162,6 +162,8 @@ abstract public class MockDatabase implements Database
 		dir.mkdirs();
 		File file = new File(dir, "$$$out");
 		file.deleteOnExit();
+		File sigFile = MartusUtilities.getSignatureFileFromFile(file);
+		sigFile.deleteOnExit();
 		return file;
 	}
 	

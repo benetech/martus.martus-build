@@ -197,7 +197,32 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void testPing() throws Exception
 	{
+		testServer.setSecurity(serverSecurity);
 		assertEquals(NetworkInterfaceConstants.VERSION, testServer.ping());
+	}
+	
+	public void testCreateInterimBulletinFile() throws Exception
+	{
+		File zipFile = createTempFile("$$$MartusServerBulletinZip");
+		File zipSignature = MartusUtilities.getSignatureFileFromFile(zipFile);
+		zipSignature.deleteOnExit();
+		assertFalse("Null files verified?", testServer.verifyBulletinInterimFile(zipFile, zipSignature));
+		
+		File file = createTempFile();
+		FileOutputStream out = new FileOutputStream(file);
+		out.write(file1Bytes);
+		out.close();
+		assertFalse("Null zip files verified?", testServer.verifyBulletinInterimFile(file, zipSignature));
+
+		zipSignature = MartusUtilities.createSignatureFileFromFile(file, serverSecurity);
+		zipSignature.deleteOnExit();
+		assertTrue("Did not verify?", testServer.verifyBulletinInterimFile(file, zipSignature));
+		
+		File file2 = createTempFile();
+		FileOutputStream out2 = new FileOutputStream(file2);
+		out2.write(file2Bytes);
+		out2.close();
+		assertFalse("File1's signature verified with File2?", testServer.verifyBulletinInterimFile(file2, zipSignature));
 	}
 	
 	public void testPutContactInfo() throws Exception
@@ -702,6 +727,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void testDownloadBulletinOk() throws Exception
 	{
+		testServer.setSecurity(serverSecurity);
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		Bulletin bulletin = store.createEmptyBulletin();
 		bulletin.set(bulletin.TAGPUBLICINFO, "public info");
@@ -2002,6 +2028,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	static BulletinStore store;
 
 	final static byte[] b1AttachmentBytes = {1,2,3,4,4,3,2,1};
+	final static byte[] file1Bytes = {1,2,3,4,4,3,2,1};
+	final static byte[] file2Bytes = {1,2,3,4,4,3,2,1,0};
 	
 	MockMartusServer testServer;
 	NetworkInterface testServerInterface;
