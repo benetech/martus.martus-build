@@ -27,7 +27,6 @@ public class TestMeta extends TestCaseEnhanced
 	
 		suite.addTest(new TestSuite(TestMartusServer.class));
 	
-		suite.addTest(new TestSuite(TestMartusUtilities.class));
 		suite.addTest(new TestSuite(TestMartusApp_WithServer.class));
 		suite.addTest(new TestSuite(TestRetrieveTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveMyTableModel.class));

@@ -63,6 +63,7 @@ public class TestCommon
 		suite.addTest(new TestSuite(TestAttachmentPacket.class));
 		suite.addTest(new TestSuite(TestAttachmentProxy.class));
 		suite.addTest(new TestSuite(TestBase64XmlOutputStream.class));
+		suite.addTest(new TestSuite(TestMartusUtilities.class));
 		suite.addTest(new TestSuite(TestBulletin.class));
 		suite.addTest(new TestSuite(TestBulletinSaver.class));
 		suite.addTest(new TestSuite(TestBulletinLoader.class));

@@ -1,4 +1,4 @@
-package org.martus.meta;
+package org.martus.common;
 
 import java.io.BufferedInputStream;
 import java.io.File;
@@ -12,23 +12,12 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.core.BulletinStore;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.TestCaseEnhanced;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
+
 
 public class TestMartusUtilities extends TestCaseEnhanced 
 {
@@ -54,15 +43,13 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	public void testValidateIntegrityOfZipFilePackets() throws Exception
 	{
 		Database db = new MockClientDatabase();
-		BulletinStore store = new BulletinStore(db);
-		store.setSignatureGenerator(security);
 
 		File sampleAttachment = createTempFile("This is some data");
 		AttachmentProxy ap = new AttachmentProxy(sampleAttachment);
 
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		b.addPublicAttachment(ap);
-		store.saveBulletin(b);
+		BulletinSaver.saveToDatabase(b, db, true, security);
 		String accountId = b.getAccount();
 		DatabaseKey key = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 
@@ -181,14 +168,10 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	public void testGetBulletinSize() throws Exception
 	{
 		byte[] b1AttachmentBytes = {1,2,3,4,4,3,2,1};
-		MartusSecurity security = new MartusSecurity();
-		security.createKeyPair(512);
-		BulletinStore store = new BulletinStore(new MockClientDatabase());
-		store.setSignatureGenerator(security);
-		Database db = store.getDatabase();
+		Database db = new MockClientDatabase();
 
-		Bulletin b1 = store.createEmptyBulletin();
-		store.saveBulletin(b1);
+		Bulletin b1 = new Bulletin(security);
+		BulletinSaver.saveToDatabase(b1, db, true, security);
 		BulletinHeaderPacket bhp = b1.getBulletinHeaderPacket();
 		int emptySize = MartusUtilities.getBulletinSize(db, bhp);
 		assertTrue("empty size not correct?", emptySize > 1000 && emptySize < 3000);
@@ -201,12 +184,12 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		out.close();
 		b1.addPublicAttachment(new AttachmentProxy(attachment));
 		b1.addPrivateAttachment(new AttachmentProxy(attachment));
-		store.saveBulletin(b1);
-		b1 = store.loadFromDatabase(DatabaseKey.createSealedKey(b1.getUniversalId()));
+		BulletinSaver.saveToDatabase(b1, db, true, security);
+		b1 = BulletinLoader.loadFromDatabase(db, DatabaseKey.createSealedKey(b1.getUniversalId()), security);
 
 		int size = MartusUtilities.getBulletinSize(db, bhp);
 		b1.set(Bulletin.TAGTITLE, "This is an very long title and should change the size of the result if things are working correctly");
-		store.saveBulletin(b1);
+		BulletinSaver.saveToDatabase(b1, db, true, security);
 		int size2 = MartusUtilities.getBulletinSize(db, bhp);
 		assertTrue("Size too small?", size > 4000);
 		assertNotEquals("Sizes match?", size, size2);		
