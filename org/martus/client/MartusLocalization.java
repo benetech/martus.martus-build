@@ -464,7 +464,7 @@ public class MartusLocalization
 		addEnglishTranslation("menu:RenameFolder=Rename Folder");
 		addEnglishTranslation("menu:DeleteFolder=Delete Folder");
 		addEnglishTranslation("menu:server=Server");
-		addEnglishTranslation("menu:RetrieveMySealedBulletins=Retrieve My Sealded Bulletins");
+		addEnglishTranslation("menu:RetrieveMySealedBulletins=Retrieve My Sealed Bulletins");
 		addEnglishTranslation("menu:RetrieveMyDraftsBulletins=Retrieve My Draft Bulletins");
 		addEnglishTranslation("menu:DeleteMyServerDrafts=Delete My Drafts From Server");
 		addEnglishTranslation("menu:RetrieveHQSealedBulletins=Retrieve Field Desk Sealed Bulletins");

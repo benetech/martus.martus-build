@@ -13,8 +13,6 @@ button:cancel=Cancelar
 button:checkall=Seleccionar todos
 button:connectserver=Conectar
 button:create=Crear
-button:edit=Edición
-button:file=Archivo
 button:help=Ayuda
 button:inputImportPublicCodeok=Importar
 button:inputexportPublicInfook=Exportar
@@ -25,7 +23,6 @@ button:inputserverpubliccodeok=Aceptar
 button:modify=Modificar
 button:no=No
 button:ok=Aceptar
-button:options=Preferencias
 button:print=Imprimir
 button:removeattachment=Eliminar adjunto
 button:retrieve=Bajar
@@ -33,7 +30,6 @@ button:saveattachment=Guardar adjunto
 button:savedraft=Guardar borrador
 button:search=Buscar
 button:send=Enviar
-button:tools=Herramientas
 button:uncheckall=Deseleccionar todos
 button:yes=Sí
 field:AccountInfoPublicCode=Código público:
@@ -200,7 +196,18 @@ field:notifyUnableToSaveAttachmentcause=No se pudo guardar el archivo adjunto. I
 field:notifyUnexpectedErrorcause=A ocurrido un error inesperado. Por favor reporte este problema a www.martus.org.
 field:notifyUserNameBlankcause=El nombre no puede estar en blanco
 field:notifyWarningBetaCopycause=Esta es una versión beta de Martus y puede contener errores. Es posible que la seguridad de esta copia beta no este finalizada por lo que le sugerimos no ingresar información privada que pueda poner a personas en peligro si es que esta es descubierta.
-field:notifyWelcomeToMartuscause=Bienvenido al systema de Martus.\n\nPara usar Martus es necesario crear una cuenta nueva. Escoja el nombre de usuario que deseé y una contraseña apropiada de 8 caracteres o más. Tome nota de lo siguiente antes de escoger su nombre y contraseña:\n\n* Recomendamos una contraseña de al menos 15 caracteres.\n* Incluya en su contraseña caracteres que no sean letras o números. (Como puntuación)\n* Use una contraseña que otras personas no puedan adivinar pues una persona que conozca su nombre y contraseña podrá acceder a sus boletines y crear nuevos boletines bajo su nombre.\n* Escriba su nombre y contraseña y manténgala en un lugar seguro\n* Necesitará ingresar su nombre y contraseña cada vez que inicie Martus.\n* En momentos Martus le pedirá ingrese su nombre y contraseña para evitar que otras personas usen su cuenta despues de que Ud. haya ingresado.\n\nIMPORTANTE: Ud. es el único que posee su nombre y contraseña. Si se le pierde esta no podrá ser recuperada por lo que su información no podra ser accedida.
+field:notifyWelcomeToMartuscause=Bienvenido al systema de Martus.
+
+Para usar Martus es necesario crear una cuenta nueva. Escoja el nombre de usuario que deseé y una contraseña apropiada de 8 caracteres o más. Tome nota de lo siguiente antes de escoger su nombre y contraseña:
+
+* Recomendamos una contraseña de al menos 15 caracteres.
+* Incluya en su contraseña caracteres que no sean letras o números. (Como puntuación)
+* Use una contraseña que otras personas no puedan adivinar pues una persona que conozca su nombre y contraseña podrá acceder a sus boletines y crear nuevos boletines bajo su nombre.
+* Escriba su nombre y contraseña y manténgala en un lugar seguro
+* Necesitará ingresar su nombre y contraseña cada vez que inicie Martus.
+* En momentos Martus le pedirá ingrese su nombre y contraseña para evitar que otras personas usen su cuenta despues de que Ud. haya ingresado.
+
+IMPORTANTE: Ud. es el único que posee su nombre y contraseña. Si se le pierde esta no podrá ser recuperada por lo que su información no podra ser accedida.
 field:notifycorruptconfiginfocause=El archivo de configuración puede estar corrupto
 field:notifyincorrectsignincause=Nombre o contraseña incorrecta
 field:notifymagicwordokcause=El servidor le a dado permiso de enviar boletines.
@@ -287,42 +294,47 @@ language:uk=Ukraniano
 language:ur=Urdu
 language:vi=Vietnamita
 language:zh=Chino
+menu:BackupMyKeyPair=Copiar my clave privada
 menu:CopyBulletins=Copiar boletin(es)
+menu:CreateNewBulletin=Crear boletín nuevo
+menu:CreateNewFolder=Crear carpeta nueva
 menu:CutBulletins=Cortar boletin(es)
+menu:DefaultDetailsFieldContent=Contenido predeterminado para campo de detalles
 menu:DeleteBulletins=Eliminar boletin(es)
 menu:DeleteFolder=Eliminar
-menu:DeleteServerDrafts=Eliminar borradores del servidor
+menu:DeleteMyServerDrafts=Eliminar mis borradores del servidor
 menu:DiscardBulletins=Deshechar boletin(es)
+menu:ExportMyPublicKey=Exportar mi clave pública
+menu:ImportHQPublicKey=Importar clave de Oficina central
 menu:PasteBulletins=Pegar boletin(es)
+menu:Preferences=Preferencias
+menu:RemoveExistingHQPublicKey=Remover Oficina central existente
 menu:RenameFolder=Renombrar
-menu:RetrieveDrafts=Bajar borradores de boletines
+menu:RetrieveHQDraftBulletins=Bajar borradores de oficinas regionales
+menu:RetrieveHQSealedBulletins=Bajar boletines sellados de oficinas regionales
+menu:RetrieveMyDraftsBulletins=Bajar mis borradores
+menu:RetrieveMySealedBulletins=Bajar mis boletines sellados
+menu:SelectServer=Elija el servidor Martus
+menu:ViewMyAccountDetails=Ver detalles de mi cuenta
 menu:about=Acerca de Martus
-menu:account=Detalles de su cuenta
-menu:backupKeyPair=Copia de reserva de llaves
-menu:bulletinDetails=Detalles del boletín
 menu:changeUserNamePassword=Cambiar su nombre o contraseña
-menu:clearPublicAccountInfo=Eliminar oficina central
 menu:contactinfo=Información de contacto
 menu:copy=Copiar
-menu:createBulletin=Crear un boletín
 menu:cut=Cortar
-menu:dateformat=Formato de fecha
 menu:delete=Suprimir
+menu:edit=Editar
 menu:exit=Salir
-menu:exportPublicAccountInfo=Exportar información pública
+menu:file=Archivo
+menu:folders=Carpetas
+menu:help=Ayuda
 menu:helpMessage=Ayuda
-menu:importPublicAccountInfo=Importar información pública
-menu:language=Idioma
 menu:modifyBulletin=Modificar boletín
-menu:newFolder=Crear una carpeta nueva
+menu:options=Opciones
 menu:paste=Pegar
 menu:printBulletin=Imprimir boletín
-menu:retrieve=Bajar boletines
-menu:retrieveHQ=Bajar boletines de oficinas regionales
-menu:retrieveHQDrafts=Bajar borradores de oficinas regionales
 menu:search=Búsqueda
 menu:selectall=Seleccionar todos
-menu:serverinfo=Configuración del servidor
+menu:server=Servidor
 message:connected=Conexión al servidor exitosa.
 message:noconnect=ERROR: no se pudo conectar al servidor.
 month:apr=Abr
