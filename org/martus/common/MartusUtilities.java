@@ -435,6 +435,27 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
+			
+			if(entry.isDirectory())
+			{
+				continue;
+			}
+			
+			if(entry.getName().startsWith(".."))
+			{
+				continue;
+			}
+			
+			if(entry.getName().indexOf("\\") >= 0 )
+			{
+				continue;
+			}
+			
+			if(entry.getName().indexOf("/") >= 0 )
+			{
+				continue;
+			}
+			
 			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
 
 			File file = File.createTempFile(tempFileName, null);
