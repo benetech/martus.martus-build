@@ -16,7 +16,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public String ping()
 	{
 		server.incrementActiveClientsCounter();
-		strResponse = server.ping();
+		String strResponse = server.ping();
 		server.decrementActiveClientsCounter();
 		return strResponse;
 	}
@@ -24,7 +24,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector getServerInformation()
 	{
 		server.incrementActiveClientsCounter();
-		vecResponse = server.getServerInformation();
+		Vector vecResponse = server.getServerInformation();
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
@@ -32,7 +32,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public String requestUploadRights(String authorAccountId, String tryMagicWord)
 	{
 		server.incrementActiveClientsCounter();
-		strResponse = server.requestUploadRights(authorAccountId, tryMagicWord);
+		String strResponse = server.requestUploadRights(authorAccountId, tryMagicWord);
 		server.decrementActiveClientsCounter();
 		return strResponse;
 	}
@@ -40,7 +40,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public String uploadBulletin(String authorAccountId, String bulletinLocalId, String data)
 	{
 		server.incrementActiveClientsCounter();
-		strResponse = server.uploadBulletin(authorAccountId, bulletinLocalId, data);
+		String strResponse = server.uploadBulletin(authorAccountId, bulletinLocalId, data);
 		server.decrementActiveClientsCounter();
 		return strResponse;
 	}
@@ -49,7 +49,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 		int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
 		server.incrementActiveClientsCounter();
-		strResponse = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
+		String strResponse = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
 						totalSize, chunkOffset, chunkSize, data, signature);
 		server.decrementActiveClientsCounter();
 		return strResponse;
@@ -58,7 +58,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
 	{
 		server.incrementActiveClientsCounter();
-		vecResponse = server.downloadBulletin(authorAccountId, bulletinLocalId);
+		Vector vecResponse = server.downloadBulletin(authorAccountId, bulletinLocalId);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
@@ -67,7 +67,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 		int chunkOffset, int maxChunkSize, String signature)
 	{
 		server.incrementActiveClientsCounter();
-		vecResponse = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
+		Vector vecResponse = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize, signature);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
@@ -76,7 +76,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
 		server.incrementActiveClientsCounter();
-		vecResponse = server.listMySealedBulletinIds(authorAccountId);
+		Vector vecResponse = server.listMySealedBulletinIds(authorAccountId);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
@@ -84,7 +84,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
 		server.incrementActiveClientsCounter();
-		vecResponse = server.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
+		Vector vecResponse = server.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
@@ -92,7 +92,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
 		server.incrementActiveClientsCounter();
-		vecResponse = server.listFieldOfficeAccounts(hqAccountId);
+		Vector vecResponse = server.listFieldOfficeAccounts(hqAccountId);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
@@ -100,7 +100,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector downloadPacket(String authorAccountId, String packetLocalId)
 	{
 		server.incrementActiveClientsCounter();
-		vecResponse = server.legacyDownloadPacket(authorAccountId, packetLocalId);
+		Vector vecResponse = server.legacyDownloadPacket(authorAccountId, packetLocalId);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
@@ -108,12 +108,10 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public String authenticateServer(String tokenToSign)
 	{
 		server.incrementActiveClientsCounter();
-		strResponse = server.authenticateServer(tokenToSign);
+		String strResponse = server.authenticateServer(tokenToSign);
 		server.decrementActiveClientsCounter();
 		return strResponse;
 	}
 	
 	MartusServer server;
-	String strResponse;
-	Vector vecResponse;
 }
