@@ -250,12 +250,6 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("Didn't Encrypt or Encyrpted too many packets.", 1, db.encryptWasCalled);
 	}
 
-	public void testIsFieldEncrypted()
-	{
-		assertEquals(false, Bulletin.isFieldEncrypted("author"));
-		assertEquals(true, Bulletin.isFieldEncrypted("privateinfo"));
-	}
-
 	public void testGetStatus() throws Exception
 	{
 		Bulletin b1 = new Bulletin(security);

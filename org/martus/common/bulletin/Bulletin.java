@@ -338,16 +338,6 @@ public class Bulletin implements BulletinConstants
 		return NORMAL;
 	}
 
-	public static boolean isFieldEncrypted(String fieldName)
-	{
-		String lookFor = fieldName.toLowerCase();
-
-		if(lookFor.equals(TAGPRIVATEINFO))
-			return true;
-
-		return false;
-	}
-
 	public boolean isAllPrivate()
 	{
 
