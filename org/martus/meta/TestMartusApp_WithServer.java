@@ -32,6 +32,7 @@ import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.Packet.WrongAccountException;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
@@ -277,7 +278,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 			appWithServer.getServerPublicKey(mockNonSSLServerHandler);
 			fail("Should have thrown");
 		}
-		catch(MartusApp.PublicInformationInvalidException expectedException)
+		catch(PublicInformationInvalidException expectedException)
 		{
 		}
 		mockServer.infoResponse = null;
@@ -296,7 +297,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 			appWithServer.getServerPublicKey(mockNonSSLServerHandler);
 			fail("Should have thrown");
 		}
-		catch(MartusApp.PublicInformationInvalidException expectedException)
+		catch(PublicInformationInvalidException expectedException)
 		{
 		}
 		mockServer.infoResponse = null;

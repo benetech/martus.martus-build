@@ -41,12 +41,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import org
-	.martus
-	.client
-	.core
-	.ClientSideNetworkHandlerUsingXmlRpc
-	.SSLSocketSetupException;
+import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.swingui.DateUtilities;
@@ -78,6 +73,7 @@ import org.martus.common.FileDatabase.MissingAccountMapException;
 import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.WrongAccountException;
@@ -731,8 +727,6 @@ public class MartusApp
 		return getServerPublicKey(server);
 	}
 
-	public class PublicInformationInvalidException extends Exception {}
-
 	public String getServerPublicKey(NetworkInterfaceForNonSSL server) throws
 		ServerNotAvailableException,
 		PublicInformationInvalidException
@@ -749,25 +743,8 @@ public class MartusApp
 
 		String accountId = (String)serverInformation.get(1);
 		String sig = (String)serverInformation.get(2);
-		validatePublicInfo(accountId, sig);
+		MartusUtilities.validatePublicInfo(accountId, sig, security);
 		return accountId;
-	}
-
-	public void validatePublicInfo(String accountId, String sig) throws
-		PublicInformationInvalidException
-	{
-		try
-		{
-			ByteArrayInputStream in = new ByteArrayInputStream(Base64.decode(accountId));
-			if(!security.isSignatureValid(accountId, in, Base64.decode(sig)))
-				throw new PublicInformationInvalidException();
-
-		}
-		catch(Exception e)
-		{
-			//System.out.println("MartusApp.getServerPublicCode: " + e);
-			throw new PublicInformationInvalidException();
-		}
 	}
 
 	public boolean requestServerUploadRights(String magicWord)
@@ -1252,7 +1229,7 @@ public class MartusApp
 		Vector importedPublicKeyInfo = MartusUtilities.importPublicKeyFromFile(file);
 		String publicKey = (String) importedPublicKeyInfo.get(0);
 		String signature = (String) importedPublicKeyInfo.get(1);
-		validatePublicInfo(publicKey, signature);
+		MartusUtilities.validatePublicInfo(publicKey, signature, security);
 		return publicKey;
 	}
 

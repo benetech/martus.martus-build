@@ -44,6 +44,7 @@ import org.martus.client.swingui.UiUtilities;
 import org.martus.common.Bulletin;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
+import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
@@ -709,8 +710,9 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		String publicKey = reader.readLine();
 		String signature = reader.readLine();
 		reader.close();
-		assertEquals("Public Key wrong?", appWithAccount.getSecurity().getPublicKeyString(), publicKey);
-		appWithAccount.validatePublicInfo(publicKey, signature);
+		MartusCrypto security = appWithAccount.getSecurity();
+		assertEquals("Public Key wrong?", security.getPublicKeyString(), publicKey);
+		MartusUtilities.validatePublicInfo(publicKey, signature, security);
 	}
 
 	public void testExtractPublicInfo() throws Exception

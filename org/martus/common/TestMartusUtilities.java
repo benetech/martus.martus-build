@@ -27,12 +27,14 @@ Boston, MA 02111-1307, USA.
 package org.martus.common;
 
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -62,8 +64,48 @@ public class TestMartusUtilities extends TestCaseEnhanced
     }
 
 	// TODO: create tests for all the MartusUtilities methods
-	public void testBasics()
+	public void testExportPublicKey() throws Exception
 	{
+		File keyFile = createTempFile();
+		MartusUtilities.exportPublicKey(security, keyFile);
+		
+		UnicodeReader reader = new UnicodeReader(keyFile);
+		String key = reader.readLine();
+		String sig = reader.readLine();
+		assertEquals("wrong public key?", security.getPublicKeyString(), key);
+		MartusUtilities.validatePublicInfo(key, sig, security);
+		
+		File badFile = new File(BAD_FILENAME);
+		try
+		{
+			MartusUtilities.exportPublicKey(security, badFile);
+			fail("Should have thrown");
+		}
+		catch (IOException ignoreExpectedException)
+		{
+		}
+	}
+	
+	public void testImportPublicKeyFromFile() throws Exception
+	{
+		String key = security.getPublicKeyString();
+		byte[] publicKeyBytes = Base64.decode(key);
+		InputStream in = new ByteArrayInputStream(publicKeyBytes);
+		byte[] sigBytes = security.createSignature(in);
+		String sig = Base64.encode(sigBytes);
+
+		File keyFile = createTempFile();
+		UnicodeWriter writer = new UnicodeWriter(keyFile);
+		writer.writeln(key);
+		writer.writeln(sig);
+		writer.close();
+
+		Vector result = MartusUtilities.importPublicKeyFromFile(keyFile);
+		assertEquals(2, result.size());
+		String gotKey = (String)result.get(0);
+		String gotSig = (String)result.get(1);
+		assertEquals("wrong public key?", key, gotKey);
+		assertEquals("wrong sig?", sig, gotSig);
 	}
 
 	public void testValidateIntegrityOfZipFilePackets() throws Exception

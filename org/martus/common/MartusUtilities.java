@@ -960,4 +960,24 @@ public class MartusUtilities
 		}
 		return normalizedPublicCode;
 	}
+
+	public static class PublicInformationInvalidException extends Exception {}
+
+
+	public static void validatePublicInfo(String accountId, String sig, MartusCrypto verifier) throws
+		PublicInformationInvalidException
+	{
+		try
+		{
+			ByteArrayInputStream in = new ByteArrayInputStream(Base64.decode(accountId));
+			if(!verifier.isSignatureValid(accountId, in, Base64.decode(sig)))
+				throw new PublicInformationInvalidException();
+	
+		}
+		catch(Exception e)
+		{
+			//System.out.println("MartusApp.getServerPublicCode: " + e);
+			throw new PublicInformationInvalidException();
+		}
+	}
 }
