@@ -63,7 +63,7 @@ abstract public class MockDatabase implements Database
 	
 	public int getRecordSize(DatabaseKey key) throws IOException
 	{
-		return readRecord(key).getBytes().length;
+		return readRecord(key).getBytes("UTF-8").length;
 	}
 
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 

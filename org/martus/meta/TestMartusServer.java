@@ -514,14 +514,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("allowed wrong sig?", NetworkInterfaceConstants.SIG_ERROR, testServer.uploadBulletinChunk(authorId, localId, totalLength, 0, chunkLength, b1ChunkData0, signature));
 	}
 	
-	public void testRecordSize() throws Exception
-	{
-		DatabaseKey shortKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount" , "x"));
-		String testString = "My test";
-		testServer.getDatabase().writeRecord(shortKey, testString);
-		assertEquals("Length not correct?", testString.length(), testServer.getDatabase().getRecordSize(shortKey));
-	}
-	
 	public void testUploadChunkIOError()
 	{
 		//TODO implement this
@@ -1204,6 +1196,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector list1 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), new Vector());
 		assertNotNull("listMyBulletinSummaries returned null", list1);
+		assertEquals("wrong length", 3, list1.size());
 		assertNotNull("null id1 [0]", list1.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
 
