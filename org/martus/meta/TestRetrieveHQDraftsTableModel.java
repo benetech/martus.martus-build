@@ -5,6 +5,7 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.core.BulletinStore;
+import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
@@ -107,10 +108,11 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		assertEquals(fieldApp1.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
-		assertEquals(fieldApp1.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
-		assertEquals(fieldApp1.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
-		assertEquals(fieldApp1.getFieldLabel("BulletinSize"), modelWithData.getColumnName(3));
+		MartusLocalization localization = fieldApp1.getLocalization();
+		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(3));
 	}
 	
 	public void testGetColumnCount()

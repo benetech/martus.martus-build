@@ -127,7 +127,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.addActionListener(new switchKeyboardHandler());
 		passwordArea = new JPanel();
 		getContentPane().add(passwordArea);
-		keyboard = new UiVirtualKeyboard(window.getApp(), this);
+		keyboard = new UiVirtualKeyboard(localization, this);
 		UpdatePasswordArea();
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);

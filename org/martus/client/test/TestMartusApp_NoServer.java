@@ -717,18 +717,19 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testFieldLabels()
 	{
 		TRACE_BEGIN("testFieldLabels");
-		assertEquals("Keep ALL Information Private", appWithAccount.getFieldLabel("allprivate"));
-		assertEquals("Author", appWithAccount.getFieldLabel("author"));
-		assertEquals("Organization", appWithAccount.getFieldLabel("organization"));
-		assertEquals("Title", appWithAccount.getFieldLabel("title"));
-		assertEquals("Location", appWithAccount.getFieldLabel("location"));
-		assertEquals("Date of Event", appWithAccount.getFieldLabel("eventdate"));
-		assertEquals("Date Entered", appWithAccount.getFieldLabel("entrydate"));
-		assertEquals("Keywords", appWithAccount.getFieldLabel("keywords"));
-		assertEquals("Summary", appWithAccount.getFieldLabel("summary"));
-		assertEquals("Details", appWithAccount.getFieldLabel("publicinfo"));
-		assertEquals("Private", appWithAccount.getFieldLabel("privateinfo"));
-		assertEquals("Language", appWithAccount.getFieldLabel("language"));
+		MartusLocalization localization = appWithAccount.getLocalization();
+		assertEquals("Keep ALL Information Private", localization.getFieldLabel("allprivate"));
+		assertEquals("Author", localization.getFieldLabel("author"));
+		assertEquals("Organization", localization.getFieldLabel("organization"));
+		assertEquals("Title", localization.getFieldLabel("title"));
+		assertEquals("Location", localization.getFieldLabel("location"));
+		assertEquals("Date of Event", localization.getFieldLabel("eventdate"));
+		assertEquals("Date Entered", localization.getFieldLabel("entrydate"));
+		assertEquals("Keywords", localization.getFieldLabel("keywords"));
+		assertEquals("Summary", localization.getFieldLabel("summary"));
+		assertEquals("Details", localization.getFieldLabel("publicinfo"));
+		assertEquals("Private", localization.getFieldLabel("privateinfo"));
+		assertEquals("Language", localization.getFieldLabel("language"));
 		TRACE_END();
 	}
 

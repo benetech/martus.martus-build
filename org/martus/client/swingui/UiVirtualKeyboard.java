@@ -38,20 +38,18 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import org.martus.client.core.MartusApp;
-
 
 
 public class UiVirtualKeyboard
 {
 
-	public UiVirtualKeyboard(MartusApp app, VirtualKeyboardHandler uiHandler)
+	public UiVirtualKeyboard(MartusLocalization localization, VirtualKeyboardHandler uiHandler)
 	{
 		handler = uiHandler;
 		password = "";
-		String keys = app.getFieldLabel("VirtualKeyboardKeys");
-		space = app.getFieldLabel("VirtualKeyboardSpace");
-		delete = app.getFieldLabel("VirtualKeyboardBackSpace");
+		String keys = localization.getFieldLabel("VirtualKeyboardKeys");
+		space = localization.getFieldLabel("VirtualKeyboardSpace");
+		delete = localization.getFieldLabel("VirtualKeyboardBackSpace");
 
 		UpdateHandler updateHandler = new UpdateHandler();
 

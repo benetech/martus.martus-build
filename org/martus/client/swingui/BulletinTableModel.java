@@ -39,6 +39,7 @@ public class BulletinTableModel extends AbstractTableModel
     public BulletinTableModel(MartusApp appToUse)
     {
 		app = appToUse;
+		localization = app.getLocalization();
     }
 
 	public void setFolder(BulletinFolder folderToUse)
@@ -98,18 +99,18 @@ public class BulletinTableModel extends AbstractTableModel
 		String value = getFolder().getStore().getFieldData(uid, fieldTag);
 		if(fieldTag.equals(Bulletin.TAGSTATUS))
 		{
-			value = app.getLocalization().getStatusLabel(value);
+			value = localization.getStatusLabel(value);
 		}
 	 	if(Bulletin.getFieldType(fieldTag) == Bulletin.DATE)
 		{
-			value = app.getLocalization().convertStoredDateToDisplay(value);
+			value = localization.convertStoredDateToDisplay(value);
 		}
 		return value;
 	}
 
 	public String getColumnName(int columnIndex)
 	{
-		return app.getFieldLabel(getFieldName(columnIndex));
+		return localization.getFieldLabel(getFieldName(columnIndex));
 	}
 
 	public String getFieldName(int columnIndex)
@@ -123,5 +124,6 @@ public class BulletinTableModel extends AbstractTableModel
 	}
 
 	MartusApp app;
+	MartusLocalization localization;
 	BulletinFolder folder;
 }

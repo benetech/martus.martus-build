@@ -121,7 +121,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return false;
 			newAccount = true;
 		}
-		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
+		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
 
 		try
 		{
@@ -1164,7 +1164,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public String getDescription()
 		{
-			return app.getFieldLabel("PublicInformationFiles");
+			return getLocalization().getFieldLabel("PublicInformationFiles");
 		}
 	}
 
@@ -1262,7 +1262,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		getContentPane().add(folderSplitter);
 		statusBar = new UiStatusBar();
-		statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(app.getFieldLabel("StatusReady"));
+		statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(getLocalization().getFieldLabel("StatusReady"));
 		getContentPane().add(statusBar, BorderLayout.SOUTH );
 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -1313,7 +1313,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(!app.attemptSignIn(signinDlg.getName(), signinDlg.getPassword()))
 			{
 				notifyDlg(currentActiveFrame, "incorrectsignin");
-				busyDlg = new UiModelessBusyDlg(app.getFieldLabel("waitAfterFailedSignIn"));
+				busyDlg = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitAfterFailedSignIn"));
 				continue;
 			}
 			break;
@@ -1333,7 +1333,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String userName = newUserInfo.getUserName();
 		String userPassword = newUserInfo.getPassword();
 
-		UiModelessBusyDlg waitingForKeyPair = new UiModelessBusyDlg(app.getFieldLabel("waitingForKeyPairGeneration"));
+		UiModelessBusyDlg waitingForKeyPair = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitingForKeyPairGeneration"));
 		try
 		{
 			app.createAccount(userName ,userPassword);

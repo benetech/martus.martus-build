@@ -44,12 +44,12 @@ abstract public class RetrieveTableModelNonHQ extends RetrieveTableModel {
 		switch(column)
 		{
 		case 0:
-			return app.getFieldLabel("retrieveflag");
+			return getLocalization().getFieldLabel("retrieveflag");
 		case 1:
-			return app.getFieldLabel(Bulletin.TAGTITLE);
+			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
 		case 2:
 		default:
-			return app.getFieldLabel("BulletinSize");
+			return getLocalization().getFieldLabel("BulletinSize");
 		}
 	}
 

@@ -52,6 +52,11 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	}
 
 	abstract public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException;
+	
+	MartusLocalization getLocalization()
+	{
+		return app.getLocalization();
+	}
 
 	protected void setProgressDialog(UiProgressRetrieveSummariesDlg progressDlg)
 	{

@@ -42,13 +42,13 @@ public abstract class RetrieveTableModelHQ extends RetrieveTableModel {
 		switch(column)
 		{
 			case 0:
-				return app.getFieldLabel("retrieveflag");
+				return getLocalization().getFieldLabel("retrieveflag");
 			case 1:
-				return app.getFieldLabel(Bulletin.TAGTITLE);
+				return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
 			case 2:
-				return app.getFieldLabel(Bulletin.TAGAUTHOR);
+				return getLocalization().getFieldLabel(Bulletin.TAGAUTHOR);
 			case 3:
-				return app.getFieldLabel("BulletinSize");
+				return getLocalization().getFieldLabel("BulletinSize");
 			default:
 				return "";
 		}

@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.swingui.DeleteMyServerDraftsTableModel;
+import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
@@ -66,9 +67,10 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	
 	public void testGetColumnName()
 	{
-		assertEquals(app.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(0));
-		assertEquals(app.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
-		assertEquals(app.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
+		MartusLocalization localization = app.getLocalization();
+		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(0));
+		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
+		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
 	}
 	
 	public void testGetColumnClass()

@@ -463,7 +463,7 @@ public class MartusApp
 		BulletinFolder newFolder = null;
 		String uniqueFolderName = null;
 		int folderIndex = 0;
-		String originalFolderName = getFieldLabel("defaultFolderName");
+		String originalFolderName = getLocalization().getFieldLabel("defaultFolderName");
 		while (newFolder == null && folderIndex < maxNewFolders)
 		{
 			uniqueFolderName = originalFolderName;
@@ -780,9 +780,9 @@ public class MartusApp
 
 			String message;
 			if(b.isDraft())
-				message = getFieldLabel("UploadingDraftBulletin");
+				message = getLocalization().getFieldLabel("UploadingDraftBulletin");
 			else
-				message = getFieldLabel("UploadingSealedBulletin");
+				message = getLocalization().getFieldLabel("UploadingSealedBulletin");
 
 			while(true)
 			{
@@ -838,7 +838,7 @@ public class MartusApp
 			sendContactInfoToServer();
 
 		if(progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("StatusReady"));
+			progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("StatusReady"));
 		return result;
 	}
 
@@ -900,7 +900,7 @@ public class MartusApp
 		if(!isSSLServerAvailable())
 		{
 			if(progressMeter != null)
-				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
+				progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
 		}
 
@@ -951,7 +951,7 @@ public class MartusApp
 		}
 
 		if(progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+			progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("UploadFailedProgressMessage"));
 		if(exceptionThrown != null)
 			throw new DamagedBulletinException(exceptionThrown);
 		return null;
@@ -963,7 +963,7 @@ public class MartusApp
 		if(!isSSLServerAvailable())
 		{
 			if(progressMeter != null)
-				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
+				progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
 		}
 
@@ -995,7 +995,7 @@ public class MartusApp
 		}
 
 		if(progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+			progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("UploadFailedProgressMessage"));
 		if(exceptionThrown != null)
 			throw new DamagedBulletinException(exceptionThrown);
 		return null;
@@ -1130,7 +1130,7 @@ public class MartusApp
 		tempFile.deleteOnExit();
 		FileOutputStream outputStream = new FileOutputStream(tempFile);
 
-		String progressTag = getFieldLabel("ChunkProgressStatusMessage");
+		String progressTag = getLocalization().getFieldLabel("ChunkProgressStatusMessage");
 		int masterTotalSize = MartusUtilities.retrieveBulletinZipToStream(uid, outputStream,
 						serverChunkSize, getCurrentNetworkInterfaceGateway(),  security,
 						progressMeter, progressTag);
@@ -1223,11 +1223,6 @@ public class MartusApp
 	public boolean attemptSignIn(String userName, String userPassPhrase)
 	{
 		return attemptSignInInternal(getKeyPairFile(), userName, userPassPhrase);
-	}
-
-	public String getFieldLabel(String fieldName)
-	{
-		return localization.getFieldLabel(fieldName);
 	}
 
 	private String getCurrentLanguage()

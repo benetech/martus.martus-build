@@ -101,7 +101,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(new JLabel(localization.getFieldLabel("ContactInfoDescriptionOfFields")));
 
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-		UiWrappedTextArea infoFuture = new UiWrappedTextArea(app.getFieldLabel("ContactInfoFutureUseOfFields"), 60);
+		UiWrappedTextArea infoFuture = new UiWrappedTextArea(localization.getFieldLabel("ContactInfoFutureUseOfFields"), 60);
 		infoFuture.setFont(space.getFont());
 		infoFuture.setRows(3);
 		getContentPane().add(infoFuture);
