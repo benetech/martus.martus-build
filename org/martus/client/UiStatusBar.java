@@ -1,15 +1,8 @@
 package org.martus.client;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
-import java.awt.Dimension;
-
 import javax.swing.Box;
 import javax.swing.BoxLayout;
-import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
-import javax.swing.border.BevelBorder;
 
 public class UiStatusBar extends JPanel
 {
@@ -17,49 +10,33 @@ public class UiStatusBar extends JPanel
 	public UiStatusBar() 
 	{
 		super();
-		setLayout( new BoxLayout( this, BoxLayout.LINE_AXIS) );
+		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
 		
-		horizontalBox = Box.createHorizontalBox();
-		statusMessage = new JLabel( " ", JLabel.LEFT );
-		statusMessage.setBorder( new BevelBorder( BevelBorder.LOWERED ));
-		horizontalBox.add( statusMessage );
-		
-		progressMeter = new JProgressBar(0, 10);
-		progressMeter.setMaximumSize(new Dimension(100, 20));
-		progressMeter.setStringPainted(true);
-		progressMeter.setBorder( new BevelBorder( BevelBorder.LOWERED ));
-		horizontalBox.add( progressMeter );
-	
-		blankStatus();
-		hideProgressMeter();
-		add(horizontalBox);
+		statusBarBox = Box.createHorizontalBox();
+		backgroundProgressMeter = new UiProgressMeter();
+		foregroundProgressMeter = new UiProgressMeter();
+		statusBarBox.add(foregroundProgressMeter);
+		statusBarBox.add(backgroundProgressMeter);
+		statusBarBox.add(Box.createHorizontalGlue());
+		add(statusBarBox);
+
+		foregroundProgressMeter.blankStatus();
+		foregroundProgressMeter.hideProgressMeter();
+		backgroundProgressMeter.blankStatus();
+		backgroundProgressMeter.hideProgressMeter();
 	}
 	
-	public void setStatusMessage(String message)
+	public UiProgressMeter getBackgroundProgressMeter()
 	{
-		statusMessage.setText(message);
+		return backgroundProgressMeter;
 	}
 	
-	public void updateProgressMeter(String message, int currentValue, int maxValue)
+	public UiProgressMeter getForegroundProgressMeter()
 	{
-		statusMessage.setText(message);
-		progressMeter.setValue(currentValue);
-		progressMeter.setMaximum(maxValue);
-		progressMeter.setVisible(true);
-	}
-	
-	public void blankStatus()
-	{
-		statusMessage.setText("          ");
+		return foregroundProgressMeter;
 	}
 
-	
-	public void hideProgressMeter()
-	{
-		progressMeter.setVisible(false);
-	}
-	
-	private Box horizontalBox;
-	private JLabel statusMessage;
-	private JProgressBar progressMeter;
+	private UiProgressMeter backgroundProgressMeter;
+	private UiProgressMeter foregroundProgressMeter;
+	private Box statusBarBox;
 }

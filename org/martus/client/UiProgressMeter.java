@@ -1,0 +1,60 @@
+package org.martus.client;
+
+import java.awt.Dimension;
+
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.border.BevelBorder;
+
+public class UiProgressMeter extends JPanel
+{
+	public UiProgressMeter() 
+	{
+		super();
+		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
+
+		statusMessage = new JLabel( " ", JLabel.LEFT );
+		statusMessage.setMinimumSize(new Dimension(60, 25));
+		statusMessage.setBorder( new BevelBorder( BevelBorder.LOWERED ));
+
+		progressMeter = new JProgressBar(0, 10);
+		Dimension meterSize = new Dimension(100, 20);
+		progressMeter.setMinimumSize(meterSize);
+		progressMeter.setMaximumSize(meterSize);
+		progressMeter.setPreferredSize(meterSize);
+		progressMeter.setBorder( new BevelBorder( BevelBorder.LOWERED ));
+		progressMeter.setStringPainted(true);
+
+		add( statusMessage );
+		add( progressMeter );
+	}
+
+	public void setStatusMessage(String message)
+	{
+		statusMessage.setText(message);
+	}
+	
+	public void updateProgressMeter(String message, int currentValue, int maxValue)
+	{
+		statusMessage.setText(message);
+		progressMeter.setValue(currentValue);
+		progressMeter.setMaximum(maxValue);
+		progressMeter.setVisible(true);
+	}
+	
+	public void blankStatus()
+	{
+		statusMessage.setText("          ");
+	}
+
+	
+	public void hideProgressMeter()
+	{
+		progressMeter.setVisible(false);
+	}
+
+	private JLabel statusMessage;
+	private JProgressBar progressMeter;
+}

@@ -497,7 +497,7 @@ public class MartusApp
 		setUploadInfoElements(uploaded, reminded);
 	}
 	
-	public void setProgressMeter(UiStatusBar meter)
+	public void setProgressMeter(UiProgressMeter meter)
 	{
 		progressMeter = meter;	
 	}
@@ -1491,6 +1491,6 @@ public class MartusApp
 	public int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 	private String currentLanguage;
 	private String currentDateFormat;
-	private UiStatusBar progressMeter;
+	private UiProgressMeter progressMeter;
 }
 

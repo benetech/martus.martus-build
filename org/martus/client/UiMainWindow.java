@@ -128,7 +128,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		errorChecker = new javax.swing.Timer(10*1000, new UploadErrorChecker());
 		errorChecker.start();
-		clearStatusMessage = SECONDS_TO_CLEAR_STATUS_MESSAGE;
+		clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
 		return true;
     }
 
@@ -1089,7 +1089,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		
 		getContentPane().add(folderSplitter);
 		statusBar = new UiStatusBar();
-		app.setProgressMeter(statusBar);
+		app.setProgressMeter(statusBar.getBackgroundProgressMeter());
 		getContentPane().add(statusBar, BorderLayout.SOUTH );
 		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -1707,9 +1707,9 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 			timedOutInDialog = false;
 			if(--clearStatusMessage < 0)
 			{
-				clearStatusMessage = SECONDS_TO_CLEAR_STATUS_MESSAGE;
-				statusBar.blankStatus();
-				statusBar.hideProgressMeter();
+				clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
+				statusBar.getBackgroundProgressMeter().blankStatus();
+				statusBar.getBackgroundProgressMeter().hideProgressMeter();
 			}
 			uploadResult = app.backgroundUpload();
 			if(uploadResult != null)
@@ -1788,7 +1788,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 	private boolean timedOutInDialog;
 
 	private static final int TIMEOUT_SECONDS = (10 * 60);
-	private static final int SECONDS_TO_CLEAR_STATUS_MESSAGE = 5;
+	private static final int TICKS_TO_CLEAR_STATUS_MESSAGE = 5;
 	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;
