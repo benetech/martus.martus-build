@@ -5,6 +5,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.StringWriter;
@@ -26,6 +27,8 @@ import org.martus.common.Packet;
 import org.martus.common.Stopwatch;
 import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;
+import org.martus.common.UnicodeReader;
+import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 
 public class TestSpeed extends TestCaseEnhanced 
@@ -85,6 +88,7 @@ public class TestSpeed extends TestCaseEnhanced
 		timeDigest(1);
 		timeDigest(2 * 1024);
 		timeDigest(100 * 1024);
+		timeDigest(5 * 1024 * 1024);
 	}
 	
 	void timeDigest(int dataSize) throws Exception
@@ -174,6 +178,40 @@ public class TestSpeed extends TestCaseEnhanced
 		for(int i = 0; i < data.length; ++i)
 			data[i] = (byte)i;
 		return data;
+	}
+	
+	public void testGetBytes() throws Exception
+	{
+		byte[] data = createRandomBytes(100);
+		String base64 = Base64.encode(data);
+		
+		final int count = 100000;
+		Stopwatch getBytesTimer = new Stopwatch();
+		for(int i = 0; i < count; ++i)
+			base64.getBytes("UTF-8");
+		print("getBytes UTF-8 " + count + " iterations of " + data.length + " bytes of data", getBytesTimer.stop());
+	}
+	
+	public void testReadLine() throws Exception
+	{
+		timeReader(1024);
+		timeReader(100 * 1024);
+		timeReader(50 * 1024 * 1024);
+	}
+
+	void timeReader(int fileLength) throws Exception, IOException
+	{
+		// This test may not be valid, because the packet verifier 
+		// uses db.openInputStream instead of creating a UnicodeReader
+		File bigFile = createRandomTextFile(fileLength);
+		UnicodeReader reader = new UnicodeReader(bigFile);
+		
+		Stopwatch readerTimer = new Stopwatch();
+		while(reader.readLine() != null)
+			;
+		print("reader " + bigFile.length() + " bytes of data", readerTimer.stop());
+		reader.close();
+		bigFile.delete();
 	}
 	
 	public void testXmlPlain() throws Exception
@@ -277,6 +315,22 @@ public class TestSpeed extends TestCaseEnhanced
 		for(int i = 0; i < length; ++i)
 			out.write((byte)i);
 		out.close();
+		return file;
+	}
+	
+	File createRandomTextFile(int length) throws Exception
+	{
+		File file = createTempFile();
+		final int lineLength = 100;
+		final int lineCount = length/lineLength;
+		UnicodeWriter writer = new UnicodeWriter(file);
+		for(int line = 0; line < lineCount; ++line)
+		{
+			byte[] bytes = createRandomBytes(lineLength);
+			String base64 = Base64.encode(bytes);
+			writer.writeln(base64); 
+		}
+		writer.close();
 		return file;
 	}
 	
