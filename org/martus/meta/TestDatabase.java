@@ -602,9 +602,9 @@ public class TestDatabase extends TestCaseEnhanced
 		writer2.write("fake contact info");
 		writer2.close();
 		counter.clear();
+		contactFile.delete();
 		db.visitAllRecords(counter);
 		assertEquals(db.toString()+ " counted contact info file?", 2, counter.count);
-		contactFile.delete();
 	}
 
 	private void internalTestVisitAllAccounts(Database db) throws Exception
@@ -831,6 +831,9 @@ public class TestDatabase extends TestCaseEnhanced
 		File interimSame = db.getIncomingInterimFile(smallKey);
 		assertEquals(db.toString()+"Not the same file?", interim, interimSame);
 		assertEquals(db.toString()+"interimSame size not the same?", fileSize, interimSame.length());
+
+		interim.delete();
+		interimSame.delete();
 	}
 	
 	private void internalTestGetOutgoingInterimFile(Database db) throws Exception
@@ -847,6 +850,9 @@ public class TestDatabase extends TestCaseEnhanced
 		File interimSame = db.getOutgoingInterimFile(smallKey);
 		assertEquals(db.toString()+"Not the same file?", interim, interimSame);
 		assertEquals(db.toString()+"interimSame size not the same?", fileSize, interimSame.length());
+
+		interim.delete();
+		interimSame.delete();
 	}	
 	
 	private void internalTestQuarantine(Database db) throws Exception

@@ -544,13 +544,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		TRACE_BEGIN("testGetAccountInformationNoAccount");
 
-		MartusServer serverWithoutKeypair = new MockMartusServer();
+		MockMartusServer serverWithoutKeypair = new MockMartusServer();
 		serverWithoutKeypair.security.clearKeyPair();
 
 		Vector errorInfo = serverWithoutKeypair.getServerInformation();
 		assertEquals(2, errorInfo.size());
 		assertEquals(NetworkInterfaceConstants.SERVER_ERROR, errorInfo.get(0));
 
+		serverWithoutKeypair.deleteAllData();
 
 		TRACE_END();
 	}

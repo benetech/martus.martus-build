@@ -426,6 +426,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		}
 		assertEquals("store account not kept if already exists?", app.getAccountId(), app.getStore().getAccountId());
 
+		app.deleteAllFiles();
 		TRACE_END();
 	}
 

@@ -906,7 +906,6 @@ public class TestBulletinStore extends TestCaseEnhanced
 		zipFile.delete();
 		tempRawFilePublic.delete();
 		tempRawFilePrivate.delete();
-
 	}
 
 	public void testImportZipFileBulletin() throws Exception
