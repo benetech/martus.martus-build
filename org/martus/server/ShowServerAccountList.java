@@ -15,13 +15,28 @@ public class ShowServerAccountList
 	public static void main(String[] args)
 		throws FileDatabase.MissingAccountMapException, MartusUtilities.FileVerificationException, CryptoInitializationException
 	{
-		new ShowServerAccountList();
+		File dataDir = null;
+		
+		if( args.length == 0 )
+		{
+			dataDir = MartusServer.getDefaultDataDirectory();
+		}
+		else if( args[0].startsWith("--packet-directory=") )
+		{
+			dataDir = new File(new File (args[0].substring(args[0].indexOf("=")+1)).getParent());
+		}
+		
+		if(!dataDir.exists() || !dataDir.isDirectory() )
+		{
+			System.out.println("Error: " + dataDir + " is not a valid data directory.");
+			System.exit(1);
+		}
+
+		new ShowServerAccountList(dataDir);
 	}
 	
-	ShowServerAccountList() throws CryptoInitializationException, MissingAccountMapException, FileVerificationException
-	{
-		File dataDirectory = MartusServer.getDefaultDataDirectory();		
-		
+	ShowServerAccountList(File dataDirectory) throws CryptoInitializationException, MissingAccountMapException, FileVerificationException
+	{		
 		fileDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"), new MartusSecurity());
 		fileDatabase.visitAllAccounts(new AccountVisitor());
 	}
