@@ -113,8 +113,8 @@ public class UiSigninDlg extends JDialog
 	
 	public boolean shouldUseTabs(int mode)
 	{
-		if(mode == INITIAL)
-			return true;
+//		if(mode == INITIAL)
+//			return true;
 			
 		return false;
 	}
