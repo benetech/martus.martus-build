@@ -13,6 +13,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
+import javax.swing.text.JTextComponent;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -220,16 +221,17 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			getModel().valueForPathChanged(path, newFolderName);
 		}
 		
-		public Component getTreeCellEditorComponent(JTree arg0, Object arg1, boolean arg2, boolean arg3, boolean arg4, int arg5) 
+		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row) 
 		{
-			System.out.println("getTreeCellEditorComponent: " + arg1);
-			node = (FolderTreeNode)arg1;
+			node = (FolderTreeNode)value;
 			oldLocalizedFolderName = node.getLocalizedName();
 			oldInternalFolderName = node.getInternalName();
-			return super.getTreeCellEditorComponent(arg0, arg1, arg2, arg3, arg4, arg5);
+			Component textField = super.getTreeCellEditorComponent(tree, value, isSelected, expanded, leaf, row);
+			((JTextComponent)editingComponent).selectAll();
+			return textField;
 		}
 
-		public void editingCanceled(ChangeEvent e)
+		public void editingCanceled(ChangeEvent arg0) 
 		{
 		}
 		// end CellEditorListener interface
