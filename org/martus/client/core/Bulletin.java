@@ -154,11 +154,6 @@ public class Bulletin implements BulletinConstants
 		return getBulletinHeaderPacket().getLastSavedTime();
 	}
 
-	public boolean mustEncryptPublicData()
-	{
-		return store.mustEncryptPublicData();
-	}
-
 	public boolean isDraft()
 	{
 		return getStatus().equals(STATUSDRAFT);
@@ -478,7 +473,7 @@ public class Bulletin implements BulletinConstants
 		original.loadFromFile(inputFile, verifier);
 		Bulletin imported = store.createEmptyBulletin();
 		imported.pullDataFrom(original);
-		BulletinSaver.saveToDatabase(imported, db);
+		BulletinSaver.saveToDatabase(imported, db, store.mustEncryptPublicData());
 		return imported.getUniversalId();
 	}
 

@@ -44,19 +44,19 @@ import org.martus.common.MartusUtilities;
 
 public class TransferableBulletinList implements Transferable
 {
-	public TransferableBulletinList(Bulletin thisBulletin, BulletinFolder fromFolder)
+	public TransferableBulletinList(Database databaseToUse, Bulletin thisBulletin, BulletinFolder fromFolder)
 	{
-		bulletins = new Bulletin[] {thisBulletin};
-		folder = fromFolder;
+		this(databaseToUse, new Bulletin[] {thisBulletin}, fromFolder);
 	}
-
-	public TransferableBulletinList(Bulletin[] bulletinsToUse, BulletinFolder fromFolder)
+	
+	public TransferableBulletinList(Database databaseToUse, Bulletin[] bulletinsToUse, BulletinFolder fromFolder)
 	{
+		db = databaseToUse;
 		bulletins = bulletinsToUse;
 		folder = fromFolder;
 	}
-
-	boolean createTransferableZipFile()
+	
+	boolean createTransferableZipFile() 
 	{
 		if(files == null)
 			files = new Vector();
@@ -69,7 +69,6 @@ public class TransferableBulletinList implements Transferable
 				File file = File.createTempFile(summary, BULLETIN_FILE_EXTENSION);
 				file.deleteOnExit();
 				files.add(file);
-				Database db = bulletin.getDatabase();
 				DatabaseKey headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
 				MartusCrypto security = bulletin.getSignatureGenerator();
 				MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
@@ -88,7 +87,7 @@ public class TransferableBulletinList implements Transferable
 	{
 		if(files == null)
 			return;
-
+			
 		try
 		{
 			for(int i =0 ; i < files.size(); ++i)
@@ -145,7 +144,7 @@ public class TransferableBulletinList implements Transferable
 //					DataFlavor.stringFlavor,
 //					mimeTextDataFlavor,
 // TODO remove all trace of mime and string flavors
-// Warning: adding when there was String and mimeText flavors
+// Warning: adding when there was String and mimeText flavors 
 //			dragging to the desktop failed silently.
 					};
 		return flavorArray;
@@ -165,22 +164,22 @@ public class TransferableBulletinList implements Transferable
 	{
 		return bulletinListDataFlavor;
 	}
-
+	
 	static public File extractFileFrom(Transferable t)
 	{
 		if(!t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			return null;
-		try
+		try 
 		{
 			Collection fileList = (Collection)t.getTransferData(DataFlavor.javaFileListFlavor);
 			if(fileList.size() != 1)
 				return null;
 
 			Iterator iterator = fileList.iterator();
-			File file = (File)iterator.next();
+			File file = (File)iterator.next();	
 			return file;
-		}
-		catch (Exception e)
+		} 
+		catch (Exception e) 
 		{
 			System.out.println("extractFileFrom :" + e);
 			return null;
@@ -221,6 +220,7 @@ public class TransferableBulletinList implements Transferable
 	private static final String BULLETIN_FILE_EXTENSION = ".mba";
 	static DataFlavor bulletinListDataFlavor = new DataFlavor(TransferableBulletinList.class, "Martus Bulletins");
 	Vector files;
+	Database db;
 	BulletinFolder folder;
 	Bulletin[] bulletins;
 }

@@ -47,7 +47,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 	final static String ICKYTITLE = "w*o:r+k'e`d";
 	final static String LONGTITLE = "This wonderful title is longer than twenty characters";
 
-	public TestTransferableBulletin(String name)
+	public TestTransferableBulletin(String name) 
 	{
 		super(name);
 	}
@@ -76,8 +76,8 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		Bulletin b1 = store.createEmptyBulletin();
 		Bulletin b2 = store.createEmptyBulletin();
 		Bulletin[] bulletins = {b1, b2};
-		TransferableBulletinList list = new TransferableBulletinList(bulletins, folder);
-
+		TransferableBulletinList list = new TransferableBulletinList(store.getDatabase(), bulletins, folder);
+		
 		Bulletin[] got = list.getBulletins();
 		assertEquals("wrong count?", 2, got.length);
 		assertEquals("missing b1?", b1.getUniversalId(), got[0].getUniversalId());
@@ -118,7 +118,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		file = getFile(longName, "longname");
 		at = file.getName().indexOf("This wonderful title");
 		assertEquals("long", 0, at);
-		assertEndsWith("wrong extension for long?", ".mba", file.getName());
+		assertEndsWith("wrong extension for long?", ".mba", file.getName());	
 		file.delete();
 	}
 
@@ -129,7 +129,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		TransferableBulletinList tb = (TransferableBulletinList)data;
 		assertEquals("bad folder?", folder, tb.getFromFolder());
 		assertEquals("bad id?", dragId, tb.getBulletins()[0].getLocalId());
-
+		
 		Bulletin[] bulletins = tb.getBulletins();
 		assertNotNull("null bulletins?", bulletins);
 		assertEquals("bad id?", dragId, bulletins[0].getLocalId());
@@ -182,7 +182,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		b.set(Bulletin.TAGTITLE, title);
 		b.save();
 		Bulletin[] bulletins = new Bulletin[] {b};
-		TransferableBulletinList localTB = new TransferableBulletinList(bulletins, folder);
+		TransferableBulletinList localTB = new TransferableBulletinList(store.getDatabase(), bulletins, folder);
 		Bulletin[] got = localTB.getBulletins();
 		assertEquals("id after create", b.getLocalId(), got[0].getLocalId());
 		return localTB;

@@ -362,7 +362,7 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		b.setSealed();
 		b.setAllPrivate(false);
-		assertEquals("Ecrypted?", true, b.mustEncryptPublicData());
+		assertEquals("Ecrypted?", true, store.mustEncryptPublicData());
 		b.save();
 		assertEquals("Didn't Encrypt or Encyrpted too many packets.", 1, db.encryptWasCalled);
 	}
@@ -421,7 +421,7 @@ public class TestBulletin extends TestCaseEnhanced
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		original.setSealed();
-		BulletinSaver.saveToDatabase(original, db);
+		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData());
 		UniversalId uid = original.getUniversalId();
 
 		original = Bulletin.loadFromDatabase(store, new DatabaseKey(uid));
@@ -495,7 +495,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b.set(Bulletin.TAGPUBLICINFO, "public info");
 		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b.setSealed();
-		BulletinSaver.saveToDatabase(b, db);
+		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData());
 		assertEquals("saved 1", 3, db.getAllKeys().size());
 
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
@@ -513,7 +513,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		Bulletin b = store.createEmptyBulletin();
 		b.setAllPrivate(true);
-		BulletinSaver.saveToDatabase(b, db);
+		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData());
 		assertEquals("saved 1", 3, db.getAllKeys().size());
 
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
@@ -964,7 +964,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		FieldDataPacket fdp = loaded.getFieldDataPacket();
 		fdp.set(Bulletin.TAGPUBLICINFO, "different public!");
-		boolean encryptPublicData = loaded.mustEncryptPublicData();
+		boolean encryptPublicData = store.mustEncryptPublicData();
 		fdp.writeXmlToDatabase(db, encryptPublicData, security);
 
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
@@ -987,7 +987,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		FieldDataPacket fdp = loaded.getPrivateFieldDataPacket();
 		fdp.set(Bulletin.TAGPRIVATEINFO, "different private!");
-		boolean encryptPublicData = loaded.mustEncryptPublicData();
+		boolean encryptPublicData = store.mustEncryptPublicData();
 		fdp.writeXmlToDatabase(db, encryptPublicData, security);
 
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
