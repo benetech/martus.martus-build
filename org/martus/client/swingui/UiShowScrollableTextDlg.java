@@ -34,6 +34,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 
+import org.martus.swing.*;
+
 
 
 public class UiShowScrollableTextDlg extends JDialog implements ActionListener
@@ -68,7 +70,7 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 		getContentPane().add(cancel);
 
 		getRootPane().setDefaultButton(ok);
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		show();
 	}
 

@@ -40,6 +40,7 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
+import org.martus.swing.*;
 
 abstract public class UiBulletinComponentSection extends JPanel
 {

@@ -42,6 +42,8 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
+import org.martus.swing.*;
+
 
 
 public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
@@ -134,7 +136,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		getRootPane().setDefaultButton(ok);
 		if(username.length() > 0)
 			passwordField.requestFocus();
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}
@@ -248,7 +250,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.setText(localization.getButtonLabel("VirtualKeyboardSwitchToNormal"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 	}
 
 	public void displayPasswordAreaUsingNormalKeyboard()
@@ -277,7 +279,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.setText(localization.getButtonLabel("VirtualKeyboardSwitchToVirtual"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 	}
 	public void updateUI()
 	{

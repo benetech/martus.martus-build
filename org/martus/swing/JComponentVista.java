@@ -27,11 +27,16 @@ Boston, MA 02111-1307, USA.
 
 
 /* used with the permission of Richard Blanchard */
-package org.martus.client.swingui;
+package org.martus.swing;
 
-import java.awt.*;
-import java.awt.print.*;
-import javax.swing.*;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.print.PageFormat;
+import java.awt.print.Printable;
+import java.awt.print.PrinterException;
+
+import javax.swing.JComponent;
 public class JComponentVista extends Vista implements Printable
 {
 	private static final boolean SYMMETRIC_SCALING = true;

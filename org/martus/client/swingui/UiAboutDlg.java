@@ -43,6 +43,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 
 import org.martus.common.MartusUtilities;
+import org.martus.swing.*;
 
 public class UiAboutDlg extends JDialog implements ActionListener
 {
@@ -103,7 +104,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		pack();
 		Dimension size = getSize();
 		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(UiUtilities.center(size, screen));
+		setLocation(Utilities.center(size, screen));
 		show();
 	}
 

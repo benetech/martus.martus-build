@@ -36,6 +36,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.martus.client.core.*;
+import org.martus.swing.*;
 
 
 
@@ -74,7 +75,7 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 
 		getRootPane().setDefaultButton(ok);
 
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

@@ -27,11 +27,15 @@ Boston, MA 02111-1307, USA.
 
 
 /* used with the permission of Jerry Huxtable */
-package org.martus.client.swingui;
+package org.martus.swing;
 
 
-import java.awt.*;
-import java.util.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
+import java.awt.LayoutManager2;
+import java.util.Hashtable;
 
 /**
  * A base class for layouts which simplifies the business of building new

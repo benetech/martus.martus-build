@@ -50,6 +50,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
 import org.martus.common.FieldDataPacket;
+import org.martus.swing.*;
 
 public class UiServerSummariesDlg extends JDialog
 {
@@ -129,7 +130,7 @@ public class UiServerSummariesDlg extends JDialog
 
 
 		getRootPane().setDefaultButton(ok);
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

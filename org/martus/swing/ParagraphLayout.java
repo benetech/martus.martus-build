@@ -27,10 +27,13 @@ Boston, MA 02111-1307, USA.
 
 
 /* used with the permission of Jerry Huxtable */
-package org.martus.client.swingui;
+package org.martus.swing;
 
 
-import java.awt.*;
+import java.awt.Component;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Insets;
 
 public class ParagraphLayout extends ConstraintLayout {
 

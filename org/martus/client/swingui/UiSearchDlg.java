@@ -35,6 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.martus.common.Bulletin;
+import org.martus.swing.*;
 
 public class UiSearchDlg extends JDialog  implements ActionListener
 {
@@ -77,7 +78,7 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 		getContentPane().add(search);
 		getContentPane().add(cancel);
 
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 

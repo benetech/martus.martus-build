@@ -35,6 +35,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.martus.client.core.ConfigInfo;
+import org.martus.swing.*;
 
 class UiSetupDlg extends JDialog implements ActionListener
 {
@@ -89,7 +90,7 @@ class UiSetupDlg extends JDialog implements ActionListener
 
 		getRootPane().setDefaultButton(ok);
 
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

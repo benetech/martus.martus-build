@@ -70,6 +70,7 @@ import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
 import org.martus.common.Bulletin;
 import org.martus.common.DatabaseKey;
 import org.martus.common.UniversalId;
+import org.martus.swing.*;
 
 
 public class UiBulletinTable extends JTable implements ListSelectionListener, DragGestureListener, DragSourceListener

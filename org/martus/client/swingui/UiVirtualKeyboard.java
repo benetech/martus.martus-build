@@ -38,6 +38,8 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
+import org.martus.swing.Utilities;
+
 
 
 public class UiVirtualKeyboard
@@ -55,7 +57,7 @@ public class UiVirtualKeyboard
 
 		Container vKeyboard = new Container();
 		int columns = 13;
-		if(UiUtilities.isMacintosh())
+		if(Utilities.isMacintosh())
 			columns = 10;
 		int rows = keys.length() / columns;
 		vKeyboard.setLayout(new GridLayout(rows, columns));

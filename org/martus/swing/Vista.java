@@ -27,7 +27,7 @@ Boston, MA 02111-1307, USA.
 
 
 /* used with the permission of Richard Blanchard */
-package org.martus.client.swingui;
+package org.martus.swing;
 
 import java.awt.Graphics;
 import java.awt.Graphics2D;

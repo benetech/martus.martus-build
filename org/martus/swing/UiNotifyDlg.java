@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui;
+package org.martus.swing;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
@@ -69,7 +69,7 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 		vbox.add(new JLabel(" "));
 
 		getContentPane().add(vbox, BorderLayout.CENTER);
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		getRootPane().setDefaultButton(ok);
 		ok.requestFocus(true);

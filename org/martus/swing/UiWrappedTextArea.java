@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui;
+package org.martus.swing;
 
 import javax.swing.JFrame;
 import javax.swing.JTextArea;

@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui;
+package org.martus.swing;
 
 import java.awt.print.PageFormat;
 import java.awt.print.Paper;
@@ -38,10 +38,10 @@ import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 
-class PrintPageFormat extends PageFormat
+public class PrintPageFormat extends PageFormat
 {
 
-	void setFromAttributes(HashPrintRequestAttributeSet attributes)
+	public void setFromAttributes(HashPrintRequestAttributeSet attributes)
 	{
 		boolean otherMediaSet = false;
 		boolean paperSizeSet = false;
@@ -90,5 +90,5 @@ class PrintPageFormat extends PageFormat
 		else
 			mustWarnUser = false;
 	}
-	boolean mustWarnUser;
+	public boolean mustWarnUser;
 }

@@ -36,6 +36,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.martus.client.core.ConfigInfo;
+import org.martus.swing.*;
 
 public class UiContactInfoDlg extends JDialog implements ActionListener
 {
@@ -113,7 +114,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 
 		getRootPane().setDefaultButton(ok);
 
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

@@ -38,6 +38,7 @@ import javax.swing.JViewport;
 
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
+import org.martus.swing.*;
 
 public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 {
@@ -75,7 +76,7 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
 
 		getRootPane().setDefaultButton(ok);
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

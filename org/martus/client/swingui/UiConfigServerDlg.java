@@ -38,6 +38,7 @@ import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
 import org.martus.common.MartusCrypto;
 import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.swing.*;
 
 public class UiConfigServerDlg extends JDialog implements ActionListener
 {
@@ -90,7 +91,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		getContentPane().add(cancel);
 		getRootPane().setDefaultButton(ok);
 
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

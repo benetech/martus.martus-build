@@ -46,6 +46,7 @@ import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
+import org.martus.swing.*;
 
 
 
@@ -82,7 +83,7 @@ public class UiAttachmentViewer extends JPanel
 		viewButton = new JButton(localization.getButtonLabel("viewattachment"));
 		viewButton.addActionListener(new ViewHandler());
 		viewButton.setEnabled(false);
-		if(!UiUtilities.isMSWindows())
+		if(!Utilities.isMSWindows())
 			viewButton.setVisible(false);
 		buttonBox.add(viewButton);
 

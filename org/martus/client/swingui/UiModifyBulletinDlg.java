@@ -48,6 +48,7 @@ import org.martus.client.core.EncryptionChangeListener;
 import org.martus.client.core.MartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
+import org.martus.swing.Utilities;
 
 class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListener, EncryptionChangeListener
 {
@@ -97,7 +98,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			Dimension editorDimension = observerToUse.getBulletinEditorDimension();
 			Point editorPosition = observerToUse.getBulletinEditorPosition();
 			boolean showMaximized = false;
-			if(UiUtilities.isValidScreenPosition(screenSize, editorDimension, editorPosition))
+			if(Utilities.isValidScreenPosition(screenSize, editorDimension, editorPosition))
 			{
 				setLocation(editorPosition);
 				setSize(editorDimension);
@@ -109,7 +110,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			if(showMaximized)
 			{
 				setSize(screenSize.width - 50, screenSize.height - 50);
-				UiUtilities.maximizeWindow(this);
+				Utilities.maximizeWindow(this);
 			}
 			show();
 		}

@@ -49,6 +49,7 @@ import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
+import org.martus.swing.Utilities;
 
 public class UiExportBulletinsDlg extends JDialog implements ActionListener
 {
@@ -103,7 +104,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		pack();
 		Dimension size = getSize();
 		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(UiUtilities.center(size, screen));
+		setLocation(Utilities.center(size, screen));
 		show();
 	}
 

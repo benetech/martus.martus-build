@@ -45,6 +45,8 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
+import org.martus.swing.*;
+
 
 
 public class UiDisplayFileDlg extends JDialog
@@ -97,7 +99,7 @@ public class UiDisplayFileDlg extends JDialog
 		getRootPane().setDefaultButton(ok);
 		ok.requestFocus();
 
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(true);
 		show();
 	}

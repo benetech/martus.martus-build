@@ -29,6 +29,8 @@ package org.martus.client.swingui;
 import javax.swing.Box;
 import javax.swing.JLabel;
 
+import org.martus.swing.Utilities;
+
 public class UiProgressRetrieveSummariesDlg extends UiProgressRetrieveDlg
 {
 	public UiProgressRetrieveSummariesDlg(UiMainWindow window, String tag)
@@ -41,6 +43,6 @@ public class UiProgressRetrieveSummariesDlg extends UiProgressRetrieveDlg
 		vBox.add(cancel);
 		vBox.add(new JLabel("    "));
 		getContentPane().add(vBox);
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 	}
 }

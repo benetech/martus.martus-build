@@ -41,6 +41,7 @@ import javax.swing.filechooser.FileFilter;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
 import org.martus.common.UnicodeReader;
+import org.martus.swing.*;
 
 
 
@@ -84,7 +85,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		getContentPane().add(cancel);
 
 		getRootPane().setDefaultButton(ok);
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(false);
 	}
 

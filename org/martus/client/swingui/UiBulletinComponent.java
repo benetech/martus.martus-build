@@ -40,6 +40,7 @@ import org.martus.client.core.EncryptionChangeListener;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
+import org.martus.swing.*;
 
 abstract public class UiBulletinComponent extends JPanel implements Scrollable, ChangeListener
 {

@@ -35,6 +35,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
+import org.martus.swing.*;
+
 public class UiStringInputDlg extends JDialog
 {
 	public UiStringInputDlg(JFrame owner, UiLocalization localization, String baseTag, String descriptionTag, String defaultText)
@@ -68,7 +70,7 @@ public class UiStringInputDlg extends JDialog
 
 		getRootPane().setDefaultButton(ok);
 
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		setResizable(false);
 	}
 

@@ -40,7 +40,6 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.UiUtilities;
 import org.martus.common.Bulletin;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -51,6 +50,7 @@ import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
+import org.martus.swing.Utilities;
 
 public class TestMartusApp_NoServer extends TestCaseEnhanced
 {
@@ -748,12 +748,12 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testCenter");
 		{
-			Point upperLeft = UiUtilities.center(new Dimension(800, 600), new Rectangle(0, 0, 800, 600));
+			Point upperLeft = Utilities.center(new Dimension(800, 600), new Rectangle(0, 0, 800, 600));
 			assertEquals(0, upperLeft.x);
 			assertEquals(0, upperLeft.y);
 		}
 		{
-			Point upperLeft = UiUtilities.center(new Dimension(400, 300), new Rectangle(0, 0, 800, 600));
+			Point upperLeft = Utilities.center(new Dimension(400, 300), new Rectangle(0, 0, 800, 600));
 			assertEquals(200, upperLeft.x);
 			assertEquals(150, upperLeft.y);
 		}

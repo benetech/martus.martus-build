@@ -75,7 +75,6 @@ import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
-import org.martus.client.swingui.UiUtilities.Delay;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.NetworkInterfaceConstants;
@@ -83,6 +82,11 @@ import org.martus.common.Packet;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.swing.JComponentVista;
+import org.martus.swing.PrintPageFormat;
+import org.martus.swing.UiNotifyDlg;
+import org.martus.swing.Utilities;
+import org.martus.swing.Utilities.Delay;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
 {
@@ -1348,7 +1352,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		Dimension appDimension = uiState.getCurrentAppDimension();
 		Point appPosition = uiState.getCurrentAppPosition();
 		boolean showMaximized = false;
-		if(UiUtilities.isValidScreenPosition(screenSize, appDimension, appPosition))
+		if(Utilities.isValidScreenPosition(screenSize, appDimension, appPosition))
 		{
 			setLocation(appPosition);
 			setSize(appDimension);
@@ -1360,7 +1364,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(showMaximized)
 		{
 			setSize(screenSize.width - 50 , screenSize.height - 50);
-			UiUtilities.maximizeWindow(this);
+			Utilities.maximizeWindow(this);
 		}
 	}
 
@@ -1372,7 +1376,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			Delay delay = new Delay(seconds);
 			delay.start();
-			UiUtilities.waitForThreadToTerminate(delay);
+			Utilities.waitForThreadToTerminate(delay);
 			if( busyDlg != null )
 			{
 				busyDlg.endDialog();

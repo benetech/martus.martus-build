@@ -37,6 +37,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
 
+import org.martus.swing.Utilities;
+
 class UiSplashDlg extends JDialog implements ActionListener
 {
 	UiSplashDlg(Frame owner, UiLocalization localization, String text)
@@ -53,7 +55,7 @@ class UiSplashDlg extends JDialog implements ActionListener
 		hbox.add(ok);
 		hbox.add(Box.createHorizontalGlue());
 		contents.add(hbox, BorderLayout.SOUTH);
-		UiUtilities.centerDlg(this);
+		Utilities.centerDlg(this);
 		show();
 	}
 

@@ -41,6 +41,7 @@ import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
 import org.martus.common.AttachmentProxy;
+import org.martus.swing.*;
 
 
 
