@@ -135,7 +135,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			try
 			{
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
-				app.initializeDatabase();
+				app.doAfterSigninInitalization();
 				fail("Should have thrown because map is missing");
 			}
 			catch(MartusApp.MartusAppInitializationException expectedException)
@@ -189,7 +189,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			try
 			{
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
-				app.initializeDatabase();
+				app.doAfterSigninInitalization();
 			}
 			catch(MartusApp.MartusAppInitializationException unExpectedException)
 			{
@@ -251,7 +251,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			try
 			{
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
-				app.initializeDatabase();
+				app.doAfterSigninInitalization();
 			}
 			catch(MartusApp.MartusAppInitializationException unExpectedException)
 			{

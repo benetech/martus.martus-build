@@ -242,11 +242,11 @@ public class MartusApp
 		}
 	}
 	
-	public void initializeDatabase() throws MartusAppInitializationException
+	public void doAfterSigninInitalization() throws MartusAppInitializationException
 	{
 			try
 			{
-				store.initialize();
+				store.doAfterSigninInitalization();
 			}
 			catch (MissingAccountMapException e)
 			{

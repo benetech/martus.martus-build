@@ -71,9 +71,25 @@ public class BulletinStore
 		}
 	}
 	
-	public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
+	public void doAfterSigninInitalization() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
 	{
 		database.initialize();
+		loadCacheOfSortableFields();
+	}
+	
+	public void prepareToExit()
+	{
+		try 
+		{
+			FileOutputStream out = new FileOutputStream(cacheOfSortableFieldsFile);
+			cacheOfSortableFields.save(out, getSignatureGenerator());
+			out.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			cacheOfSortableFieldsFile.delete();	
+		}
 	}
 	
 	public String getAccountId()
@@ -620,6 +636,8 @@ public class BulletinStore
 	private void setUpStore(File baseDirectory, Database db)
 	{
 		dir = baseDirectory;
+		cacheOfSortableFieldsFile = new File(dir, CACHE_FILE_NAME);
+
 		database = db;
 		account = "";
 		bulletinCache = new TreeMap();
@@ -627,6 +645,35 @@ public class BulletinStore
 		folders = new Vector();
 
 		createSystemFolders();
+	}
+	
+	private void loadCacheOfSortableFields()
+	{
+		if(!cacheOfSortableFieldsFile.exists())
+			return;
+			
+		FileInputStreamWithSeek in = null;
+		try 
+		{
+			in = new FileInputStreamWithSeek(cacheOfSortableFieldsFile);
+			cacheOfSortableFields.load(in, getSignatureGenerator());
+		} 
+		catch (IOException e) 
+		{
+			e.printStackTrace();
+		}
+		finally
+		{
+			try 
+			{
+				if(in != null)
+					in.close();	
+			} 
+			catch (IOException nothingWeCanDo) 
+			{
+			}
+		}
+		cacheOfSortableFieldsFile.delete();
 	}
 
 	public int quarantineUnreadableBulletins()
@@ -903,7 +950,8 @@ public class BulletinStore
 	public static final String RETRIEVE_DRAFT_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletinDraft";
 	public static final String DAMAGED_BULLETIN_FOLDER = "%DamagedBulletins";
 	private static final String DRAFT_OUTBOX = "*DraftOutbox";
-	
+
+	private static final String CACHE_FILE_NAME = "sfcache.dat";	
 	private MartusCrypto signer;
 	private String account;
 	private File dir;
@@ -916,5 +964,6 @@ public class BulletinStore
 	private BulletinFolder folderDraftOutbox;
 	Map bulletinCache;
 	CacheOfSortableFields cacheOfSortableFields;
+	File cacheOfSortableFieldsFile;
 	private boolean encryptPublicDataFlag;
 }

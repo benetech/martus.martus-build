@@ -75,10 +75,12 @@ public class CacheOfSortableFields
 		} 
 		catch (DecryptionException e) 
 		{
+			bulletinIdsHashMap.clear();
 			throw new IOException("decryption exception");
 		} 
 		catch (ClassNotFoundException e) 
 		{
+			bulletinIdsHashMap.clear();
 			throw new IOException(e.getMessage());
 		}
 	}

@@ -123,7 +123,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		try
 		{
-			app.initializeDatabase();
+			app.doAfterSigninInitalization();
 		}
 		catch (MartusAppInitializationException e)
 		{
@@ -1467,6 +1467,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(doUploadReminderOnExit())
 			return;
 		saveState();
+		getStore().prepareToExit();
 		ExitImmediately();
 	}
 	
