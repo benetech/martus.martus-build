@@ -1256,12 +1256,12 @@ public class MartusApp
 
 	public String getCurrentDateFormatCode()
 	{
-		return currentDateFormat;
+		return localization.getCurrentDateFormatCode();
 	}
 
 	public void setCurrentDateFormatCode(String code)
 	{
-		currentDateFormat = code;
+		localization.setCurrentDateFormatCode(code);
 	}
 
 
@@ -1560,6 +1560,5 @@ public class MartusApp
 
 	private final int MAXFOLDERS = 50;
 	public int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
-	private String currentDateFormat;
 }
 

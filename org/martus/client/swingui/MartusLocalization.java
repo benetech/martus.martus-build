@@ -98,8 +98,20 @@ public class MartusLocalization
     	directory = new File(directoryToUse);
 		languageTranslationsMap = new TreeMap();
 		loadEnglishTranslations();
+    	setCurrentDateFormatCode(DateUtilities.MDY_SLASH.getCode());
 	}
 	
+	public String getCurrentDateFormatCode()
+	{
+		return currentDateFormat;
+	}
+
+	public void setCurrentDateFormatCode(String code)
+	{
+		currentDateFormat = code;
+	}
+
+
 	public void loadEnglishTranslations()
 	{
 		createStringMap(ENGLISH);
@@ -380,6 +392,7 @@ public class MartusLocalization
 	private File directory;
 	private Map languageTranslationsMap;
 	private String currentLanguageCode;
+	private String currentDateFormat;
 
 	private static final String ENGLISH = "en";
 	public static final String[] ALL_LANGUAGE_CODES = {
