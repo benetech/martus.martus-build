@@ -98,6 +98,8 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		Counter counter = new Counter(db, allKeys);
 		db.visitAllRecords(counter);
 		assertEquals(db.toString()+"Not all keys visited?", 0, counter.expectedKeys.size());
+		
+		db.deleteAllData();
 	}
 
 	String smallString = "How are you doing?";

@@ -54,6 +54,8 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 		InputStream inSealed = db.openInputStream(sealedKey, security);
 		assertNotNull("sealed not found?", inSealed);
 		inSealed.close();
+		
+		db.deleteAllData();
 	}
 
 	private static final String smallString = "some text";
