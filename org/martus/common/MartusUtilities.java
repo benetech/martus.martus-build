@@ -149,10 +149,13 @@ public class MartusUtilities
 			newSigFile.delete();
 
 		byte[] signature = createSignatureFromFile(fileToSign, signer);
-
-		FileOutputStream out = new FileOutputStream(newSigFile);
-		out.write(signature);
-		out.close();
+		String sigString = Base64.encode(signature);
+		
+		UnicodeWriter writer = new UnicodeWriter(newSigFile);
+		writer.writeln(signer.getPublicKeyString());
+		writer.writeln(sigString);
+		writer.flush();
+		writer.close();
 
 		if(existingSig.exists() )
 		{
@@ -167,23 +170,33 @@ public class MartusUtilities
 	public static void verifyFileAndSignature(File fileToVerify, File signatureFile, MartusSecurity verifier)
 		throws FileVerificationException
 	{
+		FileInputStream inData = null;
+		try
+		{
+			UnicodeReader reader = new UnicodeReader(signatureFile);
+			String key = reader.readLine();
+			String signature = reader.readLine();
+			reader.close();
+			
+			inData = new FileInputStream(fileToVerify);
+			if( !verifier.isSignatureValid(key, inData, Base64.decode(signature)) )
+				throw new FileVerificationException();
+		}
+		catch(Exception e)
+		{
+			throw new FileVerificationException();
+		}
+		finally
+		{
 			try
 			{
-				byte[] signature = new byte[(int) signatureFile.length()];
-				FileInputStream inSignature = new FileInputStream(signatureFile);
-				inSignature.read(signature);
-				inSignature.close();
-				
-				FileInputStream inData = new FileInputStream(fileToVerify);
-				if( !verifier.isSignatureValid( verifier.getPublicKeyString(), inData, signature) )
-					throw new FileVerificationException();
-
 				inData.close();
 			}
-			catch(Exception e)
+			catch (IOException ignoredException)
 			{
-				throw new FileVerificationException();
+				;
 			}
+		}
 	}
 
 	public static String formatPublicCode(String publicCode) 

@@ -38,8 +38,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	}
 	
 	public void testCreateSignatureFromFile()
-		throws IOException, CryptoInitializationException, MartusSignatureException, 
-				FileSigningException, FileVerificationException
+		throws Exception
 	{
 		MartusSecurity otherSecurity = new MartusSecurity();
 		otherSecurity.createKeyPair(512);
@@ -52,12 +51,12 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 		File normalFileSigBySecurity = MartusUtilities.createSignatureFileFromFile(normalFile, security);
 
-		MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security );
+		MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security);
 		
 		try
 		{
-			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security );
-			fail("testCreateSignatureFromFile 2: Should have thrown FileVerificationException.");
+			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security);
+			fail("testCreateSignatureFromFile 1: Should have thrown FileVerificationException.");
 		}
 		catch (FileVerificationException ignoreExpectedException)
 		{
@@ -65,19 +64,9 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		}
 		
 		anotherFile = createTempFile(string1);
-
-		MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security );
-		
+		MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security);
 		File normalFileSigByOtherSecurity = MartusUtilities.createSignatureFileFromFile(normalFile, otherSecurity);
-		try
-		{
-			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigByOtherSecurity, security );
-			fail("testCreateSignatureFromFile 4: Should have thrown FileVerificationException.");
-		}
-		catch(FileVerificationException e)
-		{
-			;
-		}
+		MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigByOtherSecurity, security);
 		
 		normalFileSigBySecurity.delete();
 		normalFileSigByOtherSecurity.delete();
