@@ -41,7 +41,7 @@ public class MockMartusApp extends MartusApp
 {
 	public static MockMartusApp create(MartusCrypto crypto) throws IOException, MartusAppInitializationException
 	{
-		File fakeDataDirectory = File.createTempFile("$$$MartusTestApp", null);
+		File fakeDataDirectory = File.createTempFile("$$$MockMartusApp", null);
 		fakeDataDirectory.deleteOnExit();
 		fakeDataDirectory.delete();
 		fakeDataDirectory.mkdir();
