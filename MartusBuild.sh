@@ -158,17 +158,22 @@ downloadMartusVerifyFromCvsAndSetup()
 {
 	cd $CVS_HOME || error "unable to cd: err $?"
 	
-	SRC_VERIFY=$MARTUSSOURCES/verify/source/org/martus/jarverifier
+	SRC_VERIFY=$MARTUSSOURCES/verify
 	export SRC_VERIFY
 	
 	cvs -q checkout martus-jar-verifier || error "cvs martus-jar-verifier returned $?"
 	mkdir $SRC_VERIFY
-	cp -r martus-jar-verifier/* $SRC_VERIFY/
+	mkdir $SRC_VERIFY/source
+	mkdir $SRC_VERIFY/source/org
+	mkdir $SRC_VERIFY/source/org/martus/
+	mkdir $SRC_VERIFY/source/org/martus/jarverifier
+	
+	cp -r martus-jar-verifier/* $SRC_VERIFY//source/org/martus/jarverifier/
 	rm -f $SRC_VERIFY/*.bat
 	rm -f $SRC_VERIFY/*.txt
 	echo
 	echo "Building Server JarVerifier...";
-	cd $SRC_VERIFY || exit
+	cd $SRC_VERIFY/source/org/martus/jarverifier || exit
 	if [ -f "JarVerifier.class" ]; then
 		rm -f JarVerifier.class
 	fi
