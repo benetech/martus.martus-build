@@ -172,10 +172,18 @@ public class MartusUtilities
 	public static byte[] createSignatureFromFile(File fileToSign, MartusCrypto signer)
 		throws IOException, MartusSignatureException
 	{
-			FileInputStream in = new FileInputStream(fileToSign);
+		FileInputStream in = null;
+		try
+		{
+			in = new FileInputStream(fileToSign);
 			byte[] signature = signer.createSignature(in);
-			in.close();
 			return signature;
+		}
+		finally
+		{
+			if(in != null)
+				in.close();
+		}
 	}
 	
 	public static File getSignatureFileFromFile(File originalFile)
