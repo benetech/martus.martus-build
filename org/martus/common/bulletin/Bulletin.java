@@ -131,6 +131,19 @@ public class Bulletin implements BulletinConstants
 			return true;
 		return false;
 	}
+	
+	public boolean hasUnknownCustomField()
+	{
+		FieldDataPacket fdp = getFieldDataPacket();
+		FieldSpec[] specs = fdp.getFieldSpecs();
+		for(int i=0; i < specs.length; ++i)
+		{
+			if(specs[i].hasUnknownStuff())
+				return true;
+		}
+		
+		return false;
+	}
 
 	public long getLastSavedTime()
 	{

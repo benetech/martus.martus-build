@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.martus.client.test.BulletinForTesting;
 import org.martus.common.FieldSpec;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.AttachmentProxy;
@@ -126,6 +127,17 @@ public class TestBulletin extends TestCaseEnhanced
 		b.getPrivateFieldDataPacket().setHasUnknownTags(false);
 
 		assertFalse("not back to normal?", b.hasUnknownTags());
+	}
+	
+	public void testHasUnknownCustomField()
+	{
+		Bulletin noUnknown = new Bulletin(security);
+		assertFalse("has unknown custom?", noUnknown.hasUnknownCustomField());
+
+		BulletinForTesting.shouldCreateUnknownStuffInCustomField = true;
+		Bulletin withUnknown = new BulletinForTesting(security);
+		assertTrue("no unknown custom?", withUnknown.hasUnknownCustomField());
+		BulletinForTesting.clearShoulds();
 	}
 
 	public void testAllPrivate()
