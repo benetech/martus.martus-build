@@ -28,7 +28,8 @@
   			${util-dir}/**/*.class,
   			${hrvd-dir}/**/*.class,
   			${logi-dir}/**/*.class,
-                    	${common-dir}/**/*.class
+                    	${common-dir}/**/*.class,
+                    	${swing-dir}/**/*.class
                     	"/>
 
   <property name="server-dir" value="${martus-dir}/server"/>
@@ -47,7 +48,6 @@
   <property name="client-jar" value= "${dist}/martus.jar"/>
   <property name="client-package" value="${martus-package}.client"/>
   <property name="client-files" value="${client-dir}/*.class,
-  		${swing-dir}/**/*.class,
                 ${client-dir}/**/*.class,
                 ${client-dir}/core/main-class.txt,
                 ${client-dir}/**/Martus-*.mtf,
@@ -114,7 +114,7 @@
 
     <replace file="${common-dir}/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
 
-    <javac target="1.4" optimize="on" srcdir="${hrvd-dir};${logi-dir};${util-dir};${common-dir}" classpath="." failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${hrvd-dir};${logi-dir};${util-dir};${swing-dir};${common-dir}" classpath="." failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
