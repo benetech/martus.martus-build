@@ -26,10 +26,24 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.server.foramplifiers;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Vector;
+
 import org.martus.common.LoggerForTesting;
+import org.martus.common.MartusUtilities;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinForTesting;
+import org.martus.common.bulletin.BulletinLoader;
+import org.martus.common.bulletin.BulletinSaver;
+import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.MockClientDatabase;
 import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.util.Base64;
 
 public class TestServerForAmplifiers extends TestCaseEnhanced
 {
@@ -40,14 +54,81 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 
 	protected void setUp() throws Exception
 	{
-		logger = new LoggerForTesting();
-		MockMartusSecurity serverSecurity = MockMartusSecurity.createServer();
-		coreServer = new MockMartusServer();
-		coreServer.setSecurity(serverSecurity);
+		if(logger == null)
+			logger = new LoggerForTesting();
+		if(clientSecurity == null)
+		{
+			clientSecurity = new MockMartusSecurity();
+			clientSecurity.createKeyPair();
+		}
+		
+		if(coreServer == null)
+		{
+			MockMartusSecurity mockServer = MockMartusSecurity.createServer();
+			coreServer = new MockMartusServer();
+			coreServer.setSecurity(mockServer);
+			coreServer.serverForClients.clearCanUploadList();
+			coreServer.allowUploads(clientSecurity.getPublicKeyString());
+		}
+		
+		if(otherServer == null)
+		{
+			MockMartusSecurity mockOtherServer = MockMartusSecurity.createOtherServer();
+			otherServer = new MockMartusServer();
+			otherServer.setSecurity(mockOtherServer);
+			otherServer.serverForClients.clearCanUploadList();
+			otherServer.allowUploads(clientSecurity.getPublicKeyString());
+		}
 
-		serverSecurity = MockMartusSecurity.createOtherServer();
-		otherServer = new MockMartusServer();
-		otherServer.setSecurity(serverSecurity);
+		if(clientDatabase == null)
+		{
+			clientDatabase = new MockClientDatabase();
+			b1 = new Bulletin(clientSecurity);
+			b1.setAllPrivate(false);
+			b1.set(Bulletin.TAGTITLE, "Title1");
+			b1.set(Bulletin.TAGPUBLICINFO, "Details1");
+			b1.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails1");
+			File attachment = createTempFile();
+			FileOutputStream out = new FileOutputStream(attachment);
+			out.write(b1AttachmentBytes);
+			out.close();
+			b1.addPublicAttachment(new AttachmentProxy(attachment));
+			b1.addPrivateAttachment(new AttachmentProxy(attachment));
+			b1.setSealed();
+			BulletinSaver.saveToClientDatabase(b1, clientDatabase, true, clientSecurity);
+			b1 = BulletinLoader.loadFromDatabase(clientDatabase, DatabaseKey.createSealedKey(b1.getUniversalId()), clientSecurity);
+	
+			b2 = new Bulletin(clientSecurity);
+			b2.setAllPrivate(true);
+			b2.set(Bulletin.TAGTITLE, "Title2");
+			b2.set(Bulletin.TAGPUBLICINFO, "Details2");
+			b2.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails2");
+			b2.setSealed();
+			BulletinSaver.saveToClientDatabase(b2, clientDatabase, true, clientSecurity);
+			
+			draft = new Bulletin(clientSecurity);
+			draft.set(Bulletin.TAGPUBLICINFO, "draft public");
+			draft.setDraft();
+			BulletinSaver.saveToClientDatabase(draft, clientDatabase, true, clientSecurity);
+
+
+			privateBulletin = new Bulletin(clientSecurity);
+			privateBulletin.setAllPrivate(true);
+			privateBulletin.set(Bulletin.TAGTITLE, "TitlePrivate");
+			privateBulletin.set(Bulletin.TAGPUBLICINFO, "DetailsPrivate");
+			privateBulletin.set(Bulletin.TAGPRIVATEINFO, "PrivateDetailsPrivate");
+			privateBulletin.setSealed();
+			BulletinSaver.saveToClientDatabase(privateBulletin, clientDatabase, true, clientSecurity);
+
+			b1ZipString = BulletinForTesting.saveToZipString(clientDatabase, b1, clientSecurity);
+			b2ZipString = BulletinForTesting.saveToZipString(clientDatabase, b2, clientSecurity);
+
+			b1ZipBytes = Base64.decode(b1ZipString);
+			b1ChunkBytes0 = new byte[100];
+			b1ChunkBytes1 = new byte[b1ZipBytes.length - b1ChunkBytes0.length];
+			System.arraycopy(b1ZipBytes, 0, b1ChunkBytes0, 0, b1ChunkBytes0.length);
+			System.arraycopy(b1ZipBytes, b1ChunkBytes0.length, b1ChunkBytes1, 0, b1ChunkBytes1.length);
+		}
 	}
 
 	protected void tearDown() throws Exception
@@ -56,13 +137,105 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		otherServer.deleteAllFiles();
 	}
 	
-	public void testAmplifyOnlyMyBulletins() throws Exception
+
+	public void testIsAuthorizedForAmplifying() throws Exception
 	{
+		MockMartusServer nobodyAuthorizedCore = new MockMartusServer();
+		ServerForAmplifiers nobodyAuthorized = new ServerForAmplifiers(nobodyAuthorizedCore, logger);
+		nobodyAuthorized.loadConfigurationFiles();
+		assertFalse("client already authorized?", nobodyAuthorized.isAuthorizedAmp(clientSecurity.getPublicKeyString()));
+		nobodyAuthorizedCore.deleteAllFiles();
+		
+		MockMartusServer oneAuthorizedCore = new MockMartusServer();
+		oneAuthorizedCore.enterSecureMode();
+		File ampsWhoCallUs = new File(oneAuthorizedCore.getStartupConfigDirectory(), "AmpsWhoCallUs");
+		ampsWhoCallUs.deleteOnExit();
+		ampsWhoCallUs.mkdirs();
+		File pubKeyFile1 = new File(ampsWhoCallUs, "code=1.2.3.4.5-ip=1.2.3.4.txt");
+		pubKeyFile1.deleteOnExit();
+		MartusUtilities.exportServerPublicKey(clientSecurity, pubKeyFile1);
+		ServerForAmplifiers oneAuthorized = new ServerForAmplifiers(oneAuthorizedCore, logger);
+		oneAuthorized.loadConfigurationFiles();
+		assertTrue("client1 not authorized?", oneAuthorized.isAuthorizedAmp(clientSecurity.getPublicKeyString()));
+		assertFalse("ourselves authorized?", oneAuthorized.isAuthorizedForMirroring(coreServer.getAccountId()));
+		ampsWhoCallUs.delete();
+		oneAuthorizedCore.deleteAllFiles();
+		
 	}
-	
-	ServerForAmplifiers server;
+
+	public void testAmplifierServer() throws Exception
+	{
+		MockMartusSecurity amplifier = MockMartusSecurity.createAmplifier();
+
+
+		Vector parameters = new Vector();
+		parameters.add(clientSecurity.getPublicKeyString());
+		String signature = amplifier.createSignatureOfVectorOfStrings(parameters);
+
+		File compliance = new File(coreServer.getStartupConfigDirectory(), "compliance.txt");
+		compliance.deleteOnExit();
+		compliance.createNewFile();
+		coreServer.loadConfigurationFiles();
+		compliance.delete();
+		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinUniversalIds(amplifier.getPublicKeyString(), parameters, signature);
+		assertEquals("Unauthorized amp requested data?", ServerForAmplifiers.NOT_AUTHORIZED, response.get(0));
+
+		File ampsWhoCallUs = new File(coreServer.getStartupConfigDirectory(), "AmpsWhoCallUs");
+		ampsWhoCallUs.deleteOnExit();
+		ampsWhoCallUs.mkdirs();
+		File pubKeyFile1 = new File(ampsWhoCallUs, "code=1.2.3.4.5-ip=1.2.3.4.txt");
+		pubKeyFile1.deleteOnExit();
+		MartusUtilities.exportServerPublicKey(amplifier, pubKeyFile1);
+		compliance.createNewFile();
+		coreServer.loadConfigurationFiles();
+		compliance.delete();
+		pubKeyFile1.delete();
+		ampsWhoCallUs.delete();
+
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinUniversalIds(amplifier.getPublicKeyString(), parameters, signature);
+		assertEquals("Authorized amp requested data failed?", ServerForAmplifiers.OK, response.get(0));
+
+		assertEquals("Failed to get list of public bulletin ids?", ServerForAmplifiers.OK, response.get(0));
+		Vector uIds = (Vector)response.get(1);
+		assertEquals("bulletins found?", 0, uIds.size());
+
+		uploadSampleBulletin(coreServer);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinUniversalIds(amplifier.getPublicKeyString(), parameters, signature);
+		uIds = (Vector)response.get(1);
+		assertEquals("incorect # of bulletins found after uploading?", 1, uIds.size());
+		assertEquals("B1 should had been returned", b1.getLocalId(), uIds.get(0));
+
+	}
+
+	void uploadSampleBulletin(MockMartusServer serverToUse) 
+	{
+		serverToUse.serverForClients.clearCanUploadList();
+		serverToUse.allowUploads(clientSecurity.getPublicKeyString());
+		serverToUse.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
+		serverToUse.uploadBulletin(clientSecurity.getPublicKeyString(), b2.getLocalId(), b2ZipString);
+	}
 	
 	MockMartusServer coreServer;
 	MockMartusServer otherServer;
 	LoggerForTesting logger;
+	private static Bulletin b1;
+	private static String b1ZipString;
+	private static byte[] b1ZipBytes;
+	private static byte[] b1ChunkBytes0;
+	private static byte[] b1ChunkBytes1;
+
+	private static Bulletin b2;
+	private static String b2ZipString;
+	private static Bulletin privateBulletin;
+
+	private static Bulletin draft;
+
+	private static MartusSecurity clientSecurity;
+	private static MockClientDatabase clientDatabase;
+
+	final static byte[] b1AttachmentBytes = {1,2,3,4,4,3,2,1};
+	final static byte[] file1Bytes = {1,2,3,4,4,3,2,1};
+	final static byte[] file2Bytes = {1,2,3,4,4,3,2,1,0};
+
 }
+

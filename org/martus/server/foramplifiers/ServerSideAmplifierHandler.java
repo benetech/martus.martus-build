@@ -150,7 +150,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 				bhp.loadFromXml(headerIn, null);
 				if(! bhp.isAllPrivate())
 				{
-					infos.add(key.getUniversalId().toString());
+					infos.add(key.getLocalId());
 				}
 			}
 			catch (Exception e)

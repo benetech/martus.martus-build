@@ -1878,7 +1878,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	ServerForMirroring serverForMirroring;
 	public ServerForClients serverForClients;
-	ServerForAmplifiers serverForAmplifiers;
+	public ServerForAmplifiers serverForAmplifiers;
 	
 	public File dataDirectory;
 	Database database;

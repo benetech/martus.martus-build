@@ -71,6 +71,13 @@ public class MockMartusSecurity extends MartusSecurity
 		return security;
 	}
 	
+	public static MockMartusSecurity createAmplifier() throws Exception
+	{
+		MockMartusSecurity security = new MockMartusSecurity();
+		security.createKeyPairForAmplifier();
+		return security;
+	}
+	
 	public MockMartusSecurity() throws Exception
 	{
 	}
@@ -114,6 +121,12 @@ public class MockMartusSecurity extends MartusSecurity
 	public void createKeyPairForOtherServer() throws Exception
 	{
 		setKeyPairFromData(Base64.decode(nonEncryptedSampleOtherServerKeyPair));
+	}
+
+	public void createKeyPairForAmplifier() throws Exception
+	{
+		//TODO:This should create a unique keypair for the amplifier not reuse the HQKeyPair
+		setKeyPairFromData(Base64.decode(nonEncryptedSampleHQKeyPair));
 	}
 
 	public void createKeyPair()
