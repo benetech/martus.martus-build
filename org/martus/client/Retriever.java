@@ -64,6 +64,7 @@ public class Retriever
 		
 		public void run()
 		{
+			boolean gotAllBulletins = true;
 			int i = 0;
 			int size = uidList.size();
 			UiProgressMeter progressMeter = null;
@@ -86,14 +87,19 @@ public class Retriever
 				}
 				catch(Exception e)
 				{
-					result = NetworkInterfaceConstants.INCOMPLETE;
-					finishedRetrieve();
-					return;
+					//e.printStackTrace();
+					gotAllBulletins = false;
 				}
 			}
-			result = NetworkInterfaceConstants.OK;
+		
 			if(progressDlg != null)
 				progressDlg.updateBulletinCountMeter(i, size);
+
+			if(gotAllBulletins)
+				result = NetworkInterfaceConstants.OK;
+			else
+				result = NetworkInterfaceConstants.INCOMPLETE;
+
 			finishedRetrieve();
 		}
 

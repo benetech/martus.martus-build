@@ -919,7 +919,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_END();
 	}
 
-	public void testRetrieveBulletinsBadId() throws Exception
+	public void testRetrieveBulletinsOnlyBadId() throws Exception
 	{
 		TRACE_BEGIN("testRetreiveBulletinsBadId");
 		mockSecurityForApp.loadSampleAccount();
@@ -932,6 +932,46 @@ public class TestMartusApp extends TestCaseEnhanced
 		retriever.retrieveBulletins(badList, appWithServer.createFolderRetrieved());
 		assertEquals(NetworkInterfaceConstants.INCOMPLETE, retriever.getResult());
 		mockServer.setDownloadResponseReal();
+		TRACE_END();
+	}
+
+	public void testRetrieveBulletinsWithOneBadId() throws Exception
+	{
+		TRACE_BEGIN("testRetreiveBulletinsBadId");
+		mockSecurityForApp.loadSampleAccount();
+		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
+
+		Bulletin b1 = appWithAccount.createBulletin();
+		b1.setSealed();
+		b1.save();
+		Bulletin b2 = appWithAccount.createBulletin();
+		b2.setSealed();
+		b2.save();
+		Bulletin b3 = appWithAccount.createBulletin();
+		b3.set(Bulletin.TAGAUTHOR, "author");
+		b3.setSealed();
+		b3.save();
+		mockServer.allowUploads(appWithAccount.getAccountId());
+		assertEquals("upload b1", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
+		assertEquals("upload b3", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+
+		BulletinStore store = appWithAccount.getStore();
+		store.removeBulletinFromStore(b1.getUniversalId());
+		store.removeBulletinFromStore(b2.getUniversalId());
+		store.removeBulletinFromStore(b3.getUniversalId());
+		
+		Vector withBadId = new Vector();
+		withBadId.add(b1.getUniversalId());
+		withBadId.add(b2.getUniversalId());
+		withBadId.add(UniversalId.createDummyUniversalId());
+		withBadId.add(b3.getUniversalId());
+
+		Retriever retriever = new Retriever(appWithAccount, null);	
+		retriever.retrieveBulletins(withBadId, appWithAccount.createFolderRetrieved());
+		assertEquals("retrieve all", NetworkInterfaceConstants.INCOMPLETE, retriever.getResult());
+		assertEquals("not back to three?", 3, store.getBulletinCount());
+
 		TRACE_END();
 	}
 
