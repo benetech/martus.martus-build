@@ -175,6 +175,7 @@ public class MirroringRetriever
 		{
 			log("Sleeping for " + INACTIVE_SLEEP_MILLIS / 1000 / 60 + " minutes");
 			sleepUntil = System.currentTimeMillis() + INACTIVE_SLEEP_MILLIS;
+			shouldSleepNextCycle = false;
 			return null;
 		}
 
