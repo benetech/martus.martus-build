@@ -78,7 +78,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	{
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
-		assertEquals(String.class, modelWithData.getColumnClass(2));
+		assertEquals(Integer.class, modelWithData.getColumnClass(2));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -91,9 +91,9 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(title2+title2, 2,1);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,1));
 
-		assertEquals("b0 size", new Integer(b0Size).toString(), modelWithData.getValueAt(0,2));
-		assertEquals("b1 size", new Integer(b1Size).toString(), modelWithData.getValueAt(1,2));
-		assertEquals("b2 size", new Integer(b2Size).toString(), modelWithData.getValueAt(2,2));
+		assertEquals("b0 size", new Integer(b0Size/1000), modelWithData.getValueAt(0,2));
+		assertEquals("b1 size", new Integer(b1Size/1000), modelWithData.getValueAt(1,2));
+		assertEquals("b2 size", new Integer(b2Size/1000), modelWithData.getValueAt(2,2));
 	}
 	
 

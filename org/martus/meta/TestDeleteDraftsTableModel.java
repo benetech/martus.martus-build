@@ -74,7 +74,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	{
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
-		assertEquals(String.class, modelWithData.getColumnClass(2));
+		assertEquals(Integer.class, modelWithData.getColumnClass(2));
 	}
 	
 	public void testRowCount()

@@ -43,7 +43,9 @@ public class UiServerSummariesDlg extends JDialog
 		tableBox = Box.createVerticalBox();
 		RetrieveJTable table = new RetrieveJTable(model);
 		oldBooleanRenderer = table.getDefaultRenderer(Boolean.class);
+		oldIntegerRenderer = table.getDefaultRenderer(Integer.class);
 		table.setDefaultRenderer(Boolean.class, new BooleanRenderer());
+		table.setDefaultRenderer(Integer.class, new IntegerRenderer());
 		table.setDefaultRenderer(String.class, new StringRenderer());
 		
 		table.createDefaultColumnsFromModel();
@@ -122,9 +124,15 @@ public class UiServerSummariesDlg extends JDialog
 		public void doLayout() 
 		{
 			Dimension tableBoxSize = tableBox.getPreferredSize();
-			TableColumn column = getColumnModel().getColumn(0);
-			column.setMaxWidth(tableBoxSize.width/2);
-			column.setPreferredWidth(tableBoxSize.width/4);
+			TableColumn firstColumn = getColumnModel().getColumn(0);
+			int numberOfColumns = getColumnModel().getColumnCount();
+			firstColumn.setMaxWidth(tableBoxSize.width/2);
+			firstColumn.setPreferredWidth(tableBoxSize.width/(numberOfColumns+1));
+
+			TableColumn lastColumn = getColumnModel().getColumn(numberOfColumns-1);
+			lastColumn.setMaxWidth(tableBoxSize.width/2);
+			lastColumn.setPreferredWidth(tableBoxSize.width/(numberOfColumns+1));
+
 			super.doLayout();
 		}
 	}
@@ -137,6 +145,33 @@ public class UiServerSummariesDlg extends JDialog
 				int row, int column) 
 		{
 			Component cell = oldBooleanRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+			if(enabledBackgroundColor == null)
+				enabledBackgroundColor = cell.getBackground();
+			if(model.isDownloadable(row))
+			{
+				cell.setEnabled(true);
+				if(!isSelected)
+					cell.setBackground(enabledBackgroundColor);
+			}
+			else
+			{
+				cell.setEnabled(false);
+				if(!isSelected)
+					cell.setBackground(disabledBackgroundColor);
+			}
+			return cell;
+		}
+		Color enabledBackgroundColor;
+	}
+
+	class IntegerRenderer extends DefaultTableCellRenderer
+	{
+		public Component getTableCellRendererComponent(
+				JTable table, Object value,
+				boolean isSelected, boolean hasFocus,
+				int row, int column) 
+		{
+			Component cell = oldIntegerRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			if(enabledBackgroundColor == null)
 				enabledBackgroundColor = cell.getBackground();
 			if(model.isDownloadable(row))
@@ -235,6 +270,7 @@ public class UiServerSummariesDlg extends JDialog
 	boolean result;
 	RetrieveTableModel model;
 	TableCellRenderer oldBooleanRenderer;
+	TableCellRenderer oldIntegerRenderer;
 	Color disabledBackgroundColor;
 	Box tableBox;
 }

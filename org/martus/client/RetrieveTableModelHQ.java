@@ -18,8 +18,9 @@ public abstract class RetrieveTableModelHQ extends RetrieveTableModel {
 			case 2:
 				return app.getFieldLabel(Bulletin.TAGAUTHOR);
 			case 3:
-			default:
 				return app.getFieldLabel("BulletinSize");
+			default:
+				return "";
 		}
 	}
 
@@ -40,10 +41,12 @@ public abstract class RetrieveTableModelHQ extends RetrieveTableModel {
 			case 2:
 				return summary.getAuthor();
 			case 3:
+				return getSizeInKbytes(summary.getSize());
 			default:
-			return new Integer(summary.getSize()).toString();
+				return "";
 		}
 	}
+
 
 	public void setValueAt(Object value, int row, int column)
 	{
@@ -65,8 +68,9 @@ public abstract class RetrieveTableModelHQ extends RetrieveTableModel {
 			case 2:
 				return String.class;
 			case 3:
+				return Integer.class;
 			default:
-				return String.class;
+				return null;
 		}
 	}
 }

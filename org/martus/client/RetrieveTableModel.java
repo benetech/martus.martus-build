@@ -237,6 +237,14 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		return allSummaries;	
 	}
 	
+
+	Object getSizeInKbytes(int sizeKb) 
+	{
+		sizeKb /= 1000;
+		Integer sizeInK = new Integer(sizeKb);
+		return sizeInK;
+	}
+
 	MartusApp app;
 	BulletinStore store;
 	private UiProgressRetrieveSummariesDlg retrieverDlg;

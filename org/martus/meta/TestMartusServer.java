@@ -31,6 +31,7 @@ import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
+import org.martus.common.MartusConstants;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -1218,25 +1219,19 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String gotSummary2 = (String)ids.get(1);
 		assertNotNull("2 was null", gotSummary2);
 		
-		int at1 = gotSummary1.indexOf("=");
-		assertTrue("no = in at1?", at1 >= 0);
-		int sizePos1 = gotSummary1.lastIndexOf("=");
-		assertTrue("no 2nd = in at1?", sizePos1 >= 0);
-		assertNotEquals("only 1 separator in summary1?", at1, sizePos1);
+		String summary1Args[] = gotSummary1.split(MartusConstants.regexEqualsDelimeter, -1);
+		assertEquals("wrong number of arguments on Summary1?", 3, summary1Args.length);
 		
-		String id1 = gotSummary1.substring(0, at1);
-		String summary1 = gotSummary1.substring(at1+1, sizePos1);
-		String bulletinSize1 = gotSummary1.substring(sizePos1+1);
+		String id1 = summary1Args[0];
+		String summary1 = summary1Args[1];
+		String bulletinSize1 = summary1Args[2];
 
-		int at2 = gotSummary2.indexOf("=");
-		assertTrue("no = in at2?", at2 >= 0);
-		int sizePos2 = gotSummary2.lastIndexOf("=");
-		assertTrue("no 2nd = in at2?", sizePos2 >= 0);
-		assertNotEquals("only 1 separator in summary2?", at2, sizePos2);
-
-		String id2 = gotSummary2.substring(0, at2);
-		String summary2 = gotSummary2.substring(at2+1, sizePos2);
-		String bulletinSize2 = gotSummary2.substring(sizePos2+1);
+		String summary2Args[] = gotSummary2.split(MartusConstants.regexEqualsDelimeter, -1);
+		assertEquals("wrong number of arguments on Summary2?", 3, summary2Args.length);
+		
+		String id2= summary2Args[0];
+		String summary2 = summary2Args[1];
+		String bulletinSize2 = summary2Args[2];
 
 		String b1RealSize = Integer.toString(MartusUtilities.getBulletinSize(store.getDatabase(), b1.getBulletinHeaderPacket()));
 		String b2RealSize = Integer.toString(MartusUtilities.getBulletinSize(store.getDatabase(), privateBulletin.getBulletinHeaderPacket()));

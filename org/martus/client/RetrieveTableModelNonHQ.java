@@ -38,8 +38,9 @@ abstract public class RetrieveTableModelNonHQ extends RetrieveTableModel {
 		case 1:
 			return summary.getTitle();
 		case 2:
+				return getSizeInKbytes(summary.getSize());
 		default:
-			return new Integer(summary.getSize()).toString();
+			return "";
 		}
 	}
 
@@ -59,8 +60,9 @@ abstract public class RetrieveTableModelNonHQ extends RetrieveTableModel {
 		case 1:
 			return String.class;
 		case 2:
+			return Integer.class;
 		default:
-			return String.class;
+			return null;
 		}
 	}
 }

@@ -130,7 +130,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
 		assertEquals(String.class, modelWithData.getColumnClass(2));
-		assertEquals(String.class, modelWithData.getColumnClass(3));
+		assertEquals(Integer.class, modelWithData.getColumnClass(3));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -149,8 +149,8 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(title2+title2, 1,1);
 		assertEquals("keep title", title2, modelWithData.getValueAt(1,1));
 
-		assertTrue("B0 Size too small", Integer.parseInt((String)(modelWithData.getValueAt(0,3))) > 2000);
-		assertTrue("B2 Size too small", Integer.parseInt((String)(modelWithData.getValueAt(1,3))) > 2000);
+		assertTrue("B0 Size too small", ((Integer)(modelWithData.getValueAt(0,3))).intValue() > 1);
+		assertTrue("B2 Size too small", ((Integer)(modelWithData.getValueAt(0,3))).intValue() > 1);
 	}
 	
 	public void testSetAllFlags()

@@ -31,6 +31,7 @@ import org.martus.common.FieldDataPacket;
 import org.martus.common.FileDatabase;
 import org.martus.common.FileInputStreamWithSeek;
 import org.martus.common.InputStreamWithSeek;
+import org.martus.common.MartusConstants;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -938,20 +939,20 @@ public class MartusApp
 		throw new ServerErrorException(resultCode);
 	}
 
-	public BulletinSummary createSummaryFromString(String accountId, String pair)
+	public BulletinSummary createSummaryFromString(String accountId, String parameters)
 		throws ServerErrorException 
 	{
-		int at = pair.indexOf("=");
-		if(at < 0)
-			throw new ServerErrorException("MartusApp.createSummaryFromString: " + pair);
-		int at2 = pair.lastIndexOf("=");
-		if(at == at2)
-			throw new ServerErrorException("MartusApp.createSummaryFromString: " + pair);
-				
-		String bulletinLocalId = pair.substring(0, at);
-		String summary = pair.substring(at + 1, at2);
+		
+		String args[] = parameters.split(MartusConstants.regexEqualsDelimeter, -1);
+		if(args.length != 3)
+			throw new ServerErrorException("MartusApp.createSummaryFromString: " + parameters);
+		
+		String bulletinLocalId= args[0];
+		String summary = args[1];
+		String bulletinSize = args[2];
+		int size = Integer.parseInt(bulletinSize);
 		String author = "";
-		int size = Integer.parseInt(pair.substring(at2+1));
+
 		if(FieldDataPacket.isValidLocalId(summary))
 		{
 			String packetlocalId = summary;
