@@ -33,6 +33,7 @@ public class UiBulletinView extends UiBulletinComponent
 		privateStuff.setBackground(Color.white);
 		privateStuff.setForeground(Color.black);
 		publicAttachmentViewer.startPrintMode();
+		privateAttachmentViewer.startPrintMode();
 	}
 	
 	public void endPrintMode()
@@ -42,6 +43,7 @@ public class UiBulletinView extends UiBulletinComponent
 		privateStuff.setBackground(viewColors.privateBackground);
 		privateStuff.setForeground(viewColors.privateForeground);
 		publicAttachmentViewer.endPrintMode();
+		privateAttachmentViewer.endPrintMode();
 	}
 	
 

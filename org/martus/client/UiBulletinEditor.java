@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import javax.swing.JComponent;
 
-import org.martus.client.*;
-import org.martus.common.*;
+import org.martus.common.AttachmentProxy;
+import org.martus.common.MartusCrypto;
 
 public class UiBulletinEditor extends UiBulletinComponent
 {

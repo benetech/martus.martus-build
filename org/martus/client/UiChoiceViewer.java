@@ -1,11 +1,7 @@
-/* $Id: UiChoiceViewer.java,v 1.4 2002/09/25 22:07:14 kevins Exp $ */
 package org.martus.client;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.event.*;
-
-import org.martus.client.*;
 
 public class UiChoiceViewer extends UiField
 {
@@ -36,7 +32,7 @@ public class UiChoiceViewer extends UiField
 				break;
 			}
 		}
-		widget.setText(item.toString());
+		widget.setText(" " + item.toString() + " ");
 	}
 
 	public void disableEdits()

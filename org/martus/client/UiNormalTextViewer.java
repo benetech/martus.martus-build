@@ -1,10 +1,6 @@
-/* $Id: UiNormalTextViewer.java,v 1.3 2002/04/18 20:42:55 charles Exp $ */
 package org.martus.client;
 
 import java.awt.Font;
-import javax.swing.event.*;
-
-import org.martus.client.*;
 
 public class UiNormalTextViewer extends UiNormalTextField
 {
@@ -12,7 +8,8 @@ public class UiNormalTextViewer extends UiNormalTextField
 	{
 		super(appToUse);
 		widget = new UiTextArea(1, 40);
-		widget.setFont(new Font("SansSerif", Font.PLAIN, 12));
+		widget.setLineWrap(true);
+		widget.setFont(new Font("SansSerif", Font.PLAIN, 13));
 		supportContextMenu();
 	}
 

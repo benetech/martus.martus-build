@@ -168,7 +168,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
  	private JLabel createLabel(String fieldTag)
 	{
-		return new JLabel(getApp().getFieldLabel(fieldTag));
+		//Extra spaces added for correct printing.
+		return new JLabel("      " + getApp().getFieldLabel(fieldTag)+ " ");
 	}
 
 	private UiField createField(String fieldName)
