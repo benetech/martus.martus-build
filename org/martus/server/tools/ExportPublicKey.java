@@ -89,7 +89,7 @@ public class ExportPublicKey
 
 		if(prompt)
 		{
-			System.out.print("Public key exported to file " + outputfile.getAbsolutePath());
+			System.out.println("Public key exported to file " + outputfile.getAbsolutePath());
 			System.out.flush();
 		}
 		System.exit(0);
