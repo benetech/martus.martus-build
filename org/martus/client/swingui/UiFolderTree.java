@@ -30,6 +30,8 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Point;
 import java.awt.dnd.DropTarget;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 import javax.swing.Icon;
 import javax.swing.JLabel;
@@ -52,9 +54,10 @@ import org.martus.client.core.BulletinStore;
 
 class UiFolderTree extends JTree implements TreeSelectionListener
 {
-	public UiFolderTree(TreeModel model, BulletinStore storeToUse, UiMainWindow mainWindow)
+	public UiFolderTree(UiFolderTreePane parentToUse, TreeModel model, BulletinStore storeToUse, UiMainWindow mainWindow)
 	{
 		super(model);
+		parent = parentToUse;
 		store = storeToUse;
 		observer = mainWindow;
 		setRootVisible(false);
@@ -63,6 +66,8 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		setInvokesStopCellEditing(true);
 		getSelectionModel().setSelectionMode(TreeSelectionModel.SINGLE_TREE_SELECTION);
 		addTreeSelectionListener(this);
+		addKeyListener(new FolderKeyAdapter());
+	
 		dropTarget = new DropTarget(this, new UiFolderTreeDropAdapter(this, mainWindow));
 		DefaultTreeCellRenderer renderer = new FolderTreeNodeRenderer();
 		setCellRenderer(renderer);
@@ -115,6 +120,18 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 
 		return folder.canRename();
 	}
+	
+	class FolderKeyAdapter extends KeyAdapter
+	{
+		public void keyReleased(KeyEvent e)
+		{
+			if(e.getKeyCode() == KeyEvent.VK_DELETE)
+			{
+				parent.deleteCurrentFolderIfPossible();
+			}
+		}
+	}
+	
 
 	// TreeSelectionListener interface
 	public void valueChanged(TreeSelectionEvent e)
@@ -260,7 +277,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		FolderTreeNode node;
 	}
 
-
+	UiFolderTreePane parent;
 	BulletinStore store;
 	UiMainWindow observer;
 	DropTarget dropTarget;

@@ -1800,7 +1800,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			folders.deleteCurrentFolder();
+			folders.deleteCurrentFolderIfPossible();
 		}
 
 		public boolean isEnabled()

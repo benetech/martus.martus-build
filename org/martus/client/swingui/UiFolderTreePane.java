@@ -50,7 +50,7 @@ class UiFolderTreePane extends JScrollPane
 		model = new FolderList(parent.getApp());
 		model.loadFolders(store);
 
-		tree = new UiFolderTree(model, store, parent);
+		tree = new UiFolderTree(this, model, store, parent);
 		tree.addMouseListener(new FolderTreeMouseAdapter());
 
 		getViewport().setScrollMode(JViewport.SIMPLE_SCROLL_MODE);
@@ -102,11 +102,14 @@ class UiFolderTreePane extends JScrollPane
 	}
 
 
-	public void deleteCurrentFolder()
+	public void deleteCurrentFolderIfPossible()
 	{
 		FolderTreeNode node = getCurrentFolderNode();
-		ActionDelete delete = new ActionDelete(node);
-		delete.actionPerformed(null);
+		if(canDeleteFolder(node))
+		{
+			ActionDelete delete = new ActionDelete(node);
+			delete.actionPerformed(null);
+		}
 	}
 
 	public FolderTreeNode getCurrentFolderNode()
@@ -177,6 +180,18 @@ class UiFolderTreePane extends JScrollPane
 		}
 	}
 
+	public boolean canDeleteFolder(FolderTreeNode nodeToDelete)
+	{
+		if(nodeToDelete == null)
+			return false;
+
+		BulletinFolder folder = store.findFolder(nodeToDelete.getInternalName());
+		if(folder == null || !folder.canDelete())
+			return false;
+
+		return true;
+	}
+
 	class ActionDelete extends AbstractAction
 	{
 		public ActionDelete(FolderTreeNode node)
@@ -201,14 +216,7 @@ class UiFolderTreePane extends JScrollPane
 
 		public boolean isEnabled()
 		{
-			if(nodeToDelete == null)
-				return false;
-
-			BulletinFolder folder = store.findFolder(nodeToDelete.getInternalName());
-			if(folder == null || !folder.canDelete())
-				return false;
-
-			return true;
+			return canDeleteFolder(nodeToDelete);
 		}
 
 		FolderTreeNode nodeToDelete;
