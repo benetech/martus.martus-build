@@ -4,20 +4,10 @@
         Martus Amplifier Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
+    <import file="build.shared.values.xml" />
     <import file="build-thirdparty.xml" />
     <import file="build-common.xml" />
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- amplifier module name and dirs -->
-    <property name="martus.amplifier.module"  value="martus-amplifier"/>
-    <property name="martus.amplifier.src.root" value="${build.basedir}/${martus.amplifier.module}/source"/>
-    <property name="martus.amplifier.class.root" value="${build.basedir}/${martus.amplifier.module}/bin"/>
 
     <!-- amp classpath -->
     <path id="amp.class.path">

@@ -4,24 +4,14 @@
         Martus Common Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
+    <import file="build.shared.values.xml" />
     <import file="build-thirdparty.xml" />
     <import file="build-utils.xml" />
     <import file="build-logi.xml" />
     <import file="build-hrdag.xml" />
     <import file="build-jarverifier.xml" />
     <import file="build-swing.xml" />
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- client common name and dirs -->
-    <property name="martus.common.module"  value="martus-common"/>
-    <property name="martus.common.src.root" value="${build.basedir}/${martus.common.module}/source"/>
-    <property name="martus.common.class.root" value="${build.basedir}/${martus.common.module}/bin"/>
 
     <!-- common classpath -->
     <path id="common.class.path">

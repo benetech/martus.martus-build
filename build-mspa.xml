@@ -4,19 +4,9 @@
         Martus MSPA Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
+    <import file="build.shared.values.xml" />
     <import file="build-common.xml" />
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- mspa module name and dirs -->
-    <property name="martus.mspa.module"  value="martus-mspa"/>
-    <property name="martus.mspa.src.root" value="${build.basedir}/${martus.mspa.module}/source"/>
-    <property name="martus.mspa.class.root" value="${build.basedir}/${martus.mspa.module}/bin"/>
 
     <!-- mspa classpath -->
     <path id="mspa.class.path">

@@ -4,18 +4,8 @@
         Martus JarVerifier Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- jarverifier module name and dirs -->
-    <property name="martus.jarverifier.module"  value="martus-jar-verifier"/>
-    <property name="martus.jarverifier.src.root" value="${build.basedir}/${martus.jarverifier.module}/source"/>
-    <property name="martus.jarverifier.class.root" value="${build.basedir}/${martus.jarverifier.module}/bin"/>
+    <import file="build.shared.values.xml" />
 
     <fileset id="jarverifier.nosrc.files" dir="${martus.jarverifier.src.root}">
         <include name="**/ssmartusclientks"/>

@@ -4,20 +4,10 @@
         Martus Swing Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
+    <import file="build.shared.values.xml" />
     <import file="build-hrdag.xml" />
     <import file="build-utils.xml" />
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- swing module name and dirs -->
-    <property name="martus.swing.module"  value="martus-swing"/>
-    <property name="martus.swing.src.root" value="${build.basedir}/${martus.swing.module}/source"/>
-    <property name="martus.swing.class.root" value="${build.basedir}/${martus.swing.module}/bin"/>
 
     <!-- swing classpath -->
     <path id="swing.class.path">

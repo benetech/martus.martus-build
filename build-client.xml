@@ -4,20 +4,10 @@
         Martus Client Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
+    <import file="build.shared.values.xml" />
     <import file="build-thirdparty.xml" />
     <import file="build-jarverifier.xml" />
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- client module name and dirs -->
-    <property name="martus.client.module"  value="martus-client"/>
-    <property name="martus.client.src.root" value="${build.basedir}/${martus.client.module}/source"/>
-    <property name="martus.client.class.root" value="${build.basedir}/${martus.client.module}/bin"/>
 
     <!-- client classpath -->
     <path id="client.class.path">

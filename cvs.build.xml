@@ -4,26 +4,8 @@
         Martus Control Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
-    <!-- project names -->
-    <property name="martus-module" value="martus"/>
-    <property name="amp-module" value="martus-amplifier"/>
-    <property name="client-module" value="martus-client"/>
-    <property name="common-module" value="martus-common"/>
-    <property name="hrdag-module" value="martus-hrdag"/>
-    <property name="jarverifier-module" value="martus-jar-verifier"/>
-    <property name="logi-module" value="martus-logi"/>
-    <property name="meta-module" value="martus-meta"/>
-    <property name="mspa-module" value="martus-mspa"/>
-    <property name="server-module" value="martus-server"/>
-    <property name="swing-module" value="martus-swing"/>
-    <property name="thirdparty-module" value="martus-thirdparty"/>
-    <property name="utils-module" value="martus-utils"/>
-
-    <!-- create CVS_ROOT -->
-    <property name="cvs.cvsroot" value=":${cvs.protocol}:${cvs.username}@${cvs.location}:${cvs.repository}"/>
+    <!-- imports -->
+    <import file="build.shared.values.xml" />
 
     <!-- ================================================================== -->
     <!-- I N I T                                                            -->
@@ -54,10 +36,6 @@
     <!-- ================================================================== -->
     <!-- B U I L D                                                          -->
     <!-- ================================================================== -->
-    <target depends="init" name="make.release.nosign" description="Executes subproject that builds martus without signing jars">
-        <ant antfile="build-meta.xml" dir="." target="test.release"/>
-    </target>
-
     <target depends="init" name="make.release" description="Executes subproject that builds martus">
         <ant antfile="build-meta.xml" dir="." target="release"/>
     </target>
@@ -73,7 +51,7 @@
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
-                <argument value="${martus-module}/build.number"/>
+                <argument value="${martus.module}/build.number"/>
             </commandline>
         </cvs>
 
@@ -82,17 +60,17 @@
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
-                <argument value="${cvs.home}/${amp-module}"/>
-                <argument value="${cvs.home}/${client-module}"/>
-                <argument value="${cvs.home}/${common-module}"/>
-                <argument value="${cvs.home}/${hrdag-module}"/>
-                <argument value="${cvs.home}/${jarverifier-module}"/>
-                <argument value="${cvs.home}/${logi-module}"/>
-                <argument value="${cvs.home}/${meta-module}"/>
-                <argument value="${cvs.home}/${mspa-module}"/>
-                <argument value="${cvs.home}/${server-module}"/>
-                <argument value="${cvs.home}/${swing-module}"/>
-                <argument value="${cvs.home}/${utils-module}"/>
+                <argument value="${cvs.home}/${martus.amplifier.module}"/>
+                <argument value="${cvs.home}/${martus.common.module}"/>
+                <argument value="${cvs.home}/${martus.client.module}"/>
+                <argument value="${cvs.home}/${martus.hrdag.module}"/>
+                <argument value="${cvs.home}/${martus.jarverifier.module}"/>
+                <argument value="${cvs.home}/${martus.logi.module}"/>
+                <argument value="${cvs.home}/${martus.meta.module}"/>
+                <argument value="${cvs.home}/${martus.mspa.module}"/>
+                <argument value="${cvs.home}/${martus.server.module}"/>
+                <argument value="${cvs.home}/${martus.swing.module}"/>
+                <argument value="${cvs.home}/${martus.utils.module}"/>
             </commandline>
         </cvs>
 
@@ -101,7 +79,7 @@
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
-                <argument value="${cvs.home}/${thirdparty-module}"/>
+                <argument value="${cvs.home}/${martus.thirdparty.module}"/>
             </commandline>
         </cvs>
 

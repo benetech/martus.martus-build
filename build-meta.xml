@@ -4,21 +4,11 @@
         Martus Main Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
     <!-- import build files -->
+    <import file="build.shared.values.xml" />
     <import file="build-common.xml" />
     <import file="build-client.xml" />
     <import file="build-server.xml" />
-
-    <!-- meta module name and dirs -->
-    <property name="martus.meta.module"  value="martus-meta"/>
-    <property name="martus.meta.src.root" value="${build.basedir}/${martus.meta.module}/source"/>
-    <property name="martus.meta.class.root" value="${build.basedir}/${martus.meta.module}/bin"/>
 
     <!-- meta classpath -->
     <path id="meta.class.path">

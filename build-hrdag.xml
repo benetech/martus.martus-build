@@ -4,18 +4,8 @@
         Martus hrdag Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- hrdag module name and dirs -->
-    <property name="martus.hrdag.module"  value="martus-hrdag"/>
-    <property name="martus.hrdag.src.root" value="${build.basedir}/${martus.hrdag.module}/source"/>
-    <property name="martus.hrdag.class.root" value="${build.basedir}/${martus.hrdag.module}/bin"/>
+    <import file="build.shared.values.xml" />
 
     <target name="notify-hrdag">
         <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>

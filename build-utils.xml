@@ -4,18 +4,8 @@
         Martus Utils Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- utils module name and dirs -->
-    <property name="martus.utils.module"  value="martus-utils"/>
-    <property name="martus.utils.src.root" value="${build.basedir}/${martus.utils.module}/source"/>
-    <property name="martus.utils.class.root" value="${build.basedir}/${martus.utils.module}/bin"/>
+    <import file="build.shared.values.xml" />
 
     <!-- utils classpath -->
     <path id="utils.class.path">

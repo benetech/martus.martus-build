@@ -4,21 +4,11 @@
         Martus Server Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
+    <import file="build.shared.values.xml" />
     <import file="build-thirdparty.xml" />
     <import file="build-amp.xml" />
     <import file="build-mspa.xml" />
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- server module name and dirs -->
-    <property name="martus.server.module"  value="martus-server"/>
-    <property name="martus.server.src.root" value="${build.basedir}/${martus.server.module}/source"/>
-    <property name="martus.server.class.root" value="${build.basedir}/${martus.server.module}/bin"/>
 
     <!-- server classpath -->
     <path id="server.class.path">
@@ -26,7 +16,12 @@
         <pathelement path="${martus.common.class.root}/"/>
         <pathelement path="${martus.amplifier.class.root}/"/>
         <pathelement path="${martus.utils.class.root}/"/>
+        <pathelement path="${martus.hrdag.class.root}/"/>
         <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.logi}" includes="**/*.jar"/>
     </path>
 
     <fileset id="server.nosrc.files" dir="${martus.server.class.root}">
@@ -64,6 +59,12 @@
 <!-- ================================================================== -->
 
   <target name="test-server" depends="build-server">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            </classpath>
+        </taskdef>
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
             <classpath refid="server.class.path"/>
             <formatter type="brief" usefile="no" />

@@ -4,18 +4,8 @@
         Martus logi Build File
     </description>
 
-    <!-- set global properties for this build -->
-    <property file="build.properties" />
-
     <!-- imports -->
-
-    <!-- module names and dirs -->
-    <property name="martus.module"  value="martus"/>
-
-    <!-- logi module name and dirs -->
-    <property name="martus.logi.module"  value="martus-logi"/>
-    <property name="martus.logi.src.root" value="${build.basedir}/${martus.logi.module}/source"/>
-    <property name="martus.logi.class.root" value="${build.basedir}/${martus.logi.module}/bin"/>
+    <import file="build.shared.values.xml" />
 
     <target name="notify-logi">
         <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
