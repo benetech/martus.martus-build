@@ -94,7 +94,7 @@ public class BulletinForTesting extends Bulletin
 			new FieldSpec("author"),
 			new FieldSpec("title"),
 			new FieldSpec("custom,Custom"),
-			new FieldSpec("extra,Bad Custom!"),
+			new FieldSpec("extra,Bad Custom!,more"),
 		};
 	}
 
@@ -137,8 +137,8 @@ public class BulletinForTesting extends Bulletin
 	}
 
 
-	static boolean shouldCreateUnknownTagInHeader;
-	static boolean shouldCreateUnknownTagInPublicSection;
-	static boolean shouldCreateUnknownTagInPrivateSection;
-	static boolean shouldCreateUnknownStuffInCustomField;
+	public static boolean shouldCreateUnknownTagInHeader;
+	public static boolean shouldCreateUnknownTagInPublicSection;
+	public static boolean shouldCreateUnknownTagInPrivateSection;
+	public static boolean shouldCreateUnknownStuffInCustomField;
 }
