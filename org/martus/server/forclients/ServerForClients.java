@@ -15,6 +15,7 @@ import org.martus.common.UnicodeWriter;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.core.MartusSecureWebServer;
+import org.martus.server.core.MartusXmlRpcServer;
 
 public class ServerForClients implements ServerForNonSSLClientsInterface, ServerForClientsInterface
 {

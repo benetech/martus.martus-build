@@ -9,8 +9,8 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
+import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
-import org.martus.server.forclients.MartusXmlRpcServer;
 
 public class ServerForMirroring implements ServerSupplierInterface
 {

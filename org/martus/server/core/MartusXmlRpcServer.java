@@ -1,7 +1,5 @@
-package org.martus.server.forclients;
+package org.martus.server.core;
 
-import org.martus.server.core.MartusSecureWebServer;
-import org.martus.server.core.WebServerWithClientId;
 
 public class MartusXmlRpcServer
 {
