@@ -126,7 +126,7 @@ public class UiDateEditor extends UiField
 				mCombo.getSelectedIndex(),
 				dCombo.getSelectedIndex()+1);
 		
-		return (Date) cal.getTime();
+		return cal.getTime();
 	}
 
 	public void setText(String newText)

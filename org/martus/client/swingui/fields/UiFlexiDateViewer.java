@@ -31,7 +31,6 @@ import java.text.DateFormat;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.martus.client.core.DateUtilities;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.util.MartusFlexidate;
@@ -58,7 +57,7 @@ public class UiFlexiDateViewer extends UiField
 	public void setText(String newText)
 	{
 		value = localization.convertStoredDateToDisplay(newText);
-		int dateBreak = newText.indexOf(DateUtilities.DATE_RANGE_SEPARATER);
+		int dateBreak = newText.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);
 		if (dateBreak > 0)			
 		{
 			String beginDate = newText.substring(0,dateBreak);

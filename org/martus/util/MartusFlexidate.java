@@ -93,5 +93,6 @@ public class MartusFlexidate
 	}		
 		
 	Flexidate flexiDate;
-	public static final String FLEXIDATE_RANGE_DELIMITER = "+";	
+	public static final String 	FLEXIDATE_RANGE_DELIMITER = "+";	
+	public static final String	DATE_RANGE_SEPARATER = ",";
 }

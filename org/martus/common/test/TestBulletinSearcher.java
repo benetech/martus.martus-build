@@ -132,4 +132,36 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		assertEquals("both event and entry in range and string matchs", true, stringMatchesAndBothDatesMatch.doesMatch(b));
 
 	}
+	
+	public void testFlexiDateMatches() throws Exception
+	{
+		Bulletin b = new Bulletin(MockMartusSecurity.createClient());
+		b.set("author", "Test");
+		b.set("summary", "summary");
+		b.set("title", "Test date range");
+		b.set(Bulletin.TAGEVENTDATE, "2002-01-04,20020104+5");
+		b.set(Bulletin.TAGENTRYDATE, "2002-10-15");
+
+		String outOfRangeBeginDate ="2003-01-01";
+		String outOfRangeEndDate = "2003-12-31";
+		String inRangeBeginDate = "2003-01-04";
+		String beforeRangeEndDate = "2002-01-05";
+		String bothInRangeBeginDate ="2002-01-01";
+		String bothInRangeEndDate = "2002-03-31";
+		String eventInRangeBeginDate ="2002-01-01";
+		String eventInRangeEndDate = "2002-03-18";
+		
+		BulletinSearcher emptySearch = new BulletinSearcher(new SearchTreeNode(""), outOfRangeBeginDate, outOfRangeEndDate);
+		assertEquals("out of range", false, emptySearch.doesMatch(b));
+		
+		emptySearch = new BulletinSearcher(new SearchTreeNode(""), inRangeBeginDate,beforeRangeEndDate);
+		assertEquals("only begin day in range", false, emptySearch.doesMatch(b));		
+
+		BulletinSearcher noStringAndBothDatesMatch = new BulletinSearcher(new SearchTreeNode(""), bothInRangeBeginDate, bothInRangeEndDate);
+		assertEquals("both event and entry in range", true, noStringAndBothDatesMatch.doesMatch(b));
+
+		BulletinSearcher noStringAndEventMatches = new BulletinSearcher(new SearchTreeNode(""), eventInRangeBeginDate, eventInRangeEndDate);
+		assertEquals("event only in range", true, noStringAndEventMatches.doesMatch(b));
+	
+	}
 }

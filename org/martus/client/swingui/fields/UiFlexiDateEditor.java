@@ -39,7 +39,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.martus.client.core.DateUtilities;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.swing.ParagraphLayout;
@@ -199,7 +198,7 @@ public class UiFlexiDateEditor extends UiField
 		String dateText = df.format(getBeginDate());
 		
 		if (isFlexiDate())	
-			dateText += DateUtilities.DATE_RANGE_SEPARATER + toFlexidate();							
+			dateText += MartusFlexidate.DATE_RANGE_SEPARATER + toFlexidate();							
 		return dateText;
 	}	
 	
@@ -233,7 +232,7 @@ public class UiFlexiDateEditor extends UiField
 	public void setText(String newText)
 	{		
 		String bgDateText = newText;
-		int comma = newText.indexOf(DateUtilities.DATE_RANGE_SEPARATER);						
+		int comma = newText.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);						
 		if (comma > 0)
 		{			
 			flexiDateRB.setSelected(true);

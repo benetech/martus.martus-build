@@ -8,6 +8,6 @@
     <classpathentry kind="var" path="InfiniteMonkeys"/>
     <classpathentry kind="var" path="jsse"/>
     <classpathentry kind="var" path="JRE_LIB"/>
-    <classpathentry kind="var" path="logicrypto"/>
+    <classpathentry kind="var" path="logicrypto" sourcepath="logicrypto"/>
     <classpathentry kind="output" path=""/>
 </classpath>
