@@ -1,6 +1,7 @@
 package org.martus.server.forclients;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -33,9 +34,15 @@ public class MockMartusServer extends MartusServer
 		database = databaseToUse;
 	}
 	
-	public void initialize()
+	public void initialize() throws IOException
 	{
-		loadConfigurationFiles();
+		try
+		{
+			super.initialize();
+		}
+		catch (FileNotFoundException okIfComplianceFileIsMissing)
+		{
+		}
 	}
 	
 	public String ping()
@@ -219,9 +226,9 @@ public class MockMartusServer extends MartusServer
 		listFieldOfficeAccountsResponseNull = nullResponse;
 	}
 	
-	public void serverExit(int exitCode) throws Exception
+	public void serverExit(int exitCode) throws UnexpectedExitException
 	{
-		throw new Exception("MockServer serverExit called");
+		throw new UnexpectedExitException();
 	}
 	
 	public int getMaxFailedUploadAllowedAttemptsPerIp()

@@ -196,6 +196,25 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
+	public void testAllowUploadsPersistToNextSession() throws Exception
+	{
+		TRACE_BEGIN("testAllowUploadsPersistToNextSession");
+
+		testServer.clientsThatCanUpload.clear();
+		
+		String sampleId = "2345235";
+		
+		testServer.allowUploads(sampleId);
+		
+		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
+		other.setSecurity(testServer.security);
+		other.initialize();
+		assertEquals("didn't get saved/loaded?", true, other.canClientUpload(sampleId));
+		other.deleteAllFiles();
+
+		TRACE_END();
+	}
+
 	public void testGetServerCompliance() throws Exception
 	{
 		TRACE_BEGIN("testGetServerCompliance");
@@ -2035,23 +2054,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 	
-	public void testAllowUploadsPersistToNextSession() throws Exception
-	{
-		TRACE_BEGIN("testAllowUploadsPersistToNextSession");
-
-		testServer.clientsThatCanUpload.clear();
-		
-		String sampleId = "2345235";
-		
-		testServer.allowUploads(sampleId);
-		
-		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
-		other.initialize();
-		assertEquals("didn't get saved/loaded?", true, other.canClientUpload(sampleId));
-		other.deleteAllFiles();
-
-		TRACE_END();
-	}
 	
 	public void testRequestUploadRights() throws Exception
 	{

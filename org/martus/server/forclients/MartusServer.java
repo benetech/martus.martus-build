@@ -154,7 +154,13 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			
 			System.out.println("Passphrase correct.");			
 			server.initialize();
-
+			
+			System.out.println();
+			System.out.println("Server Compliance Statement:");
+			System.out.println("---");
+			System.out.println(server.complianceStatement);
+			System.out.println("---");
+			
 			String accountId = server.getAccountId();
 			System.out.println("Server Account: " + accountId);
 			System.out.println();
@@ -204,29 +210,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		File runningFile = new File(server.triggerDirectory, "running");
 		runningFile.delete();
 		if(secureMode)
-		{
-			File magicWordsFile = new File(server.startupConfigDirectory, MAGICWORDSFILENAME);
-			if(!magicWordsFile.delete())
-			{
-				System.out.println("Unable to delete magicwords");
-				System.exit(4);
-			}
-			File keyPairFile = new File(server.startupConfigDirectory, getKeypairFilename());
-			if(!keyPairFile.delete())
-			{
-				System.out.println("Unable to delete keypair");
-				System.exit(5);
-			}
-			File bannedFile = new File(server.startupConfigDirectory, BANNEDCLIENTSFILENAME);
-			if(bannedFile.exists())
-			{
-				if(!bannedFile.delete())
-				{
-					System.out.println("Unable to delete " + bannedFile.getAbsolutePath() );
-					System.exit(5);
-				}
-			}
-		}
+			server.deleteStartupFiles();
 				
 		System.out.println();
 
@@ -274,11 +258,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(startupConfigDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(startupConfigDirectory, getKeypairFilename());
-		bannedClientsFile = new File(startupConfigDirectory, BANNEDCLIENTSFILENAME);
+		bannedFile = new File(startupConfigDirectory, BANNEDCLIENTSFILENAME);
+		complianceFile = new File(startupConfigDirectory, COMPLIANCESTATEMENTFILENAME);
 		
 		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);
-		
-		loadBannedClients();
 		
 		Timer shutdownRequestTimer = new Timer(true);
  		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
@@ -293,7 +276,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
  		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, getUploadRequestTimerInterval());
 	}
 	
-	public void initialize()
+	public void initialize() throws IOException
 	{
 		verifyConfigurationFiles();
 		loadConfigurationFiles();
@@ -317,24 +300,17 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 	}
 
-	public void loadConfigurationFiles()
+	public void loadConfigurationFiles() throws IOException
 	{
-		try
-		{
-			BufferedReader reader = new BufferedReader(new FileReader(allowUploadFile));
-			loadCanUploadList(reader);
-			reader.close();
-		}
-		catch(FileNotFoundException nothingToWorryAbout)
-		{
-			;
-		}
-		catch(IOException e)
-		{
-			// TODO: Log this so the administrator knows
-			System.out.println("MartusServer constructor: " + e);
-		}
-		
+		loadBannedClients();
+		loadCanUploadFile();
+		loadMagicWordsFile();
+		//Tests will fail if compliance isn't last.
+		loadComplianceStatementFile();
+	}
+
+	void loadMagicWordsFile()
+	{
 		try
 		{
 			UnicodeReader reader = new UnicodeReader(magicWordsFile);
@@ -345,6 +321,25 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
+		}
+		catch(IOException e)
+		{
+			// TODO: Log this so the administrator knows
+			System.out.println("MartusServer constructor: " + e);
+		}
+	}
+
+	void loadCanUploadFile()
+	{
+		try
+		{
+			BufferedReader reader = new BufferedReader(new FileReader(allowUploadFile));
+			loadCanUploadList(reader);
+			reader.close();
+		}
+		catch(FileNotFoundException nothingToWorryAbout)
+		{
+			;
 		}
 		catch(IOException e)
 		{
@@ -1589,15 +1584,29 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				logging("loadCanUploadList : Exit OK");
 	}
 	
+	public void loadComplianceStatementFile() throws IOException
+	{
+		try
+		{
+			UnicodeReader reader = new UnicodeReader(complianceFile);
+			setComplianceStatement(reader.readAll(100));
+			reader.close();
+		}
+		catch (IOException e)
+		{
+			logging("Missing or unable to read file: " + complianceFile.getAbsolutePath());
+			throw e;
+		}
+	}
+
 	public synchronized void loadBannedClients()
 	{
 // Too much logging!
 //		if(serverMaxLogging)
 //			logging("loadBannedClients()");
-
-		loadBannedClients(bannedClientsFile);
+		loadBannedClients(bannedFile);
 	}
-
+	
 	public void loadBannedClients(File bannedClientsFile)
 	{
 		try
@@ -1881,6 +1890,41 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return getDatabase().getFolderForAccount(clientId);
 	}
 	
+	public void deleteStartupFiles()
+	{
+		if(!magicWordsFile.delete())
+		{
+			System.out.println("Unable to delete magicwords");
+			System.exit(4);
+		}
+
+		if(!keyPairFile.delete())
+		{
+			System.out.println("Unable to delete keypair");
+			System.exit(5);
+		}
+
+		if(bannedFile.exists())
+		{
+			if(!bannedFile.delete())
+			{
+				System.out.println("Unable to delete " + bannedFile.getAbsolutePath() );
+				System.exit(5);
+			}
+		}
+
+		if(complianceFile.exists())
+		{
+			if(!complianceFile.delete())
+			{
+				System.out.println("Unable to delete " + complianceFile.getAbsolutePath() );
+				System.exit(5);
+			}
+		}
+
+
+	}
+	
 	public boolean isShutdownRequested()
 	{
 		return(shutdownFile.exists());
@@ -1902,6 +1946,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		return activeClientsCounter;
 	}
+	
 	
 	public synchronized void incrementActiveClientsCounter()
 	{
@@ -2061,8 +2106,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			super(message);
 		}
 	}
-
-	public void serverExit(int exitCode) throws Exception
+	class UnexpectedExitException extends Exception{}
+	
+	public void serverExit(int exitCode) throws UnexpectedExitException 
 	{
 		System.exit(exitCode);
 	}
@@ -2305,7 +2351,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				{
 					serverExit(0);
 				}
-				catch(Exception e)
+				catch (Exception e)
 				{
 					e.printStackTrace();
 				}
@@ -2332,12 +2378,13 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public Vector clientsThatCanUpload;
 	public Vector clientsBanned;
 	public MartusCrypto security;
-	File keyPairFile;
 	String serverName;
+	File keyPairFile;
+	File bannedFile;
+	File complianceFile;
 	public File dataDirectory;
 	public File allowUploadFile;
 	public File magicWordsFile;
-	public File bannedClientsFile;
 	public File shutdownFile;
 	public File triggerDirectory;
 	public File startupConfigDirectory;
@@ -2356,6 +2403,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
+	private static final String COMPLIANCESTATEMENTFILENAME = "compliance.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	
 	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
