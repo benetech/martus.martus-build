@@ -752,11 +752,26 @@ public class MartusApp
 			
 		if(getFolderDraftOutbox().getBulletinCount() > 0)
 			return backgroundUploadOneDraftBulletin(progressMeter);
-
+		if(getConfigInfo().shouldContactInfoBeSentToServer())
+			sendContactInfoToServer();
 		if(progressMeter != null)
 			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("StatusReady"));
 		return null;
 	}
+
+	private void sendContactInfoToServer()
+	{
+		ConfigInfo info = getConfigInfo();
+		System.out.println("sent contact info");	
+		info.setSendContactInfoToServer(false);
+		try 
+		{
+			saveConfigInfo();
+		} 
+		catch (SaveConfigInfoException e) 
+		{
+		}
+	}		
 
 	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) 
 	{
