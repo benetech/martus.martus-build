@@ -431,14 +431,7 @@ public class MartusApp
 
 	public Vector findBulletinInAllVisibleFolders(Bulletin b)
 	{
-		Vector folders = new Vector();
-		for(int i = 0; i < store.getFolderCount(); ++i)
-		{
-			BulletinFolder folder = store.getFolder(i);
-			if(folder.isVisible() && folder.contains(b))
-				folders.add(folder.getName());
-		}
-		return folders;	
+		return store.findBulletinInAllVisibleFolders(b);
 	}
 
 	public boolean shouldShowDraftUploadReminder()

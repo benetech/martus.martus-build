@@ -1,5 +1,6 @@
 package org.martus.client;
 
+import java.util.Vector;
 import javax.swing.tree.DefaultTreeModel;
 
 public class FolderList extends DefaultTreeModel
@@ -23,16 +24,14 @@ public class FolderList extends DefaultTreeModel
 			FolderTreeNode item = (FolderTreeNode)getChild(root, 0);
 			removeNodeFromParent(item);
 		}
+		
+		Vector visibleFolderNames = store.getVisibleFolderNames();
 
-		for(int f = 0; f < store.getFolderCount(); ++f)
+		for(int f = 0; f < visibleFolderNames.size(); ++f)
 		{
-			BulletinFolder folder = store.getFolder(f);
-			String folderName = folder.getName();
-			if(BulletinFolder.isNameVisible(folderName))
-			{
-				FolderTreeNode item = new FolderTreeNode(folderName, app);
-				insertNodeInto(item, root, getCount());
-			}
+			String folderName = (String)visibleFolderNames.get(f);
+			FolderTreeNode item = new FolderTreeNode(folderName, app);
+			insertNodeInto(item, root, getCount());
 		}
 	}
 

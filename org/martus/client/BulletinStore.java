@@ -306,7 +306,7 @@ public class BulletinStore
 		return true;
 	}
 
-	public boolean deleteFolder(String name)
+	public synchronized boolean deleteFolder(String name)
 	{
 		BulletinFolder folder = findFolder(name);
 		if(folder == null)
@@ -339,12 +339,12 @@ public class BulletinStore
 		saveFolders();
 	}
 
-	public int getFolderCount()
+	public synchronized int getFolderCount()
 	{
 		return folders.size();
 	}
 
-	public BulletinFolder getFolder(int index)
+	public synchronized BulletinFolder getFolder(int index)
 	{
 		if(index < 0 || index >= folders.size())
 			return null;
@@ -352,7 +352,7 @@ public class BulletinStore
 		return (BulletinFolder)folders.get(index);
 	}
 
-	public BulletinFolder findFolder(String name)
+	public synchronized BulletinFolder findFolder(String name)
 	{
 		for(int index=0; index < getFolderCount(); ++index)
 		{
@@ -363,6 +363,19 @@ public class BulletinStore
 		return null;
 	}
 
+	public Vector getVisibleFolderNames()
+	{
+		Vector names = new Vector();
+		for(int f = 0; f < getFolderCount(); ++f)
+		{
+			BulletinFolder folder = getFolder(f);
+			String folderName = folder.getName();
+			if(BulletinFolder.isNameVisible(folderName))
+				names.add(folderName);
+		}
+		return names;
+	}
+	
 	public String getSearchFolderName()
 	{
 		return SEARCH_RESULTS_BULLETIN_FOLDER;
@@ -449,6 +462,18 @@ public class BulletinStore
 		saveFolders();
 	}
 
+	public Vector findBulletinInAllVisibleFolders(Bulletin b)
+	{
+		Vector folders = new Vector();
+		for(int i = 0; i < getFolderCount(); ++i)
+		{
+			BulletinFolder folder = getFolder(i);
+			if(folder.isVisible() && folder.contains(b))
+				folders.add(folder.getName());
+		}
+		return folders;
+	}
+	
 	public void deleteAllData()
 	{
 		database.deleteAllData();
@@ -466,7 +491,7 @@ public class BulletinStore
 		database = toUse;	
 	}
 
-	public void loadFolders()
+	public synchronized void loadFolders()
 	{
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -590,7 +615,7 @@ public class BulletinStore
 	
 	boolean isOrphan(Bulletin b)
 	{
-		for(int f=0; f < folders.size(); ++f)
+		for(int f=0; f < getFolderCount(); ++f)
 		{
 			BulletinFolder folder = getFolder(f);
 			if(folder.isVisible() && folder.contains(b))
@@ -600,7 +625,7 @@ public class BulletinStore
 		return true;
 	}
 
-	private BulletinFolder rawCreateFolder(String name)
+	private synchronized BulletinFolder rawCreateFolder(String name)
 	{
 		if(findFolder(name) != null)
 			return null;
@@ -610,7 +635,7 @@ public class BulletinStore
 		return folder;
 	}
 
-	public String foldersToXml()
+	public synchronized String foldersToXml()
 	{
 		String xml = MartusXml.getFolderListTagStart();
 
@@ -687,7 +712,7 @@ public class BulletinStore
 		String buffer = "";
 	}
 
-	public void loadFolders(Reader xml)
+	public synchronized void loadFolders(Reader xml)
 	{
 		folders.clear();
 		createSystemFolders();
@@ -814,7 +839,6 @@ public class BulletinStore
 	private String account;
 	private File dir;
 	private Database database;
-	private Vector bulletins;
 	private Vector folders;
 	private BulletinFolder folderOutbox;
 	private BulletinFolder folderSent;
