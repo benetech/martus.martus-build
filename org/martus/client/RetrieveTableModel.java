@@ -6,7 +6,10 @@ import java.util.Vector;
 import javax.swing.table.AbstractTableModel;
 
 import org.martus.client.MartusApp.ServerErrorException;
+import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.NetworkResponse;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusCrypto.MartusSignatureException;
 
 abstract public class RetrieveTableModel extends AbstractTableModel
 {
@@ -70,6 +73,64 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 
 		return false;
 	}
+
+	public Vector getMySummaries() throws ServerErrorException
+	{
+		Vector summaryStrings = app.getMyServerBulletinSummaries();
+		return createSummariesFromStrings(app.getAccountId(), summaryStrings);
+	}
+
+	public Vector getMyDraftSummaries() throws ServerErrorException
+	{
+		Vector summaryStrings = app.getMyDraftServerBulletinSummaries();
+		return createSummariesFromStrings(app.getAccountId(), summaryStrings);
+	}
+
+	public Vector getFieldOfficeSealedSummaries(String fieldOfficeAccountId) throws ServerErrorException
+	{
+		try 
+		{
+			NetworkResponse response = app.getCurrentSSLServerProxy().getSealedBulletinIds(app.security, fieldOfficeAccountId);
+			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+				return createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
+		} 
+		catch (MartusSignatureException e)
+		{
+			System.out.println("RetrieveTableModle.getFieldOfficeSealedSummaries: " + e);
+		}
+		throw new ServerErrorException();
+	}
+
+	public Vector getFieldOfficeDraftSummaries(String fieldOfficeAccountId) throws ServerErrorException
+	{
+		try 
+		{
+			NetworkResponse response = app.getCurrentSSLServerProxy().getDraftBulletinIds(app.security, fieldOfficeAccountId);
+			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+				return createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
+		} 
+		catch (MartusSignatureException e)
+		{
+			System.out.println("MartusApp.getFieldOfficeDraftSummaries: " + e);
+		}
+		throw new ServerErrorException();
+	}
+
+	public Vector createSummariesFromStrings(String accountId, Vector summaryStrings)
+		throws ServerErrorException 
+	{
+		Vector allSummaries = new Vector();
+		Iterator iterator = summaryStrings.iterator();
+		while(iterator.hasNext())
+		{
+			String pair = (String)iterator.next();
+			BulletinSummary bulletinSummary = app.createSummaryFromString(accountId, pair);
+			allSummaries.add(bulletinSummary);
+		}
+		return allSummaries;
+	}
+
+
 
 	MartusApp app;
 	Vector summaries;

@@ -778,18 +778,18 @@ public class MartusApp
 
 	public static class ServerErrorException extends Exception 
 	{
-		ServerErrorException(String message)
+		public ServerErrorException(String message)
 		{
 			super(message);
 		}
 		
-		ServerErrorException()
+		public ServerErrorException()
 		{
 			this("");
 		}
 	}
 	
-	private Vector getMyServerBulletinSummaries() throws ServerErrorException
+	public Vector getMyServerBulletinSummaries() throws ServerErrorException
 	{
 		String resultCode = "?";
 		try 
@@ -807,7 +807,7 @@ public class MartusApp
 		throw new ServerErrorException(resultCode);
 	}
 	
-	private Vector getMyDraftServerBulletinSummaries() throws ServerErrorException
+	public Vector getMyDraftServerBulletinSummaries() throws ServerErrorException
 	{
 		String resultCode = "?";
 		try 
@@ -823,32 +823,6 @@ public class MartusApp
 			resultCode = NetworkInterfaceConstants.SIG_ERROR;
 		}
 		throw new ServerErrorException(resultCode);
-	}
-
-	public Vector getMySummaries() throws ServerErrorException
-	{
-		Vector summaryStrings = getMyServerBulletinSummaries();
-		return createSummariesFromStrings(getAccountId(), summaryStrings);
-	}
-
-	public Vector getMyDraftSummaries() throws ServerErrorException
-	{
-		Vector summaryStrings = getMyDraftServerBulletinSummaries();
-		return createSummariesFromStrings(getAccountId(), summaryStrings);
-	}
-
-	public Vector createSummariesFromStrings(String accountId, Vector summaryStrings)
-		throws ServerErrorException 
-	{
-		Vector allSummaries = new Vector();
-		Iterator iterator = summaryStrings.iterator();
-		while(iterator.hasNext())
-		{
-			String pair = (String)iterator.next();
-			BulletinSummary bulletinSummary = createSummaryFromString(accountId, pair);
-			allSummaries.add(bulletinSummary);
-		}
-		return allSummaries;
 	}
 
 	public BulletinSummary createSummaryFromString(String accountId, String pair)
@@ -886,37 +860,6 @@ public class MartusApp
 		return bulletinSummary;
 	}
 	
-	public Vector getFieldOfficeSealedSummaries(String fieldOfficeAccountId) throws ServerErrorException
-	{
-		try 
-		{
-			NetworkResponse response = getCurrentSSLServerProxy().getSealedBulletinIds(security, fieldOfficeAccountId);
-			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
-				return createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
-		} 
-		catch (MartusSignatureException e)
-		{
-			System.out.println("MartusApp.getFieldOfficeSealedSummaries: " + e);
-		}
-		throw new ServerErrorException();
-	}
-
-	public Vector getFieldOfficeDraftSummaries(String fieldOfficeAccountId) throws ServerErrorException
-	{
-		try 
-		{
-			NetworkResponse response = getCurrentSSLServerProxy().getDraftBulletinIds(security, fieldOfficeAccountId);
-			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
-				return createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
-		} 
-		catch (MartusSignatureException e)
-		{
-			System.out.println("MartusApp.getFieldOfficeDraftSummaries: " + e);
-		}
-		throw new ServerErrorException();
-	}
-
-
 	public Vector getFieldOfficeAccounts() throws ServerErrorException
 	{
 		try
@@ -1338,7 +1281,7 @@ public class MartusApp
 		return false;
 	}
 	
-	private ClientSideNetworkGateway getCurrentSSLServerProxy()
+	public ClientSideNetworkGateway getCurrentSSLServerProxy()
 	{
 		if(currentSSLServerProxy == null)
 		{

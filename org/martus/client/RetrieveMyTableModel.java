@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.martus.client.MartusApp.ServerErrorException;
 
 
+
 public class RetrieveMyTableModel extends RetrieveTableModel 
 {
 	public RetrieveMyTableModel(MartusApp appToUse) throws 
@@ -16,7 +17,7 @@ public class RetrieveMyTableModel extends RetrieveTableModel
 
 	public void Initalize() throws ServerErrorException
 	{
-		Vector allSummaries = app.getMySummaries();
+		Vector allSummaries = getMySummaries();
 		summaries = getSummariesForBulletinsNotInStore(allSummaries);
 	}
 	

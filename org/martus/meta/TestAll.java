@@ -30,6 +30,7 @@ public class TestAll extends java.lang.Object
 		suite.addTest(new TestSuite(TestMartusServer.class));
 
 		suite.addTest(new TestSuite(TestMartusApp.class));
+		suite.addTest(new TestSuite(TestRetrieveTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveMyTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveMyDraftsTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveHQTableModel.class));

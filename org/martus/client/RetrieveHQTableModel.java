@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.martus.client.MartusApp.ServerErrorException;
 
 
+
 public class RetrieveHQTableModel extends RetrieveTableModel 
 {
 	public RetrieveHQTableModel(MartusApp appToUse) throws 
@@ -21,7 +22,7 @@ public class RetrieveHQTableModel extends RetrieveTableModel
 		for(int a = 0; a < accounts.size(); ++a)
 		{
 			String accountId = (String)accounts.get(a);
-			allSummaries.addAll(app.getFieldOfficeSealedSummaries(accountId));
+			allSummaries.addAll(getFieldOfficeSealedSummaries(accountId));
 			
 		}
 		summaries = getSummariesForBulletinsNotInStore(allSummaries);
