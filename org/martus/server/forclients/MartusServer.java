@@ -1286,10 +1286,19 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return result;
 	}
 
+	public void setComplianceStatement(String statement)
+	{
+		complianceStatement = statement;
+	}
+
 	public Vector getServerCompliance()
 	{
-		// TODO Auto-generated method stub
-		return null;
+		Vector result = new Vector();
+		result.add(OK);
+		Vector compliance = new Vector();
+		compliance.add(complianceStatement);
+		result.add(compliance);
+		return result;
 	}	
 
 	public File getContactInfoFileForAccount(String accountId) throws
@@ -2335,6 +2344,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private Vector magicWords;
 	private long bannedClientsFileLastModified;
 	private int activeClientsCounter;
+	private String complianceStatement; 
+
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
@@ -2356,5 +2367,4 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
 	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
-
 }

@@ -196,6 +196,20 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
+	public void testGetServerCompliance() throws Exception
+	{
+		TRACE_BEGIN("testGetServerCompliance");
+		String serverComplianceString = "I am compliant";
+		testServer.setComplianceStatement(serverComplianceString);
+		Vector compliance = testServer.getServerCompliance();
+		assertEquals(2, compliance.size());
+		assertEquals("ok", compliance.get(0));
+		Vector result = (Vector)compliance.get(1);
+		assertEquals(1, result.size());
+		assertEquals(serverComplianceString, result.get(0));
+		TRACE_END();
+	}
+
 
 	public void testGetNewsWithVersionInformation() throws Exception
 	{

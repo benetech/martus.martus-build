@@ -162,7 +162,11 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	
 	public Vector getServerCompliance(String myAccountId, Vector parameters, String signature)
 	{
-		return null;
+		Vector params = new Vector();
+		params.add(myAccountId);
+		params.add(parameters);
+		params.add(signature);
+		return (Vector)callServer(server, cmdGetServerCompliance, params);
 	}
 	
 

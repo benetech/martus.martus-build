@@ -41,6 +41,7 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final String cmdDeleteDrafts = "deleteDraftBulletins";
 	public static final String cmdPutContactInfo = "putContactInfo";
 	public static final String cmdGetNews = "getNews";
+	public static final String cmdGetServerCompliance = "getServerCompliance";
 
 	// legacy!
 	public static final String CMD_PING = "ping";
