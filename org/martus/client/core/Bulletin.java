@@ -406,7 +406,6 @@ public class Bulletin implements BulletinConstants
 			IOException,
 			NoKeyPairException
 	{
-		boolean isValidFlag = false;
 		packet.setUniversalId(key.getUniversalId());
 		try
 		{
@@ -414,30 +413,25 @@ public class Bulletin implements BulletinConstants
 			if(in == null)
 			{
 				//System.out.println("Packet not found: " + key.getLocalId());
-				isValidFlag = false;
 				return false;
 			}
 			packet.loadFromXml(in, expectedSig, verifier);
-			isValidFlag = true;
+			return true;
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
-			isValidFlag = false;
 			throw e;
 		}
 		catch(NoKeyPairException e)
 		{
-			isValidFlag = false;
 			throw e;
 		}
 		catch(Exception e)
 		{
 			//e.printStackTrace();
-			isValidFlag = false;
+			return false;
 		}
-		
-		return isValidFlag;
 	}
 
 	DatabaseKey getDatabaseKeyForLocalId(String localId)
