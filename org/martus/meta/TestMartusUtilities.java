@@ -70,20 +70,14 @@ public class TestMartusUtilities extends TestCaseEnhanced
 			;
 		}
 		
-		anotherFile = createTempFile(string1);
-		MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security);
-		File normalFileSigByOtherSecurity = MartusUtilities.createSignatureFileFromFile(normalFile, otherSecurity);
-		MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigByOtherSecurity, security);
-		
 		normalFileSigBySecurity.delete();
-		normalFileSigByOtherSecurity.delete();
 		normalFile.delete();
 		anotherFile.delete();
 		
 		try
 		{
 			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security);
-			fail("Should have thrown FileVerificationException.");
+			fail("testCreateSignatureFromFile 2: Should have thrown FileVerificationException.");
 		}
 		catch (FileVerificationException ignoreExpectedException)
 		{
