@@ -88,7 +88,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		Timestamp expire = Timestamp.valueOf("2002-11-15 1:00:00.000000000");
 		if(stamp.after(expire))
 			notifyDlg(this, "BetaExpired");
-		clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
 
 		if(app.doesAccountExist())
 		{
@@ -1861,11 +1860,6 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 					currentActiveFrame.setEnabled(true);
 				}
 				timedOutInDialog = false;
-				if(--clearStatusMessage < 0)
-				{
-					clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
-					statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(app.getFieldLabel("StatusReady"));
-				}
 				if(!inConfigServer)
 				{
 					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
@@ -1952,7 +1946,6 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 	private boolean inConfigServer;
 
 	private static final int TIMEOUT_SECONDS = (10 * 60);
-	private static final int TICKS_TO_CLEAR_STATUS_MESSAGE = 5;
 	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;

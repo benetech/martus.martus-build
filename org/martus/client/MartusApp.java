@@ -754,20 +754,26 @@ public class MartusApp
 			
 		if(getFolderDraftOutbox().getBulletinCount() > 0)
 			return backgroundUploadOneDraftBulletin(progressMeter);
-
+		progressMeter.setStatusMessageAndHideMeter(getFieldLabel("StatusReady"));
 		return null;
 	}
 
 	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) 
 	{
 		if(!isSSLServerAvailable())
+		{
+			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
+		}
 		
 		BulletinFolder outbox = getFolderOutbox();
 		Bulletin b = outbox.getBulletinSorted(0);
 		String result = uploadBulletin(b, progressMeter);
 		if(result == null)
+		{
+			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
 			return null;
+		}
 		
 		if(result.equals(NetworkInterfaceConstants.OK) || result.equals(NetworkInterfaceConstants.DUPLICATE))
 		{
@@ -793,25 +799,35 @@ public class MartusApp
 				}
 			}
 		}
+		else
+			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
 		return result;
 	}
 
 	String backgroundUploadOneDraftBulletin(UiProgressMeter progressMeter) 
 	{
 		if(!isSSLServerAvailable())
+		{
+			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
+		}
 		
 		BulletinFolder draftOutbox = getFolderDraftOutbox();
 		Bulletin b = draftOutbox.getBulletinSorted(0);
 		String result = uploadBulletin(b, progressMeter);
 		if(result == null)
+		{
+			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
 			return null;
+		}
 		
 		if(result.equals(NetworkInterfaceConstants.OK))
 		{
 			draftOutbox.remove(b.getUniversalId());
 			store.saveFolders();
 		}
+		else
+			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
 		
 		return result;
 	}
