@@ -66,6 +66,8 @@ public class ConfigInfo implements Serializable
 	public void setTemplateDetails(String newTemplateDetails){ templateDetails = newTemplateDetails; }
 	public void setHQKey(String newHQKey)			{ hqKey = newHQKey; }
 	public void setSendContactInfoToServer(boolean newSendContactInfoToServer) {sendContactInfoToServer = newSendContactInfoToServer; }
+	public void setServerCompliance(String newCompliance) {serverCompliance = newCompliance;}
+
 	public void clearHQKey()						{ hqKey = ""; }
 	public void clearPromptUserRequestSendToServer() { mustAskUserToSendToServer = false; }
 
@@ -82,6 +84,7 @@ public class ConfigInfo implements Serializable
 	public String getHQKey() 			{ return hqKey; }
 	public boolean shouldContactInfoBeSentToServer() { return sendContactInfoToServer; }
 	public boolean promptUserRequestSendToServer() { return mustAskUserToSendToServer; }
+	public String getServerCompliance() {return serverCompliance;}
 
 	public void clear()
 	{
@@ -98,6 +101,7 @@ public class ConfigInfo implements Serializable
 		hqKey = "";
 		sendContactInfoToServer = false;
 		mustAskUserToSendToServer = false;
+		serverCompliance = "";
 	}
 
 	public Vector getContactInfo(MartusCrypto signer) throws
@@ -134,10 +138,12 @@ public class ConfigInfo implements Serializable
 			loaded.templateDetails = in.readUTF();
 			loaded.hqKey = in.readUTF();
 			loaded.serverPublicKey = in.readUTF();
-			if(loaded.version > 1)
+			if(loaded.version >= 2)
 				loaded.sendContactInfoToServer = in.readBoolean();
 			else
 				loaded.mustAskUserToSendToServer = true;
+			if(loaded.version >= 4)
+				loaded.serverCompliance = in.readUTF();
 			in.close();
 		}
 		catch (Exception e)
@@ -164,6 +170,7 @@ public class ConfigInfo implements Serializable
 			out.writeUTF(hqKey);
 			out.writeUTF(serverPublicKey);
 			out.writeBoolean(sendContactInfoToServer);
+			out.writeUTF(serverCompliance);
 			out.close();
 		}
 		catch(Exception e)
@@ -174,7 +181,7 @@ public class ConfigInfo implements Serializable
 
 	private boolean mustAskUserToSendToServer;
 
-	final short VERSION = 3;
+	final short VERSION = 4;
 	//Version 1
 	private short version;
 	private String author;
@@ -190,5 +197,6 @@ public class ConfigInfo implements Serializable
 	//Version 2
 	private boolean sendContactInfoToServer;
 	//Version 3 flag to indicate AccountMap.txt is signed.
-
+	//Version 4
+	private String serverCompliance;
 }

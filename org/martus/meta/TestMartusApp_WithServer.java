@@ -69,7 +69,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		}
 		
 		appWithServer = MockMartusApp.create(mockSecurityForApp);
-		appWithServer.setServerInfo("mock", mockServer.getAccountId());
+		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
 		File keyPairFile = appWithServer.getKeyPairFile();
@@ -205,12 +205,15 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		final String server2 = "Server2";
 		final String key1 = "ServerKey1";
 		final String key2 = "ServerKey2";
+		final String serverCompliance1 = "Compliant1";
+		final String serverCompliance2 = "Compliant2";
 		
 		MockMartusApp app = MockMartusApp.create();
 		app.security =mockSecurityForApp;
-		app.setServerInfo(server1, key1);
+		app.setServerInfo(server1, key1, serverCompliance1);
 		assertEquals("Didn't set Configinfo name", server1, app.getConfigInfo().getServerName());
 		assertEquals("Didn't set Configinfo key", key1, app.getConfigInfo().getServerPublicKey());
+		assertEquals("Didn't set Configinfo compliance", serverCompliance1, app.getConfigInfo().getServerCompliance());
 		assertNull("Should have cleared handler", app.currentNetworkInterfaceHandler);
 		assertNull("Should have cleared gateway", app.currentNetworkInterfaceGateway);
 
@@ -218,15 +221,17 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertNotNull("Should have created handler", app.currentNetworkInterfaceHandler);
 		assertNotNull("Should have created gateway", app.currentNetworkInterfaceGateway);
 
-		app.setServerInfo(server2, key2);
+		app.setServerInfo(server2, key2, serverCompliance2);
 		assertEquals("Didn't update Configinfo name?", server2, app.getConfigInfo().getServerName());
 		assertEquals("Didn't update Configinfo key?", key2, app.getConfigInfo().getServerPublicKey());
+		assertEquals("Didn't update Configinfo compliance", serverCompliance2, app.getConfigInfo().getServerCompliance());
 		assertNull("Should have re-cleared handler", app.currentNetworkInterfaceHandler);
 		assertNull("Should have re-cleared gateway", app.currentNetworkInterfaceGateway);
 		
 		app.loadConfigInfo();
 		assertEquals("Didn't save Configinfo name?", server2, app.getConfigInfo().getServerName());
 		assertEquals("Didn't save Configinfo key?", key2, app.getConfigInfo().getServerPublicKey());
+		assertEquals("Didn't save Configinfo compliance?", serverCompliance2, app.getConfigInfo().getServerCompliance());
 		
 		app.deleteAllFiles();
 
@@ -491,7 +496,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testBackgroundUploadLogging");
 		String serverName = "some silly server";
-		appWithServer.setServerInfo(serverName, mockServer.getAccountId());
+		appWithServer.setServerInfo(serverName, mockServer.getAccountId(), "");
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		File logFile = new File(appWithServer.getUploadLogFilename());
 		logFile.delete();
@@ -893,7 +898,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	public void testDeleteServerDraftBulletins() throws Exception
 	{
-		appWithServer.setServerInfo("mock", mockServer.getAccountId());
+		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		MockGateway gateway = new MockGateway();
 
 		MartusSecurity security = new MartusSecurity();
@@ -946,7 +951,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	public void testPutContactInfo() throws Exception
 	{
-		appWithServer.setServerInfo("mock", mockServer.getAccountId());
+		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		MockGateway gateway = new MockGateway();
 
 		MartusSecurity security = new MartusSecurity();
@@ -1130,7 +1135,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		MockMartusSecurity hqSecurity = new MockMartusSecurity();	
 		hqSecurity.createKeyPair();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
-		hqApp.setServerInfo("mock", mockServer.getAccountId());
+		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithServer.getAccountId(), hqApp.getAccountId());
 		appWithServer.setHQKey(hqApp.getAccountId());

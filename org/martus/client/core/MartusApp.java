@@ -151,10 +151,11 @@ public class MartusApp
 		logUploads = true;
 	}
 
-	public void setServerInfo(String serverName, String serverKey)
+	public void setServerInfo(String serverName, String serverKey, String serverCompliance)
 	{
 		configInfo.setServerName(serverName);
 		configInfo.setServerPublicKey(serverKey);
+		configInfo.setServerCompliance(serverCompliance);
 		try
 		{
 			saveConfigInfo();

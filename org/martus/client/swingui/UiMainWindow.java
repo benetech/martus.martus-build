@@ -786,7 +786,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String serverPublicKey = serverInfoDlg.getServerPublicKey();
 			ClientSideNetworkGateway gateway = app.buildGateway(serverIPAddress, serverPublicKey);
 
-			if(!confirmServerCompliance(gateway))
+			String newServerCompliance = getServerCompliance(gateway);
+			if(!confirmServerCompliance(newServerCompliance))
 			{
 				//TODO:The following line shouldn't be necessary but without it, the trustmanager 
 				//will reject the old server, we don't know why.
@@ -795,7 +796,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return;
 			}
 			boolean magicAccepted = false;
-			app.setServerInfo(serverIPAddress, serverPublicKey);
+			app.setServerInfo(serverIPAddress, serverPublicKey, newServerCompliance);
 			if(app.requestServerUploadRights(""))
 				magicAccepted = true;
 			else
@@ -833,19 +834,27 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	boolean confirmServerCompliance(ClientSideNetworkGateway gateway)
+	private String getServerCompliance(ClientSideNetworkGateway gateway)
 	{
 		try
 		{
-			String newServerCompliance = app.getServerCompliance(gateway);
-			UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", "ServerComplianceDescription", newServerCompliance);
-			if(dlg.getResult())
-				return true;
+			return app.getServerCompliance(gateway);
 		}
 		catch (ServerCallFailedException e)
 		{
-			 return confirmDlg(this,"ServerComplianceFailed");
+			return "";
 		}
+	}
+
+	boolean confirmServerCompliance(String newServerCompliance)
+	{
+
+		if(newServerCompliance.equals(""))
+			return confirmDlg(this,"ServerComplianceFailed");
+			
+		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", "ServerComplianceDescription", newServerCompliance);
+		if(dlg.getResult())
+			return true;
 		notifyDlg(this, "UserRejectedServerCompliance");
 		return false;
 	}

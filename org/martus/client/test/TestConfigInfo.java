@@ -28,6 +28,7 @@ package org.martus.client.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -66,7 +67,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 	public void testBeforeLoad()
 	{
 		ConfigInfo info = new ConfigInfo();
-
+		verifyEmptyInfo(info, "testBeforeLoad");
 		assertEquals("No contact info", false, info.hasContactInfo());
 
 		info.setAuthor("fred");
@@ -100,6 +101,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		info.setTemplateDetails(sampleTemplateDetails);
 		info.setHQKey(sampleHQKey);
 		info.setSendContactInfoToServer(sampleSendContactInfoToServer);
+		info.setServerCompliance(sampleServerCompliance);
 		verifySampleInfo(info, "afterSet");
 
 		FileOutputStream outputStream = new FileOutputStream(configFile);
@@ -118,6 +120,11 @@ public class TestConfigInfo extends TestCaseEnhanced
 
 	public void verifySampleInfo(ConfigInfo info, String label)
 	{
+		verifySampleInfoVersion4(info, label);
+	}
+
+	public void verifySampleInfoVersion1Only(ConfigInfo info, String label)
+	{
 		assertEquals(label + ": Full has contact info", true, info.hasContactInfo());
 		assertEquals(label + ": sampleSource", sampleAuthor, info.getAuthor());
 		assertEquals(label + ": sampleOrg", sampleOrg, info.getOrganization());
@@ -129,9 +136,46 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleServerKey", sampleServerKey, info.getServerPublicKey());
 		assertEquals(label + ": sampleTemplateDetails", sampleTemplateDetails, info.getTemplateDetails());
 		assertEquals(label + ": sampleHQKey", sampleHQKey, info.getHQKey());
-		assertEquals(label + ": sampleSendContactInfoToServer", sampleSendContactInfoToServer, info.shouldContactInfoBeSentToServer());
-
 	}
+	public void verifySampleInfoVersion1(ConfigInfo info, String label)
+	{
+		verifySampleInfoVersion1Only(info, label);
+		assertEquals(label + ": sampleSendContactInfoToServer", false, info.shouldContactInfoBeSentToServer());	
+	}
+
+	public void verifySampleInfoVersion2(ConfigInfo info, String label)
+	{
+		verifySampleInfoVersion2Only(info, label);
+	}
+	
+	public void verifySampleInfoVersion2Only(ConfigInfo info, String label)
+	{
+		verifySampleInfoVersion1Only(info, label);
+		assertEquals(label + ": sampleSendContactInfoToServer", sampleSendContactInfoToServer, info.shouldContactInfoBeSentToServer());
+	}
+
+	public void verifySampleInfoVersion3(ConfigInfo info, String label)
+	{
+		verifySampleInfoVersion3Only(info, label);
+		assertEquals(label + ": sampleServerComplicance", "", info.getServerCompliance());
+	}
+
+	public void verifySampleInfoVersion3Only(ConfigInfo info, String label)
+	{
+		verifySampleInfoVersion2Only(info, label);
+	}
+
+	public void verifySampleInfoVersion4(ConfigInfo info, String label)
+	{
+		verifySampleInfoVersion4Only(info, label);
+	}
+
+	public void verifySampleInfoVersion4Only(ConfigInfo info, String label)
+	{
+		verifySampleInfoVersion3Only(info, label);
+		assertEquals(label + ": sampleServerComplicance", sampleServerCompliance, info.getServerCompliance());
+	}
+	
 
 	public void verifyEmptyInfo(ConfigInfo info, String label)
 	{
@@ -147,6 +191,83 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleTemplateDetails", "", info.getTemplateDetails());
 		assertEquals(label + ": sampleHQKey", "", info.getHQKey());
 		assertEquals(label + ": sampleSendContactInfoToServer", false, info.shouldContactInfoBeSentToServer());
+		assertEquals(label + ": sampleServerComplicance", "", info.getServerCompliance());
+		
+	}
+
+	public void testLoadVersion1() throws Exception
+	{
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(outputStream);
+		short VERSION = 1;
+		out.writeShort(VERSION);
+		out.writeUTF(sampleAuthor);
+		out.writeUTF(sampleOrg);
+		out.writeUTF(sampleEmail);
+		out.writeUTF(sampleWebPage);
+		out.writeUTF(samplePhone);
+		out.writeUTF(sampleAddress);
+		out.writeUTF(sampleServerName);
+		out.writeUTF(sampleTemplateDetails);
+		out.writeUTF(sampleHQKey);
+		out.writeUTF(sampleServerKey);
+		out.close();
+
+		ConfigInfo info = new ConfigInfo();
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+		info = ConfigInfo.load(inputStream);
+		verifySampleInfoVersion1(info, "testLoadVersion1");
+	}
+	
+	public void testLoadVersion3() throws Exception
+	{
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(outputStream);
+		short VERSION = 3;
+		out.writeShort(VERSION);
+		out.writeUTF(sampleAuthor);
+		out.writeUTF(sampleOrg);
+		out.writeUTF(sampleEmail);
+		out.writeUTF(sampleWebPage);
+		out.writeUTF(samplePhone);
+		out.writeUTF(sampleAddress);
+		out.writeUTF(sampleServerName);
+		out.writeUTF(sampleTemplateDetails);
+		out.writeUTF(sampleHQKey);
+		out.writeUTF(sampleServerKey);
+		out.writeBoolean(sampleSendContactInfoToServer);
+		out.close();
+
+		ConfigInfo info = new ConfigInfo();
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+		info = ConfigInfo.load(inputStream);
+		verifySampleInfoVersion3(info, "testLoadVersion3");
+	}
+
+	public void testLoadVersion4() throws Exception
+	{
+		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		DataOutputStream out = new DataOutputStream(outputStream);
+		short VERSION = 4;
+		out.writeShort(VERSION);
+		out.writeUTF(sampleAuthor);
+		out.writeUTF(sampleOrg);
+		out.writeUTF(sampleEmail);
+		out.writeUTF(sampleWebPage);
+		out.writeUTF(samplePhone);
+		out.writeUTF(sampleAddress);
+		out.writeUTF(sampleServerName);
+		out.writeUTF(sampleTemplateDetails);
+		out.writeUTF(sampleHQKey);
+		out.writeUTF(sampleServerKey);
+		out.writeBoolean(sampleSendContactInfoToServer);
+		out.writeUTF(sampleServerCompliance);
+		out.close();
+
+		ConfigInfo info = new ConfigInfo();
+		ByteArrayInputStream inputStream = new ByteArrayInputStream(outputStream.toByteArray());
+		info = ConfigInfo.load(inputStream);
+		verifySampleInfoVersion4(info, "testLoadVersion4");
 	}
 
 	public void testGetContactInfo() throws Exception
@@ -158,6 +279,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		MartusSecurity signer = new MartusSecurity();
 		signer.createKeyPair(512);
 		Vector contactInfo = newInfo.getContactInfo(signer);
+		assertEquals("Wrong contactinfo size", 9, contactInfo.size());
 		String publicKey = (String)contactInfo.get(0);
 
 		assertEquals("Not the publicKey?", signer.getPublicKeyString(), publicKey);
@@ -221,6 +343,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 	}
 
 	File configFile;
+//Version 1
 	final String sampleAuthor = "author";
 	final String sampleOrg = "org";
 	final String sampleEmail = "email";
@@ -231,5 +354,10 @@ public class TestConfigInfo extends TestCaseEnhanced
 	final String sampleServerKey = "server pub key";
 	final String sampleTemplateDetails = "details\ndetail2";
 	final String sampleHQKey = "1234324234";
+//Version 2
 	final boolean sampleSendContactInfoToServer = true;
+//Version 3
+	//nothing added just signed.
+//Version 4
+	final String sampleServerCompliance = "I am compliant";
 }
