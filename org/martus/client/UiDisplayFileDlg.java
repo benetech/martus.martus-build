@@ -77,7 +77,7 @@ public class UiDisplayFileDlg extends JDialog
 
 	public String getFileContents(InputStream fileStream)
 	{
-		String message = "";
+		StringBuffer message = new StringBuffer();
 		if(fileStream == null)
 		{
 			System.out.println("UiDisplayFileDlg: null stream");
@@ -91,8 +91,8 @@ public class UiDisplayFileDlg extends JDialog
 				String lineIn = reader.readLine();
 				if(lineIn == null)
 					break;
-				message += lineIn;
-				message += '\n';
+				message.append(lineIn);
+				message.append('\n');
 			}
 			reader.close();
 		} 
@@ -101,7 +101,7 @@ public class UiDisplayFileDlg extends JDialog
 			System.out.println("UiDisplayFileDlg: " + e);
 			return null;
 		}
-		return message;
+		return new String(message);
 	}
 
 	public Vector getFileVectorContents(InputStream fileStream)
