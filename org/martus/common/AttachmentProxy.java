@@ -28,8 +28,6 @@ package org.martus.common;
 
 import java.io.File;
 
-import org.martus.common.*;
-
 public class AttachmentProxy
 {
 	public AttachmentProxy(File fileToAttach)
