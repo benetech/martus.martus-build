@@ -49,6 +49,7 @@ public class TestClient
 		suite.addTest(new TestSuite(TestBulletinStore.class));
 		suite.addTest(new TestSuite(TestBulletin.class));
 		suite.addTest(new TestSuite(TestBulletinSaver.class));
+		suite.addTest(new TestSuite(TestBulletinXmlExporter.class));
 		suite.addTest(new TestSuite(TestSearchTreeNode.class));
 		suite.addTest(new TestSuite(TestSearchParser.class));
 		suite.addTest(new TestSuite(TestConfigInfo.class));
