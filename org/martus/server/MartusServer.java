@@ -1646,7 +1646,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 
-	private void serverExit(int exitCode)
+	public void serverExit(int exitCode) throws Exception
 	{
 		System.exit(exitCode);
 	}
@@ -1846,7 +1846,14 @@ public class MartusServer implements NetworkInterfaceConstants
 				File shutdownFile = new File(getDataDirectory(), MARTUSSHUTDOWNFILENAME);
 				shutdownFile.delete();
 				logging("Server has exited.");
-				serverExit(0);
+				try
+				{
+					serverExit(0);
+				}
+				catch(Exception e)
+				{
+					e.printStackTrace();
+				}
 			}
 		}
 	}
