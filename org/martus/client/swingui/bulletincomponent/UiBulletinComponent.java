@@ -53,7 +53,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		mainWindow = mainWindowToUse;
 	}
 
-	public void initalize()
+	public void createSections()
 	{
 		setLayout(new BorderLayout());
 
@@ -78,6 +78,12 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		publicStuff.matchFirstColumnWidth(privateStuff);
 		privateStuff.matchFirstColumnWidth(publicStuff);
+		
+		if(!isEditable)
+		{
+			publicStuff.disableEdits();
+			privateStuff.disableEdits();
+		}
 
 		add(publicStuff, BorderLayout.NORTH);
 		add(privateStuff, BorderLayout.SOUTH);
@@ -104,12 +110,29 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	{
 	}
 
-	public void copyDataFromBulletin(Bulletin bulletin) throws IOException
+	public void copyDataFromBulletin(Bulletin bulletinToShow) throws IOException
 	{
-		currentBulletin = bulletin;
+		currentBulletin = bulletinToShow;
+		if(currentBulletin == null)
+		{
+			if(publicStuff != null)
+			{
+				remove(publicStuff);
+				publicStuff = null;
+			}
+			if(privateStuff != null)
+			{
+				remove(privateStuff);
+				privateStuff = null;
+			}
+			repaint();
+			return;
+		}
+		
+		createSections();
 
 		String isAllPrivate = UiField.FALSESTRING;
-		if(bulletin != null && bulletin.isAllPrivate())
+		if(currentBulletin.isAllPrivate())
 			isAllPrivate = UiField.TRUESTRING;
 		allPrivateField.setText(isAllPrivate);
 
@@ -118,16 +141,13 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		FieldDataPacket publicData = null;
 		FieldDataPacket privateData = null;
-		if(bulletin != null)
-		{
-			publicData = bulletin.getFieldDataPacket();
-			privateData = bulletin.getPrivateFieldDataPacket();
-		}
+		publicData = currentBulletin.getFieldDataPacket();
+		privateData = currentBulletin.getPrivateFieldDataPacket();
 		publicStuff.copyDataFromPacket(publicData);
 		privateStuff.copyDataFromPacket(privateData);
 
 		boolean isDamaged = false;
-		if(currentBulletin != null && !currentBulletin.isValid())
+		if(!currentBulletin.isValid())
 		{
 			System.out.println("Damaged: " + currentBulletin.getLocalId());
 			isDamaged = true;
@@ -139,6 +159,9 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 	public void updateEncryptedIndicator(boolean isEncrypted)
 	{
+		if(publicStuff == null)
+			return;
+			
 		publicStuff.updateEncryptedIndicator(isEncrypted);
 		publicStuff.updateSectionBorder(isEncrypted);
 	}
@@ -214,6 +237,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	Bulletin currentBulletin;
 	EncryptionChangeListener encryptionListener;
 	boolean wasEncrypted;
+	boolean isEditable;
 	UiBulletinComponentSection publicStuff;
 	UiBulletinComponentSection privateStuff;
 

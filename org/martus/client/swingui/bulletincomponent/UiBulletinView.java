@@ -39,8 +39,6 @@ public class UiBulletinView extends UiBulletinComponent
 		super(mainWindowToUse);
 		mainWindow = mainWindowToUse;
 		bulletinViewSections = new Vector();
-		initalize();
-		disableEdits();
 		// ensure that attachmentViewer gets initialized
 	}
 
@@ -49,12 +47,6 @@ public class UiBulletinView extends UiBulletinComponent
 		UiBulletinComponentViewSection section = new UiBulletinComponentViewSection(this, mainWindow, encrypted);
 		bulletinViewSections.add(section);
 		return section;
-	}
-
-	public void disableEdits()
-	{
-		publicStuff.disableEdits();
-		privateStuff.disableEdits();
 	}
 
 	public UiField createBoolField()
