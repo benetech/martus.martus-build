@@ -91,7 +91,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		server.setServerName(servername);
 		
 		
-		System.out.println("Version " + ServerConstants.internalVersionForScriptCompatibility);
+		System.out.println("Version " + ServerConstants.marketingVersionNumber);
 		
 		String versionInfo = MartusUtilities.getVersionDate();
 		System.out.println("Build Date " + versionInfo);
