@@ -51,6 +51,7 @@ import org.martus.util.InputStreamWithSeek;
 
 public class FieldDataPacket extends Packet
 {
+	private static final char FIELD_TAG_DELIMITER = ';';
 	public FieldDataPacket(UniversalId universalIdToUse, String[] fieldTagsToUse)
 	{
 		super(universalIdToUse);
@@ -74,25 +75,25 @@ public class FieldDataPacket extends Packet
 		for(int i = 0; i < tempFieldTags.length; ++i)
 		{
 			if(i > 0)
-				fieldList += ",";
+				fieldList += FIELD_TAG_DELIMITER;
 			fieldList += tempFieldTags[i];
 		}
 		return fieldList;
 	}
 
-	static public String[] parseFieldTagsFromString(String commaSeparatedTags)
+	static public String[] parseFieldTagsFromString(String delimitedTags)
 	{
 		String[] newFieldTags = new String[0];
 		int tagStart = 0;
-		while(tagStart >= 0 && tagStart < commaSeparatedTags.length())
+		while(tagStart >= 0 && tagStart < delimitedTags.length())
 		{
-			int comma = commaSeparatedTags.indexOf(',', tagStart);
-			if(comma < 0)
-				comma = commaSeparatedTags.length();
-			String thisTag = commaSeparatedTags.substring(tagStart, comma);
+			int delimiter = delimitedTags.indexOf(FIELD_TAG_DELIMITER, tagStart);
+			if(delimiter < 0)
+				delimiter = delimitedTags.length();
+			String thisTag = delimitedTags.substring(tagStart, delimiter);
 
 			newFieldTags = appendTag(newFieldTags, thisTag);
-			tagStart = comma + 1;
+			tagStart = delimiter + 1;
 		}
 		return newFieldTags;
 	}

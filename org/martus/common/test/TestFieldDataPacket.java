@@ -548,5 +548,5 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	int SHORTEST_LEGAL_KEY_SIZE = 512;
 	static MartusSecurity security;
 	static MartusSecurity securityHQ;
-	static final String fieldListForTesting = "<FieldList>" + aTag + "," + bTag + "," + cTag + "</FieldList>";
+	static final String fieldListForTesting = "<FieldList>" + aTag + ";" + bTag + ";" + cTag + "</FieldList>";
 }
