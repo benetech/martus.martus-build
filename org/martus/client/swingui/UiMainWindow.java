@@ -1314,7 +1314,7 @@ if(result == NEW_ACCOUNT)
 	{
 		UiLocalization localization = getLocalization();
 		String message = localization.getFieldLabel("BackupKeyPairToMultipleUnencryptedFilesInformation");
-		DisplayScrollableMessage("BackupKeyPairToMultipleUnencryptedFilesInformation", message, "Continue");
+		displayScrollableMessage("BackupKeyPairToMultipleUnencryptedFilesInformation", message, "Continue");
 		String defaultInputText = "";
 		String defaultFileName = getStringInput("GetShareFileName","GetShareFileNameDescription",defaultInputText);
 		if(defaultFileName == null)
@@ -1377,7 +1377,7 @@ if(result == NEW_ACCOUNT)
 		}
 	}
 
-	private void DisplayScrollableMessage(String titleTag, String message, String okButtonTag) 
+	private void displayScrollableMessage(String titleTag, String message, String okButtonTag) 
 	{
 		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, "", "", message);
 	}
