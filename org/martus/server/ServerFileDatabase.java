@@ -14,13 +14,12 @@ public class ServerFileDatabase extends FileDatabase
 		super(directory);
 	}
 
-	public File getFileForRecord(DatabaseKey key)
-		throws IOException, TooManyAccountsException 
+	protected String getBucketPrefix(DatabaseKey key) 
 	{
 		String bucketPrefix = defaultBucketPrefix;
 		if(key.isDraft())
-			bucketPrefix = draftPrefix;
-		return getFileForRecordWithPrefix(key, bucketPrefix);
+			return draftPrefix;
+		return super.getBucketPrefix(key);
 	}
 
 	public boolean isDraftPacketBucket(String folderName)

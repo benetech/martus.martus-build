@@ -28,6 +28,8 @@ public class MockDatabase implements Database
 		draftPacketMap = new TreeMap();
 		incomingInterimMap = new TreeMap();
 		outgoingInterimMap = new TreeMap();
+		draftQuarantine = new TreeMap();
+		sealedQuarantine = new TreeMap();
 	}
 
 	public void writeRecord(DatabaseKey key, String record) throws IOException
@@ -84,10 +86,7 @@ public class MockDatabase implements Database
 	
 	public String readRecord(DatabaseKey key, MartusCrypto decrypter)
 	{
-		if(key.isDraft())
-			return (String)draftPacketMap.get(key);
-		else
-			return (String)sealedPacketMap.get(key);
+		return readRecord(key);
 	}
 
 	public void discardRecord(DatabaseKey key)
@@ -163,7 +162,40 @@ public class MockDatabase implements Database
 		}
 	}
 	
+	public boolean isInQuarantine(DatabaseKey key)
+	{
+		Map quarantine = getQuarantineFor(key);
+		return quarantine.containsKey(key);
+	}
+	
+	public void moveRecordToQuarantine(DatabaseKey key)
+	{
+		if(!doesRecordExist(key))
+			return;
+			
+		String data = readRecord(key);
+		Map quarantine = getQuarantineFor(key);
+		quarantine.put(key, data);
+		discardRecord(key);
+	}
+	
 	// end Database interface
+	
+	private Map getQuarantineFor(DatabaseKey key)
+	{
+		if(key.isDraft())
+			return draftQuarantine;
+		else
+			return sealedQuarantine;
+	}
+
+	private String readRecord(DatabaseKey key)
+	{
+		if(key.isDraft())
+			return (String)draftPacketMap.get(key);
+		else
+			return (String)sealedPacketMap.get(key);
+	}
 
 	public int getSealedRecordCount()
 	{
@@ -184,4 +216,6 @@ public class MockDatabase implements Database
 	Map draftPacketMap;
 	Map incomingInterimMap;
 	Map outgoingInterimMap;
+	Map draftQuarantine;
+	Map sealedQuarantine;
 }

@@ -234,6 +234,35 @@ public class FileDatabase implements Database
 		return new File(folder, key.getLocalId()+".out");
 	}
 	
+	public boolean isInQuarantine(DatabaseKey key)
+	{
+		try
+		{
+			return getQuarantineFileForRecord(key).exists();
+		}
+		catch(Exception nothingWeCanDoAboutIt)
+		{
+			System.out.println("FileDatabase.isInQuarantine: " + nothingWeCanDoAboutIt);
+			return false;
+		}
+	}
+	
+	public void moveRecordToQuarantine(DatabaseKey key)
+	{
+		try
+		{
+			File moveFrom = getFileForRecord(key);
+			File moveTo = getQuarantineFileForRecord(key);
+			
+			moveTo.delete();
+			moveFrom.renameTo(moveTo);
+		}
+		catch(Exception nothingWeCanDoAboutIt)
+		{
+			System.out.println("FileDatabase.moveRecordToQuarantine: " + nothingWeCanDoAboutIt);
+		}
+	}
+	
 	// end Database interface
 	
 	public void visitAllAccounts(AccountVisitor visitor) 
@@ -292,22 +321,17 @@ public class FileDatabase implements Database
 		{
 			public void visit(String accountString, File accountDir)
 			{
-				File interimDir = new File(accountDir, INTERIM_FOLDER_NAME);
-				File[] interimFiles = interimDir.listFiles();
-				if(interimFiles != null)
+				File[] subdirectories = accountDir.listFiles();
+				for (int i = 0; i < subdirectories.length; i++) 
 				{
-					for (int i = 0; i < interimFiles.length; i++) 
-					{
-						interimFiles[i].delete();
-					}
+					deleteAllFilesInDirectory(subdirectories[i]);
 				}
-				interimDir.delete();				
-				
-				deleteAllPacketsForAccount(accountDir);
+
 				File parentDir = accountDir.getParentFile();
 				accountDir.delete();
 				parentDir.delete();
 			}
+			
 		}
 		
 		AccountDeleter deleter = new AccountDeleter();
@@ -316,8 +340,7 @@ public class FileDatabase implements Database
 
 	public File getFileForRecord(DatabaseKey key) throws IOException, TooManyAccountsException
 	{
-		String bucketPrefix = defaultBucketPrefix;
-		return getFileForRecordWithPrefix(key, bucketPrefix);
+		return getFileForRecordWithPrefix(key, getBucketPrefix(key));
 	}
 	
 	public File getFileForRecordWithPrefix(DatabaseKey key, String bucketPrefix)
@@ -329,6 +352,20 @@ public class FileDatabase implements Database
 		File path = new File(getAccountDirectory(accountString), bucketName);
 		path.mkdirs();
 		return new File(path, key.getLocalId());
+	}
+	
+	private File getQuarantineFileForRecord(DatabaseKey key)
+		throws IOException, TooManyAccountsException 
+	{
+		return getFileForRecordWithPrefix(key, getQuarantinePrefix(key));
+	}
+	
+	private String getQuarantinePrefix(DatabaseKey key) 
+	{
+		if(key.isDraft())
+			return draftQuarantinePrefix;
+		else
+			return sealedQuarantinePrefix;
 	}
 	
 	public class TooManyAccountsException extends Exception {}
@@ -632,7 +669,27 @@ public class FileDatabase implements Database
 		return result;
 	}
 
+	protected String getBucketPrefix(DatabaseKey key) 
+	{
+		return defaultBucketPrefix;
+	}
+	
+	private static void deleteAllFilesInDirectory(File directory) 
+	{
+		File[] files = directory.listFiles();
+		if(files != null)
+		{
+			for (int i = 0; i < files.length; i++) 
+			{
+				files[i].delete();
+			}
+		}
+		directory.delete();				
+	}
+
 	protected static final String defaultBucketPrefix = "p";
+	protected static final String draftQuarantinePrefix = "qd-p";
+	protected static final String sealedQuarantinePrefix = "qs-p";
 	protected static final String INTERIM_FOLDER_NAME = "interim";
 	
 	File absoluteBaseDir;

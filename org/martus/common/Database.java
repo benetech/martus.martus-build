@@ -19,6 +19,9 @@ public interface Database
 	public File getIncomingInterimFile(DatabaseKey key) throws IOException;
 	public File getOutgoingInterimFile(DatabaseKey key) throws IOException;
 	
+	public boolean isInQuarantine(DatabaseKey key);
+	public void moveRecordToQuarantine(DatabaseKey key);
+	
 	public interface PacketVisitor
 	{
 		void visit(DatabaseKey key);

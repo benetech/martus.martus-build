@@ -170,6 +170,14 @@ public class TestDatabase extends TestCaseEnhanced
 		//internalTestDrafts(clientFileDb);
 		internalTestDrafts(serverFileDb);
 	}
+	
+	public void testQuarantine() throws Exception
+	{
+		TRACE("testQuarantine");
+		internalTestQuarantine(mockDb);
+		internalTestQuarantine(clientFileDb);
+	}
+	
 	/////////////////////////////////////////////////////////////////////
 
 	private void internalTestEmptyDatabase(Database db) throws Exception
@@ -438,6 +446,37 @@ public class TestDatabase extends TestCaseEnhanced
 		assertEquals(db.toString()+"Not all keys visited?", 0, counter.expectedKeys.size());
 	}
 
+	private void internalTestQuarantine(Database db) throws Exception
+	{
+		UniversalId uid = UniversalId.createDummyUniversalId();
+		DatabaseKey draftKey = new DatabaseKey(uid);
+		draftKey.setDraft();
+
+		assertFalse(db.toString()+" draft already in quarantine?", db.isInQuarantine(draftKey));
+		db.moveRecordToQuarantine(draftKey);
+		assertFalse(db.toString()+" non-existant draft record in quarantine?", db.isInQuarantine(draftKey));
+ 
+		db.writeRecord(draftKey, smallString);
+		assertFalse(db.toString()+" writing draft put it in quarantine?", db.isInQuarantine(draftKey));
+
+		db.moveRecordToQuarantine(draftKey);
+		assertTrue(db.toString()+" draft not moved to quarantine?", db.isInQuarantine(draftKey));
+		assertFalse(db.toString()+" draft not removed from main db?", db.doesRecordExist(draftKey));
+		
+		DatabaseKey sealedKey = new DatabaseKey(uid);
+		sealedKey.setSealed();
+		assertFalse(db.toString()+" sealed already in quarantine?", db.isInQuarantine(sealedKey));
+		db.writeRecord(sealedKey, smallString);
+		db.moveRecordToQuarantine(sealedKey);
+		assertTrue(db.toString()+" sealed not moved to quarantine?", db.isInQuarantine(sealedKey));
+		assertFalse(db.toString()+" sealed not removed from main db?", db.doesRecordExist(sealedKey));
+		assertTrue(db.toString()+" draft not still to quarantine?", db.isInQuarantine(draftKey));
+
+		db.writeRecord(sealedKey, smallString);
+		db.moveRecordToQuarantine(sealedKey);
+		assertTrue(db.toString()+" sealed removed from quarantine?", db.isInQuarantine(sealedKey));
+		assertFalse(db.toString()+" sealed not removed from main db again?", db.doesRecordExist(sealedKey));
+	}
 
 	static String buildLargeString()
 	{
