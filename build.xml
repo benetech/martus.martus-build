@@ -79,10 +79,10 @@
                 ${client-dir}/**/MartusHelpTOC-ru.txt,
 			    ${client-dir}/**/MartusHelp-ar.txt,
 			    ${client-dir}/**/MartusHelpTOC-ar.txt,
+				${client-jar}/**/UnofficialTranslationMessage.txt,
                 ${client-dir}/**/*.png,
                 ${client-dir}/**/*.gif,
-                ${client-dir}/**/*.jpg,
-  				${client-jar}/**/UnofficialTranslationMessage.txt
+                ${client-dir}/**/*.jpg
                 "/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
