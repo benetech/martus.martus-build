@@ -4,12 +4,15 @@ import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -49,6 +52,23 @@ public class FileDatabase implements Database
 	public void writeRecord(DatabaseKey key, String record) throws IOException
 	{
 		writeRecord(key, new StringInputStream(record));
+	}
+	
+	public void writeRecord(HashMap fileMapping)  throws IOException
+	{
+		Iterator keys = fileMapping.keySet().iterator();
+		while(keys.hasNext())
+		{
+			DatabaseKey key = (DatabaseKey) keys.next();
+			String filePath = (String) fileMapping.get(key);
+
+			InputStream in = new FileInputStream(filePath);
+			writeRecord(key,in);
+			in.close();
+			
+			File file = new File(filePath);
+			file.delete();
+		}
 	}
 	
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 

@@ -18,6 +18,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.HashMap;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -322,16 +323,38 @@ public class MartusUtilities
 		validateZipFilePacketsForImport(db, authorAccountId, zip, security);
 		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
 		
+		HashMap zipEntries = new HashMap();
+		zipEntries.clear();
+		
+		final String tempFileName = "$$$";
+		
 		Enumeration entries = zip.entries();
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
 			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
+
+			File file = File.createTempFile(tempFileName, null);
+
+			FileOutputStream out = new FileOutputStream(file);
+			BufferedOutputStream bout = new BufferedOutputStream(out);
+			
+			byte bArray[] = new byte[256];
+			int nBytesRead;
+			while(in.available() > 0)
+			{
+				nBytesRead = in.read(bArray);
+				bout.write(bArray, 0, nBytesRead);
+			}
+			bout.flush();
+			bout.close();
 		
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
 			DatabaseKey key = MartusUtilities.createKeyWithHeaderStatus(header, uid);
-			db.writeRecord(key, in);
+
+			zipEntries.put(key,file.getAbsolutePath());
 		}
+		db.writeRecord(zipEntries);
 	}
 
 	private static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws

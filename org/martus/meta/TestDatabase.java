@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.Vector;
 
 import org.martus.client.ClientFileDatabase;
@@ -197,6 +198,13 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestFindSealed(mockDb);
 		internalTestFindSealed(clientFileDb);
 		internalTestFindSealed(serverFileDb);
+	}
+	
+	public void testWriteRecords() throws Exception
+	{
+		TRACE("testWriteRecords");
+		internalTestWriteRecords(mockDb);
+		
 	}
 	
 	/////////////////////////////////////////////////////////////////////
@@ -494,6 +502,34 @@ public class TestDatabase extends TestCaseEnhanced
 		InputStream in = db.openInputStream(sealedKey, security);
 		assertNotNull("not found?", in);
 		in.close();
+	}
+	
+	private void internalTestWriteRecords(Database db) throws Exception
+	{
+		File temp1 = createTempFile();
+		File temp2 = createTempFile();
+
+		UniversalId uid1 = UniversalId.createDummyUniversalId();
+		DatabaseKey sealedKey1 = DatabaseKey.createSealedKey(uid1);
+		
+		UniversalId uid2 = UniversalId.createDummyUniversalId();
+		DatabaseKey sealedKey2 = DatabaseKey.createSealedKey(uid2);
+
+		HashMap entries = new HashMap();
+		entries.put(sealedKey1, temp1.getAbsolutePath());
+		entries.put(sealedKey2, temp2.getAbsolutePath());
+
+		db.writeRecord(entries);
+		
+		InputStream in = db.openInputStream(sealedKey1, security);
+		assertNotNull("not found?", in);
+		in.close();
+		in = db.openInputStream(sealedKey2, security);
+		assertNotNull("not found?", in);
+		in.close();
+
+		assertFalse(temp1.toString() +" file exists?", temp1.exists());
+		assertFalse(temp2.toString() +" file exists?", temp2.exists());
 	}
 
 	static String buildLargeString()
