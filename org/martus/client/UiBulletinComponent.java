@@ -27,14 +27,18 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	{
 		super();
 		mainWindow = mainWindowToUse;
+	}
+
+	public void Initalize()
+	{
 		setLayout(new BorderLayout());
 
-		publicStuff = new Section(NOT_ENCRYPTED);
-		privateStuff = new Section(ENCRYPTED);
+		publicStuff = createBulletinComponentSection(getApp(), UiBulletinComponentSection.NOT_ENCRYPTED);
+		privateStuff = createBulletinComponentSection(getApp(), UiBulletinComponentSection.ENCRYPTED);
 		privateStuff.setBorder(new LineBorder(Color.red, 5));
 
 		allPrivateField = createBoolField();
-		publicStuff.add(createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
+		publicStuff.add(privateStuff.createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
 		publicStuff.add(allPrivateField.getComponent());
 
 		String[] standardFieldTags = Bulletin.getStandardFieldNames();
@@ -62,7 +66,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		add(publicStuff, BorderLayout.NORTH);
 		add(privateStuff, BorderLayout.SOUTH);
 	}
-
+	
 	public UiMainWindow getMainWindow()
 	{
 		return mainWindow;
@@ -77,14 +81,6 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	{
 		return currentBulletin;
 	}
-
-	abstract public UiField createNormalField();
-	abstract public UiField createMultilineField();
-	abstract public UiField createBoolField();
-	abstract public UiField createChoiceField(ChoiceItem[] choices);
-	abstract public UiField createDateField();
-	abstract public JComponent createPublicAttachmentTable();
-	abstract public JComponent createPrivateAttachmentTable();
 
 	public void disableEdits()
 	{
@@ -150,11 +146,6 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			publicStuff.setBorder(new LineBorder(Color.lightGray, 5));
 	}
 
-	abstract public void addPublicAttachment(AttachmentProxy a);
-	abstract public void addPrivateAttachment(AttachmentProxy a);
-	abstract public void clearPublicAttachments();
-	abstract public void clearPrivateAttachments();
-
 	public void setEncryptionChangeListener(EncryptionChangeListener listener)
 	{
 		encryptionListener = listener;
@@ -166,38 +157,15 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			encryptionListener.encryptionChanged(newState);
 	}
 
- 	private JLabel createLabel(String fieldTag)
+	void createLabelsAndFields(JPanel target, String[] tags, int startIndex)
 	{
-		//Extra spaces added for correct printing.
-		return new JLabel("      " + getApp().getFieldLabel(fieldTag)+ " ");
-	}
-
-	private UiField createField(String fieldName)
-	{
-		UiField field = null;
-
-		switch(Bulletin.getFieldType(fieldName))
+		UiField[] fieldsInThisSection = publicStuff.createLabelsAndFields(target, tags);
+		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
 		{
-			case Bulletin.MULTILINE:
-				field = createMultilineField();
-				break;
-			case Bulletin.DATE:
-				field = createDateField();
-				break;
-			case Bulletin.CHOICE: 
-				ChoiceItem[] languages = 
-					getApp().getLanguageNameChoices(MartusLocalization.ALL_LANGUAGE_CODES);
-				field = createChoiceField(languages);
-				break;
-			case Bulletin.NORMAL:
-			default:
-				field = createNormalField();
-				break;
-
+			int thisField = startIndex + fieldNum;
+			fieldTags[thisField] = tags[fieldNum];
+			fields[thisField] = fieldsInThisSection[fieldNum];
 		}
-
-		field.getComponent().setBorder(new LineBorder(Color.black));
-		return field;
 	}
 
 	// ChangeListener interface
@@ -240,93 +208,6 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	}
 	// End scrollable interface
 
-	void createLabelsAndFields(JPanel target, String[] tags, int startIndex)
-	{
-		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
-		{
-			int thisField = startIndex + fieldNum;
-			String fieldTag = tags[fieldNum];
-
-			fieldTags[thisField] = fieldTag;
-			fields[thisField] = createField(fieldTag);
-
-			target.add(createLabel(fieldTag), ParagraphLayout.NEW_PARAGRAPH);
-			target.add(fields[thisField].getComponent());
-		}
-		
-	}
-	
-	public class Section extends JPanel
-	{
-		Section(boolean encrypted)
-		{
-			ParagraphLayout layout = new ParagraphLayout();
-			layout.outdentFirstField();
-			setLayout(layout);
-
-			setBorder(new EtchedBorder());
-
-			encryptedIndicator = new JLabel("", null, JLabel.LEFT);
-			encryptedIndicator.setVerticalTextPosition(JLabel.TOP);
-			encryptedIndicator.setFont(encryptedIndicator.getFont().deriveFont(Font.BOLD));
-			
-			damagedIndicator = new JLabel("", null, JLabel.LEFT);
-			damagedIndicator.setVerticalTextPosition(JLabel.TOP);
-			damagedIndicator.setText(getApp().getFieldLabel("MayBeDamaged"));
-			damagedIndicator.setFont(damagedIndicator.getFont().deriveFont(Font.BOLD));
-			damagedIndicator.setBackground(Color.yellow);
-			damagedIndicator.setForeground(Color.black);
-			damagedIndicator.setOpaque(true);
-			damagedIndicator.setBorder(new LineBorder(Color.black, 2));
-
-			updateEncryptedIndicator(encrypted);
-			updateDamagedIndicator(false);
-			add(encryptedIndicator);
-			add(damagedIndicator);
-		}
-		
-		public void updateEncryptedIndicator(boolean isEncrypted)
-		{
-			String iconFileName = "unlocked.jpg";
-			String title = getApp().getFieldLabel("publicsection");
-			if(isEncrypted == ENCRYPTED)
-			{
-				iconFileName = "locked.jpg";
-				title = getApp().getFieldLabel("privatesection");
-			}
-			
-			Icon icon = new ImageIcon(Section.class.getResource(iconFileName));
-			encryptedIndicator.setIcon(icon);
-			encryptedIndicator.setText(title);
-		}
-		
-		public void updateDamagedIndicator(boolean isDamaged)
-		{
-			damagedIndicator.setVisible(isDamaged);
-		}
-		
-		ParagraphLayout getParagraphLayout()
-		{
-			return (ParagraphLayout)getLayout();
-		}
-
-		int getFirstColumnWidth()
-		{
-			return getParagraphLayout().getFirstColumnMaxWidth(this);
-		}
-
-		void matchFirstColumnWidth(Section otherSection)
-		{
-			int thisWidth = getFirstColumnWidth();
-			int otherWidth = otherSection.getFirstColumnWidth();
-			if(otherWidth > thisWidth)
-				getParagraphLayout().setFirstColumnWidth(otherWidth);
-		}
-		
-		JLabel encryptedIndicator;
-		JLabel damagedIndicator;
-	}
-
 	UiMainWindow mainWindow;
 
 	String[] fieldTags;
@@ -335,8 +216,15 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	Bulletin currentBulletin;
 	EncryptionChangeListener encryptionListener;
 	boolean wasEncrypted;
-	Section publicStuff;
-	Section privateStuff;
-	final boolean ENCRYPTED = true;
-	final boolean NOT_ENCRYPTED = false;
+	UiBulletinComponentSection publicStuff;
+	UiBulletinComponentSection privateStuff;
+
+	abstract public UiField createBoolField();
+	abstract public JComponent createPublicAttachmentTable();
+	abstract public JComponent createPrivateAttachmentTable();
+	abstract public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted);
+	abstract public void addPublicAttachment(AttachmentProxy a);
+	abstract public void addPrivateAttachment(AttachmentProxy a);
+	abstract public void clearPublicAttachments();
+	abstract public void clearPrivateAttachments();
 }

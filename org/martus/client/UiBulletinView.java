@@ -14,11 +14,17 @@ public class UiBulletinView extends UiBulletinComponent
 	UiBulletinView(UiMainWindow mainWindowToUse)
 	{
 		super(mainWindowToUse);
+		Initalize();
 		viewColors = new UiColors();
 		disableEdits();
 		// ensure that attachmentViewer gets initialized
 		createPublicAttachmentTable();
 		createPrivateAttachmentTable();
+	}
+
+	public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted)
+	{
+		return new UiBulletinComponentViewSection(app, encrypted);
 	}
 	
 	public void startPrintMode()
@@ -44,27 +50,6 @@ public class UiBulletinView extends UiBulletinComponent
 		privateStuff.setForeground(viewColors.privateForeground);
 		publicAttachmentViewer.endPrintMode();
 		privateAttachmentViewer.endPrintMode();
-	}
-	
-
-	public UiField createDateField()
-	{
-		return new UiDateViewer(getApp());
-	}
-
-	public UiField createNormalField()
-	{
-		return new UiNormalTextViewer(getApp());
-	}
-
-	public UiField createMultilineField()
-	{
-		return new UiMultilineViewer(getApp());
-	}
-
-	public UiField createChoiceField(ChoiceItem[] choices)
-	{
-		return new UiChoiceViewer(choices);
 	}
 
 	public UiField createBoolField()

@@ -18,7 +18,6 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import org.martus.client.UiBulletinComponent.Section;
 import org.martus.common.MartusUtilities;
 
 public class UiAboutDlg extends JDialog implements ActionListener
@@ -32,7 +31,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		app = owner.getApp();
 		setTitle(app.getWindowTitle("about"));
 		getContentPane().setLayout(new BorderLayout());
-		JLabel icon = new JLabel(new ImageIcon(Section.class.getResource("Martus.jpg")),JLabel.LEFT);
+		JLabel icon = new JLabel(new ImageIcon(UiAboutDlg.class.getResource("Martus.jpg")),JLabel.LEFT);
 		getContentPane().add(icon, BorderLayout.NORTH);
 
 		getContentPane().add(new JLabel("   "), BorderLayout.WEST);

@@ -12,10 +12,15 @@ public class UiBulletinEditor extends UiBulletinComponent
 	UiBulletinEditor(UiMainWindow mainWindowToUse)
 	{
 		super(mainWindowToUse);
-
+		Initalize();
 		// ensure that attachmentEditor gets initialized
 		createPublicAttachmentTable();
 		createPrivateAttachmentTable();
+	}
+
+	public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted)
+	{
+		return new UiBulletinComponentEditorSection(app, encrypted);
 	}
 
 	public void copyDataToBulletin(Bulletin bulletin) throws 
@@ -69,29 +74,9 @@ public class UiBulletinEditor extends UiBulletinComponent
 		privateAttachmentEditor.clearAttachments();
 	}
 	
-	public UiField createNormalField()
-	{
-		return new UiNormalTextEditor(getApp());
-	}
-
-	public UiField createMultilineField()
-	{
-		return new UiMultilineTextEditor(getApp());
-	}
-
 	public UiField createBoolField()
 	{
 		return new UiBoolEditor(this);
-	}
-
-	public UiField createDateField()
-	{
-		return new UiDateEditor(getApp());
-	}
-
-	public UiField createChoiceField(ChoiceItem[] choices)
-	{
-		return new UiChoiceEditor(choices);
 	}
 
 	public JComponent createPublicAttachmentTable()
