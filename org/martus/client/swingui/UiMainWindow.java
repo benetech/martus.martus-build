@@ -45,7 +45,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.TimerTask;
@@ -103,12 +102,10 @@ import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
-import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MartusCrypto.KeyShareException;
 import org.martus.common.database.Database;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.Packet;
@@ -119,8 +116,6 @@ import org.martus.swing.UiFileChooser;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.Utilities;
 import org.martus.swing.Utilities.Delay;
-import org.martus.util.UnicodeReader;
-import org.martus.util.UnicodeWriter;
 import org.martus.util.Base64.InvalidBase64Exception;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
@@ -175,11 +170,12 @@ if(result == NEW_ACCOUNT)
 			String effect = localization.getFieldLabel("confirmRecoverUsingKeyShareeffect");
 			String[] contents = {cause, "", effect};
 			String createNewAccountButton =  localization.getButtonLabel("CreateNewAccount");
-			String restoreFromShareButton =  localization.getButtonLabel("RestoreFromShare");
+			String restoreFromShareButton =  localization.getButtonLabel("RecoverFromShare");
 			String[] buttons = {createNewAccountButton, restoreFromShareButton};
 			if(!confirmDlg(this, title, contents, buttons))
 			{
-				if(!recoverKeyPairFromMultipleUnencryptedFiles())
+				UiBackupRecoverKeyPair recover = new UiBackupRecoverKeyPair(this);
+				if(!recover.recoverKeyPairFromMultipleUnencryptedFiles())
 					return false;
 				wantsNewAccount = false;
 			}		
@@ -1025,7 +1021,7 @@ if(result == NEW_ACCOUNT)
 		askToBackupKeyPair();
 	}
 
-	private boolean getAndSaveUserNamePassword(File keyPairFile) 
+	boolean getAndSaveUserNamePassword(File keyPairFile) 
 	{
 		String originalUserName = app.getUserName();
 		UiCreateNewUserNameAndPasswordDlg newUserInfo = new UiCreateNewUserNameAndPasswordDlg(this, originalUserName);
@@ -1292,7 +1288,10 @@ if(result == NEW_ACCOUNT)
 		if(confirmDlg(this,"BackupKeyPairSingle"))
 			doBackupKeyPairToSingleEncryptedFile();
 		if(confirmDlg(this,"BackupKeyPairMultiple"))
-			doBackupKeyPairToMultipleUnencryptedFiles();
+		{
+			UiBackupRecoverKeyPair backup = new UiBackupRecoverKeyPair(this);
+			backup.backupKeyPairToMultipleUnencryptedFiles();
+		}
 	}
 
 	private void doBackupKeyPairToSingleEncryptedFile() 
@@ -1342,179 +1341,9 @@ if(result == NEW_ACCOUNT)
 		}
 	}
 	
-	private boolean recoverKeyPairFromMultipleUnencryptedFiles()
-	{
-		notifyDlg(this, "RecoveryProcessKeyShare");
-		
-		int minNumber = MartusConstants.minNumberOfFilesNeededToRecreateSecret;
-		String parent = "";
-		Vector shares = new Vector();
-		for(int disk = 1; disk <= minNumber; ++disk )
-		{
-			while(true)
-			{
-				UiFileChooser chooser = new UiFileChooser();
-				String windowTitle = localization.getWindowTitle("RecoverShareKeyPair");
-				windowTitle = windowTitle + " " + Integer.toString(disk) + " " + 
-								localization.getWindowTitle("SaveRestoreShareKeyPairOf") + " " +
-								Integer.toString(minNumber);
-				chooser.setDialogTitle(windowTitle);
-				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				chooser.setSelectedFile(new File(parent," "));
-				if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
-				{
-					File shareFile = chooser.getSelectedFile();
-					parent = shareFile.getPath();
-					try 
-					{
-						UnicodeReader reader = new UnicodeReader(shareFile);
-						shares.add(reader.readAll(6));
-						reader.close();
-						if(disk+1 <= minNumber)
-							notifyDlg(this, "KeyShareInsertNextDisk");
-						break;
-					} 
-					catch (IOException e) 
-					{
-						e.printStackTrace();
-						notifyDlg(this, "RecoverShareDiskError");
-						continue;
-					}
-					
-				}
-				else
-				{
-					if(confirmDlg(this, "CancelShareRestore"))
-						return false;
-				}
-			}
-		}
-		
-		try 
-		{
-			getApp().getSecurity().recoverFromKeyShareBundles(shares);
-		} 
-		catch (KeyShareException e) 
-		{
-			e.printStackTrace();
-			if(confirmDlg(this, "RecoveredKeyShareFailedTryAgain"))
-				return recoverKeyPairFromMultipleUnencryptedFiles();
-			return false;			
-		}
-
-		notifyDlg(this, "RecoveredKeyShareSucceededNewUserNamePasswordRequired");
-
-		while(true)
-		{
-			if(getAndSaveUserNamePassword(app.getKeyPairFile(app.getMartusDataRootDirectory())))
-			{					
-				notifyDlg(this, "RecoveryOfKeyShareComplete");
-				return true;
-			}	
-			if(confirmDlg(this, "CancelShareRestore"))
-				return false;
-		}		
-	}
-
-	private void doBackupKeyPairToMultipleUnencryptedFiles() 
-	{
-		UiLocalization localization = getLocalization();
-		String message = localization.getFieldLabel("BackupKeyPairToMultipleUnencryptedFilesInformation");
-		displayScrollableMessage("BackupKeyPairToMultipleUnencryptedFilesInformation", message, "Continue");
-		String defaultInputText = "";
-		String defaultFileName = getStringInput("GetShareFileName","GetShareFileNameDescription",defaultInputText);
-		if(defaultFileName == null)
-			return;
-		
-		Vector keyShareBundles = getApp().getSecurity().getKeyShareBundles();
-		if(keyShareBundles == null)
-		{
-			notifyDlg(this,"ErrorBackingUpKeyShare");
-			return;
-		}
-		int maxFiles = MartusConstants.numberOfFilesInShare;
-		String parent = "";
-		for(int disk = 1; disk <= maxFiles; ++disk )
-		{
-			while(true)
-			{
-				UiFileChooser chooser = new UiFileChooser();
-				String windowTitle = localization.getWindowTitle("SaveShareKeyPair");
-				windowTitle = windowTitle + " " + Integer.toString(disk) + " " + 
-								localization.getWindowTitle("SaveRestoreShareKeyPairOf") + " " +
-								Integer.toString(maxFiles);
-				chooser.setDialogTitle(windowTitle);
-				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				String fileName = defaultFileName.concat(Integer.toString(disk)) + MartusApp.SHARE_KEYPAIR_FILENAME_EXTENSION;
-				chooser.setSelectedFile(new File(parent,fileName));
-				if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
-				{
-					File newBackupFile = chooser.getSelectedFile();
-					parent = newBackupFile.getParent();
-
-					String[] otherBackupFiles = newBackupFile.getParentFile().list(new BackupShareFilenameFilter(defaultFileName, MartusApp.SHARE_KEYPAIR_FILENAME_EXTENSION));
-					if(otherBackupFiles != null && otherBackupFiles.length > 0)
-					{
-						notifyDlg(this, "ErrorPreviousBackupShareExists");
-						continue;
-					}
-					if(writeSharePieceToFile(newBackupFile, (String) keyShareBundles.get(disk - 1)))
-					{
-						if(disk+1 <= maxFiles)
-							notifyDlg(this, "KeyShareInsertNextDisk");
-						break;
-					}
-				}
-				else
-				{
-					if(confirmDlg(this, "CancelShareBackup"))
-						return;
-				}
-			}
-		}
-		
-		message = localization.getFieldLabel("BackupKeyShareCompleteInformation");
-		displayScrollableMessage("BackupKeyShareCompleteInformation", message, "ok");
-	}
-
-	private boolean writeSharePieceToFile(File newBackupFile, String dataToSave) 
-	{
-		try
-		{
-			UnicodeWriter output = new UnicodeWriter(newBackupFile);
-			output.write(dataToSave);
-			output.close();
-			return true;
-		}
-		catch (IOException ioe)
-		{
-			System.out.println(ioe.getMessage());
-			notifyDlg(this, "ErrorBackingupKeyPair");
-			return false;
-		}
-	}
-
-	private void displayScrollableMessage(String titleTag, String message, String okButtonTag) 
+	void displayScrollableMessage(String titleTag, String message, String okButtonTag) 
 	{
 		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, "", "", message);
-	}
-
-	public class BackupShareFilenameFilter implements FilenameFilter
-	{
-		BackupShareFilenameFilter(String name, String extension)
-		{
-			defaultName = name;
-			defaultExtension = extension;
-		}
-		
-		public boolean accept(File dir, String name)
-		{
-			if(name.startsWith(defaultName) && name.endsWith(defaultExtension))
-				return true;
-			return false;
-		}
-		String defaultName;
-		String defaultExtension;
 	}
 
 	class PublicInfoFileFilter extends FileFilter
