@@ -702,17 +702,16 @@ public class MartusApp
 			int offset = 0;
 			byte[] rawBytes = new byte[serverChunkSize];
 
+			String message;
+			if(b.isDraft())
+				message = getFieldLabel("UploadingDraftBulletin");
+			else
+				message = getFieldLabel("UploadingSealedBulletin");
+
 			while(true)
 			{
 				if(progressMeter != null)
-				{	
-					String message;
-					if(b.isDraft())
-						message = getFieldLabel("UploadingDraftBulletin");
-					else
-						message = getFieldLabel("UploadingSealedBulletin");
 					progressMeter.updateProgressMeter(message, offset, totalSize);
-				}
 				int chunkSize = inputStream.read(rawBytes);
 				if(chunkSize <= 0)
 					break;
