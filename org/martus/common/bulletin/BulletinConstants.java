@@ -35,6 +35,7 @@ public interface BulletinConstants
 	public static final int MULTILINE = 1;
 	public static final int DATE = 2;
 	public static final int CHOICE = 4;
+	public static final int DATERANGE = 5;
 
 	public static final String TAGSTATUS = "status";
 	public static final String TAGLANGUAGE = "language";
@@ -43,6 +44,7 @@ public interface BulletinConstants
 	public static final String TAGTITLE = "title";
 	public static final String TAGLOCATION = "location";
 	public static final String TAGEVENTDATE = "eventdate";
+	public static final String TAGEVENTDATERANGE = "eventdaterange";
 	public static final String TAGENTRYDATE = "entrydate";
 	public static final String TAGKEYWORDS = "keywords";
 	public static final String TAGSUMMARY = "summary";

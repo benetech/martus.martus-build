@@ -322,6 +322,7 @@ public class EnglishStrings
 "field:title=Title",
 "field:location=Location",
 "field:eventdate=Date of Event",
+"field:eventdaterange=Dates of Event",
 "field:entrydate=Date Entered",
 "field:keywords=Keywords",
 "field:summary=Summary",
