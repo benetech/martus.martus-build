@@ -292,13 +292,13 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Vector names = new Vector();
 		for(int i=0; i < methods.length; ++i)
 			names.add(methods[i].getName());
-		//TODO use real quoted strings instead.
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_PING, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_SERVER_INFO, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_UPLOAD_RIGHTS, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_UPLOAD, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_DOWNLOAD, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_MY_SUMMARIES, names);
+		// Note: These strings are legacy and can NEVER change
+		assertContains("ping", names);
+		assertContains("getServerInformation", names);
+		assertContains("requestUploadRights", names);
+		assertContains("uploadBulletin", names);
+		assertContains("downloadBulletin", names);
+		assertContains("listMyBulletinSummaries", names);
 
 		TRACE_END();
 	}
@@ -313,16 +313,16 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		for(int i=0; i < methods.length; ++i)
 			names.add(methods[i].getName());
 
-		//TODO use real quoted strings instead.
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_PING, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_UPLOAD_RIGHTS, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_UPLOAD_CHUNK, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_DOWNLOAD_CHUNK, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_MY_SUMMARIES, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_DOWNLOAD_FIELD_OFFICE_CHUNK, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_FIELD_OFFICE_SUMMARIES, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_FIELD_OFFICE_ACCOUNTS, names);
-		assertContains(NetworkInterfaceXmlRpcConstants.CMD_DOWNLOAD_FIELD_DATA_PACKET, names);
+		// Note: These strings are legacy and can NEVER change
+		assertContains("ping", names);
+		assertContains("requestUploadRights", names);
+		assertContains("uploadBulletinChunk", names);
+		assertContains("downloadMyBulletinChunk", names);
+		assertContains("listMyBulletinSummaries", names);
+		assertContains("downloadFieldOfficeBulletinChunk", names);
+		assertContains("listFieldOfficeBulletinSummaries", names);
+		assertContains("listFieldOfficeAccounts", names);
+		assertContains("downloadFieldDataPacket", names);
 
 		TRACE_END();
 	}
