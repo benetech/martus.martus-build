@@ -1,0 +1,87 @@
+<project name="Martus" default="test" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="src" value="."/>
+  <property name="build" value="build"/>
+  <property name="dist"  value="dist"/>
+  <property name="distcd"  value="distcd"/>
+  <property name="releases"  value="${src}/Releases"/>
+  <property name="install"  value="${src}/Install/Martus"/>
+
+  <target name="run" depends="build">
+  	<!-- Delete the key pair file -->
+	<delete file="${build}/MartusKeyPair.dat"/>
+	<!-- Run the client app -->
+	<exec executable="java" dir="${build}">
+          <arg line="MartusJava.Martus"/>
+	</exec>
+  </target>
+  
+  <target name="server" depends="build">
+	<!-- Run the client app -->
+	<exec executable="java" dir="${build}">
+          <arg line="MartusJava.MartusServer"/>
+	</exec>
+  </target>
+
+  <target name="dist" depends="build">
+    <!-- Create the distribution directory -->
+    <mkdir dir="${dist}"/>
+
+    <!-- Put all the classes in ${build} into the Martus-${DSTAMP}.jar file -->
+    <delete file="${dist}/Martus-${DSTAMP}.jar"/>
+    <jar jarfile="${dist}/Martus-${DSTAMP}.jar" 
+                basedir="${build}" 
+    		manifest="main-class.txt" 
+                includes="MartusJava/*.class MartusJava/*.jpg MartusJava/*.mtf MartusJava/version.txt MartusJava/MartusHelp-*.txt"
+    		whenempty="fail"/>
+ </target>
+
+  <target name="distcd" depends="dist">
+    <!-- Copy new martus-${DSTAMP}.jar from ${build} into $eleases -->
+    <copy todir="${releases}">
+        <fileset dir="${dist}" includes="Martus-${DSTAMP}.jar"/>
+    </copy>
+
+	<!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+ </target>
+
+  <target name="test" depends="clean,build">
+	<!-- Run the unit test suite -->
+	<exec executable="java" dir="${build}" failonerror="true" >
+          <arg line="MartusJava.TestAll"/>
+	</exec>
+  </target>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="build" depends="init">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" failonerror="true" excludes="obsolete/*"/>
+    <!-- create version.txt file -->
+    <echo message="${DSTAMP}" file="${src}/version.txt"/>
+    <!-- Copy language files from ${src} into ${build} -->
+    <copy todir="${build}/MartusJava">
+        <fileset dir="${src}" includes="Martus-es.mtf"/>
+        <fileset dir="${src}" includes="main-class.txt"/>
+        <fileset dir="${src}" includes="*.jpg"/>
+        <fileset dir="${src}" includes="version.txt"/>
+        <fileset dir="${src}" includes="MartusHelp-*.txt"/>
+    </copy>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete file="${src}/version.txt"/>
+  </target>
+</project>
+

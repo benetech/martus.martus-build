@@ -6,7 +6,7 @@ import javax.swing.*;
 
 import org.martus.client.*;
 
-import MartusJava.TestAll;
+import org.martus.meta.TestAll;
 
 import java.util.Arrays;
 

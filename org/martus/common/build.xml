@@ -1,0 +1,39 @@
+<project name="org.martus.common" default="test" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="src" value="."/>
+  <property name="build" value="build"/>
+  <property name="dist"  value="dist"/>
+  <property name="jar" value= "${dist}/martus-common.jar"/>
+
+  <target name="test" depends="clean,build">
+	<!-- Run the unit test suite -->
+	<java classname="org.martus.common.TestAll" 
+		fork="true"
+		classpath = "${jar}"/>
+  </target>
+
+  <target name="init">
+    <!-- Create the time stamp -->
+    <tstamp/>
+    <!-- Create the build directory structure used by compile -->
+    <mkdir dir="${build}"/>
+  </target>
+
+  <target name="build" depends="init">
+    <!-- Compile the java code from ${src} into ${build} -->
+    <javac srcdir="${src}" destdir="${build}" failonerror="true" excludes="obsolete/*"/>
+    <!-- create version.txt file -->
+    <echo message="${DSTAMP}" file="${src}/version.txt"/>
+    <mkdir dir="${dist}"/>
+    <jar jarfile="${jar}" basedir="${build}"/>
+  </target>
+
+  <target name="clean">
+    <!-- Delete the ${build} and ${dist} directory trees -->
+    <delete dir="${build}"/>
+    <delete dir="${dist}"/>
+    <delete file="${src}/version.txt"/>
+  </target>
+</project>
+
