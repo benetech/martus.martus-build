@@ -43,6 +43,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
 import org.martus.client.core.MartusApp;
+import org.martus.client.swingui.UiFileChooser;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.bulletincomponent.UiBulletinComponent;
@@ -278,7 +279,7 @@ public class UiAttachmentViewer extends JPanel
 				return;
 			String fileName = (String)model.getValueAt(selection,1);
 
-			JFileChooser chooser = new JFileChooser();
+			UiFileChooser chooser = new UiFileChooser();
 			chooser.setSelectedFile(new File(fileName));
 			File last = getLastAttachmentSaveDirectory();
 			if(last != null)

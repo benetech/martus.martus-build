@@ -41,6 +41,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
+import org.martus.client.swingui.UiFileChooser;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.bulletin.AttachmentProxy;
@@ -190,7 +191,7 @@ public class UiAttachmentEditor extends JPanel
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			JFileChooser chooser = new JFileChooser();
+			UiFileChooser chooser = new UiFileChooser();
 			File last = getLastAttachmentLoadDirectory();
 			if(last != null)
 				chooser.setCurrentDirectory(last);

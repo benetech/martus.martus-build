@@ -45,6 +45,7 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 import org.martus.client.core.BulletinXmlExporter;
+import org.martus.client.swingui.UiFileChooser;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.bulletin.Bulletin;
@@ -135,7 +136,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 
 	File askForDestinationFile()
 	{
-		JFileChooser chooser = new JFileChooser();
+		UiFileChooser chooser = new UiFileChooser();
 		chooser.setDialogTitle(mainWindow.getLocalization().getWindowTitle("ExportBulletinsSaveAs"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)

@@ -76,6 +76,7 @@ import org.martus.client.core.MartusApp.MartusAppInitializationException;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreview;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
 import org.martus.client.swingui.dialogs.UiAboutDlg;
+import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiConfigServerDlg;
 import org.martus.client.swingui.dialogs.UiContactInfoDlg;
 import org.martus.client.swingui.dialogs.UiCreateNewUserNameAndPasswordDlg;
@@ -83,7 +84,6 @@ import org.martus.client.swingui.dialogs.UiDisplayFileDlg;
 import org.martus.client.swingui.dialogs.UiExportBulletinsDlg;
 import org.martus.client.swingui.dialogs.UiLocalizeDlg;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
-import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiProgressRetrieveBulletinsDlg;
 import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
 import org.martus.client.swingui.dialogs.UiSearchDlg;
@@ -1234,7 +1234,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 		notifyDlg(this, "BackupKeyPairInformation");
 
-		JFileChooser chooser = new JFileChooser();
+		UiFileChooser chooser = new UiFileChooser();
 		chooser.setDialogTitle(getLocalization().getWindowTitle("saveBackupKeyPair"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setSelectedFile(new File(MartusApp.KEYPAIR_FILENAME));
@@ -1288,7 +1288,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		if(!reSignIn())
 			return;
-		JFileChooser chooser = new JFileChooser();
+		UiFileChooser chooser = new UiFileChooser();
 		chooser.setApproveButtonText(getLocalization().getButtonLabel("inputImportPublicCodeok"));
 		chooser.setFileFilter(new PublicInfoFileFilter());
 		chooser.setDialogTitle(getLocalization().getWindowTitle("ImportHQPublicKey"));
