@@ -92,19 +92,11 @@ public class MartusXml
         saxParser.parse(new InputSource(xmlReader), handler);
 	}
 
-	public final static String tagBulletin = "Bulletin";
-	public final static String attrBulletinId = "id";
-	public final static String attrBulletinEventDate = "eventdate";
 	public final static String tagField = "Field";
 	public final static String attrField = "name";
 	public final static String tagAttachment = "Attachment";
 	public final static String attrAttachmentName = "name";
 
-	public final static String tagFolderList = "FolderList";
-	public final static String tagFolder = "Folder";
-	public final static String attrFolder = "name";
-	public final static String tagId = "Id";
-	
 	public final static String newLine = "\n";
 	public final static String packetSignatureStart = "<!--sig=";
 	public final static String packetSignatureEnd = "-->";

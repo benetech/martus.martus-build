@@ -706,9 +706,9 @@ public class BulletinStore
 		public void startElement(String namespaceURI, String sName, String qName,
 				Attributes attrs) throws SAXException
 		{
-			if(qName.equals(MartusXml.tagFolder))
+			if(qName.equals(MartusClientXml.tagFolder))
 			{
-				String name = attrs.getValue(MartusXml.attrFolder);
+				String name = attrs.getValue(MartusClientXml.attrFolder);
 				if(startLoadingFolders)
 				{
 					startLoadingFolders = false;	
@@ -734,11 +734,11 @@ public class BulletinStore
 
 		public void endElement(String namespaceURI, String sName, String qName)
 		{
-			if(qName.equals(MartusXml.tagFolder))
+			if(qName.equals(MartusClientXml.tagFolder))
 			{
 				currentFolder = null;
 			}
-			else if(qName.equals(MartusXml.tagId))
+			else if(qName.equals(MartusClientXml.tagId))
 			{
 				try 
 				{

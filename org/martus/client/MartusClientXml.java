@@ -8,39 +8,50 @@ public class MartusClientXml
 
 	public static String getFolderListTagStart()
 	{
-		return MartusXml.getTagStart(MartusXml.tagFolderList);
+		return MartusXml.getTagStart(MartusClientXml.tagFolderList);
 	}
 
 	public static String getFolderListTagEnd()
 	{
-		return MartusXml.getTagEnd(MartusXml.tagFolderList);
+		return MartusXml.getTagEnd(MartusClientXml.tagFolderList);
 	}
 
 	public static String getBulletinTagStart(Bulletin b)
 	{
 		return MartusXml.getTagStart(
-			MartusXml.tagBulletin,
-			MartusXml.attrBulletinId,
+			MartusClientXml.tagBulletin,
+			MartusClientXml.attrBulletinId,
 			b.getUniversalIdString(),
-			MartusXml.attrBulletinEventDate,
+			MartusClientXml.attrBulletinEventDate,
 			b.get(BulletinConstants.TAGEVENTDATE));
 	}
 
 	public static String getBulletinTagEnd()
 	{
-		return MartusXml.getTagEnd(MartusXml.tagBulletin);
+		return MartusXml.getTagEnd(MartusClientXml.tagBulletin);
 	}
 
 	public static String getFolderTagStart(String name)
 	{
 		return MartusXml.getTagStart(
-			MartusXml.tagFolder,
-			MartusXml.attrFolder,
+			MartusClientXml.tagFolder,
+			MartusClientXml.attrFolder,
 			name);
 	}
 
 	public static String getFolderTagEnd()
 	{
-		return MartusXml.getTagEnd(MartusXml.tagFolder);
+		return MartusXml.getTagEnd(MartusClientXml.tagFolder);
 	}
+
+	public final static String tagBulletin = "Bulletin";
+	public final static String attrBulletinId = "id";
+	public final static String attrBulletinEventDate = "eventdate";
+
+	public final static String tagFolderList = "FolderList";
+
+	public final static String tagFolder = "Folder";
+	public final static String attrFolder = "name";
+
+	public final static String tagId = "Id";
 }
