@@ -37,6 +37,7 @@ import org.martus.common.UnicodeReader;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
+import org.martus.common.MartusCrypto.CreateDigestException;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.DecryptionException;
@@ -438,7 +439,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				logging("entering saveUploadedBulletinZipFile");
 			try 
 			{
-				result = saveUploadedBulletinZipFile(authorAccountId, interimZipFile);
+				result = saveUploadedBulletinZipFile(authorAccountId, bulletinLocalId, interimZipFile);
 			} catch (Exception e) 
 			{
 				if(serverMaxLogging)
@@ -684,7 +685,9 @@ public class MartusServer implements NetworkInterfaceConstants
 				bhp.loadFromXml(in, null, security);
 				in.close();
 
-				MartusUtilities.deleteBulletinFromDatabase(bhp, getDatabase(), security);			
+				MartusUtilities.deleteBulletinFromDatabase(bhp, getDatabase(), security);
+				DatabaseKey burKey = MartusServerUtilities.getBurKey(key);
+				getDatabase().discardRecord(burKey);			
 			}
 			catch (Exception e)
 			{
@@ -1073,13 +1076,15 @@ public class MartusServer implements NetworkInterfaceConstants
 		return null;
 	}
 
-	String saveUploadedBulletinZipFile(String authorAccountId, File zipFile) 
+	String saveUploadedBulletinZipFile(String authorAccountId, String bulletinLocalId, File zipFile) 
 	{
 		String result = NetworkInterfaceConstants.OK;
 		
+		Database db = getDatabase();
+		BulletinHeaderPacket bhp = null;
 		try
 		{
-			MartusServerUtilities.saveZipFileToDatabase(getDatabase(), authorAccountId, zipFile, security);
+			bhp = MartusServerUtilities.saveZipFileToDatabase(db, authorAccountId, zipFile, security);
 		}
 		catch (DuplicatePacketException e)
 		{
@@ -1105,6 +1110,25 @@ public class MartusServer implements NetworkInterfaceConstants
 		{
 			logging("saveUpload INVALID_DATA: " + e);
 			result =  NetworkInterfaceConstants.INVALID_DATA;
+		}
+		if(result != NetworkInterfaceConstants.OK)
+			return result;
+
+		try
+		{
+			DatabaseKey headerKey = MartusUtilities.createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
+			DatabaseKey burKey = MartusServerUtilities.getBurKey(headerKey);
+			String bur = MartusServerUtilities.createBulletinUploadRecord(bulletinLocalId, security);
+			db.writeRecord(burKey, bur);
+		}
+		catch (CreateDigestException e)
+		{
+			logging("saveUpload SERVER_ERROR: " + e);
+			result =  NetworkInterfaceConstants.SERVER_ERROR;
+		} catch (IOException e)
+		{
+			logging("saveUpload SERVER_ERROR: " + e);
+			result =  NetworkInterfaceConstants.SERVER_ERROR;
 		}
 		
 		return result;

@@ -359,7 +359,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 			logging("uploadBulletin INVALID_DATA " + e);
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}
-		String result = saveUploadedBulletinZipFile(authorAccountId, tempFile);
+		String result = saveUploadedBulletinZipFile(authorAccountId, bulletinLocalId, tempFile);
 		tempFile.delete();
 
 		return result;

@@ -36,7 +36,7 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 
 public class MartusServerUtilities
 {
-	public static void saveZipFileToDatabase(Database db, String authorAccountId, File zipFile, MartusCrypto verifier)
+	public static BulletinHeaderPacket saveZipFileToDatabase(Database db, String authorAccountId, File zipFile, MartusCrypto verifier)
 		throws
 			ZipException,
 			IOException,
@@ -51,8 +51,9 @@ public class MartusServerUtilities
 		try
 		{
 			zip = new ZipFile(zipFile);
-			MartusServerUtilities.validateZipFilePacketsForServerImport(db, authorAccountId, zip, verifier);
+			BulletinHeaderPacket header = MartusServerUtilities.validateZipFilePacketsForServerImport(db, authorAccountId, zip, verifier);
 			MartusUtilities.importBulletinPacketsFromZipFileToDatabase(db, authorAccountId, zip, verifier);
+			return header;
 		}
 		finally
 		{
@@ -61,7 +62,7 @@ public class MartusServerUtilities
 		}
 	}
 
-	public static void validateZipFilePacketsForServerImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+	public static BulletinHeaderPacket validateZipFilePacketsForServerImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
 		throws
 			Packet.InvalidPacketException,
 			IOException,
@@ -90,6 +91,8 @@ public class MartusServerUtilities
 					throw new MartusServer.DuplicatePacketException(entry.getName());
 			}
 		}
+		
+		return header;
 	}
 
 	public static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
@@ -400,6 +403,16 @@ public class MartusServerUtilities
 			bulletinLocalId + newline +
 			timeStamp + newline +
 			digest + newline;
+	}
+
+	public static DatabaseKey getBurKey(DatabaseKey key)
+	{
+		UniversalId burUid = UniversalId.createFromAccountAndLocalId(key.getAccountId(), "BUR-" + key.getLocalId());
+		DatabaseKey burKey = new DatabaseKey(burUid);
+		
+		if(key.isDraft())
+			burKey.setDraft();
+		return burKey;
 	}
 	
 	public static class MartusSignatureFileAlreadyExistsException extends Exception {}

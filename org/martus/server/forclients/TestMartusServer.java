@@ -81,10 +81,10 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			serverSecurity.createKeyPair(512);
 		}
 		
-		if(testServerSecurity == null)
+		if(otherServerSecurity == null)
 		{
-			testServerSecurity = new MartusSecurity();
-			testServerSecurity.createKeyPair(512);
+			otherServerSecurity = new MartusSecurity();
+			otherServerSecurity.createKeyPair(512);
 		}
 
 		if(hqSecurity == null)
@@ -149,7 +149,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		}
 		
 		testServer = new MockMartusServer();
-		testServer.setSecurity(testServerSecurity);
+		testServer.setSecurity(serverSecurity);
 		testServer.verifyAndLoadConfigurationFiles();
 		testServerInterface = new ServerSideNetworkHandler(testServer);
 		serverDatabase = (MockServerDatabase)testServer.getDatabase();
@@ -479,9 +479,10 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		TRACE_BEGIN("testGetAccountInformationNoAccount");
 
-		testServer.security.clearKeyPair();
+		MartusServer serverWithoutKeypair = new MockMartusServer();
+		serverWithoutKeypair.security.clearKeyPair();
 
-		Vector errorInfo = testServer.getServerInformation();
+		Vector errorInfo = serverWithoutKeypair.getServerInformation();
 		assertEquals(2, errorInfo.size());
 		assertEquals(NetworkInterfaceConstants.SERVER_ERROR, errorInfo.get(0));
 
@@ -532,11 +533,16 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		TRACE_BEGIN("testUploadBulletinChunks");
 
+		DatabaseKey headerKey = new DatabaseKey(b1.getUniversalId());
+		DatabaseKey burKey = MartusServerUtilities.getBurKey(headerKey);
+		assertFalse("BUR already exists?", serverDatabase.doesRecordExist(burKey));
+
 		testServer.serverForClients.clearCanUploadList();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity));
 		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, clientSecurity));
 
+		assertTrue("BUR not created?", serverDatabase.doesRecordExist(burKey));
 		TRACE_END();
 	}	
 
@@ -1172,11 +1178,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		twoGoodOneBad[1] = "Not a valid local id";
 		String resultOneBad = testServer.deleteDraftBulletins(clientAccountId, twoGoodOneBad);
 		assertEquals("Two good one bad not incomplete?", INCOMPLETE, resultOneBad);
-		assertEquals("Didn't delete two?", 1*3, serverDatabase.getRecordCount());
+		assertEquals("Didn't delete two?", 1*databaseRecordsPerBulletin, serverDatabase.getRecordCount());
 		
 		uploadSampleBulletin();
 		int newRecordCount = serverDatabase.getRecordCount();
-		assertNotEquals("Didn't upload?", 1*3, newRecordCount);
+		assertNotEquals("Didn't upload?", 1*databaseRecordsPerBulletin, newRecordCount);
 		String[] justSealed = new String[] {b1.getLocalId()};
 		testServer.deleteDraftBulletins(clientAccountId, justSealed);
 		assertEquals("Sealed not ok?", OK, resultAllOk);
@@ -1190,13 +1196,13 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("db not empty?", 0, serverDatabase.getRecordCount());
 		Bulletin draft1 = new Bulletin(clientSecurity);
 		uploadSampleDraftBulletin(draft1);
-		assertEquals("Didn't save 1?", 1*3, serverDatabase.getRecordCount());
+		assertEquals("Didn't save 1?", 1*databaseRecordsPerBulletin, serverDatabase.getRecordCount());
 		Bulletin draft2 = new Bulletin(clientSecurity);
 		uploadSampleDraftBulletin(draft2);
-		assertEquals("Didn't save 2?", 2*3, serverDatabase.getRecordCount());
+		assertEquals("Didn't save 2?", 2*databaseRecordsPerBulletin, serverDatabase.getRecordCount());
 		Bulletin draft3 = new Bulletin(clientSecurity);
 		uploadSampleDraftBulletin(draft3);
-		assertEquals("Didn't save 3?", 3*3, serverDatabase.getRecordCount());
+		assertEquals("Didn't save 3?", 3*databaseRecordsPerBulletin, serverDatabase.getRecordCount());
 
 		return new String[] {draft1.getLocalId(), draft2.getLocalId(), draft3.getLocalId()};
 	}
@@ -1399,7 +1405,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
 		other.verifyAndLoadConfigurationFiles();
-		other.setSecurity(testServerSecurity);
+		other.setSecurity(otherServerSecurity);
 		
 		String worked = other.requestUploadRights("whatever", sampleMagicWord1);
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
@@ -1654,10 +1660,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	static Bulletin draft;
 
+	static final int databaseRecordsPerBulletin = 4;
 	static MartusSecurity clientSecurity;
 	static String clientAccountId;
 	static MartusSecurity serverSecurity;
-	static MartusSecurity testServerSecurity;
+	static MartusSecurity otherServerSecurity;
 	static MartusSecurity hqSecurity;
 	static MockClientDatabase clientDatabase;
 

@@ -7,10 +7,12 @@ import java.io.StringReader;
 
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
+import org.martus.common.DatabaseKey;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeWriter;
+import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.forclients.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
 
@@ -134,6 +136,21 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		String bogusStringToDigest = gotFileTypeIdentifier + gotTimeStamp + b1.getLocalId() + Base64.encode(partOfPrivateKey); 
 		assertNotEquals(MartusSecurity.createDigestString(bogusStringToDigest), gotDigest);
 		TRACE_END();
+	}
+	
+	public void testGetBurKey() throws Exception
+	{
+		UniversalId uid = UniversalId.createDummyUniversalId();
+
+		DatabaseKey draftKey = DatabaseKey.createDraftKey(uid);
+		assertTrue("not draft?", MartusServerUtilities.getBurKey(draftKey).isDraft());
+
+		DatabaseKey sealedKey = DatabaseKey.createSealedKey(uid);
+		DatabaseKey sealedBurKey = MartusServerUtilities.getBurKey(sealedKey);
+		assertTrue("not sealed?", sealedBurKey.isSealed());
+		
+		assertEquals(uid.getAccountId(), sealedBurKey.getAccountId());
+		assertEquals("BUR-" + uid.getLocalId(), sealedBurKey.getLocalId());
 	}
 
 	
