@@ -1013,7 +1013,7 @@ public class MartusApp
 
 	public boolean attemptSignIn(String userName, String userPassPhrase)
 	{
-		return attemptSignInInternal(getCurrentKeyPairFile(), userName, userPassPhrase);
+		return attemptSignInInternal(getKeyPairFile(getMartusDataRootDirectory()), userName, userPassPhrase);
 	}
 
 	private String getCurrentLanguage()
