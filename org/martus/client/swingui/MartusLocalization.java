@@ -345,6 +345,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmDraftUploadReminder=Draft Upload Reminder");
 		addEnglishTranslation("wintitle:confirmRedoWeakPassword=Weak Password Warning");
 		addEnglishTranslation("wintitle:confirmOverWriteWithBackupKeyPair=Confirm Replace Existing File");
+		addEnglishTranslation("wintitle:confirmExportPrivateData=Confirm Export Private Data");
 		
 		addEnglishTranslation("wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)");
 		addEnglishTranslation("wintitle:notifyDropErrors=Error Moving Bulletin(s)");
@@ -399,7 +400,9 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyPreviewNoBulletinsSelected=No Bulletin Selected");
 		addEnglishTranslation("wintitle:notifyRetrievedOnlySomeSummaries=Error During Retrieve");
 		addEnglishTranslation("wintitle:notifyConfirmCorrectDefaultDetailsData=Confirm Correct Default Details Content");
-
+		addEnglishTranslation("wintitle:notifyExportComplete=Export Bulletins");
+		addEnglishTranslation("wintitle:notifyErrorWritingFile=Error Writing File");
+		
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
 		addEnglishTranslation("wintitle:inputservermagicword=Request Upload Permission");
@@ -435,7 +438,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:ImportHQPublicKey=Import Headquater's Public Key File");
 		addEnglishTranslation("wintitle:ServerNews=Server News");
 		addEnglishTranslation("wintitle:LoadDefaultDetails=Load Default Details Field Content");
-				
+		addEnglishTranslation("wintitle:ExportBulletins=Export Bulletins");
+		addEnglishTranslation("wintitle:ExportBulletinsSaveAs=Export Bulletins");
 		addEnglishTranslation("button:help=Help");
 		addEnglishTranslation("button:create=Create");
 		addEnglishTranslation("button:search=Search");
@@ -473,10 +477,12 @@ public class MartusLocalization
 		addEnglishTranslation("button:Leave=Leave");
 		addEnglishTranslation("button:modify=Modify");
 		addEnglishTranslation("button:loadTemplateFromFile=Load From File");
+		addEnglishTranslation("button:Continue=Continue");
 
 		addEnglishTranslation("menu:file=File");
 		addEnglishTranslation("menu:CreateNewBulletin=Create New Bulletin");
 		addEnglishTranslation("menu:printBulletin=Print Bulletin");
+		addEnglishTranslation("menu:ExportBulletins=Export Bulletins");
 		addEnglishTranslation("menu:BackupMyKeyPair=Backup My Private Key");
 		addEnglishTranslation("menu:ExportMyPublicKey=Export My Public Key");
 		addEnglishTranslation("menu:ImportHQPublicKey=Import Headquarters Key");
@@ -682,6 +688,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmRedoWeakPasswordeffect=Clicking on Yes will continue with the password you just entered.");
 		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=This file already exists. Do you wish to overwrite this file?");
 		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=The backup keypair will replace the file.");
+		addEnglishTranslation("field:confirmExportPrivateDatacause=This will save the private information in the selected bulletins in plain text.");
+		addEnglishTranslation("field:confirmExportPrivateDataeffect=Anyone who gets a copy of this file will be able to read all the private data.");
 
 		addEnglishTranslation("field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.");
 		addEnglishTranslation("field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.");
@@ -736,7 +744,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyPreviewNoBulletinsSelectedcause=No bulletin selected.  Please select the bulletin you wish to preview.");
 		addEnglishTranslation("field:notifyRetrievedOnlySomeSummariescause=Errors occured while retrieving bulletin summaries.  Some of the bulletins on the server will not be shown.");
 		addEnglishTranslation("field:notifyConfirmCorrectDefaultDetailsDatacause=Please confirm that the default details retrieved are correct.");
-				
+		addEnglishTranslation("field:notifyExportCompletecause=Export completed successfully");
+		addEnglishTranslation("field:notifyErrorWritingFilecause=An error prevented the file from being written. Check to make sure the disk is not full or write protected.");
+						
 		addEnglishTranslation("field:messageServerNewscause=The current server has sent this message:");
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
@@ -774,7 +784,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:SearchEntry=Search for:");
 		addEnglishTranslation("field:SearchStartDate=Starting on:");
 		addEnglishTranslation("field:SearchEndDate=Ending on:");
-
+		addEnglishTranslation("field:ExportPrivateData=Include private data in export");
+		addEnglishTranslation("field:ExportDetails=Information from the selected bulletins (listed below) will be exported to an XML file that you specify");
+		
 		addEnglishTranslation("folder:%OutBox=Outbox");
 		addEnglishTranslation("folder:%Sent=Sent Bulletins");
 		addEnglishTranslation("folder:%Draft=Draft Bulletins");

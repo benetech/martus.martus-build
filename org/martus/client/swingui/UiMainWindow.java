@@ -592,6 +592,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		file.add(new ActionMenuBackupMyKeyPair());		
 		file.add(new ActionMenuExportMyPublicKey());
 		file.addSeparator();
+		file.add(new ActionMenuExportBulletins());
+		file.addSeparator();
 		file.add(new ActionMenuImportHeadquarterPublicKey());
 		file.add(new ActionMenuRemoveExistingHeadquaterPublicKey());
 		file.addSeparator();
@@ -1590,6 +1592,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		return modifyingBulletin;	
 	}
+	
+	public void doExportBulletins()
+	{
+		UniversalId[] uids = table.getSelectedBulletinUids();
+		new UiExportBulletinsDlg(this, uids);
+		
+	}
 
 	public File getLastAttachmentLoadDirectory() 
 	{
@@ -1773,6 +1782,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public void actionPerformed(ActionEvent ae)
 		{
 			createBulletin();
+		}
+	}
+
+	class ActionMenuExportBulletins extends AbstractAction
+	{
+		public ActionMenuExportBulletins()
+		{
+			super(app.getMenuLabel("ExportBulletins"), null);
+		}
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			doExportBulletins();
 		}
 	}
 
