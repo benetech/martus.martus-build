@@ -34,21 +34,28 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 			return result;
 		}
 
+		if(!isAuthorizedToBackup(callerAccountId))
+		{
+			Vector result = new Vector();
+			result.add(NOT_AUTHORIZED);
+			return result;
+		}
+
 		Vector result = new Vector();
 		try
 		{
 			return executeCommand(callerAccountId, parameters);
 		}
-		catch (NotAuthorizedException e)
+		catch (RuntimeException e)
 		{
 			result = new Vector();
-			result.add(NOT_AUTHORIZED);
+			result.add(BAD_PARAMETER);
 			return result;
 		}
+
 	}
 
 	Vector executeCommand(String callerAccountId, Vector parameters)
-		throws NotAuthorizedException
 	{
 		Vector result = new Vector();
 
@@ -62,11 +69,16 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 			}
 			case cmdListAccountsForBackup:
 			{
-				Vector accounts = getAccountsForBackup(callerAccountId);
+				Vector accounts = listAccounts(callerAccountId);
 	
 				result.add(OK);
 				result.add(accounts);
 				return result;
+			}
+			case cmdListSealedBulletinsForBackup:
+			{
+				String authorAccountId = (String)parameters.get(1);
+				Vector infos = listSealedBulletins(callerAccountId, authorAccountId);
 			}
 			default:
 			{
@@ -78,11 +90,8 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return result;
 	}
 
-	Vector getAccountsForBackup(String callerAccountId) throws NotAuthorizedException
+	Vector listAccounts(String callerAccountId)
 	{
-		if(!isAuthorizedToBackup(callerAccountId))
-			throw new NotAuthorizedException();
-
 		class Collector implements Database.AccountVisitor
 		{
 			public void visit(String accountId)
@@ -98,22 +107,22 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return collector.accounts;
 	}
 	
+	Vector listSealedBulletins(String callerAccountId, String authorAccountId)
+	{
+		return null;
+	}
+	
 	int extractCommand(Object possibleCommand)
 	{
-		try
-		{
-			String cmdString = (String)possibleCommand;
-			if(cmdString.equals(CMD_PING))
-				return cmdPing;
+		String cmdString = (String)possibleCommand;
+		if(cmdString.equals(CMD_PING))
+			return cmdPing;
 
-			if(cmdString.equals(CMD_LIST_ACCOUNTS_FOR_BACKUP))
-				return cmdListAccountsForBackup;
-			
-		}
-		catch (RuntimeException e)
-		{
-			//e.printStackTrace();
-		}
+		if(cmdString.equals(CMD_LIST_ACCOUNTS_FOR_BACKUP))
+			return cmdListAccountsForBackup;
+		
+		if(cmdString.equals(CMD_LIST_SEALED_BULLETINS_FOR_BACKUP))
+			return cmdListSealedBulletinsForBackup;
 		
 		return cmdUnknown;
 	}
@@ -123,12 +132,12 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return authorizedCallers.contains(callerAccountId);
 	}
 
-	public static class NotAuthorizedException extends Exception {}
 	public static class UnknownCommandException extends Exception {}
 
 	final static int cmdUnknown = 0;
 	final static int cmdPing = 1;
 	final static int cmdListAccountsForBackup = 2;
+	final static int cmdListSealedBulletinsForBackup = 3;
 	
 	Database db;
 	MartusCrypto verifier;

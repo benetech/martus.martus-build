@@ -41,16 +41,20 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 	public void testNonStringCommand() throws Exception
 	{
+		handler.addAuthorizedCaller(callerAccountId);
+
 		Vector parameters = new Vector();
 		parameters.add(new Integer(3));
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.UNKNOWN_COMMAND, result.get(0));
+		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
 	}
 	
 	public void testUnknownCommand() throws Exception
 	{
+		handler.addAuthorizedCaller(callerAccountId);
+
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
 		parameters.add("This will never be a valid command!");
@@ -63,6 +67,8 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testPing() throws Exception
 	{
+		handler.addAuthorizedCaller(callerAccountId);
+
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_PING);
@@ -101,7 +107,6 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 	public void testGetAllAccounts() throws Exception
 	{
-		handler.clearAllAuthorizedCallers();
 		handler.addAuthorizedCaller(callerAccountId);
 
 		String accountId1 = "first sample account";
@@ -120,11 +125,41 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertContains(accountId2, accounts);
 	}
 	
-	void writeSealedRecord(Database db, String accountId) throws Exception
+	public void testListSealedBulletinsNotAuthorized() throws Exception
+	{
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_LIST_SEALED_BULLETINS_FOR_BACKUP);
+		parameters.add("account id to ignore");
+		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		Vector result = handler.request(callerAccountId, parameters, sig);
+		assertEquals(1, result.size());
+		assertEquals(MirroringInterface.NOT_AUTHORIZED, result.get(0));
+	}
+	
+//	public void testListSealedBulletins() throws Exception
+//	{
+//		String accountId1 = "first sample account";
+//		String localId1 = writeSealedRecord(db, accountId1);
+//		String accountId2 = "second sample account";
+//		String localId2 = writeSealedRecord(db, accountId2);
+//
+//		Vector parameters = new Vector();
+//		parameters.add(MirroringInterface.CMD_LIST_SEALED_BULLETINS_FOR_BACKUP);
+//		String sig = MartusUtilities.sign(parameters, callerSecurity);
+//		Vector result = handler.request(callerAccountId, parameters, sig);
+//		assertEquals(MirroringInterface.OK, result.get(0));
+//		Vector localIds = (Vector)result.get(1);
+//		assertEquals(2, localIds.size());
+//		assertContains(localId1, localIds);
+//		assertContains(localId2, localIds);
+//	}
+	
+	String writeSealedRecord(Database db, String accountId) throws Exception
 	{
 		UniversalId uid = UniversalId.createFromAccountAndPrefix(accountId, "x");
 		DatabaseKey key = DatabaseKey.createSealedKey(uid);
 		db.writeRecord(key, "just some sample data");
+		return key.getLocalId();
 	}
 
 	MockServerDatabase db;
