@@ -271,19 +271,27 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("wrong private?", b1.isAllPrivate(), b2.isAllPrivate());
 
 		AttachmentProxy a1 = new AttachmentProxy(tempFile1);
-		AttachmentProxy a2 = new AttachmentProxy(tempFile2);
 		b1.addPublicAttachment(a1);
+
+		AttachmentProxy a2 = new AttachmentProxy(tempFile2);
 		b1.addPrivateAttachment(a2);
+
+		UniversalId uid = UniversalId.createDummyUniversalId();
+		AttachmentProxy proxyInDatabase = new AttachmentProxy(uid, "blah", sampleBytes1);
+		b1.addPublicAttachment(proxyInDatabase);
+
 		b2.pullDataFrom(b1);
-		assertEquals("public attachment count", 1, b2.getPublicAttachments().length);
+		assertEquals("public attachment count", 2, b2.getPublicAttachments().length);
 		assertEquals("private attachment count", 1, b2.getPrivateAttachments().length);
-		assertEquals("public attachment data", a1, b2.getPublicAttachments()[0]);
+		assertEquals("public attachment1 data", a1, b2.getPublicAttachments()[0]);
 		assertEquals("private attachment data", a2, b2.getPrivateAttachments()[0]);
+		assertNotEquals("didn't clone the attachment?", proxyInDatabase.getUniversalId().getLocalId(), b2.getPublicAttachments()[1].getUniversalId().getLocalId());
 		b2.pullDataFrom(b1);
-		assertEquals("again public attachment count", 1, b2.getPublicAttachments().length);
+		assertEquals("again public attachment count", 2, b2.getPublicAttachments().length);
 		assertEquals("again private attachment count", 1, b2.getPrivateAttachments().length);
-		assertEquals("again public attachment data", a1, b2.getPublicAttachments()[0]);
+		assertEquals("again public attachment1 data", a1, b2.getPublicAttachments()[0]);
 		assertEquals("again private attachment data", a2, b2.getPrivateAttachments()[0]);
+		assertNotEquals("again didn't clone the attachment?", proxyInDatabase.getUniversalId().getLocalId(), b2.getPublicAttachments()[1].getUniversalId().getLocalId());
 
 		b1.setAllPrivate(false);
 		b2.pullDataFrom(b1);
@@ -292,6 +300,8 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b2.pullDataFrom(b1);
 		assertEquals("didn't pull private true?", b1.isAllPrivate(), b2.isAllPrivate());
+		
+		
 	}
 
 	public void testIsStringInArray()
