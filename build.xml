@@ -13,6 +13,7 @@
   <property name="util-dir" value="${martus-dir}/util"/>
   <property name="swing-dir" value="${martus-dir}/swing"/>
   <property name="hrvd-dir" value="org/hrvd"/>
+  <property name="logi-dir" value="org/logi"/>
   <property name="amplifier-dir" value="${martus-dir}/amplifier"/>
 
   <property name="jars-dir" value="ThirdPartyJars"/>
@@ -25,6 +26,7 @@
   <property name="common-files" value="${common-dir}/*.class,
   			${util-dir}/**/*.class,
   			${hrvd-dir}/**/*.class,
+  			${logi-dir}/**/*.class,
                     	${common-dir}/**/*.class
                     	"/>
 
@@ -111,7 +113,7 @@
 
     <replace file="${common-dir}/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
 
-    <javac target="1.4" optimize="on" srcdir="${hrvd-dir};${util-dir};${common-dir}" classpath="." failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${hrvd-dir};${logi-dir};${util-dir};${common-dir}" classpath="." failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
