@@ -47,11 +47,25 @@
     <!-- T E S T                                                            -->
     <!-- ================================================================== -->
 
-    <target name="test-common" depends="build-common">
+    <target name="test-common" depends="jar-common">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            </classpath>
+        </taskdef>
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
-            <classpath refid="common.class.path"/>
+            <classpath>
+                <pathelement path="${java.class.path}"/>
+                <fileset dir="${public.release.folder}" >
+                    <include name="martus-common-${DSTAMP}.${build.number}.jar"/>
+                </fileset>
+                <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+            </classpath>
             <formatter type="brief" usefile="no" />
-            <test name="org.martus.common.TestCommon"/>
+            <test name="org.martus.common.test.TestCommon"/>
         </junit>
     </target>
 

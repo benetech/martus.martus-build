@@ -48,7 +48,7 @@
     <!-- B U I L D                                                          -->
     <!-- ================================================================== -->
 
-    <target name="build-amp" depends="build-common" description="Compile martus-amp">
+    <target name="build-amp" description="Compile martus-amp">
         <mkdir dir="${martus.amplifier.class.root}"/>
         <javac target="1.4" optimize="on" srcdir="${martus.amplifier.src.root}" destdir="${martus.amplifier.class.root}" failonerror="true">
             <classpath refid="amp.class.path"/>
@@ -71,11 +71,27 @@
 <!-- T E S T S                                                          -->
 <!-- ================================================================== -->
 
-  <target name="test-amp" depends="build-amp">
+  <target name="test-amp" depends="jar-server">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            </classpath>
+        </taskdef>
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
-            <classpath refid="amp.class.path"/>
+            <classpath>
+                <pathelement path="${java.class.path}"/>
+                <fileset dir="${public.release.folder}" >
+                    <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
+                </fileset>
+                <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+            </classpath>
             <formatter type="brief" usefile="no" />
-            <test name="${client-package}.test.TestAllAmplifier"/>
+            <test name="org.martus.amplifier.test.TestAllAmplifier"/>
         </junit>
   </target>
 

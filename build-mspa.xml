@@ -50,9 +50,22 @@
 <!-- T E S T S                                                          -->
 <!-- ================================================================== -->
 
-  <target name="test-mspa" depends="build-mspa">
+  <target name="test-mspa" depends="jar-mspa,jar-server">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            </classpath>
+        </taskdef>
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
-            <classpath refid="mspa.class.path"/>
+            <classpath>
+                <fileset dir="${public.release.folder}" >
+                    <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
+                    <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+                </fileset>
+                <pathelement path="${java.class.path}"/>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+            </classpath>
             <formatter type="brief" usefile="no" />
             <test name="org.martus.mspa.client.test.TestAll"/>
             <test name="org.martus.mspa.server.test.TestAllServer"/>
