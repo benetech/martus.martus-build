@@ -357,7 +357,7 @@ public class WebServerWithClientId implements Runnable
 
     class Runner implements Runnable
     {
-        Thread thread;
+		XmlRpcThread thread;
         Connection con;
         int count;
 
@@ -373,6 +373,7 @@ public class WebServerWithClientId implements Runnable
             }
             else
             {
+            	thread.setSocket(socket);
                 this.notify();
             }
         }

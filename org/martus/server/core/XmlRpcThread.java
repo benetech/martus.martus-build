@@ -7,7 +7,12 @@ public class XmlRpcThread extends Thread
 	public XmlRpcThread(ThreadGroup group, Runnable runnable, Socket socketToUse)
 	{
 		super(group, runnable);
-	    socket = socketToUse;
+		setSocket(socketToUse);
+	}
+	
+	public void setSocket(Socket socketToUse)
+	{
+		socket = socketToUse;
 	}
 	      
 	public String getClientAddress()
