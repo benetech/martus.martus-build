@@ -648,12 +648,12 @@ public class TestBulletin extends TestCaseEnhanced
 		DatabaseKey keyPrivate = new DatabaseKey(originalPrivateAttachments[0].getUniversalId());
 		assertEquals("private attachment wasn't saved?", true,  store.getDatabase().doesRecordExist(keyPrivate));
 
-		File tempFile = File.createTempFile("$$$MartusTestBullSaveFileAtt1", null);
-		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(original, tempFile);
-		assertTrue("unreasonable file size?", tempFile.length() > 20);
+		File tmpFile = File.createTempFile("$$$MartusTestBullSaveFileAtta1", null);
+		tmpFile.deleteOnExit();
+		MockBulletin.saveToFile(original, tmpFile);
+		assertTrue("unreasonable file size?", tmpFile.length() > 20);
 
-		ZipFile zip = new ZipFile(tempFile);
+		ZipFile zip = new ZipFile(tmpFile);
 		Enumeration entries = zip.entries();
 		
 		ZipEntry dataEntry = (ZipEntry)entries.nextElement();
