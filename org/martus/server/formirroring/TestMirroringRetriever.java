@@ -201,6 +201,33 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		assertEquals("extra tick2 got uids?", 0, realRetriever.uidsToRetrieve.size());
 	}
 	
+	public void testListPacketsWeWant() throws Exception
+	{
+		MartusCrypto clientSecurity = MockMartusSecurity.createClient();
+		String accountId = clientSecurity.getPublicKeyString();
+		Vector infos = new Vector();
+
+		UniversalId hiddenUid1 = addNewUid(infos, accountId);
+		UniversalId visibleUid = addNewUid(infos, accountId);
+		UniversalId hiddenUid2 = addNewUid(infos, accountId);
+		
+		db.hide(hiddenUid1);
+		db.hide(hiddenUid2);
+		
+		Vector result = realRetriever.listOnlyPacketsThatWeWant(accountId, infos);
+		assertEquals("Didn't remove hidden?", 1, result.size());
+		assertEquals("Wrong info?", visibleUid, result.get(0));
+	}
+
+	private UniversalId addNewUid(Vector infos, String accountId)
+	{
+		UniversalId newUid = UniversalId.createFromAccountAndPrefix(accountId, "H");
+		Vector newInfo = new Vector();
+		newInfo.add(newUid.getLocalId());
+		infos.add(newInfo);
+		return newUid;
+	}
+	
 	private String getZipString(Database dbToExportFrom, Bulletin b, MartusCrypto signer) throws Exception
 	{
 		String accountId = b.getAccount();

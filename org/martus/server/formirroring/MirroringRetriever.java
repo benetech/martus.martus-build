@@ -142,15 +142,8 @@ public class MirroringRetriever
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
 				Vector infos = response.getResultVector();
-				for(int i=0; i < infos.size(); ++i)
-				{
-					Vector info = (Vector)infos.get(i);
-					String localId = (String)info.get(0);
-					UniversalId uid = UniversalId.createFromAccountAndLocalId(nextAccountId, localId);
-					DatabaseKey key = new DatabaseKey(uid);
-					if(!db.doesRecordExist(key))
-						uidsToRetrieve.add(uid);
-				}
+				
+				uidsToRetrieve = listOnlyPacketsThatWeWant(nextAccountId, infos);
 			}
 		}
 		catch (Exception e)
@@ -161,6 +154,21 @@ public class MirroringRetriever
 		}
 
 		return null;
+	}
+
+	Vector listOnlyPacketsThatWeWant(String accountId, Vector infos)
+	{
+		Vector uids = new Vector();
+		for(int i=0; i < infos.size(); ++i)
+		{
+			Vector info = (Vector)infos.get(i);
+			String localId = (String)info.get(0);
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localId);
+			DatabaseKey key = new DatabaseKey(uid);
+			if(!db.doesRecordExist(key) && !db.isHidden(key))
+				uids.add(uid);
+		}
+		return uids;
 	}
 
 	String getNextAccountToRetrieve()
