@@ -71,6 +71,7 @@ public class EnglishStrings
 "wintitle:confirmWarnMissingAccountMapSignatureFile=Accountmap Signature File Missing",
 "wintitle:confirmBackupKeyPairMultiple=Backing Up Keypair",
 "wintitle:confirmCancelShareBackup=Cancel Backup",
+"wintitle:confirmEnterCustomFields=Customize Fields",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -468,6 +469,8 @@ public class EnglishStrings
 "field:confirmBackupKeyPairMultipleeffect=By choosing Yes, you will be prompted to save 8 pieces of your keypair onto a removable disks.",
 "field:confirmCancelShareBackupcause=Do you wish to cancel this backup?",
 "field:confirmCancelShareBackupeffect=By choosing Yes, will exit this backup.",
+"field:confirmEnterCustomFieldscause=You have chosen to customize the fields that will be used in any new bulletins created by this account.",
+"field:confirmEnterCustomFieldseffect=Customizing fields is an advanced operation, and can be dangerous. You should only proceed if you are certain that you understand the feature.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",

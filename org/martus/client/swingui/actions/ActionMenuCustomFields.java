@@ -43,6 +43,9 @@ public class ActionMenuCustomFields extends UiMenuAction
 	
 	public void actionPerformed(ActionEvent arg0)
 	{
+		if(!mainWindow.confirmDlg(mainWindow, "EnterCustomFields"))
+			return;
+		
 		MartusApp app = mainWindow.getApp();
 		BulletinStore store = app.getStore();
 		FieldSpec[] tags = store.getPublicFieldTags();
