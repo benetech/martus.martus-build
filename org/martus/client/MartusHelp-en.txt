@@ -17,8 +17,6 @@ To uninstall Martus, use the Add/Remove Programs control panel in Windows:
 3. Select Martus from the list of applications.
 4. Click Add/Remove, and then follow the on-screen instructions.
 
-The Martus uninstaller does not remove the Java 2 Runtime environment. If you are not using other applications that require the Java 2 Runtime environment, you can use the Add/Remove Programs control panel to uninstall it. 
-
 If you need to remove Martus bulletins and configuration data, as well as the Martus application, delete the Martus folder (c:\Martus), and then empty the recycling bin.
 
 ------------------------------------------------------------------------------------------------------------------------

@@ -1,0 +1,321 @@
+Instalación de Martus
+
+Martus está escrito con el lenguaje de programación Java y necesita un entorno Java para ejecutarse. El instalador de Martus instala directamente el entorno de ejecución Java 2, así como la aplicación Martus en su ordenador. También añade un icono de acceso directo en el escritorio.
+
+Para instalar Martus en su computadora:
+1. Inserte el CD Martus en su lectora de CD-ROMs
+2. Seleccione "ejecutar" desde el menú "Inicio" en Windows.
+3. Teclee "M:\Setup:exe", siendo M la letra asociada a la unidad donde se encuentra su CD-ROM 
+4. Haga click en "siguiente" en la ventana de diálogo del "InstallShield Wizard" para instalar Martus.
+5. Lea el texto de la licencia y haga click en "Si" para acabar. Si no acepta la licencia, no se instalará Martus.
+6. El instalador le informará de sus progresos según instala el entorno Java, las extensiones y la aplicación Martus. Cuando se le pida, haga click en "Finalizar" para completar la instalación.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Desinstalar Martus
+
+Para desinstalar Martus use la opción "añadir/quitar programas" del panel de control de Windows:
+1. Seleccione Configuración>Panel de control desde el menú "Inicio".
+2. Haga dos clicks en el icono "Agregar o quitar programas".
+3. Seleccione Martus de entre la lista de aplicaciones.
+4. Haga click en "Agregar o Quitar" y siga las instrucciones que aparezcan en la pantalla.
+
+Si necesita borrar boletines de Martus o los datos de configuración además de la aplicación Martus, borre la carpeta  Martus (c:\Martus) y seguidamente vacíe la papelera de reciclaje.
+
+------------------------------------------------------------------------------------------------------------------------
+Activar su cuenta con nombre de usuario y contraseña
+
+Antes de poder usar Martus necesita crear su propia cuenta e incluir información de contacto. Al crear su cuenta, también creará un nombre de usuario y una contraseña. Use una contraseña que pueda recordar fácilmente. Si olvidara su nombre de usuario o su contraseña ya no tendría acceso a ninguno de sus boletines en Martus. De la misma forma, tome precauciones para que la contraseña sea secreta. Su contraseña permite el acceso a todos los boletines que confeccione con Martus, así como la creación de nuevos boletines. Nunca envíe su contraseña por correo electrónico, ni la diga por teléfono, pues estos métodos de comunicación pueden no ser seguros.
+
+1. Haga dos clicks en el icono de Martus en el escritorio. Es posible que tenga que esperar unos segundos antes de que la ventana de diálogo de activación se abra.
+2. Escriba un nombre de usuario que tenga entre 6 y 50 caracteres.  Escriba en el campo marcado como "nombre de usuario." Puede contener letras, números, signos de puntuación y espacios. Escoja un nombre de usuario que le resulte fácil recordar. Si usa mayúsculas y minúsculas recuerde donde están, pues los nombres de usuario de Martus distinguen entre mayúsculas y minúsculas.
+3. Haga click en el campo "contraseña."  En su pantalla aparecerá  un teclado.
+4. Haga click en los caracteres que aparecen en el teclado de la pantalla para escribir una contraseña que tenga entre 6 y 50 caracteres. Escoja una contraseña que pueda recordar pero que resulte difícil de adivinar a una tercera  persona. Si olvida su contraseña, no habrá manera de acceder a los boletines privados que haya creado o a cualquier información en su computadora. Use una combinación de letras y números para hacer que su contraseña sea más segura. Las contraseñas de Martus distinguen entre mayúsculas y minúsculas.
+
+
+
+Nota: Si prefiere teclear su contraseña usando el teclado del ordenador, haga click en "Cambiar al teclado normal." Su contraseña es menos segura si escribe con el teclado de la computadora en lugar de hacerlo con el teclado en pantalla, pues una persona no autorizada podría "rastrear" su teclado y grabar sus pulsaciones.
+
+6. Haga click en "Aceptar". Aparecerá  una segunda pantalla de activación.
+7. Introduzca el mismo nombre de usuario para verificarlo y haga click en Aceptar.
+8. Introduzca la información de contacto (puede que hagan falta unos pocos segundos hasta que aparezca la ventana de diálogo de Martus).
+ 
+
+------------------------------------------------------------------------------------------------------------------------
+
+A partir de ahora, los datos públicos del boletín (es decir, aquellos datos que no se han etiquetado específicamente como privados) estarán al alcance de investigadores o prensa, entre otros. La información de contacto ofrece la posibilidad de que alguien que quiera seguir sus actividades o las de su organización pueda tener más información acerca  de sus boletines.
+
+En "Origen" introduzca su nombre o el de su organización, en tanto que origen de la información de los boletines que usted envíe.
+
+Escriba el nombre de su organización y su dirección de correo electrónico, página web, número de teléfono y dirección postal que la gente pueda usar para ponerse en contacto con su organización.
+Si usted deja de introducir alguna información de contacto, la ventana de diálogo para la información de contacto aparecerá cada  vez que arranque Martus. Si necesita cambiar esa información más adelante, selecciones "Preferencias > Información de contacto."
+
+------------------------------------------------------------------------------------------------------------------------
+
+Establecer una conexión con el servidor
+
+Los borradores de sus boletines sólo son accesibles desde su computadora. Para asegurarse de que tiene acceso  a sus boletines en caso de robo o pérdida de la computadora, envíelos a un servidor. (Cuando usted envíe boletines, estos están sellados de manera que no puede reeditarse). Enviar boletines a un servidor también le permite compartirlos con otros que tengan acceso, como por ejemplo, la dirección de su organización o, en el futuro, la prensa y el público.
+Antes de poder enviar o recuperar  boletines del servidor, es necesario identificar el servidor en Martus.
+
+1. Seleccione "Preferencias > Configuración del servidor."
+2. Teclee la dirección de IP del servidor, y haga click en Aceptar.
+3. Introduzca el código de identificación pública del servidor, y haga click en Aceptar.
+4. Teclee la palabra mágica para obtener permiso para enviar boletines al servidor y haga click en Aceptar.
+
+Martus almacena la información del servidor, de manera que no necesita volverla a entrar a menos que reinstale la aplicación o necesite configurar Martus para enviar boletines desde otro servidor diferente. Para cambiar la descripción del servidor, selecciones "Preferencias > Configuración del servidor", y seguidamente introduzca la información para el servidor nuevo.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Establecer sus preferencias
+
+Es posible ajustar Martus en función del idioma y del formato de fecha de su elección.
+Para cambiar el idioma en la interficie de usuario escoja "Preferencias > Idioma". Seguidamente selecciones un idioma del menú y haga click en Aceptar. Actualmente, disponemos de interfícies de usuario en inglés y en español.
+Para cambiar el formato de la fecha que se use en las listas de boletines, así como en los boletines que cree, selecciones "Preferencias > Formato de fecha". Seguidamente seleccione el formato que prefiera del menú "formato de fecha" y haga click en Aceptar.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Crear un boletín
+
+Para crear  un boletín nuevo, haga click en "Crear". Se abrirá la ventana de diálogo "Crear boletín". Introduzca la información solicitada en los diferentes campos del boletín.
+Rellenar los campos del boletín
+Es posible teclear los datos directamente en los campos, y también puede copiar y pegar la información de boletines ya existentes u otros documentos. (Para copiar y pegar use las combinaciones de teclado estándar de Windows (Ctrl+C para copiar  y Ctrl+V para pegar). Alternativamente, puede hacer un click con el botón derecho en el campo a rellenar y seleccionar "Copiar" o "Pegar" del menú contextual.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Campos de un boletín de Martus
+
+Mantener  toda la información privada -  Seleccione esta opción para hacer  que todo el boletín sea privado. Deseleccione esta opción para que la mayoría de la información sea pública (De todas formas, la información incluida en la sección privada sigue siendo privada). Cuando todo el boletín es privado, el icono del candado aparecerá cerrado. Cuando el boletín es público, el icono del candado estará abierto. Las áreas privadas tendrán alrededor un borde rojo.
+
+Nota: Una vez haya enviado un boletín al servidor, cualquier información pública en éste resultará accesible a cualquiera que lo pida en el futuro, incluyendo investigadores o la prensa.
+
+Idioma - Seleccione el idioma que usará para describir el evento.
+
+Origen - El origen que incluyó en su información de contacto aparecerá automáticamente aquí, aunque puede cambiarlo.
+
+Título  - Teclee aquí un título para el boletín. El título debería facilitar a los usuarios examinar la lista de boletines para poder identificar la naturaleza del evento.
+
+Localización  - Teclee la localización del evento. En función del alcance de éste, se puede introducir un país, una región, una ciudad o cualquier otra localización. Si no tiene sentido introducir una localización, deje el campo en blanco.
+
+Palabras clave - Teclee palabras que sean sinónimas con los actos que ha descrito en el resumen, otras palabras relacionadas y localizaciones alternativas, si resultara apropiado.
+
+Fecha del evento -  Introduzca la fecha del evento que esté describiendo.
+
+Fecha introducida  - Verifique que realmente es la fecha actual.
+
+Resumen - Teclee un resumen del evento.
+
+Detalles - Teclee cualquier detalle adicional relacionado con el evento.
+
+Adjuntos - Para adjuntar una foto u otro tipo de fichero en el boletín, haga click en  Añadir adjunto, y seguidamente seleccione el fichero que quiera adjuntar.
+
+Indicación:  Si quiere añadir un fichero que sólo puedan ver aquellos que tengan acceso a la información privada, haga click en Añadir adjunto en el área  privada.
+
+Privado - Teclee cualquier información adicional que quiera incluir en el informe, pero que no deba hacerse  pública. Las áreas privadas están rodeadas por un borde rojo.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Editar un borrador
+
+Es posible hacer cambios en los borradores del boletín hasta que los mande al servidor. Para editar un borrador, haga dos clicks en el boletín, y seguidamente haga los cambios o añada información. Puede volverlo a grabar como borrador o enviarlo al servidor. Si hace click en Cancelar, la nueva información añadida se perderá y el boletín volverá a tener el aspecto que tenía la última vez que lo guardó.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Uso de una plantilla en el campo "detalles"
+
+Si en el campo "detalles" usted introduce el mismo tipo de información de manera frecuente  (por ejemplo, un número de víctimas o una respuesta gubernamental), establezca una plantilla que aparecerá  en todos los boletines que cree:
+
+1. Seleccione Preferencias > Detalles del boletín.
+2.  Teclee el texto que ha de aparecer  por defecto  en el campo "Detalles"
+3. Haga click en Aceptar.
+
+
+Cuando usted cree un boletín nuevo, el texto que entró en la ventana de diálogo Detalles del boletín aparecerá en  la sección "detalles" del nuevo boletín. Si no necesitara el texto en el boletín que está creando puede borrarlo, de la misma forma en que lo haría con cualquier otro texto.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Guardar un borrador
+
+Guarde un borrador del boletín, si quiere continuar añadiendo información más adelante, o quiere verificar alguna información. Cuando el boletín está en la carpeta de borradores, sólo existe en su computadora; no hay una copia de seguridad en el servidor.
+Para guardar una copia del boletín, haga click en "Guardar borrador."  El boletín residirá en la capreta  borradores. Para editar el boletín más adelante, abra la carpeta de borradores y haga dos clicks en el boletín que quiera revisar.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Enviar un boletín
+
+Si el boletín ya está completo y no piensa editarlo más, envíelo al servidor. Una vez haya hecho click en Enviar el boletín queda sellado y nadie -ni siquiera usted- puede hacer más cambios.
+Para enviar el boletín, haga click en Enviar. Aparecerá  la ventana de diálogo de "Confirmar el envío del boletín", advirtiéndole de que el boletín quedará permanentemente sellado. Haga click en Sí para enviar el boletín.
+El boletín aparecerá en la carpeta  Enviar con el status de sellado. Cuando haya llegado de manera satisfactoria al servidor, se desplazará a la carpeta de "Boletines enviados".
+Si no tiene una conexión a Internet, o si su ordenador no se puede conectar al servidor designado, el boletín permanecerá en la carpeta Enviar. Si hay boletines en su carpeta Enviar cuando inicie una sesión en Martus, Martus le avisará de su estado y le recordará que no se han subido todavía al servidor.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Descartar el borrador
+
+Para descartar  la información que ha introducido, haga click en Cancelar. Martus le avisará de que se borrará toda la información que no se hubiera guardado previamente del boletín, boletín que todavía no se ha enviado. Haga click en Sí para descartar la información no guardada para siempre. (Si hace click en Cancelar cuando está editando un borrador de boletín, el boletín volverá al estado en el que se encontraba cuando lo abrió.)
+
+------------------------------------------------------------------------------------------------------------------------
+
+Mantenimiento de los boletines
+
+Las carpetas facilitan el mantenimiento y ordenación de los boletines que cree o descargue del servidor. Martus incluye cuatro carpetas  por defecto y crea de forma automática otras para objetivos específicos. También se pueden crear carpetas adicionales para organizar los boletines. Cuando seleccione una carpeta, sus contenidos aparecerán  listados a la derecha. Martus muestra el boletín seleccionado.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Carpetas por defecto
+
+Martus incluye de forma automática cuatro carpetas  permanentes: Enviar, Boletines enviados, Borradores, y Desechados. 
+
+Enviar
+Esta carpeta contiene todos los boletines sellados que aún no se han subido al servidor. Todos los boletines en esta carpeta  están sellados y no pueden modificarse. Si usted está trabajado sin conexión y hace click en Enviar, el boletín seguirá en la carpeta Enviar hasta que disponga de una conexión a Internet. De manera adicional, un boletín que contiene uno o más adjuntos puede permanecer varios minutos o hasta una hora mientras Martus lo va transfiriendo al servidor.
+Si hubiera boletines en la carpeta Enviar cuando arranque la aplicación, Martus le recordará  que tiene boletines sellados que aún no se han subido al servidor.
+
+Boletines  enviados
+Esta carpeta contiene boletines sellados que ya se han subido al servidor. Cuando se envía un boletín al servidor, se desplaza de la carpeta Enviar a la de Boletines enviados. Estos boletines no pueden modificarse, aunque sí se pueden desplazar a otras carpetas. También puede desechar la copia del boletín que reside en su computadora. No se pueden borrar boletines sellados del servidor.
+
+Borradores de boletín
+Cuando haga click en Guardar borrador, el boletín se desplaza a esta carpeta. Los boletines se pueden editar, desplazarlos a otras carpetas (exceptuando la de Enviar o la de Boletines enviados) y también desecharlos. Los borradores sólo existen en su computadora y no se hacen copias de ellos en el servidor.
+
+Boletines desechados
+Cuando deseche un boletín de otra carpeta, éste se desplazará a la carpeta de Boletines desechados. Aunque estén en esta carpeta, sigue siendo posible trabajar con esos boletines desechados. Si tienen el status de borrador, todavía se pueden modificar. Si tienen el status de sellados, se les puede desplazar a la carpeta de boletines enviados. Para eliminar un boletín de su computadora completamente, vaya a la carpeta de boletines desechados, haga un click con el botón derecho en el título del boletín a desechar y escoja la opción Desechar boletín. Si el boletín tiene el status de borrador, desaparecerá  cualquier información sobre éste. Si tiene el status de sellado y se había enviado al servidor, lo borrará de su computadora, pero seguirá en el servidor.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Otras carpetas creadas por Martus
+
+Martus también crea las carpetas Resultados de la búsqueda,  Boletines descargados y Boletines recuperados cuando es necesario. Estas carpetas pueden borrarse o cambiarse el nombre.
+
+Resultados de búsqueda
+Cuando se busca algún boletín específico en su ordenador, Martus muestra los resultados en la carpeta Resultados de búsqueda. Los contenidos de esta carpeta  quedarán sobrescritos en la próxima búsqueda que lleve a cabo. Si quiere guardar los resultados de la búsqueda, cambie el nombre de esta carpeta. Martus volverá a crear una carpeta de Resultados de búsqueda nueva la próxima vez que lleve a cabo una búsqueda.
+
+Boletines descargados
+Esta carpeta contiene boletines que se ha descargado del servidor. Estos boletines están incluidos en búsquedas y pueden copiarse o moverse a carpetas diferentes. Los boletines recuperados están sellados, de manera que no pueden modificarse.
+
+Boletines recuperados
+En circunstancias normales, todos los boletines van asociados con una carpeta, pero fallos en el suministro eléctrico, errores en el hardware o problemas con el software pueden provocar que los boletines pierdan su asociación con una carpeta. Cuando se arranca Martus, éste busca boletines con tales problemas. Si Martus encuentra alguno, le avisa de ello y crea una carpeta de Boletines recuperados para ellos. Puede dejarlos allí, moverlos a una carpeta diferente o desecharlos.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Añadir carpetas
+
+Usted puede crear carpetas adicionales para ordenar los boletines según sus intereses y proyectos. También puede renombrar la carpeta de Resultados de búsqueda para guardar los resultados de la búsqueda para su uso futuro; Martus creará  una nueva carpeta  de Resultados de búsqueda la próxima vez que lleve a cabo una.
+Para crear una carpeta  vacía, seleccione Archivo > Añadir carpeta nueva o bien hacer un click con el botón derecho en el área de carpetas y seleccione Carpeta nueva. Seguidamente, escriba el nombre de la carpeta. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Organizar los boletines
+
+Los boletines puede listarse en diferentes carpetas, pero en realidad sólo hay una copia en su disco duro. Cada una de las listas hace referencia a esa copia única en su disco duro. Un boletín no puede aparecer listado dos veces en la misma carpeta.
+
+Para mover un boletín de una carpeta a otra, arrástrelo. O bien seleccione el boletín y seleccione Edición > Cortar boletín, y seguidamente marque la nueva carpeta y seleccione Edición >Pegar boletín. También se puede hacer un click con el botón derecho en el boletín o en la carpeta y seleccionar Cortar boletín o Pegar boletín del menú contextual. Al usar la instrucción "Cortar boletín" el boletín aparecerá en la carpeta de Boletines descartados.
+
+Si quiere que un boletín aparezca en varias carpetas al mismo tiempo, seleccione el boletín y escoja Edición > Copiar boletín. Seguidamente, seleccione la nueva carpeta y escoja Edición > Pegar boletín. También puede hacer click con el botón derecho en el boletín y escoger Copiar boletín del menú conetxtual. Seguidamente haga click con el botón derecho en la carpeta y seleccione Pegar boletín del menú contextual. 
+
+También se pueden reordenar los boletines dentro de una carpeta, listarlos por status, fecha del evento u origen. Para conseguirlo haga click en la columna que muestre ese contenido.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Descargar boletines
+
+De vez en cuando, puede ser necesario descargarse  boletines que se subieron previamente al servidor. Es posible descargarse cualquier boletín que haya subido y que no se encuentre en su disco duro. (Martus no permite que descargue boletines que ya tiene).
+
+1. Seleccione Herramientas > Descargar  boletines. 
+2. En la ventana de diálogo para descargar boletines, marque las casillas junto a los boletines que desee recuperar. Para seleccionar todos los boletines, haga click en  Seleccionar todos. Para deseleccionarlas todas, haga click en Deseleccionar todos.
+3. Haga click en descargar. 
+4. Los boletines aparecerán en la carpeta  Boletines descargados. 
+Cuando abra un boletín que incluye un adjunto, haga click en Guardar adjunto para guardar el adjunto en cualquier lugar de su disco duro. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Desechar Boletines
+
+También se puede desechar un boletín de una carpeta, desplazándolo a la carpeta de Boletines desechados. Para borrar un boletín del disco duro, deséchelo de la carpeta boletines descartados. Cuando se borra un boletín en fase de borrador, desaparece para siempre. Sin embargo, ya que no se puede borrar un boletín del servidor, si un boletín sellado se ha enviado al servidor, siempre se puede recuperar.
+Para borrar un boletín de una carpeta, haga click con el botón derecho y seleccione desechar boletín o Cortar boletín.  El boletín aparecerá en la carpeta de ficheros desechados. (Otra posibilidad es arrastrar el boletín a la carpeta de boletines desechados.)
+Nota: Si el boletín también está listado en otra carpeta, permanecerá  en el disco duro, incluso si lo descartó de la carpeta de boletines desechados.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Localizar boletines específicos.
+
+Se pueden buscar boletines en su computadora que contengan frases o palabras específicas. Martus busca en todos los ficheros, incluyendo el de boletines desechados.
+1. Haga click en Búsqueda.
+2. En la ventana de diálogo "Buscar", teclee la palabra o palabras que está buscando. Para buscar una frase, escríbala sin signos de interrogación. Martus buscará el texto introducido tanto si es una palabra completa como si es una parte de una palabra más larga. Por ejemplo, si estuviera buscando "pres", aparecerían  boletines con las palabras "preso"; "presidente" o "presidio". La búsqueda no distingue entre mayúsculas y minúsculas, de manera que no importa si una palabra aparece en mayúsculas o no.
+
+Indicación:  Use la palabra "or" ("o" en inglés) para ampliar su búsqueda o la palabra "and" ("y" en inglés) para reducirla. Por ejemplo, si realiza una búsqueda de "prisión or presidio" se le aparecerán  una lista de boletines que contienen alguna de las dos palabras (o las dos). Si busca "prisión and asalto" sólo se aparecerán aquellos boletines que contienen ambas palabras. 
+
+3. Haga click en Buscar
+
+4. Cuando la búsqueda se haya completado, la ventana de diálogo con los resultados de la búsqueda le informará de cuantos boletines se han encontrado que cumplen sus especificaciones. Haga click en Aceptar.
+5. La carpeta de los resultados de la búsqueda listará los boletines localizados en su búsqueda. (La carpeta contiene copias de los boletines; los originales permanecen en sus carpetas originales).
+
+Para guardar los resultados de su búsqueda haga click en la carpeta de los Resultados de búsqueda y seleccione Renombrar. Seguidamente teclee un nuevo nombre para la carpeta. La próxima vez que lleve a cabo una búsqueda, Martus creará una nueva carpeta con los resultados de la búsqueda. Si no le cambia el nombre a la carpeta con los resultados de la búsqueda, los contenidos actuales se  sobrescribirán la próxima vez que lleve a cabo una búsqueda. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Imprimir los boletines
+
+Para imprimir un boletín, selecciónelo y haga click en Imprimir. Igualmente, puede seleccionar Archivo > Imprimir boletín. El diálogo estándar de impresión de Windows se abre con las opciones al alcance de su impresora.
+
+Todos los datos que aparecen en pantalla se imprimirán; si aparecen  datos privados en la pantalla, también se imprimirán. Martus imprime una lista de los adjuntos, pero no el contenido de los adjuntos. Para imprimir un fichero adjunto, haga click en "Guardar adjunto",  para guardarlo en una carpeta de su disco duro. Seguidamente ábralo e imprímalo con la aplicación correspondiente, como un editor de imágenes o una aplicación de procesamiento de texto.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Mantener sus datos seguros
+
+Martus ha sido diseñado con la seguridad como objetivo primordial. Comprender como funcionan sus parámetros de seguridad puede ayudarlo a mantener seguros sus datos mientras se asegura que puede seguir accediendo a ellos.
+Como funciona la seguridad en Martus
+
+Todas las cuentas de Martus tienen dos claves (una serie muy larga de caracteres): una es la clave pública, que todo el mundo puede ver; la otra es una clave privada a la que sólo se puede acceder con la contraseña para esa cuenta. Cuando entra en Martus, su contraseña permite a la aplicación abrir el par de claves (el conjunto de la clave privada y la pública), de manera que pueda acceder a los boletines que ha creado y almacenado.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Copias de seguridad del fichero con el par de claves
+
+Su par de claves es propiedad suya exclusiva. Si lo pierde, debido a un fallo en el disco duro o un borrado accidental, nadie será capaz de abrir sus boletines privados, los datos privados en los boletines  públicos que ha enviado al servidor o cualquiera de los boletnes en su disco duro, ya tengan un estado de borrador o sellado. Sin embargo si usted ha establecido una cuenta de dirección (o Headquarters - HQ)  el propietario de la cuenta HQ (normalmente la oficina central de su organización) todavía será capaz de acceder a  los datos privados que haya enviado al servidor.
+Para asegurarse  de que siempre dispondrá de su par de claves, haga una copia del fichero con el par de claves en un floppy (también conocido como disket o disco flexible).
+
+1. Inserte un disco vacío en su lectora de discos flexibles.
+2. Haga dos clicks en "Mi PC".
+3. Abra la unidad C y navegue hasta la carpeta Martus (Es decir: C:\Martus)
+4. Haga un click con el botón derecho en el fichero MartusKeyPair.dat. (Si las extensiones de fichero no fueran visibles en su computadora, haga un click con el botón derecho en el fichero MartusKeyPair.
+5. Seleccione "Copiar" del menú contextual
+6. En la ventana de Mi PC navegue hasta la unidad de discos flexibles.
+7. Haga click con el botón derecho en la unidad y escoja "Pegar" desde el menú contextual.
+
+Guarde su disco flexible de copia de seguridad en un lugar seguro donde resulte difícil que se dañe por culpa de las condiciones meteorológicas, insectos u otros factores. No escriba su contraseña en el disco ni la grabe electrónicamente en él. Nadie puede usar su par de claves sin la contraseña.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Recuperar su fichero con el par de claves 
+
+Si ha perdido su computadora, ha tenido un fallo en el disco duro o ha perdido su par de claves por cualquier otra razón, puede recuperar su par de claves utilizando la copia de seguridad.
+
+Para recuperar su par de claves:
+1. Instale Martus, salvo que ya esté instalado de hecho.
+2. Antes de ejecutar la aplicación, copie el fichero MartusKeyPair.dat en la carpeta Martus.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Uso inteligente de la contraseña
+
+Es crucial que su contraseña permanezca  secreta. No comparta su contraseña con nadie, y no use una contraseña que alguien pudiera adivinar fácilmente. Cada vez que cambie su contraseña, haga una copia de seguridad del fichero con el par de claves y borre las copias anteriores. Su par de claves está codificado utilizando su nueva contraseña.
+Cuando Martus está activado, le pedirá reintroducir su nombre de usuario y contraseña después de diez minutos de inactividad.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Compartir los datos privados con su organización
+
+Es posible que la dirección de su organización quiera tener acceso  a los boletines que cree, así como los boletines creados por otros miembros de su organización. La dirección de su organización puede crear una cuenta HQ, que les permite visualizar sus boletines, incluyendo los datos privados que contengan. No podrán, sin embargo, crear boletines utilizando su cuenta. Este tipo de acceso ofrece diversas ventajas: da a los líderes de la organización más información, y asegura que alguien será capaz de acceder  sus datos privados incluso si perdiera su fichero con el par de claves u olvidara su contraseña.
+
+Para acceder  a sus boletines, la dirección de su organización primero ha de exportar su información pública y dársela a usted, así como su código público. Entonces, usted importa esa información pública y su código público.
+
+La dirección puede compartir la cuenta HQ con todos aquellos implicados en un proyecto:
+1. Cree una cuenta Martus (véase la sección "activar una cuenta")
+2. En Martus seleccione Herramientas > Exportar información pública y póngale un nombre al fichero. Martus graba el fichero con la extensión . mpi.
+3. Déle el fichero .mpi a aquellas personas a cuyos boletines quiera acceder.
+4. A través de un canal de comunicación diferente y seguro, entregue a esa misma gente el código público de la cuenta HQ. Para ver su código público, seleccione Ayuda > Detalles de su Cuenta.
+El siguiente paso es que todo el mundo implicado en el proyecto importe la información de la cuenta HQ.
+1. En Martus, seleccione Herramientas > Importar información pública
+2. Seleccione el fichero .mpi que la oficina de dirección le entregó.
+3. Entre el código de identificación público que la oficina de dirección le entregó.
+4. Haga click en Importar.
+5. Martus le advertirá de que le está dando al propietario de la cuenta HQ la facultad de ver sus datos privados. Haga click en Sí para confirmar de que efectivamente quiere hacer eso.
