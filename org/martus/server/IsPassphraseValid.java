@@ -17,7 +17,7 @@ public class IsPassphraseValid
 {
 	public static void main(String[] args)
 	{
-			if( !args[0].startsWith("--file") ) error("incorrect argument");
+			if( args.length == 0 || !args[0].startsWith("--file") ) error("incorrect argument");
 
 			File keyPairFile = new File(args[0].substring(args[0].indexOf("=")+1));
 			
