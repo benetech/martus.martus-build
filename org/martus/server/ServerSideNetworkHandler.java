@@ -127,7 +127,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		result.add(resultCode);
 		result.add(legacyResult);
 		
-		server.incrementActiveClientsCounter();
+		server.decrementActiveClientsCounter();
 		
 		return result;
 	}
@@ -142,10 +142,8 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
-			result.add(SIG_ERROR);
-			
-			server.decrementActiveClientsCounter();
-			
+			result.add(SIG_ERROR);			
+			server.decrementActiveClientsCounter();			
 			return result;
 		}
 			
@@ -315,22 +313,26 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	// begin legacy!
 	public String ping()
 	{
+		String response;
+		
 		if(server.serverSSLLogging)
 			server.logging("SSL-Ping");
 		server.incrementActiveClientsCounter();
-		strResponse = server.ping();
+		response = server.ping();
 		server.decrementActiveClientsCounter();
-		return strResponse;
+		return response;
 	}
 
 	public String requestUploadRights(String authorAccountId, String tryMagicWord)
 	{
+		String response;
+		
 		if(server.serverSSLLogging)
 			server.logging("SSL-requestUploadRights");
 		server.incrementActiveClientsCounter();
-		strResponse = legacyRequestUploadRights(authorAccountId, tryMagicWord);
+		response = legacyRequestUploadRights(authorAccountId, tryMagicWord);
 		server.decrementActiveClientsCounter();
-		return strResponse;
+		return response;
 	}
 	
 	public String legacyRequestUploadRights(String authorAccountId, String tryMagicWord)
@@ -341,56 +343,61 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId,
 		int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
+		String response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-uploadBulletinChunk");
 		server.incrementActiveClientsCounter();
-		strResponse = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
+		response = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
 						totalSize, chunkOffset, chunkSize, data, signature);
 		server.decrementActiveClientsCounter();
-		return strResponse;
+		return response;
 	}
 
 	public Vector downloadMyBulletinChunk(String authorAccountId,String bulletinLocalId,
 		int chunkOffset, int maxChunkSize, String signature)
 	{
+		Vector response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-downloadMyBulletinChunk");
 		server.incrementActiveClientsCounter();
-		vecResponse = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
+		response = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize, signature);
 		server.decrementActiveClientsCounter();
-		return vecResponse;
+		return response;
 	}
 	
 	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature)
 	{
+		Vector response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-downloadFieldOfficeBulletinChunk");
 		server.incrementActiveClientsCounter();
-		vecResponse = server.downloadFieldOfficeBulletinChunk(authorAccountId, bulletinLocalId, hqAccountId, 
+		response = server.downloadFieldOfficeBulletinChunk(authorAccountId, bulletinLocalId, hqAccountId, 
 					chunkOffset, maxChunkSize, signature);
 		server.decrementActiveClientsCounter();
-		return vecResponse;
+		return response;
 	}
 	
 	public Vector downloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
 	{
+		Vector response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-downloadAuthorizedPacket");
 		server.incrementActiveClientsCounter();
-		vecResponse = server.legacyDownloadAuthorizedPacket(authorAccountId, packetLocalId, myAccountId, signature);
+		response = server.legacyDownloadAuthorizedPacket(authorAccountId, packetLocalId, myAccountId, signature);
 		server.decrementActiveClientsCounter();
-		return vecResponse;
+		return response;
 	}
 
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
+		Vector response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-listMyBulletinSummaries");
 		server.incrementActiveClientsCounter();
-		vecResponse = legacyListMyBulletinSummaries(authorAccountId);
+		response = legacyListMyBulletinSummaries(authorAccountId);
 		server.decrementActiveClientsCounter();
-		return vecResponse;
+		return response;
 	}
 	
 	public Vector legacyListMyBulletinSummaries(String authorAccountId)
@@ -400,22 +407,24 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
+		Vector response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-downloadFieldDataPacket");
 		server.incrementActiveClientsCounter();
-		vecResponse = server.downloadFieldDataPacket(authorAccountId, bulletinLocalId, packetLocalId, myAccountId, signature);
+		response = server.downloadFieldDataPacket(authorAccountId, bulletinLocalId, packetLocalId, myAccountId, signature);
 		server.decrementActiveClientsCounter();
-		return vecResponse;
+		return response;
 	}
 	
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
+		Vector response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-listFieldOfficeBulletinSummaries");
 		server.incrementActiveClientsCounter();
-		vecResponse = legacyListFieldOfficeBulletinSummaries(hqAccountId, authorAccountId);
+		response = legacyListFieldOfficeBulletinSummaries(hqAccountId, authorAccountId);
 		server.decrementActiveClientsCounter();
-		return vecResponse;
+		return response;
 	}
 	
 	public Vector legacyListFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
@@ -425,12 +434,13 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
+		Vector response;
 		if(server.serverSSLLogging)
 			server.logging("SSL-listFieldOfficeAccounts");
 		server.incrementActiveClientsCounter();
-		vecResponse = legacyListFieldOfficeAccounts(hqAccountId);
+		response = legacyListFieldOfficeAccounts(hqAccountId);
 		server.decrementActiveClientsCounter();
-		return vecResponse;
+		return response;
 	}
 	
 	public Vector legacyListFieldOfficeAccounts(String hqAccountId)
@@ -445,8 +455,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	final static String defaultReservedResponse = "";
 
-	String strResponse;
-	Vector vecResponse;
 	MartusServer server;
 
 }
