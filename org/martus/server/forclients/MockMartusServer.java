@@ -231,7 +231,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	
 	public long getUploadRequestTimerInterval()
 	{
-		return 100 * 1000;
+		return 9999 * 1000;
 	}
 	
 	public synchronized void subtractMaxFailedUploadAttemptsFromCounter()
@@ -264,24 +264,15 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	public void deleteSignaturesForFile(File originalFile)
 	{
 		Vector sigFiles = MartusServerUtilities.getSignaturesForFile(originalFile);
-		if(sigFiles.size() > 0)
+
+		for (Iterator iter = sigFiles.iterator(); iter.hasNext();)
 		{
-			for (Iterator iter = sigFiles.iterator(); iter.hasNext();)
-			{
-				File signature = (File) iter.next();
-				if(signature.exists())
-				{
-					signature.delete();
-				}
-			}
+			File signature = (File) iter.next();
+			signature.delete();
 		}
 		
 		File sigDir = MartusServerUtilities.getSignatureDirectoryForFile(originalFile);
-		String[] filenamessAvailable = sigDir.list();
-		if(filenamessAvailable != null && filenamessAvailable.length == 0)
-		{
-			sigDir.delete();
-		}
+		sigDir.delete();
 	}
 
 	public void deleteAllFiles() throws IOException
