@@ -550,12 +550,8 @@ public class MartusApp
 		SearchParser parser = new SearchParser(this);
 		SearchTreeNode searchNode = parser.parse(searchFor);
 
-		String name = store.getSearchFolderName();
-		BulletinFolder results = store.findFolder(name);
-		if(results == null)
-			results = store.createFolder(name);
-
-		results.removeAll();
+		BulletinFolder searchFolder = createOrFindFolder(store.getSearchFolderName());
+		searchFolder.removeAll();
 
 		Vector uids = store.getAllBulletinUids();
 		for(int i = 0; i < uids.size(); ++i)
@@ -563,7 +559,7 @@ public class MartusApp
 			UniversalId uid = (UniversalId)uids.get(i);
 			Bulletin b = store.findBulletinByUniversalId(uid);
 			if(b.matches(searchNode, startDate, endDate))
-				store.addBulletinToFolder(b.getUniversalId(), results);
+				store.addBulletinToFolder(b.getUniversalId(), searchFolder);
 		}
 		store.saveFolders();
 	}

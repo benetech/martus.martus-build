@@ -598,6 +598,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		app.search(searchDlg.getSearchString(), searchDlg.getStartDate(), searchDlg.getEndDate());
 		BulletinStore store = getStore();
 		BulletinFolder searchFolder = store.findFolder(store.getSearchFolderName());
+		folders.folderTreeContentsHaveChanged();
 		folders.folderContentsHaveChanged(searchFolder);
 		int bulletinsFound = searchFolder.getBulletinCount();
 		setCursor(originalCursor);
@@ -2056,10 +2057,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 					{
 						ThreadedNotify damagedBulletin = new ThreadedNotify("DamagedBulletinMovedToDiscarded");
 						SwingUtilities.invokeAndWait(damagedBulletin);
-						folderTreeContentsHaveChanged();
 						folderContentsHaveChanged(getStore().getFolderOutbox());
 						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
 						folderContentsHaveChanged(app.createOrFindFolder(getStore().getNameOfFolderDamaged()));
+						folderTreeContentsHaveChanged();
 					}
 					if(uploadResult != null)
 					{
