@@ -262,22 +262,23 @@ public class MartusApp
 
 	public void doAfterSigninInitalization() throws MartusAppInitializationException
 	{
-			try
-			{
-				store.doAfterSigninInitalization();
-			}
-			catch (MissingAccountMapException e)
-			{
-				throw new MartusAppInitializationException("ErrorMissingAccountMap");
-			}
-			catch (FileVerificationException handlingPostponedException)
-			{
-				throw new MartusAppInitializationException("ErrorAccountMapVerification");
-			}
-			catch (MissingAccountMapSignatureException handlingPostponedException)
-			{
-				throw new MartusAppInitializationException("ErrorMissingAccountMapSignature");
-			}
+		store = new BulletinStore(currentAccountDirectory, security);
+		try
+		{
+			store.doAfterSigninInitalization();
+		}
+		catch (MissingAccountMapException e)
+		{
+			throw new MartusAppInitializationException("ErrorMissingAccountMap");
+		}
+		catch (FileVerificationException handlingPostponedException)
+		{
+			throw new MartusAppInitializationException("ErrorAccountMapVerification");
+		}
+		catch (MissingAccountMapSignatureException handlingPostponedException)
+		{
+			throw new MartusAppInitializationException("ErrorMissingAccountMapSignature");
+		}
 	}
 	
 	public File getMartusDataRootDirectory()
@@ -1119,25 +1120,14 @@ public class MartusApp
 
 		if(!worked)
 			return false;
-			
-		try
-		{
-			setCurrentAccount(userName);
-		}
-		catch (IOException e1)
-		{
-			e1.printStackTrace();
-			return false;
-		}
-
+		setCurrentAccount(userName);
 		return true;
 	}
 
-	public void setCurrentAccount(String userName) throws IOException
+	public void setCurrentAccount(String userName)
 	{
 		currentUserName = userName;
 		currentAccountDirectory = martusDataRootDirectory; 
-		store = new BulletinStore(currentAccountDirectory, security);
 	}
 
 	public String getCombinedPassPhrase(String userName, String userPassPhrase)

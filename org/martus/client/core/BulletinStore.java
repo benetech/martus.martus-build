@@ -94,12 +94,19 @@ public class BulletinStore
 		setUpStore(baseDirectory, db);
 	}
 
-	public BulletinStore(Database db) throws IOException
+	public BulletinStore(Database db)
 	{
-		File tempFile = File.createTempFile("$$$MartusBulletinStore", null);
-		File baseDirectory = tempFile.getParentFile();
-		tempFile.delete();
-		setUpStore(baseDirectory, db);
+		try
+		{
+			File tempFile = File.createTempFile("$$$MartusBulletinStore", null);
+			File baseDirectory = tempFile.getParentFile();
+			tempFile.delete();
+			setUpStore(baseDirectory, db);
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	public void doAfterSigninInitalization() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException

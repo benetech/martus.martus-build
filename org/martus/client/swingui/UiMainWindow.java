@@ -194,23 +194,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		try
 		{
-			app.loadConfigInfo();
-		}
-		catch (MartusApp.LoadConfigInfoException e)
-		{
-			notifyDlg(this, "corruptconfiginfo");
-		}
-
-		ConfigInfo info = app.getConfigInfo();
-		if(createdNewAccount)
-		{
-			File defaultDetailsFile = app.getDefaultDetailsFile();
-			if(defaultDetailsFile.exists())
-				updateBulletinDetails(defaultDetailsFile);
-		}
-
-		try
-		{
+			app.doAfterSigninInitalization();
 			if(isAccountMapSignatureMissing())
 			{
 				if(confirmDlg(this, "WarnMissingAccountMapSignatureFile"))
@@ -225,21 +209,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 					e.printStackTrace();
 				} 
 			}
-			
-			app.doAfterSigninInitalization();
 		}
 		catch (MartusAppInitializationException e)
 		{
 			initializationErrorDlg(e.getMessage());
 		}
 
-		if(!info.hasContactInfo())
-			doContactInfo();
-		else if(info.promptUserRequestSendToServer())
-		{
-			requestToUpdateContactInfoOnServerAndSaveInfo();
-			info.clearPromptUserRequestSendToServer();
-		}
+		doAfterSignInConfigInfoSetup(createdNewAccount);
 
 		int quarantineCount = app.quarantineUnreadableBulletins();
 
@@ -287,6 +263,34 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		mainWindowInitalizing = false;
 		return true;
     }
+
+	private void doAfterSignInConfigInfoSetup(boolean createdNewAccount)
+	{
+		try
+		{
+			app.loadConfigInfo();
+		}
+		catch (MartusApp.LoadConfigInfoException e)
+		{
+			notifyDlg(this, "corruptconfiginfo");
+		}
+		
+		ConfigInfo info = app.getConfigInfo();
+		if(createdNewAccount)
+		{
+			File defaultDetailsFile = app.getDefaultDetailsFile();
+			if(defaultDetailsFile.exists())
+				updateBulletinDetails(defaultDetailsFile);
+		}
+		
+		if(!info.hasContactInfo())
+			doContactInfo();
+		else if(info.promptUserRequestSendToServer())
+		{
+			requestToUpdateContactInfoOnServerAndSaveInfo();
+			info.clearPromptUserRequestSendToServer();
+		}
+	}
 
 	private boolean isAccountMapSignatureMissing() 
 	{
@@ -1021,15 +1025,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		int result = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
 			exitWithoutSavingState();
-		try
-		{
-			app.loadConfigInfo();
-			app.doAfterSigninInitalization();
-		}
-		catch (Exception e)
-		{
-			initializationErrorDlg(e.getMessage());
-		}
 		if(result == SIGNED_IN)
 			return true;
 		return false;
