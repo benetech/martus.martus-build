@@ -46,6 +46,16 @@ public class ListPacketsForBulletin
 			{
 				accountPublicKey = args[i].substring(args[i].indexOf("=")+1);
 			}
+			
+			if(args[i].startsWith("--public-key"))
+			{
+				accountPublicKey = args[i].substring(args[i].indexOf("=")+1);
+			}
+			
+			if(args[i].startsWith("--no-prompt"))
+			{
+				prompt = false;
+			}
 		}
 		
 		try
@@ -99,15 +109,25 @@ public class ListPacketsForBulletin
 			
 			InputStreamWithSeek inForLoad = db.openInputStream(dbKey, security);
 			BulletinHeaderPacket bhp = new BulletinHeaderPacket(bulletinLocalId);
-			bhp.loadFromXml(inForLoad, security);
+			try
+			{
+				bhp.loadFromXml(inForLoad, security);
+			}
+			catch(Exception e)
+			{
+				if(e.getClass() == NullPointerException.class)
+				{
+					System.err.println("ListPacketsForBulletin.main: Bulletin not Found");
+					System.exit(3);
+				}
+			}
 			inForLoad.close();
 
 			DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
 			
 			for (int i = 0; i < keys.length; i++)
 			{			
-				String path = db.getFolderForAccount(accountPublicKey);
-				System.out.println(path + "\\" + keys[i].getLocalId());
+				System.out.println(keys[i].getLocalId());
 			}
 		}
 		catch (Exception e)
