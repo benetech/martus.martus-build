@@ -8,6 +8,7 @@ import java.io.InputStream;
 import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
+import org.martus.common.LoggerInterface;
 import org.martus.common.MartusUtilities;
 import org.martus.common.XmlRpcThread;
 import org.martus.common.MartusUtilities.FileTooLargeException;
@@ -167,12 +168,19 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 	}
 */
 
-	public ServerForAmplifiers(MartusServer coreServerToUse) throws MartusCrypto.CryptoInitializationException
+	public ServerForAmplifiers(MartusServer coreServerToUse, LoggerInterface loggerToUse) throws MartusCrypto.CryptoInitializationException
 	{
 		coreServer = coreServerToUse;
+		logger = loggerToUse;
 		
 		amplifierHandler = new ServerSideAmplifierHandler(this);
 	}
+
+	public void log(String message)
+	{
+		logger.log(message);
+	}
+	
 	
 	public Database getDatabase()
 	{
@@ -500,11 +508,6 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		return ip;
 	}
 
-	public synchronized void log(String message)
-	{
-		coreServer.log(message);
-	}
-	
 	BulletinHeaderPacket loadBulletinHeaderPacket(Database db, DatabaseKey key)
 		throws
 			IOException,
@@ -527,6 +530,7 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 	}
 
 	MartusServer coreServer;
+	LoggerInterface logger;
 
 	ServerSideAmplifierHandler amplifierHandler;
 	Vector authorizedAmps;

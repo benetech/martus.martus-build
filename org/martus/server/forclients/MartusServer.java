@@ -155,7 +155,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		security = new MartusSecurity();
 		serverForClients = new ServerForClients(this);
 		serverForMirroring = new ServerForMirroring(this, logger);
-		serverForAmplifiers = new ServerForAmplifiers(this);
+		serverForAmplifiers = new ServerForAmplifiers(this, logger);
 		failedUploadRequestsPerIp = new Hashtable();
 	}
 
