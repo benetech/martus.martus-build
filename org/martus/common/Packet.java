@@ -196,45 +196,48 @@ public class Packet
 		verifyPacketSignature(inputStream, null, verifier);
 	}
 	
-	public static void verifyPacketSignature(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
+	public static void verifyPacketSignature(InputStreamWithSeek in, byte[] expectedSig, MartusCrypto verifier) throws
 					IOException,
 					InvalidPacketException,
 					SignatureVerificationException
 	{
-		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
-		final long totalBytes = bufferedInputStream.available();
-		UnicodeReader reader = new UnicodeReader(bufferedInputStream);
+//System.out.println("Packet.verifyPacketSignature " + System.currentTimeMillis());
+		final long totalBytes = in.available();
+		UnicodeReader reader = new UnicodeReader(in);
 		
 		final String startComment = reader.readLine();
 		if(startComment == null || !startComment.equals(MartusXml.packetStartComment))
 			throw new InvalidPacketException("No start comment");
 
-		final String accountTag = MartusXml.getTagStart(MartusXml.AccountElementName);
+		final String packetType = reader.readLine();
+		final String accountLine = reader.readLine();
+		final String publicKey = extractPublicKeyFromXmlLine(accountLine);
+		
 		String line = null;
-		String accountLine = null;
 		String sigLine = null;
 		while( (line=reader.readLine()) != null)
 		{
-			if(line.startsWith(accountTag))
-				accountLine = line;
 			if(line.startsWith(MartusXml.packetSignatureStart))
 				sigLine = line;
 		} 
-		inputStream.seek(0);
-		bufferedInputStream = new BufferedInputStream(inputStream);		
 
-		if(accountLine == null)		
-			throw new InvalidPacketException("No Account Tag");
+		byte[] sigBytes = extractSigFromXmlLine(sigLine);
+		
+		if(expectedSig != null && !Arrays.equals(expectedSig, sigBytes))
+			throw new SignatureVerificationException();
+		
+		final long dataLength = totalBytes - sigLine.length() - MartusXml.newLine.length();
+		in.seek(0);
+		verifySignature(in, dataLength, publicKey, sigBytes, verifier);
+
+		in.seek(0);
+	}
+
+	static byte[] extractSigFromXmlLine(String sigLine)
+		throws InvalidPacketException
+	{
 		if(sigLine == null)
 			throw new InvalidPacketException("No signature start");
-
-		int startIndex = accountLine.indexOf(">");
-		int endIndex = accountLine.indexOf("</");	
-		if(startIndex < 0 || endIndex < 0)
-			throw new InvalidPacketException("Invalid Account Element");
-		++startIndex;
-		final String publicKey = accountLine.substring(startIndex, endIndex);
-		
 		if(!sigLine.endsWith(MartusXml.packetSignatureEnd))
 			throw new InvalidPacketException("No signature end");
 
@@ -243,8 +246,7 @@ public class Packet
 		final int sigLen = sigLine.length() - sigOverhead;
 		final int actualSigStart = sigLine.indexOf("=") + 1;
 		final int actualSigEnd = actualSigStart + sigLen;
-		final long dataLength = totalBytes - sigLine.length() - MartusXml.newLine.length();
-
+		
 		byte[] sigBytes = null;
 		try
 		{
@@ -254,21 +256,35 @@ public class Packet
 		{
 			throw new InvalidPacketException("Signature not valid Base64");
 		}
-		
-		if(expectedSig != null && !Arrays.equals(expectedSig, sigBytes))
-			throw new SignatureVerificationException();
-		
-		verifySignature(bufferedInputStream, dataLength, publicKey, sigBytes, verifier);
-
-		inputStream.seek(0);
+		return sigBytes;
 	}
 
-	private static void verifySignature(BufferedInputStream bufferedInputStream,
+	static String extractPublicKeyFromXmlLine(final String accountLine)
+		throws InvalidPacketException
+	{
+		if(accountLine == null)		
+			throw new InvalidPacketException("No Account Tag");
+
+		final String accountTag = MartusXml.getTagStart(MartusXml.AccountElementName);
+		if(!accountLine.startsWith(accountTag))
+			throw new InvalidPacketException("No Account Tag");
+		
+		int startIndex = accountLine.indexOf(">");
+		int endIndex = accountLine.indexOf("</");	
+		if(startIndex < 0 || endIndex < 0)
+			throw new InvalidPacketException("Invalid Account Element");
+		++startIndex;
+		final String publicKey = accountLine.substring(startIndex, endIndex);
+		return publicKey;
+	}
+
+	private static void verifySignature(InputStream in,
 									final long dataLength, final String publicKey, 
 									byte[] expectedSigBytes, MartusCrypto verifier) throws 
 			IOException, 
 			SignatureVerificationException 
 	{
+//System.out.println("Packet.verifySignature " + System.currentTimeMillis());
 		try
 		{
 			synchronized(verifier)
@@ -279,15 +295,14 @@ public class Packet
 				byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 				while(remaining >= bytes.length)
 				{
-					got = bufferedInputStream.read(bytes);
-					for(int i = 0; i < got; ++i)
-						verifier.signatureDigestByte(bytes[i]);
+					got = in.read(bytes);
+					verifier.signatureDigestBytes(bytes);
 					remaining -= got;
 				}
 			
-				got = bufferedInputStream.read(bytes, 0, (int)remaining);
-				for(int i = 0; i < got; ++i)
-					verifier.signatureDigestByte(bytes[i]);
+				byte[] lastBytes = new byte[(int)remaining];
+				in.read(lastBytes);
+				verifier.signatureDigestBytes(lastBytes);
 			
 				if(!verifier.signatureIsValid(expectedSigBytes))
 					throw new SignatureVerificationException();
@@ -297,7 +312,8 @@ public class Packet
 		{
 			throw new SignatureVerificationException();
 		}
-	}
+//System.out.println("Packet.verifySignature done " + System.currentTimeMillis());
+}
 
 	protected String getPacketRootElementName()
 	{
