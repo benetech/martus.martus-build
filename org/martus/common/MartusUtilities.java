@@ -244,7 +244,7 @@ public class MartusUtilities
 		}
 	}
 
-	public static Vector importPublicKeyFromFile(File file) throws IOException
+	public static Vector importClientPublicKeyFromFile(File file) throws IOException
 	{
 		Vector result = new Vector();
 
@@ -259,7 +259,7 @@ public class MartusUtilities
 		return result;
 	}
 
-	public static void exportPublicKey(MartusCrypto security, File outputfile)
+	public static void exportClientPublicKey(MartusCrypto security, File outputfile)
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
 		String publicKeyString = security.getPublicKeyString();

@@ -69,7 +69,7 @@ public class ExportPublicKey
 		
 		try
 		{
-			MartusUtilities.exportPublicKey(security, outputfile);
+			MartusUtilities.exportClientPublicKey(security, outputfile);
 		}
 		catch (MartusSignatureException e)
 		{

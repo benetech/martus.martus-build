@@ -1218,7 +1218,7 @@ public class MartusApp
 		Base64.InvalidBase64Exception,
 		MartusCrypto.MartusSignatureException
 	{
-		MartusUtilities.exportPublicKey(security, exportFile);
+		MartusUtilities.exportClientPublicKey(security, exportFile);
 	}
 
 	public String extractPublicInfo(File file) throws
@@ -1226,7 +1226,7 @@ public class MartusApp
 		Base64.InvalidBase64Exception,
 		PublicInformationInvalidException
 	{
-		Vector importedPublicKeyInfo = MartusUtilities.importPublicKeyFromFile(file);
+		Vector importedPublicKeyInfo = MartusUtilities.importClientPublicKeyFromFile(file);
 		String publicKey = (String) importedPublicKeyInfo.get(0);
 		String signature = (String) importedPublicKeyInfo.get(1);
 		MartusUtilities.validatePublicInfo(publicKey, signature, security);

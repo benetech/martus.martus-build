@@ -69,7 +69,7 @@ public class EncryptFile
 			int len = buffer.length;
 			cipherStream.write(buffer, 0, len);
 			
-			String publicKeyString = (String) MartusUtilities.importPublicKeyFromFile(publicKeyFile).get(0);
+			String publicKeyString = (String) MartusUtilities.importClientPublicKeyFromFile(publicKeyFile).get(0);
 			PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
 			
 			security.encrypt(plainStream, cipherStream, security.createSessionKey(), publicKey);

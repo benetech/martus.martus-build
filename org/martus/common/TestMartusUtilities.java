@@ -64,10 +64,10 @@ public class TestMartusUtilities extends TestCaseEnhanced
     }
 
 	// TODO: create tests for all the MartusUtilities methods
-	public void testExportPublicKey() throws Exception
+	public void testExportClientPublicKey() throws Exception
 	{
 		File keyFile = createTempFile();
-		MartusUtilities.exportPublicKey(security, keyFile);
+		MartusUtilities.exportClientPublicKey(security, keyFile);
 		
 		UnicodeReader reader = new UnicodeReader(keyFile);
 		String key = reader.readLine();
@@ -79,7 +79,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		File badFile = new File(BAD_FILENAME);
 		try
 		{
-			MartusUtilities.exportPublicKey(security, badFile);
+			MartusUtilities.exportClientPublicKey(security, badFile);
 			fail("Should have thrown");
 		}
 		catch (IOException ignoreExpectedException)
@@ -87,7 +87,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		}
 	}
 	
-	public void testImportPublicKeyFromFile() throws Exception
+	public void testImportClientPublicKeyFromFile() throws Exception
 	{
 		String key = security.getPublicKeyString();
 		byte[] publicKeyBytes = Base64.decode(key);
@@ -101,7 +101,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		writer.writeln(sig);
 		writer.close();
 
-		Vector result = MartusUtilities.importPublicKeyFromFile(keyFile);
+		Vector result = MartusUtilities.importClientPublicKeyFromFile(keyFile);
 		assertEquals(2, result.size());
 		String gotKey = (String)result.get(0);
 		String gotSig = (String)result.get(1);
