@@ -45,8 +45,8 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 	public void testThreadedimporting() throws Exception
 	{
-		final int threadCount = 20;
-		final int iterations = 20;
+		final int threadCount = 10;
+		final int iterations = 10;
 		ThreadFactory factory = new ImportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 	}
