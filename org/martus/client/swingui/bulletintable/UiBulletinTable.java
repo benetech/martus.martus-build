@@ -251,7 +251,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			createClone = true;
 		}
 		
-		if(b.hasUnknownTags())
+		if(b.hasUnknownTags() || b.hasUnknownCustomField())
 			if(!mainWindow.confirmDlg(mainWindow, "EditBulletinWithUnknownTags"))
 				return;
 
