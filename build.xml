@@ -1,4 +1,4 @@
-<!-- Ant build.xml - Need Ant v1.5 or later -->
+<!-- Ant build.xml - Needs Ant v1.5.1 or later -->
 <project name="martus" default="build" basedir=".">
 
   <!-- set global properties for this build -->
@@ -90,7 +90,9 @@
 <!-- ================================================================== -->
 <!-- B U I L D                                                          -->
 <!-- ================================================================== -->
-  <target name="build" depends="init">
+
+	<!-- Build common -->
+  <target name="build-common" depends="init">
 
     <echo message="${DSTAMP}" file="${BuildDateFile}"/>
     
@@ -98,43 +100,69 @@
     		<include name="**/*.java"/>
     </javac>
 
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${common-jar}" basedir="." includes="${common-files}"/>
+
+  </target>
+  
+  <!-- Build client -->
+  <target name="build-client" depends="init,build-common">
+
+    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
+    
+    <javac target="1.4" optimize="on" srcdir="${client-dir}" classpath="${common-dir}" failonerror="true">
+    		<include name="**/*.java"/>
+    </javac>
+
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${client-jar}" basedir="." 
+				manifest="${client-dir}/core/main-class.txt" 
+    		includes="${client-files},
+    							${common-files}"/>
+  </target>
+  
+  <!-- Build server -->
+  <target name="build-server" depends="init,build-common">
+
+    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
+
     <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath="${common-dir}" failonerror="true">
     		<include name="**/*.java"/>
     </javac>
 
+    <mkdir dir="${dist}"/>
 
-    <javac target="1.4" optimize="on" srcdir="${client-dir}" classpath="${common-dir}" failonerror="true">
-    		<include name="**/*.java"/>
-    </javac>
+    <jar jarfile="${server-jar}" basedir="." 
+    		includes="${server-files}, ${common-files}"/>
+  </target>
+  
+  <!-- Build meta -->
+  <target name="build-meta" depends="init,build-common,build-server,build-client">
+
+    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
 
     <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true">
     		<include name="**/*.java"/>
     </javac>
 
     <mkdir dir="${dist}"/>
-
-    <jar jarfile="${common-jar}" basedir="." includes="${common-files}"/>
-    		
-    <jar jarfile="${server-jar}" basedir="." 
-    		includes="${server-files}, ${common-files}"/>
-    		
-    <jar jarfile="${client-jar}" basedir="." 
-				manifest="${client-dir}/core/main-class.txt" 
-    		includes="${client-files},
-    							${common-files}"/>
     		
     <jar jarfile="${meta-jar}" basedir="." 
     		includes="${meta-files}, 
     				${common-files}, 
     				${server-files},
     				${client-files}"/>
-
   </target>
+  
+  <!-- Build all (same as meta) -->
+  <target name="build" depends="init,build-common,build-server,build-client,build-meta"/>
 
 <!-- ================================================================== -->
 <!-- T E S T S                                                          -->
 <!-- ================================================================== -->
-  <target name="test-common" depends="build">
+  <target name="test-common" depends="build-common">
 		<junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
 			<classpath>
 				<pathelement location="${common-jar}"/>
@@ -144,7 +172,7 @@
 		</junit>
   </target>
 
-  <target name="test-server" depends="build">
+  <target name="test-server" depends="build-server">
 		<junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
 			<classpath>
 				<pathelement location="${server-jar}"/>
@@ -154,7 +182,7 @@
 		</junit>
   </target>
 
-  <target name="test-client" depends="build">
+  <target name="test-client" depends="build-client">
 		<junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
 			<classpath>
 				<pathelement location="${client-jar}"/>
@@ -218,33 +246,64 @@
 		/>
 
 	</target>
+	
+	<target name="check_cvspass" unless="cvs.pass">
+
+		<input
+			message="Please enter CVS password:"
+			addproperty="cvs.pass"
+		/>
+
+	</target>
+	
+	<target name="check_cvsroot" unless="cvs.cvsroot">
+
+		<input
+			message="Please enter CVS location (:<protocol>:<username>@<server>:<path>) :"
+			addproperty="cvs.cvsroot"
+		/>
+
+	</target>
 
 <!-- ================================================================== -->
 <!-- J A R S I G N E R                                                  -->
 <!-- ================================================================== -->
-	<target name="jarsigner" depends="check_storepass, check_keypass, check_keystore, build">
- 
+	<!-- Sign client jar -->
+	<target name="jarsign-client" depends="check_storepass, check_keypass, check_keystore, build">
+	
 		<signjar jar="${client-jar}"
 						keystore="${sign.keystore}"
 						storepass="${sign.storepass}"
 						keypass="${sign.keypass}"
 						alias="ssmtsjar"
 						/>
-
+	</target>
+	
+	<!-- Sign server jar -->
+	<target name="jarsign-server" depends="check_storepass, check_keypass, check_keystore, build">
+	
 		<signjar jar="${server-jar}"
 						keystore="${sign.keystore}"
 						storepass="${sign.storepass}"
 						keypass="${sign.keypass}"
 						alias="ssmtsjar"
 						/>
-						
+	</target>
+	
+	<!-- Sign common jar -->
+	<target name="jarsign-common" depends="check_storepass, check_keypass, check_keystore, build">
+	
 		<signjar jar="${common-jar}"
 						keystore="${sign.keystore}"
 						storepass="${sign.storepass}"
 						keypass="${sign.keypass}"
 						alias="ssmtsjar"
 						/>
-						
+	</target>
+	
+	<!-- Sign meta jar -->
+	<target name="jarsign-meta" depends="check_storepass, check_keypass, check_keystore, build">
+	
 		<signjar jar="${meta-jar}"
 						keystore="${sign.keystore}"
 						storepass="${sign.storepass}"
@@ -252,6 +311,9 @@
 						alias="ssmtsjar"
 						/>
 	</target>
+	
+	<!-- Sign all jar -->
+	<target name="jarsigner" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta"/>
 	
 <!-- ================================================================== -->
 <!-- M D 5                                                              -->
@@ -267,7 +329,7 @@
 <!-- ================================================================== -->
 <!-- C V S  -   T A G                                                   -->
 <!-- ================================================================== -->
-	<target name="cvs-tag" depends="init">
+	<target name="cvs-tag" depends="init,check_cvspass,check_cvsroot">
 		<cvspass cvsroot="${cvs.cvsroot}"
 				 password="${cvs.pass}"
 		/>
@@ -315,4 +377,3 @@
 	</target>
 
 </project>
-
