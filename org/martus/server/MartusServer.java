@@ -169,13 +169,13 @@ public class MartusServer
 		runningFile.delete();
 		if(secureMode)
 		{
-			File magicWordsFile = new File(dataDirectory, "magicwords.txt");
+			File magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
 			if(!magicWordsFile.delete())
 			{
 				System.out.println("Unable to delete magicwords");
 				System.exit(4);
 			}
-			File keyPairFile = new File(dataDirectory, "keypair.dat");
+			File keyPairFile = new File(dataDirectory, KEYPAIRFILENAME);
 			if(!keyPairFile.delete())
 			{
 				System.out.println("Unable to delete keypair");
@@ -221,9 +221,9 @@ public class MartusServer
 		
 
 		clientsThatCanUpload = new Vector();
-		allowUploadFile = new File(dataDirectory, "uploadsok.txt");
-		magicWordsFile = new File(dataDirectory, "magicwords.txt");
-		keyPairFile = new File(dataDirectory, "keypair.dat");
+		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
+		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
+		keyPairFile = new File(dataDirectory, KEYPAIRFILENAME);
 
 		try
 		{
@@ -1181,6 +1181,11 @@ public class MartusServer
 		return file;
 	}
 	
+	public static String getKeypairFilename()
+	{
+		return KEYPAIRFILENAME;
+	}
+	
 	class DuplicatePacketException extends Exception
 	{
 		DuplicatePacketException(String message)
@@ -1741,4 +1746,8 @@ public class MartusServer
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
+	
+	private static final String KEYPAIRFILENAME = "keypair.dat";
+	private static final String MAGICWORDSFILENAME = "magicwords.txt";
+	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 }
