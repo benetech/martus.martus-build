@@ -109,14 +109,12 @@ public class Bulletin implements BulletinConstants
 		return isValidFlag;
 	}
 
-	public boolean isFromDatabase()
-	{
-		return (getDatabase() != null);
-	}
-	
 	public Database getDatabase()
 	{
-		return db;
+		if(store == null)
+			return null;
+	
+		return store.getDatabase();
 	}
 	
 	public long getLastSavedTime()
@@ -462,7 +460,6 @@ public class Bulletin implements BulletinConstants
 		Bulletin b = new Bulletin(store);
 		b.clear();
 		b.isValidFlag = true;
-		b.db = store.getDatabase();
 		
 		boolean isHeaderValid = true;
 
@@ -512,7 +509,7 @@ public class Bulletin implements BulletinConstants
 		packet.setUniversalId(key.getUniversalId());
 		try
 		{
-			InputStreamWithSeek in = db.openInputStream(key, verifier);
+			InputStreamWithSeek in = getDatabase().openInputStream(key, verifier);
 			if(in == null)
 			{
 				System.out.println("Packet not found: " + key.getLocalId());
@@ -892,7 +889,6 @@ public class Bulletin implements BulletinConstants
 		pendingPrivateAttachments = new Vector();
 	}
 	
-	private Database db;
 	private boolean encryptedFlag;
 	private boolean isFromDatabase;
 	private boolean isValidFlag;

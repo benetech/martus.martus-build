@@ -714,13 +714,10 @@ public class TestBulletin extends TestCaseEnhanced
 		
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
 		Bulletin loaded = store.createEmptyBulletin();
-		assertEquals("fromdb", false, loaded.isFromDatabase());
-		assertNull("db", loaded.getDatabase());
 		loaded = Bulletin.loadFromDatabase(store, key);
 		assertEquals("id", b.getLocalId(), loaded.getLocalId());
 		assertEquals("public info", b.get(b.TAGPUBLICINFO), loaded.get(b.TAGPUBLICINFO));
 		assertEquals("private info", b.get(b.TAGPRIVATEINFO), loaded.get(b.TAGPRIVATEINFO));
-		assertEquals("fromdb", true, loaded.isFromDatabase());
 		assertEquals("db", db, loaded.getDatabase());
 		assertEquals("status", b.getStatus(), loaded.getStatus());
 	}
@@ -736,9 +733,8 @@ public class TestBulletin extends TestCaseEnhanced
 		
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
 		Bulletin loaded = store.createEmptyBulletin();
-		assertEquals("fromdb", false, loaded.isFromDatabase());
-		assertNull("db", loaded.getDatabase());
 		loaded = Bulletin.loadFromDatabase(store, key);
+		assertEquals("db", db, loaded.getDatabase());
 		assertEquals("id", b.getLocalId(), loaded.getLocalId());
 
 		assertEquals("not private?", b.isAllPrivate(), loaded.isAllPrivate());
