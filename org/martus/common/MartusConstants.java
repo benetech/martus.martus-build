@@ -33,5 +33,6 @@ public interface MartusConstants
 	public final static int streamBufferCopySize = 1024;
 	public final static int digestBufferSize = 1024;
 	public final static String regexEqualsDelimeter = "=";
-	public final static int NumberOfFilesInShare = 8;
+	public final static int MinNumberOfFilesNeededToRecreateSecret = 2;
+	public final static int NumberOfFilesInShare = 5;
 }

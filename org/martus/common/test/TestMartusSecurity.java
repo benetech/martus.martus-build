@@ -35,7 +35,10 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
+import java.util.Vector;
 
+import org.logi.crypto.secretshare.SecretSharingException;
+import org.martus.common.MartusConstants;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -86,6 +89,54 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	{
 	}
 	
+	public void testSecretShare() throws Exception
+	{
+		MartusSecurity tempSecurity = new MartusSecurity();
+		byte[] secret = {2,3,4,0,8,5,6,7};
+		Vector allShares = tempSecurity.buildShares(secret);
+		assertNotNull("Shares null?",allShares);
+		assertEquals("Incorrect number of Shares",  MartusConstants.NumberOfFilesInShare, allShares.size());
+
+		byte[] recoveredSecret = tempSecurity.recoverShares(allShares);
+		assertNotNull("Recovered Secret Null?", recoveredSecret);
+		assertTrue("Secret didn't match with allparts?", Arrays.equals(secret,recoveredSecret));
+		
+		Vector firstTwoShares = new Vector();
+		firstTwoShares.add(allShares.get(0));
+		firstTwoShares.add(allShares.get(1));
+		recoveredSecret = tempSecurity.recoverShares(firstTwoShares);
+		assertTrue("Secret didn't match with first and second share?", Arrays.equals(secret,recoveredSecret));
+
+		Vector lastTwoShares = new Vector();
+		lastTwoShares.add(allShares.get(3));
+		lastTwoShares.add(allShares.get(4));
+		recoveredSecret = tempSecurity.recoverShares(lastTwoShares);
+		assertTrue("Secret didn't match with last two shares?", Arrays.equals(secret,recoveredSecret));
+
+		Vector OneShareOnly = new Vector();
+		OneShareOnly.add(allShares.get(1));
+		try 
+		{
+			recoveredSecret = tempSecurity.recoverShares(OneShareOnly);
+			fail("Secret returned with only one share?");
+		} 
+		catch (SecretSharingException expectedException) 
+		{
+		}
+
+		Vector sameTwoShares = new Vector();
+		sameTwoShares.add(allShares.get(2));
+		sameTwoShares.add(allShares.get(2));
+		try 
+		{
+			recoveredSecret = tempSecurity.recoverShares(sameTwoShares);
+			fail("Secrets matched with only 1 share used twice?");
+		} 
+		catch (SecretSharingException expectedException) 
+		{
+		}
+	}
+
 	public void testGetDigestOfPartOfPrivateKey() throws Exception
 	{
 		MartusCrypto knownKey = MockMartusSecurity.createClient();

@@ -81,8 +81,12 @@ import javax.net.ssl.KeyManagerFactory;
 import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.X509V1CertificateGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.logi.crypto.Crypto;
+import org.logi.crypto.secretshare.PolySecretShare;
+import org.logi.crypto.secretshare.SecretSharingException;
 import org.martus.common.MartusConstants;
-import org.martus.util.*;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
 
 import com.isnetworks.provider.random.InfiniteMonkeyProvider;
 
@@ -190,6 +194,38 @@ public class MartusSecurity extends MartusCryptoImplementation
 			MartusSignatureException
 	{
 		return isValidSignatureOfStream(extractPublicKey(publicKeyString), inputStream, signature);
+	}
+
+	public Vector buildShares(byte[] secretToShare) throws SecretSharingException
+	{
+		Vector shares = new Vector();
+		Crypto.initRandom();
+		int minNumber = MartusConstants.MinNumberOfFilesNeededToRecreateSecret;
+		int numberShares = MartusConstants.NumberOfFilesInShare;
+		PolySecretShare[] polyShares = PolySecretShare.share(minNumber, numberShares, secretToShare, 512);
+		for (int i = 0 ; i < numberShares; ++i)
+		{
+			shares.add(polyShares[i].toString());
+		}
+		return shares;
+	}
+
+	public byte[] recoverShares(Vector shares) throws SecretSharingException
+	{
+		try 
+		{
+			int numShares = shares.size();
+			PolySecretShare[] polyShares = new PolySecretShare[numShares];
+			for(int i = 0; i < numShares; ++i)
+			{
+				polyShares[i] = (PolySecretShare)PolySecretShare.fromString(shares.get(i).toString());
+			}
+			return PolySecretShare.retrieve(polyShares);
+		} 
+		catch (Exception e) 
+		{
+			throw new SecretSharingException(e.toString());
+		}
 	}
 
 	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws
