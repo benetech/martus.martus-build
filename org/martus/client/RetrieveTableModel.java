@@ -13,7 +13,7 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 
 abstract public class RetrieveTableModel extends AbstractTableModel
 {
-	public RetrieveTableModel(MartusApp appToUse) throws ServerErrorException
+	public RetrieveTableModel(MartusApp appToUse)
 	{
 		app = appToUse;
 		summaries = new Vector();

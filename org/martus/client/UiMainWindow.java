@@ -828,6 +828,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			String dlgTitleTag = "retrieve";
 			RetrieveTableModel model = new RetrieveMyTableModel(app);
+			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
@@ -868,6 +869,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			String dlgTitleTag = "RetrieveDrafts";
 			RetrieveTableModel model = new RetrieveMyDraftsTableModel(app);
+			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
@@ -895,6 +897,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			String dlgTitleTag = "retrieveHQ";
 			RetrieveTableModel model = new RetrieveHQTableModel(app);
+			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
@@ -921,6 +924,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			String dlgTitleTag = "retrieveHQDrafts";
 			RetrieveTableModel model = new RetrieveHQDraftsTableModel(app);
+			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;

@@ -9,10 +9,8 @@ import org.martus.client.MartusApp.ServerErrorException;
 public class RetrieveMyDraftsTableModel extends RetrieveTableModel 
 {
 	public RetrieveMyDraftsTableModel(MartusApp appToUse)
-		throws ServerErrorException 
 	{
 		super(appToUse);
-		Initalize();
 	}
 
 	public void Initalize() throws ServerErrorException 

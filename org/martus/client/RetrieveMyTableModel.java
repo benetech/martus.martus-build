@@ -8,11 +8,9 @@ import org.martus.client.MartusApp.ServerErrorException;
 
 public class RetrieveMyTableModel extends RetrieveTableModel 
 {
-	public RetrieveMyTableModel(MartusApp appToUse) throws 
-		ServerErrorException 
+	public RetrieveMyTableModel(MartusApp appToUse)
 	{
 		super(appToUse);
-		Initalize();
 	}
 
 	public void Initalize() throws ServerErrorException
