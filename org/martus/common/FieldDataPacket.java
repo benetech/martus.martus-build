@@ -209,12 +209,12 @@ public class FieldDataPacket extends Packet
 		loadFromXml(inputStream, null, verifier);
 	}
 	
-	protected byte[] writeXmlPlainText(Writer writer, MartusCrypto signer) throws IOException
+	public byte[] writeXmlPlainText(Writer writer, MartusCrypto signer) throws IOException
 	{
 		return super.writeXml(writer, signer);
 	}
 	
-	protected byte[] writeXmlEncrypted(Writer writer, MartusCrypto signer) throws IOException
+	public byte[] writeXmlEncrypted(Writer writer, MartusCrypto signer) throws IOException
 	{
 		StringWriter plainTextWriter = new StringWriter();
 		writeXmlPlainText(plainTextWriter, signer);
