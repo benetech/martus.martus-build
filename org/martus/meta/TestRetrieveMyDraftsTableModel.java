@@ -37,7 +37,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		
 		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
-		app.setSSLServerForTesting(testSSLServerInterface);
+		app.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithoutData = new RetrieveMyDraftsTableModel(app);
 		modelWithoutData.initialize(null);
 		app.getStore().deleteAllData();

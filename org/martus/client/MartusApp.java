@@ -135,7 +135,7 @@ public class MartusApp
 			System.out.println("MartusApp.setServerInfo: Unable to Save ConfigInfo" + e);
 		}
 		
-		createSSLServerHandler();
+		createXmlrpcNetworkInterfaceHandler();
 	}
 	
 	public void setHQKey(String hqKey) throws 
@@ -565,7 +565,7 @@ public class MartusApp
 	
 	public boolean isSSLServerAvailable()
 	{
-		if(currentSSLServer == null && getServerName().length() == 0)
+		if(currentNetworkInterfaceHandler == null && getServerName().length() == 0)
 			return false;
 			
 		return isSSLServerAvailable(getCurrentSSLServerProxy());
@@ -1379,9 +1379,9 @@ public class MartusApp
 		return security;
 	}
 	
-	public void setSSLServerForTesting(NetworkInterface server)
+	public void setSSLNetworkInterfaceHandlerForTesting(NetworkInterface server)
 	{
-		currentSSLServer = server;
+		currentNetworkInterfaceHandler = server;
 	}
 
 	private boolean isNonSSLServerAvailable(NetworkInterfaceForNonSSL server)
@@ -1418,25 +1418,25 @@ public class MartusApp
 	
 	public ClientSideNetworkGateway getCurrentSSLServerProxy()
 	{
-		if(currentSSLServerProxy == null)
+		if(currentNetworkInterfaceGateway == null)
 		{
-			currentSSLServerProxy = new ClientSideNetworkGateway(getCurrentSSLServer());
+			currentNetworkInterfaceGateway = new ClientSideNetworkGateway(getCurrentNetworkInterfaceHandler());
 		}
 		
-		return currentSSLServerProxy;
+		return currentNetworkInterfaceGateway;
 	}
 	
-	private NetworkInterface getCurrentSSLServer()
+	private NetworkInterface getCurrentNetworkInterfaceHandler()
 	{
-		if(currentSSLServer == null)
+		if(currentNetworkInterfaceHandler == null)
 		{
-			createSSLServerHandler();
+			createXmlrpcNetworkInterfaceHandler();
 		}
 
-		return currentSSLServer;
+		return currentNetworkInterfaceHandler;
 	}
 
-	private void createSSLServerHandler() 
+	private void createXmlrpcNetworkInterfaceHandler() 
 	{
 		String ourServer = getServerName();
 		int ourPort = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
@@ -1444,9 +1444,7 @@ public class MartusApp
 		{
 			ClientSideNetworkHandlerUsingXmlRpc handler = new ClientSideNetworkHandlerUsingXmlRpc(ourServer, ourPort);
 			handler.getSimpleX509TrustManager().setExpectedPublicKey(getConfigInfo().getServerPublicKey());
-			currentSSLServer = handler;
-			
-			
+			currentNetworkInterfaceHandler = handler;
 		} 
 		catch (SSLSocketSetupException e) 
 		{
@@ -1521,8 +1519,8 @@ public class MartusApp
 	private MartusLocalization localization;
 	public BulletinStore store;
 	private ConfigInfo configInfo;
-	public NetworkInterface currentSSLServer;
-	public ClientSideNetworkGateway currentSSLServerProxy;
+	public NetworkInterface currentNetworkInterfaceHandler;
+	public ClientSideNetworkGateway currentNetworkInterfaceGateway;
 	private boolean logUploads;
 	public MartusCrypto security;
 	private String currentUserName;

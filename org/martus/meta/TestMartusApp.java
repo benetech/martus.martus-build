@@ -71,15 +71,15 @@ public class TestMartusApp extends TestCaseEnhanced
 
 		appWithoutServer = MockMartusApp.create(mockSecurityForApp);
 		MockServerNotAvailable mockServerNotAvailable = new MockServerNotAvailable();
-		appWithoutServer.setSSLServerForTesting(new ServerSideNetworkHandler(mockServerNotAvailable));
+		appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(mockServerNotAvailable));
 
 		appWithServer = MockMartusApp.create(mockSecurityForApp);
 		appWithServer.setServerInfo("mock", mockServer.getAccountId());
-		appWithServer.setSSLServerForTesting(mockSSLServerHandler);
+		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		
 		appWithAccount = MockMartusApp.create(mockSecurityForApp);
 		appWithAccount.setServerInfo("mock", mockServer.getAccountId());
-		appWithAccount.setSSLServerForTesting(mockSSLServerHandler);
+		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
 		File keyPairFile = appWithAccount.getKeyPairFile();
 		keyPairFile.delete();
@@ -436,13 +436,13 @@ public class TestMartusApp extends TestCaseEnhanced
 		app.setServerInfo(server1, key1);
 		assertEquals("Didn't set Configinfo name", server1, app.getConfigInfo().getServerName());
 		assertEquals("Didn't set Configinfo key", key1, app.getConfigInfo().getServerPublicKey());
-		NetworkInterface server1Interface = app.currentSSLServer;
+		NetworkInterface server1Interface = app.currentNetworkInterfaceHandler;
 		assertNotNull("Didn't create proxy?", server1Interface);
 
 		app.setServerInfo(server2, key2);
 		assertEquals("Didn't update Configinfo name?", server2, app.getConfigInfo().getServerName());
 		assertEquals("Didn't update Configinfo key?", key2, app.getConfigInfo().getServerPublicKey());
-		assertNotEquals("Didn't update proxy", app.currentSSLServer, server1Interface);
+		assertNotEquals("Didn't update proxy", app.currentNetworkInterfaceHandler, server1Interface);
 		
 		app.loadConfigInfo();
 		assertEquals("Didn't save Configinfo name?", server2, app.getConfigInfo().getServerName());
@@ -459,7 +459,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		MockMartusApp appWithoutServerName = MockMartusApp.create();
 		assertEquals("Empty server name was available?", false, appWithoutServerName.isSSLServerAvailable(""));
 		assertEquals("uninitialized app server available?", false, appWithoutServerName.isSSLServerAvailable());
-		assertNull("No proxy?", appWithoutServerName.currentSSLServer);
+		assertNull("No proxy?", appWithoutServerName.currentNetworkInterfaceHandler);
 		appWithoutServerName.deleteAllFiles();
 	}
 
@@ -626,12 +626,12 @@ public class TestMartusApp extends TestCaseEnhanced
 	
 	public void testUploadBulletinUsesChunks() throws Exception
 	{
-		NetworkInterface oldSSLServer = appWithAccount.currentSSLServer;
+		NetworkInterface oldSSLServer = appWithAccount.currentNetworkInterfaceHandler;
 		MockMartusServerChunks server = new MockMartusServerChunks();
 		server.setSecurity(mockSecurityForServer);
 		server.clientsThatCanUpload.clear();
 		server.allowUploads(appWithAccount.getAccountId());
-		appWithAccount.setSSLServerForTesting(new ServerSideNetworkHandler(server));
+		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(server));
 		appWithAccount.serverChunkSize = 100;
 		Bulletin b = appWithAccount.createBulletin();
 		b.setSealed();
@@ -642,7 +642,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		server.uploadResponse = NetworkInterfaceConstants.INVALID_DATA;
 		assertEquals("result ok?", NetworkInterfaceConstants.INVALID_DATA, appWithAccount.uploadBulletin(b, null));
 
-		appWithAccount.setSSLServerForTesting(oldSSLServer);
+		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(oldSSLServer);
 		appWithAccount.serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 		
 		server.deleteAllFiles();
@@ -758,7 +758,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_BEGIN("testBackgroundUploadLogging");
 		String serverName = "some silly server";
 		appWithServer.setServerInfo(serverName, mockServer.getAccountId());
-		appWithServer.setSSLServerForTesting(mockSSLServerHandler);
+		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		File logFile = new File(appWithServer.getUploadLogFilename());
 		logFile.delete();
 
@@ -1129,7 +1129,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		MartusSecurity security = new MartusSecurity();
 		security.createKeyPair(512);
 		MockMartusApp app= MockMartusApp.create(security);
-		app.currentSSLServerProxy = gateway;
+		app.currentNetworkInterfaceGateway = gateway;
 		String accountId = app.getAccountId();
 		
 		Vector uids = new Vector();
@@ -1182,7 +1182,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		MartusSecurity security = new MartusSecurity();
 		security.createKeyPair(512);
 		MockMartusApp app= MockMartusApp.create(security);
-		app.currentSSLServerProxy = gateway;
+		app.currentNetworkInterfaceGateway = gateway;
 		String accountId = app.getAccountId();
 		
 		Vector contact = new Vector();
@@ -1362,7 +1362,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		hqSecurity.createKeyPair();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
 		hqApp.setServerInfo("mock", mockServer.getAccountId());
-		hqApp.setSSLServerForTesting(mockSSLServerHandler);
+		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithAccount.getAccountId(), hqApp.getAccountId());
 		appWithAccount.setHQKey(hqApp.getAccountId());
 

@@ -42,15 +42,15 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		appWithoutServer = MockMartusApp.create(mockSecurityForApp);
 		MockServerNotAvailable mockServerNotAvailable = new MockServerNotAvailable();
-		appWithoutServer.setSSLServerForTesting(new ServerSideNetworkHandler(mockServerNotAvailable));
+		appWithoutServer.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(mockServerNotAvailable));
 
 		appWithServer = MockMartusApp.create(mockSecurityForApp);
 		appWithServer.setServerInfo("mock", mockServer.getAccountId());
-		appWithServer.setSSLServerForTesting(mockSSLServerHandler);
+		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		
 		appWithAccount = MockMartusApp.create(mockSecurityForApp);
 		appWithAccount.setServerInfo("mock", mockServer.getAccountId());
-		appWithAccount.setSSLServerForTesting(mockSSLServerHandler);
+		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
 		mockServer.deleteAllData();
 	}
@@ -410,7 +410,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		hqSecurity.createKeyPair();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
 		hqApp.setServerInfo("mock", mockServer.getAccountId());
-		hqApp.setSSLServerForTesting(mockSSLServerHandler);
+		hqApp.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		assertNotEquals("same public key?", appWithAccount.getAccountId(), hqApp.getAccountId());
 		appWithAccount.setHQKey(hqApp.getAccountId());
 

@@ -66,7 +66,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	
 		testServer = new MockServer();
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
-		hqApp.setSSLServerForTesting(testSSLServerInterface);
+		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQDraftsTableModel(hqApp);
 		modelWithData.initialize(null);
 		String z0 = MockBulletin.saveToZipString(b0);
