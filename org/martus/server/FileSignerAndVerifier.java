@@ -19,14 +19,14 @@ public class FileSignerAndVerifier
 {
 	public static void main(String[] args) throws Exception
 	{
-			System.out.println("FileSignerVerifier:\nUse this program to create a signature file of a specified file"
+			System.out.println("FileSignerAndVerifier:\nUse this program to create a signature file of a specified file"
 								+ " or to verify a file against it's signature file.");
 			File keyPairFile = null;
 			File fileForOperation = null;
 			
 			if( args.length != 2 )
 			{
-				System.err.println("\nUsage:\n FileSignerVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
+				System.err.println("\nUsage:\n FileSignerAndVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
 				System.exit(2);
 			}
 			
@@ -45,7 +45,7 @@ public class FileSignerAndVerifier
 			
 			if(keyPairFile == null || fileForOperation == null || !keyPairFile.isFile())
 			{
-				System.err.println("\nUsage:\n FileSignerVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
+				System.err.println("\nUsage:\n FileSignerAndVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
 				System.exit(2);
 			}
 
@@ -61,35 +61,33 @@ public class FileSignerAndVerifier
 			}
 			catch(Exception e)
 			{
-				System.err.println("FileSignerVerifier.main: " + e);
+				System.err.println("FileSignerAndVerifier.main: " + e);
 				System.exit(3);
 			}
 			
-			if(fileForOperation.getName().endsWith(".sig"))
+			File signatureFile = MartusUtilities.getSignatureFileFromFile(fileForOperation);
+			
+			if(signatureFile.exists())
 			{
-				File fileToVerify = null;
 				try
 				{
-					String filename = fileForOperation.getAbsolutePath();
-					filename = filename.substring(0, filename.indexOf(".sig"));
-					fileToVerify = new File(filename);
-					MartusUtilities.verifyFileAndSignature(fileToVerify, fileForOperation, security, security.getPublicKeyString());
+					MartusUtilities.verifyFileAndSignature(fileForOperation, signatureFile, security, security.getPublicKeyString());
 				}
 				catch(FileVerificationException e)
 				{
-					System.err.println("File " + fileToVerify.getAbsolutePath()
+					System.err.println("File " + fileForOperation.getAbsolutePath()
 										+ " did not verify against signature file "
-										+ fileForOperation.getAbsolutePath() + ".");
+										+ signatureFile.getAbsolutePath() + ".");
 					System.exit(3);
 				}
 				
-				System.out.println("File " + fileToVerify.getAbsolutePath()
+				System.out.println("File " + fileForOperation.getAbsolutePath()
 									+ " verified successfully against signature file "
-									+ fileForOperation.getAbsolutePath() + ".");
+									+ signatureFile.getAbsolutePath() + ".");
 			}
 			else
 			{
-				File signatureFile = MartusUtilities.createSignatureFileFromFile(fileForOperation, security);
+				signatureFile = MartusUtilities.createSignatureFileFromFile(fileForOperation, security);
 				System.out.println("Signature file created at " + signatureFile.getAbsolutePath());
 			}
 			System.exit(0);
