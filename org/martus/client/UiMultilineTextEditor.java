@@ -1,19 +1,20 @@
 package org.martus.client;
 
+import java.awt.Font;
+
 import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.text.JTextComponent;
-
-import org.martus.client.*;
 
 public class UiMultilineTextEditor extends UiTextField
 {
 	public UiMultilineTextEditor(MartusApp appToUse)
 	{
 		super(appToUse);
-		editor = new UiTextArea(5, 50);
+		editor = new UiTextArea(5, UiConstants.textFieldColumns);
 		editor.setLineWrap(true);
 		editor.setWrapStyleWord(true);
+		editor.setFont(new Font("SansSerif", Font.PLAIN, UiConstants.defaultFontSize));
 
 		widget = new JScrollPane(editor, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
 										JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
