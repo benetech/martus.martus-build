@@ -241,8 +241,14 @@ public class MockMartusServer extends MartusServer
 		keyPairFile.delete();
 		if(keyPairFile.exists())
 			throw new IOException("keyPairFile");
-	
-		new File(dataDirectoryString).delete();
+
+		new File(triggerDirectory.getAbsolutePath()).delete();
+		new File(startupConfigDirectory.getAbsolutePath()).delete();
+		File dataDir = new File(dataDirectoryString);
+		dataDir.delete();
+		
+		if(dataDir.exists())
+			throw new IOException("dataDirectory");
 	}
 
 	public Vector infoResponse;

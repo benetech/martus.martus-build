@@ -105,7 +105,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		System.out.print("Enter passphrase: ");
 		System.out.flush();
 
-		File waitingFile = new File(getTriggersDirectory(), "waiting");
+		File waitingFile = new File(server.triggerDirectory, "waiting");
 		waitingFile.delete();
 		writeSyncFile(waitingFile);
 
@@ -185,17 +185,18 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		server.setDatabase(diskDatabase);
 		
-		File runningFile = new File(getTriggersDirectory(), "running");
+		File runningFile = new File(server.triggerDirectory, "running");
 		runningFile.delete();
 		if(secureMode)
 		{
-			File magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
+			File magicWordsFile = new File(server.startupConfigDirectory, MAGICWORDSFILENAME);
 			if(!magicWordsFile.delete())
 			{
 				System.out.println("Unable to delete magicwords");
 				System.exit(4);
 			}
-			File keyPairFile = new File(dataDirectory, getKeypairFilename());
+
+			File keyPairFile = new File(server.startupConfigDirectory, getKeypairFilename());
 			if(!keyPairFile.delete())
 			{
 				System.out.println("Unable to delete keypair");
@@ -220,6 +221,18 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		security = new MartusSecurity();
 		
+		triggerDirectory = new File(dataDirectory, ADMINTRIGGERDIRECTORY);
+		if(!triggerDirectory.exists())
+		{
+			triggerDirectory.mkdirs();
+		}
+
+		startupConfigDirectory = new File(dataDirectory,ADMINSTARTUPCONFIGDIRECTORY);
+		if(!startupConfigDirectory.exists())
+		{
+			startupConfigDirectory.mkdirs();
+		}
+		
 		nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
 		serverHandler = new ServerSideNetworkHandler(this);
 		supplierHandler = new SupplierSideMirroringHandler(this);
@@ -229,9 +242,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		magicWords = new Vector();
 		
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
-		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
-		keyPairFile = new File(dataDirectory, getKeypairFilename());
-		shutdownFile = new File(getTriggersDirectory(), MARTUSSHUTDOWNFILENAME);
+		magicWordsFile = new File(startupConfigDirectory, MAGICWORDSFILENAME);
+		keyPairFile = new File(startupConfigDirectory, getKeypairFilename());
+		
+		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);		
 		bannedClientsFile = new File(dataDirectory, BANNEDCLIENTSFILENAME);
 		
 		if(!bannedClientsFile.exists())
@@ -1531,17 +1545,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return file;
 	}
 	
-	public static File getTriggersDirectory()
-	{
-		File dir = new File(getDefaultDataDirectory(), ADMINTRIGGERDIRECTORY);
-		
-		if(!dir.exists())
-		{
-			dir.mkdirs();
-		}
-		return dir;
-	}
-	
 	public static String getKeypairFilename()
 	{
 		return KEYPAIRFILENAME;
@@ -2078,6 +2081,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public File magicWordsFile;
 	public File bannedClientsFile;
 	public File shutdownFile;
+	public File triggerDirectory;
+	public File startupConfigDirectory;
 	private Vector magicWords;
 	private long bannedClientsFileLastModified;
 	private int activeClientsCounter;
@@ -2093,6 +2098,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	
 	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
+	private static final String ADMINSTARTUPCONFIGDIRECTORY = "deleteOnStartup";
 	
 	private final long IMMEDIATELY = 0;
 	private static final long bannedCheckIntervalMillis = 60 * 1000;
