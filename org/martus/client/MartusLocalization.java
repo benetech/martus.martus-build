@@ -555,7 +555,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:aboutDlgBuildDate=Built on");
 		addEnglishTranslation("field:aboutDlgCopyright=Copyright 2001-2002 Beneficent Technology, Inc. (Benetech, at www.benetech.org).");
 		addEnglishTranslation("field:aboutDlgDisclaimer=Martus comes with ABSOLUTELY NO WARRANTY, and is made available under license terms are in the file named license.txt in the Martus directory. This is free software, and you are welcome to redistribute it under certain conditions discussed in license.txt. ");
-		addEnglishTranslation("field:aboutDlgCredits=Martus Software is developed by Benetech in partnership with the Information Program of the Open Society Institute, ASPiration and the American Association for the Advancement of Science.");
+		addEnglishTranslation("field:aboutDlgCredits=Martus Software is developed by Benetech in partnership with the Information Program of the Open Society Institute, Aspiration and the American Association for the Advancement of Science.");
 		addEnglishTranslation("field:allprivate=Keep ALL Information Private");
 		addEnglishTranslation("field:language=Language");
 		addEnglishTranslation("field:author=Author");
