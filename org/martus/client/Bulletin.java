@@ -454,6 +454,13 @@ public class Bulletin implements BulletinConstants
 				db.discardRecord(new DatabaseKey(uid));
 			}
 
+			AttachmentProxy[] privateAttachments = getPrivateAttachments();
+			for(int i = 0 ; i < privateAttachments.length ; ++i)
+			{
+				UniversalId uid = privateAttachments[i].getUniversalId();
+				db.discardRecord(new DatabaseKey(uid));
+			}
+
 			db.discardRecord(key);
 		}
 		catch(Exception e)

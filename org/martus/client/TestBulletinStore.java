@@ -142,18 +142,28 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("cache too large?", true, store.bulletinCache.size() <= store.maxCachedBulletinCount);
 	}
 
-	public void testDestroyBulletin()
+	public void testDestroyBulletin() throws Exception
 	{
 		TRACE("testDestroyBulletin");
+		int originalRecordCount = db.getRecordCount();
 
 		Bulletin b = store.createEmptyBulletin();
+		AttachmentProxy a1 = new AttachmentProxy(tempFile1);
+		AttachmentProxy a2 = new AttachmentProxy(tempFile2);
+		b.addPublicAttachment(a1);
+		assertEquals("added one", 1, b.getPublicAttachments().length);
+
+		b.addPrivateAttachment(a2);
+		assertEquals("added 4", 1, b.getPrivateAttachments().length);
+		
 		b.save();
 		BulletinFolder f = store.createFolder("test");
 		f.add(b.getUniversalId());
 		store.destroyBulletin(b);
 		assertEquals(0, store.getBulletinCount());
 		assertEquals(0, f.getBulletinCount());
-	}
+		assertEquals(originalRecordCount, db.getRecordCount());
+}
 
 	public void testSaveBulletin() throws Exception
 	{
