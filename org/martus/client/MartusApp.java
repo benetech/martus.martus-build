@@ -811,7 +811,7 @@ public class MartusApp
 		
 		BulletinFolder outbox = getFolderOutbox();
 		Bulletin b = outbox.getBulletinSorted(0);
-		String excpetionThrown = null;
+		String exceptionThrown = null;
 		try
 		{
 			String result = uploadBulletin(b, progressMeter);
@@ -847,7 +847,7 @@ public class MartusApp
 		}
 		catch (InvalidPacketException e)
 		{
-			excpetionThrown = e.toString();
+			exceptionThrown = e.toString();
 			System.out.println("MartusApp.backgroundUploadOneSealedBulletin: ");
 			System.out.println("  InvalidPacket. Moving from outbox to damaged");
 			BulletinFolder damaged = createOrFindFolder(store.getNameOfFolderDamaged());
@@ -857,8 +857,8 @@ public class MartusApp
 		
 		if(progressMeter != null)
 			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
-		if(excpetionThrown != null)
-			throw new DamagedBulletinException(excpetionThrown);
+		if(exceptionThrown != null)
+			throw new DamagedBulletinException(exceptionThrown);
 		return null;
 	}
 
@@ -874,7 +874,7 @@ public class MartusApp
 		
 		BulletinFolder draftOutbox = getFolderDraftOutbox();
 		Bulletin b = draftOutbox.getBulletinSorted(0);
-		String excpetionThrown = null;
+		String exceptionThrown = null;
 		try
 		{
 			String result = uploadBulletin(b, progressMeter);
@@ -891,7 +891,7 @@ public class MartusApp
 		}
 		catch (InvalidPacketException e)
 		{
-			excpetionThrown = e.toString();
+			exceptionThrown = e.toString();
 			System.out.println("MartusApp.backgroundUploadOneDraftBulletin: ");
 			System.out.println("  InvalidPacket. Removing from draftoutbox");
 			BulletinFolder damaged = createOrFindFolder(store.getNameOfFolderDamaged());
@@ -901,8 +901,8 @@ public class MartusApp
 
 		if(progressMeter != null)
 			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
-		if(excpetionThrown != null)
-			throw new DamagedBulletinException(excpetionThrown);
+		if(exceptionThrown != null)
+			throw new DamagedBulletinException(exceptionThrown);
 		return null;
 	}
 
