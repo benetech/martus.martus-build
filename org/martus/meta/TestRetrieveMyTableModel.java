@@ -3,7 +3,9 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.*;
+import org.martus.client.core.*;
+import org.martus.client.swingui.*;
+import org.martus.client.test.*;
 import org.martus.common.*;
 import org.martus.server.forclients.*;
 

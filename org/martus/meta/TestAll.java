@@ -3,7 +3,7 @@ package org.martus.meta;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.martus.client.TestClient;
+import org.martus.client.test.TestClient;
 import org.martus.common.TestCommon;
 import org.martus.server.shared.TestServer;
 

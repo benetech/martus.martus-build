@@ -21,9 +21,9 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.Bulletin;
-import org.martus.client.BulletinStore;
-import org.martus.client.MockBulletin;
+import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinStore;
+import org.martus.client.test.MockBulletin;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;

@@ -8,7 +8,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Vector;
 
-import org.martus.client.ClientFileDatabase;
+import org.martus.client.core.ClientFileDatabase;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileDatabase;

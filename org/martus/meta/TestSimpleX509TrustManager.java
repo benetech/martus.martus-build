@@ -5,7 +5,7 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPublicKey;
 
-import org.martus.client.SimpleX509TrustManager;
+import org.martus.client.core.SimpleX509TrustManager;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;

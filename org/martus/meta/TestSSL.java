@@ -2,7 +2,7 @@ package org.martus.meta;
 
 import java.util.Vector;
 
-import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc;
+import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;

@@ -4,9 +4,9 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.Bulletin;
-import org.martus.client.MockMartusApp;
-import org.martus.client.RetrieveHQTableModel;
+import org.martus.client.core.Bulletin;
+import org.martus.client.swingui.RetrieveHQTableModel;
+import org.martus.client.test.MockMartusApp;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;

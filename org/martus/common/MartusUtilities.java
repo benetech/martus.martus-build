@@ -735,4 +735,15 @@ public class MartusUtilities
 		fdpInputStream.seek(0);
 		return true;
 	}
+
+	public static boolean isStringInArray(String[] array, String lookFor) 
+	{
+		for(int newIndex = 0; newIndex < array.length; ++newIndex)
+		{
+			if(lookFor.equals(array[newIndex]))
+				return true;
+		}
+		
+		return false;
+	}
 }

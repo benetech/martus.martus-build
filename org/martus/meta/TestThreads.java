@@ -5,9 +5,9 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipFile;
 
-import org.martus.client.Bulletin;
-import org.martus.client.BulletinFolder;
-import org.martus.client.BulletinStore;
+import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinFolder;
+import org.martus.client.core.BulletinStore;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
