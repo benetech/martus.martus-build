@@ -1690,6 +1690,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public boolean isEnabled()
 		{
+			if(isDiscardedFolderSelected())
+				return false;
 			return isAnyBulletinSelected(UiMainWindow.this);
 		}
 	}
