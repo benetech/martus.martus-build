@@ -50,7 +50,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		File normalFile = createTempFile(string1);
 		File anotherFile = createTempFile(string2);
 
-		File normalFileSigBySecurity = MartusUtilities.createSignatureFromFile(normalFile, security);
+		File normalFileSigBySecurity = MartusUtilities.createSignatureFileFromFile(normalFile, security);
 
 		MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security );
 		
@@ -68,7 +68,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 		MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security );
 		
-		File normalFileSigByOtherSecurity = MartusUtilities.createSignatureFromFile(normalFile, otherSecurity);
+		File normalFileSigByOtherSecurity = MartusUtilities.createSignatureFileFromFile(normalFile, otherSecurity);
 		try
 		{
 			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigByOtherSecurity, security );
@@ -78,6 +78,11 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		{
 			;
 		}
+		
+		normalFileSigBySecurity.delete();
+		normalFileSigByOtherSecurity.delete();
+		normalFile.delete();
+		anotherFile.delete();
 	}
 	
 	static MartusSecurity security;

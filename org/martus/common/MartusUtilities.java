@@ -129,48 +129,39 @@ public class MartusUtilities
 		}
 	}
 	
-	public static File createSignatureFromFile(File fileToSign, MartusCrypto signer)
-		throws FileSigningException
+	public static byte[] createSignatureFromFile(File fileToSign, MartusCrypto signer)
+		throws IOException, MartusSignatureException
 	{
-		byte[] signature = null;
-		boolean didSigExist = false;
-		try
-		{
 			FileInputStream in = new FileInputStream(fileToSign);
-			signature = signer.createSignature(in);
+			byte[] signature = signer.createSignature(in);
 			in.close();
-		}
-		catch(Exception e)
-		{
-			throw new FileSigningException();
-		}
-		
+			return signature;
+	}
+	
+	public static File createSignatureFileFromFile(File fileToSign, MartusCrypto signer)
+		throws IOException, MartusSignatureException
+	{		
 		String sigPath = fileToSign.getAbsolutePath();
-		File sigFile = new File(sigPath + ".sig");
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyMMddHHmmss");
-		File sigFileBak = new File(sigPath + ".sig." + formatDate);
-		if( sigFile.exists() )
+		File newSigFile = new File(sigPath + ".sig.new");
+		File existingSig = new File(sigPath + ".sig");
+		
+		if( newSigFile.exists() )
+			newSigFile.delete();
+
+		byte[] signature = createSignatureFromFile(fileToSign, signer);
+
+		FileOutputStream out = new FileOutputStream(newSigFile);
+		out.write(signature);
+		out.close();
+
+		if(existingSig.exists() )
 		{
-			sigFile.renameTo(sigFileBak);
-			sigFile = new File(sigPath + ".sig");
-			sigFile.delete();
-			didSigExist = true;
+			existingSig.delete();
 		}
 		
-		try
-		{
-			FileOutputStream out = new FileOutputStream(sigFile);
-			out.write(signature);
-			out.close();
-		}
-		catch (Exception e)
-		{
-			sigFileBak.renameTo(sigFile);
-			throw new FileSigningException();
-		}
+		newSigFile.renameTo(existingSig);
 		
-		return sigFile;
+		return existingSig;
 	}
 	
 	public static void verifyFileAndSignature(File fileToVerify, File signatureFile, MartusSecurity verifier)
