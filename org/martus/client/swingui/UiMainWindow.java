@@ -1263,7 +1263,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		try
 		{
 			File export;
-			while(true)
+			do
 			{
 				String fileName = getStringInput("ExportMyPublicKey", "NameOfExportedFile", "");
 				if(fileName == null)
@@ -1272,16 +1272,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				if(export.exists())
 				{
 					if(confirmDlg(this, "OverWriteExistingFile"))
-					{
 						export.delete();
-						break;
-					}
 				}
-				else
-				{
-					break;
-				}
-			}
+			}while(export.exists());
+			
 			app.exportPublicInfo(export);
 			String title = getApp().getWindowTitle("notifyExportMyPublicKey");
 			String msg = getApp().getFieldLabel("notifyExportMyPublicKeycause");
