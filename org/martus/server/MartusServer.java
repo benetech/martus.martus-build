@@ -203,6 +203,15 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				System.out.println("Unable to delete keypair");
 				System.exit(5);
 			}
+			File bannedFile = new File(server.startupConfigDirectory, BANNEDCLIENTSFILENAME);
+			if(bannedFile.exists())
+			{
+				if(!bannedFile.delete())
+				{
+					System.out.println("Unable to delete " + bannedFile.getAbsolutePath() );
+					System.exit(5);
+				}
+			}
 		}
 				
 		System.out.println();
@@ -250,9 +259,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(startupConfigDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(startupConfigDirectory, getKeypairFilename());
+		bannedClientsFile = new File(startupConfigDirectory, BANNEDCLIENTSFILENAME);
 		
 		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);		
-		bannedClientsFile = new File(dataDirectory, BANNEDCLIENTSFILENAME);
 
 		Timer bannedClientRefreshTimer = new Timer(true);
 		TimerTask bannedClientsTaskMonitor = new BannedClientsMonitor();
