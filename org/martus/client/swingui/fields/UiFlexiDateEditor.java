@@ -26,6 +26,8 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui.fields;
 
+import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.text.DateFormat;
@@ -54,8 +56,9 @@ public class UiFlexiDateEditor extends UiField
 	
 	private void init()
 	{
-		component = new JPanel();		
-		component.setLayout(new ParagraphLayout());		
+		component = new JPanel();
+		component.setLayout(new BorderLayout());		
+				
 		Box boxDateSelection = Box.createHorizontalBox();				
 		exactDateRB = new JRadioButton(localizationToUse.getFieldLabel("DateExact"), true);			
 		flexiDateRB = new JRadioButton(localizationToUse.getFieldLabel("DateRange"));		
@@ -65,24 +68,24 @@ public class UiFlexiDateEditor extends UiField
 		radioGroup.add(flexiDateRB);		
 
 		boxDateSelection.add(exactDateRB);
-		boxDateSelection.add(flexiDateRB);	
-		component.add(boxDateSelection);
+		boxDateSelection.add(flexiDateRB);			
 						
 		flexiDateRB.addItemListener(new RadioItemListener());
 		exactDateRB.addItemListener(new RadioItemListener());
-					  							
-		component.add(buildExactDatePanel(), ParagraphLayout.NEW_PARAGRAPH);
+		
+		component.add(boxDateSelection, BorderLayout.NORTH);
+		component.add(buildExactDatePanel(), BorderLayout.CENTER);	
 	}
 	
 	private JPanel buildFlexiDatePanel()
-	{			
-		flexiDatePanel = new JPanel();		
-			
-		flexiDatePanel.setLayout(new ParagraphLayout());								
+	{	
+		flexiDatePanel = new JPanel();
+		flexiDatePanel.setLayout(new ParagraphLayout());	
+											
 		flexiDatePanel.add(new JLabel(localizationToUse.getFieldLabel("DateRangeFrom")));		
 		flexiDatePanel.add(buildBeginDateBox());
-					
-		flexiDatePanel.add(new JLabel(localizationToUse.getFieldLabel("DateRangeTo")), ParagraphLayout.NEW_PARAGRAPH);							
+				
+		flexiDatePanel.add(new JLabel(localizationToUse.getFieldLabel("DateRangeTo")));			
 		flexiDatePanel.add(buildEndDateBox());
 		
 		return flexiDatePanel;
@@ -93,13 +96,10 @@ public class UiFlexiDateEditor extends UiField
 		extDatePanel = new JPanel();		
 		extDatePanel.setLayout(new ParagraphLayout());
 																
-		JLabel dummy1 = new JLabel(localizationToUse.getFieldLabel("DateRangeFrom"));		
-		extDatePanel.add(dummy1);					
-		extDatePanel.add( buildBeginDateBox());
-		JLabel dummy2 = new JLabel(localizationToUse.getFieldLabel("DateRangeFrom"));
-		extDatePanel.add(dummy2, ParagraphLayout.NEW_PARAGRAPH);
-		dummy1.setForeground(extDatePanel.getBackground());
-		dummy2.setForeground(extDatePanel.getBackground());
+		JLabel dummy = new JLabel(localizationToUse.getFieldLabel("DateRangeFrom"));		
+		extDatePanel.add(dummy);					
+		extDatePanel.add( buildBeginDateBox());			
+		dummy.setForeground(component.getBackground());		
 				
 		return extDatePanel;			
 	}
@@ -120,13 +120,24 @@ public class UiFlexiDateEditor extends UiField
 	private Box buildEndDateBox()
 	{
 		Box endDateBox = Box.createHorizontalBox();
+		boolean needToSetDefaultValue=false;
+		
 		if (endDayCombo == null)
 		{		
 			endDayCombo = new JComboBox();	
 			endMonthCombo = new JComboBox(localizationToUse.getMonthLabels());
 			endYearCombo = new JComboBox();
-		}				
+			needToSetDefaultValue=true;																		
+		}		
+		
 		UiDateEditor.buildDate(endDateBox, localizationToUse, endYearCombo, endMonthCombo, endDayCombo);
+		if (needToSetDefaultValue)
+		{				
+			endYearCombo.setSelectedItem((String) bgYearCombo.getSelectedItem());
+			endMonthCombo.setSelectedItem((String) bgMonthCombo.getSelectedItem());
+			endDayCombo.setSelectedItem((String) bgDayCombo.getSelectedItem());			
+		}
+			
 		return endDateBox;		
 	}
 		
@@ -148,16 +159,18 @@ public class UiFlexiDateEditor extends UiField
 		public void itemStateChanged(ItemEvent e)
 		{
 			if (isFlexiDate())
-			{											
+			{												
 				component.remove(extDatePanel);						
-				component.add(buildFlexiDatePanel(), ParagraphLayout.NEW_PARAGRAPH);																	
+				component.add(buildFlexiDatePanel());																	
 				component.revalidate();								
 			}
 			
 			if (isExactDate())
-			{									
+			{		
+				Dimension d = component.getSize();									
 				component.remove(flexiDatePanel);						
-				component.add(buildExactDatePanel(), ParagraphLayout.NEW_PARAGRAPH);											
+				component.add(buildExactDatePanel());
+				component.setPreferredSize(d);									
 				component.revalidate();				
 			}			
 		}
@@ -275,5 +288,5 @@ public class UiFlexiDateEditor extends UiField
 	private JRadioButton 		exactDateRB;
 	private JRadioButton 		flexiDateRB;
 	private JPanel 				flexiDatePanel;
-	private JPanel 				extDatePanel;
+	private JPanel 				extDatePanel;	
 }
