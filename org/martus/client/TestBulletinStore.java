@@ -231,7 +231,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		start1.save();
 		f.add(start1.getUniversalId());
 		
-		Bulletin b = f.getBulletin(0);
+		Bulletin b = f.getBulletinSorted(0);
 		assertNotNull("Sent folder should have bulletins", b);
 
 		assertEquals(true, f.contains(b));
@@ -478,7 +478,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		folder.add(b.getUniversalId());
 		xml = store.folderToXml(folder);
 		assertStartsWith(MartusXml.getFolderTagStart("Test"), xml);
-		assertContains(MartusXml.getIdTag(folder.getBulletin(0).getUniversalIdString()), xml);
+		assertContains(MartusXml.getIdTag(folder.getBulletinSorted(0).getUniversalIdString()), xml);
 		assertEndsWith(MartusXml.getFolderTagEnd(), xml);
 	}
 
@@ -812,7 +812,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinFolder folder = importer.createFolder("test");
 		importer.importZipFileBulletin(tempFile, folder, false);
 		
-		Bulletin imported = folder.getBulletin(0);
+		Bulletin imported = folder.getBulletinSorted(0);
 		assertEquals("changed uid?", original.getUniversalId(), imported.getUniversalId());
 	}
 	
@@ -830,7 +830,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinFolder folder = hqStore.createFolder("test");
 		hqStore.importZipFileBulletin(tempFile, folder, false);
 		
-		Bulletin imported = folder.getBulletin(0);
+		Bulletin imported = folder.getBulletinSorted(0);
 		assertEquals("changed uid?", original.getUniversalId(), imported.getUniversalId());
 	}
 

@@ -707,7 +707,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		assertEquals("Should fail", FAILRESULT, appWithServer.backgroundUpload(null));
 		assertEquals("Still in outbox", 1, outbox.getBulletinCount());
 		assertEquals("Not in sent folder", 0, appWithServer.getFolderSent().getBulletinCount());
-		Bulletin stillSealed = outbox.getBulletin(0);
+		Bulletin stillSealed = outbox.getBulletinSorted(0);
 		assertTrue("Should still be sealed", stillSealed.isSealed());
 		mockServer.uploadResponse = null;
 		TRACE_END();

@@ -186,7 +186,7 @@ public class BulletinStore
 			BulletinFolder folder = getFolder(f);
 			for(int b = 0; b < folder.getBulletinCount(); ++b)
 			{
-				UniversalId uid = folder.getBulletinUniversalId(b);
+				UniversalId uid = folder.getBulletinUniversalIdUnsorted(b);
 				setOfUniversalIds.add(uid);
 			}
 		}
@@ -319,7 +319,7 @@ public class BulletinStore
 
 		while(folder.getBulletinCount() > 0)
 		{
-			Bulletin b = folder.getBulletin(0);
+			Bulletin b = folder.getBulletinSorted(0);
 			discarded.add(b.getUniversalId());
 			folder.remove(b.getUniversalId());
 		}
@@ -613,7 +613,7 @@ public class BulletinStore
 		String xml = MartusXml.getFolderTagStart(folder.getName());
 		for(int index=0; index < folder.getBulletinCount(); ++index)
 		{
-			Bulletin b = folder.getBulletin(index);
+			Bulletin b = folder.getBulletinSorted(index);
 			xml += MartusXml.getIdTag(b.getUniversalIdString());
 		}
 		xml += MartusXml.getFolderTagEnd();
@@ -650,7 +650,7 @@ public class BulletinStore
 				try 
 				{
 					UniversalId bId = UniversalId.createFromString(buffer);
-					store.addBulletinToFolder(bId, currentFolder);
+					currentFolder.add(bId);
 				} 
 				catch(NotUniversalIdException e) 
 				{

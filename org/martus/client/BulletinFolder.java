@@ -2,6 +2,8 @@ package org.martus.client;
 
 import java.util.Vector;
 
+import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
 import org.martus.common.UniversalId;
 
 public class BulletinFolder
@@ -102,7 +104,9 @@ public class BulletinFolder
 			return;
 		}
 		
-		if(store.findBulletinByUniversalId(id) == null)
+		DatabaseKey key = new DatabaseKey(id);
+		Database db = store.getDatabase();
+		if(!db.doesRecordExist(key))
 		{
 			//System.out.println("not in store: " + id);
 			return;
@@ -127,20 +131,27 @@ public class BulletinFolder
 		sortedIdList = null;
 	}
 
-	public Bulletin getBulletin(int index)
+	public Bulletin getBulletinSorted(int index)
 	{
-		UniversalId uid = getBulletinUniversalId(index);
+		UniversalId uid = getBulletinUniversalIdSorted(index);
 		if(uid == null)
 			return null;
 		return store.findBulletinByUniversalId(uid);
 	}
 	
-	public UniversalId getBulletinUniversalId(int index)
+	public UniversalId getBulletinUniversalIdSorted(int index)
 	{
 		needSortedIdList();
 		if(index < 0 || index >= sortedIdList.size())
 			return null;
 		return  (UniversalId)sortedIdList.get(index);
+	}
+
+	public UniversalId getBulletinUniversalIdUnsorted(int index)
+	{
+		if(index < 0 || index >= rawIdList.size())
+			return null;
+		return  (UniversalId)rawIdList.get(index);
 	}
 
 	public boolean contains(Bulletin b)
@@ -184,7 +195,7 @@ public class BulletinFolder
 		int index;
 		for(index = 0; index < sortedIdList.size(); ++index)
 		{
-			Bulletin tryBulletin = getBulletin(index);
+			Bulletin tryBulletin = getBulletinSorted(index);
 			if(tryBulletin.get(sortTag).compareTo(thisValue) * sortDir > 0)
 				break;
 		}

@@ -89,22 +89,22 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		BulletinFolder folder = store.createFolder("blah");
 		assertEquals(0, folder.getBulletinCount());
 
-		Bulletin b = folder.getBulletin(-1);
+		Bulletin b = folder.getBulletinSorted(-1);
 		assertEquals(null, b);
 
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals(null, b);
 
-		b = folder.getBulletin(folder.getBulletinCount());
+		b = folder.getBulletinSorted(folder.getBulletinCount());
 		assertEquals(null, b);
 
 		createEmptyBulletins(folder, 6);
 		assertEquals(6, folder.getBulletinCount());
 
-		b = folder.getBulletin(folder.getBulletinCount());
+		b = folder.getBulletinSorted(folder.getBulletinCount());
 		assertEquals(null, b);
 
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals(false, (b == null));
 	}
 
@@ -160,7 +160,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		b = store.findBulletinByUniversalId(uid1);
 		assertEquals("This bulletin is not in the folder\n", false, folder.contains(b));
 
-		Bulletin b2 = folder.getBulletin(0);
+		Bulletin b2 = folder.getBulletinSorted(0);
 		assertEquals("First bulletin in folder should be valid\n", false, (b2 == null));
 	}
 
@@ -192,7 +192,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals(-1, folder.find(b.getUniversalId()));
 
 		createEmptyBulletins(folder, 3);
-		b = folder.getBulletin(2);
+		b = folder.getBulletinSorted(2);
 		assertNotNull("Can't find added bulletin", b);
 		assertEquals(2, folder.find(b.getUniversalId()));
 	}
@@ -224,7 +224,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		b.save();
 		folder.add(b.getUniversalId());
 		assertEquals("initial count", 4, folder.getBulletinCount());
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals("20010101", b.get("eventdate"));
 
 		// sort descending
@@ -232,7 +232,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals("reverse count", 4, folder.getBulletinCount());
 		assertEquals("eventdate", folder.sortedBy());
 		assertEquals("Not Decending?", folder.DESCENDING, folder.getSortDirection());
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals("20010401", b.get("eventdate"));
 		
 		// and back to ascending
@@ -240,20 +240,20 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals("new field count", 4, folder.getBulletinCount());
 		assertEquals("eventdate", folder.sortedBy());
 		assertEquals("Not Assending?", folder.ASCENDING, folder.getSortDirection());
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals("20010101", b.get("eventdate"));
 
 		// sort by other field
 		folder.sortBy("author");
 		assertEquals("new field count", 4, folder.getBulletinCount());
 		assertEquals("author", folder.sortedBy());
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals("adam ant", b.get("author"));
 		// and descending
 		folder.sortBy("author");
 		assertEquals("second reverse count", 4, folder.getBulletinCount());
 		assertEquals("author", folder.sortedBy());
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals("tom tupa", b.get("author"));
 
 		// add while in descending mode
@@ -262,7 +262,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		b.set("author","zippy zorro");
 		b.save();
 		folder.add(b.getUniversalId());
-		b = folder.getBulletin(0);
+		b = folder.getBulletinSorted(0);
 		assertEquals("zippy zorro", b.get("author"));
 	}
 
