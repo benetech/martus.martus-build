@@ -784,6 +784,24 @@ public class MartusApp
 		return null;
 	}
 
+	public Vector getNewsFromServer()
+	{
+		if(!isSSLServerAvailable())
+			return new Vector();
+		
+		try
+		{
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getNews(security);
+			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+				return response.getResultVector();
+		}
+		catch (MartusSignatureException e)
+		{
+			System.out.println("MartusApp.sendContactInfoToServer :" + e);
+		}
+		return new Vector();
+	}
+
 	private void sendContactInfoToServer()
 	{
 		if(!isSSLServerAvailable())

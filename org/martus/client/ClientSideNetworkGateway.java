@@ -120,6 +120,14 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		return new NetworkResponse(server.putContactInfo(signer.getPublicKeyString(), parameters, signature));
 	}
 
+	public NetworkResponse	getNews(MartusCrypto signer) throws
+			MartusCrypto.MartusSignatureException
+	{
+		Vector parameters = new Vector();
+		String signature = MartusUtilities.sign(parameters, signer);
+		return new NetworkResponse(server.getNews(signer.getPublicKeyString(), parameters, signature));
+	}
+
 	final static String defaultReservedString = "";
 		
 	NetworkInterface server;

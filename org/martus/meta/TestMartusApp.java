@@ -288,6 +288,45 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_END();
 	}
 
+	public void testGetNewsFromServer() throws Exception
+	{
+		Vector noServerResult = appWithoutServer.getNewsFromServer();
+		assertEquals(0, noServerResult.size());
+		
+		Vector noNews = new Vector();
+		noNews.add(NetworkInterfaceConstants.OK);
+		noNews.add(new Vector());
+		mockServer.newsResponse = noNews;
+		Vector noNewsResponse = appWithServer.getNewsFromServer();
+		assertEquals(0, noNewsResponse.size());
+			
+		Vector badNews = new Vector();
+		badNews.add("Bad Response");
+		Vector badNewsItems = new Vector();
+		badNewsItems.add("news for you NOT");
+		badNews.add(badNewsItems);
+		mockServer.newsResponse = badNews;
+		Vector badNewsResponse = appWithServer.getNewsFromServer();
+		assertEquals(0, badNewsResponse.size());
+
+		final String firstNewsItem = "first news item";
+		final String secondNewsItem = "second news item";
+		Vector twoNews = new Vector();
+		twoNews.add(NetworkInterfaceConstants.OK);
+		Vector twoNewsItems = new Vector();
+		twoNewsItems.add(firstNewsItem);
+		twoNewsItems.add(secondNewsItem);
+		twoNews.add(twoNewsItems);
+		mockServer.newsResponse = twoNews;
+		
+		Vector twoNewsResponse = appWithServer.getNewsFromServer();
+		assertEquals(2, twoNewsResponse.size());
+		assertEquals(firstNewsItem, twoNewsResponse.get(0));
+		assertEquals(secondNewsItem, twoNewsResponse.get(1));
+
+	}
+
+
 	public void testConfigInfo() throws Exception
 	{
 		TRACE_BEGIN("testConfigInfo");
@@ -2065,7 +2104,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		}
 		
 	}
-	
+
 	Bulletin createAndUploadSampleBulletin() throws Exception
 	{
 		BulletinStore store = appWithAccount.getStore();

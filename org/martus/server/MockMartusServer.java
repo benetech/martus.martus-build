@@ -275,6 +275,14 @@ public class MockMartusServer extends MartusServer
 			throw new IOException("dataDirectory");
 	}
 
+	public Vector getNews(String accountId)
+	{
+		if(newsResponse != null)	
+			return newsResponse;
+		return super.getNews(accountId);
+	}
+
+	public Vector newsResponse;
 	public Vector infoResponse;
 	public String uploadResponse;
 	public Vector downloadResponse;
@@ -289,4 +297,5 @@ public class MockMartusServer extends MartusServer
 	private boolean listFieldOfficeAccountsResponseNull;
 	
 	private String authenticateResponse;
+
 }

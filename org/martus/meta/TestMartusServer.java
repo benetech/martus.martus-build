@@ -176,14 +176,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Vector noNews = testServer.getNews(clientAccountId);
 		assertEquals(2, noNews.size());
 		assertEquals("ok", noNews.get(0));
-		assertEquals(new Integer(0), (Integer)noNews.get(1));
+		assertEquals(0, ((Vector)noNews.get(1)).size());
 
 		testServer.clientsBanned.add(clientAccountId);
 		Vector bannedNews = testServer.getNews(clientAccountId);
-		assertEquals(3, bannedNews.size());
+		assertEquals(2, bannedNews.size());
 		assertEquals("ok", bannedNews.get(0));
-		assertEquals(new Integer(1), (Integer)bannedNews.get(1));
-		assertEquals("This account is not allowed to access this server", bannedNews.get(2));
+		Vector newsItems = (Vector)bannedNews.get(1);
+		assertEquals(1, newsItems.size());
+		assertEquals("This account is not allowed to access this server", newsItems.get(0));
 		
 		testServer.clientsBanned.remove(clientAccountId);
 	}

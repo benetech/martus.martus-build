@@ -28,6 +28,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
 
@@ -299,6 +300,17 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String[] contents = {cause};
 		String[] buttons = {ok};
 		
+		new UiNotifyDlg(this, parent, title, contents, buttons);
+	}
+
+	public void messageDlg(JFrame parent, String baseTag, String message)
+	{
+		String title = app.getWindowTitle(baseTag);
+		String cause = app.getFieldLabel("message" + baseTag + "cause");
+		String ok = app.getButtonLabel("ok");
+		String[] contents = {cause, "", message};
+		String[] buttons = {ok};
+
 		new UiNotifyDlg(this, parent, title, contents, buttons);
 	}
 
@@ -2181,37 +2193,58 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void run()
 		{
+			if(inConfigServer)
+				return;
 			try
 			{
-				if(!inConfigServer)
+				checkForNewsFromServer();
+				try 
 				{
-					try 
-					{
-						uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
-					} 
-					catch (MartusApp.DamagedBulletinException e) 
-					{
-						ThreadedNotify damagedBulletin = new ThreadedNotify("DamagedBulletinMovedToDiscarded");
-						SwingUtilities.invokeAndWait(damagedBulletin);
-						folderContentsHaveChanged(getStore().getFolderOutbox());
-						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
-						folderContentsHaveChanged(app.createOrFindFolder(getStore().getNameOfFolderDamaged()));
-						folderTreeContentsHaveChanged();
-					}
-					if(uploadResult != null)
-					{
-						System.out.println("UiMainWindow.Tick.run: " + uploadResult);
-						folderContentsHaveChanged(getStore().getFolderSent());
-						folderContentsHaveChanged(getStore().getFolderOutbox());
-						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
-						folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
-					}
+					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
+				} 
+				catch (MartusApp.DamagedBulletinException e) 
+				{
+					ThreadedNotify damagedBulletin = new ThreadedNotify("DamagedBulletinMovedToDiscarded");
+					SwingUtilities.invokeAndWait(damagedBulletin);
+					folderContentsHaveChanged(getStore().getFolderOutbox());
+					folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+					folderContentsHaveChanged(app.createOrFindFolder(getStore().getNameOfFolderDamaged()));
+					folderTreeContentsHaveChanged();
+				}
+				if(uploadResult != null)
+				{
+					System.out.println("UiMainWindow.Tick.run: " + uploadResult);
+					folderContentsHaveChanged(getStore().getFolderSent());
+					folderContentsHaveChanged(getStore().getFolderOutbox());
+					folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+					folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
 				}
 			}
 			catch(Exception e)
 			{
 				e.printStackTrace();
 			}
+		}
+
+		public void checkForNewsFromServer()
+		{
+			if(alreadyGotNews)
+				return;
+			Vector newsItems = app.getNewsFromServer();
+			for (Iterator iter = newsItems.iterator(); iter.hasNext();)
+			{
+				String newsItem = (String) iter.next();
+				ThreadedMessageDlg newsDlg = new ThreadedMessageDlg("ServerNews", newsItem);
+				try
+				{
+					SwingUtilities.invokeAndWait(newsDlg);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			alreadyGotNews = true;
 		}
 
 		class ThreadedNotify implements Runnable
@@ -2227,6 +2260,23 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 			String notifyTag;	
 		}
+
+		class ThreadedMessageDlg implements Runnable
+		{
+			public ThreadedMessageDlg(String tag, String message)
+			{
+				titleTag = tag;
+				messageContents = message;
+			}
+
+			public void run()
+			{
+				messageDlg(UiMainWindow.this, titleTag, messageContents);
+			}
+			String titleTag;
+			String messageContents;
+		}
+		boolean alreadyGotNews;
 	}
 
 	class TickTimeout extends TimerTask
