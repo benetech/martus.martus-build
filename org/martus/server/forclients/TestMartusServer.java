@@ -1,4 +1,4 @@
-package org.martus.meta;
+package org.martus.server.forclients;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -49,10 +49,6 @@ import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.MartusSignatureException;
-import org.martus.server.forclients.MartusServer;
-import org.martus.server.forclients.MockMartusServer;
-import org.martus.server.forclients.ServerSideNetworkHandler;
-import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
 
 
 public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfaceConstants
