@@ -93,10 +93,10 @@ public class UiServerSummariesDlg extends JDialog
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(checkAll);
 		getContentPane().add(unCheckAll);
+		getContentPane().add(preview);
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(ok);
 		getContentPane().add(cancel);
-		getContentPane().add(preview);
 		
 		
 		getRootPane().setDefaultButton(ok);

@@ -1,10 +1,11 @@
 package org.martus.client;
 
-import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 
 import org.martus.common.FieldDataPacket;
 
@@ -14,6 +15,7 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 	{
 		super(owner, owner.getApp().getWindowTitle("BulletinPreview"), true);
 		boolean isEncrypted = fdp.isEncrypted();
+		getContentPane().setLayout(new ParagraphLayout());
 
 		UiBulletinComponentViewSection view = new UiBulletinComponentViewSection(null, owner, owner.getApp(), isEncrypted);
 		String[] standardFieldTags = Bulletin.getStandardFieldNames();
@@ -22,13 +24,17 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 		view.copyDataFromPacket(fdp);
 		view.disableEdits();
 		view.attachmentViewer.saveButton.setVisible(false);
-		getContentPane().add(view);
 
 		JButton ok = new JButton(owner.getApp().getButtonLabel("ok"));
 		ok.addActionListener(this);
-		getContentPane().add(ok,BorderLayout.SOUTH);
-		getRootPane().setDefaultButton(ok);
 
+		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(view, ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(ok, ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
+		
+		getRootPane().setDefaultButton(ok);
 		owner.centerDlg(this);
 		setResizable(true);
 		show();
