@@ -38,6 +38,7 @@
   <property name="server-files" value="${server-dir}/*.class,
                     ${server-dir}/**/*.class,
                     ${amplifier-dir}/**/*.class,
+                    ${amplifier-dir}/**/LanguageNames*.txt,
                     ${server-dir}/main/main-class.txt,
                     ${jars-dir}/**/*,
                     ${htdocs-dir}/**/*,
