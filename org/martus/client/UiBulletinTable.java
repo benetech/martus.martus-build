@@ -55,7 +55,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		setColumnWidthToHeaderWidth(1);
 
 		addMouseListener(new TableMouseAdapter());
-		addKeyListener(new TableKeyAdapter());
+		keyListener = new TableKeyAdapter();
+		addKeyListener(keyListener);
 		getTableHeader().setReorderingAllowed(false);
 		getTableHeader().addMouseListener(new TableHeaderMouseAdapter());
 
@@ -346,10 +347,37 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		{
 			if(e.getKeyCode() == e.VK_DELETE)
 			{
+				removeKeyListener(keyListener);
 				doDiscardBulletins();
+				DelayAddListener delay = new DelayAddListener();
+				delay.start();
 			}
 		}
 	}
+
+	class DelayAddListener extends Thread
+	{
+		public DelayAddListener()
+		{
+		}
+
+		public void run()
+		{
+			try
+			{
+				sleep(500);
+			}
+			catch(InterruptedException e)
+			{
+			}
+			finally
+			{
+				addKeyListener(keyListener);
+			}
+		}
+	}
+
+
 
 	class TableMouseAdapter extends MouseAdapter
 	{
@@ -554,4 +582,5 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	private BulletinsList bulletinsList;
 	private DragSource dragSource = DragSource.getDefaultDragSource();
 	private UiBulletinTableDropAdapter dropAdapter;
+	private TableKeyAdapter keyListener;
 }
