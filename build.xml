@@ -54,6 +54,8 @@
                     ${server-dir}/**/*.class,
                     ${amplifier-dir}/**/*.class,
                     ${amplifier-dir}/**/LanguageNames*.txt,
+                    ${mspa-dir}/server/**/*.class,
+                    ${mspa-dir}/network/**/*.class,
                     ${server-dir}/main/main-class.txt,
                     ${jars-dir}/**/*,
                     ${htdocs-dir}/**/*,
