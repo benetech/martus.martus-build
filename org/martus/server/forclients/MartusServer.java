@@ -741,8 +741,8 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(contentSize + 3 != contactInfo.size())
 			return result;
 
-		String signature = (String)contactInfo.get(contactInfo.size()-1);
-		contactInfo.remove(contactInfo.size()-1);
+		String signature = (String)contactInfo.remove(contactInfo.size()-1);
+		
 		if(!security.verifySignatureOfVectorOfStrings(contactInfo, publicKey, signature))
 			return NetworkInterfaceConstants.SIG_ERROR;
 		contactInfo.add(signature);
