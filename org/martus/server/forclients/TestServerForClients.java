@@ -155,10 +155,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		testServer.allowUploads(clientId);
 		testServer.loadBannedClients(tempBanned);
 
-		Vector vecResult = testServer.legacyListMySealedBulletinIds(clientId);
-		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
-		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
-		
+		Vector vecResult = null;
 		vecResult = testServer.listMyDraftBulletinIds(clientId, new Vector());
 		verifyErrorResult("listMyDraftBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listMyDraftBulletinIds", 0, testServer.getNumberActiveClients() );
@@ -170,10 +167,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		strResult = uploadBulletinChunk(testServer, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter, clientSecurity);
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult );
 		assertEquals("uploadBulletinChunk", 0, testServer.getNumberActiveClients() );
-
-		vecResult = testServer.legacyListMySealedBulletinIds(clientSecurity.getPublicKeyString());
-		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
-		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
 
 		vecResult = testServer.legacyDownloadAuthorizedPacket(clientId, bogusStringParameter, clientId, bogusStringParameter);
 		verifyErrorResult("legacyDownloadAuthorizedPacket", vecResult, NetworkInterfaceConstants.REJECTED );

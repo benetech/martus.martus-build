@@ -359,17 +359,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return response;
 	}
 
-	public Vector listMyBulletinSummaries(String authorAccountId)
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-listMyBulletinSummaries");
-		server.logging("request for client " + server.getPublicCode(authorAccountId));
-		Vector response = server.legacyListMySealedBulletinIds(authorAccountId);
-		server.clientConnectionExit();
-		return response;
-	}
-	
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
 		server.clientConnectionStart();

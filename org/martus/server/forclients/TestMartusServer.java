@@ -31,7 +31,6 @@ import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusConstants;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -342,7 +341,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotContains("requestUploadRights", names);
 		assertNotContains("uploadBulletinChunk", names);
 		assertNotContains("downloadMyBulletinChunk", names);
-		assertContains("listMyBulletinSummaries", names);
+		assertNotContains("listMyBulletinSummaries", names);
 		assertNotContains("downloadFieldOfficeBulletinChunk", names);
 		assertContains("listFieldOfficeBulletinSummaries", names);
 		assertContains("listFieldOfficeAccounts", names);
@@ -1292,80 +1291,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
-	public void testListMyBulletinSummaries() throws Exception
-	{
-		TRACE_BEGIN("testListMyBulletinSummaries");
-
-		testServer.security = serverSecurity;
-		testServer.allowUploads(clientAccountId);
-
-		Vector list1 = testServer.listMySealedBulletinIds(clientAccountId, MartusUtilities.getRetrieveBulletinSummaryTags());
-		assertNotNull("listMyBulletinSummaries returned null", list1);
-		assertEquals("wrong length", 2, list1.size());
-		assertNotNull("null id1 [0]", list1.get(0));
-		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
-
-		testServer.uploadBulletin(clientAccountId, b1.getLocalId(), b1ZipString);
-		testServer.uploadBulletin(clientAccountId, privateBulletin.getLocalId(), MockBulletin.saveToZipString(clientDatabase, privateBulletin, clientSecurity));
-
-		Vector list2 = testServer.listMySealedBulletinIds(clientAccountId, MartusUtilities.getRetrieveBulletinSummaryTags());
-		assertNotNull("listMyBulletinSummaries returned null", list2);
-		assertEquals("wrong length", 2, list2.size());
-		assertNotNull("null id1 [0]", list2.get(0));
-		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
-
-		Vector ids = (Vector)list2.get(1);
-		assertEquals("Wrong # of ids", 2, ids.size());
-		
-		String gotSummary1 = (String)ids.get(0);
-		assertNotNull("1 was null", gotSummary1);
-
-		String gotSummary2 = (String)ids.get(1);
-		assertNotNull("2 was null", gotSummary2);
-		
-		String summary1Args[] = gotSummary1.split(MartusConstants.regexEqualsDelimeter, -1);
-		assertEquals("wrong number of arguments on Summary1?", 3, summary1Args.length);
-		
-		String id1 = summary1Args[0];
-		String summary1 = summary1Args[1];
-		String bulletinSize1 = summary1Args[2];
-
-		String summary2Args[] = gotSummary2.split(MartusConstants.regexEqualsDelimeter, -1);
-		assertEquals("wrong number of arguments on Summary2?", 3, summary2Args.length);
-		
-		String id2= summary2Args[0];
-		String summary2 = summary2Args[1];
-		String bulletinSize2 = summary2Args[2];
-
-		String b1RealSize = Integer.toString(MartusUtilities.getBulletinSize(clientDatabase, b1.getBulletinHeaderPacket()));
-		String b2RealSize = Integer.toString(MartusUtilities.getBulletinSize(clientDatabase, privateBulletin.getBulletinHeaderPacket()));
-
-		if(!id1.equals(b1.getLocalId()))
-		{
-			String tempId = id1;
-			id1 = id2;
-			id2 = tempId;
-			
-			String tempSummary = summary1;
-			summary1 = summary2;
-			summary2 = tempSummary;
-			
-			String tempSize = bulletinSize1;
-			bulletinSize1 = bulletinSize2;
-			bulletinSize2 = tempSize;
-		}
-
-		assertEquals("id1", b1.getLocalId(), id1);
-		assertEquals("summary1", b1.getFieldDataPacket().getLocalId(), summary1);
-		assertEquals("Wrong size of Bulletin 1",b1RealSize , bulletinSize1);
-
-		assertEquals("id2", privateBulletin.getLocalId(), id2);
-		assertEquals("summary2", privateBulletin.getFieldDataPacket().getLocalId(), summary2);
-		assertEquals("Wrong size of Bulletin 2", b2RealSize , bulletinSize2);
-
-		TRACE_END();
-	}
-	
 	public void testDownloadFieldDataPacketWrongSig() throws Exception
 	{
 		TRACE_BEGIN("testDownloadFieldDataPacketWrongSig");
@@ -2023,14 +1948,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertEquals("isShutdownRequested 2", true, testServer.isShutdownRequested());
 
-		Vector vecResult = testServer.legacyListMySealedBulletinIds(clientId);
-		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("listMySealedBulletinIds", 1, serverForClients.getNumberActiveClients() );
-		
-		vecResult = testServer.legacyListMyDraftBulletinIds(clientId);
-		verifyErrorResult("listMyDraftBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("listMyDraftBulletinIds", 1, serverForClients.getNumberActiveClients() );
-		
+		Vector vecResult = null; 
 		String strResult = testServer.requestUploadRights(clientId, bogusStringParameter);
 		assertEquals("requestUploadRights", NetworkInterfaceConstants.SERVER_DOWN, strResult );
 		assertEquals("requestUploadRights", 1, serverForClients.getNumberActiveClients() );
@@ -2038,10 +1956,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		strResult = uploadBulletinChunk(testServerInterface, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter, clientSecurity);
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.SERVER_DOWN, strResult );
 		assertEquals("uploadBulletinChunk", 1, serverForClients.getNumberActiveClients() );
-
-		vecResult = testServer.legacyListMySealedBulletinIds(clientSecurity.getPublicKeyString());
-		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("listMySealedBulletinIds", 1, serverForClients.getNumberActiveClients() );
 
 		vecResult = testServer.legacyDownloadAuthorizedPacket(clientId, bogusStringParameter, clientId, bogusStringParameter);
 		verifyErrorResult("legacyDownloadAuthorizedPacket", vecResult, NetworkInterfaceConstants.SERVER_DOWN );

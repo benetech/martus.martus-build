@@ -588,24 +588,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 
 
-	public Vector legacyListMySealedBulletinIds(String clientId)
-	{
-		if(serverMaxLogging)
-			logging("legacylistMySealedBulletinIds " + getClientAliasForLogging(clientId));
-		
-		if(isClientBanned(clientId) )
-			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
-		
-		if( isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-		
-		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId, new Vector());
-		Vector summaries = summaryCollector.getSummaries();
-		if(serverMaxLogging)
-			logging("legacylistMySealedBulletinIds : Exit");
-		return summaries;
-	}
-	
 	public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
 	{
 		if(serverMaxLogging)
@@ -628,24 +610,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(serverMaxLogging)
 			logging("listMySealedBulletinIds : Exit");
 		return result;
-	}
-
-	public Vector legacyListMyDraftBulletinIds(String authorAccountId)
-	{
-		if(serverMaxLogging)
-			logging("legacyListMyDraftBulletinIds " + getClientAliasForLogging(authorAccountId));
-			
-		if(isClientBanned(authorAccountId) )
-			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
-		
-		if( isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-		
-		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId, new Vector());
-		Vector summaries = summaryCollector.getSummaries();
-		if(serverMaxLogging)
-			logging("legacyListMyDraftBulletinIds : Exit");
-		return summaries;
 	}
 
 	public Vector listMyDraftBulletinIds(String authorAccountId, Vector retrieveTags)
@@ -1671,14 +1635,14 @@ public class MartusServer implements NetworkInterfaceConstants
 			// TODO: this should only be for maxmaxmaxlogging
 //				if(serverMaxLogging)
 //				{
-//					logging("listMyBulletinSummaries:visit " + 
+//					logging("visit " + 
 //						getFolderFromClientId(key.getAccountId()) +  " " +
 //						key.getLocalId());
 //				}
 			if(!BulletinHeaderPacket.isValidLocalId(key.getLocalId()))
 			{
 				//this would fire for every non-header packet
-				//logging("listMyBulletinSummaries:visit  Error:isValidLocalId Key=" + key.getLocalId() );					
+				//logging("visit  Error:isValidLocalId Key=" + key.getLocalId() );					
 				return;
 			}
 				
@@ -1740,7 +1704,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			{
 				logging("visit " + e);
 				e.printStackTrace();
-				//System.out.println("MartusServer.listMyBulletinSummaries: " + e);
+				//System.out.println("MySealedSummaryCollector: " + e);
 			}
 		}
 	}
@@ -1768,7 +1732,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			{
 				logging("visit " + e);
 				e.printStackTrace();
-				//System.out.println("MartusServer.listMyBulletinSummaries: " + e);
+				//System.out.println("MyDraftSummaryCollector: " + e);
 			}
 		}
 	}

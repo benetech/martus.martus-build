@@ -25,7 +25,6 @@ public interface ServerForClientsInterface
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature);
 	public Vector legacyDownloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature);
 	public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId);
-	public Vector legacyListMySealedBulletinIds(String authorAccountId);
 	public Vector listFieldOfficeAccounts(String hqAccountId);
 	public Vector listFieldOfficeDraftBulletinIds(String myAccountId, String authorAccountId, Vector retrieveTags);
 	public Vector listFieldOfficeSealedBulletinIds(String myAccountId, String authorAccountId, Vector retrieveTags);

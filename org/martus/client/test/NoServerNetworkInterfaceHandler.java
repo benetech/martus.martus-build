@@ -123,11 +123,6 @@ public class NoServerNetworkInterfaceHandler implements NetworkInterface
 		return null;
 	}
 
-	public Vector listMyBulletinSummaries(String authorAccountId)
-	{
-		return null;
-	}
-
 	public Vector downloadFieldDataPacket(
 		String authorAccountId,
 		String bulletinLocalId,

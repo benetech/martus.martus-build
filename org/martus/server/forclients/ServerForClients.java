@@ -248,11 +248,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
 	}
 
-	public Vector legacyListMySealedBulletinIds(String clientId)
-	{
-		return coreServer.legacyListMySealedBulletinIds(clientId);
-	}
-
 	File getBannedFile()
 	{
 		return new File(coreServer.getStartupConfigDirectory(), BANNEDCLIENTSFILENAME);

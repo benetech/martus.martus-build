@@ -183,14 +183,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		return (Vector)callServer(server, CMD_DOWNLOAD_AUTHORIZED_PACKET, params);
 	}
 
-	public Vector listMyBulletinSummaries(String clientId)
-	{
-		logging("ServerInterfaceXmlRpcHandler:listMyBulletinSummaries clientId=" + clientId);
-		Vector params = new Vector();
-		params.add(clientId);
-		return (Vector)callServer(server, CMD_MY_SUMMARIES, params);
-	}
-
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
 		logging("ServerInterfaceXmlRpcHandler:downloadFieldDataPacket authorAccountId=" + authorAccountId + "bulletinLocalId=" + bulletinLocalId);
