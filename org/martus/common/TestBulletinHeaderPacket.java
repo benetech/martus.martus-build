@@ -109,7 +109,13 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 	
 	public void testAllPrivate() throws Exception
 	{
+		UniversalId dummyUid = UniversalId.createDummyUniversalId();
+		BulletinHeaderPacket unknownPrivacy = new BulletinHeaderPacket(dummyUid);
+		assertEquals("knows privacy?", false, unknownPrivacy.hasAllPrivateFlag());
+		unknownPrivacy.setAllPrivate(true);
+		
 		bhp.setAllPrivate(false);
+		assertEquals("doesn't know privacy after set false?", true, bhp.hasAllPrivateFlag());
 		assertEquals("private?", false, bhp.isAllPrivate());
 
 		ByteArrayOutputStream out1 = new ByteArrayOutputStream();
@@ -117,9 +123,11 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(out1.toByteArray());
 		BulletinHeaderPacket loadedBhp1 = new BulletinHeaderPacket(UniversalId.createDummyUniversalId());
 		loadedBhp1.loadFromXml(in1, security);
+		assertEquals("doesn't know privacy after loaded false?", true, loadedBhp1.hasAllPrivateFlag());
 		assertEquals("private after load?", false, loadedBhp1.isAllPrivate());
 
 		bhp.setAllPrivate(true);
+		assertEquals("doesn't know privacy after set true?", true, bhp.hasAllPrivateFlag());
 		assertEquals("not private?", true, bhp.isAllPrivate());
 
 		ByteArrayOutputStream out2 = new ByteArrayOutputStream();
@@ -127,6 +135,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		ByteArrayInputStreamWithSeek in2 = new ByteArrayInputStreamWithSeek(out2.toByteArray());
 		BulletinHeaderPacket loadedBhp2 = new BulletinHeaderPacket(UniversalId.createDummyUniversalId());
 		loadedBhp2.loadFromXml(in2, security);
+		assertEquals("doesn't know privacy after loaded true?", true, loadedBhp2.hasAllPrivateFlag());
 		assertEquals("not private after load?", true, loadedBhp2.isAllPrivate());
 		
 		String result2 = new String(out2.toByteArray(), "UTF-8");
@@ -135,7 +144,9 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		String withoutTag = result2.substring(0, startTagStart) + result2.substring(endTagEnd);
 		ByteArrayInputStreamWithSeek in3 = new ByteArrayInputStreamWithSeek(withoutTag.getBytes("UTF-8"));
 		BulletinHeaderPacket loadedBhp3 = new BulletinHeaderPacket(UniversalId.createDummyUniversalId());
+		loadedBhp3.setAllPrivate(true);
 		loadedBhp3.loadFromXml(in3, null);
+		assertEquals("knows privacy after loaded without tag?", false, loadedBhp3.hasAllPrivateFlag());
 		assertEquals("not private after load without tag?", true, loadedBhp3.isAllPrivate());
 	}
 

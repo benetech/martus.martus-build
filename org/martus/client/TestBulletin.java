@@ -110,6 +110,14 @@ public class TestBulletin extends TestCaseEnhanced
 
 		assertEquals(store, b.getStore());
 		
+		assertEquals("account not initialized correctly?", store.getAccountId(), b.getAccount());
+		assertEquals("field data account?", store.getAccountId(), b.getFieldDataPacket().getAccountId());
+		
+	}
+	
+	public void testAllPrivate()
+	{
+		Bulletin b = store.createEmptyBulletin();
 		assertEquals("not already all private?", true, b.isAllPrivate());
 		b.setAllPrivate(false);
 		assertEquals("still all private?", false, b.isAllPrivate());
@@ -125,10 +133,6 @@ public class TestBulletin extends TestCaseEnhanced
 		assertNotNull("No private data packet?", privateData);
 		assertEquals("private data id", header.getPrivateFieldDataPacketId(), privateData.getLocalId());
 		assertEquals("not really private?", true, privateData.isEncrypted());
-		
-		assertEquals("account not initialized correctly?", store.getAccountId(), b.getAccount());
-		assertEquals("field data account?", store.getAccountId(), b.getFieldDataPacket().getAccountId());
-		
 	}
 	
 	public void testId()

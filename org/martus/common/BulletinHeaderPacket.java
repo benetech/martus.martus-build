@@ -36,6 +36,11 @@ public class BulletinHeaderPacket extends Packet
 		publicAttachments.clear();
 		privateAttachments.clear();
 	}
+
+	public boolean hasAllPrivateFlag()
+	{
+		return knowsWhetherAllPrivate;
+	}
 	
 	public void setStatus(String newStatus)
 	{
@@ -90,6 +95,7 @@ public class BulletinHeaderPacket extends Packet
 	public void setAllPrivate(boolean newValue)
 	{
 		allPrivate = newValue;
+		knowsWhetherAllPrivate = true;
 	}
 	
 	public boolean isAllPrivate()
@@ -169,6 +175,7 @@ public class BulletinHeaderPacket extends Packet
 		MartusCrypto.DecryptionException,
 		MartusCrypto.NoKeyPairException
 	{
+		knowsWhetherAllPrivate = false;
 		super.loadFromXmlInternal(inputStream, expectedSig, verifier);
 	}
 
@@ -342,6 +349,7 @@ public class BulletinHeaderPacket extends Packet
 	
 	public static final long TIME_UNKNOWN = 0;
 
+	boolean knowsWhetherAllPrivate;
 	boolean allPrivate;	
 	String fieldDataPacketId;
 	String privateFieldDataPacketId;

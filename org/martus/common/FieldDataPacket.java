@@ -154,6 +154,7 @@ public class FieldDataPacket extends Packet
 		MartusCrypto.DecryptionException,
 		MartusCrypto.NoKeyPairException
 	{
+		setEncrypted(false);
 		super.loadFromXmlInternal(inputStream, expectedSig, verifier);
 		if(encryptedDataDuringLoad != null)
 		{

@@ -781,7 +781,14 @@ public class Bulletin implements BulletinConstants
 
 	public boolean isAllPrivate()
 	{
-		return getBulletinHeaderPacket().isAllPrivate();
+		
+		BulletinHeaderPacket bhp = getBulletinHeaderPacket();
+		if(!bhp.hasAllPrivateFlag())
+		{
+			FieldDataPacket fdp = getFieldDataPacket();
+			bhp.setAllPrivate(fdp.isEncrypted());
+		}
+		return bhp.isAllPrivate();
 	}
 	
 	public void setAllPrivate(boolean newValue)
@@ -880,6 +887,7 @@ public class Bulletin implements BulletinConstants
 	{
 		isValidFlag = true;
 		fieldData = new FieldDataPacket(dataUid, getStandardFieldNames());
+		fieldData.setEncrypted(true);
 		privateFieldData = new FieldDataPacket(privateDataUid, getPrivateFieldNames());
 		privateFieldData.setEncrypted(true);
 		header = new BulletinHeaderPacket(headerUid);
