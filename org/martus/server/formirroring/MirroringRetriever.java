@@ -31,7 +31,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.martus.client.core.ProgressMeterInterface;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
@@ -39,6 +38,7 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
+import org.martus.common.ProgressMeterInterface;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.MartusSignatureException;

@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.common;
 
 public interface ProgressMeterInterface
 {

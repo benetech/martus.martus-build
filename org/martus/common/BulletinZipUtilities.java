@@ -41,7 +41,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.core.ProgressMeterInterface;
 
 public class BulletinZipUtilities
 {

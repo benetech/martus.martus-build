@@ -34,6 +34,7 @@ import java.util.Random;
 import java.util.Vector;
 
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
+import org.martus.common.*;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;

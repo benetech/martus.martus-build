@@ -26,7 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.test;
 
-import org.martus.client.core.ProgressMeterInterface;
+import org.martus.common.ProgressMeterInterface;
 
 public class NullProgressMeter implements ProgressMeterInterface
 {
