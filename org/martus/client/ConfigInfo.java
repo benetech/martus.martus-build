@@ -59,7 +59,7 @@ public class ConfigInfo implements Serializable
 
 	public void clear()
 	{
-		version = 0;
+		version = VERSION;
 		author = "";
 		organization = "";
 		email = "";

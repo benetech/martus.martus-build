@@ -21,6 +21,7 @@ public class CurrentUiState implements Serializable
 		currentFolderName = "";
 		currentDateFormat = "";
 		currentLanguage = "";
+		currentSortTag = "";
 		currentAppDimension = new Dimension();
 		currentAppPosition = new Point();
 		currentEditorDimension = new Dimension();
