@@ -110,6 +110,17 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		return bulletins;
 	}
 
+	public Bulletin getSingleSelectedBulletin()
+	{
+		Bulletin[] selected = getSelectedBulletins();
+		Bulletin b = null;
+		if(selected.length == 1)
+		{
+			b = selected[0];
+		}
+		return b;
+	}
+
 	public void selectBulletin(Bulletin b)
 	{
 		selectRow(bulletinsList.findBulletin(b));
@@ -164,9 +175,10 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void doEditBulletin() 
 	{
-		Bulletin b = getSelectedBulletin();
+		Bulletin b = getSingleSelectedBulletin();
 		if(b == null)
 			return;
+			
 		boolean createClone = false;
 		String bulletinAccountId = b.getAccount();
 		String myAccountId = mainWindow.getApp().getAccountId();
@@ -212,7 +224,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void doCopyBulletin()
 	{
-		Bulletin selected = getSelectedBulletin();
+		Bulletin[] selected = getSelectedBulletins();
 		BulletinFolder folder = getFolder();
 		TransferableBulletinList tb = new TransferableBulletinList(selected, folder);
 
@@ -233,10 +245,6 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		
 		System.out.println("UiBulletinTable.doCopyBulletin:");
 		Transferable t = clipboard.getContents(null);
-		System.out.println(t);
-		DataFlavor[] flavors = t.getTransferDataFlavors();
-		for(int i=0; i < flavors.length; ++i)
-			System.out.println(flavors[i].getHumanPresentableName());
 	}
 
 	public void doPasteBulletin()
@@ -288,7 +296,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		else
 			discard = new ActionDiscardBulletin();
 		
-		Bulletin b = getSelectedBulletin();
+		Bulletin b = getSingleSelectedBulletin();
 		if(b == null)
 		{
 			edit.setEnabled(false);

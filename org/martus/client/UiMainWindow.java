@@ -170,12 +170,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	
 	public void bulletinSelectionHasChanged()
 	{
-		Bulletin[] selected = table.getSelectedBulletins();
-		Bulletin b = null;
-		if(selected.length == 1)
-		{
-			b = selected[0];
-		}
+		Bulletin b = table.getSingleSelectedBulletin();
 		preview.setCurrentBulletin(b);
 	}
 
@@ -674,7 +669,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		boolean printCancelled = false;
 		//System.out.println("Print");
-		if(preview.getCurrentBulletin() == null)
+		if(table.getSingleSelectedBulletin() == null)
 			return;
 		
 		preview.startPrintMode();

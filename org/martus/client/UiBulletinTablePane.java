@@ -28,12 +28,16 @@ public class UiBulletinTablePane extends JScrollPane
 	{
 		table.setFolder(folder);
 		selectFirstBulletin();
-		refreshPreview();
 	}
 	
 	public Bulletin[] getSelectedBulletins()
 	{
 		return table.getSelectedBulletins();
+	}
+
+	public Bulletin getSingleSelectedBulletin()
+	{
+		return table.getSingleSelectedBulletin();
 	}
 
 	public void selectFirstBulletin()
@@ -49,6 +53,7 @@ public class UiBulletinTablePane extends JScrollPane
 	public void setCurrentBulletinIndex(int index)
 	{
 		table.selectRow(index);	
+		parent.bulletinSelectionHasChanged();
 	}
 	
 	public void folderContentsHaveChanged(BulletinFolder folder)
@@ -59,7 +64,7 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 			Bulletin[] selected = table.getSelectedBulletins();
 			table.setFolder(folder);
 			table.selectBulletins(selected);
-			refreshPreview();
+			parent.bulletinSelectionHasChanged();
 			// the following is required (for unknown reasons)
 			// to get the table to redraw (later) if it is currently
 			// under a window. Yuck! kbs.
@@ -90,12 +95,6 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 	public void doPasteBulletin()
 	{
 		table.doPasteBulletin();
-	}
-
-	public void refreshPreview()
-	{
-System.out.println("UiBulletinTablePane.refreshPreview");
-		parent.bulletinSelectionHasChanged();
 	}
 
 	class TablePaneMouseAdapter extends MouseAdapter
