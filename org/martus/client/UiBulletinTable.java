@@ -259,6 +259,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			{
 				if(file != null)
 					dropAdapter.attemptDropFile(file, folder);
+				worked = true;
 			} 
 			catch (InvalidPacketException e) 
 			{
@@ -273,6 +274,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			try
 			{
 				dropAdapter.attemptDropBulletins(tb.getBulletins(), folder);
+				worked = true;
 			}
 			catch (StatusNotAllowedException e)
 			{
