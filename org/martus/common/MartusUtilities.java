@@ -39,12 +39,17 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
+import java.security.SecureRandom;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.TrustManager;
 
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.CryptoException;
@@ -281,23 +286,26 @@ public class MartusUtilities
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
 		String publicKeyString = security.getPublicKeyString();
-		byte[] publicKeyBytes = Base64.decode(publicKeyString);
-
-		ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-		byte[] sigBytes = security.createSignature(in);
+		String sigString = getSignatureOfPublicKey(security);
 
 		UnicodeWriter writer = new UnicodeWriter(outputfile);
 		try
 		{
-			writer.writeln(PUBLIC_KEY_FILE_IDENTIFIER + "1.0");
-			writer.writeln(PUBLIC_KEY_TYPE_SERVER);
-			writer.writeln(publicKeyString);
-			writer.writeln(Base64.encode(sigBytes));
+			writeServerPublicKey(writer, publicKeyString, sigString);
 		}
 		finally
 		{
 			writer.close();
 		}
+	}
+
+	public static void writeServerPublicKey(UnicodeWriter writer, String publicKeyString, String sigString)
+		throws IOException
+	{
+		writer.writeln(PUBLIC_KEY_FILE_IDENTIFIER + "1.0");
+		writer.writeln(PUBLIC_KEY_TYPE_SERVER);
+		writer.writeln(publicKeyString);
+		writer.writeln(sigString);
 	}
 	
 	public static Vector importClientPublicKeyFromFile(File file) throws IOException
@@ -319,21 +327,29 @@ public class MartusUtilities
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
 		String publicKeyString = security.getPublicKeyString();
-		byte[] publicKeyBytes = Base64.decode(publicKeyString);
-
-		ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-		byte[] sigBytes = security.createSignature(in);
+		String sigString = getSignatureOfPublicKey(security);
 
 		UnicodeWriter writer = new UnicodeWriter(outputfile);
 		try
 		{
 			writer.writeln(publicKeyString);
-			writer.writeln(Base64.encode(sigBytes));
+			writer.writeln(sigString);
 		}
 		finally
 		{
 			writer.close();
 		}
+	}
+
+	public static String getSignatureOfPublicKey(MartusCrypto security)
+		throws InvalidBase64Exception, MartusSignatureException
+	{
+		String publicKeyString = security.getPublicKeyString();
+		byte[] publicKeyBytes = Base64.decode(publicKeyString);
+		ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
+		byte[] sigBytes = security.createSignature(in);
+		String sigString = Base64.encode(sigBytes);
+		return sigString;
 	}
 
 	public static String formatPublicCode(String publicCode)
@@ -1012,6 +1028,17 @@ public class MartusUtilities
 			//System.out.println("MartusApp.getServerPublicCode: " + e);
 			throw new PublicInformationInvalidException();
 		}
+	}
+
+	public static SSLSocketFactory createSocketFactory(SimpleX509TrustManager tm) throws Exception
+	{
+		TrustManager []tma = {tm};
+		SSLContext sslContext = SSLContext.getInstance( "TLS" );
+		SecureRandom secureRandom = new SecureRandom();
+		sslContext.init( null, tma, secureRandom);
+	
+		return sslContext.getSocketFactory();
+	
 	}
 
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";

@@ -27,26 +27,25 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.core;
 
 import java.io.IOException;
-import java.security.SecureRandom;
 import java.sql.Timestamp;
 import java.util.Vector;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.net.ssl.SSLContext;
-import javax.net.ssl.SSLSocketFactory;
-import javax.net.ssl.TrustManager;
 
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
+import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
+import org.martus.common.SimpleHostnameVerifier;
+import org.martus.common.SimpleX509TrustManager;
 
 public class ClientSideNetworkHandlerUsingXmlRpc
 	implements NetworkInterfaceConstants, NetworkInterfaceXmlRpcConstants, NetworkInterface
 {
 
-	public class SSLSocketSetupException extends Exception {}
+	static class SSLSocketSetupException extends Exception {}
 
 	public ClientSideNetworkHandlerUsingXmlRpc(String serverName, int portToUse) throws SSLSocketSetupException
 	{
@@ -54,7 +53,8 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		port = portToUse;
 		try
 		{
-			HttpsURLConnection.setDefaultSSLSocketFactory(createSocketFactory());
+			tm = new SimpleX509TrustManager();
+			HttpsURLConnection.setDefaultSSLSocketFactory(MartusUtilities.createSocketFactory(tm));
 			HttpsURLConnection.setDefaultHostnameVerifier(new SimpleHostnameVerifier());
 		}
 		catch (Exception e)
@@ -306,18 +306,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 			e.printStackTrace();
 		}
 		return result;
-	}
-
-	SSLSocketFactory createSocketFactory() throws Exception
-	{
-		tm = new SimpleX509TrustManager();
-		TrustManager []tma = {tm};
-		SSLContext sslContext = SSLContext.getInstance( "TLS" );
-		SecureRandom secureRandom = new SecureRandom();
-		sslContext.init( null, tma, secureRandom);
-
-		return sslContext.getSocketFactory();
-
 	}
 
 	public SimpleX509TrustManager getSimpleX509TrustManager()
