@@ -45,7 +45,7 @@ public class MartusUtilities
 		return versionDate;
 	}
 
-	public static String createSignature(String stringToSign, MartusCrypto security)
+	public static synchronized String createSignature(String stringToSign, MartusCrypto security)
 		throws UnsupportedEncodingException, MartusSignatureException 
 	{
 		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
@@ -54,7 +54,7 @@ public class MartusUtilities
 		return signature;
 	}
 
-	public static boolean verifySignature(Vector dataToSign, MartusCrypto verifier, String signedBy, String sig)
+	public static synchronized boolean verifySignature(Vector dataToSign, MartusCrypto verifier, String signedBy, String sig)
 	{
 		try
 		{
@@ -77,7 +77,7 @@ public class MartusUtilities
 		}
 	}
 
-	public static String sign(Vector dataToSign, MartusCrypto signer) throws 
+	public static synchronized String sign(Vector dataToSign, MartusCrypto signer) throws 
 			MartusCrypto.MartusSignatureException
 	{
 		try

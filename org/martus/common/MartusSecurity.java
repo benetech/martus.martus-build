@@ -83,7 +83,7 @@ public class MartusSecurity implements MartusCrypto
 		initialize(rand);
 	}
 
-	void initialize(SecureRandom rand)throws CryptoInitializationException
+	synchronized void initialize(SecureRandom rand)throws CryptoInitializationException
 	{
 		Security.addProvider(new BouncyCastleProvider());
 
@@ -333,7 +333,7 @@ public class MartusSecurity implements MartusCrypto
 		return sessionKeyGenerator.generateKey().getEncoded();
 	}
 			
-	public void signatureInitializeSign() throws
+	public synchronized void signatureInitializeSign() throws
 			MartusSignatureException
 	{
 		try
@@ -347,7 +347,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 	
-	public void signatureInitializeVerify(String publicKeyString) throws
+	public synchronized void signatureInitializeVerify(String publicKeyString) throws
 			MartusSignatureException
 	{
 		PublicKey publicKey = extractPublicKey(publicKeyString);
@@ -390,7 +390,7 @@ public class MartusSecurity implements MartusCrypto
 		return null;		
 	}
 	
-	public byte[] signatureGet() throws
+	public synchronized byte[] signatureGet() throws
 			MartusSignatureException
 	{
 		try
@@ -404,7 +404,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 	
-	public boolean signatureIsValid(byte[] sig) throws 
+	public synchronized boolean signatureIsValid(byte[] sig) throws 
 		MartusSignatureException
 	{
 		try
@@ -418,7 +418,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public void signatureDigestByte(byte b) throws
+	public synchronized void signatureDigestByte(byte b) throws
 			MartusSignatureException
 	{
 		try
@@ -608,7 +608,7 @@ public class MartusSecurity implements MartusCrypto
 		return null;
 	}
 	
-	public void createKeyPair(int publicKeyBits)
+	public synchronized void createKeyPair(int publicKeyBits)
 	{
 		try
 		{
@@ -628,7 +628,7 @@ public class MartusSecurity implements MartusCrypto
 		return new BigInteger(128, rand);
 	}
 
-	byte[] createSignature(PrivateKey privateKey, InputStream inputStream) throws
+	synchronized byte[] createSignature(PrivateKey privateKey, InputStream inputStream) throws
 			MartusSignatureException
 	{
 		try
@@ -644,7 +644,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public boolean isSignatureValid(PublicKey publicKey, InputStream inputStream, byte[] signature) throws
+	public synchronized boolean isSignatureValid(PublicKey publicKey, InputStream inputStream, byte[] signature) throws
 			MartusSignatureException
 	{
 		try
@@ -660,7 +660,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 	
-	KeyPair createSunKeyPair(int bitsInKey) throws Exception
+	synchronized KeyPair createSunKeyPair(int bitsInKey) throws Exception
 	{
 		KeyPairGenerator sunKeyPairGenerator = KeyPairGenerator.getInstance("RSA");
     	sunKeyPairGenerator.initialize( bitsInKey );
@@ -725,7 +725,7 @@ public class MartusSecurity implements MartusCrypto
 		return Base64.encode(key.getEncoded());
 	}
 
-	protected void accumulateForSignOrVerify(InputStream inputStream) throws 
+	protected synchronized void accumulateForSignOrVerify(InputStream inputStream) throws 
 					IOException, 
 					MartusSignatureException
 	{
