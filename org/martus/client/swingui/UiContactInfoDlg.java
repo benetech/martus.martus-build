@@ -36,7 +36,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 
 import org.martus.client.core.ConfigInfo;
-import org.martus.client.core.MartusApp;
 
 public class UiContactInfoDlg extends JDialog implements ActionListener
 {
@@ -45,7 +44,6 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		super(mainWindow, "", true);
 		info = infoToUse;
 
-		MartusApp app = mainWindow.getApp();
 		MartusLocalization localization = mainWindow.getLocalization();
 	
 		setTitle(localization.getWindowTitle("setupcontact"));

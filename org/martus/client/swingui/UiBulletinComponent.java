@@ -37,7 +37,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.martus.client.core.EncryptionChangeListener;
-import org.martus.client.core.MartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
@@ -82,11 +81,6 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	public UiMainWindow getMainWindow()
 	{
 		return mainWindow;
-	}
-
-	public MartusApp getApp()
-	{
-		return getMainWindow().getApp();
 	}
 
 	public Bulletin getCurrentBulletin()

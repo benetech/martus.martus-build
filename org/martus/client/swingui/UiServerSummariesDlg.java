@@ -49,7 +49,6 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
-import org.martus.client.core.MartusApp;
 import org.martus.common.FieldDataPacket;
 
 public class UiServerSummariesDlg extends JDialog
@@ -143,11 +142,6 @@ public class UiServerSummariesDlg extends JDialog
 	public Vector getUniversalIdList()
 	{
 		return model.getUniversalIdList();
-	}
-
-	MartusApp getApp()
-	{
-		return mainWindow.getApp();
 	}
 
 	class RetrieveJTable extends JTable

@@ -45,7 +45,6 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 import org.martus.client.core.BulletinXmlExporter;
-import org.martus.client.core.MartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.UnicodeWriter;
@@ -185,11 +184,6 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		}
 
 		dispose();
-	}
-
-	MartusApp getApp()
-	{
-		return mainWindow.getApp();
 	}
 
 	UiMainWindow mainWindow;
