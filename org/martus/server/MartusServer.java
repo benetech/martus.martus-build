@@ -1825,13 +1825,13 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public synchronized void clientConnectionStart()
 	{
-		logging("start");
+		//logging("start");
 		incrementActiveClientsCounter();
 	}
 	
 	public synchronized void clientConnectionExit()
 	{
-		logging("exit");
+		//logging("exit");
 		decrementActiveClientsCounter();
 	}
 	
@@ -1885,13 +1885,21 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		if(serverLogging)
 		{
+			Thread currThread = Thread.currentThread();
 			Timestamp stamp = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
-
-			int threadId = Thread.currentThread().hashCode();
-			String hexThreadId = Integer.toHexString(threadId);
-			String logEntry = formatDate.format(stamp) + " " + getServerName() + " " + hexThreadId + " : " + message;
-
+			String threadId = null;
+			
+			if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
+			{
+				threadId = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
+			}
+			else
+			{
+				threadId = Integer.toHexString(currThread.hashCode());
+			}
+			
+			String logEntry = formatDate.format(stamp) + " " + getServerName() + ": " + threadId + ": " + message;
 			System.out.println(logEntry);
 		}
 	}

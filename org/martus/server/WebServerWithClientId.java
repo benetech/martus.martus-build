@@ -62,8 +62,6 @@ import java.io.InterruptedIOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.EmptyStackException;
 import java.util.Stack;
 import java.util.StringTokenizer;
@@ -364,29 +362,17 @@ public class WebServerWithClientId implements Runnable
         public synchronized void handle(Socket socket)
             throws IOException
         {
-            con = new Connection(socket);            
-            String ip = socket.getInetAddress().getHostAddress();
-            int port = socket.getLocalPort();
-            
+        	con = new Connection(socket);
             count = 0;
             if (thread == null || !thread.isAlive())
             {
-                thread = new Thread(runners, this);
+                thread = new XmlRpcThread(runners, this, socket);
                 thread.start();
             }
             else
             {
                 this.notify();
             }
-            
-            
-			Timestamp stamp = new Timestamp(System.currentTimeMillis());
-			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
-					
-			String hexThreadId = Integer.toHexString(thread.hashCode());
-			String logEntry = formatDate.format(stamp) + " " + hexThreadId + " : " + " client " + ip + ", port " + port;
-	
-			System.out.println(logEntry);
         }
 
         public void run()
@@ -460,7 +446,7 @@ public class WebServerWithClientId implements Runnable
                     // tokenize first line of HTTP request
                     StringTokenizer tokens = new StringTokenizer(line);
                     String method = tokens.nextToken();
-                    String uri = tokens.nextToken();
+                    tokens.nextToken(); //token ignored
                     String httpversion = tokens.nextToken();
                     keepalive = XmlRpc.getKeepAlive() && HTTP_11.equals(httpversion);
                     do
