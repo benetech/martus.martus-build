@@ -1346,6 +1346,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				output.write(inputArray);
 				input.close();
 				output.close();
+				notifyDlg(this,"OperationCompleted");
 			}
 			catch (FileNotFoundException fnfe)
 			{
