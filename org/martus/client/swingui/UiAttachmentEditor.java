@@ -95,6 +95,17 @@ public class UiAttachmentEditor extends JPanel
 		model.clear();
 	}
 
+	static void setLastAttachmentLoadDirectory(File lastAttachmentLoadDirectory)
+	{
+		UiAttachmentEditor.lastAttachmentLoadDirectory =
+			lastAttachmentLoadDirectory;
+	}
+
+	static File getLastAttachmentLoadDirectory()
+	{
+		return lastAttachmentLoadDirectory;
+	}
+
 	class AttachmentTableModel extends AbstractTableModel
 	{
 		public AttachmentTableModel()
@@ -171,7 +182,7 @@ public class UiAttachmentEditor extends JPanel
 		public void actionPerformed(ActionEvent ae)
 		{
 			JFileChooser chooser = new JFileChooser();
-			File last = mainWindow.getLastAttachmentLoadDirectory();
+			File last = getLastAttachmentLoadDirectory();
 			if(last != null)
 				chooser.setCurrentDirectory(last);
 			MartusLocalization localization = mainWindow.getLocalization();
@@ -180,7 +191,7 @@ public class UiAttachmentEditor extends JPanel
 			if(returnVal == JFileChooser.APPROVE_OPTION)
 			{
 				File newAttachmentFile = chooser.getSelectedFile();
-				mainWindow.setLastAttachmentLoadDirectory(chooser.getCurrentDirectory());
+				setLastAttachmentLoadDirectory(chooser.getCurrentDirectory());
 				AttachmentProxy a = new AttachmentProxy(newAttachmentFile);
 				model.add(a);
 			}
@@ -207,5 +218,8 @@ public class UiAttachmentEditor extends JPanel
 	JButton remove;
 	AttachmentTableModel model;
 	UiMainWindow mainWindow;
+	
+	private static File lastAttachmentLoadDirectory;
+	
 	static final int VISIBLE_ROW_COUNT = 4;
 }

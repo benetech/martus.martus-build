@@ -215,6 +215,17 @@ public class UiAttachmentViewer extends JPanel
 		return fullName.substring(index, fullName.length());
 	}
 
+	private static void setLastAttachmentSaveDirectory(File lastAttachmentSaveDirectory)
+	{
+		UiAttachmentViewer.lastAttachmentSaveDirectory =
+			lastAttachmentSaveDirectory;
+	}
+
+	private static File getLastAttachmentSaveDirectory()
+	{
+		return lastAttachmentSaveDirectory;
+	}
+
 	class ViewHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
@@ -264,13 +275,13 @@ public class UiAttachmentViewer extends JPanel
 
 			JFileChooser chooser = new JFileChooser();
 			chooser.setSelectedFile(new File(fileName));
-			File last = mainWindow.getLastAttachmentSaveDirectory();
+			File last = getLastAttachmentSaveDirectory();
 			if(last != null)
 				chooser.setCurrentDirectory(last);
 			int returnVal = chooser.showSaveDialog(mainWindow);
 			if(returnVal == JFileChooser.APPROVE_OPTION)
 			{
-				mainWindow.setLastAttachmentSaveDirectory(chooser.getCurrentDirectory());
+				setLastAttachmentSaveDirectory(chooser.getCurrentDirectory());
 				File outputFile = chooser.getSelectedFile();
 				if(outputFile.exists())
 				{
@@ -302,5 +313,8 @@ public class UiAttachmentViewer extends JPanel
 	JButton saveButton;
 	JButton viewButton;
 	JScrollPane attachmentPane;
+
+	private static File lastAttachmentSaveDirectory;
+
 	static final int VISIBLE_ROW_COUNT = 4;
 }

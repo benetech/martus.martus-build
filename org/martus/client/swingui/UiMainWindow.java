@@ -26,11 +26,9 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
-import java.awt.AWTEvent;
 import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
-import java.awt.Event;
 import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Point;
@@ -38,7 +36,6 @@ import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
 import java.awt.datatransfer.Transferable;
-import java.awt.event.AWTEventListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -193,13 +190,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		show();
 		toFront();
 
-		inactivityDetector = new InactivityDetector();
+		inactivityDetector = new UiInactivityDetector();
 
 		uploader = new java.util.Timer(true);
 		uploader.schedule(new BackgroundUploadTimerTask(this), 0, BACKGROUND_UPLOAD_CHECK_MILLIS);
 
 		timeoutChecker = new java.util.Timer(true);
-		timeoutChecker.schedule(new TickTimeout(), 0, BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS);
+		timeoutChecker.schedule(new TimeoutTimerTask(), 0, BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS);
 
 		errorChecker = new javax.swing.Timer(10*1000, new UploadErrorChecker());
 		errorChecker.start();
@@ -1511,26 +1508,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	}
 
-	public File getLastAttachmentLoadDirectory()
-	{
-		return lastAttachmentLoadDirectory;
-	}
-
-	public File getLastAttachmentSaveDirectory()
-	{
-		return lastAttachmentSaveDirectory;
-	}
-
-	public void setLastAttachmentLoadDirectory(File lastAttachmentLoadDirectory)
-	{
-		this.lastAttachmentLoadDirectory = lastAttachmentLoadDirectory;
-	}
-
-	public void setLastAttachmentSaveDirectory(File lastAttachmentSaveDirectory)
-	{
-		this.lastAttachmentSaveDirectory = lastAttachmentSaveDirectory;
-	}
-
 	static boolean isAnyBulletinSelected(UiMainWindow window)
 	{
 		return (window.table.getSelectedBulletinUids().length > 0);
@@ -1549,47 +1526,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private class InactivityDetector implements AWTEventListener
+	class TimeoutTimerTask extends TimerTask
 	{
-		public InactivityDetector()
-		{
-			java.awt.Toolkit.getDefaultToolkit().addAWTEventListener(this,
-					AWTEvent.KEY_EVENT_MASK |
-					AWTEvent.MOUSE_EVENT_MASK |
-					AWTEvent.MOUSE_MOTION_EVENT_MASK);
-		}
-
-		public long secondsSinceLastActivity()
-		{
-			return (now() - lastActivityAt) / 1000;
-		}
-
-		private void trackActivity()
-		{
-			lastActivityAt = now();
-		}
-
-		private long now()
-		{
-			return System.currentTimeMillis();
-		}
-
-		public void eventDispatched(AWTEvent event)
-		{
-			// a MOUSE_EXIT is automatically generated if
-			// we hide the window, so always ignore them
-			if(event.getID() == Event.MOUSE_EXIT)
-				return;
-
-			trackActivity();
-		}
-
-		long lastActivityAt = now();
-	}
-
-	class TickTimeout extends TimerTask
-	{
-		public TickTimeout()
+		public TimeoutTimerTask()
 		{
 		}
 
@@ -1663,7 +1602,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private java.util.Timer timeoutChecker;
 	private javax.swing.Timer errorChecker;
 	String uploadResult;
-	private InactivityDetector inactivityDetector;
+	private UiInactivityDetector inactivityDetector;
 
 	private UiMenuBar menuBar;
 	private UiToolBar toolBar;
@@ -1676,8 +1615,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private static final int TIMEOUT_SECONDS = (10 * 60);
 	private static final int BACKGROUND_UPLOAD_CHECK_MILLIS = 5*1000;
 	private static final int BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS = 5*1000;
-	private File lastAttachmentLoadDirectory;
-	private File lastAttachmentSaveDirectory;
 	private boolean modifyingBulletin;
 	private boolean mainWindowInitalizing;
 }
