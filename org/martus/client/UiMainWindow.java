@@ -99,6 +99,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean run()
 	{
+		mainWindowInitalizing = true;	
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		Timestamp expire = Timestamp.valueOf("2003-01-15 1:00:00.000000000");
 		if(stamp.after(expire))
@@ -136,7 +137,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
 		int quarantineCount = app.quarantineUnreadableBulletins();
-	
+
 		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_OK))
 		{
 			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_UNKNOWN);
@@ -177,7 +178,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_OK);
 			uiState.save(app.getUiStateFile());
 		}
+		mainWindowInitalizing = false;	
 		return true;
+    }
+    
+    public boolean isMainWindowInitalizing()
+    {
+    	return mainWindowInitalizing;
     }
 
     public MartusApp getApp()
@@ -238,11 +245,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void selectSearchFolder()
 	{
 		folders.selectFolder(getStore().getSearchFolderName());
-	}
-
-	public void selectFirstBulletin()
-	{
-		table.selectFirstBulletin();
 	}
 
 	public void selectNewCurrentBulletin(int currentPosition)
@@ -460,7 +462,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(folder.getSortDirection() != uiState.getCurrentSortDirection())
 				folder.sortBy(sortTag);
 			folders.selectFolder(folderName);
-			table.setCurrentBulletinIndex(uiState.getCurrentBulletinPosition());
+			if(!uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_BAD))
+				table.setCurrentBulletinIndex(uiState.getCurrentBulletinPosition());
 		}
 		catch(Exception e)
 		{
@@ -2218,4 +2221,5 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;
 	private boolean editingBulletin;
+	private boolean mainWindowInitalizing;
 }

@@ -27,7 +27,8 @@ public class UiBulletinTablePane extends JScrollPane
 	public void setFolder(BulletinFolder folder)
 	{
 		table.setFolder(folder);
-		selectFirstBulletin();
+		if(!parent.isMainWindowInitalizing())
+			selectFirstBulletin();
 	}
 	
 	public Bulletin[] getSelectedBulletins()
