@@ -69,6 +69,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		info.setServerPublicKey(sampleServerKey);
 		info.setTemplateDetails(sampleTemplateDetails);
 		info.setHQKey(sampleHQKey);
+		info.setSendContactInfoToServer(sampleSendContactInfoToServer);
 		verifySampleInfo(info, "afterSet");
 
 		FileOutputStream outputStream = new FileOutputStream(configFile);
@@ -98,6 +99,8 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleServerKey", sampleServerKey, info.getServerPublicKey());
 		assertEquals(label + ": sampleTemplateDetails", sampleTemplateDetails, info.getTemplateDetails());
 		assertEquals(label + ": sampleHQKey", sampleHQKey, info.getHQKey());
+		assertEquals(label + ": sampleSendContactInfoToServer", sampleSendContactInfoToServer, info.shouldContactInfoBeSentToServer());
+	
 	}
 
 	public void verifyEmptyInfo(ConfigInfo info, String label) 
@@ -113,6 +116,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleServerKey", "", info.getServerPublicKey());
 		assertEquals(label + ": sampleTemplateDetails", "", info.getTemplateDetails());
 		assertEquals(label + ": sampleHQKey", "", info.getHQKey());
+		assertEquals(label + ": sampleSendContactInfoToServer", false, info.shouldContactInfoBeSentToServer());
 	}
 
 	public void testStreamSaveAndLoadEmpty() throws Exception
@@ -175,4 +179,5 @@ public class TestConfigInfo extends TestCaseEnhanced
 	final String sampleServerKey = "server pub key";
 	final String sampleTemplateDetails = "details\ndetail2";
 	final String sampleHQKey = "1234324234";
+	final boolean sampleSendContactInfoToServer = true;
 }

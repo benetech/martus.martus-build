@@ -34,6 +34,7 @@ public class ConfigInfo implements Serializable
 	public void setServerPublicKey(String newServerPublicKey){serverPublicKey = newServerPublicKey; }
 	public void setTemplateDetails(String newTemplateDetails){ templateDetails = newTemplateDetails; }
 	public void setHQKey(String newHQKey)			{ hqKey = newHQKey; }
+	public void setSendContactInfoToServer(boolean newSendContactInfoToServer) {sendContactInfoToServer = newSendContactInfoToServer; }
 	public void clearHQKey()						{ hqKey = ""; }
 
 	public String getAuthor()			{ return author; }
@@ -46,6 +47,7 @@ public class ConfigInfo implements Serializable
 	public String getServerPublicKey()	{ return serverPublicKey; }
 	public String getTemplateDetails() { return templateDetails; }
 	public String getHQKey() 			{ return hqKey; }
+	public boolean shouldContactInfoBeSentToServer() { return sendContactInfoToServer; }
 
 	public void clear()
 	{
@@ -59,6 +61,7 @@ public class ConfigInfo implements Serializable
 		serverPublicKey="";
 		templateDetails = "";
 		hqKey = "";
+		sendContactInfoToServer = false;
 	}
 
 	public static ConfigInfo load(InputStream inputStream)
@@ -78,6 +81,10 @@ public class ConfigInfo implements Serializable
 			loaded.templateDetails = in.readUTF();
 			loaded.hqKey = in.readUTF();
 			loaded.serverPublicKey = in.readUTF();
+			if(version > 1)
+				loaded.sendContactInfoToServer = in.readBoolean();
+			else
+				loaded.sendContactInfoToServer = true;
 			in.close();
 		}
 		catch (Exception e)
@@ -103,6 +110,7 @@ public class ConfigInfo implements Serializable
 			out.writeUTF(templateDetails);
 			out.writeUTF(hqKey);
 			out.writeUTF(serverPublicKey);
+			out.writeBoolean(sendContactInfoToServer);
 			out.close();
 		}
 		catch(Exception e)
@@ -111,6 +119,8 @@ public class ConfigInfo implements Serializable
 		}
 	}
 
+	final short VERSION = 2;
+	//Version 1
 	private String author;
 	private String organization;
 	private String email;
@@ -121,5 +131,7 @@ public class ConfigInfo implements Serializable
 	private String serverPublicKey;
 	private String templateDetails;
 	private String hqKey;
-	final short VERSION = 1;
+	//Version 2
+	private boolean sendContactInfoToServer;	
+
 }
