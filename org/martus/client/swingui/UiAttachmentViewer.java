@@ -75,6 +75,11 @@ public class UiAttachmentViewer extends JPanel
 		saveButton.addActionListener(new SaveHandler());
 		saveButton.setEnabled(false);
 		buttonBox.add(saveButton);
+		
+		viewButton = new JButton(app.getButtonLabel("viewattachment"));
+		viewButton.addActionListener(new ViewHandler());
+		viewButton.setEnabled(false);
+		buttonBox.add(viewButton);
 
 		buttonBox.add(Box.createHorizontalGlue());
 		vbox.add(buttonBox);
@@ -88,9 +93,11 @@ public class UiAttachmentViewer extends JPanel
 	{
 		Dimension d = attachmentTable.getPreferredScrollableViewportSize();
 		int rowHeight = attachmentTable.getRowHeight() + attachmentTable.getRowMargin() ;
-		d.height = model.getRowCount() * rowHeight;
+		int rowCount = model.getRowCount();
+		d.height = rowCount * rowHeight;
 		attachmentTable.setPreferredScrollableViewportSize(d);
-		saveButton.setEnabled(model.getRowCount() > 0);
+		saveButton.setEnabled(rowCount > 0);
+		viewButton.setEnabled(rowCount > 0);
 	}
 
 	public void addAttachment(AttachmentProxy a)
@@ -162,28 +169,88 @@ public class UiAttachmentViewer extends JPanel
 		private Vector attachmentList;
 	}
 
+	public int GetSelection()
+	{
+		int selection = attachmentTable.getSelectedRow();
+		int rowCount = attachmentTable.getRowCount();
+		if(selection > rowCount || rowCount <= 0)
+			return -1;
+
+		if(selection == -1)
+		{
+			if(rowCount == 1)
+				selection = 0;
+			else
+			{
+				getToolkit().beep();
+				return -1;
+			}
+		}
+		return selection;
+	}
+
+	public String extractFileNameOnly(String fullName)
+	{
+		int index = fullName.lastIndexOf('.');
+		if(index == -1)
+			index = fullName.length();
+		String fileNameOnly = fullName.substring(0, index);
+		while(fileNameOnly.length() < 3)
+		{
+			fileNameOnly += "_";	
+		}
+		return fileNameOnly;
+	}
+
+	public String extractExtentionOnly(String fullName)
+	{
+		int index = fullName.lastIndexOf('.');
+		if(index == -1)
+			return null;
+		return fullName.substring(index, fullName.length());
+	}
+
+	class ViewHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent ae)
+		{
+			int selection = GetSelection();
+			if(selection == -1)
+				return;
+			String fileName = (String)model.getValueAt(selection,1);
+			try
+			{
+				File temp = File.createTempFile(extractFileNameOnly(fileName), extractExtentionOnly(fileName));
+				temp.deleteOnExit();
+			
+				AttachmentProxy proxy = model.getAttachmentProxyAt(selection,1);
+				Database db = mainWindow.getApp().getStore().getDatabase();
+				BulletinSaver.extractAttachmentToFile(db, proxy, app.getSecurity(), temp);
+
+				Runtime runtimeViewer = Runtime.getRuntime();
+				String tempFileFullPathName = temp.getPath();
+				Process processView=runtimeViewer.exec("rundll32"+" "+"url.dll,FileProtocolHandler"+" "+tempFileFullPathName);
+				processView.waitFor();
+			}
+			catch(Exception e)
+			{
+				mainWindow.notifyDlg(mainWindow, "UnableToViewAttachment");
+				System.out.println("Unable to view file :" + e);
+			}
+
+		}
+	}
+	
 	class SaveHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			JFileChooser chooser = new JFileChooser();
-			int selection = attachmentTable.getSelectedRow();
-			int rowCount = attachmentTable.getRowCount();
-			if(selection > rowCount || rowCount <= 0)
-				return;
-
+			int selection = GetSelection();
 			if(selection == -1)
-			{
-				if(rowCount == 1)
-					selection = 0;
-				else
-				{
-					getToolkit().beep();
-					return;
-				}
-			}
+				return;
 			String fileName = (String)model.getValueAt(selection,1);
 
+			JFileChooser chooser = new JFileChooser();
 			chooser.setSelectedFile(new File(fileName));
 			File last = mainWindow.getLastAttachmentSaveDirectory();
 			if(last != null)
@@ -219,6 +286,7 @@ public class UiAttachmentViewer extends JPanel
 	AttachmentTableModel model;
 	JTable attachmentTable;
 	JButton saveButton;
+	JButton viewButton;
 	JScrollPane attachmentPane;
 	static final int VISIBLE_ROW_COUNT = 4;
 }
