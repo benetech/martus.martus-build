@@ -133,7 +133,7 @@ public class TestThreads extends TestCaseEnhanced
 	{
 		ExportThreadFactory() throws Exception
 		{
-			BulletinStore store = new BulletinStore(new MockClientDatabase());
+			store = new BulletinStore(new MockClientDatabase());
 			MockMartusSecurity security = new MockMartusSecurity();
 			security.createKeyPair();
 			
@@ -144,9 +144,10 @@ public class TestThreads extends TestCaseEnhanced
 		
 		TestingThread createThread(int copies) throws Exception
 		{
-			return new Exporter(b, copies);
+			return new Exporter(store, b, copies);
 		}
 		
+		BulletinStore store;
 		Bulletin b;
 	}
 	
@@ -281,12 +282,12 @@ System.out.flush();
 
 	class Exporter extends TestingThread
 	{
-		Exporter(Bulletin bulletinToExport, int copiesToExport) throws Exception
+		Exporter(BulletinStore store, Bulletin bulletinToExport, int copiesToExport) throws Exception
 		{
 			bulletin = bulletinToExport;
 			file = createTempFile();
 			copies = copiesToExport;
-			db = bulletin.getDatabase();
+			db = store.getDatabase();
 			security = bulletin.getSignatureVerifier();
 			headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
 		}
@@ -325,7 +326,7 @@ System.out.flush();
 
 			Bulletin b = store.createEmptyBulletin();
 			b.save();
-			Database db = b.getDatabase();
+			Database db = store.getDatabase();
 			headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 			store.destroyBulletin(b);

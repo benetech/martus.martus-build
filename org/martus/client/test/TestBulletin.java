@@ -437,7 +437,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		File tmpFile = File.createTempFile("$$$MartusTestBullSaveFileAtta1", null);
 		tmpFile.deleteOnExit();
-		MockBulletin.saveToFile(original, tmpFile);
+		MockBulletin.saveToFile(db, original, tmpFile);
 		assertTrue("unreasonable file size?", tmpFile.length() > 20);
 
 		ZipFile zip = new ZipFile(tmpFile);
@@ -664,7 +664,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(b, tempFile);
+		MockBulletin.saveToFile(db, b, tempFile);
 		assertTrue("unreasonable file size?", tempFile.length() > 20);
 
 		ZipFile zip = new ZipFile(tempFile);
@@ -712,7 +712,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(b, tempFile);
+		MockBulletin.saveToFile(db, b, tempFile);
 
 		Bulletin loaded = store.createEmptyBulletin();
 		loaded.loadFromFile(tempFile, security);
@@ -1019,7 +1019,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded.getFieldDataPacket().getHQPublicKey());
 
 		File tempFile = createTempFile();
-		MockBulletin.saveToFile(original, tempFile);
+		MockBulletin.saveToFile(db, original, tempFile);
 		Bulletin loaded2 = store.createEmptyBulletin();
 		loaded2.loadFromFile(tempFile, security);
 		assertEquals("Loaded Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded2.getFieldDataPacket().getHQPublicKey());
@@ -1037,7 +1037,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 		original.setDraft();
 		original.setAllPrivate(true);
-		MockBulletin.saveToFile(original, tempFile);
+		MockBulletin.saveToFile(db, original, tempFile);
 		Bulletin loaded2 = store.createEmptyBulletin();
 		loaded2.loadFromFile(tempFile, otherSecurity);
 		assertEquals("draft private could get public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
@@ -1045,21 +1045,21 @@ public class TestBulletin extends TestCaseEnhanced
 
 		original.setDraft();
 		original.setAllPrivate(false);
-		MockBulletin.saveToFile(original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile);
 		loaded2.loadFromFile(tempFile, otherSecurity);
 		assertEquals("draft public could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("draft public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 
 		original.setSealed();
 		original.setAllPrivate(true);
-		MockBulletin.saveToFile(original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile);
 		loaded2.loadFromFile(tempFile, otherSecurity);
 		assertEquals("sealed private could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("sealed private could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 
 		original.setSealed();
 		original.setAllPrivate(false);
-		MockBulletin.saveToFile(original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile);
 		loaded2.loadFromFile(tempFile, otherSecurity);
 		assertEquals("sealed public couldn't get encrypted public?", original.get(Bulletin.TAGPUBLICINFO), loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("sealed public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));

@@ -36,10 +36,12 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		MartusCrypto fieldSecurity1 = new MockMartusSecurity();
 		fieldSecurity1.createKeyPair();
 		fieldApp1 = MockMartusApp.create(fieldSecurity1);
+		Database db1 = fieldApp1.getStore().getDatabase();
 
 		MartusCrypto fieldSecurity2 = new MockMartusSecurity();
 		fieldSecurity2.createKeyPair();
 		fieldApp2 = MockMartusApp.create(fieldSecurity2);
+		Database db2 = fieldApp2.getStore().getDatabase();
 
 		assertNotEquals("account Id's equal?", fieldApp1.getAccountId(), fieldApp2.getAccountId());
 
@@ -76,18 +78,17 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		modelWithData = new RetrieveHQDraftsTableModel(hqApp);
 		modelWithData.initialize(null);
 		
-		importBulletinFromFieldOfficeToHq(b0);
-		importBulletinFromFieldOfficeToHq(b1);
-		importBulletinFromFieldOfficeToHq(b2);
+		importBulletinFromFieldOfficeToHq(db1, b0);
+		importBulletinFromFieldOfficeToHq(db1,b1);
+		importBulletinFromFieldOfficeToHq(db2, b2);
 		
 		modelWithoutData = new RetrieveHQDraftsTableModel(hqApp);
 		modelWithoutData.initialize(null);
 	}
 	
-	void importBulletinFromFieldOfficeToHq(Bulletin b) throws Exception
+	void importBulletinFromFieldOfficeToHq(Database db, Bulletin b) throws Exception
 	{
 		File tempFile = createTempFile();
-		Database db = b.getDatabase();
 		DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 		MartusCrypto security = b.getSignatureGenerator();
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
