@@ -103,6 +103,7 @@ public class TestSpeed extends TestCaseEnhanced
 		timeSignatureCreateAndVerify(1);
 		timeSignatureCreateAndVerify(2 * 1024);
 		timeSignatureCreateAndVerify(100 * 1024);
+		timeSignatureCreateAndVerify(5 * 1024 * 1024);
 	}
 
 	void timeSignatureCreateAndVerify(int dataSize) throws Exception
@@ -254,12 +255,12 @@ public class TestSpeed extends TestCaseEnhanced
 
 		DatabaseKey key = new DatabaseKey(ap.getUniversalId());
 		InputStreamWithSeek xmlIn = db.openInputStream(key, security);
-		File destFile = createTempFile();
 		
 		Stopwatch verifyTimer = new Stopwatch();
 		Packet.verifyPacketSignature(xmlIn, null, security);
 		print("Verify " + fileLength + " byte attachment", verifyTimer.stop());
 		
+		File destFile = createTempFile();
 //		Stopwatch fileExportTimer = new Stopwatch();
 //		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, destFile);
 //		print("Export " + fileLength + " byte attachment", fileExportTimer.stop());
