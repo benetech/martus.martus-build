@@ -125,11 +125,6 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 		return false;
 	}
 
-	public File getFile()
-	{
-		return file;
-	}
-
 	static public DataFlavor getBulletinListDataFlavor()
 	{
 		return bulletinListDataFlavor;

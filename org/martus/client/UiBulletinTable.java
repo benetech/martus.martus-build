@@ -233,17 +233,6 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		mainWindow.lostOwnership(clipboard, contents);
 
 		clipboard.setContents(tb, mainWindow);
-		try
-		{
-			System.out.println("Did copy :" + tb.getTransferData(DataFlavor.stringFlavor));
-		}
-		catch (Exception e)
-		{
-			System.out.println(e);
-		}
-		
-		System.out.println("UiBulletinTable.doCopyBulletin:");
-		Transferable t = clipboard.getContents(null);
 	}
 
 	public void doPasteBulletin()
