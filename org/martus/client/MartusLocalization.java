@@ -313,11 +313,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmCloneBulletinAsMine=Confirm Create Copy of Someone Else's Bulletin");
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedDraftBulletinWithOutboxCopy=Confirm Delete Draft Bulletin");
 		addEnglishTranslation("wintitle:confirmPrinterWarning=Print Configuration Warning");
-		addEnglishTranslation("wintitle:notifyInvalidServerName=Invalid Server Name or IP Address");
-		addEnglishTranslation("wintitle:notifyInvalidServerCode=Invalid Server Public Code");
-		addEnglishTranslation("wintitle:notifyServerInfoInvalid=Server Response Invalid");
-		addEnglishTranslation("wintitle:notifyConfigNoServer=Unable to Connect to Server");
-		addEnglishTranslation("wintitle:notifyServerCodeWrong=Incorrect Server Public Code");
+		addEnglishTranslation("wintitle:confirmRequestToSendContactInfoToServer=Request to Send Contact Info to Server");
 
 		addEnglishTranslation("wintitle:notifyDropNotAllowed=Cannot Move Bulletin");
 		addEnglishTranslation("wintitle:notifyDropError=Error Moving Bulletin");
@@ -359,6 +355,11 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyAuthenticateServerFailed=Security Alert!");
 		addEnglishTranslation("wintitle:notifyWelcomeToMartus=Welcome To Martus");
 		addEnglishTranslation("wintitle:notifyUnexpectedError=Unexpected Error");
+		addEnglishTranslation("wintitle:notifyInvalidServerName=Invalid Server Name or IP Address");
+		addEnglishTranslation("wintitle:notifyInvalidServerCode=Invalid Server Public Code");
+		addEnglishTranslation("wintitle:notifyServerInfoInvalid=Server Response Invalid");
+		addEnglishTranslation("wintitle:notifyConfigNoServer=Unable to Connect to Server");
+		addEnglishTranslation("wintitle:notifyServerCodeWrong=Incorrect Server Public Code");
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
@@ -610,6 +611,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmCloneBulletinAsMineeffect=Clicking on Yes will create a new bulletin that contains a copy of all the same information. You will be the official author of this new bulletin, and any private data in it will only be visible by you (and your headquarters, if you have one). The original bulletin will remain unchanged.");
 		addEnglishTranslation("field:confirmPrinterWarningcause=Since you have changed from the default print tray your print out may be incorrect, if you also changed the size of paper used.  You must first select the paper tray and then select the paper size in that order, for both to get set correctly.  If you only wanted to change the paper tray then disregard this message and select 'No'.");
 		addEnglishTranslation("field:confirmPrinterWarningeffect=Clicking on Yes will bring back the Printer Dialog so you can reselect your default paper tray and size.  Clicking on 'No' will print the document.");
+		addEnglishTranslation("field:confirmRequestToSendContactInfoToServercause=Do you want to have your contact information sent to the current server?  This information may be sent to other servers, and will be viewable by anyone who has access to your public bulletin information.");
+		addEnglishTranslation("field:confirmRequestToSendContactInfoToServereffect=Clicking on Yes will send your contact information to the current server.");
 
 		addEnglishTranslation("field:notifyDropNotAllowedcause=This bulletin cannot be moved to that folder. This may be because of its Draft/Sealed status, or its author.");
 		addEnglishTranslation("field:notifyDropErrorcause=An unexpected error occured while moving this bulletin. The file may be damaged.");

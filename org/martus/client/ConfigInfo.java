@@ -36,6 +36,7 @@ public class ConfigInfo implements Serializable
 	public void setHQKey(String newHQKey)			{ hqKey = newHQKey; }
 	public void setSendContactInfoToServer(boolean newSendContactInfoToServer) {sendContactInfoToServer = newSendContactInfoToServer; }
 	public void clearHQKey()						{ hqKey = ""; }
+	public void clearPromptUserRequestSendToServer() { mustAskUserToSendToServer = false; }
 
 	public String getAuthor()			{ return author; }
 	public String getOrganization()	{ return organization; }
@@ -48,6 +49,7 @@ public class ConfigInfo implements Serializable
 	public String getTemplateDetails() { return templateDetails; }
 	public String getHQKey() 			{ return hqKey; }
 	public boolean shouldContactInfoBeSentToServer() { return sendContactInfoToServer; }
+	public boolean promptUserRequestSendToServer() { return mustAskUserToSendToServer; }
 
 	public void clear()
 	{
@@ -62,6 +64,7 @@ public class ConfigInfo implements Serializable
 		templateDetails = "";
 		hqKey = "";
 		sendContactInfoToServer = false;
+		mustAskUserToSendToServer = false;
 	}
 
 	public static ConfigInfo load(InputStream inputStream)
@@ -84,7 +87,7 @@ public class ConfigInfo implements Serializable
 			if(version > 1)
 				loaded.sendContactInfoToServer = in.readBoolean();
 			else
-				loaded.sendContactInfoToServer = true;
+				loaded.mustAskUserToSendToServer = true;
 			in.close();
 		}
 		catch (Exception e)
@@ -118,6 +121,8 @@ public class ConfigInfo implements Serializable
 			System.out.println("ConfigInfo.save error: " + e);
 		}
 	}
+
+	private boolean mustAskUserToSendToServer;
 
 	final short VERSION = 2;
 	//Version 1

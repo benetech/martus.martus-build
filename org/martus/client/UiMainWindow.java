@@ -113,7 +113,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		ConfigInfo info = app.getConfigInfo();
 		if(!info.hasContactInfo())
-				doContactInfo();
+			doContactInfo();
+		else if(info.promptUserRequestSendToServer())
+		{
+			requestToUpdateContactInfoOnServerAndSaveInfo();
+			info.clearPromptUserRequestSendToServer();
+		}
+		
 
 		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
 		int quarantineCount = app.quarantineUnreadableBulletins();
@@ -714,16 +720,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		UiContactInfoDlg setupContactDlg = new UiContactInfoDlg(this, info);
 		boolean pressedOk = setupContactDlg.getResult();
 		if(pressedOk)
-		{
-			try
-			{
-				app.saveConfigInfo();
-			}
-			catch (MartusApp.SaveConfigInfoException e)
-			{
-				notifyDlg(this, "ErrorSavingConfig");
-			}
-		}
+			requestToUpdateContactInfoOnServerAndSaveInfo();
 		// the following is required (for unknown reasons)
 		// to get the window to redraw after the dialog
 		// is closed. Yuck! kbs.
@@ -775,7 +772,22 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String[] buttons = {ok};
 			
 			UiNotifyDlg notify = new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
+			requestToUpdateContactInfoOnServerAndSaveInfo();
 			inConfigServer = false;
+		}
+	}
+
+	private void requestToUpdateContactInfoOnServerAndSaveInfo()
+	{
+		boolean sendInfo = confirmDlg(this, "RequestToSendContactInfoToServer");
+		app.getConfigInfo().setSendContactInfoToServer(sendInfo);
+		try
+		{
+			app.saveConfigInfo();
+		}
+		catch (MartusApp.SaveConfigInfoException e)
+		{
+			notifyDlg(this, "ErrorSavingConfig");
 		}
 	}
 
