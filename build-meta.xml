@@ -136,10 +136,15 @@
                     <include name="*.jar"/>
                 </fileset>
                 <pathelement path="${java.class.path}"/>
-                <fileset refid="thirdparty.common.files"/>
-                <fileset refid="thirdparty.server.files"/>
-                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
                 <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+
             </classpath>
             <formatter type="brief" usefile="no" />
             <test name="org.martus.meta.TestAll"/>
