@@ -5,6 +5,7 @@ import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -12,6 +13,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;
@@ -31,6 +34,8 @@ import org.martus.common.Packet.WrongPacketTypeException;
 public class MartusUtilities 
 {
 	public static class FileTooLargeException extends Exception {}
+	public static class FileVerificationException extends Exception {}
+	public static class FileSigningException extends Exception {}
 	
 	public static int getCappedFileLength(File file) throws FileTooLargeException
 	{
@@ -122,6 +127,72 @@ public class MartusUtilities
 			System.out.println("ServerProxy.sign: " + e);
 			throw new MartusCrypto.MartusSignatureException();
 		}
+	}
+	
+	public static File createSignatureFromFile(File fileToSign, MartusCrypto signer)
+		throws FileSigningException
+	{
+		byte[] signature = null;
+		boolean didSigExist = false;
+		try
+		{
+			FileInputStream in = new FileInputStream(fileToSign);
+			signature = signer.createSignature(in);
+			in.close();
+		}
+		catch(Exception e)
+		{
+			throw new FileSigningException();
+		}
+		
+		String sigPath = fileToSign.getAbsolutePath();
+		File sigFile = new File(sigPath + ".sig");
+		Timestamp stamp = new Timestamp(System.currentTimeMillis());
+		SimpleDateFormat formatDate = new SimpleDateFormat("yyMMddHHmmss");
+		File sigFileBak = new File(sigPath + ".sig." + formatDate);
+		if( sigFile.exists() )
+		{
+			sigFile.renameTo(sigFileBak);
+			sigFile = new File(sigPath + ".sig");
+			sigFile.delete();
+			didSigExist = true;
+		}
+		
+		try
+		{
+			FileOutputStream out = new FileOutputStream(sigFile);
+			out.write(signature);
+			out.close();
+		}
+		catch (Exception e)
+		{
+			sigFileBak.renameTo(sigFile);
+			throw new FileSigningException();
+		}
+		
+		return sigFile;
+	}
+	
+	public static void verifyFileAndSignature(File fileToVerify, File signatureFile, MartusSecurity verifier)
+		throws FileVerificationException
+	{
+			try
+			{
+				byte[] signature = new byte[(int) signatureFile.length()];
+				FileInputStream inSignature = new FileInputStream(signatureFile);
+				inSignature.read(signature);
+				inSignature.close();
+				
+				FileInputStream inData = new FileInputStream(fileToVerify);
+				if( !verifier.isSignatureValid( verifier.getPublicKeyString(), inData, signature) )
+					throw new FileVerificationException();
+
+				inData.close();
+			}
+			catch(Exception e)
+			{
+				throw new FileVerificationException();
+			}
 	}
 
 	public static String formatPublicCode(String publicCode) 
