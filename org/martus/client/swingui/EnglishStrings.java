@@ -119,7 +119,9 @@ public class EnglishStrings
 "wintitle:notifyExportComplete=Export Bulletins",
 "wintitle:notifyErrorWritingFile=Error Writing File",
 "wintitle:notifyErrorReadingFile=Error Reading File",
-
+"wintitle:notifyExportZeroBulletins=No Bulletins Selected",
+		
+		
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
 "wintitle:inputservermagicword=Request Upload Permission",
@@ -472,7 +474,8 @@ public class EnglishStrings
 "field:notifyExportCompletecause=Export completed successfully",
 "field:notifyErrorWritingFilecause=An error prevented the file from being written. Check to make sure the disk is not full or write protected.",
 "field:notifyErrorReadingFilecause=An error prevented the file from being read.",
-
+"field:notifyExportZeroBulletinscause=To export bulletins, select them first, and then perform the export operation.",
+		
 "field:messageServerNewscause=The current server has sent this message:",
 
 "field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:",

@@ -620,9 +620,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		file.add(new ActionMenuBackupMyKeyPair());
 		file.add(new ActionMenuExportMyPublicKey());
 		file.addSeparator();
-//TODO: Uncomment when the export feature is completed
-//		file.add(new ActionMenuExportBulletins());
-//		file.addSeparator();
+		file.add(new ActionMenuExportBulletins());
+		file.addSeparator();
 		file.add(new ActionMenuImportHeadquarterPublicKey());
 		file.add(new ActionMenuRemoveExistingHeadquaterPublicKey());
 		file.addSeparator();
@@ -1663,6 +1662,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void doExportBulletins()
 	{
 		UniversalId[] uids = table.getSelectedBulletinUids();
+		if(uids.length == 0)
+		{
+			notifyDlg(this, "ExportZeroBulletins");
+			return;
+		}
+
 		new UiExportBulletinsDlg(this, uids);
 
 	}
