@@ -27,8 +27,6 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.dialogs;
 
 import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -60,6 +58,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 {
 	public UiExportBulletinsDlg(UiMainWindow mainWindowToUse, Vector bulletinsToExport, String defaultName)
 	{
+		super(mainWindowToUse, "", true);
 		defaultFileName = defaultName;
 		mainWindow = mainWindowToUse;
 		bulletins = bulletinsToExport;
@@ -68,7 +67,6 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 
 	private void constructDialog()
 	{
-		setModal(true);
 		UiLocalization localization = mainWindow.getLocalization();
 		setTitle(localization.getWindowTitle("ExportBulletins"));
 		
@@ -109,10 +107,8 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		vBoxAll.add(hBoxButtons);
 		getContentPane().add(vBoxAll);
 		
-		pack();
-		Dimension size = getSize();
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(Utilities.center(size, screen));
+		Utilities.centerDlg(this);
+		setResizable(true);
 		show();
 	}
 
