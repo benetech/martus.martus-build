@@ -139,7 +139,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 		b.set("author", "Test");
 		b.set("summary", "summary");
 		b.set("title", "Test date range");
-		b.set(Bulletin.TAGEVENTDATE, "2003-08-20,20020820+3");
+		b.set(Bulletin.TAGEVENTDATE, "2003-08-20,20030820+3");
 		b.set(Bulletin.TAGENTRYDATE, "2003-08-22");
 
 		String outOfRangeAfterBeginDate ="2004-01-10";

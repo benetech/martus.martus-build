@@ -333,21 +333,7 @@ public class Bulletin implements BulletinConstants
 		if (beginDate.compareTo(searchEndDate) > 0 ||
 			endDate.compareTo(searchBeginDate) < 0)
 			return false;		
-		
-		if(beginDate.compareTo(searchBeginDate) <= 0 && 		
-			endDate.compareTo(searchEndDate) >=0 )
-			return true;		
-					
-		if ((beginDate.compareTo(searchBeginDate) >= 0 && 
-			beginDate.compareTo(searchEndDate) <= 0) && 		
-			endDate.compareTo(searchEndDate) >=0 )	
-			return true;		
-						
-		if (endDate.compareTo(searchBeginDate) >= 0 && 
-			endDate.compareTo(searchEndDate) <=0)
-			return true;			
-		
-		return false;
+		return true;
 	}
 
 	public String getHQPublicKey()
