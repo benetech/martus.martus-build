@@ -71,10 +71,9 @@
                 ${client-dir}/**/Martus-*.mtf,
                 ${client-dir}/**/MartusHelp-*.txt,
                 ${client-dir}/**/MartusHelpTOC-*.txt,
-                ${client-dir}/**/Martus.png,
-                ${client-dir}/**/MartusLogo.gif,
-                ${client-dir}/**/locked.jpg,
-                ${client-dir}/**/unlocked.jpg
+                ${client-dir}/**/*.png,
+                ${client-dir}/**/*.gif,
+                ${client-dir}/**/*.jpg
                 "/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
