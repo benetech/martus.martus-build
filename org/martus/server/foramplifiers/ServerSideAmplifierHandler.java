@@ -105,13 +105,25 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			return result;
 		}
 		
-		result.add(NetworkInterfaceConstants.NOT_AUTHORIZED);
+		int index = 0;
+		String authorAccountId = (String)parameters.get(index++);
+		String bulletinLocalId= (String)parameters.get(index++);
+		int chunkOffset = ((Integer)parameters.get(index++)).intValue();
+		int maxChunkSize = ((Integer)parameters.get(index++)).intValue();
+
+		Vector legacyResult = server.getBulletinChunk(myAccountId, authorAccountId, bulletinLocalId, 
+				chunkOffset, maxChunkSize);
+		String resultCode = (String)legacyResult.get(0);
+		legacyResult.remove(0);
+				
+		result.add(resultCode);
+		result.add(legacyResult);
+		
 		return result;
 	}
 	
 	/// End Interface //
-	
-	// TODO: Copied from org.martus.serverServerSideNetworkHandler. Extract into MartusUtilities?
+
 	private boolean isSignatureOk(String myAccountId, Vector parameters, String signature, MartusCrypto verifier)
 	{
 		return MartusUtilities.verifySignature(parameters, verifier, myAccountId, signature);

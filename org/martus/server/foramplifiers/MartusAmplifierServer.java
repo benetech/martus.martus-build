@@ -735,18 +735,12 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
-	private static final String MAGICWORDSFILENAME = "magicwords.txt";
-	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
-	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
-	private static final String MARTUSSHUTDOWNFILENAME = "exit";
+	private static final String MARTUSSHUTDOWNFILENAME = "amp-exit";
 	
 	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
 	private static final String ADMINSTARTUPCONFIGDIRECTORY = "deleteOnStartup";
 	
 	private final long IMMEDIATELY = 0;
-	private final int MAX_FAILED_UPLOAD_ATTEMPTS = 100;
-	private static final long magicWordsGuessIntervalMillis = 60 * 1000;
-	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
-	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
+
 }
