@@ -411,6 +411,9 @@ public class MartusLocalization
 		addEnglishTranslation("button:saveattachment=Save Attachment");
 		addEnglishTranslation("button:VirtualKeyboardSwitchToNormal=Switch to using regular keyboard");
 		addEnglishTranslation("button:VirtualKeyboardSwitchToVirtual=Switch to using on-screen keyboard");
+		addEnglishTranslation("button:DownloadableSummaries=Show bulletins that are only on the server.");
+		addEnglishTranslation("button:AllSummaries=Show all bulletins on this server and on this computer.");
+
 		
 		addEnglishTranslation("button:FolderTreeRoot=Folders");
 
@@ -494,7 +497,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:PublicInformationFiles=Public Information Files");
 		addEnglishTranslation("field:NormalKeyboardMsg1=Remember: Entering your password using the regular keyboard may reduce security.");
 		addEnglishTranslation("field:NormalKeyboardMsg2=For maximum security switch to the on-screen keyboard.");
-		addEnglishTranslation("field:RetrieveMessage=All bulletins retrieved will still remain on the server.");
+		addEnglishTranslation("field:RetrieveSummariesMessage=All bulletins retrieved will still remain on the server.\nYou can only retrieve bulletins that are not currently on your computer.");
 		addEnglishTranslation("field:ContactInfoRequired=This information identifies your organization.\nCurrently the only required field is Source, which gets displayed in every bulletin you create.");
 		addEnglishTranslation("field:ContactInfoDescriptionOfFields=All other fields currently are stored on disk but are not used.");
 		addEnglishTranslation("field:ContactInfoFutureUseOfFields=In the future this information will be available to anyone who can view your public bulletin information.\nThis allows people to contact you for further information.");

@@ -20,7 +20,6 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		store = app.getStore();
 		retrieverDlg = retriever;
 		allSummaries = new Vector();
-
 	}
 
 	abstract public void Initalize() throws ServerErrorException;
@@ -28,7 +27,17 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	protected void setCurrentSummaries()
 	{
 		downloadableSummaries = getSummariesForBulletinsNotInStore(allSummaries);
+		changeToDownloadableSummaries();
+	}
+	
+	public void changeToDownloadableSummaries()
+	{
 		currentSummaries = downloadableSummaries;	
+	}
+	
+	public void changeToAllSummaries()
+	{
+		currentSummaries = allSummaries;	
 	}
 
 	public Vector getSummariesForBulletinsNotInStore(Vector allSummaries) 
@@ -52,6 +61,11 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		for(int i = 0; i < currentSummaries.size(); ++i)
 			((BulletinSummary)currentSummaries.get(i)).setChecked(flagState);
 		fireTableDataChanged();
+	}
+
+	public boolean isDownloadable(int row)
+	{
+		return((BulletinSummary)currentSummaries.get(row)).isDownloadable();		
 	}
 
 	public Vector getUniversalIdList()

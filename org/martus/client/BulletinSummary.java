@@ -12,7 +12,8 @@ public class BulletinSummary
 	
 	public void setChecked(boolean newValue)
 	{
-		checkedFlag = newValue;
+		if(downloadable)
+			checkedFlag = newValue;
 	}
 	
 	public boolean isChecked()
