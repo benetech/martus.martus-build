@@ -43,7 +43,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
 import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiFileChooser;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.bulletincomponent.UiBulletinComponent;
@@ -51,6 +50,7 @@ import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.database.Database;
 import org.martus.swing.ParagraphLayout;
+import org.martus.swing.UiFileChooser;
 import org.martus.swing.Utilities;
 
 

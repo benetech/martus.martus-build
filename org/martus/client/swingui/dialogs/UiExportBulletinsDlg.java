@@ -45,12 +45,12 @@ import javax.swing.JList;
 import javax.swing.JScrollPane;
 
 import org.martus.client.core.BulletinXmlExporter;
-import org.martus.client.swingui.UiFileChooser;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.packet.UniversalId;
+import org.martus.swing.UiFileChooser;
 import org.martus.swing.Utilities;
 import org.martus.util.UnicodeWriter;
 

@@ -110,6 +110,7 @@ import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
 import org.martus.swing.JComponentVista;
 import org.martus.swing.PrintPageFormat;
+import org.martus.swing.UiFileChooser;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.Utilities;
 import org.martus.swing.Utilities.Delay;

@@ -41,11 +41,11 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import org.martus.client.swingui.UiFileChooser;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.swing.ParagraphLayout;
+import org.martus.swing.UiFileChooser;
 
 
 

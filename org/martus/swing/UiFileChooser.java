@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui;
+package org.martus.swing;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
