@@ -57,6 +57,7 @@ class Martus
 			System.out.println(e);
 			//e.printStatckTrace(System.out);
 		}
+
         UiMainWindow window = new UiMainWindow();
         if(!window.run())
         	System.exit(0);
