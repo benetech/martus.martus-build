@@ -2,13 +2,10 @@ package org.martus.server.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
-import org.martus.common.Base64.InvalidBase64Exception;
-import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class ExportPublicKey
@@ -69,19 +66,9 @@ public class ExportPublicKey
 		
 		try
 		{
-			MartusUtilities.exportClientPublicKey(security, outputfile);
+			MartusUtilities.exportServerPublicKey(security, outputfile);
 		}
-		catch (MartusSignatureException e)
-		{
-			System.err.println("ExportPublicKey.main: " + e + "\n");
-			System.exit(3);
-		}
-		catch (InvalidBase64Exception e)
-		{
-			System.err.println("ExportPublicKey.main: " + e + "\n");
-			System.exit(3);
-		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			System.err.println("ExportPublicKey.main: " + e + "\n");
 			System.exit(3);

@@ -4,9 +4,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.PublicKey;
@@ -14,8 +12,6 @@ import java.security.PublicKey;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
-import org.martus.common.MartusCrypto.EncryptionException;
-import org.martus.common.MartusCrypto.NoKeyPairException;
 
 public class EncryptFile
 {
@@ -69,32 +65,18 @@ public class EncryptFile
 			int len = buffer.length;
 			cipherStream.write(buffer, 0, len);
 			
-			String publicKeyString = (String) MartusUtilities.importClientPublicKeyFromFile(publicKeyFile).get(0);
+			String publicKeyString = (String) MartusUtilities.importServerPublicKeyFromFile(publicKeyFile, security).get(0);
 			PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
 			
 			security.encrypt(plainStream, cipherStream, security.createSessionKey(), publicKey);
 		}
-		catch (FileNotFoundException e)
+		catch (Exception e)
 		{
 			System.err.println("EncryptFile.main: " + e);
-			System.exit(3);
-		}
-		catch (EncryptionException e)
-		{
-			System.err.println("EncryptFile.main: ");
 			e.printStackTrace();
 			System.exit(3);
 		}
-		catch(NoKeyPairException e)
-		{
-			System.err.println("EncryptFile.main: " + e);
-			System.exit(3);
-		}
-		catch (IOException e)
-		{
-			System.err.println("EncryptFile.main: " + e);
-			System.exit(3);
-		}
-		System.exit(3);
+
+		System.exit(0);
 	}
 }
