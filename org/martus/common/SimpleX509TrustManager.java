@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.common;
 
 import java.security.PublicKey;
 import java.security.cert.CertificateException;
@@ -32,8 +32,6 @@ import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
 
-import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
 
 public class SimpleX509TrustManager implements X509TrustManager
 {

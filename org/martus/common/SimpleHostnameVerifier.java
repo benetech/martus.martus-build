@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.common;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.SSLSession;
