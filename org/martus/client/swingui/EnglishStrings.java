@@ -451,7 +451,7 @@ public class EnglishStrings
 "field:confirmBackupKeyPairSingleeffect=By choosing Yes, you will be prompted to save a copy of your keypair onto a removable disk.",
 "field:confirmWarnMissingAccountMapSignatureFilecause=Warning: accountmap.txt.sig file is missing.\n\nIf you have just upgraded to a new version of Martus this warning is harmless and you should click on No.  Otherwise this may indicate someone has tried to tamper with your data or could be caused by a hardware error.",		
 "field:confirmWarnMissingAccountMapSignatureFileeffect=Clicking on Yes will exit Martus.  Clicking on No will try to generate a new accountmap.txt.sig file and continue to load Martus.",		
-"field:confirmBackupKeyPairMultiplecause=We recommend that you now create 8 separate files of which any 3 can be used to reconstruct your keypair without a user name or password required.",
+"field:confirmBackupKeyPairMultiplecause=We recommend that you now create 8 separate files of which any 3 can be used to reconstruct your keypair without a user name or password being required.",
 "field:confirmBackupKeyPairMultipleeffect=By choosing Yes, you will be prompted to save 8 pieces of your keypair onto a removable disks.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
