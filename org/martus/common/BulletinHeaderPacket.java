@@ -8,8 +8,6 @@ import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.martus.common.*;
-
 public class BulletinHeaderPacket extends Packet
 {
 	public BulletinHeaderPacket(String accountString)
@@ -59,7 +57,7 @@ public class BulletinHeaderPacket extends Packet
 	{
 		lastSavedTime = System.currentTimeMillis();
 	}
-
+	
 	public void setFieldDataPacketId(String id)
 	{
 		fieldDataPacketId = id;
