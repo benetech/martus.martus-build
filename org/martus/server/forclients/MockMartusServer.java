@@ -229,11 +229,6 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		return 2;
 	}
 	
-	public long getUploadRequestTimerInterval()
-	{
-		return 9999 * 1000;
-	}
-	
 	public synchronized void subtractMaxFailedUploadAttemptsFromCounter()
 	{
 		return;

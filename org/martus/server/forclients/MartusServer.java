@@ -86,6 +86,9 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.out.println("Setting up sockets (this may take up to a minute or longer)...");
 			server.createServerForClients();
 			server.createServerForMirroring();
+
+			server.startBackgroundTimers();
+			
 			MartusServer.writeSyncFile(server.getRunningFile());
 			System.out.println("Waiting for connection...");
 		}
@@ -124,9 +127,12 @@ public class MartusServer implements NetworkInterfaceConstants
 		security = new MartusSecurity();
 		serverForClients = new ServerForClients(this);
 		failedUploadRequestsPerIp = new Hashtable();
-		
+	}
+
+	void startBackgroundTimers()
+	{
 		MartusUtilities.startTimer(new ShutdownRequestMonitor(), shutdownRequestIntervalMillis);
-		MartusUtilities.startTimer(new UploadRequestsMonitor(), getUploadRequestTimerInterval());
+		MartusUtilities.startTimer(new UploadRequestsMonitor(), magicWordsGuessIntervalMillis);
 	}
 
 	private void displayServerPublicCode() throws InvalidBase64Exception
@@ -1339,11 +1345,6 @@ public class MartusServer implements NetworkInterfaceConstants
 			return currentValue.intValue();
 		}
 		return 0;
-	}
-	
-	public long getUploadRequestTimerInterval()
-	{
-		return magicWordsGuessIntervalMillis;
 	}
 	
 	synchronized boolean areUploadRequestsAllowedForCurrentIp()
