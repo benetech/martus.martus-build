@@ -61,10 +61,10 @@ abstract public class UiBulletinComponentSection extends JPanel
 		encryptedIndicator.setVerticalTextPosition(JLabel.TOP);
 		encryptedIndicator.setFont(encryptedIndicator.getFont().deriveFont(Font.BOLD));
 
-		damagedIndicator = new UiWarningLabel(localization.getFieldLabel("MayBeDamaged"));
+		damagedIndicator = new UiWarningLabel();
 
 		updateEncryptedIndicator(encrypted);
-		updateDamagedIndicator(false);
+		clearDamagedIndicator();
 		add(encryptedIndicator);
 		add(damagedIndicator);
 	}
@@ -176,10 +176,16 @@ abstract public class UiBulletinComponentSection extends JPanel
 			fields[fieldNum].disableEdits();
 		}
 	}
-
-	public void updateDamagedIndicator(boolean isDamaged)
+	
+	public void clearDamagedIndicator()
 	{
-		damagedIndicator.setVisible(isDamaged);
+		damagedIndicator.setVisible(false);
+	}
+
+	public void updateDamagedIndicator(String text)
+	{
+		damagedIndicator.setText(text);
+		damagedIndicator.setVisible(true);
 	}
 
 	ParagraphLayout getParagraphLayout()

@@ -137,15 +137,24 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		publicStuff.copyDataFromPacket(publicData);
 		privateStuff.copyDataFromPacket(privateData);
 
-		boolean isDamaged = false;
+		publicStuff.clearDamagedIndicator();
+		privateStuff.clearDamagedIndicator();
+
 		if(!currentBulletin.isValid())
 		{
 			System.out.println("Damaged: " + currentBulletin.getLocalId());
-			isDamaged = true;
+			String text = mainWindow.getLocalization().getFieldLabel("MayBeDamaged");
+			publicStuff.updateDamagedIndicator(text);
+			privateStuff.updateDamagedIndicator(text);
+		}
+		else if(currentBulletin.hasUnknownTags())
+		{
+			System.out.println("Damaged: " + currentBulletin.getLocalId());
+			String text = mainWindow.getLocalization().getFieldLabel("BulletinHasUnknownStuff");
+			publicStuff.updateDamagedIndicator(text);
+			privateStuff.updateDamagedIndicator(text);
 		}
 
-		publicStuff.updateDamagedIndicator(isDamaged);
-		privateStuff.updateDamagedIndicator(isDamaged);
 		repaint();
 	}
 

@@ -34,15 +34,19 @@ import javax.swing.border.LineBorder;
 
 public class UiWarningLabel extends JLabel
 {
-	public UiWarningLabel(String text)
+	public UiWarningLabel()
 	{
 		setHorizontalTextPosition(LEFT);
 		setVerticalTextPosition(TOP);
-		setText("   " + text + "   ");
 		setFont(getFont().deriveFont(Font.BOLD));
 		setBackground(Color.yellow);
 		setForeground(Color.black);
 		setOpaque(true);
 		setBorder(new LineBorder(Color.black, 2));
+	}
+	
+	public void setText(String text)
+	{
+		super.setText("   " + text + "   ");
 	}
 }

@@ -36,7 +36,8 @@ public class UiUnknownViewer extends UiField
 {
 	public UiUnknownViewer(UiLocalization localizationToUse)
 	{
-		component = new UiWarningLabel(localizationToUse.getFieldLabel("UnknownFieldType"));
+		component = new UiWarningLabel();
+		component.setText(localizationToUse.getFieldLabel("UnknownFieldType"));
 	}
 
 	public JComponent getComponent()

@@ -369,6 +369,7 @@ public class EnglishStrings
 "field:publicsection=Public Information",
 "field:privatesection=Private Information",
 "field:MayBeDamaged=Warning: Portions may be missing or damaged",
+"field:BulletinHasUnknownStuff=Warning: Some information in this bulletin is not visible",
 "field:retrieveflag=Retrieve?",
 "field:DeleteFlag=Delete?",
 "field:waitingForKeyPairGeneration=Please wait a minute while your account is being created...",

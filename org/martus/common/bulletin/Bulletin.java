@@ -120,6 +120,11 @@ public class Bulletin implements BulletinConstants
 	{
 		return isValidFlag;
 	}
+	
+	public boolean hasUnknownTags()
+	{
+		return false;
+	}
 
 	public long getLastSavedTime()
 	{
