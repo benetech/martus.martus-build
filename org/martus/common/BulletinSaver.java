@@ -40,7 +40,7 @@ import org.martus.common.Packet.WrongPacketTypeException;
 public class BulletinSaver
 {
 
-	public static void saveToDatabase(Bulletin b, Database db, boolean mustEncryptPublicData, MartusCrypto signer) throws
+	public static void saveToClientDatabase(Bulletin b, Database db, boolean mustEncryptPublicData, MartusCrypto signer) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
@@ -73,14 +73,14 @@ public class BulletinSaver
 		Database db1 = db;
 		MartusCrypto signer1 = signer;
 
-		byte[] dataSig = packet1.writeXmlToDatabase(db1, encryptPublicData, signer1);
+		byte[] dataSig = packet1.writeXmlToClientDatabase(db1, encryptPublicData, signer1);
 		bhp.setFieldDataSignature(dataSig);
 		Packet packet2 = b.getPrivateFieldDataPacket();
 		boolean encryptPublicData1 = mustEncryptPublicData;
 		Database db2 = db;
 		MartusCrypto signer2 = signer;
 
-		byte[] privateDataSig = packet2.writeXmlToDatabase(db2, encryptPublicData1, signer2);
+		byte[] privateDataSig = packet2.writeXmlToClientDatabase(db2, encryptPublicData1, signer2);
 		bhp.setPrivateFieldDataSignature(privateDataSig);
 
 		for(int i = 0; i < b.getPendingPublicAttachments().size(); ++i)
@@ -90,7 +90,7 @@ public class BulletinSaver
 			boolean encryptPublicData2 = mustEncryptPublicData;
 			Database db3 = db;
 			MartusCrypto signer3 = signer;
-			packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
+			packet.writeXmlToClientDatabase(db3, encryptPublicData2, signer3);
 		}
 
 		for(int i = 0; i < b.getPendingPrivateAttachments().size(); ++i)
@@ -101,7 +101,7 @@ public class BulletinSaver
 			boolean encryptPublicData2 = mustEncryptPublicData;
 			Database db3 = db;
 			MartusCrypto signer3 = signer;
-			packet3.writeXmlToDatabase(db3, encryptPublicData2, signer3);
+			packet3.writeXmlToClientDatabase(db3, encryptPublicData2, signer3);
 		}
 
 		bhp.updateLastSavedTime();
@@ -109,7 +109,7 @@ public class BulletinSaver
 		boolean encryptPublicData2 = mustEncryptPublicData;
 		Database db3 = db;
 		MartusCrypto signer3 = signer;
-		packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
+		packet.writeXmlToClientDatabase(db3, encryptPublicData2, signer3);
 
 		if(bulletinAlreadyExisted)
 		{

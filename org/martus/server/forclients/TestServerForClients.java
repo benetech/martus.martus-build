@@ -80,7 +80,7 @@ public class TestServerForClients extends TestCaseEnhanced
 			b1.addPrivateAttachment(new AttachmentProxy(attachment));
 			b1.setHQPublicKey(hqSecurity.getPublicKeyString());
 			b1.setSealed();
-			BulletinSaver.saveToDatabase(b1, clientDatabase, true, clientSecurity);
+			BulletinSaver.saveToClientDatabase(b1, clientDatabase, true, clientSecurity);
 			b1 = BulletinLoader.loadFromDatabase(clientDatabase, DatabaseKey.createSealedKey(b1.getUniversalId()), clientSecurity);
 	
 			b2 = new Bulletin(clientSecurity);
@@ -88,12 +88,12 @@ public class TestServerForClients extends TestCaseEnhanced
 			b2.set(Bulletin.TAGPUBLICINFO, "Details2");
 			b2.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails2");
 			b2.setSealed();
-			BulletinSaver.saveToDatabase(b2, clientDatabase, true, clientSecurity);
+			BulletinSaver.saveToClientDatabase(b2, clientDatabase, true, clientSecurity);
 			
 			draft = new Bulletin(clientSecurity);
 			draft.set(Bulletin.TAGPUBLICINFO, "draft public");
 			draft.setDraft();
-			BulletinSaver.saveToDatabase(draft, clientDatabase, true, clientSecurity);
+			BulletinSaver.saveToClientDatabase(draft, clientDatabase, true, clientSecurity);
 
 
 			privateBulletin = new Bulletin(clientSecurity);
@@ -102,7 +102,7 @@ public class TestServerForClients extends TestCaseEnhanced
 			privateBulletin.set(Bulletin.TAGPUBLICINFO, "DetailsPrivate");
 			privateBulletin.set(Bulletin.TAGPRIVATEINFO, "PrivateDetailsPrivate");
 			privateBulletin.setSealed();
-			BulletinSaver.saveToDatabase(privateBulletin, clientDatabase, true, clientSecurity);
+			BulletinSaver.saveToClientDatabase(privateBulletin, clientDatabase, true, clientSecurity);
 
 			b1ZipString = MockBulletin.saveToZipString(clientDatabase, b1, clientSecurity);
 			b1ZipBytes = Base64.decode(b1ZipString);

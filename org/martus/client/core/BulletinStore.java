@@ -343,7 +343,7 @@ public class BulletinStore
 		bulletinCache.remove(b.getUniversalId());
 		try
 		{
-			BulletinSaver.saveToDatabase(b, database, mustEncryptPublicData(), getSignatureGenerator());
+			BulletinSaver.saveToClientDatabase(b, database, mustEncryptPublicData(), getSignatureGenerator());
 			//We don't call addToCaches here because we are not sure
 			//that this bulletin object is still usable -- maybe
 			//attachment proxies still point to disk files?
@@ -984,7 +984,7 @@ public class BulletinStore
 	{
 		final MartusCrypto security = getSignatureGenerator();
 		Bulletin imported = BulletinZipImporter.loadFromFile(security, inputFile);
-		BulletinSaver.saveToDatabase(imported, getDatabase(), mustEncryptPublicData(), security);
+		BulletinSaver.saveToClientDatabase(imported, getDatabase(), mustEncryptPublicData(), security);
 		return imported.getUniversalId();
 	}
 

@@ -826,7 +826,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		original.setSealed();
-		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
+		BulletinSaver.saveToClientDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
 		File zipFile = File.createTempFile("$$$MartusTestZipSealed", null);
 		zipFile.deleteOnExit();
 		Bulletin loaded = store.loadFromDatabase(originalKey);
@@ -1008,7 +1008,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.set(Bulletin.TAGPRIVATEINFO, "private");
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
-		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
+		BulletinSaver.saveToClientDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
 
 		Bulletin loaded = store.loadFromDatabase(originalKey);
 

@@ -225,7 +225,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 		Bulletin b = new Bulletin(security);
 		b.addPublicAttachment(ap);
-		BulletinSaver.saveToDatabase(b, db, true, security);
+		BulletinSaver.saveToClientDatabase(b, db, true, security);
 		String accountId = b.getAccount();
 		DatabaseKey key = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 
@@ -353,7 +353,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		Database db = new MockClientDatabase();
 
 		Bulletin b1 = new Bulletin(security);
-		BulletinSaver.saveToDatabase(b1, db, true, security);
+		BulletinSaver.saveToClientDatabase(b1, db, true, security);
 		BulletinHeaderPacket bhp = b1.getBulletinHeaderPacket();
 		int emptySize = MartusUtilities.getBulletinSize(db, bhp);
 		assertTrue("empty size not correct?", emptySize > 1000 && emptySize < 3000);
@@ -366,12 +366,12 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		out.close();
 		b1.addPublicAttachment(new AttachmentProxy(attachment));
 		b1.addPrivateAttachment(new AttachmentProxy(attachment));
-		BulletinSaver.saveToDatabase(b1, db, true, security);
+		BulletinSaver.saveToClientDatabase(b1, db, true, security);
 		b1 = BulletinLoader.loadFromDatabase(db, DatabaseKey.createSealedKey(b1.getUniversalId()), security);
 
 		int size = MartusUtilities.getBulletinSize(db, bhp);
 		b1.set(Bulletin.TAGTITLE, "This is an very long title and should change the size of the result if things are working correctly");
-		BulletinSaver.saveToDatabase(b1, db, true, security);
+		BulletinSaver.saveToClientDatabase(b1, db, true, security);
 		int size2 = MartusUtilities.getBulletinSize(db, bhp);
 		assertTrue("Size too small?", size > 4000);
 		assertNotEquals("Sizes match?", size, size2);

@@ -68,7 +68,7 @@ public class AttachmentPacket extends Packet
 		return localId.startsWith(prefix);
 	}
 
-	public byte[] writeXmlToDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws
+	public byte[] writeXmlToClientDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{

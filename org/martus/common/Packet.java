@@ -37,6 +37,7 @@ import java.util.Arrays;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -161,13 +162,19 @@ public class Packet
 	}
 
 
-	public byte[] writeXmlToDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws
+	public byte[] writeXmlToClientDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
+		DatabaseKey headerKey = new DatabaseKey(getUniversalId());
+		return writeXmlToDatabase(db, headerKey, mustEncrypt, signer);
+	}
+
+	public byte[] writeXmlToDatabase(Database db, DatabaseKey headerKey, boolean mustEncrypt, MartusCrypto signer)
+		throws IOException, CryptoException
+	{
 		StringWriter headerWriter = new StringWriter();
 		byte[] sig = writeXml(headerWriter, signer);
-		DatabaseKey headerKey = new DatabaseKey(getUniversalId());
 		if(mustEncrypt && isPublicData())
 			db.writeRecordEncrypted(headerKey, headerWriter.toString(), signer);
 		else

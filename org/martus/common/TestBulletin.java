@@ -233,7 +233,7 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin b = new Bulletin(security);
 		b.setSealed();
 		b.setAllPrivate(false);
-		BulletinSaver.saveToDatabase(b, db, true, security);
+		BulletinSaver.saveToClientDatabase(b, db, true, security);
 		assertEquals("Didn't Encrypt or Encyrpted too many packets.", 1, db.encryptWasCalled);
 	}
 
@@ -260,7 +260,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.set(Bulletin.TAGPUBLICINFO, "public info");
 		b1.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b1.setSealed();
-		BulletinSaver.saveToDatabase(b1, db, true, security);
+		BulletinSaver.saveToClientDatabase(b1, db, true, security);
 		Bulletin b2 = new Bulletin(security);
 		b2.createDraftCopyOf(b1, db);
 		assertEquals("Not a draft?", Bulletin.STATUSDRAFT, b2.getStatus());
@@ -298,7 +298,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b2.createDraftCopyOf(b1, db);
 		assertEquals("didn't pull private true?", b1.isAllPrivate(), b2.isAllPrivate());
 
-		BulletinSaver.saveToDatabase(b1,db,false,security);
+		BulletinSaver.saveToClientDatabase(b1,db,false,security);
 
 		b2.createDraftCopyOf(b1,db);
 		clonedPublicAttachment = b2.getPublicAttachments()[0];

@@ -109,7 +109,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 			bulletins.add(b);
 			DatabaseKey key = new DatabaseKey(b.getUniversalId());
 			key.setSealed();
-			BulletinSaver.saveToDatabase(b, fakeDatabase, false, clientSecurity);
+			BulletinSaver.saveToClientDatabase(b, fakeDatabase, false, clientSecurity);
 
 			String bur = MartusServerUtilities.createBulletinUploadRecord(b.getLocalId(), otherServerSecurity);
 			burs[i] = bur;
