@@ -38,7 +38,6 @@ import javax.swing.table.TableColumnModel;
 
 import org.martus.client.BulletinStore.StatusNotAllowedException;
 import org.martus.common.MartusCrypto.CryptoException;
-import org.martus.common.MartusUtilities.SealedPacketExistsException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 
@@ -254,7 +253,6 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			} catch (SignatureVerificationException e) {
 			} catch (IOException e) {
 			} catch (CryptoException e) {
-			} catch (SealedPacketExistsException e) {
 			} catch (StatusNotAllowedException e) {
 			}
 		}

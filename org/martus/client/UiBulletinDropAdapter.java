@@ -1,7 +1,6 @@
 package org.martus.client;
 
 import java.awt.Cursor;
-
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -15,11 +14,8 @@ import java.util.List;
 
 import org.martus.client.BulletinStore.StatusNotAllowedException;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
-import org.martus.common.MartusUtilities.DuplicatePacketException;
-import org.martus.common.MartusUtilities.SealedPacketExistsException;
 
 abstract class UiBulletinDropAdapter implements DropTargetListener
 {
@@ -176,11 +172,6 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		{
 			attemptDropFile(file, toFolder);
 		} 
-		catch (SealedPacketExistsException shouldBeImpossible) 
-		{
-			System.out.println("Tried to drop draft when sealed already exists");
-			resultMessageTag = "DropError";
-		} 
 		catch (StatusNotAllowedException e) 
 		{
 			resultMessageTag = "DropNotAllowed";
@@ -224,7 +215,6 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		MartusCrypto.CryptoException,
 		Packet.InvalidPacketException,
 		Packet.SignatureVerificationException,
-		MartusUtilities.SealedPacketExistsException,
 		BulletinStore.StatusNotAllowedException
 	{
 		toFolder.getStore().importZipFileBulletin(file, toFolder, false);

@@ -31,22 +31,6 @@ import org.martus.common.Packet.WrongPacketTypeException;
 public class MartusUtilities 
 {
 	public static class FileTooLargeException extends Exception {}
-	public static class DuplicatePacketException extends Exception
-	{
-		DuplicatePacketException(String message)
-		{
-			super(message);
-		}
-	}
-	
-	public static class SealedPacketExistsException extends Exception
-	{
-		SealedPacketExistsException(String message)
-		{
-			super(message);
-		}
-	}
-
 	
 	public static int getCappedFileLength(File file) throws FileTooLargeException
 	{
@@ -211,7 +195,7 @@ public class MartusUtilities
 		try 
 		{
 			ZipFile zip = new ZipFile(destZipFile);
-			validateZipFilePackets(db, headerKey.getAccountId(), zip, security);
+			validateIntegrityOfZipFilePackets(db, headerKey.getAccountId(), zip, security);
 			zip.close();
 		}
 		catch (InvalidPacketException e)
@@ -302,8 +286,6 @@ public class MartusUtilities
 	
 	public static void importBulletinPacketsFromZipFileToDatabase(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
 		throws IOException, 
-		DuplicatePacketException,
-		SealedPacketExistsException,
 		Packet.InvalidPacketException,
 		Packet.SignatureVerificationException,
 		Packet.WrongAccountException,
@@ -313,7 +295,7 @@ public class MartusUtilities
 		if(authorAccountId == null)
 			authorAccountId = header.getAccountId();
 			
-		validateZipFilePacketsForImport(db, authorAccountId, zip, security);
+		validateIntegrityOfZipFilePackets(db, authorAccountId, zip, security);
 		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
 		
 		HashMap zipEntries = new HashMap();
@@ -391,26 +373,11 @@ public class MartusUtilities
 		db.discardRecord(key);
 	}
 
-	private static void validateZipFilePacketsForImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security) throws 
-		IOException, 
-		DuplicatePacketException,
-		SealedPacketExistsException,
-		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException,
-		Packet.WrongAccountException,
-		MartusCrypto.DecryptionException
-	{
-		validateZipFilePackets(db, authorAccountId, zip, security);
-		ensureZipFilePacketsOkToImport(db, authorAccountId, zip, security);
-	}
-
-	public static void validateZipFilePackets(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+	public static void validateIntegrityOfZipFilePackets(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
 		throws
 			InvalidPacketException,
 			IOException,
 			SignatureVerificationException,
-			SealedPacketExistsException,
-			DuplicatePacketException,
 			WrongAccountException,
 			DecryptionException 
 	{
@@ -426,36 +393,6 @@ public class MartusUtilities
 			ZipEntry entry = (ZipEntry)entries.nextElement();
 			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
-		}
-	}
-
-	private static void ensureZipFilePacketsOkToImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
-		throws
-			InvalidPacketException,
-			IOException,
-			SignatureVerificationException,
-			SealedPacketExistsException,
-			DuplicatePacketException,
-			WrongAccountException,
-			DecryptionException 
-	{
-		//TODO validate Header Packet matches other packets
-		Enumeration entries = zip.entries();
-		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
-		while(entries.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
-			DatabaseKey trySealedKey = new DatabaseKey(uid);
-			trySealedKey.setSealed();
-			if(db.doesRecordExist(trySealedKey))
-			{
-				DatabaseKey newKey = MartusUtilities.createKeyWithHeaderStatus(header, uid);
-				if(newKey.isDraft())
-					throw new SealedPacketExistsException(entry.getName());
-				else
-					throw new DuplicatePacketException(entry.getName());
-			}
 		}
 	}
 

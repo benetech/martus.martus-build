@@ -2,7 +2,6 @@ package org.martus.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,9 +17,11 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.martus.common.AttachmentPacket;
@@ -48,9 +49,7 @@ import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
-import org.martus.common.MartusUtilities.DuplicatePacketException;
 import org.martus.common.MartusUtilities.FileTooLargeException;
-import org.martus.common.MartusUtilities.SealedPacketExistsException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
@@ -1317,6 +1316,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		try
 		{
 			zip = new ZipFile(zipFile);
+			validateZipFilePacketsForServerImport(getDatabase(), authorAccountId, zip, security);
 			MartusUtilities.importBulletinPacketsFromZipFileToDatabase(getDatabase(), authorAccountId, zip, security);
 		}
 		catch (DuplicatePacketException e)
@@ -1513,6 +1513,55 @@ public class MartusServer implements NetworkInterfaceConstants
 		in.close();
 		return bhp;
 	}
+
+	public static class DuplicatePacketException extends Exception
+	{
+		public DuplicatePacketException(String message)
+		{
+			super(message);
+		}
+	}
+	
+	public static class SealedPacketExistsException extends Exception
+	{
+		public SealedPacketExistsException(String message)
+		{
+			super(message);
+		}
+	}
+
+	public static void validateZipFilePacketsForServerImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+		throws
+			Packet.InvalidPacketException,
+			IOException,
+			Packet.SignatureVerificationException,
+			SealedPacketExistsException,
+			DuplicatePacketException,
+			Packet.WrongAccountException,
+			MartusCrypto.DecryptionException 
+	{
+		MartusUtilities.validateIntegrityOfZipFilePackets(db, authorAccountId, zip, security);
+
+		Enumeration entries = zip.entries();
+		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		while(entries.hasMoreElements())
+		{
+			ZipEntry entry = (ZipEntry)entries.nextElement();
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
+			DatabaseKey trySealedKey = new DatabaseKey(uid);
+			trySealedKey.setSealed();
+			if(db.doesRecordExist(trySealedKey))
+			{
+				DatabaseKey newKey = MartusUtilities.createKeyWithHeaderStatus(header, uid);
+				if(newKey.isDraft())
+					throw new SealedPacketExistsException(entry.getName());
+				else
+					throw new DuplicatePacketException(entry.getName());
+			}
+		}
+	}
+
+
 
 	abstract class SummaryCollector implements Database.PacketVisitor
 	{
