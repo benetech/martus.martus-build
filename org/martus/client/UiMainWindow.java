@@ -44,6 +44,7 @@ import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -806,15 +807,22 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private void doPrint()
 	{
 		boolean printCancelled = false;
-		//System.out.println("Print");
-		if(table.getSingleSelectedBulletin() == null)
+		Bulletin currentBulletin = table.getSingleSelectedBulletin();
+		if(currentBulletin == null)
 			return;
 		
-		preview.startPrintMode();
+		int width = preview.getView().getWidth();
+		
+		BulletinHtmlGenerator generator = new BulletinHtmlGenerator(width, app);
+		JComponent view = new JLabel(generator.getHtmlString(currentBulletin));
+
+		JFrame frame = new JFrame();
+		frame.getContentPane().add(view);
+		frame.pack();
+
 		PrintPageFormat format = new PrintPageFormat();
-		PrinterJob job = PrinterJob.getPrinterJob();
-		JComponent view = preview.getView();
 		JComponentVista vista = new JComponentVista(view, format);
+		PrinterJob job = PrinterJob.getPrinterJob();
 		job.setPageable(vista);	
 		HashPrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
 		while(true) 
@@ -847,13 +855,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			catch (PrinterException e)
 			{
 				System.out.println(e);
+				e.printStackTrace();
 			}
 		}
-		preview.endPrintMode();
 		requestFocus(true);
 	}
-
-
+	
 	private void doLocalize()
 	{
 		saveState();

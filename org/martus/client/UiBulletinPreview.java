@@ -26,16 +26,6 @@ public class UiBulletinPreview extends JScrollPane
 		return view;
 	}
 
-	public void startPrintMode()
-	{
-		view.startPrintMode();	
-	}
-	
-	public void endPrintMode()
-	{
-		view.endPrintMode();	
-	}
-
 	public void setCurrentBulletin(Bulletin b)
 	{
 		if(currentBulletin != null && b != null &&

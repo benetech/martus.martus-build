@@ -1,6 +1,5 @@
 package org.martus.client;
 
-import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -30,7 +29,6 @@ public class UiAttachmentViewer extends JPanel
 		model = new AttachmentTableModel();
 		ParagraphLayout layout = new ParagraphLayout();
 		setLayout(layout);
-		attachmentColors = new UiColors();
 
 		attachmentTable = new JTable(model);
 		attachmentTable.createDefaultColumnsFromModel();
@@ -78,53 +76,6 @@ public class UiAttachmentViewer extends JPanel
 		resizeTable();
 	}
 
-	public void startPrintMode()
-	{
-		attachmentColors.panelBackGround = getBackground();
-		attachmentColors.panelForeGround = getForeground();
-		attachmentColors.headerBackGround = attachmentPane.getColumnHeader().getView().getBackground();
-		attachmentColors.headerForeGround = attachmentPane.getColumnHeader().getView().getForeground();
-		attachmentColors.viewPortBackGround = attachmentPane.getViewport().getBackground();
-		attachmentColors.viewPortForeGround = attachmentPane.getViewport().getForeground();
-		attachmentColors.tableBackGround = attachmentTable.getBackground();
-		attachmentColors.tableForeGround = attachmentTable.getForeground();
-
-		setBackground(Color.white);
-		setForeground(Color.black);
-		attachmentPane.getColumnHeader().getView().setBackground(Color.white);
-		attachmentPane.getColumnHeader().getView().setForeground(Color.black);
-		attachmentPane.getViewport().setBackground(Color.white);
-		attachmentPane.getViewport().setForeground(Color.black);
-		attachmentTable.setBackground(Color.white);
-		attachmentTable.setForeground(Color.black);
-		saveButton.setVisible(false);
-	}
-
-	public void endPrintMode()
-	{
-		attachmentPane.getColumnHeader().getView().setBackground(attachmentColors.headerBackGround);
-		attachmentPane.getColumnHeader().getView().setForeground(attachmentColors.headerForeGround);
-		attachmentPane.getViewport().setBackground(attachmentColors.viewPortBackGround);
-		attachmentPane.getViewport().setForeground(attachmentColors.viewPortForeGround);
-		setBackground(attachmentColors.panelBackGround);
-		setForeground(attachmentColors.panelForeGround);
-		attachmentTable.setBackground(attachmentColors.tableBackGround);
-		attachmentTable.setForeground(attachmentColors.tableForeGround);
-		saveButton.setVisible(true);
-	}
-
-	class UiColors
-	{
-		public Color panelForeGround;
-		public Color panelBackGround;
-		public Color viewPortForeGround;
-		public Color viewPortBackGround;
-		public Color tableForeGround;
-		public Color tableBackGround;
-		public Color headerForeGround;
-		public Color headerBackGround;
-	}
-	
 	class AttachmentTableModel extends AbstractTableModel
 	{
 		public AttachmentTableModel()
@@ -240,6 +191,5 @@ public class UiAttachmentViewer extends JPanel
 	JTable attachmentTable;
 	JButton saveButton;
 	JScrollPane attachmentPane;
-	UiColors attachmentColors;
 	static final int VISIBLE_ROW_COUNT = 4;
 }
