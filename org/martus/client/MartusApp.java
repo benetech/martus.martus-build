@@ -755,14 +755,31 @@ public class MartusApp
 	private void sendContactInfoToServer()
 	{
 		ConfigInfo info = getConfigInfo();
-		System.out.println("sent contact info");	
-		info.setSendContactInfoToServer(false);
+		String result = "";
 		try 
 		{
+			result = putContactInfoOnServer(info.getContactInfo(security));
+		} 
+		catch (MartusSignatureException e) 
+		{
+			System.out.println("MartusApp:putContactInfoOnServer :" + e);
+			return;
+		} 
+		if(!result.equals(NetworkInterfaceConstants.OK))
+		{
+			System.out.println("MartusApp:putContactInfoOnServer Failed:" + result);
+			return;
+		}
+		System.out.println("Contact info successfully sent to server");	
+
+		try 
+		{
+			info.setSendContactInfoToServer(false);
 			saveConfigInfo();
 		} 
 		catch (SaveConfigInfoException e) 
 		{
+			System.out.println("MartusApp:putContactInfoOnServer Failed to save configinfo locally:" + e);
 		}
 	}		
 
@@ -1059,6 +1076,14 @@ public class MartusApp
 		return response.getResultCode();
 	}
 	
+	public String putContactInfoOnServer(Vector info)  throws 
+			MartusCrypto.MartusSignatureException
+	{
+		NetworkResponse response = getCurrentSSLServerProxy().putContactInfo(getSecurity(), getAccountId(), info);
+		return response.getResultCode();
+	}
+
+
 	public static class AccountAlreadyExistsException extends Exception {}
 	public static class CannotCreateAccountFileException extends IOException {}
 

@@ -232,6 +232,15 @@ public class FileDatabase implements Database
 		return interimFolder;
 	}
 	
+	public File getAbsoluteContactInfoFolderForAccount(String accountString) throws
+		IOException
+	{
+		File accountFolder = new File(absoluteBaseDir, getFolderForAccount(accountString));
+		File ContactFolder = new File(accountFolder, CONTACTINFO_FOLDER_NAME);
+		ContactFolder.mkdirs();
+		return ContactFolder;
+	}
+
 	public File getIncomingInterimFile(DatabaseKey key) throws 
 		IOException
 	{
@@ -246,6 +255,13 @@ public class FileDatabase implements Database
 		return new File(folder, key.getLocalId()+".out");
 	}
 	
+	public File getContactInfoFile(String accountId) throws 
+		IOException
+	{
+		File folder = getAbsoluteContactInfoFolderForAccount(accountId);
+		return new File(folder, "contactInfo.dat");
+	}
+
 	public boolean isInQuarantine(DatabaseKey key)
 	{
 		try
@@ -704,6 +720,7 @@ public class FileDatabase implements Database
 	protected static final String draftQuarantinePrefix = "qd-p";
 	protected static final String sealedQuarantinePrefix = "qs-p";
 	protected static final String INTERIM_FOLDER_NAME = "interim";
+	protected static final String CONTACTINFO_FOLDER_NAME = "contactInfo";
 	
 	File absoluteBaseDir;
 	Map accountMap;

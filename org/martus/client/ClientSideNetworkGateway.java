@@ -107,6 +107,13 @@ public class ClientSideNetworkGateway
 		return new NetworkResponse(server.deleteDraftBulletins(signer.getPublicKeyString(), parameters, signature));
 	}
 	
+	public NetworkResponse	putContactInfo(MartusCrypto signer, String authorAccountId, Vector parameters) throws 
+			MartusCrypto.MartusSignatureException
+	{
+		String signature = MartusUtilities.sign(parameters, signer);
+		return new NetworkResponse(server.putContactInfo(signer.getPublicKeyString(), parameters, signature));
+	}
+
 	final static String defaultReservedString = "";
 		
 	NetworkInterface server;

@@ -4,7 +4,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -219,8 +221,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		contactInfo.clear();
 		contactInfo.add(clientId);
-		contactInfo.add(new Integer(1));
+		contactInfo.add(new Integer(2));
 		contactInfo.add("Data");
+		contactInfo.add("Data2");
 		String signature = MartusUtilities.sign(contactInfo, clientSecurity);
 		contactInfo.add(signature);
 		String incorrectAccoutResult = testServer.putContactInfo("differentAccountID", contactInfo);
@@ -233,6 +236,22 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertTrue("File Doesn't exist?", contactFile.exists());
 		assertTrue("Size too small", contactFile.length() > 200);
+
+		FileInputStream contactFileInputStream = new FileInputStream(contactFile);
+		DataInputStream in = new DataInputStream(contactFileInputStream);
+
+		String inputPublicKey = in.readUTF();
+		int inputDataCount = in.readInt();
+		String inputData =  in.readUTF();
+		String inputData2 =  in.readUTF();
+		String inputSig = in.readUTF();
+		in.close();
+
+		assertEquals("Public key doesn't match", clientId, inputPublicKey);
+		assertEquals("data size not two?", 2, inputDataCount);
+		assertEquals("data not correct?", "Data", inputData);
+		assertEquals("data2 not correct?", "Data2", inputData2);
+		assertEquals("signature doesn't match?", signature, inputSig);		
 
 		contactFile.delete();
 		contactFile.getParentFile().delete();

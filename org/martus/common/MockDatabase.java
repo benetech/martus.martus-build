@@ -148,6 +148,11 @@ abstract public class MockDatabase implements Database
 		return getInterimFile(key, outgoingInterimMap);
 	}
 	
+	public File getContactInfoFile(String accountId)
+	{
+		return new File(getFolderForAccount(accountId), "$$$ContactFile.dat");
+	}
+
 	public synchronized boolean isInQuarantine(DatabaseKey key)
 	{
 		Map quarantine = getQuarantineFor(key);

@@ -7,7 +7,7 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Vector;
 
-import org.martus.common.MartusSecurity;
+import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 
@@ -72,7 +72,7 @@ public class ConfigInfo implements Serializable
 		mustAskUserToSendToServer = false;
 	}
 
-	public Vector getContactInfo(MartusSecurity signer) throws
+	public Vector getContactInfo(MartusCrypto signer) throws
 		MartusSignatureException
 	{
 		Vector contactInfo = new Vector();

@@ -1099,15 +1099,28 @@ public class TestMartusApp extends TestCaseEnhanced
 			gotAuthor = authorAccountId;
 			gotIds = bulletinLocalIds;
 			return new NetworkResponse(response);
-		}	
+		}
+		
+		public NetworkResponse	putContactInfo(MartusCrypto signer, String authorAccountId, Vector contactInfo) throws 
+			MartusCrypto.MartusSignatureException
+		{
+			if(throwSigError)
+				throw new MartusCrypto.MartusSignatureException();
+			gotSigner = signer;
+			gotAuthor = authorAccountId;
+			gotContactInfo = contactInfo;
+			return new NetworkResponse(response);
+		}
+
 		
 		MartusCrypto gotSigner;
 		String gotAuthor;
 		String[] gotIds;
+		Vector gotContactInfo;
 		Vector response;
 		boolean throwSigError;
 	}
-	
+
 	public void testDeleteServerDraftBulletins() throws Exception
 	{
 		appWithServer.setServerInfo("mock", mockServer.getAccountId());
@@ -1160,6 +1173,52 @@ public class TestMartusApp extends TestCaseEnhanced
 		}
 
 	}
+
+	public void testPutContactInfo() throws Exception
+	{
+		appWithServer.setServerInfo("mock", mockServer.getAccountId());
+		MockGateway gateway = new MockGateway();
+
+		MartusSecurity security = new MartusSecurity();
+		security.createKeyPair(512);
+		MockMartusApp app= MockMartusApp.create(security);
+		app.currentSSLServerProxy = gateway;
+		String accountId = app.getAccountId();
+		
+		Vector contact = new Vector();
+		contact.add("PublicKey");
+		contact.add(new Integer(2));
+		contact.add("Author");
+		contact.add("Address");
+		contact.add("Signature");
+
+		Vector mockResponse = new Vector();
+		mockResponse.clear();
+		mockResponse.add(NetworkInterfaceConstants.OK);
+		gateway.response = mockResponse;
+
+		String result = app.putContactInfoOnServer(contact);
+		assertEquals("wrong result?", mockResponse.get(0), result);
+		assertEquals("wrong crypto?", app.getSecurity(), gateway.gotSigner);
+		assertEquals("wrong author?", app.getAccountId(), gateway.gotAuthor);
+		assertEquals("wrong vector count?", contact.size(), gateway.gotContactInfo.size());
+		for (int i = 0; i < gateway.gotContactInfo.size(); i++)
+		{
+			assertEquals("missing contents " + i, contact.get(i), gateway.gotContactInfo.get(i));
+		}
+		
+		gateway.throwSigError = true;
+		try
+		{
+			String shouldThrow = app.putContactInfoOnServer(contact);
+			fail("Should have thrown for sig error (no key pair)");
+		}
+		catch (MartusSignatureException ignoreExpectedException)
+		{
+		}
+		gateway.throwSigError = false;
+	}
+
 
 	public void testGetFieldOfficeAccountsNoServer() throws Exception
 	{
