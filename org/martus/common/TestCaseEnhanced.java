@@ -22,6 +22,12 @@ public class TestCaseEnhanced extends TestCase
 		return file;
 	}
 
+	public static void assertFalse(String message, boolean actual)
+	{
+		if(actual)
+			throw new AssertionFailedError(message + " expected false ");
+	}
+	
 	public static void assertNotEquals(long expected, long actual)
 	{
 		if(actual == expected)
