@@ -2,7 +2,6 @@ package org.martus.client;
 
 import java.util.Vector;
 
-import MartusJava.MartusApp;
 
 import junit.framework.TestCase;
 

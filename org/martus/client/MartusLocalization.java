@@ -16,7 +16,6 @@ import java.util.Vector;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 
-import MartusJava.MartusApp;
 
 public class MartusLocalization
 {
