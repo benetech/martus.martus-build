@@ -1,5 +1,7 @@
 package org.martus.client;
 
+import java.awt.Cursor;
+
 import java.awt.Point;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -31,6 +33,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	// DropTargetListener interface
 	public void dragEnter(DropTargetDragEvent dtde) {}
 	public void dragExit(DropTargetEvent dte) {}
+	
 	public void dropActionChanged(DropTargetDragEvent dtde) {}
 
 	public void dragOver(DropTargetDragEvent dtde)
@@ -52,10 +55,15 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 
 	public void drop(DropTargetDropEvent dtde)
 	{
+		Cursor originalCursor = observer.getCursor();
+		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		
 		if(dtde.isDataFlavorSupported(TransferableBulletinList.getBulletinListDataFlavor()))
 			dopTransferableBulletin(dtde);
 		else if(dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			dropFile(dtde);
+			
+		observer.setCursor(originalCursor);
 	}
 
 	// private methods
