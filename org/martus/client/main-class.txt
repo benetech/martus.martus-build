@@ -1,2 +1,2 @@
-Main-class: MartusJava.Martus
+Main-class: org.martus.client.Martus
 Sealed: true

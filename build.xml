@@ -26,7 +26,7 @@
     			${client-dir}/locked.jpg,
     			${client-dir}/unlocked.jpg,
     			${client-dir}/version.txt,
-    			${client-dir}/main-class.txt"/>
+    			main-class.txt"/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
   <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
@@ -81,6 +81,7 @@
     		includes="${server-files}, 
     				${common-files}"/>
     <jar jarfile="${client-jar}" basedir="." 
+			manifest="${client-dir}/main-class.txt" 
     		includes="${client-files}, 
     				${common-files}"/>
     <jar jarfile="${meta-jar}" basedir="." 
