@@ -49,8 +49,13 @@ public class MockUiLocalization extends UiLocalization
 		return directoryToUse;
 	}
 
-	public String getFieldLabel(String tag)
+	public String getLabel(
+		String languageCode,
+		String category,
+		String tag,
+		String defaultResult)
 	{
 		return "<" + tag + ">";
 	}
+
 }

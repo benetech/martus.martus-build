@@ -43,7 +43,6 @@ import java.util.Vector;
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
-import org.martus.client.swingui.UiLocalization;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinSearcher;
@@ -86,12 +85,12 @@ public class MartusApp
 		}
 	}
 
-	public MartusApp(UiLocalization localizationToUse) throws MartusAppInitializationException
+	public MartusApp(Localization localizationToUse) throws MartusAppInitializationException
 	{
 		this(null, determineDataDirectory(), localizationToUse);
 	}
 
-	public MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse, UiLocalization localizationToUse) throws MartusAppInitializationException
+	public MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse, Localization localizationToUse) throws MartusAppInitializationException
 	{
 		localization = localizationToUse;
 		try
@@ -112,6 +111,11 @@ public class MartusApp
 			throw new MartusAppInitializationException("ErrorCryptoInitialization");
 		}
 
+		initializeCurrentLanguage(localizationToUse);
+	}
+
+	private void initializeCurrentLanguage(Localization localization)
+	{
 		File languageFlag = new File(getDataDirectory(),"lang.es");
 		if(languageFlag.exists())
 		{
@@ -125,10 +129,10 @@ public class MartusApp
 			previouslySavedState.load(getUiStateFile());
 			String previouslySavedStateLanguage = previouslySavedState.getCurrentLanguage();
 			if(previouslySavedStateLanguage == "")
-				localization.setCurrentLanguageCode(UiLocalization.getDefaultUiLanguage());
+				localization.setCurrentLanguageCode(Localization.ENGLISH);
 			else
 				localization.setCurrentLanguageCode(previouslySavedStateLanguage);
-
+		
 			String previouslySavedStateDateFormat = previouslySavedState.getCurrentDateFormat();
 			if(previouslySavedStateDateFormat == "")
 				localization.setCurrentDateFormatCode(DateUtilities.getDefaultDateFormatCode());
@@ -137,11 +141,6 @@ public class MartusApp
 		}
 	}
 	
-	public UiLocalization getLocalization()
-	{
-		return localization;
-	}
-
 	public void enableUploadLogging()
 	{
 		logUploads = true;
@@ -324,9 +323,9 @@ public class MartusApp
 		return  getDataDirectory() + "MartusUploadLog.txt";
 	}
 
-	public String getHelpFilename()
+	public String getHelpFilename(String languageCode)
 	{
-		String helpFile = "MartusHelp-" + getCurrentLanguage() + ".txt";
+		String helpFile = "MartusHelp-" + languageCode + ".txt";
 		return helpFile;
 	}
 
@@ -335,9 +334,9 @@ public class MartusApp
 		return("MartusHelp-en.txt");
 	}
 
-	public String getHelpTOCFilename()
+	public String getHelpTOCFilename(String languageCode)
 	{
-		String helpFile = "MartusHelpTOC-" + getCurrentLanguage() + ".txt";
+		String helpFile = "MartusHelpTOC-" + languageCode + ".txt";
 		return helpFile;
 	}
 
@@ -1230,7 +1229,7 @@ public class MartusApp
 	}
 
 	protected String dataDirectory;
-	private UiLocalization localization;
+	private Localization localization;
 	public BulletinStore store;
 	private ConfigInfo configInfo;
 	public NetworkInterface currentNetworkInterfaceHandler;

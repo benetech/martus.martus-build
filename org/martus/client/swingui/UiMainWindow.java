@@ -701,8 +701,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		InputStream helpStream = null;
 		InputStream helpStreamTOC = null;
-		String helpFileShortName = app.getHelpFilename();
-		String helpTOCFileShortName = app.getHelpTOCFilename();
+		String currentLanguage = getLocalization().getCurrentLanguageCode();
+		String helpFileShortName = app.getHelpFilename(currentLanguage);
+		String helpTOCFileShortName = app.getHelpTOCFilename(currentLanguage);
 		File helpFile = new File(MartusApp.getTranslationsDirectory(), helpFileShortName);
 		File helpTOCFile = new File(MartusApp.getTranslationsDirectory(), helpTOCFileShortName);
 		try

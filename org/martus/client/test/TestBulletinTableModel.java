@@ -34,6 +34,7 @@ import org.martus.client.swingui.BulletinTableModel;
 import org.martus.common.Bulletin;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.UniversalId;
+import org.martus.meta.MockUiLocalization;
 
 public class TestBulletinTableModel extends TestCase
 {
@@ -44,6 +45,7 @@ public class TestBulletinTableModel extends TestCase
 
     public void setUp() throws Exception
     {
+    	localization = new MockUiLocalization();
 		app = MockMartusApp.create();
 		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(app.getSecurity());
@@ -72,19 +74,19 @@ public class TestBulletinTableModel extends TestCase
 
     public void doTestColumns()
     {
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
 
 		assertEquals("column count", 4, list.getColumnCount());
-		assertEquals("Status", list.getColumnName(0));
-		assertEquals("Date of Event", list.getColumnName(1));
-		assertEquals("Title", list.getColumnName(2));
-		assertEquals("Author", list.getColumnName(3));
+		assertEquals(localization.getFieldLabel("status"), list.getColumnName(0));
+		assertEquals(localization.getFieldLabel("eventdate"), list.getColumnName(1));
+		assertEquals(localization.getFieldLabel("title"), list.getColumnName(2));
+		assertEquals(localization.getFieldLabel("author"), list.getColumnName(3));
 	}
 
 	public void doTestFieldNames()
 	{
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
 
 		assertEquals("row count", 4, list.getColumnCount());
@@ -96,7 +98,7 @@ public class TestBulletinTableModel extends TestCase
 
 	public void doTestRows()
 	{
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
 
 		assertEquals(store.getBulletinCount(), list.getRowCount());
@@ -104,13 +106,13 @@ public class TestBulletinTableModel extends TestCase
 		assertEquals(b.get("author"), list.getValueAt(2, 3));
 
 		b = list.getBulletin(4);
-		String displayDate = app.getLocalization().convertStoredDateToDisplay(b.get("eventdate"));
+		String displayDate = localization.convertStoredDateToDisplay(b.get("eventdate"));
 		assertEquals(displayDate, list.getValueAt(4, 1));
     }
 
 	public void doTestGetBulletin()
 	{
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
 		for(int i = 0; i < folderSent.getBulletinCount(); ++i)
 		{
@@ -122,7 +124,7 @@ public class TestBulletinTableModel extends TestCase
 
 	public void doTestGetValueAt()
 	{
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
 
 		assertEquals("", list.getValueAt(1000, 0));
@@ -132,11 +134,11 @@ public class TestBulletinTableModel extends TestCase
 		store.saveBulletin(b);
 
 		assertEquals(Bulletin.STATUSSEALED, b.getStatus());
-		assertEquals("Sealed", list.getValueAt(0,0));
+		assertEquals(localization.getStatusLabel("sealed"), list.getValueAt(0,0));
 
 		b.set("eventdate", "1999-04-15");
 		store.saveBulletin(b);
-		String displayDate = app.getLocalization().convertStoredDateToDisplay("1999-04-15");
+		String displayDate = localization.convertStoredDateToDisplay("1999-04-15");
 		assertEquals(displayDate, list.getValueAt(0,1));
 
 		assertEquals("xyz", b.get("title"));
@@ -144,16 +146,16 @@ public class TestBulletinTableModel extends TestCase
 
 		b.setDraft();
 		store.saveBulletin(b);
-		assertEquals("Draft", list.getValueAt(0,0));
+		assertEquals(localization.getStatusLabel("draft"), list.getValueAt(0,0));
 		b.setSealed();
 		store.saveBulletin(b);
-		assertEquals("Sealed", list.getValueAt(0,0));
+		assertEquals(localization.getStatusLabel("sealed"), list.getValueAt(0,0));
 
 	}
 
 	public void doTestSetFolder()
 	{
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		assertEquals(0, list.getRowCount());
 
 		list.setFolder(folderSent);
@@ -168,7 +170,7 @@ public class TestBulletinTableModel extends TestCase
 
 	public void doTestFindBulletin()
 	{
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
 
 		assertEquals(-1, list.findBulletin(null));
@@ -188,7 +190,7 @@ public class TestBulletinTableModel extends TestCase
 
 	public void doTestSortByColumn()
 	{
-		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
 
 		String tag = "eventdate";
@@ -202,6 +204,7 @@ public class TestBulletinTableModel extends TestCase
 	}
 
 	MockMartusApp app;
+	MockUiLocalization localization;
 	BulletinStore store;
 	BulletinFolder folderSent;
 

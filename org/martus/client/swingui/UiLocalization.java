@@ -166,11 +166,6 @@ public class UiLocalization extends Localization
 		return (ChoiceItem[])(languages.toArray((Object[])(new ChoiceItem[0])));
 	}
 
-	public static String getDefaultUiLanguage()
-	{
-		return ENGLISH;
-	}
-
 	public String getLocalizedFolderName(String folderName)
 	{
 		return getLabel(getCurrentLanguageCode(), "folder", folderName, "");

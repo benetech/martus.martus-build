@@ -33,6 +33,7 @@ import org.martus.client.swingui.FolderList;
 import org.martus.client.swingui.FolderTreeNode;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.common.MockClientDatabase;
+import org.martus.meta.MockUiLocalization;
 
 public class TestFolderList extends TestCase
 {
@@ -43,6 +44,7 @@ public class TestFolderList extends TestCase
 
     public void setUp() throws Exception
     {
+    	localization = new MockUiLocalization();
 		app = MockMartusApp.create();
 		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(app.getSecurity());
@@ -136,10 +138,11 @@ public class TestFolderList extends TestCase
 	
 	private UiLocalization getLocalization()
 	{
-		return app.getLocalization();
+		return localization;
 
 	}
 
+	MockUiLocalization localization;
 	MockMartusApp app;
 }
 
