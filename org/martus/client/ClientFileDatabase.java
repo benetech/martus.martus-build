@@ -11,4 +11,9 @@ public class ClientFileDatabase extends FileDatabase
 	{
 		super(directory, security);
 	}
+
+	public boolean mustEncryptLocalData()
+	{
+		return true;
+	}
 }

@@ -7,6 +7,11 @@ import java.util.TreeMap;
 
 public class MockClientDatabase extends MockDatabase 
 {
+	public boolean mustEncryptLocalData()
+	{
+		return true;
+	}
+
 	public void deleteAllData()
 	{
 		packetMap = new TreeMap();

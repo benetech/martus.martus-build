@@ -19,10 +19,8 @@ public class MockMartusApp extends MartusApp
 		MockMartusApp app = new MockMartusApp(crypto, fakeDataDirectory);
 		app.dataDirectory = fakeDataDirectory.getPath() + "/";
 
-		boolean encryptPublic = app.store.mustEncryptPublicData();
 		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(crypto);
-		app.store.setEncryptPublicData(encryptPublic);
 		
 		return app;
 	}

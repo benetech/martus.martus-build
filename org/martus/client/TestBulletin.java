@@ -330,9 +330,7 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		b.setSealed();
 		b.setAllPrivate(false);
-		assertEquals("Ecrypted?", false, b.mustEncryptPublicData());
-		store.setEncryptPublicData(true);
-		assertEquals("Not Ecrypted?", true, b.mustEncryptPublicData());
+		assertEquals("Ecrypted?", true, b.mustEncryptPublicData());
 		b.save();
 		assertEquals("Didn't Encrypt or Encyrpted too many packets.", 1, db.encryptWasCalled);
 	}

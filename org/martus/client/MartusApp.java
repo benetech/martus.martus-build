@@ -80,7 +80,6 @@ public class MartusApp
 			security = cryptoToUse;
 			localization = new MartusLocalization();
 			store = new BulletinStore(dataDirectoryToUse, cryptoToUse);
-			store.setEncryptPublicData(true);
 			configInfo = new ConfigInfo();
 
 			currentUserName = "";

@@ -16,7 +16,7 @@ import org.martus.common.FileDatabase.MissingAccountMapException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 
 
-abstract public class MockDatabase implements Database
+abstract public class MockDatabase extends Database
 {
 	public MockDatabase()
 	{
@@ -111,7 +111,8 @@ abstract public class MockDatabase implements Database
 		try 
 		{
 			byte[] bytes = data.getBytes("UTF-8");
-			return new MockRecordInputStream(key, bytes, streamsThatAreOpen);
+			MockRecordInputStream in = new MockRecordInputStream(key, bytes, streamsThatAreOpen);
+			return convertToDecryptingStreamIfNecessary(in, decrypter);
 		} 
 		catch(Exception e) 
 		{
@@ -277,6 +278,7 @@ abstract public class MockDatabase implements Database
 	{
 		return getAllKeys().size();
 	}
+
 	// end Database interface
 	
 	private synchronized File getInterimFile(DatabaseKey key, Map map) 

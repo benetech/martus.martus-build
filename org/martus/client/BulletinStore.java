@@ -111,14 +111,9 @@ public class BulletinStore
 		return signer;
 	}
 	
-	public void setEncryptPublicData(boolean encrypt)
-	{
-		encryptPublicDataFlag = encrypt;
-	}
-	
 	public boolean mustEncryptPublicData()
 	{
-		return encryptPublicDataFlag;
+		return getDatabase().mustEncryptLocalData();
 	}
 	
 	public int getBulletinCount()

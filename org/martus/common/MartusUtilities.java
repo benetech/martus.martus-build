@@ -1,6 +1,5 @@
 package org.martus.common;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -429,6 +428,7 @@ public class MartusUtilities
 		
 		HashMap zipEntries = new HashMap();
 		StreamCopier copier = new StreamCopier();
+		StreamEncryptor encryptor = new StreamEncryptor(security);
 
 		DatabaseKey[] keys = getAllPacketKeys(header);
 		for (int i = 0; i < keys.length; i++)
@@ -436,13 +436,18 @@ public class MartusUtilities
 			String localId = keys[i].getLocalId();
 			ZipEntry entry = zip.getEntry(localId);
 			
-			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
+			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 
 			final String tempFileName = "$$$importZip";
 			File file = File.createTempFile(tempFileName, null);
-
 			FileOutputStream rawOut = new FileOutputStream(file);
-			copyStreamWithFilter(in, rawOut, copier);
+
+			StreamFilter filter = copier;
+			if(db.mustEncryptLocalData() && doesPacketNeedLocalEncryption(header, in))
+				filter = encryptor;
+				
+			copyStreamWithFilter(in, rawOut, filter);
+
 			rawOut.close();
 			in.close();
 		
@@ -679,8 +684,29 @@ public class MartusUtilities
 		}
 	}
 
+	public static boolean doesPacketNeedLocalEncryption(BulletinHeaderPacket bhp, InputStreamWithSeek fdpInputStream) throws IOException
+	{
+		if(bhp.hasAllPrivateFlag() && bhp.isAllPrivate())
+			return false;
 
-	
+		int firstByteIsZeroIfEncrypted = fdpInputStream.read();
+		fdpInputStream.seek(0);
+		if(firstByteIsZeroIfEncrypted == 0)
+			return false;
 
-
+		final String encryptedTag = MartusXml.getTagStart(MartusXml.EncryptedFlagElementName);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(fdpInputStream));
+		String thisLine = null;
+		while( (thisLine = reader.readLine()) != null)
+		{
+			if(thisLine.indexOf(encryptedTag) >= 0)
+			{
+				fdpInputStream.seek(0);
+				return false;
+			}
+		}
+		
+		fdpInputStream.seek(0);
+		return true;
+	}
 }

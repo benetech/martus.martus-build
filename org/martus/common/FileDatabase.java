@@ -17,7 +17,7 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 
 
-public class FileDatabase implements Database
+public class FileDatabase extends Database
 {
 	public FileDatabase(File directory, MartusCrypto securityToUse)
 	{
@@ -135,17 +135,6 @@ public class FileDatabase implements Database
 		}
 	}
 
-	public boolean isEncryptedRecordStream(InputStreamWithSeek in) throws 
-			IOException 
-	{
-		int flagByte = in.read();
-		in.seek(0);
-		boolean isEncrypted = false;
-		if(flagByte == 0)
-			isEncrypted = true;
-		return isEncrypted;
-	}
-	
 	private String decryptRecord(InputStreamWithSeek in, MartusCrypto decrypter) throws 
 			IOException,
 			MartusCrypto.CryptoException
@@ -165,19 +154,9 @@ public class FileDatabase implements Database
 		try
 		{
 			File file = getFileForRecord(key);
-			InputStreamWithSeek in = null;
-			in = new FileInputStreamWithSeek(file);
+			InputStreamWithSeek in = new FileInputStreamWithSeek(file);
 			
-			if(!isEncryptedRecordStream(in))
-				return in;
-				
-			in.read(); //throwAwayFlagByte
-			ByteArrayOutputStream decryptedOut = new ByteArrayOutputStream();
-			decrypter.decrypt(in, decryptedOut);
-			in.close();
-			
-			byte[] bytes = decryptedOut.toByteArray();
-			return new ByteArrayInputStreamWithSeek(bytes);
+			return convertToDecryptingStreamIfNecessary(in, decrypter);
 		}
 		catch(IOException e)
 		{
