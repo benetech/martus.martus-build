@@ -34,9 +34,7 @@ import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.Packet;
 import org.martus.common.UnicodeReader;
@@ -118,59 +116,27 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	MartusServer(File dir) throws 
 					MartusCrypto.CryptoInitializationException
 	{
-		security = new MartusSecurity();
-		
 		dataDirectory = dir;
+		getTriggerDirectory().mkdirs();
+		getStartupConfigDirectory().mkdirs();
 		
-		triggerDirectory = new File(dataDirectory, ADMINTRIGGERDIRECTORY);
-		if(!triggerDirectory.exists())
-		{
-			triggerDirectory.mkdirs();
-		}
-
-		startupConfigDirectory = new File(dataDirectory,ADMINSTARTUPCONFIGDIRECTORY);
-		if(!startupConfigDirectory.exists())
-		{
-			startupConfigDirectory.mkdirs();
-		}
-		
-		nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
-		serverHandler = new ServerSideNetworkHandler(this);
-		supplierHandler = new SupplierSideMirroringHandler(this);
-
+		security = new MartusSecurity();
 		clientsThatCanUpload = new Vector();
 		clientsBanned = new Vector();
 		magicWords = new Vector();
 		failedUploadRequestsPerIp = new Hashtable();
 		
-		createShutdownTimer();
-		createMirroringTimer();
-		createFailedUploadRequestsTimer();
-
-		setServerName(servername);
+		startTimer(new ShutdownRequestMonitor(), shutdownRequestIntervalMillis);
+		startTimer(new UploadRequestsMonitor(), getUploadRequestTimerInterval());
+		startTimer(new MirroringTask(null), mirroringIntervalMillis);
 	}
 
-	private void createFailedUploadRequestsTimer()
+	private void startTimer(TimerTask uploadRequestTask, long interval)
 	{
 		Timer failedUploadRequestsTimer = new Timer(true);
-		TimerTask uploadRequestTask = new UploadRequestsMonitor();
-		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, getUploadRequestTimerInterval());
+		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, interval);
 	}
 
-	private void createMirroringTimer()
-	{
-		Timer mirroringTimer = new Timer(true);
-		TimerTask mirroringTask = new MirroringTask();
-		mirroringTimer.schedule(mirroringTask, IMMEDIATELY, mirroringIntervalMillis);
-	}
-
-	private void createShutdownTimer()
-	{
-		Timer shutdownRequestTimer = new Timer(true);
-		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
-		shutdownRequestTimer.schedule(shutdownRequestTaskMonitor, IMMEDIATELY, shutdownRequestIntervalMillis);
-	}
-	
 
 	private void displayServerPublicCode() throws InvalidBase64Exception
 	{
@@ -293,21 +259,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return security;
 	}
 	
-	NetworkInterfaceForNonSSL getNonSSLServerHandler()
-	{
-		return nonSSLServerHandler;
-	}
-	
-	NetworkInterface getServerHandler()
-	{
-		return serverHandler;
-	}
-	
-	MirroringInterface getMirroringSupplierHandler()
-	{
-		return supplierHandler;
-	}
-
 	public boolean isAuthorizedForMirroring(String callerAccountId)
 	{
 		return false;
@@ -338,21 +289,11 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			magicWords.add(newMagicWord);
 	}
 	
-	public void createNonSSLXmlRpcServer()
-	{
-		MartusXmlRpcServer.createNonSSLXmlRpcServer(getNonSSLServerHandler(), NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL);
-	}
-
-	public void createSSLXmlRpcServer()
-	{
-		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
-		createSSLXmlRpcServerOnPort(port);
-	}
-
 	public void createSSLXmlRpcServerOnPort(int port) 
 	{
+		ServerSideNetworkHandler serverHandler = new ServerSideNetworkHandler(this);
 		MartusSecureWebServer.security = security;
-		MartusXmlRpcServer.createSSLXmlRpcServer(getServerHandler(), port);
+		MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, port);
 	}
 	
 	public void createMirroringSupplierXmlRpcServer()
@@ -363,7 +304,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	public void createMirroringSupplierXmlRpcServer(int port)
 	{
-		MartusXmlRpcServer.createSSLXmlRpcServer(getMirroringSupplierHandler(), port);
+		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this);
+		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, port);
 	}
 	
 	public String ping()
@@ -1991,11 +1933,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 	}
 	
-	public void setServerName(String servername)
-	{
-		serverName = servername;
-	}
-	
 	String getServerName()
 	{
 		if(serverName == null)
@@ -2248,7 +2185,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		System.out.print("Enter passphrase: ");
 		System.out.flush();
 		
-		File waitingFile = new File(server.triggerDirectory, "waiting");
+		File waitingFile = new File(server.getTriggerDirectory(), "waiting");
 		waitingFile.delete();
 		writeSyncFile(waitingFile);
 		
@@ -2275,8 +2212,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	private void createServerForClients()
 	{
-		createNonSSLXmlRpcServer();
-		createSSLXmlRpcServer();
+		ServerSideNetworkHandlerForNonSSL nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
+		MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL);
+		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
+		createSSLXmlRpcServerOnPort(port);
 	}
 
 	private void deleteRunningFile()
@@ -2286,7 +2225,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	private File getRunningFile()
 	{
-		File runningFile = new File(triggerDirectory, "running");
+		File runningFile = new File(getTriggerDirectory(), "running");
 		return runningFile;
 	}
 
@@ -2331,7 +2270,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 			if(args[arg].startsWith("--server-name="))
 			{
-				servername = args[arg].substring(args[arg].indexOf("=")+1);
+				serverName = args[arg].substring(args[arg].indexOf("=")+1);
 			}
 		}
 		
@@ -2379,27 +2318,37 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	public File getMagicWordsFile()
 	{
-		return new File(startupConfigDirectory, MAGICWORDSFILENAME);
+		return new File(getStartupConfigDirectory(), MAGICWORDSFILENAME);
 	}
 
 	File getKeyPairFile()
 	{
-		return new File(startupConfigDirectory, getKeypairFilename());
+		return new File(getStartupConfigDirectory(), getKeypairFilename());
 	}
 
 	File getBannedFile()
 	{
-		return new File(startupConfigDirectory, BANNEDCLIENTSFILENAME);
+		return new File(getStartupConfigDirectory(), BANNEDCLIENTSFILENAME);
 	}
 
 	File getComplianceFile()
 	{
-		return new File(startupConfigDirectory, COMPLIANCESTATEMENTFILENAME);
+		return new File(getStartupConfigDirectory(), COMPLIANCESTATEMENTFILENAME);
 	}
 
 	public File getShutdownFile()
 	{
-		return new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);
+		return new File(getTriggerDirectory(), MARTUSSHUTDOWNFILENAME);
+	}
+
+	public File getTriggerDirectory()
+	{
+		return new File(dataDirectory, ADMINTRIGGERDIRECTORY);
+	}
+
+	public File getStartupConfigDirectory()
+	{
+		return new File(dataDirectory,ADMINSTARTUPCONFIGDIRECTORY);
 	}
 
 	private class BannedClientsMonitor extends TimerTask
@@ -2448,39 +2397,38 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	private class MirroringTask extends TimerTask
 	{
+		MirroringTask(MirroringRetriever retrieverToUse)
+		{
+		}
+		
 		public void run()
 		{
 			if(mirrorRetriever != null)
 				mirrorRetriever.tick();
 		}
+
+		MirroringRetriever mirrorRetriever;
 	}
 	
 
+	public MartusCrypto security;
+	public File dataDirectory;
 	Database database;
-	ServerSideNetworkHandlerForNonSSL nonSSLServerHandler;
-	ServerSideNetworkHandler serverHandler;
-	SupplierSideMirroringHandler supplierHandler;
-	MirroringRetriever mirrorRetriever;
+	private String complianceStatement; 
 	
 	public Vector clientsThatCanUpload;
 	public Vector clientsBanned;
-	public MartusCrypto security;
-	String serverName;
-	public File dataDirectory;
-	public File triggerDirectory;
-	public File startupConfigDirectory;
+	Hashtable failedUploadRequestsPerIp;
 	private Vector magicWords;
+	
 	private long bannedClientsFileLastModified;
 	private int activeClientsCounter;
-	private String complianceStatement; 
 
+	String serverName;
 	private boolean secureMode;
-	private String servername;
 	private boolean serverLogging;
 	private boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
-	
-	Hashtable failedUploadRequestsPerIp;
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
