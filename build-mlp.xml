@@ -1,0 +1,47 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-mlp" default="mlp" basedir=".">
+    <description>
+        Martus MLP Build File
+    </description>
+    <property name="BASEDIR" value="../binary-martus/Releases/ClientMLPs"/>
+
+<!-- Change these before you run for different Language Packs -->
+    <property name="LANGUAGEDIR" value="${BASEDIR}/arabic"/>
+    <property name="LANGUAGE" value="ar"/>
+
+
+    <!-- imports -->
+    <target name="check_keypass" unless="sign.keypass">
+        <input
+            message="Please enter key pw:"
+            addproperty="sign.keypass"
+        />
+    </target>
+
+    <target name="check_storepass" unless="sign.storepass">
+        <input
+            message="Please enter store pw:"
+            addproperty="sign.storepass"
+        />
+    </target>
+    
+    <import file="build.shared.values.xml" />
+  
+  <!-- ================================================================== -->
+  <!-- J A R                                                              -->
+  <!-- ================================================================== -->
+
+      <!-- create mlp signed jar -->
+      <target name="mlp" depends="check_storepass, check_keypass" description="Create a Signed Martus Language Pack">
+		  <jar jarfile="${LANGUAGEDIR}/Martus-${LANGUAGE}.mlp" basedir="${LANGUAGEDIR}" manifest="${BASEDIR}/manifest" includes="*.txt *.mtf *.pdf">
+          </jar>
+          <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+            <fileset dir="${LANGUAGEDIR}">
+                <include name="Martus-${LANGUAGE}.mlp"/>
+            </fileset>
+        </signjar>          
+      </target>
+
+</project>
+	    
+	    
