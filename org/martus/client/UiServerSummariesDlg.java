@@ -20,6 +20,8 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.TableCellRenderer;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableModel;
 
 public class UiServerSummariesDlg extends JDialog
 {
@@ -38,8 +40,8 @@ public class UiServerSummariesDlg extends JDialog
 		JLabel label = new JLabel("");
 		String topMessageText = getApp().getFieldLabel(topMessageTag);
 		UiWrappedTextArea retrieveMessage = new UiWrappedTextArea(mainWindow, topMessageText);
-		Box tableBox = Box.createVerticalBox();
-		JTable table = new JTable(model);
+		tableBox = Box.createVerticalBox();
+		RetrieveJTable table = new RetrieveJTable(model);
 		oldBooleanRenderer = table.getDefaultRenderer(Boolean.class);
 		table.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 		table.setDefaultRenderer(String.class, new StringRenderer());
@@ -108,6 +110,23 @@ public class UiServerSummariesDlg extends JDialog
 	MartusApp getApp()
 	{
 		return mainWindow.getApp();
+	}
+
+	class RetrieveJTable extends JTable
+	{
+		public RetrieveJTable(TableModel model)
+		{
+			super(model);	
+		}
+		
+		public void doLayout() 
+		{
+			Dimension tableBoxSize = tableBox.getPreferredSize();
+			TableColumn column = getColumnModel().getColumn(0);
+			column.setMaxWidth(tableBoxSize.width/2);
+			column.setPreferredWidth(tableBoxSize.width/4);
+			super.doLayout();
+		}
 	}
 
 	class BooleanRenderer extends DefaultTableCellRenderer
@@ -217,4 +236,5 @@ public class UiServerSummariesDlg extends JDialog
 	RetrieveTableModel model;
 	TableCellRenderer oldBooleanRenderer;
 	Color disabledBackgroundColor;
+	Box tableBox;
 }
