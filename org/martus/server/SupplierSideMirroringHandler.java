@@ -11,11 +11,12 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
+import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 
-public class SupplierSideMirroringHandler implements MirroringInterface
+public class SupplierSideMirroringHandler implements MirroringInterface, NetworkInterfaceConstants
 {
 	SupplierSideMirroringHandler(ServerSupplierInterface supplierToUse)
 	{
@@ -59,7 +60,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		catch (RuntimeException e)
 		{
 			result = new Vector();
-			result.add(BAD_PARAMETER);
+			result.add(INVALID_DATA);
 			return result;
 		}
 

@@ -14,6 +14,7 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
+import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
@@ -47,7 +48,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		parameters.add("Hello");
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.SIG_ERROR, result.get(0));
+		assertEquals(NetworkInterfaceConstants.SIG_ERROR, result.get(0));
 	}
 
 	public void testNonStringCommand() throws Exception
@@ -59,7 +60,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
+		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
 	}
 	
 	public void testUnknownCommand() throws Exception
@@ -72,7 +73,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(accountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.UNKNOWN_COMMAND, result.get(0));
+		assertEquals(NetworkInterfaceConstants.UNKNOWN_COMMAND, result.get(0));
 	}
 	
 	
@@ -86,7 +87,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(accountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.OK, result.get(0));
+		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
 	}
 	
 	public void testGetAllAccountsNotAuthorized() throws Exception
@@ -96,7 +97,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.NOT_AUTHORIZED, result.get(0));
+		assertEquals(NetworkInterfaceConstants.NOT_AUTHORIZED, result.get(0));
 	}
 
 	public void testGetAllAccountsNoneAvailable() throws Exception
@@ -108,7 +109,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(2, result.size());
-		assertEquals(MirroringInterface.OK, result.get(0));
+		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
 		Vector accounts = (Vector)result.get(1);
 		assertEquals(0, accounts.size());
 	}
@@ -126,7 +127,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
-		assertEquals(MirroringInterface.OK, result.get(0));
+		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
 		Vector accounts = (Vector)result.get(1);
 		assertEquals(2, accounts.size());
 		assertContains(accountId1, accounts);
@@ -141,7 +142,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.NOT_AUTHORIZED, result.get(0));
+		assertEquals(NetworkInterfaceConstants.NOT_AUTHORIZED, result.get(0));
 	}
 	
 	public void testListBulletinsBadAuthorAccountId() throws Exception
@@ -154,7 +155,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
+		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
 	}
 	
 	public void testListBulletins() throws Exception
@@ -180,7 +181,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		parameters.add(authorAccountId);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
-		assertEquals(MirroringInterface.OK, result.get(0));
+		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
 		Vector infos = (Vector)result.get(1);
 		assertEquals(3, infos.size());
 		assertContains(result1, infos);
@@ -196,7 +197,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.NOT_AUTHORIZED, result.get(0));
+		assertEquals(NetworkInterfaceConstants.NOT_AUTHORIZED, result.get(0));
 	}
 	
 	public void testGetBulletinChunkBadAuthorAccountId() throws Exception
@@ -209,7 +210,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
+		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
 	}
 	
 	public void testGetBulletinChunkBadParameter() throws Exception
@@ -225,7 +226,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
-		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
+		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
 	}
 	
 	public void testGetBulletinChunk() throws Exception
@@ -252,7 +253,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertEquals(maxChunkSize, supplier.gotMaxChunkSize);
 	
 		assertEquals(2, result.size());
-		assertEquals(MirroringInterface.CHUNK_OK, result.get(0));
+		assertEquals(NetworkInterfaceConstants.CHUNK_OK, result.get(0));
 		Vector details = (Vector)result.get(1);
 		assertEquals(new Integer(supplier.returnTotalLen), details.get(0));
 		assertEquals(new Integer(supplier.returnChunkSize), details.get(1));
@@ -324,7 +325,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 		gotMaxChunkSize = maxChunkSize;
 		
 		Vector result = new Vector();
-		result.add(MirroringInterface.CHUNK_OK);
+		result.add(NetworkInterfaceConstants.CHUNK_OK);
 		result.add(new Integer(returnTotalLen));
 		result.add(new Integer(returnChunkSize));
 		result.add(returnZipData);

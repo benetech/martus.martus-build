@@ -25,6 +25,7 @@ import java.util.Vector;
 
 import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.common.Base64;
+import org.martus.common.BulletinRetrieverGatewayInterface;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -41,6 +42,7 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.NetworkResponse;
+import org.martus.common.ProgressMeterInterface;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
@@ -1038,7 +1040,9 @@ public class MartusApp
 		FileOutputStream outputStream = new FileOutputStream(tempFile);
 
 		String progressTag = getFieldLabel("ChunkProgressStatusMessage");
-		int masterTotalSize = retrieveBulletinZipToStream(uid, outputStream, progressMeter, progressTag);
+		int masterTotalSize = retrieveBulletinZipToStream(uid, outputStream, 
+						serverChunkSize, getCurrentNetworkInterfaceGateway(),  security, 
+						progressMeter, progressTag);
 
 		outputStream.close();
 
@@ -1050,8 +1054,9 @@ public class MartusApp
 		tempFile.delete();
 	}
 
-	int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream, 
-			UiProgressMeter progressMeter, String progressTag)
+	static int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream, 
+			int chunkSize, BulletinRetrieverGatewayInterface gateway, MartusCrypto security, 
+			ProgressMeterInterface progressMeter, String progressTag)
 		throws
 			MartusSignatureException,
 			ServerErrorException,
@@ -1066,9 +1071,8 @@ public class MartusApp
 			progressMeter.updateProgressMeter(progressTag, 0, 1);	
 		while(!lastResponse.equals(NetworkInterfaceConstants.OK))
 		{
-			
-			NetworkResponse response = getCurrentNetworkInterfaceGateway().getBulletinChunk(security, 
-								uid.getAccountId(), uid.getLocalId(), chunkOffset, serverChunkSize);
+			NetworkResponse response = gateway.getBulletinChunk(security, 
+								uid.getAccountId(), uid.getLocalId(), chunkOffset, chunkSize);
 								
 			lastResponse = response.getResultCode();
 			if(!lastResponse.equals(NetworkInterfaceConstants.OK) &&
@@ -1088,8 +1092,8 @@ public class MartusApp
 			if(totalSize < 0)
 				throw new ServerErrorException("totalSize negative");
 				
-			int chunkSize = ((Integer)result.get(1)).intValue();
-			if(chunkSize < 0 || chunkSize > totalSize - chunkOffset)
+			int thisChunkSize = ((Integer)result.get(1)).intValue();
+			if(thisChunkSize < 0 || thisChunkSize > totalSize - chunkOffset)
 				throw new ServerErrorException("chunkSize out of range");
 			
 			// TODO: validate that length of data == chunkSize that was returned
@@ -1097,7 +1101,7 @@ public class MartusApp
 			StringReader reader = new StringReader(data);
 		
 			Base64.decode(reader, outputStream);
-			chunkOffset += chunkSize;
+			chunkOffset += thisChunkSize;
 			if(progressMeter != null)
 			{
 				if(progressMeter.shouldExit())

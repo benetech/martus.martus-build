@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.BevelBorder;
 
-public class UiProgressMeter extends JPanel
+import org.martus.common.ProgressMeterInterface;
+
+public class UiProgressMeter extends JPanel implements ProgressMeterInterface
 {
 	public UiProgressMeter(UiProgressRetrieveDlg dlg) 
 	{

@@ -2,9 +2,13 @@ package org.martus.client;
 
 import java.util.Vector;
 
-import org.martus.common.*;
+import org.martus.common.BulletinRetrieverGatewayInterface;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
+import org.martus.common.NetworkInterface;
+import org.martus.common.NetworkResponse;
 
-public class ClientSideNetworkGateway 
+public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterface
 {
 	public ClientSideNetworkGateway(NetworkInterface serverToUse)
 	{
