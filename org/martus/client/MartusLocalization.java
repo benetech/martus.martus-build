@@ -314,6 +314,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedDraftBulletinWithOutboxCopy=Confirm Delete Draft Bulletin");
 		addEnglishTranslation("wintitle:confirmPrinterWarning=Print Configuration Warning");
 		addEnglishTranslation("wintitle:confirmRequestToSendContactInfoToServer=Request to Send Contact Info to Server");
+		addEnglishTranslation("wintitle:confirmUploadReminder=Upload Reminder");
+		addEnglishTranslation("wintitle:confirmDraftUploadReminder=Draft Upload Reminder");
 
 		addEnglishTranslation("wintitle:notifyDropNotAllowed=Cannot Move Bulletin");
 		addEnglishTranslation("wintitle:notifyDropError=Error Moving Bulletin");
@@ -330,8 +332,6 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyPasswordInvalid=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyPasswordMatchesUserName=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyincorrectsignin=Incorrect Signin");
-		addEnglishTranslation("wintitle:notifyuploadreminder=Upload Reminder");
-		addEnglishTranslation("wintitle:notifydraftuploadreminder=Draft Upload Reminder");
 		addEnglishTranslation("wintitle:notifyuploadrejected=Error Sending Bulletin");
 		addEnglishTranslation("wintitle:notifycorruptconfiginfo=Error Loading Configuration File");
 		addEnglishTranslation("wintitle:notifyserverok=Server Selection Complete");
@@ -614,6 +614,10 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmPrinterWarningeffect=Clicking on Yes will bring back the Printer Dialog so you can reselect your default paper tray and size.  Clicking on 'No' will print the document.");
 		addEnglishTranslation("field:confirmRequestToSendContactInfoToServercause=Do you want to have your contact information sent to the current server?  This information may be sent to other servers, and will be viewable by anyone who has access to your public bulletin information.");
 		addEnglishTranslation("field:confirmRequestToSendContactInfoToServereffect=Clicking on Yes will send your contact information to the current server.");
+		addEnglishTranslation("field:confirmUploadRemindercause=Please Note: There are bulletins in your outbox that have not been sent to a server.  Do you still want to exit?");
+		addEnglishTranslation("field:confirmUploadRemindereffect=Clicking on Yes will exit Martus, and leave the unsent bulletins in the outbox which will be sent the next time you start Martus.");
+		addEnglishTranslation("field:confirmDraftUploadRemindercause=Please Note: There are draft bulletins that have been modified and not yet sent to a server.  Do you still want to exit?");
+		addEnglishTranslation("field:confirmDraftUploadRemindereffect=Clicking on Yes will exit Martus, but these bulletins will be sent to the server when you run Martus again.");
 
 		addEnglishTranslation("field:notifyDropNotAllowedcause=This bulletin cannot be moved to that folder. This may be because of its Draft/Sealed status, or its author.");
 		addEnglishTranslation("field:notifyDropErrorcause=An unexpected error occured while moving this bulletin. The file may be damaged.");
@@ -630,8 +634,6 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyPasswordInvalidcause=Not a valid password, passwords must be at least 8 characters long");
 		addEnglishTranslation("field:notifyPasswordMatchesUserNamecause=Your password can not be your username");
 		addEnglishTranslation("field:notifyincorrectsignincause=Username or Password incorrect");
-		addEnglishTranslation("field:notifyuploadremindercause=Please Note: There are bulletins in your outbox that have not been sent to a server.");
-		addEnglishTranslation("field:notifydraftuploadremindercause=Please Note: There are draft bulletins that have been modified and not yet sent to a server.");
 		addEnglishTranslation("field:notifyuploadrejectedcause=The current Martus Server has refused to accept a bulletin");
 		addEnglishTranslation("field:notifycorruptconfiginfocause=The configuration file may be corrupted");
 		addEnglishTranslation("field:notifyserverokcause=The Server has been selected.");

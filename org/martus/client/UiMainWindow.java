@@ -795,7 +795,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		boolean signedIn = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
-			Exit();
+			ExitImmediately();
 		return signedIn;
 	}
 
@@ -1361,23 +1361,34 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private void doUploadReminderOnExit()
+	private boolean doUploadReminderOnExit()
 	{
+		boolean dontExitApplication = false;
 		if(app.shouldShowSealedUploadReminderOnExit())
 		{
-			notifyDlg(this, "uploadreminder");
-			app.resetLastUploadRemindedTime();
+			if(confirmDlg(this, "UploadReminder"))
+				app.resetLastUploadRemindedTime();
+			else
+				dontExitApplication = true;
 		}
 		else if(app.shouldShowDraftUploadReminder())
 		{
-			notifyDlg(this, "draftuploadreminder");
-		}			
+			if(!confirmDlg(this, "DraftUploadReminder"))
+				dontExitApplication = true;
+		}
+		return dontExitApplication;			
 	}
 
-	private void Exit()
+	private void ExitNormally()
 	{
-		doUploadReminderOnExit();
+		if(doUploadReminderOnExit())
+			return;
 		saveState();
+		ExitImmediately();
+	}
+	
+	private void ExitImmediately()
+	{
 		System.exit(0);
 	}
 
@@ -1502,7 +1513,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			Exit();
+			ExitNormally();
 		}
 	}
 	
@@ -1852,7 +1863,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 	{
 		public void windowClosing(WindowEvent event)
 		{
-			Exit();
+			ExitNormally();
 		}
 	}
 	
@@ -1916,7 +1927,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 					
 					currentActiveFrame.setEnabled(false);
 					if(!signIn(UiSigninDlg.TIMED_OUT))
-						Exit();
+						ExitImmediately();
 					currentActiveFrame.setEnabled(true);
 				}
 				timedOutInDialog = false;
