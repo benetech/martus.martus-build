@@ -369,7 +369,8 @@ public class UiBackupRecoverKeyPair
 			UnicodeWriter output = new UnicodeWriter(newBackupFile);
 			output.write(dataToSave);
 			output.close();
-			return true;
+			
+			return verifySharePieceFromFile(newBackupFile, dataToSave);
 		}
 		catch (IOException ioe)
 		{
