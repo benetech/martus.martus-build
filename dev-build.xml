@@ -220,13 +220,21 @@
   </target>
 
    <!-- Build TestMLPK -->
-  <target name="build-test-mlpk" depends="init">
+  <target name="build-test-mlp" depends="init">
 	
     <mkdir dir="${dist}"/>
 
-    <jar jarfile="${dist}/Martus-xx.mlpk" basedir="mtf" 
+    <jar jarfile="${dist}/Martus-xx.mlp" basedir="mtf" 
 	    manifest="mtf/main-class"
-	    includes="**/*.txt **/*.mtf"/>
+	    includes="**/*xx.txt **/*xx.mtf **/*xx.pdf"/>
+
+    <jar jarfile="${dist}/Martus-yy.mlp" basedir="mtf" 
+	    manifest="mtf/main-class"
+	    includes="**/*yy.txt **/*yy.mtf **/*yy.pdf"/>
+
+    <jar jarfile="${dist}/Martus-updated-yy.mlp" basedir="mtf" 
+	    manifest="mtf/main-class"
+	    includes="**/*yy.txt **/*yy.mtf"/>
    </target>
 
 
