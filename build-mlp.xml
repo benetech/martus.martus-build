@@ -33,7 +33,7 @@
 
       <!-- create mlp signed jar -->
       <target name="mlp" depends="check_storepass, check_keypass" description="Create a Signed Martus Language Pack">
-		  <jar jarfile="${LANGUAGEDIR}/Martus-${LANGUAGE}.mlp" basedir="${LANGUAGEDIR}" manifest="${BASEDIR}/manifest" includes="*.txt *.mtf *.pdf">
+		  <jar jarfile="${LANGUAGEDIR}/Martus-${LANGUAGE}.mlp" basedir="${LANGUAGEDIR}/mlpFiles" manifest="${BASEDIR}/manifest" includes="*.*">
           </jar>
           <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
             <fileset dir="${LANGUAGEDIR}">
