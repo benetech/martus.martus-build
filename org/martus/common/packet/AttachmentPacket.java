@@ -38,10 +38,16 @@ import java.util.HashMap;
 
 import org.martus.common.MartusXml;
 import org.martus.common.XmlWriterFilter;
-import org.martus.common.crypto.*;
-import org.martus.common.database.*;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.Database.RecordHiddenException;
-import org.martus.util.*;
+import org.martus.util.Base64;
+import org.martus.util.Base64XmlOutputStream;
+import org.martus.util.FileInputStreamWithSeek;
+import org.martus.util.InputStreamWithSeek;
+import org.martus.util.UnicodeReader;
+import org.martus.util.UnicodeWriter;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -117,7 +123,7 @@ public class AttachmentPacket extends Packet
 	{
 		AttachmentPacket ap = new AttachmentPacket(verifier);
 
-		File base64File = File.createTempFile("MartusAttachExtract", null);
+		File base64File = File.createTempFile("$$$MartusAttachExtract", null);
 		base64File.deleteOnExit();
 
 		FileOutputStream base64Out = new FileOutputStream(base64File);
@@ -127,7 +133,7 @@ public class AttachmentPacket extends Packet
 
 		UnicodeReader base64Reader = new UnicodeReader(base64File);
 
-		File encryptedFile = File.createTempFile("MartusEncryptedAtt", null);
+		File encryptedFile = File.createTempFile("$$$MartusEncryptedAtt", null);
 		encryptedFile.deleteOnExit();
 
 		FileOutputStream outEncrypted = new FileOutputStream(encryptedFile);
