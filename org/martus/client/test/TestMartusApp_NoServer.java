@@ -64,8 +64,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("setUp");
 
-		if(mockSecurityForApp == null)
-			mockSecurityForApp = MockMartusSecurity.createClient();
+		mockSecurityForApp = MockMartusSecurity.createClient();
 
 		localization = new UiLocalization(null);
 		localization.setCurrentLanguageCode("en");
@@ -384,16 +383,16 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 	}
 
-	public void testCreateAccount() throws Exception
+	public void testCreateAccountBadDirectory() throws Exception
 	{
-		TRACE_BEGIN("testCreateAccount");
+		TRACE_BEGIN("testCreateAccountBadDirectory");
 
 		mockSecurityForApp.clearKeyPair();
 		try
 		{
 
-			File badFile = new File(BAD_FILENAME);
-			appWithAccount.createAccountInternal(badFile, userName, userPassword);
+			File badDirectory = new File(BAD_FILENAME);
+			appWithAccount.createAccountInternal(badDirectory, userName, userPassword);
 			fail("Can't create an account if we can't write the file!");
 
 		}
@@ -402,29 +401,33 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 			// expected exception
 		}
 		assertEquals("store account not unset on error?", false, mockSecurityForApp.hasKeyPair());
+		TRACE_END();
+	}
 
-
-		File keyPairFile = appWithAccount.getCurrentKeyPairFile();
+	public void testCreateAccount() throws Exception
+	{
+		TRACE_BEGIN("testCreateAccount");
+		MockMartusApp app = MockMartusApp.create();
+		app.createAccount(userName, userPassword);
+		File keyPairFile = app.getCurrentKeyPairFile();
+		assertEquals("not root dir?", app.getMartusDataRootDirectory(), keyPairFile.getParentFile());
 		File backupKeyPairFile = MartusApp.getBackupFile(keyPairFile);
-		keyPairFile.delete();
-		backupKeyPairFile.delete();
-		appWithAccount.createAccount(userName, userPassword);
-		assertEquals("no key file?", true, keyPairFile.exists());
 		assertEquals("no backup key file?", true, backupKeyPairFile.exists());
-		assertEquals("store account not set?", mockSecurityForApp.getPublicKeyString(), appWithAccount.getStore().getAccountId());
-		assertEquals("User name not set?",userName, appWithAccount.getUserName());
-		verifySignInThatWorks(appWithAccount);
+
+		assertEquals("store account not set?", app.getAccountId(), app.getStore().getAccountId());
+		assertEquals("User name not set?",userName, app.getUserName());
+		verifySignInThatWorks(app);
 
 		try
 		{
-			appWithAccount.createAccount(userName, userPassword);
+			app.createAccount(userName, userPassword);
 			fail("Can't create an account if one already exists!");
 		}
 		catch(MartusApp.AccountAlreadyExistsException e)
 		{
 			// expected exception
 		}
-		assertEquals("store account not kept if already exists?", mockSecurityForApp.getPublicKeyString(), appWithAccount.getStore().getAccountId());
+		assertEquals("store account not kept if already exists?", app.getAccountId(), app.getStore().getAccountId());
 
 		TRACE_END();
 	}
@@ -1012,7 +1015,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		assertEquals("Key not set?", key, b1.getHQPublicKey());
 	}
 
-	private static MockMartusSecurity mockSecurityForApp;
+	private MockMartusSecurity mockSecurityForApp;
 
 	UiLocalization localization;
 	private MockMartusApp appWithAccount;
