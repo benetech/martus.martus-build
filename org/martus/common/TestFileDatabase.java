@@ -397,6 +397,25 @@ public class TestFileDatabase extends TestCaseEnhanced
 		
 	}
 	
+	public void testVisitAllPacketsWithNull() throws Exception
+	{
+		class PacketCollector implements Database.PacketVisitor
+		{
+			public void visit(DatabaseKey key)
+			{
+				key = null;
+				key.getAccountId();
+			}
+			Vector list = new Vector();
+		}
+		
+		db.writeRecord(shortKey, sampleString1);
+		
+		PacketCollector ac = new PacketCollector();
+		db.visitAllPacketsForAccount(ac, accountString1);
+		assertEquals("count?", 0, ac.list.size());
+	}
+	
 	int getRecordCount()
 	{
 		class PacketCounter implements Database.PacketVisitor

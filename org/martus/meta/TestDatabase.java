@@ -208,6 +208,14 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestImportFiles(serverFileDb);
 	}
 	
+	public void testVisitAllRecordsWithNull() throws Exception
+	{
+		TRACE("testVisitAllRecordsWithNull");
+		internalTestVisitAllRecordsWithNull(mockDb);
+		internalTestVisitAllRecordsWithNull(clientFileDb);
+		internalTestVisitAllRecordsWithNull(serverFileDb);
+	}
+	
 	/////////////////////////////////////////////////////////////////////
 
 	private void internalTestEmptyDatabase(Database db) throws Exception
@@ -543,6 +551,25 @@ public class TestDatabase extends TestCaseEnhanced
 		assertEquals(db.toString() + " record 2 incorrect?", largeString, db.readRecord(sealedKey2, security));
 	}
 
+	private void internalTestVisitAllRecordsWithNull(Database db) throws Exception
+	{
+		class PacketCollector implements Database.PacketVisitor
+		{
+			public void visit(DatabaseKey key)
+			{
+				key = null;
+				key.getAccountId();
+			}
+			Vector list = new Vector();
+		}
+		
+		db.writeRecord(smallKey, smallString);
+		
+		PacketCollector ac = new PacketCollector();
+		db.visitAllRecords(ac);
+		assertEquals("count?", 0, ac.list.size());
+	}
+	
 	static String buildLargeString()
 	{
 		String result = "";

@@ -338,7 +338,15 @@ public class FileDatabase implements Database
 							key.setDraft();
 						else
 							key.setSealed();
-						visitor.visit(key);
+
+						try
+						{
+							visitor.visit(key);
+						}
+						catch (RuntimeException nothingWeCanDoAboutIt)
+						{
+							// nothing we can do, so ignore it
+						}
 					}
 				}
 			}

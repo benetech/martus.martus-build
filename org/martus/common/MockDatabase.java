@@ -125,7 +125,14 @@ abstract public class MockDatabase implements Database
 		while(iterator.hasNext())
 		{
 			DatabaseKey key = (DatabaseKey)iterator.next();
-			visitor.visit(key);
+			try
+			{
+				visitor.visit(key);
+			}
+			catch (RuntimeException nothingWeCanDoAboutIt)
+			{
+				// nothing we can do, so ignore it
+			}
 		}
 	}
 
