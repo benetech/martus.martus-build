@@ -606,6 +606,8 @@ zipSources()
 	find . -name "*.gif" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "*.jpg" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "*.png" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "UnofficialTranslationMessage.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "UnofficialTranslationMessageRtoL.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "license.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "gpl.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "main-class.txt" -print | zip $MARTUS_ZIP_PATH -q@
