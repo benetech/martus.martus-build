@@ -14,18 +14,24 @@ import java.util.zip.ZipOutputStream;
 
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinStore;
+import org.martus.client.ClientFileDatabase;
+import org.martus.client.MartusUserNameAndPassword;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
+import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
+import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
+import org.martus.server.ServerFileDatabase;
 
 public class TestMartusUtilities extends TestCaseEnhanced 
 {
@@ -153,6 +159,42 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		zip.close();
 		zipOut.close();
 		return copiedZipFile;
+	}
+	
+	public void testGetBulletinSize() throws Exception
+	{
+		DatabaseKey shortKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount" , "x"));
+		String testString = "This is a test";			
+		byte[] b1AttachmentBytes = {1,2,3,4,4,3,2,1};
+		MartusSecurity security = new MartusSecurity();
+		security.createKeyPair(512);
+		BulletinStore store = new BulletinStore(new MockClientDatabase());
+		store.setSignatureGenerator(security);
+		Database db = store.getDatabase();
+
+		Bulletin b1 = store.createEmptyBulletin();
+		b1.save();
+		BulletinHeaderPacket bhp = b1.getBulletinHeaderPacket();
+		int emptySize = MartusUtilities.getBulletinSize(db, bhp);
+		assertTrue("empty size not correct?", emptySize > 1000 && emptySize < 3000);
+		b1.set(b1.TAGTITLE, "Title");
+		b1.set(b1.TAGPUBLICINFO, "Details1");
+		b1.set(b1.TAGPRIVATEINFO, "PrivateDetails1");
+		File attachment = createTempFile();
+		FileOutputStream out = new FileOutputStream(attachment);
+		out.write(b1AttachmentBytes);
+		out.close();
+		b1.addPublicAttachment(new AttachmentProxy(attachment));
+		b1.addPrivateAttachment(new AttachmentProxy(attachment));
+		b1.save();
+		b1 = Bulletin.loadFromDatabase(store, DatabaseKey.createSealedKey(b1.getUniversalId()));
+
+		int size = MartusUtilities.getBulletinSize(db, bhp);
+		b1.set(b1.TAGTITLE, "This is an very long title and should change the size of the result if things are working correctly");
+		b1.save();
+		int size2 = MartusUtilities.getBulletinSize(db, bhp);
+		assertTrue("Size too small?", size > 4000);
+		assertNotEquals("Sizes match?", size, size2);		
 	}
 	
 	public void testCreateSignatureFromFile()

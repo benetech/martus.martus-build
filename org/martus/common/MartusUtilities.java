@@ -339,6 +339,25 @@ public class MartusUtilities
 		return keys;
 	}
 	
+	public static int getBulletinSize(Database db, BulletinHeaderPacket bhp)
+	{
+		int size = 0;
+		DatabaseKey[] bulletinPacketKeys  = getAllPacketKeys(bhp);
+		for(int i = 0 ; i < bulletinPacketKeys.length ; ++i)
+		{
+			try 
+			{
+				size += db.getRecordSize(bulletinPacketKeys[i]);
+			} 
+			catch (IOException e) 
+			{
+				System.out.println("MartusUtilities:bulletinPacketKeys error= " + e);
+				return 0;
+			}
+		}
+		return size;
+	}
+	
 	public static void extractPacketsToZipStream(String clientId, Database db, DatabaseKey[] packetKeys, OutputStream outputStream, MartusCrypto security) throws 
 		IOException, 
 		UnsupportedEncodingException 
