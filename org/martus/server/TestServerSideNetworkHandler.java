@@ -2,8 +2,10 @@ package org.martus.server;
 
 import java.util.Vector;
 
-import org.martus.client.ClientSideNetworkGateway;
-import org.martus.common.*;
+import org.martus.common.MartusUtilities;
+import org.martus.common.MockMartusSecurity;
+import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.TestCaseEnhanced;
 
 
 public class TestServerSideNetworkHandler extends TestCaseEnhanced 
@@ -33,7 +35,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 		parameters.add("abc");
 		parameters.add(new Integer(2));
 		String badSig = "123";
-		String wrongSig = ClientSideNetworkGateway.sign(parameters, otherSecurity);
+		String wrongSig = MartusUtilities.sign(parameters, otherSecurity);
 		
 		{
 			Vector badSigResult = handler.getUploadRights(myAccountId, parameters, badSig);

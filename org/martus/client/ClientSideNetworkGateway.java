@@ -22,7 +22,7 @@ public class ClientSideNetworkGateway
 	{
 		Vector parameters = new Vector();
 		parameters.add(tryMagicWord);
-		String signature = sign(parameters, signer);
+		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getUploadRights(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -31,7 +31,7 @@ public class ClientSideNetworkGateway
 	{
 		Vector parameters = new Vector();
 		parameters.add(authorAccountId);
-		String signature = sign(parameters, signer);
+		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getSealedBulletinIds(signer.getPublicKeyString(), parameters, signature));
 	}
 					
@@ -40,7 +40,7 @@ public class ClientSideNetworkGateway
 	{
 		Vector parameters = new Vector();
 		parameters.add(authorAccountId);
-		String signature = sign(parameters, signer);
+		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getDraftBulletinIds(signer.getPublicKeyString(), parameters, signature));
 	}
 					
@@ -49,7 +49,7 @@ public class ClientSideNetworkGateway
 	{
 		Vector parameters = new Vector();
 		parameters.add(hqAccountId);
-		String signature = sign(parameters, signer);
+		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getFieldOfficeAccountIds(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -64,7 +64,7 @@ public class ClientSideNetworkGateway
 		parameters.add(new Integer(chunkOffset));
 		parameters.add(new Integer(chunkSize));
 		parameters.add(data);
-		String signature = sign(parameters, signer);
+		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.putBulletinChunk(signer.getPublicKeyString(), parameters, signature));
 	}
 					
@@ -77,7 +77,7 @@ public class ClientSideNetworkGateway
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(chunkOffset));
 		parameters.add(new Integer(maxChunkSize));
-		String signature = sign(parameters, signer);
+		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getBulletinChunk(signer.getPublicKeyString(), parameters, signature));
 	}
 					
@@ -89,58 +89,10 @@ public class ClientSideNetworkGateway
 		parameters.add(authorAccountId);
 		parameters.add(bulletinLocalId);
 		parameters.add(packetLocalId);
-		String signature = sign(parameters, signer);
+		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getPacket(signer.getPublicKeyString(), parameters, signature));
 	}
 	
-	public static String sign(Vector dataToSign, MartusCrypto signer) throws 
-			MartusCrypto.MartusSignatureException
-	{
-		try
-		{
-			signer.signatureInitializeSign();
-			for(int element = 0; element < dataToSign.size(); ++element)
-			{
-				String thisElement = dataToSign.get(element).toString();
-				byte[] bytesToSign = thisElement.getBytes("UTF-8");
-				//TODO: might want to optimize this for speed
-				for(int b = 0; b < bytesToSign.length; ++b)
-					signer.signatureDigestByte(bytesToSign[b]);
-				signer.signatureDigestByte((byte)0);
-			}
-			return Base64.encode(signer.signatureGet());
-		}
-		catch(Exception e)
-		{
-			// TODO: Needs tests!
-			System.out.println("ServerProxy.sign: " + e);
-			throw new MartusCrypto.MartusSignatureException();
-		}
-	}
-
-	public static boolean verifySignature(Vector dataToSign, MartusCrypto verifier, String signedBy, String sig)
-	{
-		try
-		{
-			verifier.signatureInitializeVerify(signedBy);
-			for(int element = 0; element < dataToSign.size(); ++element)
-			{
-				String thisElement = dataToSign.get(element).toString();
-				byte[] bytesToSign = thisElement.getBytes("UTF-8");
-				//TODO: might want to optimize this for speed
-				for(int b = 0; b < bytesToSign.length; ++b)
-					verifier.signatureDigestByte(bytesToSign[b]);
-				verifier.signatureDigestByte((byte)0);
-			}
-			byte[] sigBytes = Base64.decode(sig);
-			return verifier.signatureIsValid(sigBytes);
-		}
-		catch(Exception e)
-		{
-			return false;
-		}
-	}
-
 	final static String defaultReservedString = "";
 		
 	NetworkInterface server;

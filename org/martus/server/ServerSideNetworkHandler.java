@@ -2,8 +2,10 @@ package org.martus.server;
 
 import java.util.Vector;
 
-import org.martus.client.ClientSideNetworkGateway;
-import org.martus.common.*;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
+import org.martus.common.NetworkInterface;
+import org.martus.common.NetworkInterfaceConstants;
 
 
 public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterfaceConstants
@@ -291,7 +293,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	private boolean isSignatureOk(String myAccountId, Vector parameters, String signature, MartusCrypto verifier)
 	{
-		return ClientSideNetworkGateway.verifySignature(parameters, verifier, myAccountId, signature);
+		return MartusUtilities.verifySignature(parameters, verifier, myAccountId, signature);
 	}
 
 	final static String defaultReservedResponse = "";

@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.Vector;
 
 import org.martus.common.MartusCrypto.MartusSignatureException;
 
@@ -51,6 +52,54 @@ public class MartusUtilities
 		byte[] sigBytes = security.createSignature(new ByteArrayInputStream(bytesToSign));
 		String signature = Base64.encode(sigBytes);
 		return signature;
+	}
+
+	public static boolean verifySignature(Vector dataToSign, MartusCrypto verifier, String signedBy, String sig)
+	{
+		try
+		{
+			verifier.signatureInitializeVerify(signedBy);
+			for(int element = 0; element < dataToSign.size(); ++element)
+			{
+				String thisElement = dataToSign.get(element).toString();
+				byte[] bytesToSign = thisElement.getBytes("UTF-8");
+				//TODO: might want to optimize this for speed
+				for(int b = 0; b < bytesToSign.length; ++b)
+					verifier.signatureDigestByte(bytesToSign[b]);
+				verifier.signatureDigestByte((byte)0);
+			}
+			byte[] sigBytes = Base64.decode(sig);
+			return verifier.signatureIsValid(sigBytes);
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+
+	public static String sign(Vector dataToSign, MartusCrypto signer) throws 
+			MartusCrypto.MartusSignatureException
+	{
+		try
+		{
+			signer.signatureInitializeSign();
+			for(int element = 0; element < dataToSign.size(); ++element)
+			{
+				String thisElement = dataToSign.get(element).toString();
+				byte[] bytesToSign = thisElement.getBytes("UTF-8");
+				//TODO: might want to optimize this for speed
+				for(int b = 0; b < bytesToSign.length; ++b)
+					signer.signatureDigestByte(bytesToSign[b]);
+				signer.signatureDigestByte((byte)0);
+			}
+			return Base64.encode(signer.signatureGet());
+		}
+		catch(Exception e)
+		{
+			// TODO: Needs tests!
+			System.out.println("ServerProxy.sign: " + e);
+			throw new MartusCrypto.MartusSignatureException();
+		}
 	}
 
 	public static String formatPublicCode(String publicCode) 

@@ -23,8 +23,6 @@ public class TestAll
 		suite.addTest(new TestSuite(TestServerFileDatabase.class));
 		suite.addTest(new TestSuite(TestServerSideNetworkHandler.class));
 
-		suite.addTest(org.martus.common.TestAll.suite());
-
 	    return suite;
 	}
 }

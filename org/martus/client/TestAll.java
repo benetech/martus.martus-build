@@ -39,8 +39,6 @@ public class TestAll
 		suite.addTest(new TestSuite(TestSimpleX509TrustManager.class));
 		suite.addTest(new TestSuite(TestClientFileDatabase.class));
 
-		suite.addTest(org.martus.common.TestAll.suite());
-
 	    return suite;
 	}
 }
