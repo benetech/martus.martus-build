@@ -2,6 +2,7 @@ package org.martus.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -341,6 +342,10 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 			logging("getServerInformation");
+			
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+				
 		Vector result = new Vector();
 		try
 		{
@@ -366,6 +371,12 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
+		if( !isClientAuthorized(clientId) )
+			return NetworkInterfaceConstants.REJECTED;
+			
+		if( isShutdownRequested() )
+			return NetworkInterfaceConstants.SERVER_DOWN;
+			
 		if(tryMagicWord.length() == 0 && clientsThatCanUpload.contains(clientId))
 			return NetworkInterfaceConstants.OK;
 		
@@ -420,6 +431,12 @@ public class MartusServer implements NetworkInterfaceConstants
 			logging("uploadBulletinChunk");
 		}
 		
+		if( !isClientAuthorized(authorAccountId) )
+			return NetworkInterfaceConstants.REJECTED;
+		
+		if( isShutdownRequested() )
+			return NetworkInterfaceConstants.SERVER_DOWN;
+		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," +
 					Integer.toString(totalSize) + "," + Integer.toString(chunkOffset) + "," +
 					Integer.toString(chunkSize) + "," + data;
@@ -451,6 +468,12 @@ public class MartusServer implements NetworkInterfaceConstants
 		{
 			logging("putBulletinChunk REJECTED");
 			return NetworkInterfaceConstants.REJECTED;
+		}
+		
+		if( isShutdownRequested() )
+		{
+			logging(" returning SERVER_DOWN");
+			return NetworkInterfaceConstants.SERVER_DOWN;
 		}
 		
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
@@ -559,6 +582,9 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 			logging("downloadBulletin " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+			
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 
 		Vector result = new Vector();
 		
@@ -607,6 +633,12 @@ public class MartusServer implements NetworkInterfaceConstants
 			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + "HQ: " + getClientAliasForLogging(hqAccountId));
 		}
+		
+		if( !isClientAuthorized(authorAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
 		Vector result = new Vector();
 		
@@ -658,6 +690,12 @@ public class MartusServer implements NetworkInterfaceConstants
 			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
 		}
+		
+		if( !isClientAuthorized(authorAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," +
 					Integer.toString(chunkOffset) + "," +
@@ -743,6 +781,12 @@ public class MartusServer implements NetworkInterfaceConstants
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
 		}
 		
+		if( !isClientAuthorized(myAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+		
 		Vector result = new Vector();
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
 		DatabaseKey headerKey = new DatabaseKey(uid);
@@ -781,6 +825,9 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( !isClientAuthorized(clientId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+		
 		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId);
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
@@ -796,6 +843,9 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( !isClientAuthorized(authorAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+		
 		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
@@ -808,8 +858,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(serverMaxLogging)
 			logging("listFieldOfficeSealedBulletinIds " + getClientAliasForLogging(hqAccountId));
 			
-//		if( !isClientAuthorized(hqAccountId) )
-//			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+		if( !isClientAuthorized(hqAccountId) )
+			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
 		SummaryCollector summaryCollector = new FieldOfficeSealedSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
@@ -822,6 +875,13 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 			logging("listFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));
+
+		if( !isClientAuthorized(hqAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+			
 		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
@@ -886,6 +946,12 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public String deleteDraftBulletins(String accountId, String[] localIds)
 	{
+		if( !isClientAuthorized(accountId) )
+			return REJECTED;
+		
+		if( isShutdownRequested() )
+			return SERVER_DOWN;
+			
 		String result = OK;
 		for (int i = 0; i < localIds.length; i++)
 		{
@@ -911,6 +977,12 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public String putContactInfo(String accountId, Vector contactInfo)
 	{
+		if( !isClientAuthorized(accountId) )
+			return NetworkInterfaceConstants.REJECTED;
+		
+		if( isShutdownRequested() )
+			return NetworkInterfaceConstants.SERVER_DOWN;
+			
 		String result = NetworkInterfaceConstants.INVALID_DATA;
 		if(contactInfo == null)
 			return result;
@@ -965,16 +1037,15 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(serverMaxLogging)
 			logging("downloadAuthorizedPacket: " + getClientAliasForLogging(myAccountId));
 			
-//		if( !isClientAuthorized(myAccountId) )
-//		{
-//			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
-//		}
+		if( !isClientAuthorized(authorAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 	
 		String signedString = authorAccountId + "," + packetLocalId + "," + myAccountId;
 		if(!isSignatureCorrect(signedString, signature, myAccountId))
-		{
 			return returnSingleResponseAndLog("", NetworkInterfaceConstants.SIG_ERROR);
-		}
 		
 		return	legacyDownloadPacket(authorAccountId, packetLocalId);
 	}
@@ -1024,6 +1095,12 @@ public class MartusServer implements NetworkInterfaceConstants
 			logging("downloadFieldOfficeDataPacket: " + getClientAliasForLogging(authorAccountId) + "  " + bulletinLocalId);
 			logging("  packet " + packetLocalId + " requested by: " + getClientAliasForLogging(myAccountId));
 		}
+		
+		if( !isClientAuthorized(myAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 	
 		Vector result = new Vector();
 
@@ -1045,6 +1122,12 @@ public class MartusServer implements NetworkInterfaceConstants
 		String packetLocalId) 
 	{
 		Vector result = new Vector();
+		
+		if( !isClientAuthorized(myAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
 		if(!FieldDataPacket.isValidLocalId(packetLocalId))
 		{
@@ -1473,7 +1556,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			return false;
 	}
 	
-	public int getNumberActiveClients()
+	public synchronized int getNumberActiveClients()
 	{
 		return activeClientsCounter;
 	}
