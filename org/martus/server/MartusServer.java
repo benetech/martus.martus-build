@@ -1663,7 +1663,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 			try 
 			{
-				MartusUtilities.verifyFileAndSignature(bulletinZipFile, bulletinSignatureFile, (MartusSecurity)security, accountId);
+				MartusUtilities.verifyFileAndSignature(bulletinZipFile, bulletinSignatureFile, security, accountId);
 				return true;
 			} 
 			catch (MartusUtilities.FileVerificationException e) 
