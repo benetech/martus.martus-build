@@ -157,7 +157,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testListBulletins() throws Exception
 	{
-		String authorAccountId = "sample account";
+		String authorAccountId = authorSecurity.getPublicKeyString();
 		
 		BulletinHeaderPacket bhp1 = new BulletinHeaderPacket(authorAccountId);
 		bhp1.setStatus(BulletinConstants.STATUSSEALED);

@@ -39,44 +39,12 @@ public class MockMartusSecurity extends MartusSecurity
 		super.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 	}
 	
-	public void signatureInitializeSign() throws 
-		MartusSignatureException
-	{
-		checksum = 0x12345678;
-	}
-
-	public void signatureDigestByte(byte b) throws 
-		MartusSignatureException
-	{
-		checksum += b;
-	}
-
-	public void signatureDigestBytes(byte[] bytes)
-		throws MartusSignatureException
-	{
-		for (int i = 0; i < bytes.length; i++)
-			signatureDigestByte(bytes[i]);
-	}
-
-	public byte[] signatureGet() throws 
-		MartusSignatureException
-	{
-		int result = checksum;
-		return Integer.toHexString(result).getBytes();
-	}
-		
-	public void signatureInitializeVerify(String publicKey) throws
-		MartusSignatureException
-	{
-		checksum = 0x12345678;
-	}
-	
 	public boolean signatureIsValid(byte[] sig) throws MartusSignatureException
 	{
 		if(fakeSigVerifyFailure)
 			return false;
 			
-		return Arrays.equals(sig, signatureGet());
+		return super.signatureIsValid(sig);
 	}
 
 	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws

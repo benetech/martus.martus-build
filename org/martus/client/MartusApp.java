@@ -930,6 +930,9 @@ public class MartusApp
 	
 	public Vector getMyServerBulletinSummaries() throws ServerErrorException
 	{
+		if(!isSSLServerAvailable())
+			throw new ServerErrorException("No server");
+
 		String resultCode = "?";
 		try 
 		{
@@ -948,6 +951,9 @@ public class MartusApp
 	
 	public Vector getMyDraftServerBulletinSummaries() throws ServerErrorException
 	{
+		if(!isSSLServerAvailable())
+			throw new ServerErrorException("No server");
+
 		String resultCode = "?";
 		try 
 		{
@@ -1000,6 +1006,9 @@ public class MartusApp
 	
 	public Vector getFieldOfficeAccounts() throws ServerErrorException
 	{
+		if(!isSSLServerAvailable())
+			throw new ServerErrorException();
+
 		try
 		{
 			NetworkResponse response = getCurrentNetworkInterfaceGateway().getFieldOfficeAccountIds(security, getAccountId());

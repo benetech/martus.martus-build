@@ -77,6 +77,18 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
+
+		try
+		{
+			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithoutServer);
+			model.initialize(null);
+			model.getMyDraftSummaries();
+			model.getDownloadableSummaries();
+			fail("Got valid draft summaries?");
+		}
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
+		{
+		}
 	}
 	
 	public void testGetMyBulletinSummariesErrors() throws Exception

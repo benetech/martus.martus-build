@@ -161,7 +161,6 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 			{
 				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, packetLocalId);
 				FieldDataPacket fdp = null;
-				MartusCrypto security = testServer.security;
 				if(uid.equals(b0.getFieldDataPacket().getUniversalId()))
 					fdp = b0.getFieldDataPacket();
 				if(uid.equals(b1.getFieldDataPacket().getUniversalId()))
@@ -169,6 +168,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 				if(uid.equals(b2.getFieldDataPacket().getUniversalId()))
 					fdp = b2.getFieldDataPacket();
 				StringWriter writer = new StringWriter();
+				MartusCrypto security = app.getSecurity();
 				fdp.writeXml(writer, security);
 				result.add(NetworkInterfaceConstants.OK);
 				result.add(writer.toString());

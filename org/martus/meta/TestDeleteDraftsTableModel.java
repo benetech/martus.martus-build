@@ -124,7 +124,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 			{
 				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, packetLocalId);
 				FieldDataPacket fdp = null;
-				MartusCrypto security = testServer.security;
+				MartusCrypto security = app.getSecurity();
 				if(uid.equals(b0.getFieldDataPacket().getUniversalId()))
 					fdp = b0.getFieldDataPacket();
 				if(uid.equals(b1.getFieldDataPacket().getUniversalId()))

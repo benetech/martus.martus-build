@@ -1,12 +1,18 @@
 package org.martus.meta;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 import org.martus.client.Bulletin;
 import org.martus.client.MockBulletin;
 import org.martus.client.MockMartusApp;
 import org.martus.client.RetrieveHQTableModel;
+import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -15,6 +21,12 @@ import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.MartusCrypto.DecryptionException;
+import org.martus.common.MartusCrypto.NoKeyPairException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongPacketTypeException;
 import org.martus.server.MockMartusServer;
 import org.martus.server.ServerSideNetworkHandler;
 
@@ -71,21 +83,24 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQTableModel(hqApp);
 		modelWithData.initialize(null);
-		String z0 = MockBulletin.saveToZipString(b0);
-		String z1 = MockBulletin.saveToZipString(b1);
-		String z2 = MockBulletin.saveToZipString(b2);
-		Bulletin hqB0 = hqApp.createBulletin();
-		MockBulletin.loadFromZipString(hqB0, z0);
-		hqB0.save();
-		Bulletin hqB1 = hqApp.createBulletin();
-		MockBulletin.loadFromZipString(hqB1, z1);
-		hqB1.save();
-		Bulletin hqB2 = hqApp.createBulletin();
-		MockBulletin.loadFromZipString(hqB2, z2);
-		hqB2.save();
+
+		importBulletinFromFieldOfficeToHq(b0);
+		importBulletinFromFieldOfficeToHq(b1);
+		importBulletinFromFieldOfficeToHq(b2);
 		
 		modelWithoutData = new RetrieveHQTableModel(hqApp);
 		modelWithoutData.initialize(null);
+		assertEquals(0, modelWithoutData.getRowCount());
+	}
+
+	void importBulletinFromFieldOfficeToHq(Bulletin b) throws Exception
+	{
+		File tempFile = createTempFile();
+		Database db = b.getStore().getDatabase();
+		DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
+		MartusCrypto security = b.getStore().getSignatureGenerator();
+		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
+		hqApp.getStore().importZipFileToStoreWithSameUids(tempFile);
 	}
 	
 	public void tearDown() throws Exception
