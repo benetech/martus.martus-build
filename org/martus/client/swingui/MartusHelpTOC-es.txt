@@ -1,45 +1,47 @@
-El sistema de ayuda de Martus no est� disponible en espa�ol.
-What is Martus(tm)?
-Why is security so important when using Martus?
-How does Martus keep the data secure?
-What does an individual need to do to keep data secure?
-What are the limitations to Martus security?
-Why send bulletins to the server?
-Getting Started
-Installing
-Choosing a password
-Setting up a server connection
-Setting your preferences
-Creating a Bulletin
-Completing fields in a bulletin
-Using a template in the Details field
-Saving and modifying Bulletins
-Saving a draft
-Modifying a copy of a sealed bulletin
-Modifying a draft
-Discarding a draft
-Managing Bulletins
-Default folders
-Other folders created by Martus
-Creating folders
-Discarding and deleting bulletins
-Organizing bulletins
-Dragging bulletins to the Windows desktop
-Retrieving sealed bulletins
-Retrieving draft bulletins
-Retrieving bulletins created by field desks
-Viewing and saving attachments
-Viewing damaged bulletins
-Searching for specific bulletins
-Printing bulletins
-Keeping Your Data Secure
-How Martus security works
-Back up your key pair file
-Restoring your key pair file
-Use your password wisely
-Use safe computing practices
-Sharing your private data with your organization 
-Instructions for Headquarters users
-Instructions for field users who want to provide access to Headquarters users
-Instructions for field users who want to deny future access to Headquarters users
-Frequently Asked Questions
+﻿INTRODUCCIÓN AL SOFTWARE MARTUS™
+¿QUÉ ES MARTUS™?
+¿PORQUÉ ES TAN IMPORTANTE LA SEGURIDAD EN MARTUS?
+¿CÓMO MANTENER SEGUROS LOS DATOS CON MARTUS?
+¿QUÉ TIENE QUE HACER UN INDIVIDUO PARA MANTENER SUS DATOS SEGUROS?
+¿CUÁLES SON LAS LIMITACIONES DE LA SEGURIDAD EN MARTUS?
+¿POR QUÉ HAY QUE ENVIAR LOS BOLETINES A UN SERVIDOR?
+¿POR  QUÉ ES MARTUS UNA APLICACIÓN DE CÓDIGO ABIERTO?
+INICIO
+INSTALACION
+DESINSTALACION
+ACTIVAR SU CUENTA
+ESCOGER UNA CONTRASEÑA
+ESTABLECER UNA CONEXIÓN CON EL SERVIDOR
+ESTABLECER SUS PREFERENCIAS
+ACTUALIZAR LA APLICACIÓN MARTUS
+Crear un boletín
+RELLENAR LOS CAMPOS DEL BOLETÍN
+USO DE UNA PLANTILLA EN EL CAMPO “DETALLES”
+CAMPOS PERSONALIZADOS
+GRABAR Y MODIFICAR BOLETINES
+MODIFICAR UNA COPIA DE UN BOLETÍN SELLADO
+MODIFICAR UN BORRADOR
+DESCARTAR UN BORRADOR
+MANTENIMIENTO DE LOS BOLETINES
+CARPETAS POR DEFECTO
+AÑADIR CARPETAS
+DESCARTAR Y BORRAR BOLETINES
+BORRAR TODOS BOLETINES Y SUS DATOS
+ORGANIZAR LOS BOLETINES
+ARRASTRAR BOLETINES AL ESCRITORIO DE SU COMPUTADORA
+RECUPERAR BOLETINES SELLADOS
+RECUPERAR BORRADORES
+RECUPERAR BOLETINES CREADOS DESDE OTRAS UBICACIONES.
+VER Y DESCARTAR ADJUNTOS
+VER BOLETINES DAÑADOS
+BUSCAR BOLETINES ESPECÍFICOS
+IMPRIMIR LOS BOLETINES
+EXPORTAR DATOS DE BOLETINES
+MANTENER SUS DATOS SEGUROS
+COMO FUNCIONA LA SEGURIDAD EN MARTUS
+COPIAS DE SEGURIDAD DEL ARCHIVO CON EL PAR DE CLAVES
+RECUPERAR SU ARCHIVO CON EL PAR DE CLAVES
+USO INTELIGENTE DE LA CONTRASEÑA
+UTILICE HÁBITOS INFORMÁTICOS SEGUROS
+COMPARTIR LOS DATOS PRIVADOS CON SU ORGANIZACIÓN
+PREGUNTAS MÁS FRECUENTES
