@@ -19,12 +19,11 @@ public class MirroringRetriever
 {
 	MirroringRetriever(Database databaseToUse, BulletinRetrieverGatewayInterface gatewayToUse, MartusCrypto securityToUse)
 	{
-		db = databaseToUse;
 		gateway = gatewayToUse;
 		security = securityToUse;
 	}
 	
-	public void retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
+	public File retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
 	{
 		File tempFile = File.createTempFile("$$$MirroringRetriever", null);
 		tempFile.deleteOnExit();
@@ -41,29 +40,9 @@ public class MirroringRetriever
 			throw new ServerErrorException("totalSize didn't match data length");
 		}
 
-		saveFileToDatabase(uid, tempFile);			
-		tempFile.delete();
+		return tempFile;
 	}
 	
-	void saveFileToDatabase(UniversalId uid, File tempFile) throws IOException
-	{
-		ZipFile zip = new ZipFile(tempFile);
-		try
-		{
-			MartusUtilities.importBulletinPacketsFromZipFileToDatabase(db, uid.getAccountId(), zip, security);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			System.out.println("MirroringRetriever.saveFileToDatabase: " + e);
-		}
-		finally
-		{
-			zip.close();
-		}
-	}
-
-	Database db;	
 	BulletinRetrieverGatewayInterface gateway;
 	MartusCrypto security;
 }

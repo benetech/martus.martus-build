@@ -34,25 +34,24 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		supplier.authorizedCaller = security.getPublicKeyString();
 
 		SupplierSideMirroringHandler handler = new SupplierSideMirroringHandler(supplier);
-		FakeRetrieverGateway gateway = new FakeRetrieverGateway(handler);
+		CallerSideMirroringGateway gateway = new CallerSideMirroringGateway(handler);
 		supplier.returnResultTag = NetworkInterfaceConstants.OK;
 		
-		FakeMirroringRetriever retriever = new FakeMirroringRetriever(db, gateway, security);
+		MirroringRetriever retriever = new MirroringRetriever(db, gateway, security);
 		UniversalId uid = UniversalId.createDummyUniversalId();
-		retriever.retrieveOneBulletin(uid);
+		File gotFile = retriever.retrieveOneBulletin(uid);
 		assertEquals(uid.getAccountId(), supplier.gotAccount);
 		assertEquals(uid.getLocalId(), supplier.gotLocalId);
 
 		int expectedLength = Base64.decode(supplier.returnZipData).length;
-		assertEquals("retriever wrong uid?", uid, retriever.savedUid);
-		assertEquals("retriever wrong length?", expectedLength, retriever.savedFileLength);
+		assertEquals("file wrong length?", expectedLength, gotFile.length());
 	}
 }
 
 
-class FakeRetrieverGateway implements BulletinRetrieverGatewayInterface
+class CallerSideMirroringGateway implements BulletinRetrieverGatewayInterface
 {
-	FakeRetrieverGateway(MirroringInterface handlerToUse)
+	CallerSideMirroringGateway(MirroringInterface handlerToUse)
 	{
 		handler = handlerToUse;
 	}
@@ -74,19 +73,3 @@ class FakeRetrieverGateway implements BulletinRetrieverGatewayInterface
 	MirroringInterface handler;
 }
 
-class FakeMirroringRetriever extends MirroringRetriever
-{
-	FakeMirroringRetriever(Database databaseToUse, BulletinRetrieverGatewayInterface gatewayToUse, MartusCrypto securityToUse)
-	{
-		super(databaseToUse, gatewayToUse, securityToUse);
-	}
-	
-	void saveFileToDatabase(UniversalId uid, File tempFile) throws IOException
-	{
-		savedUid = uid;
-		savedFileLength = tempFile.length();
-	}
-
-	UniversalId savedUid;
-	long savedFileLength;
-}
