@@ -28,11 +28,11 @@ package org.martus.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -123,12 +123,10 @@ public class FileDatabase extends Database
 		while(keys.hasNext())
 		{
 			DatabaseKey key = (DatabaseKey) keys.next();
-			File file = (File) fileMapping.get(key);
-
-			InputStream in = new FileInputStream(file.getAbsolutePath());
-			writeRecord(key,in);
-			in.close();
-			file.delete();
+			File fromFile = (File) fileMapping.get(key);
+			File toFile = getFileForRecord(key);
+			toFile.delete();
+			fromFile.renameTo(toFile);
 		}
 	}
 
@@ -192,13 +190,13 @@ public class FileDatabase extends Database
 
 			return convertToDecryptingStreamIfNecessary(in, decrypter);
 		}
-		catch(IOException e)
-		{
-			//System.out.println("FileDatabase.openInputStream: " + e);
-		}
 		catch(TooManyAccountsException e)
 		{
 			System.out.println("FileDatabase.openInputStream: " + e);
+		}
+		catch(IOException e)
+		{
+			//System.out.println("FileDatabase.openInputStream: " + e);
 		}
 
 		return null;
@@ -475,7 +473,7 @@ public class FileDatabase extends Database
 			return sealedQuarantinePrefix;
 	}
 
-	public class TooManyAccountsException extends Exception {}
+	public class TooManyAccountsException extends IOException {}
 
 	File getAccountDirectory(String accountString) throws IOException, TooManyAccountsException
 	{
@@ -650,7 +648,7 @@ public class FileDatabase extends Database
 		try
 		{
 			File file = getFileForRecord(key);
-			FileOutputStream rawOut = new FileOutputStream(file);
+			OutputStream rawOut = createOutputStream(file);
 			MartusUtilities.copyStreamWithFilter(in, rawOut, copier);
 		}
 		catch(TooManyAccountsException e)
@@ -659,6 +657,11 @@ public class FileDatabase extends Database
 			System.out.println("FileDatabase.writeRecord1b: " + e);
 			throw new IOException("Too many accounts");
 		}
+	}
+	protected OutputStream createOutputStream(File file)
+		throws IOException
+	{
+		return new FileOutputStream(file);
 	}
 
 	public boolean isDraftPacketBucket(String folderName)

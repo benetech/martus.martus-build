@@ -2,10 +2,12 @@ package org.martus.server.core;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.text.ParseException;
 
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileDatabase;
+import org.martus.common.FileOutputStreamViaTemp;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
@@ -85,5 +87,10 @@ public class ServerFileDatabase extends FileDatabase
 		return MartusServerUtilities.getFormattedTimeStamp(lastModifiedMillisSince1970);
 	}
 	
+	protected OutputStream createOutputStream(File file) throws IOException
+	{
+		return new FileOutputStreamViaTemp(file);
+	}
+
 	private static final String draftPrefix = "d" + defaultBucketPrefix;
 }
