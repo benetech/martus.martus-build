@@ -838,7 +838,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		try
 		{
 			String newServerCompliance = app.getServerCompliance(gateway);
-			UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", newServerCompliance);
+			UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", "ServerComplianceDescription", newServerCompliance);
 			if(dlg.getResult())
 				return true;
 		}

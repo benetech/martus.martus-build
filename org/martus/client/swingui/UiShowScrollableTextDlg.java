@@ -38,7 +38,7 @@ import javax.swing.JScrollPane;
 
 public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 {
-	public UiShowScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String text)
+	public UiShowScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text)
 	{
 		super(owner, "", true);
 		mainWindow = owner;
@@ -58,6 +58,8 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 		details.setText(text);
 
 		getContentPane().setLayout(new ParagraphLayout());
+		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new UiWrappedTextArea(localization.getFieldLabel(descriptionTag)));
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(detailScrollPane);
 
