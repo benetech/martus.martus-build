@@ -53,7 +53,9 @@ public class Bulletin implements BulletinConstants
 
 	public Bulletin(BulletinStore bulletinStore)
 	{
-		store = bulletinStore;
+		BulletinStore newStore = bulletinStore;
+		store = newStore;
+		security = store.getSignatureGenerator();
 		String accountId = "";
 		if(store != null)
 			accountId = store.getAccountId();
@@ -66,42 +68,19 @@ public class Bulletin implements BulletinConstants
 		clear();
 	}
 
-	public Bulletin(Bulletin other) throws
-		IOException,
-		MartusCrypto.EncryptionException
-	{
-		BulletinHeaderPacket otherHeader = other.getBulletinHeaderPacket();
-		FieldDataPacket otherData = other.getFieldDataPacket();
-		FieldDataPacket otherPrivateData = other.getPrivateFieldDataPacket();
-
-		store = other.getStore();
-		UniversalId headerUid = otherHeader.getUniversalId();
-		UniversalId dataUid = otherData.getUniversalId();
-		UniversalId privateDataUid = otherPrivateData.getUniversalId();
-
-		createMemberVariables(headerUid, dataUid, privateDataUid);
-
-		pullDataFrom(other);
-	}
-
 	public BulletinStore getStore()
 	{
 		return store;
 	}
 
-	public void setStore(BulletinStore newStore)
-	{
-		store = newStore;
-	}
-
 	public MartusCrypto getSignatureGenerator()
 	{
-		return getStore().getSignatureGenerator();
+		return security;
 	}
 
 	public MartusCrypto getSignatureVerifier()
 	{
-		return getStore().getSignatureVerifier();
+		return security;
 	}
 
 	public UniversalId getUniversalId()
@@ -200,7 +179,7 @@ public class Bulletin implements BulletinConstants
 		if(rawFile != null)
 		{
 			byte[] sessionKeyBytes = getSignatureGenerator().createSessionKey();
-			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, store.getSignatureVerifier());
+			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, getSignatureVerifier());
 			bhp.addPublicAttachmentLocalId(ap.getLocalId());
 			pendingPublicAttachments.add(ap);
 			a.setUniversalIdAndSessionKey(ap.getUniversalId(), sessionKeyBytes);
@@ -222,7 +201,7 @@ public class Bulletin implements BulletinConstants
 		if(rawFile != null)
 		{
 			byte[] sessionKeyBytes = getSignatureGenerator().createSessionKey();
-			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, store.getSignatureVerifier());
+			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, getSignatureVerifier());
 			bhp.addPrivateAttachmentLocalId(ap.getLocalId());
 			getPendingPrivateAttachments().add(ap);
 			a.setUniversalIdAndSessionKey(ap.getUniversalId(), sessionKeyBytes);
@@ -543,6 +522,7 @@ public class Bulletin implements BulletinConstants
 	private boolean encryptedFlag;
 	private boolean isFromDatabase;
 	private boolean isValidFlag;
+	private MartusCrypto security;
 	private BulletinStore store;
 	private BulletinHeaderPacket header;
 	private FieldDataPacket fieldData;

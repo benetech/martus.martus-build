@@ -217,34 +217,28 @@ public class TestBulletinStore extends TestCaseEnhanced
 	{
 		TRACE("testSaveBulletin");
 
+		final String initialSummary = "New bulletin";
+
 		assertEquals(0, store.getBulletinCount());
 
 		Bulletin b = store.createEmptyBulletin();
-		b.set(Bulletin.TAGSUMMARY, "New bulletin");
+		b.set(Bulletin.TAGSUMMARY, initialSummary);
 		store.saveBulletin(b);
 		UniversalId uId = b.getUniversalId();
 		assertEquals(1, store.getBulletinCount());
 		assertEquals(false, (uId.toString().length() == 0));
-		assertEquals("not saved initially?", "New bulletin", store.findBulletinByUniversalId(uId).get(Bulletin.TAGSUMMARY));
+		assertEquals("not saved initially?", initialSummary, store.findBulletinByUniversalId(uId).get(Bulletin.TAGSUMMARY));
 
 		// re-saving the same bulletin replaces the old one
 		UniversalId id = b.getUniversalId();
 		store.saveBulletin(b);
 		assertEquals(1, store.getBulletinCount());
 		assertEquals("Saving should keep same id", id, b.getUniversalId());
-		assertEquals("not still saved?", "New bulletin", store.findBulletinByUniversalId(uId).get(Bulletin.TAGSUMMARY));
-
-		// saving a bulletin with the same id replaces the old one
-		Bulletin b2 = new Bulletin(b);
-		b2.set(Bulletin.TAGSUMMARY, "Replaced bulletin");
-		store.saveBulletin(b2);
-		assertEquals(1, store.getBulletinCount());
-		assertEquals(id, b2.getUniversalId());
-		assertEquals("not replaced?", "Replaced bulletin", store.findBulletinByUniversalId(uId).get(Bulletin.TAGSUMMARY));
+		assertEquals("not still saved?", initialSummary, store.findBulletinByUniversalId(uId).get(Bulletin.TAGSUMMARY));
 
 		// unsaved bulletin changes should not be in the store
 		b.set(Bulletin.TAGSUMMARY, "not saved yet");
-		assertEquals("saved without asking?", "Replaced bulletin", store.findBulletinByUniversalId(uId).get(Bulletin.TAGSUMMARY));
+		assertEquals("saved without asking?", initialSummary, store.findBulletinByUniversalId(uId).get(Bulletin.TAGSUMMARY));
 
 		// saving a new bulletin with a non-empty id should retain that id
 		int oldCount = store.getBulletinCount();

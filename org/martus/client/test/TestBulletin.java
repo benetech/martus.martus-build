@@ -103,7 +103,7 @@ public class TestBulletin extends TestCaseEnhanced
 
     public void testBasics()
     {
-		Bulletin b = new Bulletin((BulletinStore)null);
+		Bulletin b = new Bulletin(store);
 		assertEquals(false, b.isStandardField("Nope"));
 		assertEquals(true, b.isStandardField("Location"));
 		assertEquals(true, b.isStandardField("location"));
@@ -145,7 +145,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testId()
 	{
-		Bulletin b = new Bulletin((BulletinStore)null);
+		Bulletin b = new Bulletin(store);
 		assertNotNull("Id was Null?", b.getLocalId());
 		assertEquals("Id was empty?", false, b.getLocalId().length()==0);
 	}
@@ -385,24 +385,6 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin b2 = BulletinLoader.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		long loadedTime = b2.getLastSavedTime();
 		assertEquals("Didn't keep time saved?", firstSavedTime, loadedTime);
-	}
-
-	public void testCopyConstructor() throws Exception
-	{
-		Bulletin b = store.createEmptyBulletin();
-		b.set("author", "someone");
-		b.save();
-
-		Bulletin copy = new Bulletin(b);
-		assertEquals("store", b.getStore(), copy.getStore());
-		assertEquals("signer", b.getSignatureGenerator(), copy.getSignatureGenerator());
-		assertEquals("verifier", b.getSignatureVerifier(), copy.getSignatureVerifier());
-		assertEquals("id", b.getLocalId(), copy.getLocalId());
-		assertEquals("account", b.getAccount(), copy.getAccount());
-		assertEquals("author", b.get("author"), copy.get("author"));
-		assertEquals("fdp id", b.getFieldDataPacket().getLocalId(), copy.getFieldDataPacket().getLocalId());
-		assertEquals("fdp account", b.getFieldDataPacket().getAccountId(), copy.getFieldDataPacket().getAccountId());
-		assertEquals("header fdp id", b.getBulletinHeaderPacket().getFieldDataPacketId(),copy.getBulletinHeaderPacket().getFieldDataPacketId());
 	}
 
 	public void testGetStatus() throws Exception

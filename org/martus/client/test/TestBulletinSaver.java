@@ -100,32 +100,23 @@ public class TestBulletinSaver extends TestCaseEnhanced
 		assertEquals("resaved 1 header key", true,db.doesRecordExist(headerKey1));
 		assertEquals("resaved 1 data key", true,db.doesRecordExist(dataKey1));
 
-		// saving a bulletin with the same id replaces the old one
-		Bulletin b2 = new Bulletin(b);
-		b2.set("summary", "Replaced bulletin");
-		BulletinSaver.saveToDatabase(b2, db, store.mustEncryptPublicData(), security);
-		assertEquals("resaved 2", 3, db.getAllKeys().size());
-		DatabaseKey headerKey2 = new DatabaseKey(b2.getBulletinHeaderPacket().getUniversalId());
-		DatabaseKey dataKey2 = new DatabaseKey(b2.getFieldDataPacket().getUniversalId());
-		assertEquals("resaved 2 header key", true,db.doesRecordExist(headerKey2));
-		assertEquals("resaved 2 data key", true,db.doesRecordExist(dataKey2));
-
-		Bulletin b3 = BulletinLoader.loadFromDatabase(store, headerKey2);
-		assertEquals("id", b2.getLocalId(), b3.getLocalId());
-		assertEquals("summary", b2.get("summary"), b3.get("summary"));
+		Bulletin b3 = BulletinLoader.loadFromDatabase(store, headerKey1);
+		assertEquals("id", b.getLocalId(), b3.getLocalId());
+		assertEquals("summary", b.get("summary"), b3.get("summary"));
 
 		// unsaved bulletin changes should not be in the store
-		b.set("summary", "not saved yet");
-		Bulletin b4 = BulletinLoader.loadFromDatabase(store, headerKey2);
-		assertEquals("id", b2.getLocalId(), b4.getLocalId());
-		assertEquals("summary", b2.get("summary"), b4.get("summary"));
+		Bulletin b2 = BulletinLoader.loadFromDatabase(store, headerKey1);
+		b2.set("summary", "not saved yet");
+		Bulletin b4 = BulletinLoader.loadFromDatabase(store, headerKey1);
+		assertEquals("id", b.getLocalId(), b4.getLocalId());
+		assertEquals("summary", b.get("summary"), b4.get("summary"));
 
 		// saving a new bulletin with a non-empty id should retain that id
 		b = store.createEmptyBulletin();
 		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData(), security);
 		assertEquals("saved another", 6, db.getAllKeys().size());
-		assertEquals("old header key", true, db.doesRecordExist(headerKey2));
-		assertEquals("old data key", true, db.doesRecordExist(dataKey2));
+		assertEquals("old header key", true, db.doesRecordExist(headerKey1));
+		assertEquals("old data key", true, db.doesRecordExist(dataKey1));
 		DatabaseKey newHeaderKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
 		DatabaseKey newDataKey = new DatabaseKey(b.getFieldDataPacket().getUniversalId());
 		assertEquals("new header key", true, db.doesRecordExist(newHeaderKey));
