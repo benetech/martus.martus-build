@@ -165,15 +165,15 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		
 		BulletinHeaderPacket bhp1 = new BulletinHeaderPacket(authorAccountId);
 		bhp1.setStatus(BulletinConstants.STATUSSEALED);
-		String result1 = writeSampleHeaderPacket(bhp1);
+		Vector result1 = writeSampleHeaderPacket(bhp1);
 		
 		BulletinHeaderPacket bhp2 = new BulletinHeaderPacket(authorAccountId);
 		bhp2.setStatus(BulletinConstants.STATUSSEALED);
-		String result2 = writeSampleHeaderPacket(bhp2);
+		Vector result2 = writeSampleHeaderPacket(bhp2);
 
 		BulletinHeaderPacket bhpDraft = new BulletinHeaderPacket(authorAccountId);
 		bhp2.setStatus(BulletinConstants.STATUSDRAFT);
-		String result3 = writeSampleHeaderPacket(bhpDraft);
+		Vector result3 = writeSampleHeaderPacket(bhpDraft);
 		
 		handler.addAuthorizedCaller(callerAccountId);
 
@@ -190,7 +190,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertContains(result3, infos);
 	}
 
-	String writeSampleHeaderPacket(BulletinHeaderPacket bhp) throws Exception
+	Vector writeSampleHeaderPacket(BulletinHeaderPacket bhp) throws Exception
 	{
 		String accountId = bhp.getAccountId();
 		StringWriter writer = new StringWriter();
@@ -198,7 +198,11 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		DatabaseKey key = DatabaseKey.createDraftKey(bhp.getUniversalId());
 		db.writeRecord(key, new StringInputStream(writer.toString()));
 		String sigString = Base64.encode(sigBytes);
-		return key.getLocalId() + "=" + sigString;
+		
+		Vector info = new Vector();
+		info.add(key.getLocalId());
+		info.add(sigString);
+		return info;
 	}
 	
 	String writeSealedRecord(Database db, String accountId) throws Exception

@@ -132,7 +132,9 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 					byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, verifier);
 					in.close();
 					String sigString = Base64.encode(sigBytes);
-					String info = key.getLocalId() + "=" + sigString;
+					Vector info = new Vector();
+					info.add(key.getLocalId());
+					info.add(sigString);
 					infos.add(info);
 				}
 				catch (Exception e)
