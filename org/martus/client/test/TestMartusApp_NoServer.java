@@ -873,8 +873,8 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testStatusLabels()
 	{
 		TRACE_BEGIN("testStatusLabels");
-		assertEquals("Draft", appWithAccount.getStatusLabel(Bulletin.STATUSDRAFT));
-		assertEquals("Sealed", appWithAccount.getStatusLabel(Bulletin.STATUSSEALED));
+		assertEquals("Draft", appWithAccount.getLocalization().getStatusLabel(Bulletin.STATUSDRAFT));
+		assertEquals("Sealed", appWithAccount.getLocalization().getStatusLabel(Bulletin.STATUSSEALED));
 		TRACE_END();
 	}
 

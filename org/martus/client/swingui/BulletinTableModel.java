@@ -98,7 +98,7 @@ public class BulletinTableModel extends AbstractTableModel
 		String value = getFolder().getStore().getFieldData(uid, fieldTag);
 		if(fieldTag.equals(Bulletin.TAGSTATUS))
 		{
-			value = app.getStatusLabel(value);
+			value = app.getLocalization().getStatusLabel(value);
 		}
 	 	if(Bulletin.getFieldType(fieldTag) == Bulletin.DATE)
 		{
