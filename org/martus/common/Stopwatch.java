@@ -40,6 +40,11 @@ public class Stopwatch
 
 	public long stop()
 	{
+		return elapsed();
+	}
+	
+	public long elapsed()
+	{
 		return System.currentTimeMillis() - millis;
 	}
 
