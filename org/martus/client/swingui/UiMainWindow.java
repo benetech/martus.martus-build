@@ -63,7 +63,6 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
-import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
@@ -233,8 +232,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void bulletinSelectionHasChanged()
 	{
 		Bulletin b = table.getSingleSelectedBulletin();
-		actionEdit.setEnabled(b != null);
-		actionPrint.setEnabled(b != null);
+		// TODO: Can this be shifted into UiToolBar? 
+		toolBar.actionEdit.setEnabled(b != null);
+		toolBar.actionPrint.setEnabled(b != null);
 		preview.setCurrentBulletin(b);
 	}
 
@@ -536,32 +536,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		JPanel topStuff = new JPanel(false);
 		topStuff.setLayout(new GridLayout(2, 1));
+
 		menuBar = new UiMenuBar(this);
 		topStuff.add(menuBar);
-		topStuff.add(createToolbar());
+
+		toolBar = new UiToolBar(this);
+		topStuff.add(toolBar);
+
 		return topStuff;
 	}
-
-	private void createToolbarActions()
-	{
-		actionCreate = UiActions.newActionCreate(this);
-		actionEdit = UiActions.newActionModify(this);
-		actionSearch = UiActions.newActionSearch(this);
-		actionPrint = UiActions.newActionPrint(this);
-	}
-	
-	private JComponent createToolbar()
-	{
-		createToolbarActions();
-		JToolBar toolbar = new JToolBar();
-		toolbar.setFloatable(false);
-		toolbar.add(actionCreate);
-		toolbar.add(actionEdit);
-		toolbar.add(actionSearch);
-		toolbar.add(actionPrint);
-		return toolbar;
-	}
-
 
 	void doModifyBulletin()
 	{
@@ -1695,12 +1678,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
 
-	AbstractAction actionCreate;
-	AbstractAction actionEdit;
-	AbstractAction actionSearch;
-	AbstractAction actionPrint;
-
 	private UiMenuBar menuBar;
+	private UiToolBar toolBar;
 	private UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;
