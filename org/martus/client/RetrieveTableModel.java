@@ -5,12 +5,12 @@ import java.util.Vector;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.martus.client.MartusApp.ServerErrorException;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.MartusUtilities.ServerErrorException;
 
 abstract public class RetrieveTableModel extends AbstractTableModel
 {

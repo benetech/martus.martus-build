@@ -55,13 +55,13 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
-import org.martus.client.MartusApp.ServerErrorException;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.MartusUtilities.ServerErrorException;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
 {

@@ -5,20 +5,18 @@ import java.util.Vector;
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinStore;
 import org.martus.client.BulletinSummary;
-import org.martus.client.MartusApp;
 import org.martus.client.MockMartusApp;
 import org.martus.client.RetrieveHQDraftsTableModel;
 import org.martus.client.RetrieveHQTableModel;
 import org.martus.client.RetrieveMyDraftsTableModel;
 import org.martus.client.RetrieveMyTableModel;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.server.MartusServer;
 import org.martus.server.MockMartusServer;
 import org.martus.server.ServerSideNetworkHandler;
-import org.martus.server.ServerSideNetworkHandlerForNonSSL;
 
 public class TestRetrieveTableModel extends TestCaseEnhanced
 {
@@ -73,7 +71,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid summaries?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 	}
@@ -93,7 +91,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		mockServer.listMyResponse = null;
@@ -272,7 +270,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		mockServer.listMyResponse = null;
@@ -352,7 +350,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid sealed summaries?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		
@@ -364,7 +362,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid draft summaries?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 	}
@@ -385,7 +383,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected sealed didn't throw?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 
@@ -397,7 +395,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected draft didn't throw?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 

@@ -1034,7 +1034,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 			fail("Should have thrown");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		
@@ -1064,7 +1064,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 			fail("Should have thrown");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		
@@ -1234,7 +1234,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			Vector failed = appWithoutServer.getFieldOfficeAccounts();
 			fail("Got valid accounts?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		
@@ -1255,7 +1255,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			Vector failed = appWithServer.getFieldOfficeAccounts();
 			fail("null response didn't throw?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		mockSSLServerHandler.nullGetFieldOfficeAccountIds(false);
@@ -1269,7 +1269,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			Vector failed = appWithServer.getFieldOfficeAccounts();
 			fail("rejected didn't throw?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		mockServer.listFieldOfficeAccountsResponse = null;
@@ -1322,7 +1322,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			appWithAccount.retrieveFieldDataPacketFromServer("account", "123", "xyz");
 			fail("Didn't throw Error for bad ID?");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 		
@@ -1333,7 +1333,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			appWithAccount.retrieveFieldDataPacketFromServer(appWithAccount.getAccountId(), b1.getLocalId(), fdpId1);
 			fail("Didn't throw Error for bad Missing Packet on Server");
 		}
-		catch(MartusApp.ServerErrorException ignoreExpectedException)
+		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
 		{
 		}
 

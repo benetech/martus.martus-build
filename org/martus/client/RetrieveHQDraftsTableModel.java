@@ -2,7 +2,7 @@ package org.martus.client;
 
 import java.util.Vector;
 
-import org.martus.client.MartusApp.ServerErrorException;
+import org.martus.common.MartusUtilities.ServerErrorException;
 
 
 

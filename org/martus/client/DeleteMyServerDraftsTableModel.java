@@ -1,6 +1,6 @@
 package org.martus.client;
 
-import org.martus.client.MartusApp.ServerErrorException;
+import org.martus.common.MartusUtilities.ServerErrorException;
 
 public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
 {

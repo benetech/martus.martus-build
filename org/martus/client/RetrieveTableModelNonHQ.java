@@ -1,6 +1,6 @@
 package org.martus.client;
 
-import org.martus.client.MartusApp.ServerErrorException;
+
 
 abstract public class RetrieveTableModelNonHQ extends RetrieveTableModel {
 
