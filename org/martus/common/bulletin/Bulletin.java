@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.martus.client.core.DateUtilities;
 import org.martus.common.FieldSpec;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
@@ -47,6 +48,7 @@ import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.util.InputStreamWithSeek;
+import org.martus.util.MartusFlexidate;
 import org.martus.util.Base64.InvalidBase64Exception;
 
 
@@ -282,11 +284,34 @@ public class Bulletin implements BulletinConstants
 	{
 		String eventDate = fieldData.get(Bulletin.TAGEVENTDATE);
 		String entryDate = fieldData.get(Bulletin.TAGENTRYDATE);
+
+		int comma = eventDate.indexOf(DateUtilities.DATE_RANGE_SEPARATER);
+		if (comma > 0)
+			return isWithinFlexiDates(eventDate.substring(comma+1), beginDate, endDate);		
 		if(eventDate.compareTo(beginDate) >= 0 && eventDate.compareTo(endDate) <= 0)
 			return true;
 		if(entryDate.compareTo(beginDate) >= 0 && entryDate.compareTo(endDate) <= 0)
 			return true;
 
+		return false;
+	}
+	
+	private boolean isWithinFlexiDates(String flexiDate, String searchBeginDate, String searchEndDate)
+	{		
+		MartusFlexidate mf = null;
+		if (flexiDate.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER) > 0)		
+			mf = new MartusFlexidate(flexiDate);
+		else
+			return false;
+		
+		DateFormat df = Bulletin.getStoredDateFormat();						
+		String beginDate = df.format(mf.getBeginDate());
+		String endDate = df.format(mf.getEndDate());
+		
+		if(beginDate.compareTo(searchBeginDate) >= 0 && 		
+			endDate.compareTo(searchEndDate) <=0 )
+			return true;
+			
 		return false;
 	}
 
