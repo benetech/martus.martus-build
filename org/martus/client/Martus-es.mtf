@@ -249,6 +249,7 @@ folder:%SearchResults=Resultados de búsqueda
 folder:%Sent=Boletines enviados
 keyword:and=y
 keyword:or=o
+language:?=<-Otro->
 language:ar=Arabe
 language:az=Azerbaijani
 language:bn=Bengalí
