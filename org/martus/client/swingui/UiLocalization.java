@@ -32,6 +32,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -43,6 +44,7 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.DateUtilities;
 import org.martus.client.core.Localization;
 import org.martus.client.core.MartusApp;
+import org.martus.common.MartusUtilities;
 import org.martus.util.UnicodeWriter;
 
 
@@ -57,7 +59,7 @@ public class UiLocalization extends Localization
 			System.out.println("that contains all the existing translations " +
 								"for language xx, plus placeholder");
 			System.out.println("tags for all the untranslated strings.");
-			System.out.println("Example of a language codes: es = Spanish");
+			System.out.println("Example of a language code: es = Spanish");
 			System.exit(1);
 		}
 
@@ -73,16 +75,12 @@ public class UiLocalization extends Localization
 		System.out.println("Exporting translations for: " + languageCode);
 		UiLocalization bd = new UiLocalization(MartusApp.getTranslationsDirectory());
 		bd.loadTranslationFile(languageCode);
-		Vector keys = bd.getAllTranslationStrings(languageCode);
+		File outputFile = new File(args[1]);
 
 		try
 		{
-			UnicodeWriter writer = new UnicodeWriter(new File(args[1]));
-			for(int i = 0; i < keys.size(); ++i)
-			{
-				String thisString = (String)keys.get(i);
-				writeWithNewlinesEncoded(writer, thisString);
-			}
+			UnicodeWriter writer = new UnicodeWriter(outputFile);
+			bd.exportTranslations(languageCode, writer);
 
 			writer.close();
 			System.out.println("Success");
@@ -94,6 +92,35 @@ public class UiLocalization extends Localization
 		}
 
     }
+
+	public void exportTranslations(String languageCode, UnicodeWriter writer)
+		throws IOException 
+	{
+		setCurrentLanguageCode("en");
+		writer.writeln("# Martus Client Translation File");
+		writer.writeln("# Language code:  " + languageCode);
+		writer.writeln("# Language name:  " + getLanguageName(languageCode));
+		writer.writeln("# Exported date:  " + new Date().toString());
+		writer.writeln("# Client version: " + UiConstants.versionLabel);
+		writer.writeln("# Client build:   " + MartusUtilities.getVersionDate());
+		writer.writeln("#");
+		writer.writeln("# Lines beginning with # are comments and are ignored by Martus");
+		writer.writeln("# Each entry consists of: KEY=VALUE");
+		writer.writeln("# Do not modify any KEY. Do localize every VALUE.");
+		writer.writeln("# Each untranslated VALUE has <> around it. As you translate each ");
+		writer.writeln("#    VALUE, remove its <>");
+		writer.writeln("# The file MUST be saved in UTF-8 format!");
+		writer.writeln("# If you name it Martus-xx.mtf (where xx is the correct language code) and");
+		writer.writeln("#    put the file in c:\\Martus, then Martus will automatically read it.");
+		writer.writeln("# In Martus, to choose a language, go to Options/Preferences.");
+		writer.writeln("#");
+		Vector keys = getAllTranslationStrings(languageCode);
+		for(int i = 0; i < keys.size(); ++i)
+		{
+			String thisString = (String)keys.get(i);
+			writeWithNewlinesEncoded(writer, thisString);
+		}
+	}
 
 	public static void writeWithNewlinesEncoded(UnicodeWriter writer, String thisString)
 		throws IOException

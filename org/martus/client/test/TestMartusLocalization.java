@@ -26,6 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.test;
 
+import java.util.Map;
 import java.util.Vector;
 
 import junit.framework.TestCase;
@@ -33,6 +34,8 @@ import junit.framework.TestCase;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
+import org.martus.util.StringInputStream;
+import org.martus.util.UnicodeStringWriter;
 
 public class TestMartusLocalization extends TestCase
 {
@@ -95,6 +98,24 @@ public class TestMartusLocalization extends TestCase
 		assertEquals("es/something", bd.getLabel("es", "category", "sillytag", "?"));
 
 		assertEquals("<Print>", bd.getLabel("xx", "button", "print", null));
+	}
+	
+	public void testLoadTranslations() throws Exception
+	{
+		String sampleFileContents = "# This is a comment with =\na:b=c\nd:e=f";
+		StringInputStream in = new StringInputStream(sampleFileContents);
+		bd.loadTranslations("qq", in);
+		assertEquals("c", bd.getLabel("qq", "a", "b", "default"));
+		Map qq = bd.getStringMap("qq");
+		assertEquals("not 2?", 2, qq.size());
+	}
+	
+	public void testExportTranslations() throws Exception
+	{
+		UnicodeStringWriter writer = UnicodeStringWriter.create();
+		bd.exportTranslations("en", writer);
+		String result = writer.toString();
+		assertEquals("no leading comment?", 0, result.indexOf("#"));
 	}
 
 	public void testAddTranslation()

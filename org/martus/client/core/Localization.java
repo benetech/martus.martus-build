@@ -96,6 +96,9 @@ public class Localization
 	{
 		if(translation == null)
 			return;
+			
+		if(translation.startsWith("#"))
+			return;
 	
 		Map stringMap = getStringMap(languageCode);
 		if(stringMap == null)
