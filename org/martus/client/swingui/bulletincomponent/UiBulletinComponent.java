@@ -65,8 +65,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		publicStuff.add(privateStuff.createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
 		publicStuff.add(allPrivateField.getComponent());
 
-		String[] standardFieldTags = Bulletin.getStandardFieldNames();
-		String[] privateFieldTags = Bulletin.getPrivateFieldNames();
+		String[] standardFieldTags = Bulletin.getPublicFieldTags();
+		String[] privateFieldTags = Bulletin.getPrivateFieldTags();
 
 		int numFields = standardFieldTags.length + privateFieldTags.length;
 		fields = new UiField[numFields];

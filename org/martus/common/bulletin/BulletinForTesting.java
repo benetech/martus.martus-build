@@ -38,20 +38,22 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.martus.common.MartusConstants;
-import org.martus.common.crypto.*;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
-import org.martus.common.database.*;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
-import org.martus.util.*;
+import org.martus.util.Base64;
+import org.martus.util.UnicodeWriter;
 
 
 
-public class MockBulletin extends Bulletin
+public class BulletinForTesting extends Bulletin
 {
-	public MockBulletin(MartusCrypto securityToUse)
+	public BulletinForTesting(MartusCrypto securityToUse)
 	{
 		super(securityToUse);
 	}

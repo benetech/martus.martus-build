@@ -59,13 +59,27 @@ public class Bulletin implements BulletinConstants
 
 	public Bulletin(MartusCrypto securityToUse)
 	{
+		this(securityToUse, getPublicFieldTags(), getPrivateFieldTags());
+	}
+	
+	public Bulletin(MartusCrypto securityToUse, String[] standardFieldNames, String[] privateFieldNames)
+	{
 		security = securityToUse;
 		String accountId = security.getPublicKeyString();
 		UniversalId headerUid = BulletinHeaderPacket.createUniversalId(accountId);
 		UniversalId dataUid = FieldDataPacket.createUniversalId(accountId);
 		UniversalId privateDataUid = FieldDataPacket.createUniversalId(accountId);
 
-		createMemberVariables(headerUid, dataUid, privateDataUid);
+		isValidFlag = true;
+		fieldData = new FieldDataPacket(dataUid, standardFieldNames);
+		fieldData.setEncrypted(true);
+		privateFieldData = new FieldDataPacket(privateDataUid, privateFieldNames);
+		privateFieldData.setEncrypted(true);
+		header = new BulletinHeaderPacket(headerUid);
+		header.setFieldDataPacketId(dataUid.getLocalId());
+		header.setPrivateFieldDataPacketId(privateDataUid.getLocalId());
+		setPendingPublicAttachments(new Vector());
+		setPendingPrivateAttachments(new Vector());
 
 		clear();
 	}
@@ -298,7 +312,7 @@ public class Bulletin implements BulletinConstants
 		return fieldData.getFieldCount();
 	}
 
-	public static String[] getStandardFieldNames()
+	public static String[] getPublicFieldTags()
 	{
 		return new String[]
 		{
@@ -311,7 +325,7 @@ public class Bulletin implements BulletinConstants
 		};
 	}
 
-	public static String[] getPrivateFieldNames()
+	public static String[] getPrivateFieldTags()
 	{
 		return new String[]
 		{
@@ -478,20 +492,6 @@ public class Bulletin implements BulletinConstants
 	public FieldDataPacket getPrivateFieldDataPacket()
 	{
 		return privateFieldData;
-	}
-
-	private void createMemberVariables(UniversalId headerUid, UniversalId dataUid, UniversalId privateDataUid)
-	{
-		isValidFlag = true;
-		fieldData = new FieldDataPacket(dataUid, getStandardFieldNames());
-		fieldData.setEncrypted(true);
-		privateFieldData = new FieldDataPacket(privateDataUid, getPrivateFieldNames());
-		privateFieldData.setEncrypted(true);
-		header = new BulletinHeaderPacket(headerUid);
-		header.setFieldDataPacketId(dataUid.getLocalId());
-		header.setPrivateFieldDataPacketId(privateDataUid.getLocalId());
-		setPendingPublicAttachments(new Vector());
-		setPendingPrivateAttachments(new Vector());
 	}
 
 	private void setPendingPublicAttachments(Vector pendingPublicAttachments)

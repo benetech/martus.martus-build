@@ -34,7 +34,7 @@ import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinSaver;
-import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockClientDatabase;
@@ -130,7 +130,7 @@ public class TestServerForClients extends TestCaseEnhanced
 			privateBulletin.setSealed();
 			BulletinSaver.saveToClientDatabase(privateBulletin, clientDatabase, true, clientSecurity);
 
-			b1ZipString = MockBulletin.saveToZipString(clientDatabase, b1, clientSecurity);
+			b1ZipString = BulletinForTesting.saveToZipString(clientDatabase, b1, clientSecurity);
 			b1ZipBytes = Base64.decode(b1ZipString);
 			b1ChunkBytes0 = new byte[100];
 			b1ChunkBytes1 = new byte[b1ZipBytes.length - b1ChunkBytes0.length];

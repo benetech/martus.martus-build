@@ -33,7 +33,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinZipImporter;
-import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.Bulletin.DamagedBulletinException;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.database.DatabaseKey;
@@ -139,7 +139,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		assertEquals("Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded.getFieldDataPacket().getHQPublicKey());
 
 		File tempFile = createTempFile();
-		MockBulletin.saveToFile(db, original, tempFile, security);
+		BulletinForTesting.saveToFile(db, original, tempFile, security);
 		Bulletin loaded2 = new Bulletin(security);
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, security);
 		assertEquals("Loaded Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded2.getFieldDataPacket().getHQPublicKey());

@@ -42,7 +42,7 @@ import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinSaver;
-import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -840,7 +840,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File zipFile = File.createTempFile("$$$MartusTestZipSealed", null);
 		zipFile.deleteOnExit();
 		Bulletin loaded = store.loadFromDatabase(originalKey);
-		MockBulletin.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getRecordCount());
 
@@ -890,7 +890,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempFile = createTempFile();
 
 		Bulletin b = store.createEmptyBulletin();
-		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 
 		BulletinFolder folder = store.createFolder("test");
 		folder.setStatusAllowed(Bulletin.STATUSSEALED);
@@ -914,7 +914,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		folder = store.createFolder("test2");
 
 		b.setSealed();
-		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 		store.importZipFileBulletin(tempFile, folder, false);
 		assertEquals("not imported to store?", 1, store.getBulletinCount());
 		assertEquals("not imported to folder count?", 1, folder.getBulletinCount());
@@ -933,7 +933,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempFile = createTempFile();
 
 		Bulletin original = store.createEmptyBulletin();
-		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,original, tempFile, store.getSignatureVerifier());
 
 		BulletinStore importer = createTempStore();
 		BulletinFolder folder = importer.createFolder("test");
@@ -953,7 +953,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin original = store.createEmptyBulletin();
 		original.setHQPublicKey(hqStore.getAccountId());
 		original.setSealed();
-		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,original, tempFile, store.getSignatureVerifier());
 
 		BulletinFolder folder = hqStore.createFolder("test");
 		hqStore.importZipFileBulletin(tempFile, folder, false);
@@ -971,7 +971,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTestStoreImportZip", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(db,b, tempFile, creator.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,b, tempFile, creator.getSignatureVerifier());
 
 		creator.importZipFileBulletin(tempFile, creator.getFolderOutbox(), false);
 		assertEquals("Didn't fully import?", 1, creator.getBulletinCount());
@@ -994,7 +994,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempFile = createTempFile();
 
 		Bulletin b = store.createEmptyBulletin();
-		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 		UniversalId originalUid = b.getUniversalId();
 
 		BulletinFolder folder = store.createFolder("test");
@@ -1024,7 +1024,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		File zipFile = File.createTempFile("$$$MartusTestZipDraft", null);
 		zipFile.deleteOnExit();
-		MockBulletin.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
+		BulletinForTesting.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getRecordCount());

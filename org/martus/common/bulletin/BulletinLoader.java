@@ -44,7 +44,9 @@ public class BulletinLoader
 			Bulletin.DamagedBulletinException,
 			MartusCrypto.NoKeyPairException
 	{
-		Bulletin b = new Bulletin(verifier);
+		String[] standardFieldNames = Bulletin.getPublicFieldTags();
+		String[] privateFieldNames = Bulletin.getPrivateFieldTags();
+		Bulletin b = new Bulletin(verifier, standardFieldNames, privateFieldNames);
 		b.clear();
 		b.setIsValid(false);
 

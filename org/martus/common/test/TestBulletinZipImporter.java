@@ -42,7 +42,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinZipImporter;
-import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -80,7 +80,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(db, b, tempFile, security);
+		BulletinForTesting.saveToFile(db, b, tempFile, security);
 
 		Bulletin loaded = new Bulletin(security);
 		BulletinZipImporter.loadFromFile(loaded, tempFile, security);
@@ -178,7 +178,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		File tmpFile = File.createTempFile("$$$MartusTestBullSaveFileAtta1", null);
 		tmpFile.deleteOnExit();
-		MockBulletin.saveToFile(db, original, tmpFile, security);
+		BulletinForTesting.saveToFile(db, original, tmpFile, security);
 		assertTrue("unreasonable file size?", tmpFile.length() > 20);
 
 		ZipFile zip = new ZipFile(tmpFile);
@@ -186,13 +186,13 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		ZipEntry dataEntry = (ZipEntry)entries.nextElement();
 		assertStartsWith("data id wrong?", "F", dataEntry.getName());
-		FieldDataPacket fdp = new FieldDataPacket(dummyUid, Bulletin.getStandardFieldNames());
+		FieldDataPacket fdp = new FieldDataPacket(dummyUid, Bulletin.getPublicFieldTags());
 		fdp.loadFromXml(new ZipEntryInputStream(zip, dataEntry), security);
 		assertEquals("fdp id?", original.getFieldDataPacket().getUniversalId(), fdp.getUniversalId());
 
 		ZipEntry privateEntry = (ZipEntry)entries.nextElement();
 		assertStartsWith("private id wrong?", "F", privateEntry.getName());
-		FieldDataPacket pdp = new FieldDataPacket(dummyUid, Bulletin.getPrivateFieldNames());
+		FieldDataPacket pdp = new FieldDataPacket(dummyUid, Bulletin.getPrivateFieldTags());
 		pdp.loadFromXml(new ZipEntryInputStream(zip, privateEntry), security);
 		assertEquals("pdp id?", original.getPrivateFieldDataPacket().getUniversalId(), pdp.getUniversalId());
 
@@ -238,7 +238,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(db, b, tempFile, security);
+		BulletinForTesting.saveToFile(db, b, tempFile, security);
 		assertTrue("unreasonable file size?", tempFile.length() > 20);
 
 		ZipFile zip = new ZipFile(tempFile);
@@ -250,7 +250,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		ZipEntry dataEntry = (ZipEntry)entries.nextElement();
 		assertNotNull("null data?", dataEntry);
 		InputStreamWithSeek dataIn = new ZipEntryInputStream(zip, dataEntry);
-		FieldDataPacket data = new FieldDataPacket(uid, Bulletin.getStandardFieldNames());
+		FieldDataPacket data = new FieldDataPacket(uid, Bulletin.getPublicFieldTags());
 		data.loadFromXml(dataIn, security);
 		assertEquals("data wrong?", b.get(Bulletin.TAGPUBLICINFO), data.get(Bulletin.TAGPUBLICINFO));
 
@@ -258,7 +258,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		ZipEntry privateDataEntry = (ZipEntry)entries.nextElement();
 		assertNotNull("null data?", privateDataEntry);
 		InputStreamWithSeek privateDataIn = new ZipEntryInputStream(zip, privateDataEntry);
-		FieldDataPacket privateData = new FieldDataPacket(uid, Bulletin.getPrivateFieldNames());
+		FieldDataPacket privateData = new FieldDataPacket(uid, Bulletin.getPrivateFieldTags());
 		privateData.loadFromXml(privateDataIn, security);
 		assertEquals("data wrong?", b.get(Bulletin.TAGPRIVATEINFO), privateData.get(Bulletin.TAGPRIVATEINFO));
 
@@ -289,7 +289,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		original.setDraft();
 		original.setAllPrivate(true);
-		MockBulletin.saveToFile(db, original, tempFile, security);
+		BulletinForTesting.saveToFile(db, original, tempFile, security);
 		Bulletin loaded2 = new Bulletin(security);
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("draft private could get public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
@@ -297,21 +297,21 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		original.setDraft();
 		original.setAllPrivate(false);
-		MockBulletin.saveToFile(db,original, tempFile, security);
+		BulletinForTesting.saveToFile(db,original, tempFile, security);
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("draft public could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("draft public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 
 		original.setSealed();
 		original.setAllPrivate(true);
-		MockBulletin.saveToFile(db,original, tempFile, security);
+		BulletinForTesting.saveToFile(db,original, tempFile, security);
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("sealed private could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("sealed private could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 
 		original.setSealed();
 		original.setAllPrivate(false);
-		MockBulletin.saveToFile(db,original, tempFile, security);
+		BulletinForTesting.saveToFile(db,original, tempFile, security);
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("sealed public couldn't get encrypted public?", original.get(Bulletin.TAGPUBLICINFO), loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("sealed public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));

@@ -206,14 +206,14 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testGetStandardFieldNames()
 	{
-		List names = Arrays.asList(Bulletin.getStandardFieldNames());
+		List names = Arrays.asList(Bulletin.getPublicFieldTags());
 		assertEquals(true, names.contains("author"));
 		assertEquals(false, names.contains("privateinfo"));
 		assertEquals(false, names.contains("nope"));
 		assertEquals(true, names.contains("language"));
 		assertEquals(true, names.contains("organization"));
 
-		List privateNames = Arrays.asList(Bulletin.getPrivateFieldNames());
+		List privateNames = Arrays.asList(Bulletin.getPrivateFieldTags());
 		assertEquals(true, privateNames.contains("privateinfo"));
 		assertEquals(false, privateNames.contains("nope"));
 	}

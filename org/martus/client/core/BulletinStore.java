@@ -655,8 +655,20 @@ public class BulletinStore
 
 	public Bulletin createEmptyBulletin()
 	{
-		Bulletin b = new Bulletin(getSignatureGenerator());
+		String[] standardFieldNames = getPublicFieldTags();
+		String[] privateFieldNames = getPrivateFieldTags();
+		Bulletin b = new Bulletin(getSignatureGenerator(), standardFieldNames, privateFieldNames);
 		return b;
+	}
+
+	private String[] getPrivateFieldTags()
+	{
+		return privateFieldTags;
+	}
+
+	private String[] getPublicFieldTags()
+	{
+		return publicFieldTags;
 	}
 
 	public synchronized BulletinFolder createOrFindFolder(String name)
@@ -688,6 +700,9 @@ public class BulletinStore
 		folders = new Vector();
 
 		createSystemFolders();
+	
+		publicFieldTags = Bulletin.getPublicFieldTags();
+		privateFieldTags = Bulletin.getPrivateFieldTags();
 	}
 
 	private void loadCacheOfSortableFields()
@@ -1026,4 +1041,8 @@ public class BulletinStore
 	CacheOfSortableFields cacheOfSortableFields;
 	File cacheOfSortableFieldsFile;
 	private boolean encryptPublicDataFlag;
+
+	String[] publicFieldTags;
+
+	String[] privateFieldTags;
 }

@@ -21,7 +21,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -583,7 +583,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.OK);
 		response.add(new Integer(totalSize));
 		response.add(new Integer(chunkSize));
-		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForServer));
+		response.add(BulletinForTesting.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForServer));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -611,7 +611,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.OK);
 		response.add(new Integer(-1));
 		response.add(new Integer(bulletinBytes.length));
-		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(),b, mockSecurityForServer));
+		response.add(BulletinForTesting.saveToZipString(appWithServer.getStore().getDatabase(),b, mockSecurityForServer));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -639,7 +639,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.CHUNK_OK);
 		response.add(new Integer(bulletinBytes.length));
 		response.add(new Integer(bulletinBytes.length / 3 * 2));
-		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(),b, mockSecurityForServer));
+		response.add(BulletinForTesting.saveToZipString(appWithServer.getStore().getDatabase(),b, mockSecurityForServer));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -1186,7 +1186,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	byte[] getBulletinZipBytes(Bulletin b) throws Exception
 	{
-		return Base64.decode(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForApp));
+		return Base64.decode(BulletinForTesting.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForApp));
 	}
 		
 	private static MockMartusSecurity mockSecurityForApp;
