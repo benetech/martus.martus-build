@@ -33,7 +33,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 			public void visit(String accountString)
 			{
-				UniversidlIdOfPublicBulletinsCollector collector = new UniversidlIdOfPublicBulletinsCollector();
+				LocallIdOfPublicBulletinsCollector collector = new LocallIdOfPublicBulletinsCollector();
 				Database db = server.getDatabase();
 				db.visitAllRecordsForAccount(collector, accountString);
 				
@@ -80,7 +80,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 		}
 	}
 	
-	public Vector getPublicBulletinUniversalIds(String myAccountId, Vector parameters, String signature)
+	public Vector getPublicBulletinLocalIds(String myAccountId, Vector parameters, String signature)
 	{
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
@@ -94,7 +94,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 
 		String accountString = (String) parameters.get(0);
 
-		UniversidlIdOfPublicBulletinsCollector collector = new UniversidlIdOfPublicBulletinsCollector();
+		LocallIdOfPublicBulletinsCollector collector = new LocallIdOfPublicBulletinsCollector();
 		Database db = server.getDatabase();
 		db.visitAllRecordsForAccount(collector, accountString);
 		
@@ -132,7 +132,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 	/// End Interface //
 	
-	class UniversidlIdOfPublicBulletinsCollector implements Database.PacketVisitor
+	class LocallIdOfPublicBulletinsCollector implements Database.PacketVisitor
 	{
 		public void visit(DatabaseKey key)
 		{

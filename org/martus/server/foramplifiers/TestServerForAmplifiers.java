@@ -176,7 +176,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		ampsWhoCallUs.delete();
 		
 		
-		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinUniversalIds(amplifier.getPublicKeyString(), parameters, signature);
+		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
 		assertEquals("Authorized amp requested data failed?", ServerForAmplifiers.OK, response.get(0));
 
 		assertEquals("Failed to get list of public bulletin ids?", ServerForAmplifiers.OK, response.get(0));
@@ -185,21 +185,21 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 
 		uploadSampleBulletin(coreServer, b1.getLocalId(), b1ZipString);
 		uploadSampleBulletin(coreServer, b2.getLocalId(), b2ZipString);
-		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinUniversalIds(amplifier.getPublicKeyString(), parameters, signature);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
 		uIds = (Vector)response.get(1);
 		assertEquals("incorect # of bulletins found after uploading?", 1, uIds.size());
 		assertEquals("B1 should had been returned", b1.getLocalId(), uIds.get(0));
 
 		uploadSampleBulletin(otherServer, b3.getLocalId(), b3ZipString);
 		uploadSampleBulletin(coreServer, b3.getLocalId(), b3ZipString);
-		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinUniversalIds(amplifier.getPublicKeyString(), parameters, signature);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
 		uIds = (Vector)response.get(1);
 		assertEquals("Currently B3 is a bulletin not mirrored?", 2, uIds.size());
 		
 		String bulletin3LocalId = b3.getLocalId();
 		String burFromOtherDatabase = MartusServerUtilities.createBulletinUploadRecord(bulletin3LocalId, otherServer.getSecurity());
 		MartusServerUtilities.writeSpecificBurToDatabase(coreServer.getDatabase(), b3.getBulletinHeaderPacket(), burFromOtherDatabase);
-		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinUniversalIds(amplifier.getPublicKeyString(), parameters, signature);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
 		uIds = (Vector)response.get(1);
 		assertEquals("incorect # of bulletins found after mirroring, should only amplify own bulletins?", 1, uIds.size());
 	}
