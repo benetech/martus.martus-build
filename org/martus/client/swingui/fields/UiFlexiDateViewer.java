@@ -58,7 +58,9 @@ public class UiFlexiDateViewer extends UiField
 	{
 		value = localization.convertStoredDateToDisplay(newText);
 		int dateBreak = newText.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);
-		if (dateBreak > 0)			
+		int datePlus = newText.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER);
+		
+		if (dateBreak > 0 && newText.charAt(datePlus+1) != '0')			
 		{
 			String beginDate = newText.substring(0,dateBreak);
 			String endDate = convertEndDate(newText.substring(dateBreak+1));						
@@ -71,8 +73,8 @@ public class UiFlexiDateViewer extends UiField
 	
 	private String convertEndDate(String endDate)	
 	{
-		if (endDate.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER) <=0)
-			return endDate;
+//		if (endDate.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER) <=0)
+//			return endDate;
 			
 		MartusFlexidate mf = new MartusFlexidate(endDate);
 		DateFormat df = Bulletin.getStoredDateFormat();				

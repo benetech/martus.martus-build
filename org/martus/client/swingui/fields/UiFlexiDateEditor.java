@@ -208,24 +208,24 @@ public class UiFlexiDateEditor extends UiField
 	public String getText()
 	{
 		DateFormat df = Bulletin.getStoredDateFormat();				
-		String dateText = df.format(getBeginDate());
+		String dateText = df.format(getBeginDate())+ MartusFlexidate.DATE_RANGE_SEPARATER;
 		
 		if (isFlexiDate())	
-			dateText += MartusFlexidate.DATE_RANGE_SEPARATER + toFlexidate();							
+			dateText += toFlexidate(getBeginDate(), getEndDate());
+		else
+			dateText += toFlexidate(getBeginDate(), getBeginDate());
+				
 		return dateText;
 	}	
 	
-	private String toFlexidate()
+	private String toFlexidate(Date beginDate, Date endDate)
 	{
-		MartusFlexidate mf = new MartusFlexidate(getBeginDate(), getEndDate());
+		MartusFlexidate mf = new MartusFlexidate(beginDate, endDate);
 		return mf.getMatusFlexidate();
 	}
 	
 	private String fromFlexidate(String date)
-	{
-		if (date.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER) <=0 )
-			return date;
-			
+	{		
 		MartusFlexidate mf = new MartusFlexidate(date);				
 		DateFormat df = Bulletin.getStoredDateFormat();				
 					
@@ -245,8 +245,10 @@ public class UiFlexiDateEditor extends UiField
 	public void setText(String newText)
 	{		
 		String bgDateText = newText;
-		int comma = newText.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);						
-		if (comma > 0)
+		int comma = newText.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);
+		int plus = newText.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER);			
+							
+		if (newText.charAt(plus+1) != '0' && comma > 0)
 		{			
 			flexiDateRB.setSelected(true);
 			bgDateText = newText.substring(0,comma);

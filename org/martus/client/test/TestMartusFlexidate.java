@@ -97,7 +97,28 @@ public class TestMartusFlexidate extends TestCaseEnhanced
 		
 		DateFormat df = Bulletin.getStoredDateFormat();										
 		assertEquals("2000-01-10", df.format(mf.getBeginDate()));
-		assertEquals("2000-01-15", df.format(mf.getEndDate()));	
+		assertEquals("2000-01-15", df.format(mf.getEndDate()));			
+	}	
+	
+	public void testSameDateRange()
+	{
+		Date beginDate = getDate(2000,Calendar.JANUARY,10);
+		Date endDate = getDate(2000,Calendar.JANUARY, 10);
+		
+		MartusFlexidate mf = new MartusFlexidate(beginDate, endDate);
+
+		assertEquals("20000110+0", mf.getMatusFlexidate());	
+
+		DateFormat df = Bulletin.getStoredDateFormat();										
+		assertEquals("2000-01-10", df.format(mf.getBeginDate()));
+		assertEquals("2000-01-10", df.format(mf.getEndDate()));
+		
+		mf = new MartusFlexidate("20030105+0");		
+		assertEquals("20030105+0", mf.getMatusFlexidate());
+
+		df = Bulletin.getStoredDateFormat();						
+		assertEquals("2003-01-05", df.format(mf.getBeginDate()));
+		assertEquals("2003-01-05", df.format(mf.getEndDate()));			
 	}
 	
 	public void testDateRangeSwap()
