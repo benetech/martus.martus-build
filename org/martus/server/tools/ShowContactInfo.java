@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.common.utilities;
+package org.martus.server.tools;
 
 import java.io.DataInputStream;
 import java.io.EOFException;
