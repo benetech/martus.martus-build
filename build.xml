@@ -9,14 +9,20 @@
   <property name="docs"  value="TechDocs/javadocs"/>
   <property name="martus-dir" value="org/martus"/>
   <property name="martus-package" value="org.martus"/>
+  
+  <property name="util-dir" value="${martus-dir}/util"/>
+  <property name="swing-dir" value="${martus-dir}/swing"/>
+  <property name="hrvd-dir" value="org/hrvd"/>
 
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
   <property name="common-package" value="${martus-package}.common"/>
 
   <property name="common-files" value="${common-dir}/*.class,
-                    ${common-dir}/**/*.class
-                    "/>
+  			${util-dir}/**/*.class,
+  			${hrvd-dir}/**/*.class,
+                    	${common-dir}/**/*.class
+                    	"/>
 
   <property name="server-dir" value="${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
@@ -29,6 +35,7 @@
   <property name="client-jar" value= "${dist}/martus.jar"/>
   <property name="client-package" value="${martus-package}.client"/>
   <property name="client-files" value="${client-dir}/*.class,
+  		${swing-dir}/**/*.class,
                 ${client-dir}/**/*.class,
                 ${client-dir}/core/main-class.txt,
                 ${client-dir}/**/Martus-*.mtf,
@@ -95,7 +102,7 @@
 
     <replace file="${common-dir}/MartusUtilities.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
 
-    <javac target="1.4" optimize="on" srcdir="${common-dir}" classpath="." failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${hrvd-dir};${util-dir};${common-dir}" classpath="." failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
@@ -108,7 +115,7 @@
   <!-- Build client -->
   <target name="build-client" depends="init,build-common">
 
-    <javac target="1.4" optimize="on" srcdir="${client-dir}" classpath="${common-jar}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${swing-dir};${client-dir}" classpath=".;${common-jar}" failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
@@ -123,7 +130,7 @@
   <!-- Build server -->
   <target name="build-server" depends="init,build-common">
 
-    <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath="${common-jar}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath=".;${common-jar}" failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
@@ -136,7 +143,7 @@
   <!-- Build meta -->
   <target name="build-meta" depends="init,build-common,build-server,build-client">
 
-    <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath="${client-jar};${server-jar}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath=".;${client-jar};${server-jar}" failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
