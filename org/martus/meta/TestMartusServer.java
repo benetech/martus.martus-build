@@ -889,6 +889,53 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		MockBulletin.loadFromZipString(loaded, zipString);
 	}
 
+	Vector getBulletinChunk(MartusSecurity securityToUse, NetworkInterface server, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
+	{
+		Vector parameters = new Vector();
+		parameters.add(authorAccountId);
+		parameters.add(bulletinLocalId);
+		parameters.add(new Integer(chunkOffset));
+		parameters.add(new Integer(maxChunkSize));
+
+		String signature = MartusUtilities.sign(parameters, securityToUse);
+		return server.getBulletinChunk(securityToUse.getPublicKeyString(), parameters, signature);
+	}
+
+	public void testGetNotMyBulletin() throws Exception
+	{
+		testServer.security = serverSecurity;
+		testServer.clientsThatCanUpload.clear();
+		testServer.allowUploads(clientSecurity.getPublicKeyString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
+		
+		MartusSecurity	newClientSecurity = new MartusSecurity();
+		newClientSecurity.createKeyPair(512);
+
+		Vector result = getBulletinChunk(newClientSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
+		assertEquals("Succeeded?  You are not the owner or the HQ", NetworkInterfaceConstants.NOTYOURBULLETIN, result.get(0));
+	}
+
+	public void testGetHQBulletin() throws Exception
+	{
+		testServer.security = serverSecurity;
+		testServer.clientsThatCanUpload.clear();
+		testServer.allowUploads(clientSecurity.getPublicKeyString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
+		
+		Vector result = getBulletinChunk(hqSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
+		assertEquals("Failed? You are the HQ", NetworkInterfaceConstants.OK, result.get(0));
+	}
+
+	public void testGetMyBulletin() throws Exception
+	{
+		testServer.security = serverSecurity;
+		testServer.clientsThatCanUpload.clear();
+		testServer.allowUploads(clientSecurity.getPublicKeyString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
+		
+		Vector result = getBulletinChunk(clientSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
+		assertEquals("Failed? I am the author", NetworkInterfaceConstants.OK, result.get(0));
+	}
 	public void testDownloadBulletinChunkWholeBulletinLegacySignature() throws Exception
 	{
 		uploadSampleBulletin();

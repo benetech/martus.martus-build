@@ -842,7 +842,29 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-		
+
+		DatabaseKey headerKey =	findHeaderKeyInDatabase(authorAccountId, bulletinLocalId);
+		if(headerKey == null)
+			return returnSingleResponseAndLog( " returning NOT_FOUND", NetworkInterfaceConstants.NOT_FOUND );
+
+		if(!myAccountId.equals(authorAccountId))
+		{
+			try 
+			{
+				String hqAccountId = getBulletinHQAccountId(headerKey);
+				if(!myAccountId.equals(hqAccountId))
+					return returnSingleResponseAndLog( " returning NOTYOURBULLETIN", NetworkInterfaceConstants.NOTYOURBULLETIN );
+			} 
+			catch (SignatureVerificationException e) 
+			{
+					return returnSingleResponseAndLog( " returning SIG ERROR", NetworkInterfaceConstants.SIG_ERROR );
+			} 
+			catch (Exception e) 
+			{
+				return returnSingleResponseAndLog( " returning SERVER_ERROR :" + e, NetworkInterfaceConstants.SERVER_ERROR );
+			} 
+		}
+
 		Vector result = getBulletinChunkWithoutVerifyingCaller(
 					authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize);
@@ -1533,31 +1555,34 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 				int chunkOffset, int maxChunkSize)
 	{
-		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
-		DatabaseKey headerKey = new DatabaseKey(uid);
-		headerKey.setSealed();
-		if(!getDatabase().doesRecordExist(headerKey))
-			headerKey.setDraft();
-		
-		Vector result = new Vector();
-		if(!getDatabase().doesRecordExist(headerKey))
-		{
-			logging("getBulletinChunkWithoutVerifyingCaller:  NOT_FOUND");
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-			return result;
-		}
+		DatabaseKey headerKey =	findHeaderKeyInDatabase(authorAccountId, bulletinLocalId);
+		if(headerKey == null)
+			return returnSingleResponseAndLog("getBulletinChunkWithoutVerifyingCaller:  NOT_FOUND ", NetworkInterfaceConstants.NOT_FOUND);
 		
 		try
 		{
-			result = buildBulletinChunkResponse(headerKey, chunkOffset, maxChunkSize);
+			return buildBulletinChunkResponse(headerKey, chunkOffset, maxChunkSize);
 		}
 		catch(Exception e)
 		{
-			logging("getBulletinChunkWithoutVerifyingCaller:  SERVER_ERROR " + e);
-			//System.out.println("MartusServer.download: " + e);
-			result.add(NetworkInterfaceConstants.SERVER_ERROR);
+			return returnSingleResponseAndLog("getBulletinChunkWithoutVerifyingCaller:  SERVER_ERROR " + e, NetworkInterfaceConstants.SERVER_ERROR);
 		}
-		return result;
+	}
+
+
+	public DatabaseKey findHeaderKeyInDatabase(String authorAccountId,String bulletinLocalId) 
+	{
+		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
+		DatabaseKey headerKey = new DatabaseKey(uid);
+		headerKey.setSealed();
+		if(getDatabase().doesRecordExist(headerKey))
+			return headerKey;
+
+		headerKey.setDraft();
+		if(getDatabase().doesRecordExist(headerKey))
+			return headerKey;
+
+		return null;
 	}
 
 	private String saveUploadedBulletinZipFile(String authorAccountId, File zipFile) 
