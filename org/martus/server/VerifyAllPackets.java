@@ -5,6 +5,7 @@ import java.io.File;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
+import org.martus.common.FileDatabase;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
@@ -96,7 +97,11 @@ public class VerifyAllPackets
 							System.out.println();
 							System.out.println("Missing packet: " + keys[i].getLocalId());
 							System.out.println("  for header: " + visitingLocalId);
-							System.out.println("      for account bucket: " + bhp.getAccountId());
+							
+							FileDatabase fdb = (FileDatabase) db;
+							File bucket = fdb.getFileForRecord(keys[i]);
+							String path = bucket.getParent().substring(bucket.getParent().indexOf("packets"));
+							System.out.println("      for account bucket: " + path);
 						}
 					}
 				}
