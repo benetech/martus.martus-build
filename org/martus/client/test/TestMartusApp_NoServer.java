@@ -38,6 +38,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
+import org.martus.client.swingui.UiUtilities;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
@@ -681,12 +682,12 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testCenter");
 		{
-			Point upperLeft = MartusApp.center(new Dimension(800, 600), new Rectangle(0, 0, 800, 600));
+			Point upperLeft = UiUtilities.center(new Dimension(800, 600), new Rectangle(0, 0, 800, 600));
 			assertEquals(0, upperLeft.x);
 			assertEquals(0, upperLeft.y);
 		}
 		{
-			Point upperLeft = MartusApp.center(new Dimension(400, 300), new Rectangle(0, 0, 800, 600));
+			Point upperLeft = UiUtilities.center(new Dimension(400, 300), new Rectangle(0, 0, 800, 600));
 			assertEquals(200, upperLeft.x);
 			assertEquals(150, upperLeft.y);
 		}

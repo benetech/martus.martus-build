@@ -104,7 +104,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		pack();
 		Dimension size = getSize();
 		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
+		setLocation(UiUtilities.center(size, screen));
 		show();
 	}
 

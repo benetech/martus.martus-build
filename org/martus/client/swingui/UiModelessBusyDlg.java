@@ -37,8 +37,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
-import org.martus.client.core.MartusApp;
-
 public class UiModelessBusyDlg extends JDialog
 {
 
@@ -55,7 +53,7 @@ public class UiModelessBusyDlg extends JDialog
 		pack();
 		Dimension size = getSize();
 		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
+		setLocation(UiUtilities.center(size, screen));
 		setResizable(false);
 		origCursor = getCursor();
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

@@ -26,9 +26,6 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.core;
 
-import java.awt.Dimension;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -1337,13 +1334,6 @@ public class MartusApp
 		}
 
 		return result;
-	}
-
-	public static Point center(Dimension inner, Rectangle outer)
-	{
-		int x = (outer.width - inner.width) / 2;
-		int y = (outer.height - inner.height) / 2;
-		return new Point(x, y);
 	}
 
 	public String getAccountId()

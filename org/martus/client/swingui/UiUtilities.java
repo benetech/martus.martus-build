@@ -143,7 +143,14 @@ public class UiUtilities
 		dlg.pack();
 		Dimension size = dlg.getSize();
 		Rectangle screen = new Rectangle(new Point(0, 0), Toolkit.getDefaultToolkit().getScreenSize());
-		dlg.setLocation(MartusApp.center(size, screen));
+		dlg.setLocation(UiUtilities.center(size, screen));
+	}
+
+	public static Point center(Dimension inner, Rectangle outer)
+	{
+		int x = (outer.width - inner.width) / 2;
+		int y = (outer.height - inner.height) / 2;
+		return new Point(x, y);
 	}
 
 	static class Delay extends Thread

@@ -60,15 +60,11 @@ import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.event.MenuEvent;
-import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.core.BulletinFolder;
@@ -369,35 +365,36 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public AbstractAction getActionMenuEdit()
 	{
-		return actionMenuModifyBulletin;
+		return menuBar.actionMenuModifyBulletin;
 	}
 
 	public AbstractAction getActionMenuSelectAll()
 	{
-		return actionMenuSelectAllBulletins;
+		return menuBar.actionMenuSelectAllBulletins;
 	}
 
 	public AbstractAction getActionMenuCut()
 	{
-		return actionMenuCutBulletins;
+		return menuBar.actionMenuCutBulletins;
 	}
 
 	public AbstractAction getActionMenuCopy()
 	{
-		return actionMenuCopyBulletins;
+		return menuBar.actionMenuCopyBulletins;
 	}
 
 	public AbstractAction getActionMenuPaste()
 	{
-		return actionMenuPasteBulletins;
+		return menuBar.actionMenuPasteBulletins;
 	}
 
 	public AbstractAction getActionMenuDiscard()
 	{
-		return actionMenuDiscardBulletins;
+		return menuBar.actionMenuDiscardBulletins;
 	}
 
 	//ClipboardOwner Interface
+	//TODO: This doesn't seem to be called right now--can we delete it?
 	public void lostOwnership(Clipboard clipboard, Transferable contents)
 	{
 		System.out.println("UiMainWindow: ClipboardOwner.lostOwnership");
@@ -539,114 +536,23 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		JPanel topStuff = new JPanel(false);
 		topStuff.setLayout(new GridLayout(2, 1));
-		topStuff.add(createMenubar());
+		menuBar = new UiMenuBar(this);
+		topStuff.add(menuBar);
 		topStuff.add(createToolbar());
 		return topStuff;
 	}
 
-	private void createActions()
+	private void createToolbarActions()
 	{
 		actionCreate = UiActions.newActionCreate(this);
 		actionEdit = UiActions.newActionModify(this);
 		actionSearch = UiActions.newActionSearch(this);
 		actionPrint = UiActions.newActionPrint(this);
-
-		actionMenuPrint = UiActions.newActionMenuPrint(this);
-
-		actionMenuModifyBulletin = UiActions.newActionMenuModifyBulletin(this);
-		actionMenuSelectAllBulletins = UiActions.newActionMenuSelectAllBulletins(this);
-		actionMenuCutBulletins = UiActions.newActionMenuCutBulletins(this);
-		actionMenuCopyBulletins = UiActions.newActionMenuCopyBulletins(this);
-		actionMenuPasteBulletins = UiActions.newActionMenuPasteBulletins(this);
-		actionMenuDiscardBulletins = UiActions.newActionMenuDiscardBulletins(this);
-
-		actionMenuRenameFolder = UiActions.newActionMenuRenameFolder(this);
-		actionMenuDeleteFolder = UiActions.newActionMenuDeleteFolder(this);
 	}
-
-	private JComponent createMenubar()
-	{
-		JMenu file = new JMenu(app.getMenuLabel("file"));
-		PrintMenuListener printMenuListener = new PrintMenuListener();
-		file.addMenuListener(printMenuListener);
-		printMenuListener.initalize();
-
-		file.add(UiActions.newActionMenuCreateNewBulletin(this));
-		file.add(actionMenuPrint);
-		file.addSeparator();
-		file.add(UiActions.newActionMenuBackupMyKeyPair(this));
-		file.add(UiActions.newActionMenuExportMyPublicKey(this));
-		file.addSeparator();
-		file.add(UiActions.newActionMenuExportBulletins(this));
-		file.addSeparator();
-		file.add(UiActions.newActionMenuImportHeadquarterPublicKey(this));
-		file.add(UiActions.newActionMenuRemoveExistingHeadquaterPublicKey(this));
-		file.addSeparator();
-		file.add(UiActions.newActionMenuExit(this));
-
-
-		JMenu edit = new JMenu(app.getMenuLabel("edit"));
-		EditMenuListener menuListener = new EditMenuListener();
-		edit.addMenuListener(menuListener);
-		menuListener.initalize();
-
-		edit.add(UiActions.newActionMenuSearch(this));
-		edit.addSeparator();
-		edit.add(actionMenuModifyBulletin);
-		edit.addSeparator();
-		edit.add(actionMenuCutBulletins);
-		edit.add(actionMenuCopyBulletins);
-		edit.add(actionMenuPasteBulletins);
-		edit.add(actionMenuSelectAllBulletins);
-		edit.addSeparator();
-		edit.add(actionMenuDiscardBulletins);
-
-		JMenu folders = new JMenu(app.getMenuLabel("folders"));
-		FoldersMenuListener menuFolderListener = new FoldersMenuListener();
-		folders.addMenuListener(menuFolderListener);
-		menuFolderListener.initalize();
-
-		folders.add(UiActions.newActionMenuCreateFolder(this));
-		folders.add(actionMenuRenameFolder);
-		folders.add(actionMenuDeleteFolder);
-
-
-		JMenu server = new JMenu(app.getMenuLabel("server"));
-		server.add(UiActions.newActionMenuRetrieveMySealedBulletins(this));
-		server.add(UiActions.newActionMenuRetrieveMyDraftBulletins(this));
-		server.add(UiActions.newActionMenuDeleteMyServerDraftBulletins(this));
-		server.addSeparator();
-		server.add(UiActions.newActionMenuRetrieveHQSealedBulletins(this));
-		server.add(UiActions.newActionMenuRetrieveHQDraftBulletins(this));
-		server.addSeparator();
-		server.add(UiActions.newActionMenuSelectServer(this));
-
-
-		JMenu options = new JMenu(app.getMenuLabel("options"));
-		options.add(UiActions.newActionMenuPreferences(this));
-		options.add(UiActions.newActionMenuContactInfo(this));
-		options.add(UiActions.newActionMenuDefaultDetailsFieldContent(this));
-		options.add(UiActions.newActionMenuChangeUserNamePassword(this));
-
-
-		JMenu help = new JMenu(app.getMenuLabel("help"));
-		help.add(UiActions.newActionMenuHelp(this));
-		help.add(UiActions.newActionMenuAbout(this));
-		help.addSeparator();
-		help.add(UiActions.newActionMenuAccountDetails(this));
-
-		JMenuBar menubar = new JMenuBar();
-		menubar.add(file);
-		menubar.add(edit);
-		menubar.add(folders);
-		menubar.add(server);
-		menubar.add(options);
-		menubar.add(help);
-		return menubar;
-	}
-
+	
 	private JComponent createToolbar()
 	{
+		createToolbarActions();
 		JToolBar toolbar = new JToolBar();
 		toolbar.setFloatable(false);
 		toolbar.add(actionCreate);
@@ -1358,7 +1264,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		getContentPane().removeAll();
 
 		setTitle(app.getWindowTitle("main"));
-		createActions();
 
 		preview = new UiBulletinPreview(this);
 		table = new UiBulletinTablePane(this);
@@ -1572,69 +1477,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return (window.table.getSingleSelectedBulletin() != null);
 	}
 	
-	class PrintMenuListener implements MenuListener
-	{
-		public void initalize()
-		{
-			//Java Bug, menu items need to be disabled before correct behavior occures.
-			actionMenuPrint.setEnabled(false);
-		}
-
-		public void menuSelected(MenuEvent e)
-		{
-			actionMenuPrint.setEnabled(actionMenuPrint.isEnabled());
-		}
-
-		public void menuDeselected(MenuEvent e) {}
-		public void menuCanceled(MenuEvent e) {}
-	}
-	
-	class EditMenuListener implements MenuListener
-	{
-		public void menuSelected(MenuEvent e)
-		{
-			actionMenuModifyBulletin.setEnabled(actionMenuModifyBulletin.isEnabled());
-			actionMenuSelectAllBulletins.setEnabled(actionMenuSelectAllBulletins.isEnabled());
-			actionMenuCutBulletins.setEnabled(actionMenuCutBulletins.isEnabled());
-			actionMenuCopyBulletins.setEnabled(actionMenuCopyBulletins.isEnabled());
-			actionMenuPasteBulletins.setEnabled(actionMenuPasteBulletins.isEnabled());
-			actionMenuDiscardBulletins.setEnabled(actionMenuDiscardBulletins.isEnabled());
-		}
-
-		public void initalize()
-		{
-			//Java Bug, menu items need to be disabled before correct behavior occures.
-			actionMenuModifyBulletin.setEnabled(false);
-			actionMenuSelectAllBulletins.setEnabled(false);
-			actionMenuCutBulletins.setEnabled(false);
-			actionMenuCopyBulletins.setEnabled(false);
-			actionMenuPasteBulletins.setEnabled(false);
-			actionMenuDiscardBulletins.setEnabled(false);
-		}
-
-		public void menuDeselected(MenuEvent e) {}
-		public void menuCanceled(MenuEvent e) {}
-	}
-
-	class FoldersMenuListener implements MenuListener
-	{
-		public void menuSelected(MenuEvent e)
-		{
-			actionMenuRenameFolder.setEnabled(actionMenuRenameFolder.isEnabled());
-			actionMenuDeleteFolder.setEnabled(actionMenuDeleteFolder.isEnabled());
-		}
-
-		public void initalize()
-		{
-			//Java Bug, menu items need to be disabled before correct behavior occures.
-			actionMenuRenameFolder.setEnabled(false);
-			actionMenuDeleteFolder.setEnabled(false);
-		}
-
-		public void menuDeselected(MenuEvent e) {}
-		public void menuCanceled(MenuEvent e) {}
-	}
-
 	class WindowEventHandler extends WindowAdapter
 	{
 		public void windowClosing(WindowEvent event)
@@ -1852,21 +1694,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private javax.swing.Timer errorChecker;
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
-	private AbstractAction actionCreate;
-	private AbstractAction actionEdit;
-	private AbstractAction actionSearch;
-	private AbstractAction actionPrint;
-	private AbstractAction actionMenuPrint;
-	private AbstractAction actionMenuModifyBulletin;
-	private AbstractAction actionMenuSelectAllBulletins;
-	private AbstractAction actionMenuCutBulletins;
-	private AbstractAction actionMenuCopyBulletins;
-	private AbstractAction actionMenuPasteBulletins;
-	private AbstractAction actionMenuDiscardBulletins;
-	private AbstractAction actionMenuRenameFolder;
-	private AbstractAction actionMenuDeleteFolder;
 
+	AbstractAction actionCreate;
+	AbstractAction actionEdit;
+	AbstractAction actionSearch;
+	AbstractAction actionPrint;
 
+	private UiMenuBar menuBar;
 	private UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;
@@ -1876,7 +1710,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private static final int TIMEOUT_SECONDS = (10 * 60);
 	private static final int BACKGROUND_UPLOAD_CHECK_MILLIS = 5*1000;
 	private static final int BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS = 5*1000;
-	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;
 	private boolean modifyingBulletin;
