@@ -267,14 +267,6 @@ System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITL
 		return inputDlg.getResult();
 	}
 
-	public void updateSectionBorder(UiBulletinComponentSection section, boolean isEncrypted) 
-	{
-		if(isEncrypted)
-			section.setBorder(new LineBorder(Color.red, 5));
-		else
-			section.setBorder(new LineBorder(Color.lightGray, 5));
-	}
-
 	public TransferableBulletinList getClipboardTransferableBulletin()
 	{
 		Transferable t = getTransferableFromClipboard();

@@ -127,6 +127,14 @@ abstract public class UiBulletinComponentSection extends JPanel
 		encryptedIndicator.setIcon(icon);
 		encryptedIndicator.setText(title);
 	}
+
+	public void updateSectionBorder(boolean isEncrypted) 
+	{
+		if(isEncrypted)
+			setBorder(new LineBorder(Color.red, 5));
+		else
+			setBorder(new LineBorder(Color.lightGray, 5));
+	}
 	
 	public void disableEdits()
 	{

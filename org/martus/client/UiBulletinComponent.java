@@ -36,7 +36,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		publicStuff = createBulletinComponentSection(getApp(), UiBulletinComponentSection.NOT_ENCRYPTED);
 		privateStuff = createBulletinComponentSection(getApp(), UiBulletinComponentSection.ENCRYPTED);
-		mainWindow.updateSectionBorder(privateStuff, true);
+		privateStuff.updateSectionBorder(true);
 
 		allPrivateField = createBoolField();
 		publicStuff.add(privateStuff.createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
@@ -117,7 +117,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	public void updateEncryptedIndicator(boolean isEncrypted)
 	{
 		publicStuff.updateEncryptedIndicator(isEncrypted);
-		mainWindow.updateSectionBorder(publicStuff, isEncrypted);
+		publicStuff.updateSectionBorder(isEncrypted);
 	}
 
 	public void setEncryptionChangeListener(EncryptionChangeListener listener)
