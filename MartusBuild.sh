@@ -1,8 +1,5 @@
 #!/bin/sh
 
-# TODO: test run with command below
-#set -u
-
 #################################################
 # Martus CD Build Script
 #
@@ -10,868 +7,995 @@
 #				 CVSROOT HOMEDRIVE HOMEPATH
 #				 need to be modified to suit
 #				 your build environment
+#
+#				PATH must include jsdk & ant bin directories
 #################################################
 
 #################################################
 #
 #	TODO:
+#		- update build to use downloaded jars
+#			and jsdk for build
 #
 #################################################
+set -u
+#set -n
 
 # error function
-error() { echo "$*" >&2; exit 1; }
+error() { echo "ERROR: $*" >&2; exit 1; }
 
-# set the necessary environment vars
-CVSROOT=:pserver:ivo@cvs.bookshare.org:/var/local/cvs
-HOMEDRIVE=c:
-HOMEPATH=\CVS_HOME
-MARTUSINSTALLERPROJECT=$HOMEDRIVE/$HOMEPATH/binary-martus/Installer
-MARTUSNSISPROJECTDIR=$MARTUSINSTALLERPROJECT/Win32_NSIS
-MARTUSBUILDFILES=$MARTUSINSTALLERPROJECT/BuildFiles
+# usage fn
+usage()
+{
+	echo "Usage: $0 -cdt"
+	echo -e "\t-s: Simple build. No tagging. Overrides -t"
+	echo -e "\t-t: Tag CVS. Run TestAll, checks-in successful builds"
+	echo -e "\t-c: Client Installers built"
+	echo -e "\t-b: Burn a Client CD. Implies option -c"
+}
 
-MARTUSSOURCES=$HOMEDRIVE/$HOMEPATH/MartusBuild
+setCvsEnvVars() # sets the primary environment vars for CVS access
+{
+	CVSROOT=:pserver:ivo@cvs.bookshare.org:/var/local/cvs
+	HOMEDRIVE=c:
+	HOMEPATH=\CVS_HOME
+	CVS_HOME=$HOMEDRIVE/$HOMEPATH
+	MARTUSINSTALLERPROJECT=$CVS_HOME/binary-martus/Installer
+	MARTUSNSISPROJECTDIR=$MARTUSINSTALLERPROJECT/Win32_NSIS
+	MARTUSBUILDFILES=$MARTUSINSTALLERPROJECT/BuildFiles
 
-PATH=/cygdrive/c/j2sdk1.4.2_03/bin:/cygdrive/c/java/ant-1.5/bin:$PATH
+	MARTUSSOURCES=$CVS_HOME/MartusBuild
 
-export HOMEDRIVE HOMEPATH MARTUSSOURCES MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH CVSROOT
+	PATH=/cygdrive/c/j2sdk1.4.2_03/bin:/cygdrive/c/java/ant-1.5/bin:$PATH
 
-# move cwd to a neutral position
-INITIAL_DIR=`pwd`
-cd / || exit
+	CVS_DATE=`date '+%Y-%m-%d'`
+	CVS_YEAR=`date '+%Y'`
+	CVS_MONTH_DAY=`date '+%m%d'`
 
-# check if this is a CVS tagged release
-echo
-echo "Should the CVS tree be labeled after a successful build?[y/N]"
-read cvs_tag
-if [ $cvs_tag = 'y' ]; then
-	cvs_tag=Y
-fi
+	INITIAL_DIR=`pwd`
 
-cvs_date=`date '+%Y-%m-%d'`
+	export CVSROOT HOMEDRIVE HOMEPATH CVS_HOME CVS_DATE CVS_YEAR CVS_MONTH_DAY
+	export MARTUSSOURCES MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH INITIAL_DIR
+}
 
-echo
-echo "Should client Releases be built?[y/N]"
-read build_cd
-if [ $build_cd = 'y' ]; then
-	build_cd=Y
-fi
-
-if [ $build_cd = 'Y' ]; then
-	# check if we should burn a CD
+cleanCvsHome() # Clean the build environment
+{
 	echo
-	echo "Should the resultant ISO be burned onto a CD?[y/N]"
-	read burn_cd
-	if [ $burn_cd = 'y' ]; then
-		burn_cd=Y
+	echo "Cleaning the build environment (ignore mount/umount messages)...";
+	if [ -d "$CVS_HOME" ]; then
+		rm -Rf $CVS_HOME
 	fi
-fi
+	mkdir $CVS_HOME
+	mkdir $MARTUSSOURCES
+	
+	if [ ! -d "/MartusBuild" ]; then
+		mount $MARTUSSOURCES /MartusBuild 2>&1
+	fi
+}
 
-if [ $build_cd = 'Y' ]; then
+downloadSourcesFromCvs()
+{
+	cleanCvsHome
+	martus_cvs_src_modules="client amplifier common hrdag meta server swing utils mspa logi"
+
 	echo
-	echo "Should the client release include sources?[y/N]"
-	read include_sources
-	if [ $include_sources = 'y' ]; then
-		include_sources=Y
+	echo "Downloading source from CVS...";
+	cd $CVS_HOME || error "unable to cd: err $?"
+	
+	for cvs_module in $martus_cvs_src_modules
+		do
+		cvs -q checkout martus-$cvs_module/source || error "cvs returned $? - for martus-$cvs_module"
+		echo "copying martus-$cvs_module...";
+		echo
+		cp -r $CVS_HOME/martus-$cvs_module/source/* $MARTUSSOURCES || error "copy martus-$cvs_module returned $?"
+		echo
+	done
+	
+	downloadMartusFilesFromCVS
+	downloadMartusAmpPresentationFromCvs
+	downloadMartusThirdpartyFromCvsAndSetup
+	downloadMartusVerifyFromCvsAndSetup
+	cleanBuildArea
+	downloadMartusInstallerFromCvsAndSetup
+} # downloadSourcesFromCvs
+
+downloadMartusFilesFromCVS()
+{
+	cd $CVS_HOME || error "unable to cd: err $?"
+	
+	cvs -q checkout -l -P martus || error "cvs checkout martus returned $?"
+	echo "copying martus...";
+	echo
+	cp -r $CVS_HOME/martus/* $MARTUSSOURCES || error "copy martus returned $?"
+	echo
+} # downloadMartusFilesFromCVS
+
+downloadMartusAmpPresentationFromCvs()
+{
+	cd $CVS_HOME || error "unable to cd: err $?"
+	
+	cvs -q checkout martus-amplifier/presentation || error "cvs martus-amplifier/presentation returned $?"
+	mkdir -p $MARTUSSOURCES/www/MartusAmplifier/presentation
+	cp -r $CVS_HOME/martus-amplifier/presentation/* $MARTUSSOURCES/www/MartusAmplifier/presentation/ || error "copy martus-amplifier/presentation returned $?"
+	echo
+	
+	cvs -q checkout martus-amplifier/presentationNonSSL || error "cvs martus-amplifier/presentationNonSSL returned $?"
+	mkdir -p $MARTUSSOURCES/www/MartusAmplifier/presentationNonSSL
+	cp -r $CVS_HOME/martus-amplifier/presentationNonSSL/* $MARTUSSOURCES/www/MartusAmplifier/presentationNonSSL/ || error "copy martus-amplifier/presentationNonSSL returned $?"
+	echo
+} # downloadMartusAmpPresentationFromCvs
+
+downloadMartusThirdpartyFromCvsAndSetup()
+{
+	cd $CVS_HOME || error "unable to cd: err $?"
+	
+	common_thirdparty_jar_names="ant InfiniteMonkey XMLRPC"
+	SRC_THIRDPARTY_JARS_COMMON_DIR=$CVS_HOME/martus-thirdparty/common
+
+	server_thirdparty_jar_names="Jetty Lucene Velocity"
+	SRC_THIRDPARTY_JARS_SERVER_DIR=$CVS_HOME/martus-thirdparty/server
+
+	SRC_THIRDPARTY_JARS=$MARTUSSOURCES/ThirdPartyJars
+	export SRC_THIRDPARTY_JARS
+	
+	cvs -q checkout martus-thirdparty || error "cvs checkout martus-thirdparty returned $?"
+	mkdir $SRC_THIRDPARTY_JARS
+	echo "copying martus-thirdparty...";
+	echo
+	
+	for jar_name in $common_thirdparty_jar_names
+		do
+		cp $SRC_THIRDPARTY_JARS_COMMON_DIR/$jar_name/bin/*.jar $SRC_THIRDPARTY_JARS/ || error "copy $jar_name returned $?"
+	done
+	
+	for jar_name in $server_thirdparty_jar_names
+		do
+		cp $SRC_THIRDPARTY_JARS_SERVER_DIR/$jar_name/bin/*.jar $SRC_THIRDPARTY_JARS/ || error "copy $jar_name returned $?"
+	done
+} #downloadMartusThirdpartyFromCvsAndSetup
+
+downloadMartusVerifyFromCvsAndSetup()
+{
+	cd $CVS_HOME || error "unable to cd: err $?"
+	
+	SRC_VERIFY=$MARTUSSOURCES/verify
+	export SRC_VERIFY
+	
+	cvs -q checkout martus-jar-verifier || error "cvs martus-jar-verifier returned $?"
+	mkdir $SRC_VERIFY
+	cp -r martus-jar-verifier/* $SRC_VERIFY/
+	rm -f $SRC_VERIFY/*.bat
+	rm -f $SRC_VERIFY/*.txt
+	echo
+	echo "Building Server JarVerifier...";
+	cd $SRC_VERIFY || exit
+	if [ -f "JarVerifier.class" ]; then
+		rm -f JarVerifier.class
 	fi
-fi
+	javac JarVerifier.java
+	status=$?
+	if [ -f "JarVerifier.class" ]; then
+		rm -f JarVerifier.java
+	fi
+	cd $CVS_HOME || exit
+} # downloadMartusVerifyFromCvsAndSetup
 
-# Clean the build environment
+cleanBuildArea() # remove CVS directories from build area
+{
 echo
-echo "Cleaning the build environment (ignore mount/umount messages)...";
-if [ -d "$HOMEDRIVE/$HOMEPATH" ]; then
-	rm -Rf $HOMEDRIVE/$HOMEPATH
-fi
-mkdir $HOMEDRIVE/$HOMEPATH
-mkdir $HOMEDRIVE/$HOMEPATH/MartusBuild
-
-if [ ! -d "/MartusBuild" ]; then
-	mount $MARTUSSOURCES /MartusBuild 2>&1
-fi
-
-# Connect to cvs & download latest source
-echo
-echo "Downloading source from CVS...";
-cd $HOMEDRIVE/$HOMEPATH || exit
-
-cvs.exe -q checkout -l -P martus || error "cvs returned $?"
-echo "copying martus...";
-echo
-cp -r martus/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-client/source || error "cvs returned $?"
-echo "copying martus-client...";
-echo 
-cp -r martus-client/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-common/source || error "cvs returned $?"
-echo "copying martus-common...";
-echo
-cp -r martus-common/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-hrdag/source || error "cvs returned $?"
-echo "copying martus-hrdag...or hrvd...";
-echo
-cp -r martus-hrdag/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-meta/source || error "cvs returned $?"
-echo "copying martus-meta...";
-echo
-cp -r martus-meta/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild/ || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-server/source || error "cvs returned $?"
-echo "copying martus-server...";
-echo
-cp -r martus-server/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-amplifier/source || error "cvs returned $?"
-echo "copying martus-amplifier...";
-echo
-cp -r martus-amplifier/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-amplifier/presentation || error "cvs returned $?"
-mkdir -p MartusBuild/www/MartusAmplifier/presentation
-cp -r martus-amplifier/presentation/* MartusBuild/www/MartusAmplifier/presentation/ || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-amplifier/presentationNonSSL || error "cvs returned $?"
-mkdir -p MartusBuild/www/MartusAmplifier/presentationNonSSL
-cp -r martus-amplifier/presentationNonSSL/* MartusBuild/www/MartusAmplifier/presentationNonSSL/ || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-mspa/source || error "cvs returned $?"
-echo "copying martus-mspa...";
-echo
-cp -r martus-mspa/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-swing/source || error "cvs returned $?"
-echo "copying martus-swing...";
-echo
-cp -r martus-swing/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-utils/source || error "cvs returned $?"
-echo "copying martus-utils...";
-echo
-cp -r martus-utils/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-logi/source || error "cvs returned $?"
-echo "copying martus-logi...";
-echo
-cp -r martus-logi/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy returned $?"
-echo
-
-cvs.exe -q checkout martus-thirdparty || error "cvs returned $?"
-mkdir MartusBuild/ThirdPartyJars
-echo "copying martus-thirdparty...";
-echo
-cp martus-thirdparty/common/ant/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
-cp martus-thirdparty/common/InfiniteMonkey/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
-cp martus-thirdparty/common/XMLRPC/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
-
-cp martus-thirdparty/server/Jetty/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
-cp martus-thirdparty/server/Lucene/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
-cp martus-thirdparty/server/Velocity/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
-
-cvs.exe -q checkout martus-jar-verifier || error "cvs returned $?"
-mkdir MartusBuild/verify
-cp -r martus-jar-verifier/* MartusBuild/verify/
-rm -f MartusBuild/verify/*.bat
-rm -f MartusBuild/verify/*.txt
-echo
-echo "Building Server JarVerifier...";
-cd MartusBuild/verify || exit
-if [ -f "JarVerifier.class" ]; then
-	rm -f JarVerifier.class
-fi
-javac JarVerifier.java
-status=$?
-if [ -f "JarVerifier.class" ]; then
-	rm -f JarVerifier.java
-fi
-cd $HOMEDRIVE/$HOMEPATH || exit
-
-# remove CVS directories from build area
+echo "Cleaning build area...";
 cd $MARTUSSOURCES
 find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
+cd $CVS_HOME || exit
+} # cleanBuildArea
 
-cd $HOMEDRIVE/$HOMEPATH || exit
-if [ $build_cd = 'Y' ]; then
+downloadMartusInstallerFromCvsAndSetup()
+{
+	if [ $build_client_cd = 0 ]; then
+		echo
+		echo "No CD Build necessary...";
+		return
+	fi
 	echo
-	echo "Downloading installer from CVS...";
-	RESULT=`cvs.exe checkout binary-martus/Installer/ 2>&1 || error "cvs returned $?"`
-	RESULT=`cvs.exe checkout -l binary-martus/Releases || error "cvs returned $?"`
+	echo "CD Build necessary, downloading installer from CVS...";
+	cvs checkout binary-martus/Installer/ 2>&1 || error "cvs returned $?"
+	
+	copyThirdPartyJarToCDBuild
+	copyThirdPartySourceToCDBuild
+	copyThirdPartyLicenseToCDBuild
+	cp $CVS_HOME/martus-thirdparty/common/InfiniteMonkey/bin/InfiniteMonkey.dll $MARTUSBUILDFILES/ProgramFiles/
+} # downloadMartusInstallerFromCvsAndSetup
 
-	### additional client tasks - start ###
-
-	# copy third-party jars to the CD build location (xml-rpc, bc-castle, infinitemonkey, junit)
+copyThirdPartyJarToCDBuild()
+{
+	BUILDFILES_JARS=$MARTUSBUILDFILES/Jars
+	SRC_THIRDPARTY_JARS_COMMON_DIR=$CVS_HOME/martus-thirdparty/common
+	SRC_THIRDPARTY_JARS_LIBEXT_DIR=$CVS_HOME/martus-thirdparty/libext
 	echo "Copying thirdparty jars to build location..."
 	echo
-	mkdir -p $MARTUSBUILDFILES/Jars
-	cd $HOMEDRIVE/$HOMEPATH
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/InfiniteMonkey/bin/InfiniteMonkey.jar $MARTUSBUILDFILES/Jars/
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/XMLRPC/bin/xmlrpc-*.jar $MARTUSBUILDFILES/Jars/
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/libext/BouncyCastle/bin/*.jar $MARTUSBUILDFILES/Jars/
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/libext/JUnit/bin/*.jar $MARTUSBUILDFILES/Jars/
-	
-	# copy sources to the build files source directory
-	rm -fr $MARTUSBUILDFILES/SourceFiles
-	mkdir -p $MARTUSBUILDFILES/SourceFiles
-	
-	mkdir -p $MARTUSBUILDFILES/SourceFiles/BouncyCastle
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/libext/BouncyCastle/source/* $MARTUSBUILDFILES/SourceFiles/BouncyCastle/
-	
-	mkdir -p $MARTUSBUILDFILES/SourceFiles/InfiniteMonkey
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/InfiniteMonkey/source/* $MARTUSBUILDFILES/SourceFiles/InfiniteMonkey/
+	mkdir -p $BUILDFILES_JARS
+	cd $CVS_HOME
+	cp $SRC_THIRDPARTY_JARS_COMMON_DIR/InfiniteMonkey/bin/InfiniteMonkey.jar $BUILDFILES_JARS/
+	cp $SRC_THIRDPARTY_JARS_COMMON_DIR/XMLRPC/bin/xmlrpc-*.jar $BUILDFILES_JARS/
+	cp $SRC_THIRDPARTY_JARS_LIBEXT_DIR/BouncyCastle/bin/*.jar $BUILDFILES_JARS/
+	cp $SRC_THIRDPARTY_JARS_LIBEXT_DIR/JUnit/bin/*.jar $BUILDFILES_JARS/
+} # copyThirdPartyJarToCDBuild
 
-	mkdir -p $MARTUSBUILDFILES/SourceFiles/Installer/NSIS
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/client/installer/Win32/NSIS/source/* $MARTUSBUILDFILES/SourceFiles/Installer/NSIS/
+copyThirdPartySourceToCDBuild()
+{
+	BUILDFILES_SRC_FILES=$MARTUSBUILDFILES/SourceFiles
+	rm -fr $BUILDFILES_SRC_FILES
+	mkdir -p $BUILDFILES_SRC_FILES
 	
-	mkdir -p $MARTUSBUILDFILES/SourceFiles/junit
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/libext/JUnit/source/* $MARTUSBUILDFILES/SourceFiles/junit/
+	mkdir -p $BUILDFILES_SRC_FILES/BouncyCastle
+	cp $CVS_HOME/martus-thirdparty/libext/BouncyCastle/source/* $BUILDFILES_SRC_FILES/BouncyCastle/
 	
-	mkdir -p $MARTUSBUILDFILES/SourceFiles/Logi
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/Logi/source/* $MARTUSBUILDFILES/SourceFiles/Logi/
+	mkdir -p $BUILDFILES_SRC_FILES/InfiniteMonkey
+	cp $CVS_HOME/martus-thirdparty/common/InfiniteMonkey/source/* $BUILDFILES_SRC_FILES/InfiniteMonkey/
+
+	mkdir -p $BUILDFILES_SRC_FILES/Installer/NSIS
+	cp $CVS_HOME/martus-thirdparty/client/installer/Win32/NSIS/source/* $BUILDFILES_SRC_FILES/Installer/NSIS/
 	
-	mkdir -p $MARTUSBUILDFILES/SourceFiles/Sun
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/client/Sun/source/* $MARTUSBUILDFILES/SourceFiles/Sun/
+	mkdir -p $BUILDFILES_SRC_FILES/junit
+	cp $CVS_HOME/martus-thirdparty/libext/JUnit/source/* $BUILDFILES_SRC_FILES/junit/
 	
-	mkdir -p $MARTUSBUILDFILES/SourceFiles/xmlrpc
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/XMLRPC/source/* $MARTUSBUILDFILES/SourceFiles/xmlrpc/
+	mkdir -p $BUILDFILES_SRC_FILES/Logi
+	cp $CVS_HOME/martus-thirdparty/common/Logi/source/* $BUILDFILES_SRC_FILES/Logi/
 	
-	cd $MARTUSBUILDFILES/SourceFiles
+	mkdir -p $BUILDFILES_SRC_FILES/Sun
+	cp $CVS_HOME/martus-thirdparty/client/Sun/source/* $BUILDFILES_SRC_FILES/Sun/
+	
+	mkdir -p $BUILDFILES_SRC_FILES/xmlrpc
+	cp $CVS_HOME/martus-thirdparty/common/XMLRPC/source/* $BUILDFILES_SRC_FILES/xmlrpc/
+	
+	cd $BUILDFILES_SRC_FILES
 	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
+} # copyThirdPartySourceToCDBuild
+
+copyThirdPartyLicenseToCDBuild()
+{
+	BUILDFILES_LICENSES=$MARTUSBUILDFILES/Documents/Licenses
+	rm -fr $BUILDFILES_LICENSES
 	
-	# copy the licenses into the doc folder
-	rm -fr $MARTUSBUILDFILES/Documents/Licenses
+	mkdir -p $BUILDFILES_LICENSES/BouncyCastle
+	cp $CVS_HOME/martus-thirdparty/libext/BouncyCastle/license/* $BUILDFILES_LICENSES/BouncyCastle/
 	
-	mkdir -p $MARTUSBUILDFILES/Documents/Licenses/BouncyCastle
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/libext/BouncyCastle/license/* $MARTUSBUILDFILES/Documents/Licenses/BouncyCastle/
+	mkdir -p $BUILDFILES_LICENSES/InfiniteMonkey
+	cp $CVS_HOME/martus-thirdparty/common/InfiniteMonkey/license/* $BUILDFILES_LICENSES/InfiniteMonkey/
 	
-	mkdir -p $MARTUSBUILDFILES/Documents/Licenses/InfiniteMonkey
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/InfiniteMonkey/license/* $MARTUSBUILDFILES/Documents/Licenses/InfiniteMonkey/
+	mkdir -p $BUILDFILES_LICENSES/JUnit
+	cp $CVS_HOME/martus-thirdparty/libext/JUnit/license/* $BUILDFILES_LICENSES/JUnit/
 	
-	mkdir -p $MARTUSBUILDFILES/Documents/Licenses/JUnit
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/libext/JUnit/license/* $MARTUSBUILDFILES/Documents/Licenses/JUnit/
+	mkdir -p $BUILDFILES_LICENSES/Logi
+	cp $CVS_HOME/martus-thirdparty/common/Logi/license/* $BUILDFILES_LICENSES/Logi/
 	
-	mkdir -p $MARTUSBUILDFILES/Documents/Licenses/Logi
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/Logi/license/* $MARTUSBUILDFILES/Documents/Licenses/Logi/
+	mkdir -p $BUILDFILES_LICENSES/Sun
+	cp $CVS_HOME/martus-thirdparty/client/Sun/license/* $BUILDFILES_LICENSES/Sun/
 	
-	mkdir -p $MARTUSBUILDFILES/Documents/Licenses/Sun
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/client/Sun/license/* $MARTUSBUILDFILES/Documents/Licenses/Sun/
+	mkdir -p $BUILDFILES_LICENSES/Xml-Rpc
+	cp $CVS_HOME/martus-thirdparty/common/XMLRPC/license/* $BUILDFILES_LICENSES/Xml-Rpc/
 	
-	mkdir -p $MARTUSBUILDFILES/Documents/Licenses/Xml-Rpc
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/XMLRPC/license/* $MARTUSBUILDFILES/Documents/Licenses/Xml-Rpc/
-	
-	cd $MARTUSBUILDFILES/Documents/Licenses
+	cd $BUILDFILES_LICENSES
 	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
+} # copyThirdPartyLicenseToCDBuild
+
+setupBuildEnvironment()
+{
+	CURRENT_VERSION=pre2.5-internal
+	BUILD_DATE=`date '+%Y%m%d'`
 	
-	# copy program files
-	cp $HOMEDRIVE/$HOMEPATH/martus-thirdparty/common/InfiniteMonkey/bin/InfiniteMonkey.dll $MARTUSBUILDFILES/ProgramFiles/
+	# the build number below relies on the Ant task that creates and autoincrements this file
+	BUILD_NUMBER_FILE="$MARTUSSOURCES/build.number"
+	if [ -f "$BUILD_NUMBER_FILE" ]; then
+		BUILD_NUMBER=`cat $BUILD_NUMBER_FILE | grep build.number | cut -d'=' -f2`
+	else
+		BUILD_NUMBER=1
+	fi
 	
-
-	### additional client tasks - end ###
-fi
-
-###########################################################################
-# get the build details
-CURRENT_VERSION=2.0
-BUILD_DATE=`date '+%Y%m%d'`
-
-# the build number below relies on the Ant task that creates and
-#autoincrements this file
-BUILD_NUMBER_FILE="$MARTUSSOURCES/build.number"
-if [ -f "$BUILD_NUMBER_FILE" ]; then
-	BUILD_NUMBER=`cat $BUILD_NUMBER_FILE | grep build.number | cut -d'=' -f2`
-else
-	BUILD_NUMBER=1
-fi
-
-MARTUS_ZIP_NAME=MartusClient-$CURRENT_VERSION-src.zip
-
-# note the variables
-echo "Build is v $CURRENT_VERSION, b $BUILD_NUMBER, date $BUILD_DATE"
-echo
-
-export CURRENT_VERSION BUILD_NUMBER BUILD_DATE MARTUS_ZIP_NAME BUILD_NUMBER_FILE
-
-###########################################################################
-
-echo
-echo "Starting the ant build (might take a minute)..."
-cd /MartusBuild
-if [ $cvs_tag = 'Y' ]; then
-	ant.bat md5
-	#ant.bat md5-no-tests
-else
-	ant.bat build
-fi
-status=$?
-
-# check the build.number file back into CVS
-cd $HOMEDRIVE/$HOMEPATH
-echo "Updating to CVS: $BUILD_NUMBER_FILE"
-cp -f $BUILD_NUMBER_FILE $HOMEDRIVE/$HOMEPATH/martus/
-cvs.exe commit -m "v $cvs_date" $HOMEDRIVE/$HOMEPATH/martus/build.number || exit
-
-if [ $status != 0 ]; then
+	MARTUS_ZIP_NAME=MartusClient-$CURRENT_VERSION-src.zip
+	
+	echo "Build is v $CURRENT_VERSION, b $BUILD_NUMBER, date $BUILD_DATE"
 	echo
-	echo "Build Failed!"
-	cd $INITIAL_DIR
-fi
+	
+	BUILD_OUTPUT_DIR=$MARTUSSOURCES/dist
+	RELEASE_DIR=/tmp/Releases
+	BUILD_VERNUM_TAG=$BUILD_DATE.$BUILD_NUMBER
+	
+	export CURRENT_VERSION BUILD_NUMBER BUILD_DATE MARTUS_ZIP_NAME BUILD_NUMBER_FILE RELEASE_DIR BUILD_VERNUM_TAG
+} # setupBuildEnvironment
 
-echo
-echo "Ant completed with status: $status"
-
-if [ ! -f "$MARTUSSOURCES/dist/martus.jar" ]; then
-	echo "BUILD FAILED!! Exit status $status"
-	echo "Please note any messages above"
-	echo "Cleaning up..."
-	cd /
-	#rm -Rf $HOMEDRIVE/$HOMEPATH
-	cd $INITIAL_DIR
-	echo "Exiting..."
-	exit 1
-fi
-
-if [ $cvs_tag = 'Y' ]; then
-if [ ! -f "$MARTUSSOURCES/dist/martus.jar.md5" ]; then
-	echo "BUILD FAILED!! Missing md5. Exit status $status"
-	echo "Please note any messages above"
-	echo "Cleaning up..."
-	cd /
-	#rm -Rf $HOMEDRIVE/$HOMEPATH
-	cd $INITIAL_DIR
-	echo "Exiting..."
-	exit 1
-fi
-fi
-
-cd $INITIAL_DIR
-
-echo
-echo "Moving martus.jar to temp CD build location..."
-if [ -d "/tmp/Releases" ]; then
-	rm -fR /tmp/Releases
-fi
-mkdir -p /tmp/Releases
-
-cp $MARTUSSOURCES/dist/martus-server.jar /tmp/Releases/martus-server-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-if [ -f "$MARTUSSOURCES/dist/martus-server.jar.MD5" ]; then
-	echo -e "\n" >> "$MARTUSSOURCES/dist/martus-server.jar.MD5"
-	cp $MARTUSSOURCES/dist/martus-server.jar.MD5 /tmp/Releases/martus-server-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-fi
-
-cp $MARTUSSOURCES/dist/martus-mspa-client.jar /tmp/Releases/martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-if [ -f "$MARTUSSOURCES/dist/martus-mspa-client.jar.MD5" ]; then
-	echo -e "\n" >> "$MARTUSSOURCES/dist/martus-mspa-client.jar.MD5"
-	cp $MARTUSSOURCES/dist/martus-mspa-client.jar.MD5 /tmp/Releases/martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-fi
-
-cp $MARTUSSOURCES/dist/martus-meta.jar /tmp/Releases/martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-if [ -f "$MARTUSSOURCES/dist/martus-meta.jar.MD5" ]; then
-	echo -e "\n" >> "$MARTUSSOURCES/dist/martus-meta.jar.MD5"
-	cp $MARTUSSOURCES/dist/martus-meta.jar.MD5 /tmp/Releases/martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-fi
-
-cp $MARTUSSOURCES/dist/martus.jar /tmp/Releases/martus.jar || exit
-cp $MARTUSSOURCES/dist/martus.jar /tmp/Releases/martus-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-if [ -f "$MARTUSSOURCES/dist/martus.jar.MD5" ]; then
-	echo -e "\n" >> "$MARTUSSOURCES/dist/martus.jar.MD5"
-	cp $MARTUSSOURCES/dist/martus.jar.MD5 /tmp/Releases/martus-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-fi
-
-# labelling the sources CVS tree
-if [ $cvs_tag = 'Y' ]; then
+startAntBuild()
+{
 	echo
-	echo "Labeling CVS with tag: v${cvs_date}_build-$BUILD_NUMBER"
-	cd $HOMEDRIVE/$HOMEPATH
-	RESULT=`cvs.exe tag v${cvs_date}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi martus-thirdparty`
+	echo "Starting the ant build (might take a minute)..."
+	cd /MartusBuild
+	if [ $cvs_tag = 1 ]; then
+		ant md5
+		#ant md5-no-tests
+	else
+		ant build
+	fi
 	status=$?
+	
+	# check the build.number file back into CVS
+	cd $CVS_HOME
+	echo "Updating to CVS: $BUILD_NUMBER_FILE"
+	cp -f $BUILD_NUMBER_FILE $CVS_HOME/martus/
+	cvs commit -m "v $CVS_DATE" ${CVS_HOME}/martus/build.number
+	
 	if [ $status != 0 ]; then
-		echo "Unable to add tag to CVS. You must do it manually"
-	fi;
-
-	# create Client CVS dirs
-	if [ ! -d "$HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientJar/CVS" ]; then
-		mkdir -p $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientJar/CVS || exit
-		cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientJar/CVS
-		touch Entries
-		echo "binary-martus/Releases/ClientJar" > Repository
-		echo $CVSROOT > Root
+		echo
+		echo "Build Failed!"
+		cd $INITIAL_DIR
 	fi
-
-	# create Server CVS dirs
-	if [ ! -d "$HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar/CVS" ]; then
-		mkdir -p $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar/CVS || exit
-		cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar/CVS
-		touch Entries
-		echo "binary-martus/Releases/ServerJar" > Repository
-		echo $CVSROOT > Root
+	
+	echo
+	echo "Ant completed with status: $status"
+	
+	if [ ! -f "$BUILD_OUTPUT_DIR/martus.jar" ]; then
+		echo "BUILD FAILED!! Exit status $status"
+		echo "Please note any messages above"
+		echo "Cleaning up..."
+		cd /
+		#rm -Rf $CVS_HOME
+		cd $INITIAL_DIR
+		echo "Exiting..."
+		exit 1
 	fi
+	
+	if [ $cvs_tag = 1 ]; then
+		if [ ! -f "$BUILD_OUTPUT_DIR/martus.jar.md5" ]; then
+			echo "BUILD FAILED!! Missing md5. Exit status $status"
+			echo "Please note any messages above"
+			echo "Cleaning up..."
+			cd /
+			#rm -Rf $CVS_HOME
+			cd $INITIAL_DIR
+			echo "Exiting..."
+			exit 1
+		fi
+	fi
+	cd $INITIAL_DIR
+} # startAntBuild
 
+copyAntBuildToCDBuild()
+{
+	echo
+	echo "Moving martus.jar to temp CD build location..."
+	if [ -d "$RELEASE_DIR" ]; then
+		rm -fR $RELEASE_DIR
+	fi
+	mkdir -p $RELEASE_DIR
+	
+	JARNAME_CLIENT_ORIG=martus
+	JARNAME_CLIENT_FINAL=$JARNAME_CLIENT_ORIG-$BUILD_VERNUM_TAG
+	export JARNAME_CLIENT_ORIG JARNAME_CLIENT_FINAL
+	
+	JARNAME_SERVER_ORIG=martus-server
+	JARNAME_SERVER_FINAL=$JARNAME_SERVER_ORIG-$BUILD_VERNUM_TAG
+	export JARNAME_SERVER_ORIG JARNAME_SERVER_FINAL
+	
+	JARNAME_MSPA_ORIG=martus-mspa-client
+	JARNAME_MSPA_FINAL=$JARNAME_MSPA_ORIG-$BUILD_VERNUM_TAG
+	export JARNAME_MSPA_ORIG JARNAME_MSPA_FINAL
+	
+	JARNAME_META_ORIG=martus-meta
+	JARNAME_META_FINAL=$JARNAME_META_ORIG-$BUILD_VERNUM_TAG
+	export JARNAME_META_ORIG JARNAME_META_FINAL
+	
+	cp -v $BUILD_OUTPUT_DIR/$JARNAME_SERVER_ORIG.jar $RELEASE_DIR/$JARNAME_SERVER_FINAL.jar || exit
+	if [ -f "$BUILD_OUTPUT_DIR/$JARNAME_SERVER_ORIG.jar.MD5" ]; then
+		echo -e "\n" >> "$BUILD_OUTPUT_DIR/$JARNAME_SERVER_ORIG.jar.MD5"
+		cp -v $BUILD_OUTPUT_DIR/$JARNAME_SERVER_ORIG.jar.MD5 $RELEASE_DIR/$JARNAME_SERVER_FINAL.jar.md5 || exit
+	fi
+	
+	cp -v $BUILD_OUTPUT_DIR/$JARNAME_MSPA_ORIG.jar $RELEASE_DIR/$JARNAME_MSPA_FINAL.jar || exit
+	if [ -f "$BUILD_OUTPUT_DIR/$JARNAME_MSPA_ORIG.jar.MD5" ]; then
+		echo -e "\n" >> "$BUILD_OUTPUT_DIR/$JARNAME_MSPA_ORIG.jar.MD5"
+		cp -v $BUILD_OUTPUT_DIR/$JARNAME_MSPA_ORIG.jar.MD5 $RELEASE_DIR/$JARNAME_MSPA_FINAL.jar.md5 || exit
+	fi
+	
+	cp -v $BUILD_OUTPUT_DIR/$JARNAME_META_ORIG.jar $RELEASE_DIR/$JARNAME_META_FINAL.jar || exit
+	if [ -f "$BUILD_OUTPUT_DIR/$JARNAME_META_ORIG.jar.MD5" ]; then
+		echo -e "\n" >> "$BUILD_OUTPUT_DIR/$JARNAME_META_ORIG.jar.MD5"
+		cp $BUILD_OUTPUT_DIR/$JARNAME_META_ORIG.jar.MD5 $RELEASE_DIR/$JARNAME_META_FINAL.jar.md5 || exit
+	fi
+	
+	cp -v $BUILD_OUTPUT_DIR/$JARNAME_CLIENT_ORIG.jar $RELEASE_DIR/$JARNAME_CLIENT_ORIG.jar || exit
+	cp -v $BUILD_OUTPUT_DIR/$JARNAME_CLIENT_ORIG.jar $RELEASE_DIR/$JARNAME_CLIENT_FINAL.jar || exit
+	if [ -f "$BUILD_OUTPUT_DIR/$JARNAME_CLIENT_ORIG.jar.MD5" ]; then
+		echo -e "\n" >> "$BUILD_OUTPUT_DIR/$JARNAME_CLIENT_ORIG.jar.MD5"
+		cp -v $BUILD_OUTPUT_DIR/$JARNAME_CLIENT_ORIG.jar.MD5 $RELEASE_DIR/$JARNAME_CLIENT_FINAL.jar.md5 || exit
+	fi
+} # copyAntBuildToCDBuild
+
+updateCvsTree()
+{
+	if [ $cvs_tag = 0 ]; then
+		return
+	fi
+	
+	echo
+	echo "Labeling CVS with tag: v${CVS_DATE}_build-$BUILD_NUMBER"
+	cd $CVS_HOME
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi || error "Unable to add tag to CVS. Check any error messages displayed."
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus-thirdparty
+	
+	#check if ClientJar directory structure already exists, if not add it
+	cvs checkout -l binary-martus/Releases/ClientJar || error "cvs checkout -l binary-martus/Releases/ClientJar - returned $?"
+	cvs checkout -l binary-martus/Releases/ClientJar/$CVS_YEAR/$CVS_MONTH_DAY
+	if [ ! -d "$CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR" ]; then
+		# create fake CVS entries
+		if [ ! -d "$CVS_HOME/binary-martus/Releases/ClientJar/CVS" ]; then
+			mkdir -p $CVS_HOME/binary-martus/Releases/ClientJar/CVS || exit
+			touch $CVS_HOME/binary-martus/Releases/ClientJar/CVS/Entries
+			echo "binary-martus/Releases/ClientJar" > $CVS_HOME/binary-martus/Releases/ClientJar/CVS/Repository
+			echo $CVSROOT > $CVS_HOME/binary-martus/Releases/ClientJar/CVS/Root
+		fi
+		
+		mkdir $CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR
+		cd $CVS_HOME/binary-martus/Releases/ClientJar/
+		cvs add $CVS_YEAR  || exit
+	fi
+	if [ ! -d "$CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR/$CVS_MONTH_DAY" ]; then
+		mkdir $CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR/$CVS_MONTH_DAY
+		cd $CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR
+		cvs add $CVS_MONTH_DAY || exit
+	fi
+	
 	# add client to CVS
-	mkdir -p $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientJar
-	cp /tmp/Releases/martus-$BUILD_DATE.$BUILD_NUMBER.jar $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientJar || exit
-	cp /tmp/Releases/martus-$BUILD_DATE.$BUILD_NUMBER.jar.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientJar || exit
-	cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientJar/
-	echo "Adding to CVS: martus-$BUILD_DATE.$BUILD_NUMBER.jar"
-	cvs.exe add martus-$BUILD_DATE.$BUILD_NUMBER.jar  || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-	cvs.exe add martus-$BUILD_DATE.$BUILD_NUMBER.jar.md5  || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
+	CVS_CLIENTJAR_DIR=$CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR/$CVS_MONTH_DAY
+	cp -v $RELEASE_DIR/martus-$BUILD_VERNUM_TAG.jar $CVS_CLIENTJAR_DIR/ || error "unable to copy"
+	cp -v $RELEASE_DIR/martus-$BUILD_VERNUM_TAG.jar.md5 $CVS_CLIENTJAR_DIR/ || error "unable to copy"
+	echo "Adding to CVS: $JARNAME_CLIENT_FINAL.jar"
+	cd $CVS_CLIENTJAR_DIR
+	cvs add $JARNAME_CLIENT_FINAL.jar  || error "unable to cvs add $JARNAME_CLIENT_FINAL.jar"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_CLIENT_FINAL.jar || error "unable to commit client jar"
+	cvs add $CVS_CLIENTJAR_DIR/$JARNAME_CLIENT_FINAL.jar.md5  || error "unable to cvs add $JARNAME_CLIENT_FINAL.jar.md5"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_CLIENT_FINAL.jar.md5 || error "unable to commit client jar md5"
+
+	#check if ServerJar directory structure already exists, if not add it
+	cd $CVS_HOME
+	cvs checkout -l binary-martus/Releases/ServerJar || error "cvs returned $?"
+	cvs checkout -l binary-martus/Releases/ServerJar/$CVS_YEAR/$CVS_MONTH_DAY
+	if [ ! -d "$CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR" ]; then
+		# create fake CVS entries
+		if [ ! -d "$CVS_HOME/binary-martus/Releases/ServerJar/CVS" ]; then
+			mkdir -p $CVS_HOME/binary-martus/Releases/ServerJar/CVS || exit
+			touch $CVS_HOME/binary-martus/Releases/ServerJar/CVS/Entries
+			echo "binary-martus/Releases/ServerJar" > $CVS_HOME/binary-martus/Releases/ServerJar/CVS/Repository
+			echo $CVSROOT > $CVS_HOME/binary-martus/Releases/ServerJar/CVS/Root
+		fi
+		
+		mkdir $CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR
+		cd $CVS_HOME/binary-martus/Releases/ServerJar/
+		cvs.exe add $CVS_YEAR  || error "Unable to add to cvs: $CVS_YEAR"
+	fi
+	if [ ! -d "$CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR/$CVS_MONTH_DAY" ]; then
+		mkdir $CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR/$CVS_MONTH_DAY
+		cd $CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR
+		cvs.exe add $CVS_MONTH_DAY || error "Unable to add to cvs: $CVS_MONTH_DAY"
+	fi
 
 	# add server to CVS
-	mkdir -p $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar
-	cp /tmp/Releases/martus-server-$BUILD_DATE.$BUILD_NUMBER.jar $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar || exit
-	cp /tmp/Releases/martus-server-$BUILD_DATE.$BUILD_NUMBER.jar.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar || exit
+	CVS_SERVERJAR_DIR=$CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR/$CVS_MONTH_DAY
+	cp -v $RELEASE_DIR/$JARNAME_SERVER_FINAL.jar $CVS_SERVERJAR_DIR/ || error "Unable to copy"
+	cp -v $RELEASE_DIR/$JARNAME_SERVER_FINAL.jar.md5 $CVS_SERVERJAR_DIR || error "Unable to copy"
 	
-	cp /tmp/Releases/martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar || exit
-	cp /tmp/Releases/martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar || exit
+	cp -v $RELEASE_DIR/$JARNAME_MSPA_FINAL.jar $CVS_SERVERJAR_DIR || error "Unable to copy"
+	cp -v $RELEASE_DIR/$JARNAME_MSPA_FINAL.jar.md5 $CVS_SERVERJAR_DIR || error "Unable to copy"
 	
-	cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar/
-	echo "Adding to CVS: martus-server-$BUILD_DATE.$BUILD_NUMBER.jar"
-	cvs.exe add martus-server-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-server-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-	cvs.exe add martus-server-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-server-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
+	echo "Adding to CVS: $JARNAME_SERVER_FINAL.jar"
+	cd $CVS_SERVERJAR_DIR
+	cvs add $JARNAME_SERVER_FINAL.jar || error "Unable to cvs add $JARNAME_SERVER_FINAL.jar"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_SERVER_FINAL.jar || error "Unable to cvs commit $JARNAME_SERVER_FINAL.jar"
+	cvs add $JARNAME_SERVER_FINAL.jar.md5 || error "Unable to cvs add $JARNAME_SERVER_FINAL.jar.md5"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_SERVER_FINAL.jar.md5 || error "Unable to cvs commit $JARNAME_SERVER_FINAL.jar.md5"
 	
-	cvs.exe add martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-	cvs.exe add martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-mspa-client-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
+	cvs add $JARNAME_MSPA_FINAL.jar || error "Unable to cvs add $JARNAME_MSPA_FINAL.jar"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_MSPA_FINAL.jar || error "Unable to cvs commit $JARNAME_MSPA_FINAL.jar"
+	cvs add $JARNAME_MSPA_FINAL.jar.md5 || error "Unable to cvs add $JARNAME_MSPA_FINAL.jar.md5"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_MSPA_FINAL.jar.md5 || error "Unable to cvs commit $JARNAME_MSPA_FINAL.jar.md5"
 	
 	# add meta to CVS
-	cp /tmp/Releases/martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar || exit
-	cp /tmp/Releases/martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar || exit
-	cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ServerJar/
-	echo "Adding to CVS: martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar"
-	cvs.exe add martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar || exit
-	cvs.exe add martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" martus-meta-$BUILD_DATE.$BUILD_NUMBER.jar.md5 || exit
-	
-	# verify the added tag
-	#HOMEDRIVE=c:
-	#HOMEPATH=\CVS_HOME2
-	
-	#export HOMEDRIVE HOMEPATH
-	
-	#mkdir $HOMEDRIVE/$HOMEPATH
-	#cd $HOMEDRIVE/$HOMEPATH
-	
-	#cvs.exe -q checkout -r v${cvs_date}_build-$BUILD_NUMBER -l -P martus || error "unable to retrieve tag v${cvs_date}_build-$BUILD_NUMBER. cvs returned $?"
-	
-	#HOMEDRIVE=c:
-	#HOMEPATH=\CVS_HOME
+	cp -v $RELEASE_DIR/$JARNAME_META_FINAL.jar $CVS_SERVERJAR_DIR/ || error "Unable to copy"
+	cp -v $RELEASE_DIR/$JARNAME_META_FINAL.jar.md5 $CVS_SERVERJAR_DIR/ || error "Unable to copy"
+	echo "Adding to CVS: $JARNAME_META_FINAL.jar"
+	cd $CVS_SERVERJAR_DIR
+	cvs add $JARNAME_META_FINAL.jar || error "Unable to cvs add $JARNAME_META_FINAL.jar"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_META_FINAL.jar || error "Unable to cvs commit $JARNAME_META_FINAL.jar"
+	cvs add $JARNAME_META_FINAL.jar.md5 || error "Unable to cvs add $JARNAME_META_FINAL.jar.md5"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_META_FINAL.jar.md5 || error "Unable to cvs commit $JARNAME_META_FINAL.jar"
+} # updateCvsTree
 
-	#export HOMEDRIVE HOMEPATH	
-fi
-
-cd $INITIAL_DIR
-
-#start installer build
-if [ $build_cd = 'Y' ]; then
+removeUnnecesarryBuildFiles()
+{
+	cd $INITIAL_DIR
 	echo
-else
-	echo
-	echo "The build completed succesfully. The built jars are in /tmp/Releases."
-	exit 0
-fi
+	echo "removing extra dirs & files (ignore any File not Found messages)...";
+	rm -fR $BUILD_OUTPUT_DIR
+	rm -fR $MARTUSSOURCES/TechDocs
+	rm -fR $MARTUSSOURCES/org/martus/meta
+	rm -fR $MARTUSSOURCES/org/martus/server
+	rm -fR $MARTUSSOURCES/org/martus/mspa
+	rm -fR $MARTUSSOURCES/org/martus/amplifier
+	rm -f $MARTUSSOURCES/.classpath
+	rm -f $MARTUSSOURCES/.project
+	rm -f $MARTUSSOURCES/build.number
+	rm -f $MARTUSSOURCES/build.properties
+} # removeUnnecesarryBuildFiles
 
-if [ $include_sources = 'Y' ]; then
-	echo ""
-else
-	rm -fR $MARTUSSOURCES || exit
-fi
+createInstallerLicenseFile()
+{
+	# create the license file for the installer
+	if [ -f "$MARTUSBUILDFILES/combined-license.txt" ]; then
+		rm -f $MARTUSBUILDFILES/combined-license.txt
+	fi
+	cat $MARTUSBUILDFILES/Documents/license.txt > $MARTUSBUILDFILES/combined-license.txt
+	echo -e "\n\n\t**********************************\n\n" >> $MARTUSBUILDFILES/combined-license.txt
+	cat $MARTUSBUILDFILES/Documents/gpl.txt >> $MARTUSBUILDFILES/combined-license.txt
+} # createInstallerLicenseFile
 
-# clean up the sources dir
-if [ -d "$HOMEDRIVE/$HOMEPATH/MartusBuild/ThirdPartyJars" ]; then
-	rm -Rf $HOMEDRIVE/$HOMEPATH/MartusBuild/ThirdPartyJars
-fi
+fixNewlinesInTxtFiles()
+{
+	unix2dos.exe --unix2dos $MARTUSBUILDFILES/combined-license.txt
+	find $MARTUSBUILDFILES/Documents -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
+	find $MARTUSBUILDFILES/verify -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
+	find $MARTUSBUILDFILES/Winsock95 -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
+	find $BUILDFILES_SRC_FILES -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
+}
 
-if [ -d "$HOMEDRIVE/$HOMEPATH/MartusBuild/verify" ]; then
-	rm -Rf $HOMEDRIVE/$HOMEPATH/MartusBuild/verify
-fi
+copyLicenseTextFiles()
+{
+	cp $MARTUSBUILDFILES/Documents/license.txt $MARTUSSOURCES/
+	cp $MARTUSBUILDFILES/Documents/gpl.txt $MARTUSSOURCES/
+	
+	cp $MARTUSBUILDFILES/Documents/license.txt $MARTUSBUILDFILES/ProgramFiles/
+	cp $MARTUSBUILDFILES/Documents/gpl.txt $MARTUSBUILDFILES/ProgramFiles/
+	
+	cp $MARTUSBUILDFILES/Documents/license.txt $MARTUSBUILDFILES/Verify/
+	cp $MARTUSBUILDFILES/Documents/gpl.txt $MARTUSBUILDFILES/Verify/
+	
+	cp $MARTUSBUILDFILES/Documents/license.txt "$BUILDFILES_SRC_FILES/Installer/NSIS Scripts/"
+	cp $MARTUSBUILDFILES/Documents/gpl.txt "$BUILDFILES_SRC_FILES/Installer/NSIS Scripts/"
+} # copyLicenseTextFiles
 
-if [ -d "$HOMEDRIVE/$HOMEPATH/MartusBuild/www" ]; then
-	rm -Rf $HOMEDRIVE/$HOMEPATH/MartusBuild/www
-fi
-
-echo
-echo "Starting the installer build..."
-
-RELEASE_FILE=/tmp/Releases/martus.jar
-stop_build=0
-if [ ! -f "$RELEASE_FILE" ]; then
-	stop_build=1
-	echo
-	echo "No Martus.jar was found to use in the build...."
-	echo "This script will prep the NSIS project."
-	echo "You will then need to:"
-	echo "1) Manually add the jar to be used in the release to $MARTUSBUILDFILES/ProgramFiles/"
-	echo "2) Create the CD image with:"
-	echo "\t cd $MARTUSNSISPROJECTDIR"
-	echo "\t makensis.exe NSIS_Martus.nsi"
-	echo "\t cp MartusSetup.exe $CD_IMAGE_DIR/"
-	echo "3) Create the Martus release ISO with:"
-	echo "mkisofs -J -r -T -hide-joliet-trans-tbl -l -V Martus -o $MARTUSBUILDFILES/MartusRel.iso $CD_IMAGE_DIR"
-else
-	echo
-	echo "Martus.jar to use in the build was found in the temporary location...."
-	mv $RELEASE_FILE $MARTUSBUILDFILES/ProgramFiles/Martus.jar || exit
-fi
-
-cd $INITIAL_DIR
-echo
-echo "removing extra dirs & files (ignore any File not Found messages)...";
-rm -fR $MARTUSSOURCES/dist
-rm -fR $MARTUSSOURCES/TechDocs
-rm -fR $MARTUSSOURCES/org/martus/meta
-rm -fR $MARTUSSOURCES/org/martus/server
-rm -fR $MARTUSSOURCES/org/martus/mspa
-rm -fR $MARTUSSOURCES/org/martus/amplifier
-rm -f $MARTUSSOURCES/.classpath
-rm -f $MARTUSSOURCES/.project
-rm -f $MARTUSSOURCES/build.number
-rm -f $MARTUSSOURCES/build.properties
-
-# moving installer scripts
-if [ ! -d "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts" ]; then
-	mkdir "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts"
-fi
-
-cp $MARTUSNSISPROJECTDIR/*.nsi "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts/"
-mkdir "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts/locallang"
-cp $MARTUSNSISPROJECTDIR/locallang/English.* "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts/locallang/"
-cp $MARTUSNSISPROJECTDIR/locallang/Spanish.* "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts/locallang/"
-cp $MARTUSNSISPROJECTDIR/locallang/Russian.* "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts/locallang/"
-
-find $HOMEDRIVE/$HOMEPATH -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
-find $MARTUSSOURCES -type "f" -name "*.class" -exec rm -fR '{}' \; > /dev/null
-
-# create the license file for the installer
-if [ -f "$MARTUSBUILDFILES/combined-license.txt" ]; then
-	rm -f $MARTUSBUILDFILES/combined-license.txt
-fi
-cat $MARTUSBUILDFILES/Documents/license.txt > $MARTUSBUILDFILES/combined-license.txt
-echo -e "\n\n\t**********************************\n\n" >> $MARTUSBUILDFILES/combined-license.txt
-cat $MARTUSBUILDFILES/Documents/gpl.txt >> $MARTUSBUILDFILES/combined-license.txt
-
-# fix newlines for all text files
-unix2dos.exe --unix2dos $MARTUSBUILDFILES/combined-license.txt
-find $MARTUSBUILDFILES/Documents -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
-find $MARTUSBUILDFILES/verify -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
-find $MARTUSBUILDFILES/Winsock95 -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
-find $MARTUSBUILDFILES/SourceFiles -type "f" -name "*.txt" -exec unix2dos.exe --unix2dos '{}' \; > /dev/null
-
-cp $MARTUSBUILDFILES/Documents/license.txt $MARTUSSOURCES/
-cp $MARTUSBUILDFILES/Documents/gpl.txt $MARTUSSOURCES/
-
-cp $MARTUSBUILDFILES/Documents/license.txt $MARTUSBUILDFILES/ProgramFiles/
-cp $MARTUSBUILDFILES/Documents/gpl.txt $MARTUSBUILDFILES/ProgramFiles/
-
-cp $MARTUSBUILDFILES/Documents/license.txt $MARTUSBUILDFILES/Verify/
-cp $MARTUSBUILDFILES/Documents/gpl.txt $MARTUSBUILDFILES/Verify/
-
-cp $MARTUSBUILDFILES/Documents/license.txt "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts/"
-cp $MARTUSBUILDFILES/Documents/gpl.txt "$MARTUSBUILDFILES/SourceFiles/Installer/NSIS Scripts/"
-
-cd $INITIAL_DIR
-
-#zip-up sources
-if [ $include_sources = 'Y' ]; then
+zipSources()
+{
+	MARTUS_ZIP_PATH=$MARTUSSOURCES/$MARTUS_ZIP_NAME
 	echo
 	echo "zipping up sources..."
 	cd $MARTUSSOURCES
-	find . -name "*.java" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "build.xml" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "*.gif" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "*.jpg" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "*.png" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "license.txt" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "gpl.txt" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "main-class.txt" -print | zip $MARTUS_ZIP_NAME -q@
-
+	find . -name "*.java" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "build.xml" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "*.gif" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "*.jpg" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "*.png" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "license.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "gpl.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "main-class.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	
 	#english
-	find . -name "MartusHelpTOC-en.txt" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "MartusHelp-en.txt" -print | zip $MARTUS_ZIP_NAME -q@
+	find . -name "MartusHelpTOC-en.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "MartusHelp-en.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	
 	#spanish
-	find . -name "MartusHelpTOC-es.txt" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "MartusHelp-es.txt" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "Martus-es.mtf" -print | zip $MARTUS_ZIP_NAME -q@
+	find . -name "MartusHelpTOC-es.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "MartusHelp-es.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "Martus-es.mtf" -print | zip $MARTUS_ZIP_PATH -q@
 	
 	#russian
-	find . -name "MartusHelpTOC-ru.txt" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "MartusHelp-ru.txt" -print | zip $MARTUS_ZIP_NAME -q@
-	find . -name "Martus-ru.mtf" -print | zip $MARTUS_ZIP_NAME -q@
+	find . -name "MartusHelpTOC-ru.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "MartusHelp-ru.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "Martus-ru.mtf" -print | zip $MARTUS_ZIP_PATH -q@
 	
 	echo
 	echo "zipping third party items..."
-	cd $MARTUSBUILDFILES/SourceFiles
+	cd $BUILDFILES_SRC_FILES
+	
+	find ./BouncyCastle -type "f" -name "*" -print | zip $MARTUS_ZIP_PATH -q@
+	find ./Sun -type "f" -name "*" -print | zip $MARTUS_ZIP_PATH -q@
+	find ./InfiniteMonkey -type "f" -name "*" -print | zip $MARTUS_ZIP_PATH -q@
+	find ./junit -type "f" -name "*" -print | zip $MARTUS_ZIP_PATH -q@
+	find ./xmlrpc -type "f" -name "*" -print | zip $MARTUS_ZIP_PATH -q@
+	find ./logi -type "f" -name "*" -print | zip $MARTUS_ZIP_PATH -q@
+	find ./Installer -type "f" -name "*" -print | zip $MARTUS_ZIP_PATH -q@
+} # zipSources
 
-	find ./BouncyCastle -type "f" -name "*" -print | zip $MARTUSSOURCES/$MARTUS_ZIP_NAME -q@
-	find ./Sun -type "f" -name "*" -print | zip $MARTUSSOURCES/$MARTUS_ZIP_NAME -q@
-	find ./InfiniteMonkey -type "f" -name "*" -print | zip $MARTUSSOURCES/$MARTUS_ZIP_NAME -q@
-	find ./junit -type "f" -name "*" -print | zip $MARTUSSOURCES/$MARTUS_ZIP_NAME -q@
-	find ./xmlrpc -type "f" -name "*" -print | zip $MARTUSSOURCES/$MARTUS_ZIP_NAME -q@
-	find ./logi -type "f" -name "*" -print | zip $MARTUSSOURCES/$MARTUS_ZIP_NAME -q@
-	find ./Installer -type "f" -name "*" -print | zip $MARTUSSOURCES/$MARTUS_ZIP_NAME -q@
+buildClientJarVerifier()
+{
+	echo
+	echo "Building JarVerifier...";
+	cd $MARTUSBUILDFILES/Verify || error "cannot cd to $MARTUSBUILDFILES/Verify"
+	if [ -f "JarVerifier.class" ]; then
+		rm -f JarVerifier.class
+	fi
+	javac JarVerifier.java
+	status=$?
+	
+	if [ ! -f "JarVerifier.class" ]; then
+		echo "BUILD FAILED!!, exit status $status!!"
+		exit $status
+	fi
+} # buildClientJarVerifier
 
-fi
+createAndFixCdDocuments()
+{
+	createInstallerLicenseFile
+	fixNewlinesInTxtFiles
+	copyLicenseTextFiles
+	zipSources
+} # createAndFixCdDocuments
 
-# Build JarVerifier
-echo
-echo "Building JarVerifier...";
-cd $MARTUSBUILDFILES/Verify || exit
-if [ -f "JarVerifier.class" ]; then
-	rm -f JarVerifier.class
-fi
-javac JarVerifier.java
-status=$?
+createClientInstallers()
+{
+	cd $INITIAL_DIR
+	echo
+	echo "Starting the installer build..."
+	
+	RELEASE_FILE=$RELEASE_DIR/martus.jar
+	export RELEASE_FILE
+	
+	if [ ! -f "$RELEASE_FILE" ]; then
+		error "No Martus.jar was found to use in the build...."
+	fi
+	cp -v $RELEASE_FILE "$MARTUSBUILDFILES/ProgramFiles/"
+	
+	removeUnnecesarryBuildFiles
+	
+	# moving installer scripts
+	INSTALLER_SRC_FILES="$BUILDFILES_SRC_FILES/Installer/NSIS Scripts"
+	if [ ! -d $INSTALLER_SRC_FILES ]; then
+		echo
+		echo "Creating $INSTALLER_SRC_FILES..."
+		mkdir "$INSTALLER_SRC_FILES"
+	fi
+	
+	cp -v $MARTUSNSISPROJECTDIR/*.nsi "$INSTALLER_SRC_FILES/"
+	mkdir "$INSTALLER_SRC_FILES/locallang"
+	
+	# NOTE: Language specific items below
+	cp -v $MARTUSNSISPROJECTDIR/locallang/English.* "$INSTALLER_SRC_FILES/locallang/"
+	cp -v $MARTUSNSISPROJECTDIR/locallang/Spanish.* "$INSTALLER_SRC_FILES/locallang/"
+	cp -v $MARTUSNSISPROJECTDIR/locallang/Russian.* "$INSTALLER_SRC_FILES/locallang/"
+	
+	find $CVS_HOME -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
+	find $MARTUSSOURCES -type "f" -name "*.class" -exec rm -fR '{}' \; > /dev/null
+	
+	createAndFixCdDocuments
+	buildClientJarVerifier
+	createInstallerCdImage
+	createCdNsisInstaller
+	createSingleNsisInstaller
+	createUpgradeInstaller
+	createCdIso
+} # createClientInstallers
 
-if [ ! -f "JarVerifier.class" ]; then
-	echo "BUILD FAILED!!, exit status $status!!"
-	exit $status
-fi
-
-if [ $stop_build -eq 1 ];then
-	echo "Exiting client build"
-	exit 1
-fi
-
-# ###################################################
-# Create CD Image to use
-CD_IMAGE_DIR=/tmp/Releases/CD_IMAGE
-
-mkdir -p $CD_IMAGE_DIR
-cp $MARTUSBUILDFILES/Documents/README*.txt $CD_IMAGE_DIR
-cp $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR
-
-mkdir -p $CD_IMAGE_DIR/Win95
-cp $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
-
-mkdir -p $CD_IMAGE_DIR/verify
-cp $MARTUSBUILDFILES/Verify/* $CD_IMAGE_DIR/verify/
-rm $CD_IMAGE_DIR/verify/*_th.txt
-
-cp $MARTUSBUILDFILES/ProgramFiles/autorun.inf $CD_IMAGE_DIR
-
-mkdir -p $CD_IMAGE_DIR/Martus
-cp $MARTUSBUILDFILES/ProgramFiles/* $CD_IMAGE_DIR/Martus/
-rm -f $CD_IMAGE_DIR/Martus/autorun.inf
-cp $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR/Martus/
-cp $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR/Martus/
-
-mkdir -p $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/martus_user_guide.pdf $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/quickstartguide.pdf $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/*_fr.pdf $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/*_es.pdf $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/*_ru.pdf $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/LinuxJavaInstall.txt $CD_IMAGE_DIR/Martus/Docs/
-
-cp -r $MARTUSBUILDFILES/Documents/Licenses $CD_IMAGE_DIR/Martus/Docs/
-
-mkdir -p $CD_IMAGE_DIR/LibExt
-cp $MARTUSBUILDFILES/Jars/* $CD_IMAGE_DIR/LibExt/
-
-if [ $include_sources = 'Y' ]; then
+createInstallerCdImage()
+{
+	CD_IMAGE_DIR=$RELEASE_DIR/CD_IMAGE
+	export CD_IMAGE_DIR
+	
+	mkdir -p $CD_IMAGE_DIR
+	cp -v $MARTUSBUILDFILES/Documents/README*.txt $CD_IMAGE_DIR
+	cp -v $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR
+	
+	mkdir -p $CD_IMAGE_DIR/Win95
+	cp -v $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
+	
+	mkdir -p $CD_IMAGE_DIR/verify
+	cp -v $MARTUSBUILDFILES/Verify/* $CD_IMAGE_DIR/verify/
+	rm $CD_IMAGE_DIR/verify/*_th.txt
+	
+	cp -v $MARTUSBUILDFILES/ProgramFiles/autorun.inf $CD_IMAGE_DIR
+	
+	mkdir -p $CD_IMAGE_DIR/Martus
+	cp -v $MARTUSBUILDFILES/ProgramFiles/* $CD_IMAGE_DIR/Martus/
+	rm -f $CD_IMAGE_DIR/Martus/autorun.inf
+	cp -v $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR/Martus/
+	cp -v $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR/Martus/
+	
+	mkdir -p $CD_IMAGE_DIR/Martus/Docs
+	cp -v $MARTUSBUILDFILES/Documents/martus_user_guide.pdf $CD_IMAGE_DIR/Martus/Docs
+	cp -v $MARTUSBUILDFILES/Documents/quickstartguide.pdf $CD_IMAGE_DIR/Martus/Docs
+	cp -v $MARTUSBUILDFILES/Documents/*_fr.pdf $CD_IMAGE_DIR/Martus/Docs
+	cp -v $MARTUSBUILDFILES/Documents/*_es.pdf $CD_IMAGE_DIR/Martus/Docs
+	cp -v $MARTUSBUILDFILES/Documents/*_ru.pdf $CD_IMAGE_DIR/Martus/Docs
+	cp -v $MARTUSBUILDFILES/Documents/LinuxJavaInstall.txt $CD_IMAGE_DIR/Martus/Docs/
+	
+	cp -vr $BUILDFILES_LICENSES $CD_IMAGE_DIR/Martus/Docs/
+	
+	mkdir -p $CD_IMAGE_DIR/LibExt
+	cp -v $MARTUSBUILDFILES/Jars/* $CD_IMAGE_DIR/LibExt/
+	
 	mkdir -p $CD_IMAGE_DIR/Sources/
-	cp $MARTUSSOURCES/$MARTUS_ZIP_NAME $CD_IMAGE_DIR/Sources/
-fi
+	cp -v $MARTUSSOURCES/$MARTUS_ZIP_NAME $CD_IMAGE_DIR/Sources/
+	
+	mkdir -p $CD_IMAGE_DIR/Java/Linux/i586
+	cd "$MARTUSBUILDFILES/Java redist/Linux/i586/"
+	cp -v *.bin $CD_IMAGE_DIR/Java/Linux/i586/
+	
+	cd $CD_IMAGE_DIR
+	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
+	cd $INITIAL_DIR
+} # createInstallerCdImage
 
-mkdir -p $CD_IMAGE_DIR/Java/Linux/i586
-cp "$MARTUSBUILDFILES/Java redist/Linux/i586/*.bin" $CD_IMAGE_DIR/Java/Linux/i586/
-
-cd $CD_IMAGE_DIR
-find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
-cd $INITIAL_DIR
-
-cd $MARTUSNSISPROJECTDIR
-if [ -f "$MARTUSNSISPROJECTDIR/MartusSetup.exe" ]; then
-	rm -f $MARTUSNSISPROJECTDIR/MartusSetup.exe
-fi
-echo "starting the CD NSIS installer build...";
-
-makensis.exe /V2 NSIS_Martus.nsi
-if [ -f "$MARTUSNSISPROJECTDIR/MartusSetup.exe" ]; then
+createCdNsisInstaller()
+{
+	cd $MARTUSNSISPROJECTDIR
+	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetup.exe" ]; then
+		echo
+		echo "Removing $MARTUSNSISPROJECTDIR/MartusSetup.exe"
+		rm -f $MARTUSNSISPROJECTDIR/MartusSetup.exe
+	fi
 	echo
-	echo "Build succeded..."
-else
+	echo "starting the CD NSIS installer build...";
+	
+	makensis.exe /V2 NSIS_Martus.nsi
+	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetup.exe" ]; then
+		echo
+		echo "Build CD NSIS installer succeded..."
+	else
+		echo
+		echo "Build CD NSIS installer FAILED..."
+		exit 1
+	fi
+	cp -v $MARTUSNSISPROJECTDIR/MartusSetup.exe $CD_IMAGE_DIR/
+	cd $INITIAL_DIR
+} # createCdNsisInstaller
+
+createSingleNsisInstaller()
+{
+	cp -v $MARTUSSOURCES/$MARTUS_ZIP_NAME $MARTUSBUILDFILES/ || error "zip copy failed"
+	
+	cd $MARTUSNSISPROJECTDIR
+	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" ]; then
+		rm -f $MARTUSNSISPROJECTDIR/MartusSetupSingle.exe
+	fi
+	echo "starting the Single NSIS installer build...";
+	
+	makensis.exe /V2 NSIS_Martus_Single.nsi
+	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" ]; then
+		echo
+		echo "Build Single NSIS installer succeded..."
+		cp "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe
+	else
+		echo
+		echo "Build Single NSIS installer FAILED..."
+		exit 1
+	fi
+	
 	echo
-	echo "Build failed..."
-	exit 1
-fi
-cp $MARTUSNSISPROJECTDIR/MartusSetup.exe $CD_IMAGE_DIR/
-cd $INITIAL_DIR
-####################################################################################
+	echo "generating md5sums of Single installer..."
+	cd $RELEASE_DIR
+	md5sum $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
+	echo -e "\n" >> $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
+} # createSingleNsisInstaller
 
-# ##################################################################################
-# Create Single Installer Image to use
-
-if [ $include_sources = 'Y' ]; then
-	cp $MARTUSSOURCES/$MARTUS_ZIP_NAME $MARTUSBUILDFILES/
-fi
-
-cd $MARTUSNSISPROJECTDIR
-if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" ]; then
-	rm -f $MARTUSNSISPROJECTDIR/MartusSetupSingle.exe
-fi
-echo "starting the Single NSIS installer build...";
-
-makensis.exe /V2 NSIS_Martus_Single.nsi
-if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" ]; then
+createUpgradeInstaller()
+{
+	cd $MARTUSNSISPROJECTDIR
+	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" ]; then
+		rm -f $MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe
+	fi
+	echo "starting the Upgrade NSIS installer build...";
+	
+	makensis.exe /V2 NSIS_Martus_Upgrade.nsi
+	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" ]; then
+		echo
+		echo "Build Upgrade NSIS installer succeded..."
+		cp -v "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe
+	else
+		echo
+		echo "Build Upgrade NSIS installer FAILED..."
+		exit 1
+	fi
+	
 	echo
-	echo "Build succeded..."
-	cp "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" /tmp/Releases/MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe
-else
+	echo "generating md5sums of Upgrade..."
+	cd $RELEASE_DIR
+	md5sum $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
+	echo -e "\n" >> $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
+	
+	cd $INITIAL_DIR
+} # createUpgradeInstaller
+
+createCdIso()
+{
+	echo 
+	echo "Creating ISO..."
+	if [ -f "$MARTUSBUILDFILES/Martus-$BUILD_VERNUM_TAG.iso" ]; then
+		rm -f $MARTUSBUILDFILES/Martus-$BUILD_VERNUM_TAG.iso
+	fi
+	
+	mkisofs -J -r -T -hide-joliet-trans-tbl -l -V Martus-$BUILD_VERNUM_TAG -o $MARTUSBUILDFILES/Martus-$BUILD_VERNUM_TAG.iso $CD_IMAGE_DIR || error "mkisofs returned $?"
+	   
+	if [ ! -d "$RELEASE_DIR" ]; then
+		mkdir -p $RELEASE_DIR
+	fi
+	
+	if [ -f "$RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso" ]; then
+		rm -f $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso
+	fi
+	mv $MARTUSBUILDFILES/Martus-$BUILD_VERNUM_TAG.iso $RELEASE_DIR/
+	
 	echo
-	echo "Build failed..."
-	exit 1
-fi
+	echo "generating md5sums of ISO..."
+	cd $RELEASE_DIR
+	md5sum $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso > $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5
+	echo -e "\n" >> $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5
+} # createCdIso
 
-cd $INITIAL_DIR
+updateCvsTreeWithBinaries()
+{
+	if [ $cvs_tag = 0 ]; then
+		return
+	fi
 
-# ##################################################################################
-# Create Upgrade Installer Image to use
+	cd $CVS_HOME || exit	
 
-cd $MARTUSNSISPROJECTDIR
-if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" ]; then
-	rm -f $MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe
-fi
-echo "starting the Upgrade NSIS installer build...";
-
-makensis.exe /V2 NSIS_Martus_Upgrade.nsi
-if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" ]; then
-	echo
-	echo "Build succeded..."
-	cp "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe
-else
-	echo
-	echo "Build failed..."
-	exit 1
-fi
-
-cd $INITIAL_DIR
-
-####################################################################################
-
-echo
-echo "Creating ISO..."
-if [ -f "$MARTUSBUILDFILES/Martus-$BUILD_DATE.$BUILD_NUMBER.iso" ]; then
-	rm -f $MARTUSBUILDFILES/Martus-$BUILD_DATE.$BUILD_NUMBER.iso
-fi
-
-mkisofs -J -r -T -hide-joliet-trans-tbl -l -V Martus-$BUILD_DATE.$BUILD_NUMBER -o $MARTUSBUILDFILES/Martus-$BUILD_DATE.$BUILD_NUMBER.iso $CD_IMAGE_DIR || error "mkisofs returned $?"
-
-if [ ! -d "/tmp/Releases" ]; then
-	mkdir -p /tmp/Releases
-fi
-
-if [ -f "/tmp/Releases/Martus-$BUILD_DATE.$BUILD_NUMBER.iso" ]; then
-	rm -f /tmp/Releases/Martus-$BUILD_DATE.$BUILD_NUMBER.iso
-fi
-mv $MARTUSBUILDFILES/Martus-$BUILD_DATE.$BUILD_NUMBER.iso /tmp/Releases/
-
-echo
-echo "generating md5sums of ISO..."
-cd /tmp/Releases
-md5sum.exe Martus-$BUILD_DATE.$BUILD_NUMBER.iso > Martus-$BUILD_DATE.$BUILD_NUMBER.iso.md5
-echo -e "\n" >> Martus-$BUILD_DATE.$BUILD_NUMBER.iso.md5
-
-md5sum.exe MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe > MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5
-echo -e "\n" >> MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5
-
-md5sum.exe MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe > MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5
-echo -e "\n" >> MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5
-
-if [ $cvs_tag = 'Y' ]; then
-	cd $HOMEDRIVE/$HOMEPATH || exit
-
-	if [ ! -d "$HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientISO/CVS" ]; then
-		mkdir -p $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientISO/CVS || exit
-		cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientISO/CVS
+	if [ ! -d "$CVS_HOME/binary-martus/Releases/ClientISO/CVS" ]; then
+		mkdir -p $CVS_HOME/binary-martus/Releases/ClientISO/CVS || exit
+		cd $CVS_HOME/binary-martus/Releases/ClientISO/CVS
 		touch Entries
 		echo "binary-martus/Releases/ClientISO" > Repository
 		echo $CVSROOT > Root
 	fi
 
 	# add ISO md5 to CVS
-	cp /tmp/Releases/Martus-$BUILD_DATE.$BUILD_NUMBER.iso.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientISO || exit
-	cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientISO/
-	echo "Adding to CVS: Martus-$BUILD_DATE.$BUILD_NUMBER.iso.md5"
-	cvs.exe add Martus-$BUILD_DATE.$BUILD_NUMBER.iso.md5  || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" Martus-$BUILD_DATE.$BUILD_NUMBER.iso.md5 || exit
-
+	cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5 $CVS_HOME/binary-martus/Releases/ClientISO || exit
+	cd $CVS_HOME/binary-martus/Releases/ClientISO/
+	echo "Adding to CVS: Martus-$BUILD_VERNUM_TAG.iso.md5"
+	cvs.exe add Martus-$BUILD_VERNUM_TAG.iso.md5  || exit
+	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" Martus-$BUILD_VERNUM_TAG.iso.md5 || exit
+	
 	# move ISO onto Network
 	if [ -d "/cygdrive/h/Martus/ClientISO" ]; then
 		echo "Moving ISO onto network drive"
-		cp /tmp/Releases/Martus-$BUILD_DATE.$BUILD_NUMBER.iso /cygdrive/h/Martus/ClientISO/ || exit
-		cp /tmp/Releases/Martus-$BUILD_DATE.$BUILD_NUMBER.iso.md5 /cygdrive/h/Martus/ClientISO/ || exit
+		cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso /cygdrive/h/Martus/ClientISO/ || exit
+		cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5 /cygdrive/h/Martus/ClientISO/ || exit
 	else
 		echo "Beneserve2 not available. You must move the Client ISO onto //Beneserve2/Engineering/Martus/ClientISO/ , its md5 has already been checked into CVS"
-fi
+	fi
 	
 	# add Single Installer into CVS
-	if [ ! -d "$HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe/CVS" ]; then
-		mkdir -p $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe/CVS || exit
-		cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe/CVS
+	if [ ! -d "$CVS_HOME/binary-martus/Releases/ClientExe/CVS" ]; then
+		mkdir -p $CVS_HOME/binary-martus/Releases/ClientExe/CVS || exit
+		cd $CVS_HOME/binary-martus/Releases/ClientExe/CVS
 		touch Entries
 		echo "binary-martus/Releases/ClientExe" > Repository
 		echo $CVSROOT > Root
 	fi
 	
 	# add Single exe md5 to CVS
-	cp /tmp/Releases/MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe || exit
-	cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe/
-	echo "Adding to CVS: MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5"
-	cvs.exe add MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5  || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 || exit
+	cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 $CVS_HOME/binary-martus/Releases/ClientExe || exit
+	cd $CVS_HOME/binary-martus/Releases/ClientExe/
+	echo "Adding to CVS: MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5"
+	cvs.exe add MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5  || exit
+	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 || exit
 	
 	# move Single Exe onto Network
 	if [ -d "/cygdrive/h/Martus/ClientExe" ]; then
 		echo "Moving ClientExe onto network drive"
-		cp /tmp/Releases/MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe /cygdrive/h/Martus/ClientExe/ || exit
-		cp /tmp/Releases/MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
+		cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe /cygdrive/h/Martus/ClientExe/ || exit
+		cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
 	else
 		echo "Beneserve2 not available. You must move the Client Single Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its md5 has already been checked into CVS"
 	fi
 	
 	# add Upgrade exe md5 to CVS
-	cp /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe || exit
-	cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe/
-	echo "Adding to CVS: MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5"
-	cvs.exe add MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5  || exit
-	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 || exit
+	cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 $CVS_HOME/binary-martus/Releases/ClientExe || exit
+	cd $CVS_HOME/binary-martus/Releases/ClientExe/
+	echo "Adding to CVS: MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5"
+	cvs.exe add MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5  || exit
+	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 || exit
 	
 	# move Upgrade Exe onto Network
 	if [ -d "/cygdrive/h/Martus/ClientExe" ]; then
 		echo "Moving MartusSetupUpgrade onto network drive"
-		cp /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe /cygdrive/h/Martus/ClientExe/ || exit
-		cp /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
+		cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe /cygdrive/h/Martus/ClientExe/ || exit
+		cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
 	else
 		echo "Beneserve2 not available. You must move the Client Upgrade Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its md5 has already been checked into CVS"
 	fi
+}
+
+####### main program #######
+if [ $# = 0 ]; then
+	usage
+	exit 1
 fi
+
+cvs_tag=0
+build_client_cd=0
+burn_client_cd=0
+simple_build=0
+
+while getopts ":tcbs" opt; do
+	case $opt in
+		t ) cvs_tag=1
+			export cvs_tag;;
+		c ) build_client_cd=1
+			export build_client_cd;;
+		b ) burn_client_cd=1
+			build_client_cd=1
+			export build_client_cd burn_client_cd;;
+		s ) simple_build=1
+			cvs_tag=0
+			export simple_build cvs_tag;;
+		\? ) usage
+			exit 1 ;;
+	esac
+done
+
+if [ $simple_build = 1 ]; then
+	cvs_tag=0
+	export cvs_tag
+fi
+
+
+echo 
+if [ $build_client_cd = 1 ]; then
+	echo "- Client installers to be built"
+else
+	echo "- Client installers NOT built"
+fi
+
+if [ $burn_client_cd = 1 ]; then
+	echo "- Will burn to a CD"
+else
+	echo "- Will NOT burn to a CD"
+fi
+
+if [ $cvs_tag = 1 ]; then
+	echo "- Tagging CVS after successful build"
+else
+	echo "- NOT tagging CVS after successful build"
+fi
+
+setCvsEnvVars
+
+# move cwd to a neutral position
+cd / || exit
+
+downloadSourcesFromCvs
+setupBuildEnvironment
+startAntBuild
+copyAntBuildToCDBuild
+updateCvsTree
+
+if [ $build_client_cd = 0 ]; then
+	echo
+	echo "The build completed succesfully. The built jars are in $RELEASE_DIR."
+	exit 0
+fi
+
+# clean up the sources dir
+if [ -d "$SRC_THIRDPARTY_JARS" ]; then
+	rm -Rf $SRC_THIRDPARTY_JARS
+fi
+
+if [ -d "$SRC_VERIFY" ]; then
+	rm -Rf $SRC_VERIFY
+fi
+
+if [ -d "$MARTUSSOURCES/www" ]; then
+	rm -Rf $MARTUSSOURCES/www
+fi
+
+createClientInstallers
+updateCvsTreeWithBinaries
 
 echo
-echo "The build completed succesfully. The Release files are located in /tmp/Releases/ ."
+echo "The build completed succesfully. The Release files are located in $RELEASE_DIR/ ."
 
 # burn the cd image if required
-if [ $burn_cd = 'Y' ]; then
-	echo "Ready to burn image onto CD. Make sure a blank CD is in the CD burner, then press any key to start:"
+if [ $burn_client_cd = 1 ]; then
+	echo "Ready to burn image onto CD. Make sure a blank CD is in the CD burner, then press Enter to start:"
 	read throw_away
-	cdrecord dev=0,1,0 -v -eject -dao -data /tmp/Releases/Martus-$BUILD_DATE.$BUILD_NUMBER.iso
+	cdrecord dev=0,1,0 -v -eject -dao -data $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso
 fi
+
+cd $INITIAL_DIR
 
 exit 0
