@@ -67,7 +67,9 @@ public class ServerForMirroring implements ServerSupplierInterface
 				}
 				catch (Exception e)
 				{
-					e.printStackTrace();
+					// TODO: Log this so the MSPA knows there's a problem
+					// (but in a way that won't print during unit tests)
+					//e.printStackTrace();
 				}
 			}
 			
