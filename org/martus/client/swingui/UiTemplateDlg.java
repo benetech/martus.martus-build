@@ -30,18 +30,17 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.InputStreamReader;
+import java.io.IOException;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
+import org.martus.common.UnicodeReader;
 
 
 
@@ -60,7 +59,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		cancel.addActionListener(this);
 		JButton help = new JButton(app.getButtonLabel("help"));
 		help.addActionListener(new helpHandler());
-		JButton loadFromFile = new JButton(app.getButtonLabel("loadTemplateFromFile"));
+		JButton loadFromFile = new JButton(app.getButtonLabel("ResetContents"));
 		loadFromFile.addActionListener(new loadFileHandler());
 
 		details = new UiTextArea(15, 65);
@@ -110,45 +109,39 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			JFileChooser chooser = new JFileChooser();
-			chooser.setApproveButtonText(app.getButtonLabel("inputLoadDefaultDetailsok"));
-			chooser.setFileFilter(new DefaultDetailsFilter());
-			chooser.setDialogTitle(app.getWindowTitle("LoadDefaultDetails"));
-			chooser.setCurrentDirectory(new File(app.getDataDirectory()));
-			int returnVal = chooser.showOpenDialog(mainWindow);
-			if(returnVal == JFileChooser.APPROVE_OPTION)
+			if(mainWindow.confirmDlg(mainWindow, "ResetDefaultDetails"))
 			{
-				File importFile = chooser.getSelectedFile();
-				if(importFile.exists())
-					RetrieveTextData(importFile);
+				details.setText("");
+				File defaultDetailsFile = app.getDefaultDetailsFile();
+				try
+				{
+					if(defaultDetailsFile.exists())
+						loadFile(defaultDetailsFile);
+				}
+				catch (IOException e)
+				{
+					e.printStackTrace();
+					mainWindow.notifyDlg(mainWindow, "ErrorReadingFile");
+				}
 			}
 		}
 
 	}
 
-	public void RetrieveTextData(File importFile)
+	public void loadFile(File fileToLoad) throws IOException
 	{
 		String data = "";
-		try
+		BufferedReader reader = new BufferedReader(new UnicodeReader(fileToLoad));
+		while(true)
 		{
-			InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(importFile));
-			BufferedReader reader = new BufferedReader(inputStreamReader);
-			while(true)
-			{
-				String line = reader.readLine();
-				if(line == null)
-					break;
-				data += line;
-				data += "\n";
-			}
-			inputStreamReader.close();
-			details.setText(data);
-			mainWindow.notifyDlg(mainWindow, "ConfirmCorrectDefaultDetailsData");
+			String line = reader.readLine();
+			if(line == null)
+				break;
+			data += line;
+			data += "\n";
 		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-		}
+		reader.close();
+		details.setText(data);
 	}
 
 	class DefaultDetailsFilter extends FileFilter

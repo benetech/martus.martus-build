@@ -592,8 +592,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		file.add(new ActionMenuBackupMyKeyPair());
 		file.add(new ActionMenuExportMyPublicKey());
 		file.addSeparator();
-		file.add(new ActionMenuExportBulletins());
-		file.addSeparator();
+//TODO: Uncomment when the export feature is completed
+//		file.add(new ActionMenuExportBulletins());
+//		file.addSeparator();
 		file.add(new ActionMenuImportHeadquarterPublicKey());
 		file.add(new ActionMenuRemoveExistingHeadquaterPublicKey());
 		file.addSeparator();
@@ -1035,8 +1036,20 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		ConfigInfo info = app.getConfigInfo();
 		UiTemplateDlg templateDlg = new UiTemplateDlg(this, info);
-		if(defaultFile != null)
-			templateDlg.RetrieveTextData(defaultFile);
+		try
+		{
+			if(defaultFile != null)
+			{
+				templateDlg.loadFile(defaultFile);
+				notifyDlg(this, "ConfirmCorrectDefaultDetailsData");
+			}
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			return;
+		}
+
 		templateDlg.show();
 		if(templateDlg.getResult())
 		{

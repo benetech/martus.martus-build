@@ -59,6 +59,7 @@ public class EnglishStrings
 "wintitle:confirmRedoWeakPassword=Weak Password Warning",
 "wintitle:confirmOverWriteWithBackupKeyPair=Confirm Replace Existing File",
 "wintitle:confirmExportPrivateData=Confirm Export Private Data",
+"wintitle:confirmResetDefaultDetails=Reset Contents",
 
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -115,6 +116,7 @@ public class EnglishStrings
 "wintitle:notifyConfirmCorrectDefaultDetailsData=Confirm Correct Default Details Content",
 "wintitle:notifyExportComplete=Export Bulletins",
 "wintitle:notifyErrorWritingFile=Error Writing File",
+"wintitle:notifyErrorReadingFile=Error Reading File",
 
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -191,6 +193,7 @@ public class EnglishStrings
 "button:modify=Modify",
 "button:loadTemplateFromFile=Load From File",
 "button:Continue=Continue",
+"button:ResetContents=Reset Contents",
 
 "menu:file=File",
 "menu:CreateNewBulletin=Create New Bulletin",
@@ -403,6 +406,8 @@ public class EnglishStrings
 "field:confirmOverWriteWithBackupKeyPair=The backup keypair will replace the file.",
 "field:confirmExportPrivateDatacause=This will save the private information in the selected bulletins in plain text.",
 "field:confirmExportPrivateDataeffect=Anyone who gets a copy of this file will be able to read all the private data.",
+"field:confirmResetDefaultDetailscause=This will reset the current Default Details contents to the original contents. After resetting the contents, you should review them to be sure they are correct.",
+"field:confirmResetDefaultDetailseffect=After you review the contents, you can accept them, modify them, or press cancel to keep the existing default details.",
 
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
@@ -459,7 +464,8 @@ public class EnglishStrings
 "field:notifyConfirmCorrectDefaultDetailsDatacause=Please confirm that the default details retrieved are correct.",
 "field:notifyExportCompletecause=Export completed successfully",
 "field:notifyErrorWritingFilecause=An error prevented the file from being written. Check to make sure the disk is not full or write protected.",
-
+"field:notifyErrorReadingFilecause=An error prevented the file from being read.",
+		
 "field:messageServerNewscause=The current server has sent this message:",
 
 "field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:",
