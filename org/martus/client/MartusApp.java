@@ -379,6 +379,11 @@ public class MartusApp
 		return newFolder;
 	}
 	
+	public int quarantineUnreadableBulletins()
+	{
+		return store.quarantineUnreadableBulletins();
+	}
+	
 	public int repairOrphans()
 	{
 		Set orphans = store.getSetOfOrphanedBulletinUniversalIds();

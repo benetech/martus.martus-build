@@ -9,7 +9,17 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.Vector;
 
-import org.martus.common.*;
+import org.martus.common.AttachmentProxy;
+import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
+import org.martus.common.FieldDataPacket;
+import org.martus.common.MartusSecurity;
+import org.martus.common.MartusXml;
+import org.martus.common.MockDatabase;
+import org.martus.common.MockMartusSecurity;
+import org.martus.common.TestCaseEnhanced;
+import org.martus.common.UniversalId;
 
 
 public class TestBulletinStore extends TestCaseEnhanced
@@ -1025,6 +1035,53 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("hidden-plus is an orphan?", false, store.isOrphan(b2));
 	}
 
+	public void testQuarantineUnreadableBulletinsSimple() throws Exception
+	{
+		assertEquals("found a bad bulletin in an empty database?", 0, store.quarantineUnreadableBulletins());
+		Bulletin b1 = store.createEmptyBulletin();
+		b1.save();
+		assertEquals("quarantined a good record?", 0, store.quarantineUnreadableBulletins());
+		corruptBulletinHeader(b1);
+		assertEquals("didn't claim to quarantine 1 record?", 1, store.quarantineUnreadableBulletins());
+		DatabaseKey key = new DatabaseKey(b1.getUniversalId());
+		assertTrue("didn't actually quarantine our record?", store.getDatabase().isInQuarantine(key));
+	}
+	
+	public void testQuarantineUnreadableBulletinsMany() throws Exception
+	{
+		final int totalCount = 20;
+		Bulletin bulletins[] = new Bulletin[totalCount];
+		for (int i = 0; i < bulletins.length; i++) 
+		{
+			bulletins[i] = store.createEmptyBulletin();
+			bulletins[i].save();
+		}
+
+		final int badCount = 4;
+		DatabaseKey badKeys[] = new DatabaseKey[badCount];
+		for (int i = 0; i < badKeys.length; i++) 
+		{
+			int bulletinIndex = i * (totalCount/badCount);
+			Bulletin b = bulletins[bulletinIndex];
+			badKeys[i] = new DatabaseKey(b.getUniversalId());
+			corruptBulletinHeader(b);
+		}
+
+		assertEquals("wrong quarantine count?", badCount, store.quarantineUnreadableBulletins());
+		for (int i = 0; i < badKeys.length; i++) 
+			assertTrue("didn't quarantine " + i, store.getDatabase().isInQuarantine(badKeys[i]));
+	}
+	
+	private void corruptBulletinHeader(Bulletin b) throws Exception
+	{
+		UniversalId uid = b.getUniversalId();
+		DatabaseKey key = new DatabaseKey(uid);
+		Database db = b.getStore().getDatabase();
+		String goodData = db.readRecord(key, security);
+		String badData = "x" + goodData;
+		db.writeRecord(key, badData);
+	}
+		
 	private BulletinStore createTempStore() throws Exception 
 	{
 		MartusSecurity tempSecurity = new MockMartusSecurity();

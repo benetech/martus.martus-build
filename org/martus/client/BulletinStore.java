@@ -540,6 +540,32 @@ public class BulletinStore
 		createSystemFolders();
 	}
 
+	public int quarantineUnreadableBulletins()
+	{
+		class Quarantiner implements Database.PacketVisitor
+		{
+			public void visit(DatabaseKey key)
+			{
+				try
+				{
+					InputStream in = database.openInputStream(key, getSignatureVerifier());
+					Packet.validateXml(in, key.getAccountId(), key.getLocalId(), null, getSignatureVerifier());
+				}
+				catch(Exception e)
+				{
+					++quarantinedCount;
+					database.moveRecordToQuarantine(key);
+				}
+			}
+		
+			int quarantinedCount;
+		}
+		
+		Quarantiner visitor = new Quarantiner();
+		visitAllBulletins(visitor);
+		return visitor.quarantinedCount;
+	}
+	
 	boolean isOrphan(Bulletin b)
 	{
 		for(int f=0; f < folders.size(); ++f)
