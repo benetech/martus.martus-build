@@ -191,6 +191,47 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		db.deleteAllData();
 	}
 	
+	public void testHiddenFromVisiting() throws Exception
+	{
+		verifyHiddenFromVisiting(mockDatabase, draftKey);
+		verifyHiddenFromVisiting(mockDatabase, sealedKey);
+		verifyHiddenFromVisiting(fileDatabase, draftKey);
+		verifyHiddenFromVisiting(fileDatabase, sealedKey);
+		
+	}
+	
+	void verifyHiddenFromVisiting(Database db, DatabaseKey key) throws Exception
+	{
+		String accountId = key.getAccountId();
+		UniversalId visibleUid = UniversalId.createFromAccountAndLocalId(accountId, "Y");
+		DatabaseKey visibleKey = new DatabaseKey(visibleUid);
+		db.writeRecord(visibleKey, "some data");
+		writeAndHideRecord(db, key);
+		
+		class Visitor implements Database.PacketVisitor
+		{
+			Visitor(DatabaseKey hiddenKeyToUse)
+			{
+				hiddenKey = hiddenKeyToUse;
+			}
+			
+			public void visit(DatabaseKey thisKey)
+			{
+				assertNotEquals("Visited hidden key?", hiddenKey, thisKey);
+				visitedKey = thisKey;
+			}
+			public DatabaseKey hiddenKey;
+			public DatabaseKey visitedKey;
+		}
+		
+		Visitor visitor = new Visitor(key);
+		db.visitAllRecords(visitor);
+		assertEquals(visibleKey, visitor.visitedKey);
+		visitor.visitedKey = null;
+		db.visitAllRecordsForAccount(visitor, accountId);
+		assertEquals(visibleKey, visitor.visitedKey);
+	}
+	
 	
 	
 	// TODO: need to test BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase

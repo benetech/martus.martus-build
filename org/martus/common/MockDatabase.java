@@ -182,7 +182,8 @@ abstract public class MockDatabase extends Database
 			DatabaseKey key = (DatabaseKey)iterator.next();
 			try
 			{
-				visitor.visit(key);
+				if(!isHidden(key))
+					visitor.visit(key);
 			}
 			catch (RuntimeException nothingWeCanDoAboutIt)
 			{

@@ -405,17 +405,17 @@ public class FileDatabase extends Database
 					for(int i=0; i < files.length; ++i)
 					{
 						UniversalId uid = UniversalId.createFromAccountAndLocalId(accountString, files[i]);
+						if(isHidden(uid))
+							continue;
+						if(uid.getLocalId().startsWith("BUR-"))
+							continue;
+							
 						DatabaseKey key = new DatabaseKey(uid);
 						if(isDraftPacketBucket(packetBuckets[packetBucket]))
 							key.setDraft();
 						else
 							key.setSealed();
 							
-						if(key.getLocalId().startsWith("BUR-"))
-						{
-							continue;
-						}
-
 						try
 						{
 							visitor.visit(key);
