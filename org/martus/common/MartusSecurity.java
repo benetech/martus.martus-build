@@ -197,7 +197,7 @@ public class MartusSecurity implements MartusCrypto
 			IvParameterSpec spec = new IvParameterSpec(ivBytes);
 			sessionCipherEngine.init(Cipher.ENCRYPT_MODE, sessionKey, spec, rand);
 
-			BufferedOutputStream bufferedCipherStream = new BufferedOutputStream(cipherStream);
+			OutputStream bufferedCipherStream = new BufferedOutputStream(cipherStream);
 			DataOutputStream output = new DataOutputStream(bufferedCipherStream);
 			output.writeInt(encryptedKeyBytes.length);
 			output.write(encryptedKeyBytes);
@@ -205,8 +205,7 @@ public class MartusSecurity implements MartusCrypto
 			output.write(ivBytes);
 		
 			CipherOutputStream cos = new CipherOutputStream(output, sessionCipherEngine);
-		
-			BufferedInputStream bufferedPlainStream = new BufferedInputStream(plainStream);
+			InputStream bufferedPlainStream = new BufferedInputStream(plainStream);
 			
 			byte[] buffer = new byte[MartusConstants.streamBufferCopySize];
 			int count = 0;
@@ -727,26 +726,20 @@ public class MartusSecurity implements MartusCrypto
 		return Base64.encode(key.getEncoded());
 	}
 
-	protected synchronized void accumulateForSignOrVerify(InputStream inputStream) throws 
+	protected synchronized void accumulateForSignOrVerify(InputStream in) throws 
 					IOException, 
 					MartusSignatureException
 	{
-		BufferedInputStream in = new BufferedInputStream(inputStream);
 		try
 		{
-			int theByte = 0;
-			while((theByte = in.read()) != -1)
-			{
-				sigEngine.update((byte)theByte);
-			}
+			int got;
+			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
+			while( (got=in.read(bytes)) >= 0)
+				sigEngine.update(bytes, 0, got);
 		}
 		catch(java.security.SignatureException e)
 		{
 			throw new MartusSignatureException();
-		}
-		finally
-		{
-			in.close();
 		}
 	}
 
