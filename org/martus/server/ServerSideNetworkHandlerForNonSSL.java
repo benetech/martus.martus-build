@@ -15,67 +15,105 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 
 	public String ping()
 	{
-		return server.ping();
+		server.incrementActiveClientsCounter();
+		strResponse = server.ping();
+		server.decrementActiveClientsCounter();
+		return strResponse;
 	}
 
 	public Vector getServerInformation()
 	{
-		return server.getServerInformation();
+		server.incrementActiveClientsCounter();
+		vecResponse = server.getServerInformation();
+		server.decrementActiveClientsCounter();
+		return vecResponse;
 	}
 
 	public String requestUploadRights(String authorAccountId, String tryMagicWord)
 	{
-		return server.requestUploadRights(authorAccountId, tryMagicWord);
+		server.incrementActiveClientsCounter();
+		strResponse = server.requestUploadRights(authorAccountId, tryMagicWord);
+		server.decrementActiveClientsCounter();
+		return strResponse;
 	}
 
 	public String uploadBulletin(String authorAccountId, String bulletinLocalId, String data)
 	{
-		return server.uploadBulletin(authorAccountId, bulletinLocalId, data);
+		server.incrementActiveClientsCounter();
+		strResponse = server.uploadBulletin(authorAccountId, bulletinLocalId, data);
+		server.decrementActiveClientsCounter();
+		return strResponse;
 	}
 
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId,
 		int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
-		return server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
+		server.incrementActiveClientsCounter();
+		strResponse = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
 						totalSize, chunkOffset, chunkSize, data, signature);
+		server.decrementActiveClientsCounter();
+		return strResponse;
 	}
 
 	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
 	{
-		return server.downloadBulletin(authorAccountId, bulletinLocalId);
+		server.incrementActiveClientsCounter();
+		vecResponse = server.downloadBulletin(authorAccountId, bulletinLocalId);
+		server.decrementActiveClientsCounter();
+		return vecResponse;
 	}
 
 	public Vector downloadMyBulletinChunk(String authorAccountId,String bulletinLocalId,
 		int chunkOffset, int maxChunkSize, String signature)
 	{
-		return server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
+		server.incrementActiveClientsCounter();
+		vecResponse = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize, signature);
+		server.decrementActiveClientsCounter();
+		return vecResponse;
 	}
 
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
-		return server.listMySealedBulletinIds(authorAccountId);
+		server.incrementActiveClientsCounter();
+		vecResponse = server.listMySealedBulletinIds(authorAccountId);
+		server.decrementActiveClientsCounter();
+		return vecResponse;
 	}
 
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
-		return server.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
+		server.incrementActiveClientsCounter();
+		vecResponse = server.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
+		server.decrementActiveClientsCounter();
+		return vecResponse;
 	}
 
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
-		return server.listFieldOfficeAccounts(hqAccountId);
+		server.incrementActiveClientsCounter();
+		vecResponse = server.listFieldOfficeAccounts(hqAccountId);
+		server.decrementActiveClientsCounter();
+		return vecResponse;
 	}
 
 	public Vector downloadPacket(String authorAccountId, String packetLocalId)
 	{
-		return server.legacyDownloadPacket(authorAccountId, packetLocalId);
+		server.incrementActiveClientsCounter();
+		vecResponse = server.legacyDownloadPacket(authorAccountId, packetLocalId);
+		server.decrementActiveClientsCounter();
+		return vecResponse;
 	}
 
 	public String authenticateServer(String tokenToSign)
 	{
-		return server.authenticateServer(tokenToSign);
+		server.incrementActiveClientsCounter();
+		strResponse = server.authenticateServer(tokenToSign);
+		server.decrementActiveClientsCounter();
+		return strResponse;
 	}
 	
 	MartusServer server;
+	String strResponse;
+	Vector vecResponse;
 }
