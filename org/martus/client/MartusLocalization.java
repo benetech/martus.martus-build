@@ -644,9 +644,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=This file already exists. Do you wish to overwrite this file?");
 		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=The backup keypair will replace the file.");
 
-		addEnglishTranslation("field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or thier author.");
+		addEnglishTranslation("field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.");
 		addEnglishTranslation("field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.");
-		addEnglishTranslation("field:notifyPasteErrorNotAllowedcause=One or more bulletins cannot be pasted in that folder. This may be because of their Draft/Sealed status, or thier author.");
+		addEnglishTranslation("field:notifyPasteErrorNotAllowedcause=One or more bulletins cannot be pasted in that folder. This may be because of their Draft/Sealed status, or their author.");
 		addEnglishTranslation("field:notifyPasteErrorcause=An unexpected error occured while pasting the bulletin(s). One or more files may be damaged.");
 		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
