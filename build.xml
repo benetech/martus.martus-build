@@ -20,6 +20,8 @@
   <property name="htdocs-dir" value="www"/>
   <property name="verifier-dir" value="verify"/>
 
+  <property name="jar-verifier-dir" value ="${martus-dir}/jarverifier"/>
+
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
   <property name="common-package" value="${martus-package}.common"/>
@@ -29,7 +31,9 @@
                         ${hrvd-dir}/**/*.class,
                         ${logi-dir}/**/*.class,
                     	${common-dir}/**/*.class,
-                    	${swing-dir}/**/*.class
+						${jar-verifier-dir}/**/*.class,
+						${jar-verifier-dir}/**/ssmartusclientks,
+  	                	${swing-dir}/**/*.class
                     	"/>
 
   <property name="mspa-dir" value="${martus-dir}/mspa"/>
@@ -132,7 +136,7 @@
 
     <replace file="${common-dir}/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
 
-    <javac target="1.4" optimize="on" srcdir="${hrvd-dir};${logi-dir};${util-dir};${swing-dir};${common-dir}" classpath="." failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${hrvd-dir};${logi-dir};${jar-verifier-dir};${util-dir};${swing-dir};${common-dir}" classpath="." failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
