@@ -154,6 +154,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			int result = signIn(UiSigninDlg.INITIAL); 
 			if(result == CANCELLED)
 				return false;
+System.out.println("This needs to be removed! 283989234");
+//REMOVE THE FOLLOWING TWO LINES OF CODE!
+if(result == NEW_ACCOUNT)
+	return false;
+				
 			if(result == SIGNED_IN)
 				wantsNewAccount = false;
 		}
@@ -1255,7 +1260,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void doBackupKeyPair()
 	{
-		File keypairFile = app.getKeyPairFile();
+		File keypairFile = app.getCurrentKeyPairFile();
 		if(keypairFile.length() > MAX_KEYPAIRFILE_SIZE)
 		{
 			System.out.println("keypair file too large!");

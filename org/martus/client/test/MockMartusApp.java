@@ -48,10 +48,7 @@ public class MockMartusApp extends MartusApp
 		fakeDataDirectory.mkdir();
 
 		MockMartusApp app = new MockMartusApp(crypto, fakeDataDirectory);
-		app.currentAccountDirectory = fakeDataDirectory;
-
-		app.store = new BulletinStore(new MockClientDatabase());
-		app.store.setSignatureGenerator(crypto);
+		app.setCurrentAccount("some user");
 
 		return app;
 	}
@@ -74,12 +71,12 @@ public class MockMartusApp extends MartusApp
 		if(getUploadInfoFile().exists())
 			throw new IOException("uploadInfoFile");
 
-		getKeyPairFile().delete();
-		if(getKeyPairFile().exists())
+		getCurrentKeyPairFile().delete();
+		if(getCurrentKeyPairFile().exists())
 			throw new IOException("getKeyPairFile");
 
-		getBackupFile(getKeyPairFile()).delete();
-		if(getBackupFile(getKeyPairFile()).exists())
+		getBackupFile(getCurrentKeyPairFile()).delete();
+		if(getBackupFile(getCurrentKeyPairFile()).exists())
 			throw new IOException("getBackupFile");
 
 		File configInfo = new File(getConfigInfoFilename());
@@ -102,6 +99,13 @@ public class MockMartusApp extends MartusApp
 		if(dir.exists())
 			throw new IOException("dataDirectory");
 
+	}
+
+	public void setCurrentAccount(String userName)
+	{
+		super.setCurrentAccount(userName);
+		store = new BulletinStore(new MockClientDatabase());
+		store.setSignatureGenerator(getSecurity());
 	}
 
 	public void loadSampleData() throws Exception

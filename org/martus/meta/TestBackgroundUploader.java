@@ -84,7 +84,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		appWithServer.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
-		File keyPairFile = appWithServer.getKeyPairFile();
+		File keyPairFile = appWithServer.getCurrentKeyPairFile();
 		keyPairFile.delete();
 		appWithServer.getUploadInfoFile().delete();
 		new File(appWithServer.getConfigInfoFilename()).delete();

@@ -72,7 +72,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		appWithAccount = MockMartusApp.create(mockSecurityForApp);
 		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandlerNotAvailable());
 
-		File keyPairFile = appWithAccount.getKeyPairFile();
+		File keyPairFile = appWithAccount.getCurrentKeyPairFile();
 		keyPairFile.delete();
 		new File(appWithAccount.getConfigInfoFilename()).delete();
 		new File(appWithAccount.getConfigInfoSignatureFilename()).delete();
@@ -167,6 +167,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 			{
 				UiLocalization localization = new UiLocalization(fakeDataDirectory);
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
+				app.setCurrentAccount("some user");
 				app.doAfterSigninInitalization();
 				fail("Should have thrown because map is missing");
 			}
@@ -222,6 +223,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 			{
 				UiLocalization localization = new UiLocalization(fakeDataDirectory);
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
+				app.setCurrentAccount("some user");
 				app.doAfterSigninInitalization();
 				fail("Should have thrown because of missing map signature");
 			}
@@ -285,6 +287,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 			{
 				UiLocalization localization = new UiLocalization(fakeDataDirectory);
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
+				app.setCurrentAccount("some user");
 				app.doAfterSigninInitalization();
 				fail("Should have thrown because of invalid map signature");
 			}
@@ -401,7 +404,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		assertEquals("store account not unset on error?", false, mockSecurityForApp.hasKeyPair());
 
 
-		File keyPairFile = appWithAccount.getKeyPairFile();
+		File keyPairFile = appWithAccount.getCurrentKeyPairFile();
 		File backupKeyPairFile = MartusApp.getBackupFile(keyPairFile);
 		keyPairFile.delete();
 		backupKeyPairFile.delete();
@@ -515,7 +518,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testDoesAccountExist");
 
-		File keyPairFile = appWithAccount.getKeyPairFile();
+		File keyPairFile = appWithAccount.getCurrentKeyPairFile();
 		keyPairFile.delete();
 		assertEquals("account exists without a file?", false, appWithAccount.doesAnyAccountExist());
 

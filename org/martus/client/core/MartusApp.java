@@ -94,8 +94,6 @@ public class MartusApp
 			maxNewFolders = MAXFOLDERS;
 			martusDataRootDirectory = dataDirectoryToUse;
 
-			currentAccountDirectory = martusDataRootDirectory; 
-			store = new BulletinStore(currentAccountDirectory, security);
 		}
 		catch(MartusCrypto.CryptoInitializationException e)
 		{
@@ -107,7 +105,7 @@ public class MartusApp
 
 	private void initializeCurrentLanguage(Localization localization)
 	{
-		File languageFlag = new File(getCurrentAccountDirectoryName(),"lang.es");
+		File languageFlag = new File(getMartusDataRootDirectory(),"lang.es");
 		if(languageFlag.exists())
 		{
 			languageFlag.delete();
@@ -278,6 +276,11 @@ public class MartusApp
 				throw new MartusAppInitializationException("ErrorMissingAccountMapSignature");
 			}
 	}
+	
+	public File getMartusDataRootDirectory()
+	{
+		return martusDataRootDirectory;
+	}
 
 	public File getCurrentAccountDirectory()
 	{
@@ -306,7 +309,7 @@ public class MartusApp
 
 	public File getUiStateFile()
 	{
-		return new File(getCurrentAccountDirectoryName() + "UiState.dat");
+		return new File(getMartusDataRootDirectory(), "UiState.dat");
 	}
 
 	public File getDefaultDetailsFile()
@@ -341,9 +344,15 @@ public class MartusApp
 		return determineMartusDataRootDirectory();
 	}
 
-	public File getKeyPairFile()
+	public File getCurrentKeyPairFile()
 	{
-		return new File(getCurrentAccountDirectoryName() + KEYPAIR_FILENAME);
+		File dir = getCurrentAccountDirectory();
+		return getKeyPairFile(dir);
+	}
+
+	public File getKeyPairFile(File dir)
+	{
+		return new File(dir, KEYPAIR_FILENAME);
 	}
 
 	public static File getBackupFile(File original)
@@ -960,19 +969,19 @@ public class MartusApp
 					CannotCreateAccountFileException,
 					IOException
 	{
-		createAccountInternal(getKeyPairFile(), userName, userPassPhrase);
+		createAccountInternal(getMartusDataRootDirectory(), userName, userPassPhrase);
 	}
 
 	public void writeKeyPairFile(String userName, String userPassPhrase) throws
 		IOException,
 		CannotCreateAccountFileException
 	{
-		writeKeyPairFileWithBackup(getKeyPairFile(), userName, userPassPhrase);
+		writeKeyPairFileWithBackup(getCurrentKeyPairFile(), userName, userPassPhrase);
 	}
 
 	public boolean doesAnyAccountExist()
 	{
-		return getKeyPairFile().exists();
+		return getCurrentKeyPairFile().exists();
 	}
 
 	public void exportPublicInfo(File exportFile) throws
@@ -1004,7 +1013,7 @@ public class MartusApp
 
 	public boolean attemptSignIn(String userName, String userPassPhrase)
 	{
-		return attemptSignInInternal(getKeyPairFile(), userName, userPassPhrase);
+		return attemptSignInInternal(getCurrentKeyPairFile(), userName, userPassPhrase);
 	}
 
 	private String getCurrentLanguage()
@@ -1024,11 +1033,12 @@ public class MartusApp
 		return getAccountId().equals(b.getAccount());	
 	}
 
-	public void createAccountInternal(File keyPairFile, String userName, String userPassPhrase) throws
+	public void createAccountInternal(File accountDataDirectory, String userName, String userPassPhrase) throws
 					AccountAlreadyExistsException,
 					CannotCreateAccountFileException,
 					IOException
 	{
+		File keyPairFile = getKeyPairFile(accountDataDirectory);
 		if(keyPairFile.exists())
 			throw(new AccountAlreadyExistsException());
 		security.clearKeyPair();
@@ -1118,9 +1128,11 @@ public class MartusApp
 		return worked;
 	}
 
-	private void setCurrentAccount(String userName)
+	public void setCurrentAccount(String userName)
 	{
 		currentUserName = userName;
+		currentAccountDirectory = martusDataRootDirectory; 
+		store = new BulletinStore(currentAccountDirectory, security);
 	}
 
 	public String getCombinedPassPhrase(String userName, String userPassPhrase)
