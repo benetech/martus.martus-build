@@ -27,9 +27,12 @@ Boston, MA 02111-1307, USA.
 package org.martus.common.test;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Vector;
 
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.bulletin.Bulletin;
@@ -188,6 +191,97 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		assertFalse("This burRecord was created by this security?", MartusServerUtilities.wasBurCreatedByThisCrypto(burRecord, serverSecurity));
 	}
 
+	public void testWriteContactInfo() throws Exception
+	{
+		try
+		{
+			MartusServerUtilities.writeContatctInfo("bogusId", new Vector(), null);
+			fail("Should have thrown invalid file");
+		}
+		catch (Exception expectedException)
+		{
+		}
+
+		Vector contactInfo = new Vector();
+		String clientId = "id";
+		contactInfo.add(clientId);
+		contactInfo.add(new Integer(2));
+		String data1 = "Data";
+		contactInfo.add(data1);
+		String data2 = "Data2";
+		contactInfo.add(data2);
+		String signature = "Signature";
+		contactInfo.add(signature);
+
+		File contactInfoFile = createTempFile();
+		MartusServerUtilities.writeContatctInfo(clientId, contactInfo, contactInfoFile);
+
+		assertTrue("File Doesn't exist?", contactInfoFile.exists());
+
+		FileInputStream contactFileInputStream = new FileInputStream(contactInfoFile);
+		DataInputStream in = new DataInputStream(contactFileInputStream);
+
+		String inputPublicKey = in.readUTF();
+		int inputDataCount = in.readInt();
+		String inputData =  in.readUTF();
+		String inputData2 =  in.readUTF();
+		String inputSig = in.readUTF();
+		in.close();
+
+		assertEquals("Public key doesn't match", clientId, inputPublicKey);
+		assertEquals("data size not two?", 2, inputDataCount);
+		assertEquals("data not correct?", data1, inputData);
+		assertEquals("data2 not correct?", data2, inputData2);
+		assertEquals("signature doesn't match?", signature, inputSig);		
+
+		contactInfoFile.delete();
+		contactInfoFile.getParentFile().delete();
+	}
+
+	public void testGetContactInfo() throws Exception
+	{
+		File invalidFile = createTempFile();
+		try
+		{
+			MartusServerUtilities.getContactInfo(invalidFile);
+			fail("Should have thrown invalid file");
+		}
+		catch (Exception expectedException)
+		{
+		}
+
+		Vector contactInfo = new Vector();
+		String clientId = "id";
+		contactInfo.add(clientId);
+		contactInfo.add(new Integer(2));
+		String data1 = "Data";
+		contactInfo.add(data1);
+		String data2 = "Data2";
+		contactInfo.add(data2);
+		String signature = "Signature";
+		contactInfo.add(signature);
+
+		File contactInfoFile = createTempFile();
+		MartusServerUtilities.writeContatctInfo(clientId, contactInfo, contactInfoFile);
+		Vector retrievedInfo = MartusServerUtilities.getContactInfo(contactInfoFile);
+		assertEquals("Vector wrong size", contactInfo.size(), retrievedInfo.size());
+		
+		String inputPublicKey = (String)retrievedInfo.get(0);
+		int inputDataCount = ((Integer)retrievedInfo.get(1)).intValue();
+		String inputData = (String)retrievedInfo.get(2);
+		String inputData2 = (String)retrievedInfo.get(3);
+		String inputSig = (String)retrievedInfo.get(4);
+
+		assertEquals("Public key doesn't match", clientId, inputPublicKey);
+		assertEquals("data size not two?", 2, inputDataCount);
+		assertEquals("data not correct?", data1, inputData);
+		assertEquals("data2 not correct?", data2, inputData2);
+		assertEquals("signature doesn't match?", signature, inputSig);		
+
+		contactInfoFile.delete();
+		contactInfoFile.getParentFile().delete();
+	}
+
 	
 	public File createTempFileWithContents(String content)
 		throws IOException
@@ -200,6 +294,6 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		
 		return file;
 	}
-	
+
 	static MartusSecurity serverSecurity;
 }

@@ -27,9 +27,12 @@ Boston, MA 02111-1307, USA.
 package org.martus.common.utilities;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
@@ -515,6 +518,37 @@ public class MartusServerUtilities
 		db.writeRecord(burKey, bur);
 	}
 	
+	static public void writeContatctInfo(String accountId, Vector contactInfo, File contactInfoFile) throws IOException
+	{
+		contactInfoFile.getParentFile().mkdirs();
+		FileOutputStream contactFileOutputStream = new FileOutputStream(contactInfoFile);
+		DataOutputStream out = new DataOutputStream(contactFileOutputStream);
+		out.writeUTF((String)contactInfo.get(0));
+		out.writeInt(((Integer)(contactInfo.get(1))).intValue());
+		for(int i = 2; i<contactInfo.size(); ++i)
+		{
+			out.writeUTF((String)contactInfo.get(i));
+		}
+		out.close();
+	}
+
+	static public Vector getContactInfo(File contactFile) throws FileNotFoundException, IOException
+	{
+		Vector contactInfo = new Vector();
+		FileInputStream contactFileInputStream = new FileInputStream(contactFile);
+		DataInputStream in = new DataInputStream(contactFileInputStream);
+	
+		contactInfo.add(in.readUTF());
+		int inputDataCount = in.readInt();
+		contactInfo.add(new Integer(inputDataCount));
+		for(int i = 0; i < inputDataCount + 1; ++i)
+		{
+			contactInfo.add(in.readUTF());
+		}			
+		in.close();
+		return contactInfo;
+	}
+
 	public static class MartusSignatureFileAlreadyExistsException extends Exception {}
 	public static class MartusSignatureFileDoesntExistsException extends Exception {}
 	public static class FileTooLargeException extends IOException {}

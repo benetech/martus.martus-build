@@ -28,8 +28,6 @@ package org.martus.server.forclients;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -89,7 +87,6 @@ import org.martus.util.Base64.InvalidBase64Exception;
 
 public class MartusServer implements NetworkInterfaceConstants
 {
-
 	public static void main(String[] args)
 	{
 		try
@@ -750,21 +747,12 @@ public class MartusServer implements NetworkInterfaceConstants
 			return NetworkInterfaceConstants.SIG_ERROR;
 		contactInfo.add(signature);
 
-		try 
+		try
 		{
-			File contactInfoFile = getContactInfoFileForAccount(accountId);
-			contactInfoFile.getParentFile().mkdirs();
-			FileOutputStream contactFileOutputStream = new FileOutputStream(contactInfoFile);
-			DataOutputStream out = new DataOutputStream(contactFileOutputStream);
-			out.writeUTF((String)contactInfo.get(0));
-			out.writeInt(((Integer)(contactInfo.get(1))).intValue());
-			for(int i = 2; i<contactInfo.size(); ++i)
-			{
-				out.writeUTF((String)contactInfo.get(i));
-			}
-			out.close();
-		} 
-		catch (IOException e) 
+			File contactFile = getDatabase().getContactInfoFile(accountId);
+			MartusServerUtilities.writeContatctInfo(accountId, contactInfo, contactFile);
+		}
+		catch (IOException e)
 		{
 			log("putContactInfo Error" + e);
 			return NetworkInterfaceConstants.SERVER_ERROR;
@@ -792,22 +780,10 @@ public class MartusServer implements NetworkInterfaceConstants
 			return results;
 		}
 		
-		
-		Vector contactInfo = new Vector();
 		try
 		{
-			FileInputStream contactFileInputStream = new FileInputStream(contactFile);
-			DataInputStream in = new DataInputStream(contactFileInputStream);
-
-			contactInfo.add(in.readUTF());
-			int inputDataCount = in.readInt();
-			contactInfo.add(new Integer(inputDataCount));
-			for(int i = 0; i < inputDataCount; ++i)
-			{
-				contactInfo.add(in.readUTF());
-			}			
-			String signature = in.readUTF();
-			in.close();
+			Vector contactInfo = MartusServerUtilities.getContactInfo(contactFile);
+			String signature = (String)contactInfo.remove(contactInfo.size()-1);
 			if(!security.verifySignatureOfVectorOfStrings(contactInfo, accountId, signature))
 			{
 				log("getContactInfo:"+accountId +" : Signature failed");
