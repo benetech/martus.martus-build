@@ -243,6 +243,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(false, names.contains("privateinfo"));
 		assertEquals(false, names.contains("nope"));
 		assertEquals(true, names.contains("language"));
+		assertEquals(true, names.contains("organization"));
 		
 		List privateNames = Arrays.asList(Bulletin.getPrivateFieldNames());
 		assertEquals(true, privateNames.contains("privateinfo"));

@@ -168,25 +168,25 @@ public class TestMartusApp extends TestCaseEnhanced
 		appWithAccount.loadConfigInfo();
 
 		ConfigInfo originalInfo = appWithAccount.getConfigInfo();
-		assertEquals("should be empty", "", originalInfo.getSource());
+		assertEquals("should be empty", "", originalInfo.getAuthor());
 
-		originalInfo.setSource("blah");
-		assertEquals("should have been set", "blah", appWithAccount.getConfigInfo().getSource());
+		originalInfo.setAuthor("blah");
+		assertEquals("should have been set", "blah", appWithAccount.getConfigInfo().getAuthor());
 		appWithAccount.saveConfigInfo();
-		assertEquals("should still be there", "blah", appWithAccount.getConfigInfo().getSource());
+		assertEquals("should still be there", "blah", appWithAccount.getConfigInfo().getAuthor());
 		assertEquals("save didn't work!", true, file.exists());
 
-		originalInfo.setSource("something else");
+		originalInfo.setAuthor("something else");
 		appWithAccount.loadConfigInfo();
 		assertNotNull("ConfigInfo null", appWithAccount.getConfigInfo());
-		assertEquals("should have reloaded", "blah", appWithAccount.getConfigInfo().getSource());
+		assertEquals("should have reloaded", "blah", appWithAccount.getConfigInfo().getAuthor());
 
 		File sigFile = new File(appWithAccount.getConfigInfoSignatureFilename());
 		sigFile.delete();
 		appWithAccount.saveConfigInfo();
 		assertTrue("Missing Signature file", sigFile.exists());
 		appWithAccount.loadConfigInfo();
-		assertEquals("blah", appWithAccount.getConfigInfo().getSource());
+		assertEquals("blah", appWithAccount.getConfigInfo().getAuthor());
 		sigFile.delete();
 		try
 		{
@@ -197,7 +197,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		{
 			//Expected
 		}
-		assertEquals("", appWithAccount.getConfigInfo().getSource());
+		assertEquals("", appWithAccount.getConfigInfo().getAuthor());
 
 		TRACE_END();
 
@@ -307,12 +307,15 @@ public class TestMartusApp extends TestCaseEnhanced
 		mockSecurityForApp.loadSampleAccount();
 		ConfigInfo info = appWithServer.getConfigInfo();
 		String source = "who?";
+		String organization = "those guys";
 		String template = "Was there a bomb?";
-		info.setSource(source);
+		info.setAuthor(source);
+		info.setOrganization(organization);
 		info.setTemplateDetails(template);
 		Bulletin b = appWithServer.createBulletin();
 		assertNotNull("null Bulletin", b);
 		assertEquals(source, b.get(Bulletin.TAGAUTHOR));
+		assertEquals(organization, b.get(Bulletin.TAGORGANIZATION));
 		assertEquals(template, b.get(Bulletin.TAGPUBLICINFO));
 		assertEquals(Bulletin.STATUSDRAFT, b.getStatus());
 		assertEquals("not automatically private?", true, b.isAllPrivate());
@@ -1368,7 +1371,8 @@ public class TestMartusApp extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testFieldLabels");
 		assertEquals("Keep ALL Information Private", appWithServer.getFieldLabel("allprivate"));
-		assertEquals("Source", appWithServer.getFieldLabel("author"));
+		assertEquals("Author", appWithServer.getFieldLabel("author"));
+		assertEquals("Organization", appWithServer.getFieldLabel("organization"));
 		assertEquals("Title", appWithServer.getFieldLabel("title"));
 		assertEquals("Location", appWithServer.getFieldLabel("location"));
 		assertEquals("Date of Event", appWithServer.getFieldLabel("eventdate"));

@@ -15,15 +15,16 @@ public class ConfigInfo implements Serializable
 
 	public boolean hasContactInfo()
 	{
-		if(source == null)
-			return false;
-		if(source.length() == 0)
-			return false;
+		if(author != null && author.length() > 0)
+			return true;
 
-		return true;
+		if(organization != null && organization.length() > 0)
+			return true;
+
+		return false;
 	}
 
-	public void setSource(String newSource)		{ source = newSource; }
+	public void setAuthor(String newSource)		{ author = newSource; }
 	public void setOrganization(String newOrg)		{ organization = newOrg; }
 	public void setEmail(String newEmail)			{ email = newEmail; }
 	public void setWebPage(String newWebPage)		{ webPage = newWebPage; }
@@ -35,7 +36,7 @@ public class ConfigInfo implements Serializable
 	public void setHQKey(String newHQKey)			{ hqKey = newHQKey; }
 	public void clearHQKey()						{ hqKey = ""; }
 
-	public String getSource()			{ return source; }
+	public String getAuthor()			{ return author; }
 	public String getOrganization()	{ return organization; }
 	public String getEmail()			{ return email; }
 	public String getWebPage()			{ return webPage; }
@@ -48,7 +49,7 @@ public class ConfigInfo implements Serializable
 
 	public void clear()
 	{
-		source = "";
+		author = "";
 		organization = "";
 		email = "";
 		webPage = "";
@@ -67,7 +68,7 @@ public class ConfigInfo implements Serializable
 		{
 			DataInputStream in = new DataInputStream(inputStream);
 			short version = in.readShort();
-			loaded.source = in.readUTF();
+			loaded.author = in.readUTF();
 			loaded.organization = in.readUTF();
 			loaded.email = in.readUTF();
 			loaded.webPage = in.readUTF();
@@ -92,7 +93,7 @@ public class ConfigInfo implements Serializable
 		{
 			DataOutputStream out = new DataOutputStream(outputStream);
 			out.writeShort(VERSION);
-			out.writeUTF(source);
+			out.writeUTF(author);
 			out.writeUTF(organization);
 			out.writeUTF(email);
 			out.writeUTF(webPage);
@@ -110,7 +111,7 @@ public class ConfigInfo implements Serializable
 		}
 	}
 
-	private String source;
+	private String author;
 	private String organization;
 	private String email;
 	private String webPage;

@@ -1,13 +1,13 @@
 package org.martus.client;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
-
-
-import java.io.File;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextField;
 
 public class UiContactInfoDlg extends JDialog implements ActionListener
 {
@@ -35,7 +35,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		JScrollPane addressScrollPane = new JScrollPane(address, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
-		source.setText(info.getSource());
+		source.setText(info.getAuthor());
 		organization.setText(info.getOrganization());
 		email.setText(info.getEmail());
 		webpage.setText(info.getWebPage());
@@ -47,14 +47,16 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(space, ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(new JLabel());
 		
-		UiWrappedTextArea infoRequired = new UiWrappedTextArea(owner, app.getFieldLabel("ContactInfoRequired"));
+		UiWrappedTextArea infoRequired = new UiWrappedTextArea(owner, app.getFieldLabel("ContactInfoRequiredFields"));
 		infoRequired.setFont(space.getFont(), 60);
 		getContentPane().add(infoRequired);
 		
-		getContentPane().add(new JLabel(app.getFieldLabel("author")), ParagraphLayout.NEW_PARAGRAPH);
+		String authorPrompt = app.getFieldLabel("AuthorRequired");
+		getContentPane().add(new JLabel(authorPrompt), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(source);
 
-		getContentPane().add(new JLabel(app.getFieldLabel("organization")), ParagraphLayout.NEW_PARAGRAPH);
+		String organizationPrompt = app.getFieldLabel("OrganizationRequired");
+		getContentPane().add(new JLabel(organizationPrompt), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(organization);
 		getContentPane().add(new JLabel(app.getFieldLabel("email")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(email);
@@ -96,7 +98,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		result = false;
 		if(ae.getSource() == ok)
 		{
-			info.setSource(source.getText());
+			info.setAuthor(source.getText());
 			info.setOrganization(organization.getText());
 			info.setEmail(email.getText());
 			info.setWebPage(webpage.getText());

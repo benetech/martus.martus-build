@@ -315,7 +315,8 @@ public class MartusApp
 	public Bulletin createBulletin()
 	{
 		Bulletin b = store.createEmptyBulletin();
-		b.set(Bulletin.TAGAUTHOR, configInfo.getSource());
+		b.set(Bulletin.TAGAUTHOR, configInfo.getAuthor());
+		b.set(Bulletin.TAGORGANIZATION, configInfo.getOrganization());
 		b.set(Bulletin.TAGPUBLICINFO, configInfo.getTemplateDetails());
 		b.setDraft();
 		b.setAllPrivate(true);

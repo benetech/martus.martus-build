@@ -1,10 +1,13 @@
 package org.martus.client;
 
-import java.util.*;
-import java.text.*;
-import java.io.*;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
-import org.martus.common.*;
+import org.martus.common.TestCaseEnhanced;
 
 public class TestConfigInfo extends TestCaseEnhanced
 {
@@ -26,7 +29,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 	public void testConstructor()
 	{
 		ConfigInfo info = new ConfigInfo();
-		assertNotNull("source null", info.getSource());
+		assertNotNull("source null", info.getAuthor());
 		assertNotNull("template null", info.getTemplateDetails());
 	}
 
@@ -36,18 +39,27 @@ public class TestConfigInfo extends TestCaseEnhanced
 
 		assertEquals("No contact info", false, info.hasContactInfo());
 
-		info.setSource("fred");
-		assertEquals("fred", info.getSource());
+		info.setAuthor("fred");
+		assertEquals("fred", info.getAuthor());
 	}
 
-
+	public void testHasContactInfo() throws Exception
+	{
+		ConfigInfo info = new ConfigInfo();
+		info.setAuthor("fred");
+		assertEquals("author isn't enough contact info?", true, info.hasContactInfo());
+		info.setAuthor("");
+		info.setOrganization("whatever");
+		assertEquals("organization isn't enough contact info?", true, info.hasContactInfo());
+		
+	}
 
 	public void testSaveAndLoadFullFile() throws Exception
 	{
 		ConfigInfo info = new ConfigInfo();
 		verifyEmptyInfo(info, "constructor");
 
-		info.setSource(sampleSource);
+		info.setAuthor(sampleSource);
 		info.setOrganization(sampleOrg);
 		info.setEmail(sampleEmail);
 		info.setWebPage(sampleWebPage);
@@ -76,7 +88,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 	public void verifySampleInfo(ConfigInfo info, String label) 
 	{
 		assertEquals(label + ": Full has contact info", true, info.hasContactInfo());
-		assertEquals(label + ": sampleSource", sampleSource, info.getSource());
+		assertEquals(label + ": sampleSource", sampleSource, info.getAuthor());
 		assertEquals(label + ": sampleOrg", sampleOrg, info.getOrganization());
 		assertEquals(label + ": sampleEmail", sampleEmail, info.getEmail());
 		assertEquals(label + ": sampleWebPage", sampleWebPage, info.getWebPage());
@@ -91,7 +103,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 	public void verifyEmptyInfo(ConfigInfo info, String label) 
 	{
 		assertEquals(label + ": Full has contact info", false, info.hasContactInfo());
-		assertEquals(label + ": sampleSource", "", info.getSource());
+		assertEquals(label + ": sampleSource", "", info.getAuthor());
 		assertEquals(label + ": sampleOrg", "", info.getOrganization());
 		assertEquals(label + ": sampleEmail", "", info.getEmail());
 		assertEquals(label + ": sampleWebPage", "", info.getWebPage());
@@ -109,10 +121,10 @@ public class TestConfigInfo extends TestCaseEnhanced
 		ByteArrayOutputStream emptyOutputStream = new ByteArrayOutputStream();
 		emptyInfo.save(emptyOutputStream);
 
-		emptyInfo.setSource("should go away");
+		emptyInfo.setAuthor("should go away");
 		ByteArrayInputStream emptyInputStream = new ByteArrayInputStream(emptyOutputStream.toByteArray());
 		emptyInfo = ConfigInfo.load(emptyInputStream);
-		assertEquals("should have cleared", "", emptyInfo.getSource());
+		assertEquals("should have cleared", "", emptyInfo.getAuthor());
 	}
 
 	public void testStreamSaveAndLoadNonEmpty() throws Exception

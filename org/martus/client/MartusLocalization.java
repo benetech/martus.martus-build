@@ -470,7 +470,10 @@ public class MartusLocalization
 		addEnglishTranslation("field:aboutDlgLine4=of the Open Society Institute and the American Association for the Advancement of Science.");
 		addEnglishTranslation("field:allprivate=Keep ALL Information Private");
 		addEnglishTranslation("field:language=Language");
-		addEnglishTranslation("field:author=Source");
+		addEnglishTranslation("field:author=Author");
+		addEnglishTranslation("field:AuthorRequired=Author (required)");
+		addEnglishTranslation("field:organization=Organization");
+		addEnglishTranslation("field:OrganizationRequired=Organization (required)");
 		addEnglishTranslation("field:title=Title");
 		addEnglishTranslation("field:location=Location");
 		addEnglishTranslation("field:eventdate=Date of Event");
@@ -503,7 +506,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:NormalKeyboardMsg1=Remember: Entering your password using the regular keyboard may reduce security.");
 		addEnglishTranslation("field:NormalKeyboardMsg2=For maximum security switch to the on-screen keyboard.");
 		addEnglishTranslation("field:RetrieveSummariesMessage=All bulletins retrieved will still remain on the server.\nYou can only retrieve bulletins that are not currently on your computer.");
-		addEnglishTranslation("field:ContactInfoRequired=This information identifies your organization.\nCurrently the only required field is Source, which gets displayed in every bulletin you create.");
+		addEnglishTranslation("field:ContactInfoRequiredFields=This information identifies your organization.\nYou must enter either an Author or Organization, and both are shown in every bulletin you create.");
 		addEnglishTranslation("field:ContactInfoDescriptionOfFields=All other fields currently are stored on disk but are not used.");
 		addEnglishTranslation("field:ContactInfoFutureUseOfFields=In the future this information will be available to anyone who can view your public bulletin information.\nThis allows people to contact you for further information.");
 		addEnglishTranslation("field:ContactInfoUpdateLater=You can change any of this information later, by choosing Options/Contact Info.");
@@ -610,7 +613,6 @@ public class MartusLocalization
 		addEnglishTranslation("field:username=Username");
 		addEnglishTranslation("field:password1=Password");
 		addEnglishTranslation("field:password2=(same password again)");
-		addEnglishTranslation("field:organization=Organization");
 		addEnglishTranslation("field:email=Email Address");
 		addEnglishTranslation("field:webpage=Web Page");
 		addEnglishTranslation("field:phone=Phone Number");
