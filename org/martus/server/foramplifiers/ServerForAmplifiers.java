@@ -433,9 +433,9 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 			RecordHiddenException 
 	{
 		Vector result = new Vector();
-		log("entering createInterimBulletinFile");
+		//log("entering createInterimBulletinFile");
 		File tempFile = createInterimBulletinFile(headerKey);
-		log("createInterimBulletinFile done");
+		//log("createInterimBulletinFile done");
 		int totalLength = MartusUtilities.getCappedFileLength(tempFile);
 		
 		int chunkSize = totalLength - chunkOffset;
@@ -489,7 +489,7 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, getSecurity());
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, getSecurity().getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();
-//		log("    Total file size =" + tempFile.length());
+		log("    Total file size =" + tempFile.length());
 		
 		return tempFile;
 	}
