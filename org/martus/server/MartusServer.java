@@ -1166,13 +1166,11 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public synchronized void loadNotAuthorizedClients()
 	{
-		if(serverMaxLogging)
-			logging("loadNotAuthorizedClients");
+// Too much logging!
+//		if(serverMaxLogging)
+//			logging("loadNotAuthorizedClients");
 
 		loadBannedClients(bannedClientsFile);
-		
-		if(serverMaxLogging)
-				logging("loadNotAuthorizedClients : Exit OK");
 	}
 
 	public void loadBannedClients(File bannedClientsFile)
