@@ -25,6 +25,7 @@
     			${client-dir}/MartusHelp-en.txt,
     			${client-dir}/locked.jpg,
     			${client-dir}/unlocked.jpg,
+    			${client-dir}/Martus.jpg,
     			${client-dir}/version.txt,
     			main-class.txt"/>
 
