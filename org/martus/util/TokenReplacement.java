@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002,2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -23,33 +23,38 @@ Software Foundation, Inc., 59 Temple Place - Suite 330,
 Boston, MA 02111-1307, USA.
 
 */
+package org.martus.util;
 
-package org.martus.server.forclients;
+import java.util.Iterator;
+import java.util.Map;
 
-import junit.framework.Test;
-import junit.framework.TestSuite;
-
-public class TestForClients
+public class TokenReplacement 
 {
-	public static void main(String[] args) 
+
+	public static String replaceTokens(String original, Map tokenReplacement)
 	{
-		runTests();
+		if(tokenReplacement.isEmpty())
+			return original;
+	
+		String revised = original;
+		for (Iterator keys = tokenReplacement.keySet().iterator(); keys.hasNext();)
+		{
+			String token = (String) keys.next();
+			String replacement = (String)tokenReplacement.get(token);
+			revised = revised.replaceAll(token, replacement);
+		}
+		return revised;		
 	}
-
-	public static void runTests() 
+	public static String[] replaceTokens(String[] original, Map tokenReplacement)
 	{
-		junit.textui.TestRunner.run(suite());
-	}
-
-	public static Test suite() 
-	{
-		TestSuite suite = new TestSuite("All Server ForClient Tests");
-
-		suite.addTest(new TestSuite(TestMartusServer.class));
-		suite.addTest(new TestSuite(TestMartusServerUtilities.class));
-		suite.addTest(new TestSuite(TestServerForClients.class));
-		suite.addTest(new TestSuite(TestServerSideNetworkHandler.class));
-
-		return suite;
+		if(tokenReplacement.isEmpty())
+			return original;
+	
+		String[] revised = new String[original.length];
+		for (int i = 0; i < original.length; ++i)
+		{
+			revised[i] = replaceTokens(original[i], tokenReplacement);
+		}
+		return revised;		
 	}
 }

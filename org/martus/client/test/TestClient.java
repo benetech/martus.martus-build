@@ -47,21 +47,23 @@ public class TestClient
 
 		suite.addTest(new TestSuite(TestBulletinFolder.class));
 		suite.addTest(new TestSuite(TestBulletinStore.class));
-		suite.addTest(new TestSuite(TestBulletinXmlExporter.class));
-		suite.addTest(new TestSuite(TestConfigInfo.class));
-		suite.addTest(new TestSuite(TestMartusApp_NoServer.class));
-		suite.addTest(new TestSuite(TestMartusLocalization.class));
-		suite.addTest(new TestSuite(TestDateUtilities.class));
 		suite.addTest(new TestSuite(TestBulletinTableModel.class));
-		suite.addTest(new TestSuite(TestFolderList.class));
-		suite.addTest(new TestSuite(TestTransferableBulletin.class));
-		suite.addTest(new TestSuite(TestChoiceItem.class));
-		suite.addTest(new TestSuite(TestCurrentUiState.class));
-		suite.addTest(new TestSuite(TestClientFileDatabase.class));
-		suite.addTest(new TestSuite(TestMartusUserNameAndPassword.class));
+		suite.addTest(new TestSuite(TestBulletinXmlExporter.class));
 		suite.addTest(new TestSuite(TestCacheOfSortableFields.class));
+		suite.addTest(new TestSuite(TestChoiceItem.class));
+		suite.addTest(new TestSuite(TestClientFileDatabase.class));
 		suite.addTest(new TestSuite(TestClientSideNetworkHandler.class));
+		suite.addTest(new TestSuite(TestConfigInfo.class));
+		suite.addTest(new TestSuite(TestCurrentUiState.class));
 		suite.addTest(new TestSuite(TestCustomFieldSpecValidator.class));
+		suite.addTest(new TestSuite(TestDateUtilities.class));
+		suite.addTest(new TestSuite(TestFolderList.class));
+		suite.addTest(new TestSuite(TestMartusApp_NoServer.class));
+		suite.addTest(new TestSuite(TestMartusFlexidate.class));
+		suite.addTest(new TestSuite(TestMartusLocalization.class));
+		suite.addTest(new TestSuite(TestMartusUserNameAndPassword.class));
+		suite.addTest(new TestSuite(TestTokenReplacement.class));
+		suite.addTest(new TestSuite(TestTransferableBulletin.class));
 
 	    return suite;
 	}

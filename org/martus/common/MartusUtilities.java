@@ -37,8 +37,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -533,34 +531,6 @@ public class MartusUtilities
 	{
 		String newFileName = createValidFileName(originalFileName);
 		return newFileName.equals(originalFileName);
-	}
-
-	public static String replaceTokens(String original, Map tokenReplacement)
-	{
-		if(tokenReplacement.isEmpty())
-			return original;
-
-		String revised = original;
-		for (Iterator keys = tokenReplacement.keySet().iterator(); keys.hasNext();)
-		{
-			String token = (String) keys.next();
-			String replacement = (String)tokenReplacement.get(token);
-			revised = revised.replaceAll(token, replacement);
-		}
-		return revised;		
-	}
-
-	public static String[] replaceTokens(String[] original, Map tokenReplacement)
-	{
-		if(tokenReplacement.isEmpty())
-			return original;
-
-		String[] revised = new String[original.length];
-		for (int i = 0; i < original.length; ++i)
-		{
-			revised[i] = replaceTokens(original[i], tokenReplacement);
-		}
-		return revised;		
 	}
 
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";

@@ -38,11 +38,11 @@ import javax.swing.JScrollPane;
 
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.MartusUtilities;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.UiTextArea;
 import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
+import org.martus.util.TokenReplacement;
 
 
 
@@ -60,15 +60,15 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 
 		UiLocalization localization = mainWindow.getLocalization();
 		String windowTitle = localization.getWindowTitle(titleTag);
-		setTitle(MartusUtilities.replaceTokens(windowTitle, tokenReplacement));
+		setTitle(TokenReplacement.replaceTokens(windowTitle, tokenReplacement));
 		String buttonLabel = localization.getButtonLabel(okButtonTag);
-		ok = new JButton(MartusUtilities.replaceTokens(buttonLabel, tokenReplacement));
+		ok = new JButton(TokenReplacement.replaceTokens(buttonLabel, tokenReplacement));
 		ok.addActionListener(this);
 		JButton cancel = null;
 		if(cancelButtonTag.length() != 0)
 		{
 			buttonLabel = localization.getButtonLabel(cancelButtonTag);
-			cancel = new JButton(MartusUtilities.replaceTokens(buttonLabel, tokenReplacement));
+			cancel = new JButton(TokenReplacement.replaceTokens(buttonLabel, tokenReplacement));
 			cancel.addActionListener(this);
 		}
 
@@ -78,12 +78,12 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 		details.setEditable(false);
 		JScrollPane detailScrollPane = new JScrollPane(details, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		details.setText(MartusUtilities.replaceTokens(text, tokenReplacement));
+		details.setText(TokenReplacement.replaceTokens(text, tokenReplacement));
 
 		getContentPane().setLayout(new ParagraphLayout());
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		String fieldLabel = localization.getFieldLabel(descriptionTag);
-		fieldLabel = MartusUtilities.replaceTokens(fieldLabel, tokenReplacement);
+		fieldLabel = TokenReplacement.replaceTokens(fieldLabel, tokenReplacement);
 		getContentPane().add(new UiWrappedTextArea(fieldLabel));
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(detailScrollPane);

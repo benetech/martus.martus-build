@@ -34,7 +34,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -111,51 +110,6 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		catch (IOException ignoreExpectedException)
 		{
 		}
-	}
-	
-	public void testReplaceTokens() throws Exception
-	{
-		try 
-		{
-			MartusUtilities.replaceTokens("",null);
-			fail("Null map is invalid and should throw.");
-		} 
-		catch (RuntimeException expected) 
-		{
-		}
-
-		String nothingToReplace = "nothing to replace";
-		HashMap empty = new HashMap();
-		String result = MartusUtilities.replaceTokens(nothingToReplace, empty);
-		assertEquals("Nothing to replace why didn't strings match?", nothingToReplace, result);
-
-		String token = "#dd#";
-		String replacementValue = "but this";
-		String replaceOneItem = "nothing " + token + " to replace";
-		HashMap map = new HashMap();
-		map.put(token, replacementValue);
-		result = MartusUtilities.replaceTokens(replaceOneItem, map);
-		assertNotEquals("Did not replace token?", replaceOneItem, result);
-		assertEquals("Incorrect replacement?", "nothing but this to replace", result);
-
-		String token2 = "#ff#";
-		String replacementValue2 = "when all is said and done.";
-		String replaceTwoItem = replaceOneItem + " " + token2;
-		map.put(token2, replacementValue2);
-		result = MartusUtilities.replaceTokens(replaceTwoItem, map);
-		assertNotEquals("Did not replace both tokens?", replaceTwoItem, result);
-		assertEquals("Incorrect replacement of two tokens?", "nothing but this to replace when all is said and done.", result);
-		
-		String[] stringOriginalArray = {"#a#","#unknown#","#c#"};
-		HashMap tokens = new HashMap();
-		tokens.put("#a#","1");
-		tokens.put("#c#","3");
-		
-		String[] arrayResult = MartusUtilities.replaceTokens(stringOriginalArray, tokens);
-		String[] expectedArray = {"1", "#unknown#", "3"};
-		assertEquals("Replace Tokens for an array[0] of strings not replaced?", expectedArray[0], arrayResult[0]);
-		assertEquals("an unknown token in array[1] of strings was replaced?", expectedArray[1], arrayResult[1]);
-		assertEquals("Replace Tokens for an array[3] of strings not replaced?", expectedArray[2], arrayResult[2]);
 	}
 	
 	public void testImportServerPublicKeyFromFile() throws Exception

@@ -41,7 +41,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
-import org.martus.common.MartusUtilities;
+import org.martus.util.TokenReplacement;
 
 public class UiNotifyDlg extends JDialog implements ActionListener
 {
@@ -53,9 +53,9 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 	
 	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
 	{
-		super(owner, MartusUtilities.replaceTokens(title, tokenReplacement) , true);
-		contents = MartusUtilities.replaceTokens(contents, tokenReplacement);
-		buttons = MartusUtilities.replaceTokens(buttons, tokenReplacement);
+		super(owner, TokenReplacement.replaceTokens(title, tokenReplacement) , true);
+		contents = TokenReplacement.replaceTokens(contents, tokenReplacement);
+		buttons = TokenReplacement.replaceTokens(buttons, tokenReplacement);
 
 		getContentPane().add(new JLabel("      "), BorderLayout.WEST);
 		getContentPane().add(new JLabel("      "), BorderLayout.EAST);
