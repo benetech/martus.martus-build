@@ -137,7 +137,7 @@ abstract public class MockDatabase extends Database
 
 	public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter)
 	{
-		if(isHidden(key.getUniversalId()))
+		if(isHidden(key))
 			return null;
 
 		String data = readRecord(key, decrypter);

@@ -66,7 +66,7 @@ public class MockServerDatabase extends MockDatabase
 
 	synchronized String readRecord(DatabaseKey key)
 	{
-		if(isHidden(key.getUniversalId()))
+		if(isHidden(key))
 			return null;
 
 		Map map = getPacketMapFor(key);

@@ -93,6 +93,11 @@ abstract public class Database
 	{
 		return hiddenPacketUids.contains(uid);
 	}
+	
+	public boolean isHidden(DatabaseKey key)
+	{
+		return isHidden(key.getUniversalId());
+	}
 
 	public boolean mustEncryptLocalData()
 	{
@@ -133,14 +138,14 @@ abstract public class Database
 		while(lookForHiddenKeys.hasNext())
 		{
 			DatabaseKey key = (DatabaseKey) lookForHiddenKeys.next();
-			if(isHidden(key.getUniversalId()))
+			if(isHidden(key))
 				throw new RecordHiddenException();
 		}
 	}
 
 	protected void throwIfRecordIsHidden(DatabaseKey key) throws RecordHiddenException
 	{
-		if(isHidden(key.getUniversalId()))
+		if(isHidden(key))
 			throw new RecordHiddenException();
 	}
 

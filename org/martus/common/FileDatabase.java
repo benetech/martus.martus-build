@@ -191,7 +191,7 @@ public class FileDatabase extends Database
 			IOException,
 			MartusCrypto.CryptoException
 	{
-		if(isHidden(key.getUniversalId()))
+		if(isHidden(key))
 			return null;
 
 		try
