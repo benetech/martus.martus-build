@@ -39,6 +39,11 @@ public class MockMartusSecurity extends MartusSecurity
 		loadSampleAccount();
 	}
 	
+	public void speedWarning(String message)
+	{
+		//System.out.println("MockMartusSecurity.speedWarning: " + message);
+	}
+	
 	public void readKeyPair(InputStream inputStream, String passPhrase) throws
 		IOException,
 		InvalidKeyPairFileVersionException,
@@ -60,7 +65,7 @@ public class MockMartusSecurity extends MartusSecurity
 	
 	public void createKeyPair(int publicKeyBits)
 	{
-		//System.out.println("WARNING: Calling MockMartusSecurity.createKeyPair " + publicKeyBits);
+		speedWarning("Calling MockMartusSecurity.createKeyPair " + publicKeyBits);
 		super.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 	}
 	
@@ -223,5 +228,11 @@ public class MockMartusSecurity extends MartusSecurity
 		"wa3N3srq6RX+d+sgV3xkT6SBTbwOS+3gDkUs7PMnmLNMzOZoboNGHB44rbr8D6" +
 		"b9rplgWLxBeBvKKet25Icx1lhq8EHJOfxVzOIbKAREkQxuYrB5rqcz6q27q7VP" +
 		"Pikfi4CO8=";
+
+	public byte[] signatureGet() throws MartusSignatureException
+	{
+		speedWarning("signatureGet");
+		return super.signatureGet();
+	}
 
 }
