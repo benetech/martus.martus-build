@@ -26,7 +26,7 @@ public class Retriever
 
 	public void retrieveFieldOfficeBulletins(Vector uidList)
 	{
-		BulletinFolder retrievedFolder = app.createFolderRetrieved();
+		BulletinFolder retrievedFolder = app.createFolderRetrievedFieldOffice();
 		app.getStore().saveFolders();
 
 		retrieveBulletins(uidList, retrievedFolder);

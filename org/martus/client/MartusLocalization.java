@@ -365,8 +365,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:BulletinDetails=Details Field Default Content");
 		addEnglishTranslation("wintitle:retrieve=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:RetrieveDrafts=Retrieve Draft Bulletins");
-		addEnglishTranslation("wintitle:retrieveHQ=Retrieve Headquarter Sealed Bulletins");
-		addEnglishTranslation("wintitle:retrieveHQDrafts=Retrieve Headquarter Draft Bulletins");
+		addEnglishTranslation("wintitle:retrieveHQ=Retrieve Field Desk Sealed Bulletins");
+		addEnglishTranslation("wintitle:retrieveHQDrafts=Retrieve Field Desk Draft Bulletins");
 		addEnglishTranslation("wintitle:about=About Martus");
 		addEnglishTranslation("wintitle:AccountInfo=Account Information");
 		addEnglishTranslation("wintitle:Help=Help on Martus");
@@ -431,8 +431,8 @@ public class MartusLocalization
 		addEnglishTranslation("menu:changeUserNamePassword=Change User Name or Password");
 		addEnglishTranslation("menu:retrieve=Retrieve Bulletins");
 		addEnglishTranslation("menu:RetrieveDrafts=Retrieve Draft Bulletins");
-		addEnglishTranslation("menu:retrieveHQ=Retrieve Headquarter Bulletins");
-		addEnglishTranslation("menu:retrieveHQDrafts=Retrieve Headquarter Draft Bulletins");
+		addEnglishTranslation("menu:retrieveHQ=Retrieve Field Desk Bulletins");
+		addEnglishTranslation("menu:retrieveHQDrafts=Retrieve Field Desk Draft Bulletins");
 		addEnglishTranslation("menu:exportPublicAccountInfo=Export Public Information");
 		addEnglishTranslation("menu:importPublicAccountInfo=Import Public Information");
 		addEnglishTranslation("menu:clearPublicAccountInfo=Remove Existing Headquarters");
@@ -508,13 +508,13 @@ public class MartusLocalization
 		addEnglishTranslation("field:StatusReady=Ready");
 		addEnglishTranslation("field:RetrieveMySealedBulletinProgress=Retrieving Sealed Bulletins");
 		addEnglishTranslation("field:RetrieveMyDraftBulletinProgress=Retrieving Draft Bulletins");
-		addEnglishTranslation("field:RetrieveHQSealedBulletinProgress=Retrieving Headquarter Sealed Bulletins");
-		addEnglishTranslation("field:RetrieveHQDraftBulletinProgress=Retrieving Headquarter Draft Bulletins");
+		addEnglishTranslation("field:RetrieveHQSealedBulletinProgress=Retrieving Field Desk Sealed Bulletins");
+		addEnglishTranslation("field:RetrieveHQDraftBulletinProgress=Retrieving Field Desk Draft Bulletins");
 		addEnglishTranslation("field:ChunkProgressStatusMessage=Download Progress");
 		addEnglishTranslation("field:RetrieveMySealedBulletinSummaries=Retrieving Sealed Bulletin Summaries");
 		addEnglishTranslation("field:RetrieveMyDraftBulletinSummaries=Retrieving Draft Bulletin Summaries");
-		addEnglishTranslation("field:RetrieveHQSealedBulletinSummaries=Retrieving Headquarter Sealed Bulletin Summaries");
-		addEnglishTranslation("field:RetrieveHQDraftBulletinSummaries=Retrieving Headquarter Draft Bulletin Summaries");
+		addEnglishTranslation("field:RetrieveHQSealedBulletinSummaries=Retrieving Field Desk Sealed Bulletin Summaries");
+		addEnglishTranslation("field:RetrieveHQDraftBulletinSummaries=Retrieving Field Desk Draft Bulletin Summaries");
 
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");
@@ -625,6 +625,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:AccountInfoPublicCode=Public Code:");
 		addEnglishTranslation("field:NameOfExportedFile=Please enter a name for the file you wish to export.");
 		addEnglishTranslation("field:NameOfExportedFile=Please enter a name for the file you wish to export.");
+
+		addEnglishTranslation("folder:%RetrievedMyBulletin=Retrieved Bulletins");
+		addEnglishTranslation("folder:%RetrievedFieldOfficeBulletin=Field Desk Bulletins");
 
 		addEnglishTranslation("month:jan=Jan");
 		addEnglishTranslation("month:feb=Feb");

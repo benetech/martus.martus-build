@@ -1380,6 +1380,12 @@ public class TestMartusApp extends TestCaseEnhanced
 		assertEquals("Language", appWithServer.getFieldLabel("language"));
 		TRACE_END();
 	}
+	
+	public void testFolderLabels()
+	{
+		//assertEquals("Retrieved Bulletins", appWithServer.getFolderLabel("%RetrievedMyBulletin"));
+		//assertEquals("Field Desk Bulletins", appWithServer.getFolderLabel("%RetrievedFieldOfficeBulletin"));
+	}
 
 	public void testLanguageNames()
 	{
