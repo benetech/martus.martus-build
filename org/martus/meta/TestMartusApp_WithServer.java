@@ -40,6 +40,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
     public TestMartusApp_WithServer(String name) throws Exception
     {
         super(name);
+    	VERBOSE = false;
 	}
 
     public void setUp() throws Exception
@@ -1248,21 +1249,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		return Base64.decode(MockBulletin.saveToZipString(b));
 	}
 		
-	private void TRACE_BEGIN(String method)
-	{
-		if(VERBOSE)
-		{
-			System.out.print("TestMartusApp." + method + ": ");
-			methodStartedAt = System.currentTimeMillis();
-		}
-	}
-
-	private void TRACE_END()
-	{
-		if(VERBOSE)
-			System.out.println(System.currentTimeMillis() - methodStartedAt);
-	}
-
 	private static MockMartusSecurity mockSecurityForApp;
 	private static MockMartusSecurity mockSecurityForServer;
 
@@ -1273,9 +1259,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private NetworkInterfaceForNonSSL mockNonSSLServerHandler;
 	private MockServerInterfaceHandler mockSSLServerHandler;
 	
-	private final boolean VERBOSE = false;
-	private long methodStartedAt;
-
 	static final String sampleMagicWord = "beans!";
 
 }

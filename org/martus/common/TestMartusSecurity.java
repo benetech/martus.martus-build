@@ -41,11 +41,10 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 
 public class TestMartusSecurity extends TestCaseEnhanced
 {
-	private final boolean VERBOSE = false;
-
 	public TestMartusSecurity(String name)
 	{
 		super(name);
+		VERBOSE = false;
 	}
 
 	public void setUp() throws Exception
@@ -681,24 +680,8 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	}
 */
 
-	private void TRACE_BEGIN(String method)
-	{
-		if(VERBOSE)
-		{
-			System.out.print("TestMartusSecurity." + method);
-			methodStartedAt = System.currentTimeMillis();
-		}
-	}
-
-	private void TRACE_END()
-	{
-		if(VERBOSE)
-			System.out.println(System.currentTimeMillis() - methodStartedAt);
-	}
-
 	private static MartusSecurity security;
 	private static MartusSecurity securityWithoutKeyPair;
 	private static KeyPair invalidKeyPair;
 
-	private long methodStartedAt;
 }

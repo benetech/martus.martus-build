@@ -175,7 +175,26 @@ public class TestCaseEnhanced extends TestCase
 		if (!container.endsWith(expected))
 			throw new AssertionFailedError(label + ": <" + expected + ">" + " not at end of " + "<" + container + ">");
 	}
+
+	public void TRACE_BEGIN(String method)
+	{
+		if(VERBOSE)
+		{
+			System.out.print(getClass() + "." + method + ": ");
+			methodStartedAt = System.currentTimeMillis();
+		}
+	}
+
+	public void TRACE_END()
+	{
+		if(VERBOSE)
+			System.out.println(System.currentTimeMillis() - methodStartedAt);
+	}
+
 	
 	public final static String BAD_FILENAME = "<>//\\..??**::||";
+
+	private long methodStartedAt;
+	public boolean VERBOSE = false;
 
 }

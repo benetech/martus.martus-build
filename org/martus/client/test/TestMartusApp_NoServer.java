@@ -27,6 +27,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public TestMartusApp_NoServer(String name)
 	{
 		super(name);
+		VERBOSE = false;
 	}
 
 	public void setUp() throws Exception
@@ -906,21 +907,6 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 
 
-	private void TRACE_BEGIN(String method)
-	{
-		if(VERBOSE)
-		{
-			System.out.print("TestMartusApp." + method + ": ");
-			methodStartedAt = System.currentTimeMillis();
-		}
-	}
-
-	private void TRACE_END()
-	{
-		if(VERBOSE)
-			System.out.println(System.currentTimeMillis() - methodStartedAt);
-	}
-
 	public static class MockServerNotAvailable extends MockMartusServer
 	{
 		MockServerNotAvailable() throws Exception
@@ -939,9 +925,6 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 //	private MockMartusApp appWithAccount;
 	private MockMartusApp appWithAccount;
-
-	private final boolean VERBOSE = false;
-	private long methodStartedAt;
 
 	static final String userName = "testuser";
 	static final String userName2 = "testuse!";
