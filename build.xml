@@ -1,10 +1,38 @@
-<project name="martus" default="test" basedir=".">
+<project name="martus" default="test-meta" basedir=".">
 
   <!-- set global properties for this build -->
   <property name="dist"  value="dist"/>
-  <property name="common-dir"  value="org/martus/common"/>
+  <property name="martus-dir" value="org/martus"/>
+  <property name="martus-package" value="org.martus"/>
+  
+  <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
-  <property name="common-package"  value="org.martus.common"/>
+  <property name="common-package" value="${martus-package}.common"/>
+  <property name="common-files" value="${common-dir}/*.class,
+    			${common-dir}/version.txt"/>
+
+  <property name="server-dir" value="${martus-dir}/server"/>
+  <property name="server-jar" value= "${dist}/martus-server.jar"/>
+  <property name="server-package" value="${martus-package}.server"/>
+  <property name="server-files" value="${server-dir}/*.class,
+    			${server-dir}/version.txt"/>
+
+  <property name="client-dir" value="${martus-dir}/client"/>
+  <property name="client-jar" value= "${dist}/martus.jar"/>
+  <property name="client-package" value="${martus-package}.client"/>
+  <property name="client-files" value="${client-dir}/*.class,
+    			${client-dir}/Martus-es.mtf,
+    			${client-dir}/MartusHelp-en.txt,
+    			${client-dir}/locked.jpg,
+    			${client-dir}/unlocked.jpg,
+    			${client-dir}/version.txt,
+    			${client-dir}/main-class.txt"/>
+
+  <property name="meta-dir" value="${martus-dir}/meta"/>
+  <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
+  <property name="meta-package" value="${martus-package}.meta"/>
+  <property name="meta-files" value="${meta-dir}/*.class,
+    			${meta-dir}/version.txt"/>
 
   <target name="init">
     <!-- tstamp task initializes ${DSTAMP} etc -->
@@ -12,23 +40,83 @@
   </target>
 
   <target name="clean">
+  	<delete file="${dist}/*"/>
+  	<delete dir="${dist}"/>
+
     <delete file="${common-dir}/*.class"/>
     <delete file="${common-jar}"/>
     <delete file="${common-jar}/version.txt"/>
+
+    <delete file="${server-dir}/*.class"/>
+    <delete file="${server-jar}"/>
+    <delete file="${server-jar}/version.txt"/>
+
+    <delete file="${client-dir}/*.class"/>
+    <delete file="${client-jar}"/>
+    <delete file="${client-jar}/version.txt"/>
+
+    <delete file="${meta-dir}/*.class"/>
+    <delete file="${meta-jar}"/>
+    <delete file="${meta-jar}/version.txt"/>
   </target>
 
   <target name="build" depends="init">
-    <javac srcdir="${common-dir}" destdir="${common-dir}" failonerror="true" excludes="obsolete/*"/>
+
     <echo message="${DSTAMP}" file="${common-dir}/version.txt"/>
+    <javac srcdir="${common-dir}" destdir="${common-dir}" failonerror="true"/>
+
+    <echo message="${DSTAMP}" file="${server-dir}/version.txt"/>
+    <javac srcdir="${server-dir}" destdir="${server-dir}" failonerror="true"/>
+
+    <echo message="${DSTAMP}" file="${client-dir}/version.txt"/>
+    <javac srcdir="${client-dir}" destdir="${client-dir}" failonerror="true"/>
+
+    <echo message="${DSTAMP}" file="${meta-dir}/version.txt"/>
+    <javac srcdir="${meta-dir}" destdir="${meta-dir}" failonerror="true"/>
+
     <mkdir dir="${dist}"/>
-    <jar jarfile="${common-jar}" basedir="." includes="${common-dir}/*.class"/>
+    <jar jarfile="${common-jar}" basedir="." 
+    		includes="${common-files}"/>
+    <jar jarfile="${server-jar}" basedir="." 
+    		includes="${server-files}, 
+    				${common-files}"/>
+    <jar jarfile="${client-jar}" basedir="." 
+    		includes="${client-files}, 
+    				${common-files}"/>
+    <jar jarfile="${meta-jar}" basedir="." 
+    		includes="${meta-files}, 
+    				${common-files}, 
+    				${server-files},
+    				${client-files}"/>
+
   </target>
 
-  <target name="test" depends="build">
+  <target name="test-common" depends="build">
 	<!-- Run the unit test suite -->
 	<java classname="${common-package}.TestAll" 
 		fork="true"
 		classpath = "${common-jar}"/>
+  </target>
+
+  <target name="test-server" depends="build">
+	<!-- Run the unit test suite -->
+	<java classname="${server-package}.TestAll" 
+		fork="true"
+		classpath = "${server-jar}"/>
+  </target>
+
+  <target name="test-client" depends="build">
+	<!-- Run the unit test suite -->
+	<java classname="${client-package}.TestAll" 
+		fork="true"
+		classpath = "${client-jar}"/>
+  </target>
+
+  <target name="test-meta" depends="build">
+	<!-- Run the unit test suite -->
+	<java classname="${meta-package}.TestAll" 
+		fork="true"
+		classpath = "${meta-jar}"/>
   </target>
 
 </project>
