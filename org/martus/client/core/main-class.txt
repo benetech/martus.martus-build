@@ -1,2 +1,2 @@
-Main-class: org.martus.client.core.Martus
+Main-class: org.martus.client.swingui.Martus
 Sealed: true
