@@ -214,6 +214,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		serverForClients.loadConfigurationFiles();
 		serverForMirroring.loadConfigurationFiles();
+		serverForAmplifiers.loadConfigurationFiles();
 
 		//Tests will fail if compliance isn't last.
 		loadHiddenPacketsFile();
@@ -1380,6 +1381,31 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(serverName == null)
 			return "host/address";
 		return serverName;
+	}
+
+	public Vector loadServerPublicKeys(File directoryContainingPublicKeyFiles) throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
+	{
+		Vector servers = new Vector();
+
+		File[] files = directoryContainingPublicKeyFiles.listFiles();
+		if(files == null)
+			return servers;
+		for (int i = 0; i < files.length; i++)
+		{
+			File thisFile = files[i];
+			Vector publicInfo = MartusUtilities.importServerPublicKeyFromFile(thisFile, getSecurity());
+			String accountId = (String)publicInfo.get(0);
+			servers.add(accountId);
+			if(isSecureMode())
+			{
+				thisFile.delete();
+				if(thisFile.exists())
+					throw new IOException("delete failed: " + thisFile);
+			}
+			log("Authorized to call us: " + thisFile.getName());
+		}
+		
+		return servers;
 	}
 
 	BulletinHeaderPacket loadBulletinHeaderPacket(Database db, DatabaseKey key)

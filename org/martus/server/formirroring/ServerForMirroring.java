@@ -83,8 +83,8 @@ public class ServerForMirroring implements ServerSupplierInterface
 		log("MirroringInterval (millis): " + mirroringIntervalMillis);
 		log("InactiveSleep (millis): " + inactiveSleepMillis);
 
-		authorizedCallers = new Vector();
-		loadServersWhoAreAuthorizedToCallUs();
+		File authorizedCallersDir = getAuthorizedCallersDirectory();
+		authorizedCallers = coreServer.loadServerPublicKeys(authorizedCallersDir);
 		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
 	}
 
@@ -218,38 +218,9 @@ public class ServerForMirroring implements ServerSupplierInterface
 		return coreServer.isSecureMode();
 	}
 
-	void loadServersWhoAreAuthorizedToCallUs() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
-	{
-		authorizedCallers.clear();
-
-		File authorizedCallersDir = getAuthorizedCallersDirectory();
-		File[] callersFiles = authorizedCallersDir.listFiles();
-		if(callersFiles == null)
-			return;
-		for (int i = 0; i < callersFiles.length; i++)
-		{
-			File callerFile = callersFiles[i];
-			Vector publicInfo = MartusUtilities.importServerPublicKeyFromFile(callerFile, getSecurity());
-			String accountId = (String)publicInfo.get(0);
-			addAuthorizedCaller(accountId);
-			if(isSecureMode())
-			{
-				callerFile.delete();
-				if(callerFile.exists())
-					throw new IOException("delete failed: " + callerFile);
-			}
-			log("Authorized to call us: " + callerFile.getName());
-		}
-	}
-
 	File getAuthorizedCallersDirectory()
 	{
 		return new File(coreServer.getStartupConfigDirectory(), "mirrorsWhoCallUs");
-	}
-	
-	void addAuthorizedCaller(String publicKey)
-	{
-		authorizedCallers.add(publicKey);
 	}
 	
 	File getMirrorsWeWillCallDirectory()

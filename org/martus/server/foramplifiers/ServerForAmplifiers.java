@@ -193,6 +193,11 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		return getSecurity().getPublicKeyString();
 	}
 	
+	public void loadConfigurationFiles() throws IOException
+	{
+		
+	}
+	
 	public void createAmplifierXmlRpcServer()
 	{
 		int port = AmplifierInterfaceXmlRpcConstants.MARTUS_PORT_FOR_AMPLIFIER;
