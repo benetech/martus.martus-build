@@ -52,14 +52,6 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		createLabelsAndFields(publicStuff, standardFieldTags, 0);
 		createLabelsAndFields(privateStuff, privateFieldTags, standardFieldTags.length);
 		
-		JLabel publicAttachments = new JLabel(getApp().getFieldLabel("attachments"));
-		publicStuff.add(publicAttachments, ParagraphLayout.NEW_PARAGRAPH);
-		publicStuff.add(createPublicAttachmentTable());
-
-		JLabel privateAttachments = new JLabel(getApp().getFieldLabel("attachments"));
-		privateStuff.add(privateAttachments, ParagraphLayout.NEW_PARAGRAPH);
-		privateStuff.add(createPrivateAttachmentTable());
-
 		publicStuff.matchFirstColumnWidth(privateStuff);
 		privateStuff.matchFirstColumnWidth(publicStuff);
 
@@ -104,26 +96,15 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		if(bulletin != null && bulletin.isAllPrivate())
 			isAllPrivate = allPrivateField.TRUESTRING;
 		allPrivateField.setText(isAllPrivate);
+
+		publicStuff.clearAttachments();
+		privateStuff.clearAttachments();
 		if(bulletin != null)
 		{
 			publicStuff.copyDataFromPacket(bulletin.getFieldDataPacket());
 			privateStuff.copyDataFromPacket(bulletin.getPrivateFieldDataPacket());
 		}
-		
-		clearPublicAttachments();
-		clearPrivateAttachments();
 
-		if(bulletin != null)
-		{
-			AttachmentProxy[] publicAttachments = bulletin.getPublicAttachments();
-			for(int i = 0 ; i < publicAttachments.length ; ++i)
-				addPublicAttachment(publicAttachments[i]);	
-
-			AttachmentProxy[] privateAttachments = bulletin.getPrivateAttachments();
-			for(int i = 0 ; i < privateAttachments.length ; ++i)
-				addPrivateAttachment(privateAttachments[i]);	
-		}
-		
 		boolean isDamaged = false;
 		if(currentBulletin != null && !currentBulletin.isValid())
 		{
@@ -164,6 +145,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			fieldTags[thisField] = tags[fieldNum];
 			fields[thisField] = fieldsInThisSection[fieldNum];
 		}
+		target.add(target.createAttachmentTable());
 	}
 
 	// ChangeListener interface
@@ -218,11 +200,5 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	UiBulletinComponentSection privateStuff;
 
 	abstract public UiField createBoolField();
-	abstract public JComponent createPublicAttachmentTable();
-	abstract public JComponent createPrivateAttachmentTable();
 	abstract public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted);
-	abstract public void addPublicAttachment(AttachmentProxy a);
-	abstract public void addPrivateAttachment(AttachmentProxy a);
-	abstract public void clearPublicAttachments();
-	abstract public void clearPrivateAttachments();
 }

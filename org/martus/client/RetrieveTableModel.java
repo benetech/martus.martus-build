@@ -237,6 +237,11 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		return allSummaries;	
 	}
 	
+	public BulletinSummary getBulletinSummary(int row)
+	{
+		return (BulletinSummary)allSummaries.get(row);	
+	}
+	
 
 	Object getSizeInKbytes(int sizeKb) 
 	{

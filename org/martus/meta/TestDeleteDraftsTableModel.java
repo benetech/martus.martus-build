@@ -1,19 +1,19 @@
 package org.martus.meta;
 
+import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.Bulletin;
 import org.martus.client.DeleteMyServerDraftsTableModel;
 import org.martus.client.MockMartusApp;
+import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MockMartusSecurity;
-import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.TestCaseEnhanced;
+import org.martus.common.UniversalId;
 import org.martus.server.MockMartusServer;
 import org.martus.server.ServerSideNetworkHandler;
-import org.martus.server.ServerSideNetworkHandlerForNonSSL;
 
 public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 {
@@ -108,14 +108,41 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 			Vector list = new Vector();
 			if(hasData)
 			{
-				list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE)+"=3000");
-				list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE)+"=3100");
-				list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE)+"=3200");
+				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=3000");
+				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId() + "=3100");
+				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId() + "=3200");
 			}
 			result.add(list);
 			return result;
 		}
 		
+		public Vector getPacket(String hqAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId)
+		{
+			Vector result = new Vector();
+			try 
+			{
+				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, packetLocalId);
+				FieldDataPacket fdp = null;
+				MartusCrypto security = testServer.security;
+				if(uid.equals(b0.getFieldDataPacket().getUniversalId()))
+					fdp = b0.getFieldDataPacket();
+				if(uid.equals(b1.getFieldDataPacket().getUniversalId()))
+					fdp = b1.getFieldDataPacket();
+				if(uid.equals(b2.getFieldDataPacket().getUniversalId()))
+					fdp = b2.getFieldDataPacket();
+				StringWriter writer = new StringWriter();
+				fdp.writeXml(writer, security);
+				result.add(NetworkInterfaceConstants.OK);
+				result.add(writer.toString());
+				writer.close();
+			} 
+			catch (Exception e) 
+			{
+				result.add(NetworkInterfaceConstants.SERVER_ERROR);
+			}
+			return result;
+		}
+
 		public boolean hasData;
 		
 	}

@@ -14,17 +14,19 @@ public class UiBulletinView extends UiBulletinComponent
 	UiBulletinView(UiMainWindow mainWindowToUse)
 	{
 		super(mainWindowToUse);
+		mainWindow = mainWindowToUse;
+		bulletinViewSections = new Vector();
 		Initalize();
 		viewColors = new UiColors();
 		disableEdits();
 		// ensure that attachmentViewer gets initialized
-		createPublicAttachmentTable();
-		createPrivateAttachmentTable();
 	}
 
 	public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted)
 	{
-		return new UiBulletinComponentViewSection(app, encrypted);
+		UiBulletinComponentViewSection section = new UiBulletinComponentViewSection(this, mainWindow, app, encrypted);
+		bulletinViewSections.add(section);
+		return section;
 	}
 	
 	public void startPrintMode()
@@ -38,8 +40,10 @@ public class UiBulletinView extends UiBulletinComponent
 		publicStuff.setForeground(Color.black);
 		privateStuff.setBackground(Color.white);
 		privateStuff.setForeground(Color.black);
-		publicAttachmentViewer.startPrintMode();
-		privateAttachmentViewer.startPrintMode();
+		for(int i = 0 ; i< bulletinViewSections.size(); ++i)
+		{
+			((UiBulletinComponentViewSection)(bulletinViewSections.get(i))).attachmentViewer.startPrintMode();
+		}	
 	}
 	
 	public void endPrintMode()
@@ -48,49 +52,15 @@ public class UiBulletinView extends UiBulletinComponent
 		publicStuff.setForeground(viewColors.publicForeground);
 		privateStuff.setBackground(viewColors.privateBackground);
 		privateStuff.setForeground(viewColors.privateForeground);
-		publicAttachmentViewer.endPrintMode();
-		privateAttachmentViewer.endPrintMode();
+		for(int i = 0 ; i< bulletinViewSections.size(); ++i)
+		{
+			((UiBulletinComponentViewSection)(bulletinViewSections.get(i))).attachmentViewer.endPrintMode();
+		}	
 	}
 
 	public UiField createBoolField()
 	{
 		return new UiBoolViewer(getApp());
-	}
-
-	public JComponent createPublicAttachmentTable()
-	{
-		if(publicAttachmentViewer == null)
-			publicAttachmentViewer = new UiAttachmentViewer(getMainWindow(), this);
-
-		return publicAttachmentViewer;
-	}
-
-	public JComponent createPrivateAttachmentTable()
-	{
-		if(privateAttachmentViewer == null)
-			privateAttachmentViewer = new UiAttachmentViewer(getMainWindow(), this);
-
-		return privateAttachmentViewer;
-	}
-	
-	public void addPublicAttachment(AttachmentProxy a)
-	{
-		publicAttachmentViewer.addAttachment(a);
-	}
-	
-	public void clearPublicAttachments()
-	{
-		publicAttachmentViewer.clearAttachments();
-	}
-
-	public void addPrivateAttachment(AttachmentProxy a)
-	{
-		privateAttachmentViewer.addAttachment(a);
-	}
-	
-	public void clearPrivateAttachments()
-	{
-		privateAttachmentViewer.clearAttachments();
 	}
 
 	class UiColors
@@ -101,7 +71,6 @@ public class UiBulletinView extends UiBulletinComponent
 		public Color privateBackground;
 	}
 	
-	private UiAttachmentViewer publicAttachmentViewer;
-	private UiAttachmentViewer privateAttachmentViewer;
 	private UiColors viewColors;
+	private Vector bulletinViewSections;
 }

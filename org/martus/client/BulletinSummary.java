@@ -1,14 +1,18 @@
 
 package org.martus.client;
+
+import org.martus.common.FieldDataPacket;
+
 public class BulletinSummary
 {
-	public BulletinSummary(String accountIdToUse, String localIdToUse, String titleToUse, String authorToUse, int sizeToUse)
+	public BulletinSummary(String accountIdToUse, String localIdToUse, FieldDataPacket fdpToUse, int sizeToUse)
 	{
 		accountId = accountIdToUse;
 		localId = localIdToUse;
-		title = titleToUse;
-		author = authorToUse;
 		size = sizeToUse;
+		title = fdpToUse.get(Bulletin.TAGTITLE);
+		author = fdpToUse.get(Bulletin.TAGAUTHOR);
+		fdp = fdpToUse;
 	}
 	
 	public void setChecked(boolean newValue)
@@ -57,7 +61,12 @@ public class BulletinSummary
 		return size;	
 	}
 	
-
+	public FieldDataPacket getFieldDataPacket()
+	{
+		return fdp;	
+	}
+	
+	private FieldDataPacket fdp;
 	private String accountId;
 	String localId;
 	String title;

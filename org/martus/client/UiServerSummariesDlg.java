@@ -23,6 +23,8 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableModel;
 
+import org.martus.common.FieldDataPacket;
+
 public class UiServerSummariesDlg extends JDialog
 {
 	public UiServerSummariesDlg(UiMainWindow owner, RetrieveTableModel tableModel, 
@@ -41,7 +43,7 @@ public class UiServerSummariesDlg extends JDialog
 		String topMessageText = getApp().getFieldLabel(topMessageTag);
 		UiWrappedTextArea retrieveMessage = new UiWrappedTextArea(mainWindow, topMessageText);
 		tableBox = Box.createVerticalBox();
-		RetrieveJTable table = new RetrieveJTable(model);
+		table = new RetrieveJTable(model);
 		oldBooleanRenderer = table.getDefaultRenderer(Boolean.class);
 		oldIntegerRenderer = table.getDefaultRenderer(Integer.class);
 		table.setDefaultRenderer(Boolean.class, new BooleanRenderer());
@@ -71,6 +73,8 @@ public class UiServerSummariesDlg extends JDialog
 		ok.addActionListener(new OkHandler());
 		JButton cancel = new JButton(getApp().getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
+		JButton preview = new JButton(getApp().getButtonLabel("Preview"));
+		preview.addActionListener(new PreviewHandler());
 		
 		JButton checkAll = new JButton(getApp().getButtonLabel("checkall"));
 		checkAll.addActionListener(new CheckAllHandler());
@@ -92,6 +96,8 @@ public class UiServerSummariesDlg extends JDialog
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(ok);
 		getContentPane().add(cancel);
+		getContentPane().add(preview);
+		
 		
 		getRootPane().setDefaultButton(ok);
 		mainWindow.centerDlg(this);
@@ -231,6 +237,19 @@ public class UiServerSummariesDlg extends JDialog
 		}
 	}
 
+	class PreviewHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent ae)
+		{
+			int row = table.getSelectedRow();
+			if(row>=0)
+			{
+				FieldDataPacket fdp = model.getBulletinSummary(row).getFieldDataPacket();
+				System.out.println(fdp.get(Bulletin.TAGENTRYDATE));
+			}
+		}
+	}
+
 	class CheckAllHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
@@ -268,9 +287,11 @@ public class UiServerSummariesDlg extends JDialog
 	UiMainWindow mainWindow;
 	JTextField text;
 	boolean result;
+	RetrieveJTable table;
 	RetrieveTableModel model;
 	TableCellRenderer oldBooleanRenderer;
 	TableCellRenderer oldIntegerRenderer;
 	Color disabledBackgroundColor;
 	Box tableBox;
+	
 }

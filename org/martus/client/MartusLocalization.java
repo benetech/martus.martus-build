@@ -433,6 +433,7 @@ public class MartusLocalization
 		addEnglishTranslation("button:VirtualKeyboardSwitchToVirtual=Switch to using on-screen keyboard");
 		addEnglishTranslation("button:DownloadableSummaries=Show bulletins that are only on the server.");
 		addEnglishTranslation("button:AllSummaries=Show all bulletins on this server and on this computer.");
+		addEnglishTranslation("button:Preview=Preview");
 
 		
 		addEnglishTranslation("button:FolderTreeRoot=Folders");

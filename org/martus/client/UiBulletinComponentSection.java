@@ -5,11 +5,13 @@ import java.awt.Font;
 
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
+import org.martus.common.AttachmentProxy;
 import org.martus.common.FieldDataPacket;
 
 abstract public class UiBulletinComponentSection extends JPanel
@@ -55,6 +57,8 @@ abstract public class UiBulletinComponentSection extends JPanel
 			target.add(createLabel(tags[fieldNum]), ParagraphLayout.NEW_PARAGRAPH);
 			target.add(fields[fieldNum].getComponent());
 		}
+		JLabel attachments = new JLabel(app.getFieldLabel("attachments"));
+		target.add(attachments, ParagraphLayout.NEW_PARAGRAPH);
 		return fields;
 	}
 	
@@ -68,6 +72,10 @@ abstract public class UiBulletinComponentSection extends JPanel
 			text = fdp.get(fieldTags[fieldNum]);
 			fields[fieldNum].setText(text);
 		}
+
+		AttachmentProxy[] attachments = fdp.getAttachments();
+		for(int i = 0 ; i < attachments.length ; ++i)
+			addAttachment(attachments[i]);	
 	}
 	
  	public JLabel createLabel(String fieldTag)
@@ -101,6 +109,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		field.getComponent().setBorder(new LineBorder(Color.black));
 		return field;
 	}
+	
 
 	public void updateEncryptedIndicator(boolean isEncrypted)
 	{
@@ -152,4 +161,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	abstract public UiField createMultilineField();
 	abstract public UiField createChoiceField(ChoiceItem[] choices);
 	abstract public UiField createDateField();
+	abstract public JComponent createAttachmentTable();
+	abstract public void addAttachment(AttachmentProxy a);
+	abstract public void clearAttachments();
 }

@@ -1,5 +1,6 @@
 package org.martus.meta;
 
+import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.*;
@@ -137,9 +138,9 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
 			Vector list = new Vector();
-			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE) + "=" + b0Size);
-			list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE) + "=" + b1Size);
-			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE) + "=" + b2Size);
+			list.add(b0.getLocalId() + "=" +  b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
+			list.add(b1.getLocalId() + "=" +  b1.getFieldDataPacket().getLocalId() + "=" + b1Size);
+			list.add(b2.getLocalId() + "=" +  b2.getFieldDataPacket().getLocalId() + "=" + b2Size);
 			result.add(list);
 			Vector sizes = new Vector();
 			if(retrieveTags.size() == 1)
@@ -152,6 +153,32 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 			return result;
 		}
 		
+		public Vector getPacket(String hqAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId)
+		{
+			Vector result = new Vector();
+			try 
+			{
+				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, packetLocalId);
+				FieldDataPacket fdp = null;
+				MartusCrypto security = testServer.security;
+				if(uid.equals(b0.getFieldDataPacket().getUniversalId()))
+					fdp = b0.getFieldDataPacket();
+				if(uid.equals(b1.getFieldDataPacket().getUniversalId()))
+					fdp = b1.getFieldDataPacket();
+				if(uid.equals(b2.getFieldDataPacket().getUniversalId()))
+					fdp = b2.getFieldDataPacket();
+				StringWriter writer = new StringWriter();
+				fdp.writeXml(writer, security);
+				result.add(NetworkInterfaceConstants.OK);
+				result.add(writer.toString());
+				writer.close();
+			} 
+			catch (Exception e) 
+			{
+				result.add(NetworkInterfaceConstants.SERVER_ERROR);
+			}
+			return result;
+		}
 	}
 	
 	String title1 = "This is a cool title";

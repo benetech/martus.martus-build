@@ -12,15 +12,14 @@ public class UiBulletinEditor extends UiBulletinComponent
 	UiBulletinEditor(UiMainWindow mainWindowToUse)
 	{
 		super(mainWindowToUse);
+		owner = mainWindowToUse;
 		Initalize();
 		// ensure that attachmentEditor gets initialized
-		createPublicAttachmentTable();
-		createPrivateAttachmentTable();
 	}
 
 	public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted)
 	{
-		return new UiBulletinComponentEditorSection(app, encrypted);
+		return new UiBulletinComponentEditorSection(this, owner, app, encrypted);
 	}
 
 	public void copyDataToBulletin(Bulletin bulletin) throws 
@@ -39,62 +38,28 @@ public class UiBulletinEditor extends UiBulletinComponent
 			bulletin.set(fieldTags[fieldNum], fields[fieldNum].getText());
 		}
 
-		AttachmentProxy[] publicAttachments = publicAttachmentEditor.getAttachments();
+		UiBulletinComponentEditorSection publicSection = (UiBulletinComponentEditorSection)publicStuff;
+		AttachmentProxy[] publicAttachments = publicSection.attachmentEditor.getAttachments();
 		for(int aIndex = 0; aIndex < publicAttachments.length; ++aIndex)
 		{
 			AttachmentProxy a = publicAttachments[aIndex];
 			bulletin.addPublicAttachment(a);
 		}
 
-		AttachmentProxy[] privateAttachments = privateAttachmentEditor.getAttachments();
+		UiBulletinComponentEditorSection privateSection = (UiBulletinComponentEditorSection)privateStuff;
+		AttachmentProxy[] privateAttachments = privateSection.attachmentEditor.getAttachments();
 		for(int aIndex = 0; aIndex < privateAttachments.length; ++aIndex)
 		{
 			AttachmentProxy a = privateAttachments[aIndex];
 			bulletin.addPrivateAttachment(a);
 		}
+		
 	}
 
-	public void addPublicAttachment(AttachmentProxy a)
-	{
-		publicAttachmentEditor.addAttachment(a);
-	}
-
-	public void clearPublicAttachments()
-	{
-		publicAttachmentEditor.clearAttachments();
-	}
-	
-	public void addPrivateAttachment(AttachmentProxy a)
-	{
-		privateAttachmentEditor.addAttachment(a);
-	}
-
-	public void clearPrivateAttachments()
-	{
-		privateAttachmentEditor.clearAttachments();
-	}
-	
 	public UiField createBoolField()
 	{
 		return new UiBoolEditor(this);
 	}
 
-	public JComponent createPublicAttachmentTable()
-	{
-		if(publicAttachmentEditor == null)
-			publicAttachmentEditor = new UiAttachmentEditor(mainWindow);
-
-		return publicAttachmentEditor;
-	}
-
-	public JComponent createPrivateAttachmentTable()
-	{
-		if(privateAttachmentEditor == null)
-			privateAttachmentEditor = new UiAttachmentEditor(mainWindow);
-
-		return privateAttachmentEditor;
-	}
-
-	private UiAttachmentEditor publicAttachmentEditor;
-	private UiAttachmentEditor privateAttachmentEditor;
+	UiMainWindow owner;
 }

@@ -942,39 +942,27 @@ public class MartusApp
 	public BulletinSummary createSummaryFromString(String accountId, String parameters)
 		throws ServerErrorException 
 	{
-		
+		FieldDataPacket fdp = null;
 		String args[] = parameters.split(MartusConstants.regexEqualsDelimeter, -1);
 		if(args.length != 3)
 			throw new ServerErrorException("MartusApp.createSummaryFromString: " + parameters);
-		
 		String bulletinLocalId= args[0];
-		String summary = args[1];
-		String bulletinSize = args[2];
-		int size = Integer.parseInt(bulletinSize);
-		String author = "";
+		String packetlocalId = args[1];
+		int size = Integer.parseInt(args[2]);
 
-		if(FieldDataPacket.isValidLocalId(summary))
+		if(!FieldDataPacket.isValidLocalId(packetlocalId))
+			throw new ServerErrorException();
+		try 
 		{
-			String packetlocalId = summary;
-			try 
-			{
-				FieldDataPacket fdp = retrieveFieldDataPacketFromServer(accountId, bulletinLocalId, packetlocalId);
-				summary = fdp.get(Bulletin.TAGTITLE);
-				author = fdp.get(Bulletin.TAGAUTHOR);
-			} 
-			catch(Exception e) 
-			{
-				System.out.println("MartusApp.getSummaries: " + e);
-				e.printStackTrace();
-				throw new ServerErrorException();
-			}
-		}
-		else
+			fdp = retrieveFieldDataPacketFromServer(accountId, bulletinLocalId, packetlocalId);
+		} 
+		catch(Exception e) 
 		{
-			if(summary.length() > 0)
-				summary = summary.substring(1);
+			System.out.println("MartusApp.createSummaryFromString: " + e);
+			e.printStackTrace();
+			throw new ServerErrorException();
 		}
-		BulletinSummary bulletinSummary = new BulletinSummary(accountId, bulletinLocalId, summary, author, size);
+		BulletinSummary bulletinSummary = new BulletinSummary(accountId, bulletinLocalId, fdp, size);
 		return bulletinSummary;
 	}
 	

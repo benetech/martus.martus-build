@@ -1,12 +1,18 @@
 package org.martus.client;
 
+import javax.swing.JComponent;
+
+import org.martus.common.AttachmentProxy;
+
 public class UiBulletinComponentEditorSection extends UiBulletinComponentSection 
 {
 
-	public UiBulletinComponentEditorSection( MartusApp appToUse, boolean encrypted) 
+	public UiBulletinComponentEditorSection(UiBulletinComponent bulletinComponentToUse, UiMainWindow ownerToUse, MartusApp appToUse, boolean encrypted) 
 	{
 		super(appToUse, encrypted);
 		app = appToUse;
+		owner = ownerToUse;
+		bulletinComponent = bulletinComponentToUse;
 	}
 
 	public UiField createNormalField()
@@ -29,6 +35,26 @@ public class UiBulletinComponentEditorSection extends UiBulletinComponentSection
 		return new UiDateEditor(app);
 	}
 
-	MartusApp app;
+	public void addAttachment(AttachmentProxy a)
+	{
+		attachmentEditor.addAttachment(a);
+	}
 
+	public void clearAttachments()
+	{
+		attachmentEditor.clearAttachments();
+	}
+	
+	public JComponent createAttachmentTable()
+	{
+		if(attachmentEditor == null)
+			attachmentEditor = new UiAttachmentEditor(owner);
+
+		return attachmentEditor;
+	}
+	
+	UiAttachmentEditor attachmentEditor;
+	MartusApp app;
+	UiMainWindow owner;
+	UiBulletinComponent bulletinComponent;
 }
