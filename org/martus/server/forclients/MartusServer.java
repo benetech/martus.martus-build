@@ -120,7 +120,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		security = new MartusSecurity();
 		serverForClients = new ServerForClients(this);
 		clientsThatCanUpload = new Vector();
-		magicWords = new Vector();
 		failedUploadRequestsPerIp = new Hashtable();
 		
 		startTimer(new ShutdownRequestMonitor(), shutdownRequestIntervalMillis);
@@ -196,29 +195,9 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		serverForClients.loadBannedClients();
 		loadCanUploadFile();
-		loadMagicWordsFile();
+		serverForClients.loadMagicWordsFile();
 		//Tests will fail if compliance isn't last.
 		loadComplianceStatementFile();
-	}
-
-	void loadMagicWordsFile()
-	{
-		try
-		{
-			UnicodeReader reader = new UnicodeReader(getMagicWordsFile());
-			String line = null;
-			while( (line = reader.readLine()) != null)
-				setMagicWord(normalizeMagicWord(line));
-			reader.close();
-		}
-		catch(FileNotFoundException nothingToWorryAbout)
-		{
-		}
-		catch(IOException e)
-		{
-			// TODO: Log this so the administrator knows
-			System.out.println("MartusServer constructor: " + e);
-		}
 	}
 
 	void loadCanUploadFile()
@@ -274,12 +253,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return security.getPublicKeyString();
 	}
 	
-	public void setMagicWord(String newMagicWord)
-	{
-		if( !magicWords.contains(newMagicWord) )
-			magicWords.add(newMagicWord);
-	}
-	
 	public String ping()
 	{
 		if(serverMaxLogging)
@@ -322,7 +295,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		boolean uploadGranted = false;
 
-		if(magicWords.contains(normalizeMagicWord(tryMagicWord)))
+		if(serverForClients.isValidMagicWord(tryMagicWord))
 			uploadGranted = true;
 			
 		if(!areUploadRequestsAllowedForCurrentIp())
@@ -343,7 +316,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		if(!uploadGranted)
 		{
-			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + " magicWords=" + magicWords.toString() + " tryMagicWord=" +tryMagicWord);
+			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + " tryMagicWord=" +tryMagicWord);
 			incrementFailedUploadRequestsForCurrentClientIp();
 			return NetworkInterfaceConstants.REJECTED;
 		}
@@ -1696,11 +1669,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(!secureMode)
 			return;
 
-		if(!getMagicWordsFile().delete())
-		{
-			System.out.println("Unable to delete magicwords");
-			System.exit(4);
-		}
+		serverForClients.deleteMagicWordsFile();
 
 		if(!getKeyPairFile().delete())
 		{
@@ -2078,11 +2047,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 	
-	static String normalizeMagicWord(String original)
-	{
-		return original.toLowerCase().trim().replaceAll("\\s", "");
-	}
-
 
 	private static String getPassphraseFromConsole(MartusServer server)
 	{
@@ -2210,11 +2174,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return new File(dataDirectory, UPLOADSOKFILENAME);
 	}
 
-	public File getMagicWordsFile()
-	{
-		return new File(getStartupConfigDirectory(), MAGICWORDSFILENAME);
-	}
-
 	File getKeyPairFile()
 	{
 		return new File(getStartupConfigDirectory(), getKeypairFilename());
@@ -2302,14 +2261,13 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	public MartusCrypto security;
 	ServerForMirroring serverForMirroring;
-	ServerForClients serverForClients;
+	public ServerForClients serverForClients;
 	public File dataDirectory;
 	Database database;
 	private String complianceStatement; 
 	
 	public Vector clientsThatCanUpload;
 	Hashtable failedUploadRequestsPerIp;
-	Vector magicWords;
 	
 	String serverName;
 	private boolean secureMode;
@@ -2318,7 +2276,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	public static boolean serverSSLLogging;
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
-	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 	private static final String COMPLIANCESTATEMENTFILENAME = "compliance.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";

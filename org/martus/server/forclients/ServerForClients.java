@@ -16,6 +16,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	{
 		coreServer = coreServerToUse;
 		clientsBanned = new Vector();
+		magicWords = new Vector();
 
 	}
 	
@@ -39,7 +40,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		System.out.println();
 		System.out.println(coreServer.clientsThatCanUpload.size() + " client(s) currently allowed to upload");
 		System.out.println(clientsBanned.size() + " client(s) are currently banned");
-		System.out.println(coreServer.magicWords.size() + " active magic word(s)");
+		System.out.println(magicWords.size() + " active magic word(s)");
 	}
 
 
@@ -274,11 +275,63 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		}
 	}
 
+	public boolean isValidMagicWord(String tryMagicWord)
+	{
+		return (magicWords.contains(normalizeMagicWord(tryMagicWord)));
+	}
+	
+	public void addMagicWord(String newMagicWord)
+	{
+		if( !magicWords.contains(newMagicWord) )
+			magicWords.add(newMagicWord);
+	}
+	
+	public File getMagicWordsFile()
+	{
+		return new File(coreServer.getStartupConfigDirectory(), MAGICWORDSFILENAME);
+	}
+
+	void loadMagicWordsFile()
+	{
+		try
+		{
+			UnicodeReader reader = new UnicodeReader(getMagicWordsFile());
+			String line = null;
+			while( (line = reader.readLine()) != null)
+				addMagicWord(normalizeMagicWord(line));
+			reader.close();
+		}
+		catch(FileNotFoundException nothingToWorryAbout)
+		{
+		}
+		catch(IOException e)
+		{
+			// TODO: Log this so the administrator knows
+			System.out.println("MartusServer constructor: " + e);
+		}
+	}
+
+	void deleteMagicWordsFile()
+	{
+		if(!getMagicWordsFile().delete())
+		{
+			System.out.println("Unable to delete magicwords");
+			System.exit(4);
+		}
+	}
+
+	static String normalizeMagicWord(String original)
+	{
+		return original.toLowerCase().trim().replaceAll("\\s", "");
+	}
+
 
 	MartusServer coreServer;
 	private int activeClientsCounter;
+	Vector magicWords;
 	public Vector clientsBanned;
 	private long bannedClientsFileLastModified;
 
 	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
+	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 }

@@ -2061,7 +2061,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String sampleMagicWord = "bliflfji";
 
 		testServer.clientsThatCanUpload.clear();
-		testServer.setMagicWord(sampleMagicWord);
+		testServer.serverForClients.addMagicWord(sampleMagicWord);
 		
 		assertEquals("any upload attemps?", 0, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
 		
@@ -2083,7 +2083,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String sampleMagicWord = "bliflfji";
 
 		testServer.clientsThatCanUpload.clear();
-		testServer.setMagicWord(sampleMagicWord);
+		testServer.serverForClients.addMagicWord(sampleMagicWord);
 		
 		assertEquals("counter 1?", 0, testServer.getNumFailedUploadRequestsForIp(MockMartusServer.CLIENT_IP_ADDRESS));
 		
@@ -2129,7 +2129,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String sampleMagicWord4 = sampleMagicWord1 + "\t" + sampleMagicWord2;
 		String nonExistentMagicWord = "ThisIsNotAMagicWord";
 		
-		File file = testServer.getMagicWordsFile();
+		File file = testServer.serverForClients.getMagicWordsFile();
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.writeln(sampleMagicWord1);
 		writer.writeln(sampleMagicWord2);
