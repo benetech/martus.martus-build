@@ -39,6 +39,7 @@ public class UiMultilineTextEditor extends UiTextField
 	public void setText(String newText)
 	{
 		editor.setText(newText);
+		editor.updateUI(); //Resets view position to top of scroll pane
 	}
 
 	public void disableEdits()
