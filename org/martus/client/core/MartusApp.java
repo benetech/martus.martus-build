@@ -1233,11 +1233,6 @@ public class MartusApp
 		return localization.getFieldLabel(fieldName);
 	}
 
-	public String getLanguageName(String code)
-	{
-		return localization.getLanguageName(code);
-	}
-
 	public String getWindowTitle(String code)
 	{
 		return localization.getWindowTitle(code);
@@ -1321,7 +1316,7 @@ public class MartusApp
 		for(int i = 0; i < languageCodes.length; i++)
 		{
 			tempChoicesArray[i] =
-				new ChoiceItem(languageCodes[i], getLanguageName(languageCodes[i]));
+				new ChoiceItem(languageCodes[i], getLocalization().getLanguageName(languageCodes[i]));
 		}
 		Arrays.sort(tempChoicesArray);
 		return tempChoicesArray;

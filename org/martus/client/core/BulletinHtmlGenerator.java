@@ -30,6 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
+import org.martus.client.swingui.MartusLocalization;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
@@ -83,6 +84,7 @@ public class BulletinHtmlGenerator
 
 	private String getSectionHtmlString(Bulletin b, String[] standardFieldTags)
 	{
+		MartusLocalization localization = app.getLocalization();
 		String sectionHtml = "";
 		for(int fieldNum = 0; fieldNum < standardFieldTags.length; ++fieldNum)
 		{
@@ -91,7 +93,7 @@ public class BulletinHtmlGenerator
 			if(Bulletin.getFieldType(tag) == Bulletin.DATE)
 				value = app.convertStoredToDisplay(value);
 			else if(Bulletin.getFieldType(tag) == Bulletin.CHOICE)
-				value = app.getLanguageName(value);
+				value = localization.getLanguageName(value);
 			else if(Bulletin.getFieldType(tag) == Bulletin.MULTILINE)
 				value = insertNewlines(value);
 
