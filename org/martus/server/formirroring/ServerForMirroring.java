@@ -16,19 +16,19 @@ import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
+import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException;
 
 public class ServerForMirroring implements ServerSupplierInterface
 {
 	public ServerForMirroring(MartusServer coreServerToUse) throws 
-			IOException, 
-			InvalidPublicKeyFileException, 
-			PublicInformationInvalidException
+			IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
 	{
 		authorizedCallers = new Vector();
 		coreServer = coreServerToUse;
 		loadServersWhoAreAuthorizedToCallUs();
 
-		MartusUtilities.startTimer(new MirroringTask(null), mirroringIntervalMillis);
+		retrieversWeWillCall = new Vector();
+		createGatewaysForServersWhoWeCall();
 	}
 
 	public void addListeners()
@@ -36,6 +36,8 @@ public class ServerForMirroring implements ServerSupplierInterface
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this, getSecurity());
 		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, MirroringInterface.DEST_OBJECT_NAME, port);
+
+		MartusUtilities.startTimer(new MirroringTask(retrieversWeWillCall), mirroringIntervalMillis);
 	}
 
 	// Begin ServerSupplierInterface
@@ -159,23 +161,109 @@ public class ServerForMirroring implements ServerSupplierInterface
 		authorizedCallers.add(publicKey);
 	}
 	
+	File getMirrorsWeWillCallDirectory()
+	{
+		return new File(coreServer.getStartupConfigDirectory(), "mirrorsWhoWeCall");		
+	}
+	
+	void createGatewaysForServersWhoWeCall() throws 
+			IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
+	{
+		retrieversWeWillCall.clear();
+
+		File toCallDir = getMirrorsWeWillCallDirectory();
+		File[] toCallFiles = toCallDir.listFiles();
+		if(toCallFiles == null)
+			return;
+		for (int i = 0; i < toCallFiles.length; i++)
+		{
+			File toCallFile = toCallFiles[i];
+			retrieversWeWillCall.add(createRetrieverToCall(toCallFile));
+			if(isSecureMode())
+				toCallFile.delete();
+		}
+	}
+	
+	MirroringRetriever createRetrieverToCall(File publicKeyFile) throws
+			IOException, 
+			InvalidPublicKeyFileException, 
+			PublicInformationInvalidException, 
+			SSLSocketSetupException
+	{
+		CallerSideMirroringGateway gateway = createGatewayToCall(publicKeyFile);
+		MirroringRetriever retriever = new MirroringRetriever(getDatabase(), gateway, getSecurity());
+		return retriever;
+	}
+	
+	CallerSideMirroringGateway createGatewayToCall(File publicKeyFile) throws 
+			IOException, 
+			InvalidPublicKeyFileException, 
+			PublicInformationInvalidException, 
+			SSLSocketSetupException
+	{
+		String ip = extractIpFromFileName(publicKeyFile.getName());
+		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
+		Vector publicInfo = MartusUtilities.importServerPublicKeyFromFile(publicKeyFile, getSecurity());
+		String publicKey = (String)publicInfo.get(0);
+
+		CallerSideMirroringGatewayForXmlRpc xmlRpcGateway = new CallerSideMirroringGatewayForXmlRpc(ip, port); 
+		xmlRpcGateway.setExpectedPublicKey(publicKey);
+		return new CallerSideMirroringGateway(xmlRpcGateway);
+	}
+
+	static String extractIpFromFileName(String fileName) throws 
+		InvalidPublicKeyFileException 
+	{
+		final String ipStartString = "ip=";
+		int ipStart = fileName.indexOf(ipStartString);
+		if(ipStart < 0)
+			throw new InvalidPublicKeyFileException();
+		ipStart += ipStartString.length();
+		int ipEnd = ipStart;
+		for(int i=0; i < 3; ++i)
+		{
+			ipEnd = fileName.indexOf(".", ipEnd+1);
+			if(ipEnd < 0)
+				throw new InvalidPublicKeyFileException();
+		}
+		++ipEnd;
+		while(ipEnd < fileName.length() && Character.isDigit(fileName.charAt(ipEnd)))
+			++ipEnd;
+		String ip = fileName.substring(ipStart, ipEnd);
+		return ip;
+	}
+	
 	private class MirroringTask extends TimerTask
 	{
-		MirroringTask(MirroringRetriever retrieverToUse)
+		MirroringTask(Vector retrieversToUse)
 		{
+			retrievers = retrieversToUse;
 		}
 		
 		public void run()
 		{
-			if(mirrorRetriever != null)
-				mirrorRetriever.tick();
+			protectedRun();
+		}
+		
+		synchronized void protectedRun()
+		{
+			if(retrievers.size() == 0)
+				return;
+			if(nextRetriever >= retrievers.size())
+				nextRetriever = 0;
+				
+			MirroringRetriever thisRetriever = (MirroringRetriever)retrievers.get(nextRetriever);
+			thisRetriever.tick();
 		}
 
-		MirroringRetriever mirrorRetriever;
+		int nextRetriever;
+		Vector retrievers;
 	}
 	
 	MartusServer coreServer;
 	Vector authorizedCallers;
-
+	MirroringRetriever retriever;
+	Vector retrieversWeWillCall;
+	
 	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
 }

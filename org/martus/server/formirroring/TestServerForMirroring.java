@@ -11,6 +11,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.server.forclients.MockMartusServer;
 
 public class TestServerForMirroring extends TestCaseEnhanced
@@ -65,6 +66,27 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		
 	}
 	
+	public void testLoadMirrorsToCall() throws Exception
+	{
+		MockMartusServer noCallsToMakeCore = new MockMartusServer();
+		ServerForMirroring noCallsToMake = new ServerForMirroring(noCallsToMakeCore);
+		assertEquals(0, noCallsToMake.retrieversWeWillCall.size());
+		noCallsToMakeCore.deleteAllFiles();
+		
+		MockMartusServer twoCallsToMakeCore = new MockMartusServer();
+		twoCallsToMakeCore.enterSecureMode();
+		File mirrorsWhoWeCall = new File(twoCallsToMakeCore.getStartupConfigDirectory(), "mirrorsWhoWeCall");
+		mirrorsWhoWeCall.mkdirs();
+		File pubKeyFile1 = new File(mirrorsWhoWeCall, "code=1.2.3.4.5-ip=1.2.3.4.txt");
+		MartusUtilities.exportServerPublicKey(clientSecurity1, pubKeyFile1);
+		File pubKeyFile2 = new File(mirrorsWhoWeCall, "code=2.3.4.5.6-ip=2.3.4.5.txt");
+		MartusUtilities.exportServerPublicKey(clientSecurity2, pubKeyFile2);
+		ServerForMirroring twoCallsToMake = new ServerForMirroring(twoCallsToMakeCore);
+		assertEquals(2, twoCallsToMake.retrieversWeWillCall.size());
+		mirrorsWhoWeCall.delete();
+		twoCallsToMakeCore.deleteAllFiles();
+	}
+	
 	public void testIsAuthorizedForMirroring() throws Exception
 	{
 		MockMartusServer nobodyAuthorizedCore = new MockMartusServer();
@@ -112,6 +134,31 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		Vector ids2 = new Vector();
 		ids2.add(((Vector)result2.get(0)).get(0));
 		assertContains(bhp3.getLocalId(), ids2);
+	}
+	
+	public void testExtractIpFromFileName() throws Exception
+	{
+		try
+		{
+			ServerForMirroring.extractIpFromFileName("code=x.y.z");
+			fail("Should have thrown missing ip=");
+		}
+		catch(InvalidPublicKeyFileException ignoreExpectedException)
+		{
+		}
+
+		try
+		{
+			ServerForMirroring.extractIpFromFileName("ip=1.2.3");
+			fail("Should have thrown not enough dots");
+		}
+		catch(InvalidPublicKeyFileException ignoreExpectedException)
+		{
+		}
+
+		assertEquals("1.2.3.4", ServerForMirroring.extractIpFromFileName("ip=1.2.3.4"));
+		assertEquals("2.3.4.5", ServerForMirroring.extractIpFromFileName("ip=2.3.4.5.txt"));
+		assertEquals("3.4.5.6", ServerForMirroring.extractIpFromFileName("code=x.y.z-ip=3.4.5.6.txt"));
 	}
 
 	ServerForMirroring server;
