@@ -292,7 +292,7 @@ public class MartusApp
 
 	public File getKeyPairFile()
 	{
-		return new File(getDataDirectory() + "MartusKeyPair.dat");
+		return new File(getDataDirectory() + KEYPAIR_FILENAME);
 	}
 	
 	public static File getBackupFile(File original)
@@ -1553,6 +1553,8 @@ public class MartusApp
 
 	public static final String PUBLIC_INFO_EXTENSION = ".mpi";
 	public static final String AUTHENTICATE_SERVER_FAILED = "Failed to Authenticate Server";
+	public static final String KEYPAIR_FILENAME = "MartusKeyPair.dat";
+
 	private final int MAXFOLDERS = 50;
 	public int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 	private String currentLanguage;

@@ -364,6 +364,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyServerCodeWrong=Incorrect Server Public Code");
 		addEnglishTranslation("wintitle:notifyRetrieveCanceled=Bulletin Download Canceled");
 		addEnglishTranslation("wintitle:notifyRememberPassword=Remember Your Password");
+		addEnglishTranslation("wintitle:notifyErrorBackingupKeyPair=Error");
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");

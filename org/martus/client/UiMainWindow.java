@@ -1047,14 +1047,18 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	
 	private void doBackupKeyPair()
 	{
-		if(!reSignIn())
-			return;
-
 		File keypairFile = app.getKeyPairFile();
+		if(keypairFile.length() > MAX_KEYPAIRFILE_SIZE)
+		{
+			System.out.println("keypair file too large!");
+			notifyDlg(this, "ErrorBackingupKeyPair");
+			return;
+		}
+
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle(app.getWindowTitle("saveBackupKeyPair"));
 		chooser.setFileSelectionMode(chooser.FILES_AND_DIRECTORIES);
-		chooser.setSelectedFile(app.getBackupFile(keypairFile));
+		chooser.setSelectedFile(new File(app.KEYPAIR_FILENAME));
 		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
 			File newBackupFile = chooser.getSelectedFile();
@@ -1066,8 +1070,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				FileInputStream input = new FileInputStream(keypairFile);
 				FileOutputStream output = new FileOutputStream(newBackupFile); 
 				
-				if(keypairFile.length() > MAX_KEYPAIRFILE_SIZE)
-					throw new IOException("KeyPair file size too large.");
 				int originalKeyPairFileSize = (int) keypairFile.length();
 				byte[] inputArray = new byte[originalKeyPairFileSize];
 				
