@@ -97,7 +97,7 @@
   
     <replace file="${common-dir}/MartusUtilities.java" token="#{BUILDDATE}" value="${DSTAMP}"/>
     
-    <javac target="1.4" optimize="on" srcdir="${common-dir}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${common-dir}" classpath="." failonerror="true">
     		<include name="**/*.java"/>
     </javac>
 
