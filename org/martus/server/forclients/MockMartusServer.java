@@ -16,6 +16,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	public MockMartusServer() throws Exception
 	{
 		this(new TempDirectory());
+		serverForClients = new ServerForClients(this);
 	}
 	
 	public MockMartusServer(File dataDir) throws Exception
@@ -43,6 +44,16 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		catch (FileNotFoundException okIfComplianceFileIsMissing)
 		{
 		}
+	}
+	
+	public synchronized void clientConnectionStart()
+	{
+		serverForClients.clientConnectionStart();
+	}
+	
+	public synchronized void clientConnectionExit()
+	{
+		serverForClients.clientConnectionExit();
 	}
 	
 	public String ping()

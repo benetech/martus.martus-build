@@ -1773,32 +1773,9 @@ public class MartusServer implements NetworkInterfaceConstants
 		return(getShutdownFile().exists());
 	}
 	
-	public synchronized void clientConnectionStart()
+	public boolean canExitNow()
 	{
-		//logging("start");
-		incrementActiveClientsCounter();
-	}
-	
-	public synchronized void clientConnectionExit()
-	{
-		//logging("exit");
-		decrementActiveClientsCounter();
-	}
-	
-	public synchronized int getNumberActiveClients()
-	{
-		return activeClientsCounter;
-	}
-	
-	
-	public synchronized void incrementActiveClientsCounter()
-	{
-		activeClientsCounter++;
-	}
-	
-	public synchronized void decrementActiveClientsCounter()
-	{
-		activeClientsCounter--;
+		return serverForClients.canExitNow();
 	}
 	
 	public synchronized void incrementFailedUploadRequestsForCurrentClientIp()
@@ -2348,7 +2325,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		public void run()
 		{
-			if( isShutdownRequested() && getNumberActiveClients() == 0 )
+			if( isShutdownRequested() && canExitNow() )
 			{
 				logging("Shutdown request received.");
 				
@@ -2396,7 +2373,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	private Vector magicWords;
 	
 	private long bannedClientsFileLastModified;
-	private int activeClientsCounter;
 
 	String serverName;
 	private boolean secureMode;

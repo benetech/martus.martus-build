@@ -238,6 +238,23 @@ public class TestServerForClients extends TestCaseEnhanced
 		TRACE_END();
 	}
 
+	public void testClientCounter()
+	{
+		TRACE_BEGIN("testClientCounter");
+
+		assertEquals("getNumberActiveClients 1", 0, testServer.getNumberActiveClients());
+		
+		testServer.clientConnectionStart();
+		testServer.clientConnectionStart();
+		assertEquals("getNumberActiveClients 2", 2, testServer.getNumberActiveClients());
+		
+		testServer.clientConnectionExit();
+		testServer.clientConnectionExit();
+		assertEquals("getNumberActiveClients 3", 0, testServer.getNumberActiveClients());
+
+		TRACE_END();
+	}
+	
 	String uploadBulletinChunk(NetworkInterface server, String authorId, String localId, int totalLength, int offset, int chunkLength, String data, MartusCrypto signer) throws Exception
 	{
 		String stringToSign = authorId + "," + localId + "," + Integer.toString(totalLength) + "," + 

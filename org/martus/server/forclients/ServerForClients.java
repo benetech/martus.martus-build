@@ -14,6 +14,42 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 
 	}
 	
+	public MartusCrypto getSecurity()
+	{
+		return coreServer.getSecurity();
+	}
+	
+	public String getPublicCode(String clientId)
+	{
+		return coreServer.getPublicCode(clientId); 
+	}
+	
+	public synchronized void logging(String message)
+	{
+		coreServer.logging(message);
+	}
+	
+	public boolean canExitNow()
+	{
+		return (getNumberActiveClients() == 0);
+	}
+	
+	synchronized int getNumberActiveClients()
+	{
+		return activeClientsCounter;
+	}
+	
+	
+	public synchronized void clientConnectionStart()
+	{
+		activeClientsCounter++;
+	}
+	
+	public synchronized void clientConnectionExit()
+	{
+		activeClientsCounter--;
+	}
+	
 	public void handleNonSSL()
 	{
 		ServerSideNetworkHandlerForNonSSL nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
@@ -32,10 +68,9 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		coreServer.allowUploads(clientId);
 	}
 	
-	public int getNumberActiveClients()
-	{
-		return coreServer.getNumberActiveClients();
-	}
+
+
+
 
 	// BEGIN SSL interface
 	public String deleteDraftBulletins(String accountId, String[] localIds)
@@ -108,31 +143,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.listMyDraftBulletinIds(authorAccountId, retrieveTags);
 	}
 
-	public MartusCrypto getSecurity()
-	{
-		return coreServer.getSecurity();
-	}
-	
-	public String getPublicCode(String clientId)
-	{
-		return coreServer.getPublicCode(clientId); 
-	}
-	
-	public synchronized void logging(String message)
-	{
-		coreServer.logging(message);
-	}
-	
-	public synchronized void clientConnectionStart()
-	{
-		coreServer.clientConnectionStart();
-	}
-	
-	public synchronized void clientConnectionExit()
-	{
-		coreServer.clientConnectionExit();
-	}
-
 	// begin NON-SSL interface (sort of)
 	public String authenticateServer(String tokenToSign)
 	{
@@ -195,5 +205,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	}
 
 	MartusServer coreServer;
+	private int activeClientsCounter;
 
 }
