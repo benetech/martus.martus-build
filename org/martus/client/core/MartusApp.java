@@ -815,16 +815,18 @@ public class MartusApp
 	public String backgroundUpload(UiProgressMeter progressMeter) throws
 		DamagedBulletinException
 	{
+		String result = null;
+		
 		if(getFolderOutbox().getBulletinCount() > 0)
-			return backgroundUploadOneSealedBulletin(progressMeter);
-
-		if(getFolderDraftOutbox().getBulletinCount() > 0)
-			return backgroundUploadOneDraftBulletin(progressMeter);
-		if(getConfigInfo().shouldContactInfoBeSentToServer())
+			result = backgroundUploadOneSealedBulletin(progressMeter);
+		else if(getFolderDraftOutbox().getBulletinCount() > 0)
+			result = backgroundUploadOneDraftBulletin(progressMeter);
+		else if(getConfigInfo().shouldContactInfoBeSentToServer())
 			sendContactInfoToServer();
+
 		if(progressMeter != null)
 			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("StatusReady"));
-		return null;
+		return result;
 	}
 
 	public Vector getNewsFromServer()
