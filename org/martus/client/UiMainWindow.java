@@ -174,6 +174,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void bulletinSelectionHasChanged()
 	{
 		Bulletin b = table.getSingleSelectedBulletin();
+		actionEdit.setEnabled(b != null);
+		actionPrint.setEnabled(b != null);
 		preview.setCurrentBulletin(b);
 	}
 
@@ -449,7 +451,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		JMenu file = new JMenu(app.getButtonLabel("file"));
 		file.add(new ActionMenuCreateFolder());
 		file.add(new ActionMenuCreateBulletin());
-		file.add(new ActionMenuPrintBulletin());
+		actionMenuPrint = new ActionMenuPrintBulletin();
+		file.addMenuListener(actionMenuPrint);
+		file.add(actionMenuPrint);
 		file.addSeparator();
 		file.add(new ActionMenuExit());
 
@@ -1444,6 +1448,16 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		private int timeInMillis;
 	}
 
+	static private boolean isAnyBulletinSelected(UiMainWindow window)
+	{
+		return (window.table.getSelectedBulletins().length > 0);
+	}
+
+	static private boolean isOnlyOneBulletinSelected(UiMainWindow window)
+	{
+		return (window.table.getSingleSelectedBulletin() != null);
+	}
+
 	class ActionCreate extends AbstractAction
 	{
 		public ActionCreate()
@@ -1535,17 +1549,32 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuPrintBulletin extends AbstractAction
+	class ActionMenuPrintBulletin extends AbstractAction implements MenuListener
 	{
 		public ActionMenuPrintBulletin()
 		{
 			super(app.getMenuLabel("printBulletin"), null);
+			//Java Bug, menu items need to be disabled before correct behavior occures.
+			setEnabled(false);
 		}
 
 		public void actionPerformed(ActionEvent ae)
 		{
 			doPrint();
 		}
+
+		public boolean isEnabled()
+		{
+			return isOnlyOneBulletinSelected(UiMainWindow.this);
+		}
+
+		public void menuSelected(MenuEvent e)
+		{
+			actionMenuPrint.setEnabled(actionMenuPrint.isEnabled());
+		}
+		
+		public void menuDeselected(MenuEvent e) {}
+		public void menuCanceled(MenuEvent e) {}
 	}
 	
 	class ActionMenuAbout extends AbstractAction
@@ -1587,11 +1616,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	static private boolean isAnyBulletinSelected(UiMainWindow window)
-	{
-		return (window.table.getSelectedBulletins().length > 0);
-	}
-	
 	class ActionMenuEdit extends AbstractAction
 	{
 		public ActionMenuEdit()
@@ -1606,7 +1630,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public boolean isEnabled()
 		{
-			return (table.getSingleSelectedBulletin() != null);
+			return isOnlyOneBulletinSelected(UiMainWindow.this);
 		}
 	}
 	
@@ -2084,6 +2108,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private javax.swing.Timer errorChecker;
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
+	private ActionMenuPrintBulletin actionMenuPrint;
 	private ActionMenuEdit actionMenuEdit;
 	private ActionMenuCut actionMenuCut;
 	private ActionMenuCopy actionMenuCopy;
