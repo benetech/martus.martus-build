@@ -18,6 +18,8 @@ import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Enumeration;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -175,7 +177,7 @@ public class MartusServer
 				System.out.println("Unable to delete magicwords");
 				System.exit(4);
 			}
-			File keyPairFile = new File(dataDirectory, KEYPAIRFILENAME);
+			File keyPairFile = new File(dataDirectory, getKeypairFilename());
 			if(!keyPairFile.delete())
 			{
 				System.out.println("Unable to delete keypair");
@@ -221,9 +223,17 @@ public class MartusServer
 		
 
 		clientsThatCanUpload = new Vector();
+		clientsNotAuthorized = new Vector();
+		notAuthorizedClientsFile = new File(dataDirectory, NOTAUTHORIZEDCLIENTSFILENAME);
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
-		keyPairFile = new File(dataDirectory, KEYPAIRFILENAME);
+		keyPairFile = new File(dataDirectory, getKeypairFilename());
+		
+		notAuthorizedClientsLastModified = 0;
+		loadNotAuthorizedClients();
+		timer = new Timer(true);
+		TimerTask task = new MonitorTask();
+		timer.schedule(task, period, period);
 
 		try
 		{
@@ -407,6 +417,12 @@ public class MartusServer
 			logging("uploadBulletinChunk");
 		}
 		
+		if( !isClientAuthorized(authorAccountId) )
+		{
+			logging("  returning REJECTED");
+			return NetworkInterfaceConstants.REJECTED;
+		}
+		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," +
 					Integer.toString(totalSize) + "," + Integer.toString(chunkOffset) + "," +
 					Integer.toString(chunkSize) + "," + data;
@@ -548,6 +564,13 @@ public class MartusServer
 			logging("downloadBulletin " + getFolderFromClientId(authorAccountId) + " " + bulletinLocalId);
 		Vector result = new Vector();
 		
+		if( !isClientAuthorized(authorAccountId) )
+		{
+			logging("  returning REJECTED");
+			result.add(NetworkInterfaceConstants.REJECTED);
+			return result;
+		}
+		
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
 		DatabaseKey headerKey = new DatabaseKey(uid);
 		if(!getDatabase().doesRecordExist(headerKey))
@@ -593,7 +616,15 @@ public class MartusServer
 			logging("  " + getFolderFromClientId(authorAccountId) + " " + bulletinLocalId);
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + "HQ: " + getFolderFromClientId(hqAccountId));
 		}
+		
 		Vector result = new Vector();
+		
+		if( !isClientAuthorized(hqAccountId) )
+		{
+			logging("  returning REJECTED");
+			result.add(NetworkInterfaceConstants.REJECTED);
+			return result;
+		}
 		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," + hqAccountId + "," + 
 					Integer.toString(chunkOffset) + "," +
@@ -642,6 +673,14 @@ public class MartusServer
 			logging("downloadMyBulletinChunk ");
 			logging("  " + getFolderFromClientId(authorAccountId) + " " + bulletinLocalId);
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
+		}
+		
+		if( !isClientAuthorized(authorAccountId) )
+		{
+			logging("  returning REJECTED");
+			Vector result = new Vector();
+			result.add(NetworkInterfaceConstants.REJECTED);
+			return result;
 		}
 		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," +
@@ -765,6 +804,15 @@ public class MartusServer
 	{
 		if(serverMaxLogging)
 			logging("listMySealedBulletinIds " + getFolderFromClientId(clientId));
+			
+		if( !isClientAuthorized(clientId) )
+		{
+			logging("  returning REJECTED");
+			Vector result = new Vector();
+			result.add(NetworkInterfaceConstants.REJECTED);
+			return result;
+		}
+		
 		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId);
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
@@ -776,6 +824,15 @@ public class MartusServer
 	{
 		if(serverMaxLogging)
 			logging("listMyDraftBulletinIds " + getFolderFromClientId(authorAccountId));
+			
+		if( !isClientAuthorized(authorAccountId) )
+		{
+			logging("  returning REJECTED");
+			Vector result = new Vector();
+			result.add(NetworkInterfaceConstants.REJECTED);
+			return result;
+		}
+		
 		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
@@ -862,6 +919,14 @@ public class MartusServer
 		//TODO reject requests for other accounts public packets
 		if(serverMaxLogging)
 			logging("downloadAuthorizedPacket: " + getFolderFromClientId(myAccountId));
+			
+		if( !isClientAuthorized(myAccountId) )
+		{
+			logging("  returning REJECTED");
+			Vector result = new Vector();
+			result.add(NetworkInterfaceConstants.REJECTED);
+			return result;
+		}
 	
 		String signedString = authorAccountId + "," + packetLocalId + "," + myAccountId;
 		if(!isSignatureCorrect(signedString, signature, myAccountId))
@@ -923,6 +988,13 @@ public class MartusServer
 		}
 	
 		Vector result = new Vector();
+		
+		if( !isClientAuthorized(myAccountId) )
+		{
+			logging("  returning REJECTED");
+			result.add(NetworkInterfaceConstants.REJECTED);
+			return result;
+		}
 
 		String signedString = authorAccountId + "," + bulletinLocalId + "," + packetLocalId + "," + myAccountId;
 		if(!isSignatureCorrect(signedString, signature, myAccountId))
@@ -1037,6 +1109,11 @@ public class MartusServer
 	{
 		return clientsThatCanUpload.contains(clientId);
 	}
+	
+	public boolean isClientAuthorized(String clientId)
+	{
+		return !clientsNotAuthorized.contains(clientId);
+	}
 
 	public synchronized void allowUploads(String clientId)
 	{
@@ -1075,29 +1152,79 @@ public class MartusServer
 		}
 		return formattedCode;
 	}
+	
+	public synchronized void loadListFromFile(BufferedReader readerInput, Vector list)
+		throws IOException
+	{
+		try
+		{
+			while(true)
+			{
+				String currentLine = readerInput.readLine();
+				if(currentLine == null)
+					break;
+				if(currentLine.length() == 0)
+					continue;
+					
+				if( list.contains(currentLine) )
+					continue;
+
+				list.add(currentLine);
+				//System.out.println("MartusServer.loadListFromFile: " + currentLine);
+			}
+		}
+		catch(IOException e)
+		{
+			throw new IOException(e.getMessage());
+		}
+	}
 
 	public synchronized void loadCanUploadList(BufferedReader canUploadInput)
 	{
 		if(serverMaxLogging)
 			logging("loadCanUploadList");
+
 		try
 		{
-			while(true)
-			{
-				String currentLine = canUploadInput.readLine();
-				if(currentLine == null)
-					break;
-				if(currentLine.length() == 0)
-					continue;
-				clientsThatCanUpload.add(currentLine);
-			}
-			if(serverMaxLogging)
-				logging("loadCanUploadList : Exit OK");
+			loadListFromFile(canUploadInput, clientsThatCanUpload);
 		}
-		catch(IOException e)
+		catch (IOException e)
 		{
 			logging("loadCanUploadList -- Error loading can-upload list: " + e);
 		}
+		
+		if(serverMaxLogging)
+				logging("loadCanUploadList : Exit OK");
+	}
+	
+	public synchronized void loadNotAuthorizedClients()
+	{
+		if(serverMaxLogging)
+			logging("loadNotAuthorizedClients");
+
+		try
+		{
+			long lastModified = notAuthorizedClientsFile.lastModified();
+			if( lastModified != notAuthorizedClientsLastModified )
+			{
+				clientsNotAuthorized.clear();
+				notAuthorizedClientsLastModified = lastModified;
+				UnicodeReader reader = new UnicodeReader(notAuthorizedClientsFile);
+				loadListFromFile(reader, clientsNotAuthorized);
+				reader.close();
+			}
+		}
+		catch(FileNotFoundException nothingToWorryAbout)
+		{
+			clientsNotAuthorized.clear();
+		}
+		catch (IOException e)
+		{
+			logging("loadNotAuthorizedClients -- Error loading can-upload list: " + e);
+		}
+		
+		if(serverMaxLogging)
+				logging("loadNotAuthorizedClients : Exit OK");
 	}
 
 	public static boolean keyBelongsToClient(DatabaseKey key, String clientId)
@@ -1732,17 +1859,29 @@ public class MartusServer
 		}
 		String hqAccountId;
 	}
+	
+	private class MonitorTask extends TimerTask
+	{
+		public void run()
+		{
+			loadNotAuthorizedClients();
+		}
+	}
 
 
 	Database database;
 	ServerSideNetworkHandlerForNonSSL nonSSLServerHandler;
 	ServerSideNetworkHandler serverHandler;
 	public Vector clientsThatCanUpload;
+	public Vector clientsNotAuthorized;
 	public MartusCrypto security;
 	File keyPairFile;
 	public File allowUploadFile;
 	public File magicWordsFile;
+	public File notAuthorizedClientsFile;
+	private Timer timer;
 	private String magicWord;
+	private long notAuthorizedClientsLastModified;
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
@@ -1750,4 +1889,6 @@ public class MartusServer
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
+	private static final String NOTAUTHORIZEDCLIENTSFILENAME = "notauthorized.txt";
+	private static final long period = 60000;
 }
