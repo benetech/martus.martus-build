@@ -187,15 +187,15 @@ public class Packet
 			throw new InvalidPacketException("Wrong Local ID: expected " + localId + " but was " + handler.localId);
 	}
 
-	protected static void verifyPacketSignature(InputStreamWithSeek inputStream, MartusCrypto verifier) throws
+	public static byte[] verifyPacketSignature(InputStreamWithSeek inputStream, MartusCrypto verifier) throws
 			IOException,
 			InvalidPacketException,
 			SignatureVerificationException
 	{
-		verifyPacketSignature(inputStream, null, verifier);
+		return verifyPacketSignature(inputStream, null, verifier);
 	}
 	
-	public static void verifyPacketSignature(InputStreamWithSeek in, byte[] expectedSig, MartusCrypto verifier) throws
+	public static byte[] verifyPacketSignature(InputStreamWithSeek in, byte[] expectedSig, MartusCrypto verifier) throws
 			IOException,
 			InvalidPacketException,
 			SignatureVerificationException
@@ -240,6 +240,9 @@ public class Packet
 
 				if(!verifier.signatureIsValid(sigBytes))
 					throw new SignatureVerificationException();
+
+				in.seek(0);
+				return sigBytes;
 			}
 		}
 		catch (MartusSignatureException e)
@@ -251,7 +254,6 @@ public class Packet
 			throw new SignatureVerificationException();
 		}
 
-		in.seek(0);
 	}
 
 	public static boolean isValidStartComment(final String startComment)
