@@ -25,6 +25,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
+import org.martus.common.*;
 import org.martus.common.Base64;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.FileDatabase;
@@ -777,25 +778,24 @@ public class MartusApp
 		return result;
 	}
 
-	public String retrieveMyBulletins(Vector uidList)
+	public String retrieveMyBulletins(Vector uidList, Retriever retriever)
 	{
 		BulletinFolder retrievedFolder = createFolderRetrieved();
 		store.saveFolders();
 
-		return retrieveBulletins(uidList, retrievedFolder);
+		return retrieveBulletins(uidList, retrievedFolder, retriever);
 	}
 
-	public String retrieveFieldOfficeBulletins(Vector uidList)
+	public String retrieveFieldOfficeBulletins(Vector uidList, Retriever retriever)
 	{
 		BulletinFolder retrievedFolder = createFolderRetrieved();
 		store.saveFolders();
 
-		return retrieveBulletins(uidList, retrievedFolder);
+		return retrieveBulletins(uidList, retrievedFolder, retriever);
 	}
 
-	private String retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder) 
+	private String retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder, Retriever retriever) 
 	{
-		Retriever retriever = new Retriever(this, store);
 		retriever.retrieveBulletins(uidList, retrievedFolder);
 		return retriever.getResult();
 	}

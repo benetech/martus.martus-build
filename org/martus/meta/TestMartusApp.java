@@ -22,6 +22,7 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceForNonSSL;
+import org.martus.common.Retriever;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
@@ -769,7 +770,8 @@ public class TestMartusApp extends TestCaseEnhanced
 		mockServer.setDownloadResponseNotFound();
 		Vector badList = new Vector();
 		badList.add("not an id");
-		assertEquals(NetworkInterfaceConstants.INCOMPLETE, appWithServer.retrieveMyBulletins(badList));
+		Retriever retriever = new Retriever(appWithServer);	
+		assertEquals(NetworkInterfaceConstants.INCOMPLETE, appWithServer.retrieveMyBulletins(badList, retriever));
 		mockServer.setDownloadResponseReal();
 		TRACE_END();
 	}
@@ -785,7 +787,8 @@ public class TestMartusApp extends TestCaseEnhanced
 		assertEquals("No bulletins", 0, store.getBulletinCount());
 
 		Vector empty = new Vector();
-		assertEquals("empty", NetworkInterfaceConstants.OK, appWithAccount.retrieveMyBulletins(empty));
+		Retriever retriever = new Retriever(appWithAccount);	
+		assertEquals("empty", NetworkInterfaceConstants.OK, appWithAccount.retrieveMyBulletins(empty, retriever));
 		assertEquals("Empty didn't even ask", null, mockServer.lastClientId);
 		assertEquals("Empty didn't download", 0, store.getBulletinCount());
 
@@ -806,7 +809,8 @@ public class TestMartusApp extends TestCaseEnhanced
 		b1.save();
 		Vector justB1 = new Vector();
 		justB1.add(b1.getUniversalId());
-		assertEquals("justB1", NetworkInterfaceConstants.OK, appWithAccount.retrieveMyBulletins(justB1));
+		Retriever retriever = new Retriever(appWithAccount);	
+		assertEquals("justB1", NetworkInterfaceConstants.OK, appWithAccount.retrieveMyBulletins(justB1, retriever));
 		assertEquals("justB1 didn't even ask", null, mockServer.lastClientId);
 		assertEquals("justB1 didn't download", 1, store.getBulletinCount());
 
@@ -819,7 +823,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		errorResponse.add(errorString);
 
 		mockServer.downloadResponse = errorResponse;
-		assertEquals("unknownId", NetworkInterfaceConstants.INCOMPLETE, appWithAccount.retrieveMyBulletins(nonExistantUidList));
+		assertEquals("unknownId", NetworkInterfaceConstants.INCOMPLETE, appWithAccount.retrieveMyBulletins(nonExistantUidList, retriever));
 		mockServer.downloadResponse = null;
 
 		Bulletin b2 = appWithAccount.createBulletin();
@@ -841,7 +845,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		allThree.add(b1.getUniversalId());
 		allThree.add(b2.getUniversalId());
 		allThree.add(b3.getUniversalId());
-		assertEquals("retrieve all", NetworkInterfaceConstants.OK, appWithAccount.retrieveMyBulletins(allThree));
+		assertEquals("retrieve all", NetworkInterfaceConstants.OK, appWithAccount.retrieveMyBulletins(allThree, retriever));
 		assertEquals("not back to three?", 3, store.getBulletinCount());
 		
 		Bulletin b3got = store.findBulletinByUniversalId(b3.getUniversalId());
@@ -1041,7 +1045,8 @@ public class TestMartusApp extends TestCaseEnhanced
 
 		Vector uploadedIdList = new Vector();
 		uploadedIdList.add("sample id");
-		assertEquals(NetworkInterfaceConstants.NO_SERVER, appWithoutServer.retrieveMyBulletins(uploadedIdList));
+		Retriever retriever = new Retriever(appWithoutServer);	
+		assertEquals(NetworkInterfaceConstants.NO_SERVER, appWithoutServer.retrieveMyBulletins(uploadedIdList, retriever));
 
 		TRACE_END();
 	}
@@ -1523,11 +1528,12 @@ public class TestMartusApp extends TestCaseEnhanced
 		Vector uidList = new Vector();
 		uidList.add(b1.getUniversalId());
 		uidList.add(b2.getUniversalId());
-		assertEquals("retrieve field office bulletins failed?", NetworkInterfaceConstants.OK, hqApp.retrieveFieldOfficeBulletins(uidList));
+		Retriever retriever = new Retriever(hqApp);	
+		assertEquals("retrieve field office bulletins failed?", NetworkInterfaceConstants.OK, hqApp.retrieveFieldOfficeBulletins(uidList, retriever));
 
 		uidList.clear();
 		uidList.add(b3.getUniversalId());
-		assertEquals("retrieve non-field office bulletins worked?", NetworkInterfaceConstants.INCOMPLETE, hqApp.retrieveFieldOfficeBulletins(uidList));
+		assertEquals("retrieve non-field office bulletins worked?", NetworkInterfaceConstants.INCOMPLETE, hqApp.retrieveFieldOfficeBulletins(uidList, retriever));
 
 		hqApp.deleteAllFiles();
 		TRACE_END();

@@ -43,6 +43,7 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.MartusApp.ServerErrorException;
+import org.martus.common.*;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.Base64.InvalidBase64Exception;
@@ -818,7 +819,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-			String result = app.retrieveMyBulletins(uidList);
+			Retriever retriever = new Retriever(app);	
+			String result = app.retrieveMyBulletins(uidList, retriever);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -845,7 +847,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 				
-			String result = app.retrieveMyBulletins(uidList);
+			Retriever retriever = new Retriever(app);	
+			String result = app.retrieveMyBulletins(uidList, retriever);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -871,8 +874,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-				
-			String result = app.retrieveFieldOfficeBulletins(uidList);
+			Retriever retriever = new Retriever(app);	
+			String result = app.retrieveFieldOfficeBulletins(uidList, retriever);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -899,7 +902,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 				
-			String result = app.retrieveFieldOfficeBulletins(uidList);
+			Retriever retriever = new Retriever(app);	
+			String result = app.retrieveFieldOfficeBulletins(uidList, retriever);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
