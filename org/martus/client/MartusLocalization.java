@@ -323,7 +323,7 @@ public class MartusLocalization
 		
 		addEnglishTranslation("wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)");
 		addEnglishTranslation("wintitle:notifyDropErrors=Error Moving Bulletin(s)");
-		addEnglishTranslation("wintitle:notifyPasteErrorNotAllowed=Cannot Pasting Bulletin(s)");
+		addEnglishTranslation("wintitle:notifyPasteErrorNotAllowed=Cannot Paste Bulletin(s)");
 		addEnglishTranslation("wintitle:notifyPasteError=Error Pasting Bulletin(s)");
 		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
@@ -442,9 +442,6 @@ public class MartusLocalization
 		addEnglishTranslation("button:Preview=Preview");
 		addEnglishTranslation("button:Delete=Delete");
 		addEnglishTranslation("button:Leave=Leave");
-
-		
-		addEnglishTranslation("button:FolderTreeRoot=Folders");
 
 		addEnglishTranslation("menu:exit=Exit");
 		addEnglishTranslation("menu:newFolder=Add new Folder");

@@ -28,7 +28,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		super(model);
 		store = storeToUse;
 		observer = mainWindow;
-
+		setRootVisible(false);
 		setShowsRootHandles(false);
 		setEditable(true);
 		setInvokesStopCellEditing(true);
@@ -145,7 +145,6 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			label = new JLabel();
 			label.setOpaque(true);
 			
-			rootIcon = getLeafIcon();
 			closedIcon = getClosedIcon();
 			openIcon = getOpenIcon();
 		}
@@ -154,24 +153,16 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 					boolean isSelected, boolean isExpanded, boolean isLeaf,
 					int row, boolean hasFocus) 
 		{
-			if(row == 0)
-			{
-				label.setIcon(rootIcon);
-				label.setText(observer.getApp().getButtonLabel("FolderTreeRoot"));
-			}
+			if(isSelected)
+				label.setIcon(openIcon);
 			else
-			{
-				if(isSelected)
-					label.setIcon(openIcon);
-				else
-					label.setIcon(closedIcon);
-				FolderTreeNode folderNode = (FolderTreeNode)value;
-				BulletinFolder folder = store.findFolder(folderNode.getInternalName());
-				String show = "?";
-				if(folder != null)
-					show = folderNode.getLocalizedName()+ " (" + folder.getBulletinCount() + ")";
-				label.setText(show);
-			}
+				label.setIcon(closedIcon);
+			FolderTreeNode folderNode = (FolderTreeNode)value;
+			BulletinFolder folder = store.findFolder(folderNode.getInternalName());
+			String show = "?";
+			if(folder != null)
+				show = folderNode.getLocalizedName()+ " (" + folder.getBulletinCount() + ")";
+			label.setText(show);
 
 			Color foreground = getTextNonSelectionColor();
 			Color background = getBackgroundNonSelectionColor();
@@ -187,7 +178,6 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		}
 		
 		JLabel label;
-		Icon rootIcon;
 		Icon closedIcon;
 		Icon openIcon;
 	}
