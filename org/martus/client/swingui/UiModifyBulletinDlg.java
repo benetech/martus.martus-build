@@ -143,7 +143,8 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		}
 
 
-		BulletinStore store = getApp().getStore();
+		MartusApp app = observer.getApp();
+		BulletinStore store = app.getStore();
 
 		Cursor originalCursor = getCursor();
 		if(ae.getSource() == send)
@@ -152,7 +153,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 				return;
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			bulletin.setSealed();
-			getApp().setHQKeyInBulletin(bulletin);
+			app.setHQKeyInBulletin(bulletin);
 			store.saveBulletin(bulletin);
 			observer.bulletinContentsHaveChanged(bulletin);
 			store.moveBulletin(bulletin, store.getFolderDrafts(), store.getFolderOutbox());
@@ -162,7 +163,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		{
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			bulletin.setDraft();
-			getApp().setHQKeyInBulletin(bulletin);
+			app.setHQKeyInBulletin(bulletin);
 			store.saveBulletin(bulletin);
 			observer.bulletinContentsHaveChanged(bulletin);
 			store.addBulletinToFolder(bulletin.getUniversalId(), store.getFolderDrafts());
@@ -194,10 +195,6 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 	}
 	// end WindowListener interface
 
-	public MartusApp getApp()
-	{
-		return observer.getApp();
-	}
 
 	public void encryptionChanged(boolean newState)
 	{
