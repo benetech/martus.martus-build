@@ -241,9 +241,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			Bulletin clone = store.createEmptyBulletin();
 			try
 			{
-				clone.pullDataFrom(b, store.getDatabase());
-				clone.setDraft();
-
+				clone.createDraftCopyOf(b, store.getDatabase());
 				store.saveBulletin(clone);
 				DatabaseKey key = DatabaseKey.createKey(clone.getUniversalId(),clone.getStatus());
 				b = store.loadFromDatabase(key);

@@ -357,7 +357,7 @@ public class Bulletin implements BulletinConstants
 		getBulletinHeaderPacket().setAllPrivate(newValue);
 	}
 
-	public void pullDataFrom(Bulletin other, Database otherDatabase) throws
+	public void createDraftCopyOf(Bulletin other, Database otherDatabase) throws
 		CryptoException, 
 		InvalidPacketException, 
 		SignatureVerificationException, 
