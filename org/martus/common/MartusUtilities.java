@@ -1055,6 +1055,12 @@ public class MartusUtilities
 		timer.schedule(task, IMMEDIATELY, interval);
 	}
 
+	public static String getPublicCode(String nextAccountId)
+		throws Base64.InvalidBase64Exception
+	{
+		return MartusUtilities.formatPublicCode(MartusUtilities.computePublicCode(nextAccountId));
+	}
+
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
 	static final String PUBLIC_KEY_TYPE_SERVER = "Server";
 }
