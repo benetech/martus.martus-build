@@ -98,6 +98,7 @@ public class MartusLocalization
 
 		String key = translation.substring(0,endKey);
 		String value = translation.substring(endKey + 1, translation.length());
+		value = value.replaceAll("\\\\n", "\n");
 		stringMap.put(key, value);
 	}
 

@@ -90,6 +90,8 @@ public class TestMartusLocalization extends TestCase
 		bd.addTranslation("a", "invalid=because-bad-language");
 		bd.addTranslation("en", null);
 		bd.addTranslation("en", "invalid-because-no-equals");
+		bd.addTranslation("en", "b:c=new\\nline");
+		assertEquals("new\nline", bd.getLabel("en", "b", "c", "default"));
 	}
 
 /*TODO: Evaluate whether any of these tests are still useful
