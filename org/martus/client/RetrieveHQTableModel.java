@@ -21,7 +21,7 @@ public class RetrieveHQTableModel extends RetrieveTableModel
 			String accountId = (String)accounts.get(a);
 			getFieldOfficeSealedSummaries(accountId);
 		}
-		summaries = getSummariesForBulletinsNotInStore(allSummaries);
+		setCurrentSummaries();
 	}
 		
 	public String getColumnName(int column)
@@ -45,7 +45,7 @@ public class RetrieveHQTableModel extends RetrieveTableModel
 
 	public Object getValueAt(int row, int column)
 	{
-		BulletinSummary summary = (BulletinSummary)summaries.get(row);
+		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
 		switch(column)
 		{
 			case 0:
@@ -60,7 +60,7 @@ public class RetrieveHQTableModel extends RetrieveTableModel
 
 	public void setValueAt(Object value, int row, int column)
 	{
-		BulletinSummary summary = (BulletinSummary)summaries.get(row);
+		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
 		if(column == 0)
 		{
 			summary.setChecked(((Boolean)value).booleanValue());

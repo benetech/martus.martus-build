@@ -16,7 +16,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	public RetrieveTableModel(MartusApp appToUse, UiProgressRetrieveSummariesDlg retriever)
 	{
 		app = appToUse;
-		summaries = new Vector();
+		downloadableSummaries = new Vector();
 		store = app.getStore();
 		retrieverDlg = retriever;
 		allSummaries = new Vector();
@@ -24,6 +24,12 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	}
 
 	abstract public void Initalize() throws ServerErrorException;
+
+	protected void setCurrentSummaries()
+	{
+		downloadableSummaries = getSummariesForBulletinsNotInStore(allSummaries);
+		currentSummaries = downloadableSummaries;	
+	}
 
 	public Vector getSummariesForBulletinsNotInStore(Vector allSummaries) 
 	{
@@ -43,8 +49,8 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 
 	public void setAllFlags(boolean flagState)
 	{
-		for(int i = 0; i < summaries.size(); ++i)
-			((BulletinSummary)summaries.get(i)).setChecked(flagState);
+		for(int i = 0; i < currentSummaries.size(); ++i)
+			((BulletinSummary)currentSummaries.get(i)).setChecked(flagState);
 		fireTableDataChanged();
 	}
 
@@ -52,9 +58,9 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	{
 		Vector uidList = new Vector();
 
-		for(int i = 0; i < summaries.size(); ++i)
+		for(int i = 0; i < currentSummaries.size(); ++i)
 		{
-			BulletinSummary summary = (BulletinSummary)summaries.get(i);
+			BulletinSummary summary = (BulletinSummary)currentSummaries.get(i);
 			if(summary.isChecked())
 			{
 				UniversalId uid = UniversalId.createFromAccountAndLocalId(summary.getAccountId(), summary.getLocalId());
@@ -67,7 +73,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 
 	public int getRowCount()
 	{
-		return summaries.size();
+		return currentSummaries.size();
 	}
 
 	public boolean isCellEditable(int row, int column)
@@ -196,10 +202,10 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 			throw (errorThrown);
 	}
 	
-	public Vector getResults() throws ServerErrorException
+	public Vector getDownloadableSummaries() throws ServerErrorException
 	{
 		checkIfErrorOccurred();
-		return summaries;	
+		return downloadableSummaries;	
 	}
 
 	public Vector getAllSummaries() throws ServerErrorException
@@ -209,9 +215,10 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	}
 	
 	MartusApp app;
-	Vector summaries;
 	BulletinStore store;
 	private UiProgressRetrieveSummariesDlg retrieverDlg;
-	protected Vector allSummaries;
+	protected Vector currentSummaries;
+	private Vector downloadableSummaries;
+	private Vector allSummaries;
 	private ServerErrorException errorThrown;
 }

@@ -16,7 +16,7 @@ public class RetrieveMyTableModel extends RetrieveTableModel
 	public void Initalize() throws ServerErrorException
 	{
 		getMySummaries();
-		summaries = getSummariesForBulletinsNotInStore(allSummaries);
+		setCurrentSummaries();
 	}
 	
 	public String getColumnName(int column)
@@ -34,7 +34,7 @@ public class RetrieveMyTableModel extends RetrieveTableModel
 
 	public Object getValueAt(int row, int column)
 	{
-		BulletinSummary summary = (BulletinSummary)summaries.get(row);
+		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
 		if(column == 0)
 		{
 			return new Boolean(summary.isChecked());
@@ -44,7 +44,7 @@ public class RetrieveMyTableModel extends RetrieveTableModel
 
 	public void setValueAt(Object value, int row, int column)
 	{
-		BulletinSummary summary = (BulletinSummary)summaries.get(row);
+		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
 		if(column == 0)
 		{
 			summary.setChecked(((Boolean)value).booleanValue());

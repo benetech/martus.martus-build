@@ -69,7 +69,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer, null);
 			model.Initalize();
 			model.getMySummaries();
-			Vector failed = model.getResults();
+			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid summaries?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -89,7 +89,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, null);
 			model.Initalize();
-			Vector failed = model.getResults();
+			Vector failed = model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -126,7 +126,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, null);
 		model.Initalize();
-		Vector result = model.getResults();
+		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
 		BulletinSummary s1 = (BulletinSummary)result.get(0);
@@ -219,7 +219,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			}
 		}
 
-		Vector result = model.getResults();
+		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
 		BulletinSummary s1 = (BulletinSummary)result.get(0);
@@ -260,7 +260,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer, null);
 			model.Initalize();
-			Vector failed = model.getResults();
+			Vector failed = model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -297,7 +297,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount, null);
 		model.Initalize();
-		Vector result = model.getResults();
+		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
 		BulletinSummary s1 = (BulletinSummary)result.get(0);
@@ -332,7 +332,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer, null);
 			model.Initalize();
 			model.getFieldOfficeSealedSummaries("");
-			Vector failed = model.getResults();
+			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid sealed summaries?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -344,7 +344,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer, null);
 			model.Initalize();
 			model.getFieldOfficeDraftSummaries("");
-			Vector failed = model.getResults();
+			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid draft summaries?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -365,7 +365,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer, null);
 			model.Initalize();
 			model.getFieldOfficeSealedSummaries("");
-			Vector failed = model.getResults();
+			Vector failed = model.getDownloadableSummaries();
 			fail("rejected sealed didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -377,7 +377,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer, null);
 			model.Initalize();
 			model.getFieldOfficeDraftSummaries("");
-			Vector failed = model.getResults();
+			Vector failed = model.getDownloadableSummaries();
 			fail("rejected draft didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -433,7 +433,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, null);
 		model.Initalize();
-		Vector returnedSealedResults = model.getResults();
+		Vector returnedSealedResults = model.getDownloadableSummaries();
 		assertEquals("Wrong size?", 2, returnedSealedResults.size());
 		BulletinSummary s1 = (BulletinSummary)returnedSealedResults.get(0);
 		BulletinSummary s2 = (BulletinSummary)returnedSealedResults.get(1);
@@ -456,7 +456,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, null);
 		model2.Initalize();
-		Vector returnedDraftResults = model2.getResults();
+		Vector returnedDraftResults = model2.getDownloadableSummaries();
 		assertEquals("Wrong draft size?", 1, returnedDraftResults.size());
 		BulletinSummary s3 = (BulletinSummary)returnedDraftResults.get(0);
 		boolean found3 = false;
