@@ -14,6 +14,12 @@ public class ShowContactInfo
 		
 		for (int i = 0; i < args.length; i++)
 		{
+			if(args[i].startsWith("--field-names"))
+			{
+				System.out.println("author \torganization\temail\twebpage\tphone\taddress ");
+				System.out.flush();
+				System.exit(0);
+			}
 			
 			if(args[i].startsWith("--file"))
 			{
