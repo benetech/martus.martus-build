@@ -35,7 +35,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.client.core.BulletinFolder;
-import org.martus.client.core.BulletinLoader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusClientXml;
 import org.martus.common.AttachmentProxy;
@@ -777,7 +776,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
 		File zipFile = File.createTempFile("$$$MartusTestZipSealed", null);
 		zipFile.deleteOnExit();
-		Bulletin loaded = BulletinLoader.loadFromDatabase(store, originalKey);
+		Bulletin loaded = store.loadFromDatabase(originalKey);
 		MockBulletin.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getRecordCount());
@@ -799,7 +798,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("Attachment Packet missing", db.doesRecordExist(attachmentKey));
 		assertTrue("Attachment Private Packet missing", db.doesRecordExist(attachmentPrivateKey));
 		
-		Bulletin reloaded = BulletinLoader.loadFromDatabase(store, originalKey);
+		Bulletin reloaded = store.loadFromDatabase(originalKey);
 		assertEquals("public?", original.get(Bulletin.TAGTITLE), reloaded.get(Bulletin.TAGTITLE));
 		assertEquals("private?", original.get(Bulletin.TAGPRIVATEINFO), reloaded.get(Bulletin.TAGPRIVATEINFO));
 		
@@ -952,7 +951,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.addPrivateAttachment(aPrivate);
 		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
 		
-		Bulletin loaded = BulletinLoader.loadFromDatabase(store, originalKey);
+		Bulletin loaded = store.loadFromDatabase(originalKey);
 
 		File zipFile = File.createTempFile("$$$MartusTestZipDraft", null);
 		zipFile.deleteOnExit();
@@ -978,7 +977,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("Attachment Public Packet present?", false, db.doesRecordExist(attachmentKey));
 		assertEquals("Attachment Private Packet present?", false, db.doesRecordExist(attachmentPrivateKey));
 
-		Bulletin reloaded = BulletinLoader.loadFromDatabase(store, new DatabaseKey(savedAsId));
+		Bulletin reloaded = store.loadFromDatabase(new DatabaseKey(savedAsId));
 		
 		assertEquals("public?", original.get(Bulletin.TAGTITLE), reloaded.get(Bulletin.TAGTITLE));
 		assertEquals("private?", original.get(Bulletin.TAGPRIVATEINFO), reloaded.get(Bulletin.TAGPRIVATEINFO));

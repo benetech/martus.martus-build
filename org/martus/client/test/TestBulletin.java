@@ -36,14 +36,13 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.martus.client.core.BulletinLoader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.SearchParser;
-import org.martus.common.*;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinSaver;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
@@ -382,7 +381,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertTrue("time wrong?", delta2 < 1000);
 
 		Thread.sleep(200);
-		Bulletin b2 = BulletinLoader.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
+		Bulletin b2 = store.loadFromDatabase(new DatabaseKey(b.getUniversalId()));
 		long loadedTime = b2.getLastSavedTime();
 		assertEquals("Didn't keep time saved?", firstSavedTime, loadedTime);
 	}

@@ -40,15 +40,7 @@ import org.martus.common.Packet;
 public class BulletinLoader
 {
 
-	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key) throws
-		IOException,
-		Bulletin.DamagedBulletinException,
-		MartusCrypto.NoKeyPairException
-	{
-		return loadFromDatabase(store, key, store.getSignatureVerifier());
-	}
-
-	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key, MartusCrypto verifier) throws
+	public static Bulletin loadFromDatabase(Database db, DatabaseKey key, MartusCrypto verifier) throws
 			IOException,
 			Bulletin.DamagedBulletinException,
 			MartusCrypto.NoKeyPairException
@@ -59,7 +51,6 @@ public class BulletinLoader
 	
 		BulletinHeaderPacket headerPacket = b.getBulletinHeaderPacket();
 		DatabaseKey headerKey = key;
-		final Database db = store.getDatabase();
 		boolean isHeaderValid = BulletinLoader.loadAnotherPacket(headerPacket, db, headerKey, null, verifier);
 	
 		if(isHeaderValid)

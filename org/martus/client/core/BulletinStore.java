@@ -295,7 +295,7 @@ public class BulletinStore
 
 		try
 		{
-			Bulletin b = BulletinLoader.loadFromDatabase(this, key);
+			Bulletin b = loadFromDatabase(key);
 			addToCaches(b);
 			return b;
 		}
@@ -320,6 +320,14 @@ public class BulletinStore
 			return data;
 		Bulletin b = findBulletinByUniversalId(uid);
 		return b.get(fieldTag);
+	}
+
+	public Bulletin loadFromDatabase(DatabaseKey key) throws
+		IOException,
+		Bulletin.DamagedBulletinException,
+		MartusCrypto.NoKeyPairException
+	{
+		return BulletinLoader.loadFromDatabase(getDatabase(), key, getSignatureVerifier());
 	}
 
 	public void saveBulletin(Bulletin b)

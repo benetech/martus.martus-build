@@ -85,7 +85,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		original.setSealed();
 		store.saveBulletin(original);
 
-		Bulletin loaded = BulletinLoader.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
+		Bulletin loaded = BulletinLoader.loadFromDatabase(db, new DatabaseKey(original.getUniversalId()), security);
 		assertEquals("not valid?", true, loaded.isValid());
 
 		FieldDataPacket fdp = loaded.getFieldDataPacket();
@@ -93,7 +93,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		boolean encryptPublicData = store.mustEncryptPublicData();
 		fdp.writeXmlToDatabase(db, encryptPublicData, security);
 
-		loaded = BulletinLoader.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
+		loaded = BulletinLoader.loadFromDatabase(db, new DatabaseKey(original.getUniversalId()), security);
 		assertEquals("not invalid?", false, loaded.isValid());
 		assertEquals("private messed up?", original.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
 	}
@@ -108,7 +108,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		original.setSealed();
 		store.saveBulletin(original);
 
-		Bulletin loaded = BulletinLoader.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
+		Bulletin loaded = BulletinLoader.loadFromDatabase(db, new DatabaseKey(original.getUniversalId()), security);
 		assertEquals("not valid?", true, loaded.isValid());
 
 		FieldDataPacket fdp = loaded.getPrivateFieldDataPacket();
@@ -116,7 +116,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		boolean encryptPublicData = store.mustEncryptPublicData();
 		fdp.writeXmlToDatabase(db, encryptPublicData, security);
 
-		loaded = BulletinLoader.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
+		loaded = BulletinLoader.loadFromDatabase(db, new DatabaseKey(original.getUniversalId()), security);
 		assertEquals("not invalid?", false, loaded.isValid());
 		assertEquals("public messed up?", original.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
 	}
@@ -134,7 +134,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
 		Bulletin loaded = store.createEmptyBulletin();
-		loaded = BulletinLoader.loadFromDatabase(store, key);
+		loaded = BulletinLoader.loadFromDatabase(db, key, security);
 		assertEquals("id", b.getLocalId(), loaded.getLocalId());
 		assertEquals("public info", b.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info", b.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
@@ -149,7 +149,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		original.setHQPublicKey(key);
 		store.saveBulletin(original);
 		DatabaseKey dbKey = new DatabaseKey(original.getUniversalId());
-		Bulletin loaded = BulletinLoader.loadFromDatabase(store, dbKey);
+		Bulletin loaded = BulletinLoader.loadFromDatabase(db, dbKey, security);
 		assertEquals("Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded.getFieldDataPacket().getHQPublicKey());
 
 		File tempFile = createTempFile();
@@ -170,7 +170,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
 		Bulletin loaded = store.createEmptyBulletin();
-		loaded = BulletinLoader.loadFromDatabase(store, key);
+		loaded = BulletinLoader.loadFromDatabase(db, key, security);
 		assertEquals("id", b.getLocalId(), loaded.getLocalId());
 
 		assertEquals("not private?", b.isAllPrivate(), loaded.isAllPrivate());
@@ -274,7 +274,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 	{
 		store.saveBulletin(b);
 		DatabaseKey headerKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
-		Bulletin stillValid = BulletinLoader.loadFromDatabase(store, headerKey, security);
+		Bulletin stillValid = BulletinLoader.loadFromDatabase(db, headerKey, security);
 		assertEquals(label + " not valid after save?", true, stillValid.isValid());
 	}
 
@@ -287,7 +287,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		{
 			try
 			{
-				BulletinLoader.loadFromDatabase(store, headerKey, security);
+				BulletinLoader.loadFromDatabase(db, headerKey, security);
 			}
 			catch (DamagedBulletinException ignoreExpectedException)
 			{
@@ -295,7 +295,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 			return;
 		}
 
-		Bulletin invalid = BulletinLoader.loadFromDatabase(store, headerKey, security);
+		Bulletin invalid = BulletinLoader.loadFromDatabase(db, headerKey, security);
 		assertEquals(label + " not invalid?", false, invalid.isValid());
 		assertEquals(label + " wrong uid?", b.getUniversalId(), invalid.getUniversalId());
 		assertEquals(label + " wrong fdp account?", b.getAccount(), invalid.getFieldDataPacket().getAccountId());

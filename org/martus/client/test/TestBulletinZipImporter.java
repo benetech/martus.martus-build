@@ -37,9 +37,8 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.core.BulletinZipImporter;
-import org.martus.client.core.BulletinLoader;
 import org.martus.client.core.BulletinStore;
+import org.martus.client.core.BulletinZipImporter;
 import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
@@ -176,7 +175,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData(), security);
 		UniversalId uid = original.getUniversalId();
 
-		original = BulletinLoader.loadFromDatabase(store, new DatabaseKey(uid));
+		original = store.loadFromDatabase(new DatabaseKey(uid));
 		AttachmentProxy[] originalAttachments = original.getPublicAttachments();
 		assertEquals("not one attachment?", 1, originalAttachments.length);
 		DatabaseKey key2 = new DatabaseKey(originalAttachments[0].getUniversalId());

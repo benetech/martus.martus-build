@@ -12,7 +12,6 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.core.BulletinLoader;
 import org.martus.client.core.BulletinStore;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
@@ -203,7 +202,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		b1.addPublicAttachment(new AttachmentProxy(attachment));
 		b1.addPrivateAttachment(new AttachmentProxy(attachment));
 		store.saveBulletin(b1);
-		b1 = BulletinLoader.loadFromDatabase(store, DatabaseKey.createSealedKey(b1.getUniversalId()));
+		b1 = store.loadFromDatabase(DatabaseKey.createSealedKey(b1.getUniversalId()));
 
 		int size = MartusUtilities.getBulletinSize(db, bhp);
 		b1.set(Bulletin.TAGTITLE, "This is an very long title and should change the size of the result if things are working correctly");
