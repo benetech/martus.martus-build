@@ -24,6 +24,9 @@
   <property name="htdocs-dir" value="www"/>
   <property name="verifier-dir" value="verify"/>
 
+  <property name="jar-verifier-jar" value= "${dist}/JarVerifier.jar"/>
+  <property name="jar-verifier-files" value="${relative-jar-verifier-dir}/*.class,
+                                            ${relative-jar-verifier-dir}/ssmartusclientks"/>
   <property name="common-dir" value="${cvs.home}/martus-common/source/${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
   <property name="common-package" value="${martus-package}.common"/>
@@ -46,10 +49,6 @@
                                             ${mspa-dir}/main/**/*.class,
                                             ${mspa-dir}/common/**/*.class,
                                             ${mspa-dir}/main/main-class.txt"/>
-
-  <property name="jar-verifier-jar" value= "${dist}/JarVerifier.jar"/>
-  <property name="jar-verifier-files" value="${relative-jar-verifier-dir}/*.class,
-                                            ${relative-jar-verifier-dir}/ssmartusclientks"/>
 
   <property name="server-dir" value="${cvs.home}/martus-server/source/${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
@@ -148,6 +147,7 @@
     <mkdir dir="${bin}"/>
 
     <replace file="${common-dir}/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
+	<copy file="${jar-verifier-dir}/ssmartusclientks" todir="${bin}/${relative-jar-verifier-dir}"/>
 
     <javac destdir="bin" target="1.4" optimize="on"
     	srcdir="${jar-verifier-dir};${hrvd-dir};${logi-dir};${util-dir};${swing-dir};${common-dir}"
@@ -163,7 +163,7 @@
 
     <mkdir dir="${dist}"/>
 
-    <jar jarfile="${common-jar}" basedir="${bin}" includes="**/*.class"/>
+    <jar jarfile="${common-jar}" basedir="${bin}" includes="**/*.class **/ssmartusclientks"/>
     
     <!-- clean up -->
     <delete dir="${bin}"/>
