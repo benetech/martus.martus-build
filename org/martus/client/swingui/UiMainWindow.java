@@ -73,9 +73,35 @@ import org.martus.client.core.CurrentUiState;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
-import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
-import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
-import org.martus.client.swingui.tablemodels.*;
+import org.martus.client.swingui.bulletincomponent.UiBulletinPreview;
+import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
+import org.martus.client.swingui.dialogs.UiAboutDlg;
+import org.martus.client.swingui.dialogs.UiConfigServerDlg;
+import org.martus.client.swingui.dialogs.UiContactInfoDlg;
+import org.martus.client.swingui.dialogs.UiCreateNewUserNameAndPasswordDlg;
+import org.martus.client.swingui.dialogs.UiDisplayFileDlg;
+import org.martus.client.swingui.dialogs.UiExportBulletinsDlg;
+import org.martus.client.swingui.dialogs.UiLocalizeDlg;
+import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
+import org.martus.client.swingui.dialogs.UiModifyBulletinDlg;
+import org.martus.client.swingui.dialogs.UiProgressRetrieveBulletinsDlg;
+import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
+import org.martus.client.swingui.dialogs.UiSearchDlg;
+import org.martus.client.swingui.dialogs.UiServerSummariesDlg;
+import org.martus.client.swingui.dialogs.UiShowScrollableTextDlg;
+import org.martus.client.swingui.dialogs.UiSigninDlg;
+import org.martus.client.swingui.dialogs.UiSplashDlg;
+import org.martus.client.swingui.dialogs.UiStringInputDlg;
+import org.martus.client.swingui.dialogs.UiTemplateDlg;
+import org.martus.client.swingui.dialogs.UiModifyBulletinDlg.CancelHandler;
+import org.martus.client.swingui.dialogs.UiModifyBulletinDlg.DoNothingOnCancel;
+import org.martus.client.swingui.foldertree.UiFolderTreePane;
+import org.martus.client.swingui.tablemodels.DeleteMyServerDraftsTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
+import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.NetworkInterfaceConstants;
@@ -336,7 +362,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return false;
 	}
 
-	boolean canModifyCurrentFolder()
+	public boolean canModifyCurrentFolder()
 	{
 		BulletinFolder folder = folders.getSelectedFolder();
 		return canModifyFolder(folder);
@@ -428,7 +454,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return menu;
 	}
 	
-	AbstractAction getActionMenuPaste()
+	public AbstractAction getActionMenuPaste()
 	{
 		return menuBar.actionMenuPasteBulletins;
 	}
@@ -455,32 +481,32 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return uiState.isCurrentDefaultKeyboardVirtual();
 	}
 
-	Dimension getBulletinEditorDimension()
+	public Dimension getBulletinEditorDimension()
 	{
 		return uiState.getCurrentEditorDimension();
 	}
 
-	Point getBulletinEditorPosition()
+	public Point getBulletinEditorPosition()
 	{
 		return uiState.getCurrentEditorPosition();
 	}
 
-	boolean isBulletinEditorMaximized()
+	public boolean isBulletinEditorMaximized()
 	{
 		return uiState.isCurrentEditorMaximized();
 	}
 
-	void setBulletinEditorDimension(Dimension size)
+	public void setBulletinEditorDimension(Dimension size)
 	{
 		uiState.setCurrentEditorDimension(size);
 	}
 
-	void setBulletinEditorPosition(Point position)
+	public void setBulletinEditorPosition(Point position)
 	{
 		uiState.setCurrentEditorPosition(position);
 	}
 
-	void setBulletinEditorMaximized(boolean maximized)
+	public void setBulletinEditorMaximized(boolean maximized)
 	{
 		uiState.setCurrentEditorMaximized(maximized);
 	}
@@ -591,12 +617,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return topStuff;
 	}
 
-	void doModifyBulletin()
+	public void doModifyBulletin()
 	{
 		table.doModifyBulletin();
 	}
 
-	void doSelectAllBulletins()
+	public void doSelectAllBulletins()
 	{
 		table.doSelectAllBulletins();	
 	}
@@ -616,27 +642,27 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		table.doPasteBulletins();
 	}
 
-	void doDiscardBulletins()
+	public void doDiscardBulletins()
 	{
 		table.doDiscardBulletins();
 	}
 	
-	void doCreateFolder()
+	public void doCreateFolder()
 	{
 		folders.createNewFolder();
 	}
 	
-	void doRenameFolder()
+	public void doRenameFolder()
 	{
 		folders.renameCurrentFolder();
 	}
 	
-	void doDeleteFolder()
+	public void doDeleteFolder()
 	{
 		folders.deleteCurrentFolderIfPossible();
 	}
 	
-	void doSearch()
+	public void doSearch()
 	{
 		UiSearchDlg searchDlg = new UiSearchDlg(this);
 		if(!searchDlg.getResults())
@@ -671,12 +697,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	void aboutMartus()
+	public void aboutMartus()
 	{
 		new UiAboutDlg(this);
 	}
 
-	void showAccountInfo()
+	public void showAccountInfo()
 	{
 		String title = getLocalization().getWindowTitle("AccountInfo");
 		String userName = getLocalization().getFieldLabel("AccountInfoUserName")
@@ -701,7 +727,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		new UiNotifyDlg(this, title, contents, buttons);
 	}
 
-	void displayHelpMessage()
+	public void displayHelpMessage()
 	{
 
 		InputStream helpStream = null;
@@ -733,7 +759,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	void doPrint()
+	public void doPrint()
 	{
 		Bulletin currentBulletin = table.getSingleSelectedBulletin();
 		if(currentBulletin == null)
@@ -795,7 +821,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	void doLocalize()
+	public void doLocalize()
 	{
 		saveState();
 		new UiLocalizeDlg(this);
@@ -804,7 +830,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		show();
 	}
 
-	boolean doContactInfo()
+	public boolean doContactInfo()
 	{
 		ConfigInfo info = app.getConfigInfo();
 		UiContactInfoDlg setupContactDlg = new UiContactInfoDlg(this, info);
@@ -819,7 +845,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	}
 
 
-	void doConfigureServer()
+	public void doConfigureServer()
 	{
 		if(!reSignIn())
 			return;
@@ -916,7 +942,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	boolean reSignIn()
+	public boolean reSignIn()
 	{
 		boolean signedIn = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
@@ -925,7 +951,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	}
 
 
-	void doChangeUserNamePassword()
+	public void doChangeUserNamePassword()
 	{
 		if(!reSignIn())
 			return;
@@ -982,7 +1008,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	void doRetrieveMySealedBulletins()
+	public void doRetrieveMySealedBulletins()
 	{
 		String dlgTitleTag = "RetrieveMySealedBulletins";
 		String summariesProgressTag = "RetrieveMySealedBulletinSummaries";
@@ -993,7 +1019,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	void doRetrieveMyDraftBulletins()
+	public void doRetrieveMyDraftBulletins()
 	{
 		String dlgTitleTag = "RetrieveMyDraftBulletins";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
@@ -1004,7 +1030,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	void doRetrieveHQBulletins()
+	public void doRetrieveHQBulletins()
 	{
 		String dlgTitleTag = "RetrieveHQSealedBulletins";
 		String summariesProgressTag = "RetrieveHQSealedBulletinSummaries";
@@ -1015,7 +1041,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	void doRetrieveHQDraftsBulletins()
+	public void doRetrieveHQDraftsBulletins()
 	{
 		String dlgTitleTag = "RetrieveHQDraftBulletins";
 		String summariesProgressTag = "RetrieveHQDraftBulletinSummaries";
@@ -1026,7 +1052,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	void doDeleteServerDraftBulletins()
+	public void doDeleteServerDraftBulletins()
 	{
 		String dlgTitleTag = "DeleteMyDraftsFromServer";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
@@ -1158,7 +1184,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return summariesDlg.getUniversalIdList();
 	}
 
-	void doExportMyPublicKey()
+	public void doExportMyPublicKey()
 	{
 		try
 		{
@@ -1190,7 +1216,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	void doBackupKeyPair()
+	public void doBackupKeyPair()
 	{
 		File keypairFile = app.getKeyPairFile();
 		if(keypairFile.length() > MAX_KEYPAIRFILE_SIZE)
@@ -1250,7 +1276,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	void doImportHQPublicKey()
+	public void doImportHQPublicKey()
 	{
 		if(!reSignIn())
 			return;
@@ -1284,7 +1310,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	void doClearPublicAccountInfo()
+	public void doClearPublicAccountInfo()
 	{
 		if(!reSignIn())
 			return;
@@ -1449,7 +1475,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return dontExitApplication;
 	}
 
-	void exitNormally()
+	public void exitNormally()
 	{
 		if(doUploadReminderOnExit())
 			return;
@@ -1519,12 +1545,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	}
 
-	static boolean isAnyBulletinSelected(UiMainWindow window)
+	public static boolean isAnyBulletinSelected(UiMainWindow window)
 	{
 		return (window.table.getSelectedBulletinUids().length > 0);
 	}
 
-	static boolean isOnlyOneBulletinSelected(UiMainWindow window)
+	public static boolean isOnlyOneBulletinSelected(UiMainWindow window)
 	{
 		return (window.table.getSingleSelectedBulletin() != null);
 	}

@@ -57,7 +57,7 @@ public class UiUtilities
 		new UiNotifyDlg(parent, title, contents, buttons);
 	}
 
-	static boolean confirmDlg(UiLocalization localization, JFrame parent, String baseTag)
+	public static boolean confirmDlg(UiLocalization localization, JFrame parent, String baseTag)
 	{
 		String title = localization.getWindowTitle("confirm" + baseTag);
 		String cause = localization.getFieldLabel("confirm" + baseTag + "cause");

@@ -24,35 +24,43 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.fields;
 
-import org.martus.client.core.MartusApp;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
+
 import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+public class UiDateViewer extends UiField
 {
-
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public UiDateViewer(UiLocalization localizationToUse)
 	{
-		super(appToUse, localizationToUse);
+		localization = localizationToUse;
+		label = new JLabel();
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public JComponent getComponent()
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
+		return label;
 	}
 
-	public String getColumnName(int column)
+	public String getText()
 	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
+		return "";
 	}
+
+	public void setText(String newText)
+	{
+		value = localization.convertStoredDateToDisplay(newText);
+		label.setText("  " + value + "  ");
+	}
+
+	public void disableEdits()
+	{
+	}
+
+	UiLocalization localization;
+	JLabel label;
+	String value;
 }
+

@@ -32,6 +32,9 @@ import javax.swing.JMenuBar;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import org.martus.client.swingui.actions.ActionMenuQuickErase;
+import org.martus.client.swingui.actions.UiActions;
+
 public class UiMenuBar extends JMenuBar
 {
 	UiMenuBar(UiMainWindow mainWindowToUse)

@@ -24,35 +24,46 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.fields;
 
-import org.martus.client.core.MartusApp;
+import javax.swing.JComponent;
+import javax.swing.text.JTextComponent;
+
 import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.swing.UiTextArea;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+public abstract class UiNormalTextField extends UiTextField
 {
-
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public UiNormalTextField(UiLocalization localizationToUse)
 	{
-		super(appToUse, localizationToUse);
+		super(localizationToUse);
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public JComponent getComponent()
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
+		return widget;
 	}
 
-	public String getColumnName(int column)
+	public JTextComponent getEditor()
 	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
+		return widget;
 	}
+
+	public String getText()
+	{
+		return widget.getText();
+	}
+
+	public void setText(String newText)
+	{
+		widget.setText(newText);
+	}
+
+	public void disableEdits()
+	{
+		widget.setEditable(false);
+	}
+
+	UiTextArea widget;
 }
+

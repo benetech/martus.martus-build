@@ -24,35 +24,26 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.bulletintable;
 
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import java.awt.Point;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+import org.martus.client.core.BulletinFolder;
+import org.martus.client.swingui.UiBulletinDropAdapter;
+import org.martus.client.swingui.UiMainWindow;
+
+class UiBulletinTableDropAdapter extends UiBulletinDropAdapter
 {
-
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	UiBulletinTableDropAdapter(UiBulletinTable tableToUse, UiMainWindow mainWindow)
 	{
-		super(appToUse, localizationToUse);
+		super(mainWindow);
+		table = tableToUse;
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public BulletinFolder getFolder(Point at)
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
+		return table.getFolder();
 	}
 
-	public String getColumnName(int column)
-	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
-	}
+	UiBulletinTable table;
 }

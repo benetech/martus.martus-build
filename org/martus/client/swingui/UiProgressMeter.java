@@ -34,6 +34,7 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.border.BevelBorder;
 
+import org.martus.client.swingui.dialogs.UiProgressRetrieveDlg;
 import org.martus.common.ProgressMeterInterface;
 
 public class UiProgressMeter extends JPanel implements ProgressMeterInterface

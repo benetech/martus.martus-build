@@ -29,9 +29,9 @@ package org.martus.client.test;
 import junit.framework.TestCase;
 
 import org.martus.client.core.BulletinStore;
-import org.martus.client.swingui.FolderList;
-import org.martus.client.swingui.FolderTreeNode;
 import org.martus.client.swingui.UiLocalization;
+import org.martus.client.swingui.foldertree.FolderList;
+import org.martus.client.swingui.foldertree.FolderTreeNode;
 import org.martus.common.MockClientDatabase;
 
 public class TestFolderList extends TestCase

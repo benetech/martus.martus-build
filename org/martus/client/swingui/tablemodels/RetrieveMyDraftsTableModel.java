@@ -28,7 +28,7 @@ package org.martus.client.swingui.tablemodels;
 
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.UiProgressRetrieveSummariesDlg;
+import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
 import org.martus.common.MartusUtilities.ServerErrorException;
 
 

@@ -24,35 +24,42 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.foldertree;
 
-import org.martus.client.core.MartusApp;
+import javax.swing.tree.DefaultMutableTreeNode;
+
 import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+public class FolderTreeNode extends DefaultMutableTreeNode
 {
 
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public FolderTreeNode(Object obj, UiLocalization localizationToUse)
 	{
-		super(appToUse, localizationToUse);
+		super();
+		internalNode = new FolderNode(localizationToUse);
+		setUserObject(obj);
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public String getInternalName()
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
+		return internalNode.getInternalName();
 	}
 
-	public String getColumnName(int column)
+	public String toString()
 	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
+		return getLocalizedName();
 	}
+
+	public String getLocalizedName()
+	{
+		return internalNode.getLocalizedName();
+	}
+
+	public void setUserObject(Object object)
+	{
+		super.setUserObject(object);
+		internalNode.setInternalName(object.toString());
+	}
+
+	private FolderNode internalNode;
 }

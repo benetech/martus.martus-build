@@ -24,27 +24,14 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.actions;
 
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.client.swingui.UiMainWindow;
 
-
-
-public class RetrieveMyTableModel extends RetrieveTableModelNonHQ
+abstract class UiMenuAction extends UiMartusAction
 {
-	public RetrieveMyTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public UiMenuAction(UiMainWindow mainWindowToUse, String tag)
 	{
-		super(appToUse, localizationToUse);
-	}
-
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
-	{
-		setProgressDialog(progressDlg);
-
-		getMySummaries();
-		setCurrentSummaries();
+		super(mainWindowToUse, mainWindowToUse.getLocalization().getMenuLabel(tag));
 	}
 }

@@ -24,35 +24,53 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.fields;
 
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import javax.swing.JCheckBox;
+import javax.swing.JComponent;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+public class UiBoolEditor extends UiField implements ChangeListener
 {
-
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public UiBoolEditor(ChangeListener listener)
 	{
-		super(appToUse, localizationToUse);
+		observer = listener;
+		widget = new JCheckBox("");
+		widget.addChangeListener(this);
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public JComponent getComponent()
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
+		return widget;
 	}
 
-	public String getColumnName(int column)
+	public String getText()
 	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
+		if(widget.isSelected())
+			return TRUESTRING;
+
+		return FALSESTRING;
 	}
+
+	public void setText(String newText)
+	{
+		boolean selected = (newText.equals(TRUESTRING));
+		widget.setSelected(selected);
+	}
+
+	public void disableEdits()
+	{
+		widget.setEnabled(false);
+	}
+
+	public void stateChanged(ChangeEvent event)
+	{
+		if(observer != null)
+			observer.stateChanged(event);
+	}
+
+	JCheckBox widget;
+	ChangeListener observer;
 }
+

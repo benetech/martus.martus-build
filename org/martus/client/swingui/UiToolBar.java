@@ -29,6 +29,8 @@ package org.martus.client.swingui;
 import javax.swing.AbstractAction;
 import javax.swing.JToolBar;
 
+import org.martus.client.swingui.actions.UiActions;
+
 public class UiToolBar extends JToolBar
 {
 	UiToolBar(UiMainWindow mainWindow)

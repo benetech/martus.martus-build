@@ -30,6 +30,7 @@ import java.util.Vector;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.MartusApp;
+import org.martus.client.swingui.dialogs.UiProgressRetrieveBulletinsDlg;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.UniversalId;
 

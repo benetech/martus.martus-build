@@ -24,35 +24,30 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.actions;
 
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import java.awt.event.ActionEvent;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.UiUtilities;
+
+public class ActionMenuQuickErase extends UiMenuAction 
 {
-
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public ActionMenuQuickErase (UiMainWindow mainWindowToUse)
 	{
-		super(appToUse, localizationToUse);
+		super(mainWindowToUse, "QuickErase");
 	}
-
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	
+	public void actionPerformed(ActionEvent arg0) 
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
-	}
-
-	public String getColumnName(int column)
-	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
+		if(!mainWindow.reSignIn())
+			return;
+		if(!UiUtilities.confirmDlg(mainWindow.getLocalization(), mainWindow, "DoQuickErase"))
+			return;
+		if(mainWindow.getApp().deleteAllBulletinsAndUserFolders())
+			mainWindow.notifyDlg(mainWindow, "QuickEraseWorked");
+		else
+			mainWindow.notifyDlg(mainWindow, "QuickEraseFailed");
+		mainWindow.folderTreeContentsHaveChanged();
 	}
 }

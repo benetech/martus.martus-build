@@ -24,35 +24,52 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.fields;
 
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+import org.martus.client.core.ChoiceItem;
+
+public class UiChoiceEditor extends UiField
 {
-
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public UiChoiceEditor(ChoiceItem[] choicesToUse)
 	{
-		super(appToUse, localizationToUse);
+		choices = choicesToUse;
+		widget = new JComboBox(choices);
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public JComponent getComponent()
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
+		return widget;
 	}
 
-	public String getColumnName(int column)
+	public String getText()
 	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
+		ChoiceItem item = (ChoiceItem)widget.getSelectedItem();
+		return item.getCode();
 	}
+
+	public void setText(String newText)
+	{
+		ChoiceItem item = choices[0];
+		for(int i = 0; i < choices.length; ++i)
+		{
+			if(newText.equals(choices[i].getCode()))
+			{
+				item = choices[i];
+				break;
+			}
+		}
+		widget.setSelectedItem(item);
+	}
+
+	public void disableEdits()
+	{
+		widget.setEnabled(false);
+	}
+
+	JComboBox widget;
+	ChoiceItem[] choices;
 }
+

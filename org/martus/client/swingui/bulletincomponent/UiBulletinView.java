@@ -24,33 +24,43 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.client.swingui.bulletincomponent;
 
 import java.util.Vector;
 
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.client.swingui.UiMainWindow;
+import org.martus.client.swingui.fields.UiBoolViewer;
+import org.martus.client.swingui.fields.UiField;
 
-
-
-public class RetrieveHQTableModel extends RetrieveTableModelHQ
+public class UiBulletinView extends UiBulletinComponent
 {
-	public RetrieveHQTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	UiBulletinView(UiMainWindow mainWindowToUse)
 	{
-		super(appToUse, localizationToUse);
+		super(mainWindowToUse);
+		mainWindow = mainWindowToUse;
+		bulletinViewSections = new Vector();
+		Initalize();
+		disableEdits();
+		// ensure that attachmentViewer gets initialized
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public UiBulletinComponentSection createBulletinComponentSection(boolean encrypted)
 	{
-		setProgressDialog(progressDlg);
-		Vector accounts = app.downloadFieldOfficeAccountIds();
-		for(int a = 0; a < accounts.size(); ++a)
-		{
-			String accountId = (String)accounts.get(a);
-			getFieldOfficeSealedSummaries(accountId);
-		}
-		setCurrentSummaries();
+		UiBulletinComponentViewSection section = new UiBulletinComponentViewSection(this, mainWindow, encrypted);
+		bulletinViewSections.add(section);
+		return section;
 	}
+
+	public void disableEdits()
+	{
+		publicStuff.disableEdits();
+		privateStuff.disableEdits();
+	}
+
+	public UiField createBoolField()
+	{
+		return new UiBoolViewer(mainWindow.getLocalization());
+	}
+
+	private Vector bulletinViewSections;
 }

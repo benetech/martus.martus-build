@@ -24,35 +24,38 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.tablemodels;
+package org.martus.swing;
 
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import java.awt.KeyboardFocusManager;
+import java.util.HashSet;
+import java.util.Set;
 
-public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
+import javax.swing.JTextArea;
+import javax.swing.KeyStroke;
+
+public class UiTextArea extends JTextArea
 {
-
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+	public UiTextArea(int rows, int cols)
 	{
-		super(appToUse, localizationToUse);
+		super(rows, cols);
+		SetTabKeyForFocusEvents();
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	public UiTextArea(String text)
 	{
-		setProgressDialog(progressDlg);
-		getMyDraftSummaries();
-		setCurrentSummaries();
+		super(text);
+		SetTabKeyForFocusEvents();
 	}
 
-	public String getColumnName(int column)
+	private void SetTabKeyForFocusEvents()
 	{
-		if(column == 0)
-			return getLocalization().getFieldLabel("DeleteFlag");
-		if(column == 1)
-			return getLocalization().getFieldLabel(Bulletin.TAGTITLE);
-		return getLocalization().getFieldLabel("BulletinSize");
+		Set set = new HashSet(getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+	    set.clear();
+	    set.add(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_TAB, 0));
+	    setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
+	    set.clear();
+	    set.add(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_TAB,
+	    		 java.awt.event.InputEvent.SHIFT_MASK));
+	    setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, set);
 	}
 }

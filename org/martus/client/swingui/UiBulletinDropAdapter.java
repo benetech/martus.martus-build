@@ -51,9 +51,9 @@ import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
-abstract class UiBulletinDropAdapter implements DropTargetListener
+public abstract class UiBulletinDropAdapter implements DropTargetListener
 {
-	UiBulletinDropAdapter(UiMainWindow mainWindow)
+	public UiBulletinDropAdapter(UiMainWindow mainWindow)
 	{
 		observer = mainWindow;
 	}

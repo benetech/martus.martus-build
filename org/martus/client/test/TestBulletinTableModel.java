@@ -30,7 +30,7 @@ import junit.framework.TestCase;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
-import org.martus.client.swingui.BulletinTableModel;
+import org.martus.client.swingui.bulletintable.BulletinTableModel;
 import org.martus.common.Bulletin;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.UniversalId;

@@ -35,7 +35,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.client.swingui.UiProgressRetrieveSummariesDlg;
+import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
