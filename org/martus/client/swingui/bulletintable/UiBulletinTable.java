@@ -250,6 +250,10 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				return;
 			createClone = true;
 		}
+		
+		if(b.hasUnknownTags())
+			if(!mainWindow.confirmDlg(mainWindow, "EditBulletinWithUnknownTags"))
+				return;
 
 		BulletinStore store = mainWindow.getApp().getStore();
 		CancelHandler handler = new DoNothingOnCancel();

@@ -79,6 +79,7 @@ public class EnglishStrings
 "wintitle:confirmErrorRecoverIvalidFileName=Invalid File",
 "wintitle:confirmBackupKeyShareVerifyDisks=Verify Disks",
 "wintitle:confirmCancelShareVerify=Cancel Verification",
+"wintitle:confirmEditBulletinWithUnknownTags=Modify Bulletin",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -512,7 +513,9 @@ public class EnglishStrings
 "field:confirmBackupKeyShareVerifyDiskseffect=By choosing Yes, the verification process will begin.",
 "field:confirmCancelShareVerifycause=Do you wish to cancel the verification?",
 "field:confirmCancelShareVerifyeffect=By choosing Yes, will exit this verification step.",
-	
+"field:confirmEditBulletinWithUnknownTagscause=The bulletin you have chosen to modify contains information that this version of Martus cannot understand. It may have been created by a newer version of Martus, so you should ensure that you are running the latest version.",
+"field:confirmEditBulletinWithUnknownTagseffect=If you modify this bulletin, the unknown information will be lost.",
+
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
 "field:notifyPasteErrorNotAllowedcause=One or more bulletins cannot be pasted in that folder. This may be because of their Draft/Sealed status, or their author.",
