@@ -312,7 +312,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 		return security;
 	}
 	
-	public Vector getBulletinChunk(String authorAccountId, String bulletinLocalId,
+	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 			int chunkOffset, int maxChunkSize)
 	{
 		gotAccount = authorAccountId;

@@ -9,6 +9,6 @@ public interface ServerSupplierInterface
 {
 	public MockServerDatabase getDatabase();
 	public MartusCrypto getSecurity();
-	public Vector getBulletinChunk(String authorAccountId, String bulletinLocalId,
+	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 			int chunkOffset, int maxChunkSize);
 }

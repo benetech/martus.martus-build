@@ -168,7 +168,8 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 	
 	Vector getBulletinChunk(String authorAccountId, String bulletinLocalId, int offset, int maxChunkSize)
 	{
-		return supplier.getBulletinChunk(authorAccountId, bulletinLocalId, offset, maxChunkSize);
+		return supplier.getBulletinChunkWithoutVerifyingCaller(authorAccountId, bulletinLocalId, 
+								offset, maxChunkSize);
 	}
 	
 	
