@@ -259,7 +259,7 @@
 	<target name="check_cvsroot" unless="cvs.cvsroot">
 
 		<input
-			message="Please enter CVS location (:<protocol>:<username>@<server>:<path>) :"
+			message="Please enter CVS location (:protocol:username@server:path) :"
 			addproperty="cvs.cvsroot"
 		/>
 
