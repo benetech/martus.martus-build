@@ -690,7 +690,6 @@ public class BulletinStore
 		{
 			Bulletin b = folder.getBulletinSorted(index);
 			xml += MartusXml.getIdTag(b.getUniversalIdString());
-			xml += MartusClientXml.getBulletinTag(b);
 		}
 		xml += MartusClientXml.getFolderTagEnd();
 		return xml;
@@ -710,10 +709,6 @@ public class BulletinStore
 			if(qName.equals(MartusClientXml.tagFolder))
 			{
 				handleFolderStartTag(attrs);
-			}
-			else if(qName.equals(MartusClientXml.tagBulletin))
-			{
-				handleBulletinStartTag(attrs);
 			}
 
 			buffer = "";
@@ -744,20 +739,6 @@ public class BulletinStore
 		public void characters(char buf[], int offset, int len) throws SAXException
 		{
 			buffer += new String(buf, offset, len);
-		}
-
-		void handleBulletinStartTag(Attributes attrs)
-		{
-			String uidString = attrs.getValue(MartusClientXml.attrBulletinId);
-			String eventDate = attrs.getValue(MartusClientXml.attrBulletinEventDate);
-			try
-			{
-				currentFolder.add(UniversalId.createFromString(uidString), "");
-			}
-			catch(NotUniversalIdException e) 
-			{
-				System.out.println("BulletinStore::startElement : " + e);
-			}
 		}
 
 		void handleFolderStartTag(Attributes attrs)
