@@ -18,7 +18,7 @@
     <property name="martus.logi.class.root" value="${build.basedir}/${martus.logi.module}/bin"/>
 
     <target name="notify-logi">
-        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+        <echo message="This is not a standalone build file. Please run these tasks thru the main meta-build.xml."/>
     </target>
 
   <!-- ================================================================== -->

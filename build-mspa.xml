@@ -40,7 +40,7 @@
     </fileset>
 
     <target name="notify-mspa">
-        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+        <echo message="This is not a standalone build file. Please run these tasks thru the main meta-build.xml."/>
     </target>
 
   <!-- ================================================================== -->
