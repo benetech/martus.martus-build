@@ -47,6 +47,7 @@ import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.BulletinLoader;
 import org.martus.common.BulletinSaver;
+import org.martus.common.BulletinZipImporter;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileInputStreamWithSeek;
@@ -64,6 +65,7 @@ import org.martus.common.UniversalId.NotUniversalIdException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
+
 
 /*
 	This class represents a collection of bulletins
@@ -947,15 +949,6 @@ public class BulletinStore
 		}
 	}
 
-	public UniversalId importZipFileToStoreWithNewUids(File inputFile) throws
-			IOException,
-			MartusCrypto.CryptoException,
-			Packet.InvalidPacketException,
-			Packet.SignatureVerificationException
-	{
-		return BulletinZipImporter.importZipFileToStoreWithNewUids(inputFile, this);
-	}
-
 	public boolean canPutBulletinInFolder(BulletinFolder folder, String bulletinAuthorAccount, String bulletinStatus)
 	{
 		if(!folder.canAdd(bulletinStatus))
@@ -972,6 +965,17 @@ public class BulletinStore
 
 		bulletinCache.put(b.getUniversalId(), b);
 		cacheOfSortableFields.setFieldData(b);
+	}
+
+	public UniversalId importZipFileToStoreWithNewUids(File inputFile) throws
+		IOException,
+		MartusCrypto.EncryptionException,
+		MartusCrypto.CryptoException
+	{
+		final MartusCrypto security = getSignatureGenerator();
+		Bulletin imported = BulletinZipImporter.loadFromFile(security, inputFile);
+		BulletinSaver.saveToDatabase(imported, getDatabase(), mustEncryptPublicData(), security);
+		return imported.getUniversalId();
 	}
 
 	public static int maxCachedBulletinCount = 100;

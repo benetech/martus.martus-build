@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,17 +32,6 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
-import org.martus.common.AttachmentPacket;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.BulletinSaver;
-import org.martus.common.Database;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusCrypto;
-import org.martus.common.UniversalId;
-import org.martus.common.ZipEntryInputStream;
 
 public class BulletinZipImporter
 {
@@ -154,27 +143,15 @@ public class BulletinZipImporter
 		}
 	}
 
-	public static Bulletin loadFromFile(BulletinStore store, File inputFile) throws 
+	public static Bulletin loadFromFile(MartusCrypto security, File inputFile) throws 
 		IOException,
 		MartusCrypto.EncryptionException
 	{
-		MartusCrypto verifier = store.getSignatureVerifier();
-		Bulletin original = store.createEmptyBulletin();
-		BulletinZipImporter.loadFromFile(original, inputFile, verifier);
-		Bulletin imported = store.createEmptyBulletin();
+		Bulletin original = new Bulletin(security);
+		BulletinZipImporter.loadFromFile(original, inputFile, security);
+		Bulletin imported = new Bulletin(security);
 		imported.pullDataFrom(original);
 		return imported;
-	}
-
-	static UniversalId importZipFileToStoreWithNewUids(File inputFile, BulletinStore store) throws
-		IOException,
-		MartusCrypto.EncryptionException,
-		MartusCrypto.CryptoException
-	{
-		Database db = store.getDatabase();
-		Bulletin imported = BulletinZipImporter.loadFromFile(store, inputFile);
-		BulletinSaver.saveToDatabase(imported, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
-		return imported.getUniversalId();
 	}
 
 	public static AttachmentProxy extractZipAttachmentToFileProxy(MartusCrypto verifier, ZipFile zip, AttachmentProxy attachment) throws

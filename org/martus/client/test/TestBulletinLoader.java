@@ -28,12 +28,12 @@ package org.martus.client.test;
 
 import java.io.File;
 
-import org.martus.client.core.BulletinZipImporter;
 import org.martus.client.core.BulletinStore;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.BulletinLoader;
 import org.martus.common.BulletinSaver;
+import org.martus.common.BulletinZipImporter;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;

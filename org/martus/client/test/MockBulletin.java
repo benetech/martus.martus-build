@@ -37,11 +37,11 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.core.BulletinZipImporter;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinZipImporter;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
