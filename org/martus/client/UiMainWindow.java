@@ -47,6 +47,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
+import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
@@ -1815,7 +1816,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		long lastActivityAt = now();
 	}
-
+	
 	class Tick extends TimerTask
 	{
 		public Tick()
@@ -1828,20 +1829,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			{
 				if(hasTimedOut())
 				{
-					if(inDialog())
-					{
-						timedOutInDialog = true;
-						return;
-					}
-					
 					System.out.println("Inactive");
-					
-					currentActiveFrame.setEnabled(false);
-					if(!signIn(UiSigninDlg.TIMED_OUT))
-						ExitImmediately();
-					currentActiveFrame.setEnabled(true);
+					ThreadedSignin signin = new ThreadedSignin();
+					SwingUtilities.invokeAndWait(signin);
 				}
-				timedOutInDialog = false;
+
 				if(!inConfigServer)
 				{
 					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
@@ -1861,27 +1853,24 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 		}
 		
-		boolean inDialog()
-		{
-			KeyboardFocusManager kfm = KeyboardFocusManager.getCurrentKeyboardFocusManager();
-			if(kfm.getActiveWindow() == UiMainWindow.this)
-				return false;
-				
-			if(kfm.getActiveWindow() == currentActiveFrame)
-				return false;
-				
-			return true;
-		}
-		
 		boolean hasTimedOut()
 		{
-			if(timedOutInDialog)
-				return true;
 			if(inactivityDetector.secondsSinceLastActivity() > TIMEOUT_SECONDS)
 				return true;
 				
 			return false;
 		}
+
+		class ThreadedSignin implements Runnable
+		{
+			public void run()
+			{
+				if(!signIn(UiSigninDlg.TIMED_OUT))
+					ExitImmediately();
+			}
+			
+		}
+
 	}
 
 	class UploadErrorChecker extends AbstractAction
@@ -1925,7 +1914,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;	
-	private boolean timedOutInDialog;
 	private boolean inConfigServer;
 
 	private static final int TIMEOUT_SECONDS = (10 * 60);
