@@ -407,36 +407,23 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		if(!isDiscardedFolder(folderToDiscardFrom))
 			return true;
 
-		boolean okToDiscard = true;
 		MartusApp app = mainWindow.getApp();
 		BulletinFolder draftOutBox = app.getFolderDraftOutbox();
 
 		Vector visibleFoldersContainingThisBulletin = app.findBulletinInAllVisibleFolders(b);
 		visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom);
 
-		if(visibleFoldersContainingThisBulletin.size() == 0)
-		{
-			String dialogTag = "";
-			if (b.isSealed())
-				dialogTag = "DiscardSealedBulletins";
-			else if(draftOutBox.contains(b))
-				dialogTag = "DeleteDiscardedDraftBulletinWithOutboxCopy";
-			else
-				dialogTag = "DiscardDraftBulletins";
-		
-			okToDiscard = mainWindow.confirmDlg(mainWindow, dialogTag);
-		}
+		String dialogTag = "";
+		if(visibleFoldersContainingThisBulletin.size() > 0)
+			dialogTag = "confirmDeleteDiscardedBulletinWithCopies";
+		else if (b.isSealed())
+			dialogTag = "confirmDiscardSealedBulletins";
+		else if(draftOutBox.contains(b))
+			dialogTag = "confirmDeleteDiscardedDraftBulletinWithOutboxCopy";
 		else
-		{
-			String title = app.getWindowTitle("confirmDeleteDiscardedBulletinWithCopies");
-			String cause = app.getFieldLabel("confirmDeleteDiscardedBulletinWithCopiescause");
-			String folders = buildFolderNameList(visibleFoldersContainingThisBulletin);
-			String effect = app.getFieldLabel("confirmDeleteDiscardedBulletinWithCopieseffect");
-			String question = app.getFieldLabel("confirmquestion");
-			String[] contents = {cause, "", effect, folders, "", question};
-			okToDiscard = mainWindow.confirmDlg(mainWindow, title, contents);
-		}
-		return okToDiscard;
+			dialogTag = "confirmDiscardDraftBulletins";
+
+		return confirmDeleteBulletins(dialogTag, visibleFoldersContainingThisBulletin);
 	}
 
 	private boolean confirmDiscardMultipleBulletins()
@@ -444,8 +431,37 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		BulletinFolder folderToDiscardFrom = getFolder();
 		if(!isDiscardedFolder(folderToDiscardFrom))
 			return true;
-			
-		return false;
+
+		MartusApp app = mainWindow.getApp();
+		Vector visibleFoldersContainingAnyBulletin = new Vector();
+		Bulletin[] bulletins = getSelectedBulletins();
+		for (int i = 0; i < bulletins.length; i++)
+		{
+			Bulletin b = bulletins[i];
+			Vector visibleFoldersContainingThisBulletin = app.findBulletinInAllVisibleFolders(b);
+			visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom);
+			visibleFoldersContainingAnyBulletin.addAll(visibleFoldersContainingThisBulletin);
+		}
+		
+		String dialogTag = "";
+		if(visibleFoldersContainingAnyBulletin.size() > 0)
+			dialogTag = "confirmDeleteMultipleDiscardedBulletinsWithCopies";
+		else
+			return false;
+
+		return confirmDeleteBulletins(dialogTag, visibleFoldersContainingAnyBulletin);
+	}
+
+	private boolean confirmDeleteBulletins(String dialogTag, Vector foldersToList)
+	{
+		MartusApp app = mainWindow.getApp();
+		String title = app.getWindowTitle(dialogTag);
+		String cause = app.getFieldLabel(dialogTag + "cause");
+		String folders = buildFolderNameList(foldersToList);
+		String effect = app.getFieldLabel(dialogTag + "effect");
+		String question = app.getFieldLabel("confirmquestion");
+		String[] contents = {cause, "", effect, folders, "", question};
+		return mainWindow.confirmDlg(mainWindow, title, contents);
 	}
 	
 	private String buildFolderNameList(Vector visibleFoldersContainingThisBulletin)
