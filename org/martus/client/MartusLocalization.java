@@ -491,6 +491,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:ContactInfoUpdateLater=You can change any of this information later, by choosing Options/Contact Info.");
 		addEnglishTranslation("field:UploadingSealedBulletin=Uploading Sealed Bulletin");
 		addEnglishTranslation("field:UploadingDraftBulletin=Uploading Draft Bulletin");
+		addEnglishTranslation("field:StatusReady=Ready");
 
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");

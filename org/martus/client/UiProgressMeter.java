@@ -15,7 +15,7 @@ public class UiProgressMeter extends JPanel
 		super();
 		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
 
-		statusMessage = new JLabel( " ", JLabel.LEFT );
+		statusMessage = new JLabel("     ", JLabel.LEFT );
 		statusMessage.setMinimumSize(new Dimension(60, 25));
 		statusMessage.setBorder( new BevelBorder( BevelBorder.LOWERED ));
 
@@ -33,22 +33,16 @@ public class UiProgressMeter extends JPanel
 
 	public void setStatusMessage(String message)
 	{
-		statusMessage.setText(message);
+		statusMessage.setText(" " + message + " ");
 	}
 	
 	public void updateProgressMeter(String message, int currentValue, int maxValue)
 	{
-		statusMessage.setText(message);
+		setStatusMessage(message);
 		progressMeter.setValue(currentValue);
 		progressMeter.setMaximum(maxValue);
 		progressMeter.setVisible(true);
 	}
-	
-	public void blankStatus()
-	{
-		statusMessage.setText("          ");
-	}
-
 	
 	public void hideProgressMeter()
 	{
