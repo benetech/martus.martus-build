@@ -307,14 +307,15 @@ public class Bulletin implements BulletinConstants
 	{
 		String eventDate = fieldData.get(Bulletin.TAGEVENTDATE);
 		String entryDate = fieldData.get(Bulletin.TAGENTRYDATE);
-
-		int comma = eventDate.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);
-		if (comma > 0)
-			return isWithinFlexiDates(eventDate.substring(comma+1), beginDate, endDate);		
+		
 		if(eventDate.compareTo(beginDate) >= 0 && eventDate.compareTo(endDate) <= 0)
 			return true;
 		if(entryDate.compareTo(beginDate) >= 0 && entryDate.compareTo(endDate) <= 0)
 			return true;
+			
+		int comma = eventDate.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);		
+		if(comma > 0 && isWithinFlexiDates(eventDate.substring(comma+1), beginDate, endDate))
+			return true;					
 
 		return false;
 	}
