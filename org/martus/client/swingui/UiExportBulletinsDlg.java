@@ -61,7 +61,6 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		setTitle(mainWindow.getApp().getWindowTitle("ExportBulletins"));
 		
 		includePrivate = new JCheckBox(mainWindow.getApp().getFieldLabel("ExportPrivateData"));
-		includePrivate.setEnabled(false);
 
 		ok = new JButton(getApp().getButtonLabel("Continue"));
 		ok.addActionListener(this);
@@ -151,7 +150,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		try
 		{
 			UnicodeWriter writer = new UnicodeWriter(destFile);
-			BulletinXmlExporter.exportBulletins(bulletins, writer);
+			BulletinXmlExporter.exportBulletins(writer, bulletins, userWantsToExportPrivate());
 			writer.close();
 			mainWindow.notifyDlg(mainWindow, "ExportComplete");
 		}

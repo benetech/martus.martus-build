@@ -60,22 +60,23 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 	public void testExportOneBulletin() throws Exception
 	{
 		Bulletin b = new Bulletin(store);
+		b.setAllPrivate(false);
 		
 		final String sampleAuthor = "someone special";
-		final String samplePrivateInfo = "this should not appear in the xml";
 
 		b.set(BulletinConstants.TAGAUTHOR, sampleAuthor);
-		b.set(BulletinConstants.TAGPRIVATEINFO, samplePrivateInfo);
 		
 		Vector list = new Vector();
 		list.add(b);
-		String result = doExport(list);
+		String result = doExport(list, false);
 
 		assertContains("<ExportedMartusBulletins>", result);
 		assertContains("<MartusBulletin>", result);
 		assertContains(b.getAccount(), result);
 		assertContains(b.getLocalId(), result);
 		assertContains(sampleAuthor, result);
+		assertNotContains("<PrivateData>", result);
+		assertNotContains("<AttachmentList>", result);
 		
 		//System.out.println(result);
 	}
@@ -83,12 +84,13 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 	public void testExportWithPublicAttachments() throws Exception
 	{
 		Bulletin b = new Bulletin(store);
-		final File sampleAttachmentFile1 = addNewSampleAttachment(b);
-		final File sampleAttachmentFile2 = addNewSampleAttachment(b);
+		b.setAllPrivate(false);
+		final File sampleAttachmentFile1 = addNewPublicSampleAttachment(b);
+		final File sampleAttachmentFile2 = addNewPublicSampleAttachment(b);
 
 		Vector list = new Vector();
 		list.add(b);
-		String result = doExport(list);
+		String result = doExport(list, false);
 
 		assertContains(sampleAttachmentFile1.getName(), result);
 		assertContains(sampleAttachmentFile2.getName(), result);
@@ -97,7 +99,9 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 	public void testExportMultipleBulletins() throws Exception
 	{
 		Bulletin b1 = new Bulletin(store);
+		b1.setAllPrivate(false);
 		Bulletin b2 = new Bulletin(store);
+		b2.setAllPrivate(false);
 		
 		final String sampleTitle1 = "a big event took place!";
 		final String sampleTitle2 = "watch this space";
@@ -108,27 +112,103 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		Vector list = new Vector();
 		list.add(b1);
 		list.add(b2);
-		BulletinXmlExporter.exportBulletins(list, writer);
+		BulletinXmlExporter.exportBulletins(writer, list, false);
 		String result = writer.toString();
 
 		assertContains(sampleTitle1, result);
 		assertContains(sampleTitle2, result);
 	}
+	
+	public void testExportPrivateData() throws Exception
+	{
+		Bulletin b = new Bulletin(store);
+		b.setAllPrivate(false);
 
-	String doExport(Vector list) throws IOException
+		final String samplePublic = "someone special";
+		final String samplePrivate = "shhhhh! it's private!";
+
+		b.set(BulletinConstants.TAGPUBLICINFO, samplePublic);
+		b.set(BulletinConstants.TAGPRIVATEINFO, samplePrivate);
+
+		Vector list = new Vector();
+		list.add(b);
+		String publicOnly = doExport(list, false);
+		assertContains("<PublicDataOnly></PublicDataOnly>", publicOnly);
+		assertContains(samplePublic, publicOnly);
+		assertNotContains(samplePrivate, publicOnly);
+		
+		String publicAndPrivate = doExport(list, true);
+		assertContains("<PublicAndPrivateData></PublicAndPrivateData>", publicAndPrivate);
+		assertContains(samplePublic, publicAndPrivate);
+		assertContains(samplePrivate, publicAndPrivate);
+	}
+	
+	public void testExportWithPrivateAttachment() throws Exception
+	{
+		Bulletin b = new Bulletin(store);
+		b.setAllPrivate(false);
+		final File sampleAttachmentFile1 = addNewPrivateSampleAttachment(b);
+
+		Vector list = new Vector();
+		list.add(b);
+
+		String publicOnly = doExport(list, false);
+		assertNotContains(sampleAttachmentFile1.getName(), publicOnly);
+
+		String publicAndPrivate = doExport(list, true);
+		assertContains(sampleAttachmentFile1.getName(), publicAndPrivate);
+	}
+
+	public void testExportAnAllPrivateBulletin() throws Exception
+	{
+		Bulletin b = new Bulletin(store);
+		b.setAllPrivate(true);
+		final String sampleAuthor = "someone special";
+		b.set(BulletinConstants.TAGAUTHOR, sampleAuthor);
+
+		Vector list = new Vector();
+		list.add(b);
+		String publicOnly = doExport(list, false);
+		String publicAndPrivate = doExport(list, true);
+
+		assertContains(b.getAccount(), publicOnly);
+		assertContains(b.getLocalId(), publicOnly);
+		assertContains("<AllPrivate></AllPrivate>", publicOnly);
+		assertNotContains(sampleAuthor, publicOnly);
+		assertNotContains("<PublicData>", publicOnly);
+		assertNotContains("<PrivateData>", publicOnly);
+
+		assertContains(b.getAccount(), publicAndPrivate);
+		assertContains(b.getLocalId(), publicAndPrivate);
+		assertContains("<AllPrivate></AllPrivate>", publicAndPrivate);
+		assertContains(sampleAuthor, publicAndPrivate);
+		assertContains("<PublicData>", publicAndPrivate);
+		assertContains("<PrivateData>", publicAndPrivate);
+	}
+
+	String doExport(Vector list, boolean includePrivateData) throws IOException
 	{
 		StringWriter writer = new StringWriter();
-		BulletinXmlExporter.exportBulletins(list, writer);
+		BulletinXmlExporter.exportBulletins(writer, list, includePrivateData);
 		String result = writer.toString();
 		return result;
 	}
 
-	File addNewSampleAttachment(Bulletin b)
+	File addNewPublicSampleAttachment(Bulletin b)
 		throws IOException, EncryptionException
 	{
 		final File sampleAttachmentFile = createTempFile();
 		AttachmentProxy ap = new AttachmentProxy(sampleAttachmentFile);
 		b.addPublicAttachment(ap);
+		return sampleAttachmentFile;
+	}
+
+	File addNewPrivateSampleAttachment(Bulletin b)
+		throws IOException, EncryptionException
+	{
+		final File sampleAttachmentFile = createTempFile();
+		AttachmentProxy ap = new AttachmentProxy(sampleAttachmentFile);
+		b.addPrivateAttachment(ap);
 		return sampleAttachmentFile;
 	}
 

@@ -36,34 +36,49 @@ import org.martus.common.MartusXml;
 
 public class BulletinXmlExporter
 {
-	public static void exportBulletins(Vector bulletins, Writer dest)
+	public static void exportBulletins(Writer dest, Vector bulletins, boolean includePrivateData)
 		throws IOException
 	{
 		dest.write(MartusXml.getTagStart(ExportedBulletinsElementName));
-		dest.write("\n\n");
+		if(includePrivateData)
+			writeElement(dest, PublicAndPrivateElementName, "");
+		else
+			writeElement(dest, PublicOnlyElementName, "");
+		dest.write("\n");
 
 		for (int i = 0; i < bulletins.size(); i++)
 		{
 			Bulletin b = (Bulletin)bulletins.get(i);
-			exportOneBulletin(b, dest);
+			exportOneBulletin(b, dest, includePrivateData);
 		}
 		dest.write(MartusXml.getTagEnd(ExportedBulletinsElementName));
 	}
 
-	static void exportOneBulletin(Bulletin b, Writer dest) throws IOException
+	static void exportOneBulletin(Bulletin b, Writer dest, boolean includePrivateData) throws IOException
 	{
 		dest.write(MartusXml.getTagStart(BulletinElementName));
 		dest.write("\n");
 
 		writeElement(dest, LocalIdElementName, b.getLocalId());
 		writeElement(dest, AccountIdElementName, b.getAccount());
-		String[] tags = Bulletin.getStandardFieldNames();
-		writeFields(dest, b, tags);
-		
-		dest.write(MartusXml.getTagStart(AttachmentsListElementName));
-		AttachmentProxy[] publicAttachments = b.getPublicAttachments();
-		writeAttachments(dest, publicAttachments);
-		dest.write(MartusXml.getTagEnd(AttachmentsListElementName));
+		if(b.isAllPrivate())
+			writeElement(dest, AllPrivateElementName, "");
+
+		if(includePrivateData || !b.isAllPrivate())
+		{
+			dest.write(MartusXml.getTagStart(PublicDataElementName));
+			writeFields(dest, b, Bulletin.getStandardFieldNames());
+			writeAttachments(dest, b.getPublicAttachments());
+			dest.write(MartusXml.getTagEnd(PublicDataElementName));
+		}
+
+		if(includePrivateData)
+		{
+			dest.write(MartusXml.getTagStart(PrivateDataElementName));
+			writeFields(dest, b, Bulletin.getPrivateFieldNames());
+			writeAttachments(dest, b.getPrivateAttachments());
+			dest.write(MartusXml.getTagEnd(PrivateDataElementName));
+		}
 
 		dest.write(MartusXml.getTagEnd(BulletinElementName));
 		dest.write("\n");
@@ -72,11 +87,16 @@ public class BulletinXmlExporter
 	static void writeAttachments(Writer dest, AttachmentProxy[] publicAttachments)
 		throws IOException
 	{
+		if(publicAttachments.length == 0)
+			return;
+
+		dest.write(MartusXml.getTagStart(AttachmentsListElementName));
 		for (int i = 0; i < publicAttachments.length; i++)
 		{
 			AttachmentProxy proxy = publicAttachments[i];
 			writeElement(dest, AttachmentElementName, proxy.getLabel());
 		}
+		dest.write(MartusXml.getTagEnd(AttachmentsListElementName));
 	}
 
 	static void writeFields(Writer dest, Bulletin b, String[] tags)
@@ -98,8 +118,13 @@ public class BulletinXmlExporter
 	}
 	
 	public final static String ExportedBulletinsElementName = "ExportedMartusBulletins";
+	public final static String PublicOnlyElementName = "PublicDataOnly";
+	public final static String PublicAndPrivateElementName = "PublicAndPrivateData";
 	public final static String BulletinElementName = "MartusBulletin";
+	public final static String PublicDataElementName = "PublicData";
+	public final static String PrivateDataElementName = "PrivateData";
 	public final static String LocalIdElementName = "LocalId";
+	public final static String AllPrivateElementName = "AllPrivate";
 	public final static String AccountIdElementName = "AuthorAccountId";
 	public final static String AttachmentsListElementName = "AttachmentList";
 	public final static String AttachmentElementName = "Attachment";
