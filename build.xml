@@ -44,37 +44,48 @@
   <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
   <property name="meta-package" value="${martus-package}.meta"/>
   <property name="meta-files" value="${meta-dir}/*.class"/>
-
+  
   <target name="init">
     <!-- tstamp task initializes ${DSTAMP} etc -->
     <tstamp/>
   </target>
 
   <target name="clean">
-  	<delete file="${dist}/*"/>
-  	<delete dir="${dist}"/>
-
+  
+    <!-- Remove dis jars & folder -->
+    <delete verbose="true" includeEmptyDirs="true">
+        <fileset dir="${dist}" includes="*.jar"/>
+    </delete>
+    
     <delete file="${BuildDateFile}"/>
-
-    <delete file="${common-dir}/*.class"/>
-    <delete file="${common-jar}"/>
-
-    <delete file="${server-dir}/*.class"/>
-    <delete file="${server-dir}/core/*.class"/>
-    <delete file="${server-dir}/foramplifiers/*.class"/>
-    <delete file="${server-dir}/forclients/*.class"/>
-    <delete file="${server-dir}/formirroring/*.class"/>
-    <delete file="${server-dir}/tools/*.class"/>
-    <delete file="${server-jar}"/>
-
-    <delete file="${client-dir}/*.class"/>
-    <delete file="${client-dir}/test/*.class"/>
-    <delete file="${client-dir}/core/*.class"/>
-    <delete file="${client-dir}/swingui/*.class"/>
-    <delete file="${client-jar}"/>
-
-    <delete file="${meta-dir}/*.class"/>
-    <delete file="${meta-jar}"/>
+    
+    <!-- Remove common class files -->
+    <delete>
+        <fileset dir="${common-dir}" includes="*.class"/>
+    </delete>
+    
+    <!-- Remove meta class files -->
+    <delete>
+        <fileset dir="${meta-dir}" includes="*.class"/>
+    </delete>
+    
+    <!-- Remove client class files -->
+    <delete>
+        <fileset dir="${client-dir}" includes="*.class"/>
+        <fileset dir="${client-dir}/test/" includes="*.class"/>
+        <fileset dir="${client-dir}/core/" includes="*.class"/>
+        <fileset dir="${client-dir}/swingui/" includes="*.class"/>
+    </delete>
+    
+    <!-- Remove server class files -->
+    <delete>
+        <fileset dir="${server-dir}" includes="*.class"/>
+        <fileset dir="${server-dir}/core/" includes="*.class"/>
+        <fileset dir="${server-dir}/foramplifiers/" includes="*.class"/>
+        <fileset dir="${server-dir}/forclients/" includes="*.class"/>
+        <fileset dir="${server-dir}/formirroring/" includes="*.class"/>
+        <fileset dir="${server-dir}/tools/" includes="*.class"/>
+    </delete>
   </target>
 
   <target name="build" depends="init">
