@@ -16,44 +16,52 @@ public class Retriever
 		result = NetworkInterfaceConstants.INCOMPLETE;
 	}
 	
-	public String retrieveMyBulletins(Vector uidList)
+	public void retrieveMyBulletins(Vector uidList)
 	{
 		BulletinFolder retrievedFolder = app.createFolderRetrieved();
 		app.getStore().saveFolders();
 
-		return retrieveBulletins(uidList, retrievedFolder);
+		retrieveBulletins(uidList, retrievedFolder);
 	}
 
-	public String retrieveFieldOfficeBulletins(Vector uidList)
+	public void retrieveFieldOfficeBulletins(Vector uidList)
 	{
 		BulletinFolder retrievedFolder = app.createFolderRetrieved();
 		app.getStore().saveFolders();
 
-		return retrieveBulletins(uidList, retrievedFolder);
+		retrieveBulletins(uidList, retrievedFolder);
 	}
 
-	public String retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder) 
+	public void retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder) 
 	{
-		finished = false;
 		if(!app.isSSLServerAvailable())
-			return NetworkInterfaceConstants.NO_SERVER;
+		{
+			result = NetworkInterfaceConstants.NO_SERVER;
+			return;
+		}
 
 		RetrieveThread worker = new RetrieveThread(uidList, retrievedFolder);
 		worker.start();
 
-		if(retrieveDlg != null)
-			retrieveDlg.show();
-		else
-			while(!finished){}
+		if(retrieveDlg == null)
+			waitForThreadToTerminate(worker);
+	}
 
-		return getResult();
+	public void waitForThreadToTerminate(RetrieveThread worker) 
+	{
+		try 
+		{
+			worker.join();
+		} 
+		catch (InterruptedException e) 
+		{
+		}
 	}
 	
 	public void finishedRetrieve()
 	{
-		finished = true;
 		if(retrieveDlg != null)
-			retrieveDlg.dispose();
+			retrieveDlg.finishedRetrieve();
 	}
 
 	public String getResult()
@@ -101,18 +109,11 @@ public class Retriever
 			finishedRetrieve();
 		}
 
-		public void destroy() 
-		{
-			finishedRetrieve();
-			super.destroy();
-		}
-
 		private Vector uidList;
 		private BulletinFolder retrievedFolder;
 	}
 		
 	private String result;
 	private MartusApp app;
-	private UiProgressRetrieveDlg retrieveDlg;
-	private boolean finished;
+	public UiProgressRetrieveDlg retrieveDlg;
 }

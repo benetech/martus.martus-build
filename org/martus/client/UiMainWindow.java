@@ -832,7 +832,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 			Retriever retriever = createRetriever("RetrieveMySealedBulletinProgress");
-			String result = retriever.retrieveMyBulletins(uidList);
+			String result = getMyBulletins(retriever, uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -848,6 +848,20 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
+	private String getMyBulletins(Retriever retriever, Vector uidList) 
+	{
+		retriever.retrieveMyBulletins(uidList);
+		retriever.retrieveDlg.show();
+		return retriever.getResult();
+	}
+
+	private String getFieldOfficeBulletins(Retriever retriever, Vector uidList) 
+	{
+		retriever.retrieveFieldOfficeBulletins(uidList);
+		retriever.retrieveDlg.show();
+		return retriever.getResult();
+	}
+
 	private void doRetrieveDraftBulletins()
 	{
 		try 
@@ -859,7 +873,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return;
 				
 			Retriever retriever = createRetriever("RetrieveMyDraftBulletinProgress");
-			String result = retriever.retrieveMyBulletins(uidList);
+			String result = getMyBulletins(retriever, uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -885,7 +899,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 			Retriever retriever = createRetriever("RetrieveHQSealedBulletinProgress");
-			String result = retriever.retrieveFieldOfficeBulletins(uidList);
+			String result = getFieldOfficeBulletins(retriever, uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -911,7 +925,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 			Retriever retriever = createRetriever("RetrieveHQDraftBulletinProgress");
-			String result = retriever.retrieveFieldOfficeBulletins(uidList);
+			String result = getFieldOfficeBulletins(retriever, uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");

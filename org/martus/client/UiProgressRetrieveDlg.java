@@ -42,6 +42,11 @@ public class UiProgressRetrieveDlg extends JDialog
 	{
 		return chunkCountMeter;	
 	}
+	
+	public void finishedRetrieve()
+	{
+		dispose();	
+	}
 
 	private UiProgressMeter bulletinCountMeter;
 	private UiProgressMeter chunkCountMeter;
