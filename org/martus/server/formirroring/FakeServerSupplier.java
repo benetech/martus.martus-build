@@ -113,6 +113,10 @@ class FakeServerSupplier implements ServerSupplierInterface
 		result.add(returnZipData);
 		return result;
 	}
+	
+	public void log(String message)
+	{
+	}
 
 	String authorizedCaller;
 	String returnZipData;

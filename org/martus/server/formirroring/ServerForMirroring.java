@@ -23,21 +23,32 @@ public class ServerForMirroring implements ServerSupplierInterface
 	public ServerForMirroring(MartusServer coreServerToUse) throws 
 			IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
 	{
-		authorizedCallers = new Vector();
 		coreServer = coreServerToUse;
+		log("Initializing ServerForMirroring");
+		
+		authorizedCallers = new Vector();
 		loadServersWhoAreAuthorizedToCallUs();
+		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
 
 		retrieversWeWillCall = new Vector();
 		createGatewaysForServersWhoWeCall();
+		log("Configured to call " + retrieversWeWillCall.size() + " Mirrors");
 	}
 
+	public void log(String message)
+	{
+		coreServer.log(message);
+	}
+	
 	public void addListeners()
 	{
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
+		log("Opening port " + port + " for mirroring...");
 		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this, getSecurity());
 		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, MirroringInterface.DEST_OBJECT_NAME, port);
 
 		MartusUtilities.startTimer(new MirroringTask(retrieversWeWillCall), mirroringIntervalMillis);
+		log("Mirroring port opened and mirroring task scheduled");
 	}
 
 	// Begin ServerSupplierInterface

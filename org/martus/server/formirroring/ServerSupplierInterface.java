@@ -10,5 +10,5 @@ public interface ServerSupplierInterface
 	public Vector listBulletinsForMirroring(String authorAccountId);
 	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 			int chunkOffset, int maxChunkSize);
-
+	public void log(String message);
 }

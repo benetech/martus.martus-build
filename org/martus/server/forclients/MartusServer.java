@@ -50,6 +50,8 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
+import org.martus.server.core.LoggerInterface;
+import org.martus.server.core.LoggerToConsole;
 import org.martus.server.core.ServerConstants;
 import org.martus.server.core.ServerFileDatabase;
 import org.martus.server.core.XmlRpcThread;
@@ -109,7 +111,14 @@ public class MartusServer implements NetworkInterfaceConstants
 	MartusServer(File dir) throws 
 					MartusCrypto.CryptoInitializationException
 	{
+		this(dir, new LoggerToConsole());
+	}
+
+	MartusServer(File dir, LoggerInterface loggerToUse) throws 
+					MartusCrypto.CryptoInitializationException
+	{
 		dataDirectory = dir;
+		logger = loggerToUse;
 		getTriggerDirectory().mkdirs();
 		getStartupConfigDirectory().mkdirs();
 		
@@ -1709,6 +1718,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		return ip;
 	}
 
+	public synchronized void log(String message)
+	{
+		logger.log(message);
+	}
+
 	public synchronized void logging(String message)
 	{
 		if(serverLogging)
@@ -2046,6 +2060,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			if(args[arg].startsWith("--server-name="))
 			{
 				serverName = args[arg].substring(args[arg].indexOf("=")+1);
+				logger.setServerName(getServerName());
 			}
 		}
 		
@@ -2165,6 +2180,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	Hashtable failedUploadRequestsPerIp;
 	
+	LoggerInterface logger;
 	String serverName;
 	private boolean secureMode;
 	private boolean serverLogging;

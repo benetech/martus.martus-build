@@ -10,6 +10,7 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterfaceConstants;
+import org.martus.server.core.LoggerForTesting;
 
 public class MockMartusServer extends MartusServer implements ServerForClientsInterface, ServerForNonSSLClientsInterface
 {
@@ -20,7 +21,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	
 	public MockMartusServer(File dataDir) throws Exception
 	{
-		super(dataDir);
+		super(dataDir, new LoggerForTesting());
 		setDatabase(new MockServerDatabase());
 	}
 	
