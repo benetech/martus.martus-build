@@ -194,10 +194,15 @@ public class MirroringRetriever
 		{
 			log("Getting list of accounts");
 			NetworkResponse response = gateway.listAccountsForMirroring(security);
-			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+			String resultCode = response.getResultCode();
+			if(resultCode.equals(NetworkInterfaceConstants.OK))
 			{
 				accountsToRetrieve.addAll(response.getResultVector());
 				log("Account count:" + accountsToRetrieve.size());
+			}
+			else if(!resultCode.equals(NetworkInterfaceConstants.NO_SERVER))
+			{
+				log("ERROR returned by " + ip + ": " + resultCode);
 			}
 		}
 		catch (Exception e)
