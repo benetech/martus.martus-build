@@ -49,7 +49,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
-import org.martus.client.swingui.*;
+import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
@@ -66,7 +66,6 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.NetworkResponse;
-import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.FileDatabase.MissingAccountMapException;
@@ -1175,10 +1174,9 @@ public class MartusApp
 		Base64.InvalidBase64Exception,
 		PublicInformationInvalidException
 	{
-		UnicodeReader reader = new UnicodeReader(file);
-		String publicKey = reader.readLine();
-		String signature = reader.readLine();
-		reader.close();
+		Vector importedPublicKeyInfo = MartusUtilities.importPublicKeyFromFile(file);
+		String publicKey = (String) importedPublicKeyInfo.get(0);
+		String signature = (String) importedPublicKeyInfo.get(1);		
 		validatePublicInfo(publicKey, signature);
 		return publicKey;
 	}		

@@ -201,11 +201,17 @@ public class MartusSecurity implements MartusCrypto
 			EncryptionException,
 			NoKeyPairException
 	{
-		PublicKey publicKey = getPublicKey();
+		encrypt(plainStream, cipherStream, sessionKeyBytes, getPublicKey());
+	}
+	
+	public synchronized void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes, PublicKey publicKey) throws 
+			EncryptionException,
+			NoKeyPairException
+	{
 		if(publicKey == null)
 			throw new NoKeyPairException();
-
-		CipherOutputStream cos = createCipherOutputStream(cipherStream, sessionKeyBytes);
+			
+		CipherOutputStream cos = createCipherOutputStream(cipherStream, sessionKeyBytes, getKeyString(publicKey));
 		try
 		{
 			InputStream bufferedPlainStream = new BufferedInputStream(plainStream);
@@ -224,9 +230,15 @@ public class MartusSecurity implements MartusCrypto
 			//System.out.println("MartusSecurity.encrypt: " + e);
 			throw new EncryptionException();
 		}
-	}
+	}	
 
 	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
+		throws EncryptionException
+	{
+		return createCipherOutputStream(cipherStream, sessionKeyBytes, getPublicKeyString());
+	}
+	
+	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes, String publicKeyString)
 		throws EncryptionException
 	{
 		try
@@ -234,7 +246,7 @@ public class MartusSecurity implements MartusCrypto
 			byte[] ivBytes = new byte[IV_BYTE_COUNT];
 			rand.nextBytes(ivBytes);
 			
-			byte[] encryptedKeyBytes = encryptSessionKey(sessionKeyBytes, getPublicKeyString());
+			byte[] encryptedKeyBytes = encryptSessionKey(sessionKeyBytes, publicKeyString);
 			
 			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
 			IvParameterSpec spec = new IvParameterSpec(ivBytes);

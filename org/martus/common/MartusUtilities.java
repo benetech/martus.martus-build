@@ -253,6 +253,21 @@ public class MartusUtilities
 		}
 	}
 	
+	public static Vector importPublicKeyFromFile(File file) throws IOException
+	{
+		Vector result = new Vector();
+		
+		UnicodeReader reader = new UnicodeReader(file);
+		String publicKey = reader.readLine();
+		String signature = reader.readLine();
+		reader.close();
+		
+		result.add(publicKey);
+		result.add(signature);
+		
+		return result;
+	}
+	
 	public static void exportPublicKey(MartusCrypto security, File outputfile)
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
