@@ -61,7 +61,7 @@
 <!-- T E S T S                                                          -->
 <!-- ================================================================== -->
 
-  <target name="test-client" depends="build-client">
+  <target name="test-client" depends="jar-client">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
             <classpath>
                 <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
@@ -69,7 +69,15 @@
             </classpath>
         </taskdef>
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
-            <classpath refid="client.class.path"/>
+            <classpath>
+                <pathelement path="${java.class.path}"/>
+                <fileset dir="${public.release.folder}" >
+                    <include name="martus-client-${DSTAMP}.${build.number}.jar"/>
+                </fileset>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+            </classpath>
             <formatter type="brief" usefile="no" />
             <test name="org.martus.client.test.TestAll"/>
         </junit>
