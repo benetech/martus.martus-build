@@ -34,6 +34,7 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.FieldSpec;
+import org.martus.common.bulletin.Bulletin;
 import org.martus.common.packet.FieldDataPacket;
 
 public class ActionMenuCustomFields extends UiMenuAction
@@ -77,6 +78,14 @@ public class ActionMenuCustomFields extends UiMenuAction
 			String newTags = mainWindow.getStringInput("CustomFields", "", existingTags);
 			if(newTags == null)
 				return null;
+				
+			if(newTags.length() == 0)
+			{
+				if(mainWindow.confirmDlg(mainWindow, "UndoCustomFields"))
+					return Bulletin.getDefaultPublicFieldSpecs();
+				continue;
+			}
+ 
 			FieldSpec[] newSpecs = FieldDataPacket.parseFieldTagsFromString(newTags);
 			CustomFieldSpecValidator checker = new CustomFieldSpecValidator(newSpecs);
 			if(checker.isValid())

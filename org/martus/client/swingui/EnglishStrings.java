@@ -72,6 +72,7 @@ public class EnglishStrings
 "wintitle:confirmBackupKeyPairMultiple=Backing Up Keypair",
 "wintitle:confirmCancelShareBackup=Cancel Backup",
 "wintitle:confirmEnterCustomFields=Customize Fields",
+"wintitle:confirmUndoCustomFields=Customize Fields",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -472,6 +473,8 @@ public class EnglishStrings
 "field:confirmCancelShareBackupeffect=By choosing Yes, will exit this backup.",
 "field:confirmEnterCustomFieldscause=You have chosen to customize the fields that will be used in any new bulletins created by this account.",
 "field:confirmEnterCustomFieldseffect=Customizing fields is an advanced operation, and can be dangerous. You should only proceed if you are certain that you understand the feature.",
+"field:confirmUndoCustomFieldscause=You have chosen to revert to the standard set of Martus fields.",
+"field:confirmUndoCustomFieldseffect=New bulletins created with this account will not have any custom fields.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
@@ -549,7 +552,7 @@ public class EnglishStrings
 "field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:",
 "field:inputExportMyPublicKeyentry=",
 "field:inputGetShareFileNameentry=Enter the name of the file you wish to export.",
-"field:inputCustomFieldsentry=Enter the list of field tags below, in the order you want them to appear",
+"field:inputCustomFieldsentry=Enter the list of field tags below, in the order you want them to appear. To revert to the original standard fields, blank out the line and press OK.",
 
 "field:username=Username",
 "field:password1=Password",
