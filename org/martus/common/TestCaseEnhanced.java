@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.common;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
@@ -57,6 +58,17 @@ public class TestCaseEnhanced extends TestCase
 		writer.close();
 		return file;
 	}
+
+	protected File createTempFile(byte[] data) throws Exception
+	{
+		File tempFile = File.createTempFile("$$$MartusTest", null);
+		tempFile.deleteOnExit();
+		FileOutputStream out = new FileOutputStream(tempFile);
+		out.write(data);
+		out.close();
+		return tempFile;
+	}
+
 
 	public static void assertFalse(String message, boolean actual)
 	{
@@ -190,7 +202,6 @@ public class TestCaseEnhanced extends TestCase
 		if(VERBOSE)
 			System.out.println(System.currentTimeMillis() - methodStartedAt);
 	}
-
 
 	public final static String BAD_FILENAME = "<>//\\..??**::||";
 
