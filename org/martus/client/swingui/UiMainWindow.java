@@ -1320,7 +1320,7 @@ if(result == NEW_ACCOUNT)
 		if(defaultFileName == null)
 			return;
 		
-		int maxFiles = MartusConstants.NumberOfFilesInShare;
+		int maxFiles = MartusConstants.numberOfFilesInShare;
 		String parent = "";
 		boolean saved;
 		for(int disk = 1; disk <= maxFiles; ++disk )

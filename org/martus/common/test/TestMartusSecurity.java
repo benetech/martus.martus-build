@@ -28,6 +28,7 @@ package org.martus.common.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -45,6 +46,8 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.util.Base64;
 import org.martus.util.ByteArrayInputStreamWithSeek;
+import org.martus.util.StringInputStream;
+import org.martus.util.UnicodeReader;
 
 
 public class TestMartusSecurity extends TestCaseEnhanced
@@ -58,7 +61,6 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		TRACE_BEGIN("setUp");
-		final int SMALLEST_LEGAL_KEY_FOR_TESTING = 512;
 		if(security == null)
 			security = new MartusSecurity();
 
@@ -95,7 +97,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		byte[] secret = {2,3,4,0,8,5,6,7};
 		Vector allShares = tempSecurity.buildShares(secret);
 		assertNotNull("Shares null?",allShares);
-		assertEquals("Incorrect number of Shares",  MartusConstants.NumberOfFilesInShare, allShares.size());
+		assertEquals("Incorrect number of Shares",  MartusConstants.numberOfFilesInShare, allShares.size());
 
 		byte[] recoveredSecret = tempSecurity.recoverShares(allShares);
 		assertNotNull("Recovered Secret Null?", recoveredSecret);
@@ -135,6 +137,63 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		catch (SecretSharingException expectedException) 
 		{
 		}
+	}
+	
+	public void testGetKeyShareBundles() throws Exception
+	{
+		MartusSecurity tempSecurity = new MartusSecurity();
+		tempSecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
+		
+		Vector bundles = tempSecurity.getKeyShareBundles();
+		assertNotNull("Got a null vector?", bundles);
+		assertEquals("Size of vector incorrect?", MartusConstants.numberOfFilesInShare, bundles.size());
+		InputStream in = new StringInputStream(bundles.get(0).toString());
+		
+		UnicodeReader reader = new UnicodeReader(in);
+		String item1Encoded = reader.readLine();
+		String item1 = new String(Base64.decode(item1Encoded));
+		assertTrue("First part of file not a MartusShare ID?",item1.equals(MartusConstants.martusSecretShareFileID));		
+
+		String item2 = reader.readLine();
+		assertTrue("Second part of file not our public key?",item2.equals(tempSecurity.getPublicKeyString()));		
+		
+		String item3Encoded = reader.readLine();
+		String share1 = new String(Base64.decode(item3Encoded));
+
+		in.close();
+		reader.close();
+		in = new StringInputStream(bundles.get(2).toString());
+		reader = new UnicodeReader(in);
+
+		item1Encoded = reader.readLine();
+		item1 = new String(Base64.decode(item1Encoded));
+		assertTrue("First part of 3rd file not a MartusShare ID?",item1.equals(MartusConstants.martusSecretShareFileID));		
+
+		item2 = reader.readLine();
+		assertTrue("Second part of 3rd file not our public key?",item2.equals(tempSecurity.getPublicKeyString()));		
+		
+		item3Encoded = reader.readLine();
+		String share2 = new String(Base64.decode(item3Encoded));
+		
+		Vector twoShares = new Vector();
+		twoShares.add(share1);
+		twoShares.add(share2);
+		byte[] recoveredSessionKey = tempSecurity.recoverShares(twoShares);
+		
+		String item4Encoded = reader.readLine();
+		byte[] encryptedPrivateKey = Base64.decode(item4Encoded);
+		in.close();
+		reader.close();
+		
+		MartusSecurity newSecurity = new MartusSecurity();
+		ByteArrayInputStreamWithSeek inEncryptedPrivateKey = new ByteArrayInputStreamWithSeek(encryptedPrivateKey);
+		ByteArrayOutputStream outDecryptedPrivateKey = new ByteArrayOutputStream();
+		newSecurity.decrypt( inEncryptedPrivateKey, outDecryptedPrivateKey, recoveredSessionKey);
+		outDecryptedPrivateKey.close();
+		inEncryptedPrivateKey.close();
+		String recoveredPrivateKey = outDecryptedPrivateKey.toString();
+		String privateKeyString = tempSecurity.getPrivateKeyString();
+		assertEquals("Private Key was not decrypted correctly?",privateKeyString,recoveredPrivateKey);		
 	}
 
 	public void testGetDigestOfPartOfPrivateKey() throws Exception
@@ -746,5 +805,6 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	private static MartusSecurity security;
 	private static MartusSecurity securityWithoutKeyPair;
 	private static KeyPair invalidKeyPair;
+	final int SMALLEST_LEGAL_KEY_FOR_TESTING = 512;
 
 }

@@ -87,6 +87,8 @@ import org.logi.crypto.secretshare.SecretSharingException;
 import org.martus.common.MartusConstants;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;
+import org.martus.util.StringInputStream;
+import org.martus.util.UnicodeStringWriter;
 
 import com.isnetworks.provider.random.InfiniteMonkeyProvider;
 
@@ -200,8 +202,8 @@ public class MartusSecurity extends MartusCryptoImplementation
 	{
 		Vector shares = new Vector();
 		Crypto.initRandom();
-		int minNumber = MartusConstants.MinNumberOfFilesNeededToRecreateSecret;
-		int numberShares = MartusConstants.NumberOfFilesInShare;
+		int minNumber = MartusConstants.minNumberOfFilesNeededToRecreateSecret;
+		int numberShares = MartusConstants.numberOfFilesInShare;
 		PolySecretShare[] polyShares = PolySecretShare.share(minNumber, numberShares, secretToShare, 512);
 		for (int i = 0 ; i < numberShares; ++i)
 		{
@@ -226,6 +228,38 @@ public class MartusSecurity extends MartusCryptoImplementation
 		{
 			throw new SecretSharingException(e.toString());
 		}
+	}
+
+	public Vector getKeyShareBundles() 
+	{
+		Vector shareBundles = new Vector();
+		try 
+		{
+			byte[] sessionKey = createSessionKey();
+			Vector sessionKeyShares = buildShares(sessionKey);
+			StringInputStream in = new StringInputStream(getPrivateKeyString());
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			encrypt(in,out,sessionKey);	
+			out.close();		
+			for(int i = 0; i < sessionKeyShares.size(); ++i)
+			{
+				UnicodeStringWriter writer = UnicodeStringWriter.create();
+				writer.writeln(Base64.encode(MartusConstants.martusSecretShareFileID.getBytes()));
+				writer.writeln(getPublicKeyString());
+				String privateShare = (String)(sessionKeyShares.get(i));
+				writer.writeln(Base64.encode(privateShare.getBytes()));
+				writer.writeln(Base64.encode(out.toByteArray()));
+				writer.close();
+				shareBundles.add(writer.toString());
+			}			
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			return null;
+		}
+		
+		return shareBundles;
 	}
 
 	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws

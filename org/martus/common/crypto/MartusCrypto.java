@@ -103,6 +103,9 @@ public abstract class MartusCrypto
 	// other
 	public abstract String createRandomToken();
 	public abstract KeyManager [] createKeyManagers() throws Exception;
+	
+	// Secret Share of Private Key
+	public abstract Vector getKeyShareBundles();
 
 	// public codes
 	public static String computePublicCode(String publicKeyString) throws
