@@ -328,7 +328,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmDiscardSealedBulletins=Confirm Delete Sealed Bulletin");
 		addEnglishTranslation("wintitle:confirmdeletefolder=Confirm Delete Folder");
 		addEnglishTranslation("wintitle:confirmRemoveAttachment=Confirm Remove Attachments");
-		addEnglishTranslation("wintitle:confirmOverWriteExistingFile=Confirm OverWrite Existing File");
+		addEnglishTranslation("wintitle:confirmOverWriteExistingFile=Confirm Replace Existing File");
 		addEnglishTranslation("wintitle:confirmCancelModifyBulletin=Cancel Modify Bulletin");
 		addEnglishTranslation("wintitle:confirmSetImportPublicKey=Confirm Import of Public Key");
 		addEnglishTranslation("wintitle:confirmWarningSwitchToNormalKeyboard=Security Warning");
@@ -344,7 +344,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmUploadReminder=Upload Reminder");
 		addEnglishTranslation("wintitle:confirmDraftUploadReminder=Draft Upload Reminder");
 		addEnglishTranslation("wintitle:confirmRedoWeakPassword=Weak Password Warning");
-		addEnglishTranslation("wintitle:confirmOverWriteWithBackupKeyPair=Confirm OverWrite Existing File");
+		addEnglishTranslation("wintitle:confirmOverWriteWithBackupKeyPair=Confirm Replace Existing File");
 		
 		addEnglishTranslation("wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)");
 		addEnglishTranslation("wintitle:notifyDropErrors=Error Moving Bulletin(s)");
@@ -648,8 +648,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmretrieveeffect=This will restore all the discarded bulletins that were sent to the server.  ");
 		addEnglishTranslation("field:confirmRemoveAttachmentcause=You have chosen to remove the selected attachments from this bulletin.");
 		addEnglishTranslation("field:confirmRemoveAttachmenteffect=The selected attachments will be permanently removed from this bulletin.");
-		addEnglishTranslation("field:confirmOverWriteExistingFilecause=This file already exists. Do you wish to overwrite this file?");
-		addEnglishTranslation("field:confirmOverWriteExistingFileeffect=The selected attachment will replace the file on your hard drive.");
+		addEnglishTranslation("field:confirmOverWriteExistingFilecause=A file already exists with that name.");
+		addEnglishTranslation("field:confirmOverWriteExistingFileeffect=The existing file will be deleted and replaced with the new information.");
 		addEnglishTranslation("field:confirmCancelModifyBulletincause=You have chosen to cancel modifying this bulletin.");
 		addEnglishTranslation("field:confirmCancelModifyBulletineffect=Any changes you have made to this bulletin will be discarded.");
 		addEnglishTranslation("field:confirmSetImportPublicKeycause=You have chosen to allow this client the ability to view your public and PRIVATE data.");
