@@ -13,7 +13,6 @@ import java.util.TreeMap;
 
 import org.martus.common.Database.PacketVisitor;
 
-import MartusJava.MartusCrypto;
 
 public class MockDatabase implements Database
 {

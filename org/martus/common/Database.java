@@ -1,14 +1,8 @@
 package org.martus.common;
 
-import java.util.Set;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-
-import org.martus.common.*;
-
-import MartusJava.MartusCrypto;
-import MartusJava.MartusCrypto.CryptoException;
 
 public interface Database
 {

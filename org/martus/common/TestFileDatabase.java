@@ -10,9 +10,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
-import org.martus.common.*;
 
-import MartusJava.MockMartusSecurity;
 
 public class TestFileDatabase extends TestCaseEnhanced
 {

@@ -19,9 +19,6 @@ import org.martus.common.Database.AccountVisitor;
 import org.martus.common.Database.PacketVisitor;
 
 import MartusJava.FileInputStreamWithReset;
-import MartusJava.MartusCrypto;
-import MartusJava.UnicodeReader;
-import MartusJava.UnicodeWriter;
 
 public class FileDatabase implements Database
 {
