@@ -20,7 +20,19 @@ public class TestDatabaseKey extends TestCaseEnhanced
 	
 	public void testConstructors() throws Exception
 	{
-		
+		UniversalId uid1 = UniversalId.createDummyUniversalId();
+		DatabaseKey key1 = DatabaseKey.createDraftKey(uid1);
+		assertEquals("bad uid1?", uid1, key1.getUniversalId());
+		assertEquals("not draft?", true, key1.isDraft());
+
+		DatabaseKey key2 = DatabaseKey.createSealedKey(uid1);
+		assertEquals("bad uid2?", uid1, key2.getUniversalId());
+		assertEquals("not sealed?", true, key2.isSealed());
+
+		DatabaseKey key3 = DatabaseKey.createLegacyKey(uid1);
+		assertEquals("bad uid3?", uid1, key3.getUniversalId());
+		assertEquals("draft?", false, key3.isDraft());
+		assertEquals("sealed?", false, key3.isSealed());
 	}
 
 	public void testEqualsStrings() throws Exception
@@ -76,8 +88,7 @@ public class TestDatabaseKey extends TestCaseEnhanced
 	public void testStatus() throws Exception
 	{
 		UniversalId uid = UniversalId.createDummyUniversalId();
-		DatabaseKey key = new DatabaseKey(uid);
-		// TODO: should default to unknown, really, but that would break a lot of code right now
+		DatabaseKey key = DatabaseKey.createSealedKey(uid);
 		assertEquals("Default not sealed?", true, key.isSealed());
 		assertEquals("Default was draft?", false, key.isDraft());
 		key.setDraft();

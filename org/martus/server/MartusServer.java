@@ -559,7 +559,7 @@ public class MartusServer
 		Vector result = new Vector();
 		
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
-		DatabaseKey headerKey = new DatabaseKey(uid);
+		DatabaseKey headerKey = DatabaseKey.createSealedKey(uid);
 		if(!getDatabase().doesRecordExist(headerKey))
 		{
 			logging("downloadBulletin NOT_FOUND");
@@ -913,7 +913,7 @@ public class MartusServer
 
 		Database db = getDatabase();
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(clientId, packetId);
-		DatabaseKey key = new DatabaseKey(uid);
+		DatabaseKey key = DatabaseKey.createSealedKey(uid);
 		if(db.doesRecordExist(key))
 		{
 			try
@@ -975,8 +975,7 @@ public class MartusServer
 		Database db = getDatabase();
 		
 		UniversalId headerUid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
-		DatabaseKey headerKey = new DatabaseKey(headerUid);
-		headerKey.setSealed();
+		DatabaseKey headerKey = DatabaseKey.createSealedKey(headerUid);
 		
 		if(!db.doesRecordExist(headerKey))
 			headerKey.setDraft();

@@ -4,6 +4,27 @@ package org.martus.common;
 
 public class DatabaseKey implements Comparable
 {
+	public static DatabaseKey createDraftKey(UniversalId uidToUse)
+	{
+		DatabaseKey key = new DatabaseKey(uidToUse);
+		key.setDraft();
+		return key;
+	}
+	
+	public static DatabaseKey createSealedKey(UniversalId uidToUse)
+	{
+		DatabaseKey key = new DatabaseKey(uidToUse);
+		key.setSealed();
+		return key;
+	}
+	
+	public static DatabaseKey createLegacyKey(UniversalId uidToUse)
+	{
+		DatabaseKey key = new DatabaseKey(uidToUse);
+		key.status = statusUnknown;
+		return key;
+	}
+	
 	public DatabaseKey(UniversalId uidToUse)
 	{
 		uid = uidToUse;

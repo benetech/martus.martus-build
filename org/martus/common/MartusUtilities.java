@@ -304,8 +304,7 @@ public class MartusUtilities
 	private static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws
 		IOException
 	{
-		DatabaseKey headerKey = new DatabaseKey(bulletinUid);
-		headerKey.setDraft();
+		DatabaseKey headerKey = DatabaseKey.createDraftKey(bulletinUid);
 		if(!db.doesRecordExist(headerKey))
 			return;
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(bulletinUid);
@@ -340,8 +339,7 @@ public class MartusUtilities
 	private static void deleteDraftPacket(Database db, String accountId, String localId)
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localId);
-		DatabaseKey key = new DatabaseKey(uid);
-		key.setDraft();
+		DatabaseKey key = DatabaseKey.createDraftKey(uid);
 		db.discardRecord(key);
 	}
 
@@ -384,12 +382,10 @@ public class MartusUtilities
 
 	public static DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid) 
 	{
-		DatabaseKey key = new DatabaseKey(uid);
 		if(header.getStatus().equals(BulletinConstants.STATUSDRAFT))
-			key.setDraft();
+			return DatabaseKey.createDraftKey(uid);
 		else
-			key.setSealed();
-		return key;
+			return DatabaseKey.createSealedKey(uid);
 	}
 
 }

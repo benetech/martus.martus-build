@@ -111,7 +111,7 @@ public class TestMartusServer extends TestCaseEnhanced
 			b1.setHQPublicKey(hqSecurity.getPublicKeyString());
 			b1.setSealed();
 			b1.save();
-			b1 = Bulletin.loadFromDatabase(store, new DatabaseKey(b1.getUniversalId()));
+			b1 = Bulletin.loadFromDatabase(store, DatabaseKey.createSealedKey(b1.getUniversalId()));
 	
 			b2 = store.createEmptyBulletin();
 			b2.set(b2.TAGTITLE, "Title2");
@@ -274,7 +274,7 @@ public class TestMartusServer extends TestCaseEnhanced
 
 		Database db = testServer.getDatabase();
 		assertNotNull("no database?", db);
-		DatabaseKey key = new DatabaseKey(b1.getUniversalId());
+		DatabaseKey key = DatabaseKey.createSealedKey(b1.getUniversalId());
 		Bulletin got = Bulletin.loadFromDatabase(store, key);
 		assertEquals("id", b1.getLocalId(), got.getLocalId());
 
@@ -289,7 +289,7 @@ public class TestMartusServer extends TestCaseEnhanced
 
 		Database db = testServer.getDatabase();
 		assertNotNull("no database?", db);
-		DatabaseKey key = new DatabaseKey(b1.getUniversalId());
+		DatabaseKey key = DatabaseKey.createSealedKey(b1.getUniversalId());
 		Bulletin got = Bulletin.loadFromDatabase(store, key);
 		assertEquals("id", b1.getLocalId(), got.getLocalId());
 
@@ -1343,7 +1343,7 @@ public class TestMartusServer extends TestCaseEnhanced
 	public void testKeyBelongsToClient()
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId("a", "b");
-		DatabaseKey key = new DatabaseKey(uid);
+		DatabaseKey key = DatabaseKey.createSealedKey(uid);
 		assertEquals("doesn't belong ", false, MartusServer.keyBelongsToClient(key, "b"));
 		assertEquals("belongs ", true, MartusServer.keyBelongsToClient(key, "a"));
 	}
