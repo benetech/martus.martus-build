@@ -1812,16 +1812,16 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverLogging)
 		{
 			Timestamp stamp = new Timestamp(System.currentTimeMillis());
-			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z:");
+			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
 			String logEntry;
 			if(serverMaxLogging)
 			{
 				int threadId = Thread.currentThread().hashCode();
-				logEntry = getServerHostname() + " " + threadId + " " + message;
+				logEntry = getServerHostname() + " " + threadId + " : " + message;
 			}
 			else
 			{
-				logEntry = message;
+				logEntry = " : " + message;
 			}
 			System.out.println(formatDate.format(stamp) + " " + logEntry);
 		}
@@ -1831,23 +1831,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		String hostname;
 		String address;
-		try
-		{
-			hostname = InetAddress.getLocalHost().getHostName();
-		}
-		catch(Exception e)
-		{
-			hostname = "hostname";
-		}
-		
-		try
-		{
-			address = InetAddress.getLocalHost().getHostAddress();
-		}
-		catch(Exception e)
-		{
-			address = "address";
-		}
+
+		hostname = "hostname";
+		address = "address";
 		return hostname + "/" + address;
 	}
 
