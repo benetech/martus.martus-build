@@ -625,7 +625,8 @@ public class MartusApp
 
 	public void search(String searchFor, String startDate, String endDate)
 	{
-		SearchParser parser = new SearchParser(getKeyword("and"), getKeyword("or"));
+		MartusLocalization localization = getLocalization();
+		SearchParser parser = new SearchParser(localization.getKeyword("and"), localization.getKeyword("or"));
 		SearchTreeNode searchNode = parser.parse(searchFor);
 		BulletinSearcher matcher = new BulletinSearcher(searchNode, startDate, endDate);
 
@@ -1246,11 +1247,6 @@ public class MartusApp
 	public String getMenuLabel(String code)
 	{
 		return localization.getMenuLabel(code);
-	}
-
-	public String getKeyword(String code)
-	{
-		return localization.getKeyword(code);
 	}
 
 	public ChoiceItem[] getUiLanguages()
