@@ -1646,7 +1646,10 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 
-
+	private void serverExit(int exitCode)
+	{
+		System.exit(exitCode);
+	}
 
 	abstract class SummaryCollector implements Database.PacketVisitor
 	{
@@ -1843,7 +1846,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				File shutdownFile = new File(getDataDirectory(), MARTUSSHUTDOWNFILENAME);
 				shutdownFile.delete();
 				logging("Server has exited.");
-				System.exit(0);
+				serverExit(0);
 			}
 		}
 	}

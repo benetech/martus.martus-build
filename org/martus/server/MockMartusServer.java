@@ -212,6 +212,11 @@ public class MockMartusServer extends MartusServer
 		{ 
 			listFieldOfficeAccountsResponseNull = nullResponse;
 		}
+		
+		private void serverExit(int exitCode) throws Exception
+		{
+			throw new Exception("MockServer serverExit called");
+		}
 
 		static class TempDirectory extends File
 		{
