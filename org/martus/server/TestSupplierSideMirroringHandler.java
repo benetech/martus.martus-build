@@ -255,8 +255,8 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertEquals(2, result.size());
 		assertEquals(NetworkInterfaceConstants.CHUNK_OK, result.get(0));
 		Vector details = (Vector)result.get(1);
-		assertEquals(new Integer(supplier.returnTotalLen), details.get(0));
-		assertEquals(new Integer(supplier.returnChunkSize), details.get(1));
+		assertEquals(new Integer(supplier.getChunkSize() * 3), details.get(0));
+		assertEquals(new Integer(supplier.getChunkSize()), details.get(1));
 		assertEquals(supplier.returnZipData, details.get(2));
 	}
 	
@@ -293,55 +293,3 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	MartusCrypto authorSecurity;
 }
 
-class FakeServerSupplier implements ServerSupplierInterface
-{
-	FakeServerSupplier() throws Exception
-	{
-		db = new MockServerDatabase();
-		security = new MockMartusSecurity();
-	}
-	
-	public Database getDatabase()
-	{
-		return db;
-	}
-	
-	public MartusCrypto getSecurity()
-	{
-		return security;
-	}
-	
-	public boolean isAuthorizedForMirroring(String callerAccountId)
-	{
-		return callerAccountId.equals(authorizedCaller);
-	}
-
-	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
-			int chunkOffset, int maxChunkSize)
-	{
-		gotAccount = authorAccountId;
-		gotLocalId = bulletinLocalId;
-		gotChunkOffset = chunkOffset;
-		gotMaxChunkSize = maxChunkSize;
-		
-		Vector result = new Vector();
-		result.add(NetworkInterfaceConstants.CHUNK_OK);
-		result.add(new Integer(returnTotalLen));
-		result.add(new Integer(returnChunkSize));
-		result.add(returnZipData);
-		return result;
-	}
-
-	String authorizedCaller;
-	int returnTotalLen = 234;
-	int returnChunkSize = 345;
-	String returnZipData = "zip data";
-
-	MockServerDatabase db;
-	MartusCrypto security;
-	
-	String gotAccount;
-	String gotLocalId;
-	int gotChunkOffset;
-	int gotMaxChunkSize;
-}

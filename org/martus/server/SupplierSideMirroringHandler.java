@@ -23,17 +23,6 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		supplier = supplierToUse;
 		db = supplier.getDatabase();
 		verifier = supplier.getSecurity();
-		authorizedCallers = new Vector();
-	}
-	
-	public void clearAllAuthorizedCallers()
-	{
-		authorizedCallers.clear();
-	}
-	
-	public void addAuthorizedCaller(String authorizedAccountId)
-	{
-		authorizedCallers.add(authorizedAccountId);
 	}
 	
 	public Vector request(String callerAccountId, Vector parameters, String signature)
@@ -208,6 +197,4 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 	ServerSupplierInterface supplier;
 	Database db;
 	MartusCrypto verifier;
-	
-	Vector authorizedCallers;
 }
