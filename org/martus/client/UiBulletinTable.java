@@ -133,8 +133,9 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void bulletinHasChanged(Bulletin b)
 	{
+		Bulletin[] selected = getSelectedBulletins();
 		tableChanged(new TableModelEvent(bulletinsList));
-		selectBulletin(b);
+		selectBulletins(selected);
 	}
 
 	// ListSelectionListener interface
