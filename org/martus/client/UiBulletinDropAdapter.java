@@ -219,9 +219,15 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	{
 		Cursor originalCursor = observer.getCursor();
 		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		toFolder.getStore().importZipFileBulletin(file, toFolder, false);
-		observer.folderContentsHaveChanged(toFolder);
-		observer.setCursor(originalCursor);
+		try 
+		{
+			toFolder.getStore().importZipFileBulletin(file, toFolder, false);
+			observer.folderContentsHaveChanged(toFolder);
+		} 
+		finally
+		{
+			observer.setCursor(originalCursor);
+		}
 	}
 
 
