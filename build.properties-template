@@ -37,13 +37,14 @@ cvs.privatekey.location=
 # email properties
 # #####################################
 
-# comma separated list of senders/recipients
-java.email.from=
-java.email.to=
+MailLogger.mailhost=BENESBS
+MailLogger.success.subject=
 
-java.email.mailhost=BENESBS
-java.email.port=25
-java.email.msg=
+# comma separated list of senders/recipients
+MailLogger.from=
+MailLogger.replyto=
+MailLogger.failure.to=
+MailLogger.success.to=
 
 # #####################################
 # installer related properties
