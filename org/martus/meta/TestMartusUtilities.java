@@ -14,6 +14,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinStore;
+import org.martus.common.AttachmentProxy;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusSecurity;
@@ -52,7 +53,12 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		Database db = new MockClientDatabase();
 		BulletinStore store = new BulletinStore(db);
 		store.setSignatureGenerator(security);
+
+		File sampleAttachment = createTempFile("This is some data");
+		AttachmentProxy ap = new AttachmentProxy(sampleAttachment);
+
 		Bulletin b = store.createEmptyBulletin();
+		b.addPublicAttachment(ap);
 		b.save();
 		String accountId = b.getAccount();
 		DatabaseKey key = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
@@ -61,8 +67,40 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, key, originalZipFile, security);
 		validateZipFile(accountId, originalZipFile);
 
-		File copiedZipFile = createCopyOfZipFile(originalZipFile);
+		File copiedZipFile = createCopyOfZipFile(originalZipFile, null);
 		validateZipFile(accountId, copiedZipFile);
+		
+		File zipWithoutHeaderPacket = createCopyOfZipFile(originalZipFile, "B-");
+		try
+		{
+			validateZipFile(accountId, zipWithoutHeaderPacket);
+			fail("Should have thrown for missing header");
+		}
+		catch (IOException ignoreExpectedException)
+		{
+		}
+
+		File zipWithoutDataPackets = createCopyOfZipFile(originalZipFile, "F-");
+		try
+		{
+			validateZipFile(accountId, zipWithoutDataPackets);
+			fail("Should have thrown for missing data packets");
+		}
+		catch (IOException ignoreExpectedException)
+		{
+		}
+
+		File zipWithoutAttachmentPackets = createCopyOfZipFile(originalZipFile, "A-");
+		try
+		{
+			validateZipFile(accountId, zipWithoutAttachmentPackets);
+			fail("Should have thrown for missing attachment");
+		}
+		catch (IOException ignoreExpectedException)
+		{
+		}
+		
+		// add an extra packet and make sure the validate fails
 	}
 
 	private void validateZipFile(String accountId, File copiedZipFile)
@@ -79,7 +117,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		copiedZip.close();
 	}
 
-	private File createCopyOfZipFile(File tempZipFile)
+	private File createCopyOfZipFile(File tempZipFile, String excludeStartsWith)
 		throws IOException, FileNotFoundException, ZipException
 	{
 		File copiedZipFile = createTempFile();
@@ -90,6 +128,8 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
+			if(excludeStartsWith != null && entry.getName().startsWith(excludeStartsWith))
+				continue;
 			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
 			zipOut.putNextEntry(entry);
 			int dataLength = (int)entry.getSize();

@@ -465,6 +465,12 @@ public class MartusUtilities
 			WrongAccountException,
 			DecryptionException 
 	{
+		BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		DatabaseKey[] keys = getAllPacketKeys(bhp);
+		Vector localIds = new Vector();
+		for (int i = 0; i < keys.length; i++)
+			localIds.add(keys[i].getLocalId());
+
 		//TODO validate Header Packet matches other packets
 		Enumeration entries = zip.entries();
 		if(!entries.hasMoreElements())
@@ -475,9 +481,13 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
+			localIds.remove(entry.getName());
 			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}
+		
+		if(localIds.size() > 0)
+			throw new IOException("Missing packets");
 	}
 
 	public static DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid) 

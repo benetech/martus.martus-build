@@ -190,6 +190,7 @@ public class BulletinHeaderPacket extends Packet
 	{
 		BulletinHeaderPacket header = new BulletinHeaderPacket("Unknown");
 		ZipEntry headerZipEntry = getBulletinHeaderEntry(zip);
+
 		InputStreamWithSeek headerIn = new ZipEntryInputStream(zip, headerZipEntry);
 		try
 		{
@@ -212,13 +213,17 @@ public class BulletinHeaderPacket extends Packet
 		return header;
 	}
 
-	static ZipEntry getBulletinHeaderEntry(ZipFile zip) 
+	static ZipEntry getBulletinHeaderEntry(ZipFile zip) throws IOException
 	{
 		Enumeration entries = zip.entries();
-		ZipEntry headerEntry = null;
 		while(entries.hasMoreElements())
-			headerEntry = (ZipEntry)entries.nextElement();
-		return headerEntry;
+		{
+			ZipEntry headerEntry = (ZipEntry)entries.nextElement();
+			if(isValidLocalId(headerEntry.getName()))
+				return headerEntry;
+		}
+		
+		throw new IOException("Missing header entry");
 	}
 	
 	protected String getPacketRootElementName()
