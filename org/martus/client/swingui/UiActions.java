@@ -491,7 +491,8 @@ public class UiActions
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			mainWindow.doDiscardBulletins();
+			if(isEnabled())
+				mainWindow.doDiscardBulletins();
 		}
 
 		public boolean isEnabled()

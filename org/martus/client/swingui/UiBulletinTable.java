@@ -464,6 +464,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		boolean okToDiscard = true;
 		Bulletin[] bulletins = getSelectedBulletins();
+		if(bulletins.length == 0 || bulletins[0] == null)
+			return;
 		if(bulletins.length == 1)
 		{
 			okToDiscard = confirmDiscardSingleBulletin(bulletins[0]);
