@@ -201,9 +201,7 @@ public class MartusServerUtilities
 		throws IOException, MartusSignatureException, InterruptedException, MartusSignatureFileAlreadyExistsException
 	{
 		Thread.sleep(1000);
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SimpleDateFormat formatDate = new SimpleDateFormat(MARTUS_SIGNATURE_FILE_DATE_FORMAT);
-		String dateStamp = formatDate.format(stamp);
+		String dateStamp = createTimeStamp();
 		
 		File sigDir = getPathToSignatureDirForFile(fileToSign);
 		File signatureFile = new File(sigDir.getPath() + File.separatorChar + fileToSign.getName() + "." + dateStamp + ".sig");
@@ -222,6 +220,14 @@ public class MartusServerUtilities
 
 
 		return signatureFile;
+	}
+
+	public static String createTimeStamp()
+	{
+		Timestamp stamp = new Timestamp(System.currentTimeMillis());
+		SimpleDateFormat formatDate = new SimpleDateFormat(MARTUS_SIGNATURE_FILE_DATE_FORMAT);
+		String dateStamp = formatDate.format(stamp);
+		return dateStamp;
 	}
 	
 	public synchronized static void writeSignatureFileWithDatestamp(File signatureFile, String date, File fileToSign, MartusCrypto signer)
