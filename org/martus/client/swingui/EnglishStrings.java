@@ -80,6 +80,7 @@ public class EnglishStrings
 "wintitle:confirmBackupKeyShareVerifyDisks=Verify Disks",
 "wintitle:confirmCancelShareVerify=Cancel Verification",
 "wintitle:confirmEditBulletinWithUnknownTags=Modify Bulletin",
+"wintitle:confirmExportUnknownTags=Export Bulletins",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -515,6 +516,8 @@ public class EnglishStrings
 "field:confirmCancelShareVerifyeffect=By choosing Yes, will exit this verification step.",
 "field:confirmEditBulletinWithUnknownTagscause=The bulletin you have chosen to modify contains information that this version of Martus cannot understand. It may have been created by a newer version of Martus, so you should ensure that you are running the latest version.",
 "field:confirmEditBulletinWithUnknownTagseffect=If you modify this bulletin, the unknown information will be lost.",
+"field:confirmExportUnknownTagscause=One or more of the bulletins you have chosen to export contain information that this version of Martus cannot understand. They may have been created by a newer version of Martus, so you should ensure that you are running the latest version.",
+"field:confirmExportUnknownTagseffect=If you continue with the export, any unknown information will not be exported.",
 
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",

@@ -101,12 +101,16 @@ public class BulletinXmlExporter
 		dest.write(MartusXml.getTagEnd(AttachmentsListElementName));
 	}
 
-	static void writeFields(Writer dest, Bulletin b, FieldSpec[] tags)
+	static void writeFields(Writer dest, Bulletin b, FieldSpec[] specs)
 		throws IOException
 	{
-		for (int i = 0; i < tags.length; i++)
+		for (int i = 0; i < specs.length; i++)
 		{
-			String tag = tags[i].getTag();
+			FieldSpec spec = specs[i];
+			if(spec.hasUnknownStuff())
+				continue;
+				
+			String tag = spec.getTag();
 			String rawFieldData = b.get(tag);
 			writeElement(dest, tag, rawFieldData);
 		}

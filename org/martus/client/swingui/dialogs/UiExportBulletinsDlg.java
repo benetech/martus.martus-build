@@ -44,6 +44,7 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
+import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinXmlExporter;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
@@ -59,16 +60,9 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 {
 	public UiExportBulletinsDlg(UiMainWindow mainWindowToUse, Vector bulletinsToExport, String defaultName)
 	{
-		mainWindow = mainWindowToUse;
 		defaultFileName = defaultName;
-		bulletins = bulletinsToExport;
-		constructDialog();
-	}
-
-	public UiExportBulletinsDlg(UiMainWindow mainWindowToUse, UniversalId[] selectedBulletins)
-	{
 		mainWindow = mainWindowToUse;
-		bulletins = findBulletins(selectedBulletins);
+		bulletins = bulletinsToExport;
 		constructDialog();
 	}
 
@@ -122,13 +116,13 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		show();
 	}
 
-	Vector findBulletins(UniversalId[] selectedBulletins)
+	public static Vector findBulletins(BulletinStore store, UniversalId[] selectedBulletins)
 	{
 		Vector bulletins = new Vector();
 		for (int i = 0; i < selectedBulletins.length; i++)
 		{
 			UniversalId uid = selectedBulletins[i];
-			Bulletin b = mainWindow.getStore().findBulletinByUniversalId(uid);
+			Bulletin b = store.findBulletinByUniversalId(uid);
 			bulletins.add(b);
 		}
 		return bulletins;
@@ -193,6 +187,19 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 	{
 		if(ae.getSource().equals(ok))
 		{
+			boolean hasUnknown = false;
+			for (int i = 0; i < bulletins.size(); i++)
+			{
+				Bulletin b = (Bulletin)bulletins.get(i);
+				if(b.hasUnknownTags() || b.hasUnknownCustomField())
+					hasUnknown = true;
+			}
+			if(hasUnknown)
+			{
+				if(!mainWindow.confirmDlg(null, "ExportUnknownTags"))
+					return;
+			}
+			
 			if(userWantsToExportPrivate())
 			{
 				if(!mainWindow.confirmDlg(null, "ExportPrivateData"))

@@ -1650,8 +1650,8 @@ if(result == NEW_ACCOUNT)
 			return;
 		}
 
-		new UiExportBulletinsDlg(this, uids);
-
+		Vector bulletins = UiExportBulletinsDlg.findBulletins(getStore(), uids);
+		new UiExportBulletinsDlg(this, bulletins, "");
 	}
 
 	public static boolean isAnyBulletinSelected(UiMainWindow window)
