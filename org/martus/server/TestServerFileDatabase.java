@@ -27,6 +27,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		goodDir2.delete();
 		goodDir2.mkdir();
 		serverFileDb = new ServerFileDatabase(goodDir2, security);
+		serverFileDb.initialize();
 	}
 	
 	public void testBasics() throws Exception
@@ -37,6 +38,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		dir.delete();
 		dir.mkdir();
 		ServerFileDatabase db = new ServerFileDatabase(dir, security);
+		db.initialize();
 				
 		key.setSealed();
 		File sealedFile = db.getFileForRecord(key);

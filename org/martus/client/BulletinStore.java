@@ -28,6 +28,9 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
+import org.martus.common.FileDatabase.MissingAccountMapException;
+import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
+import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.WrongAccountException;
 import org.martus.common.UniversalId.NotUniversalIdException;
 import org.xml.sax.Attributes;
@@ -45,25 +48,32 @@ import org.xml.sax.helpers.DefaultHandler;
 */
 public class BulletinStore
 {
-	public BulletinStore(File baseDirectory) throws FileDatabase.MissingAccountMapException, MartusUtilities.FileVerificationException
+	public BulletinStore(File baseDirectory, MartusCrypto cryptoToUse)
 	{
+		setSignatureGenerator(cryptoToUse);
 		File dbDirectory = new File(baseDirectory, "packets");
 		Database db = new ClientFileDatabase(dbDirectory, signer);
-		initialize(baseDirectory, db);
+		setUpStore(baseDirectory, db);
 	}
 	
 	public BulletinStore(Database db)
 	{
-		try {
+		try
+		{
 			File tempFile = File.createTempFile("$$$MartusBulletinStore", null);
 			File baseDirectory = tempFile.getParentFile();
 			tempFile.delete();
-			initialize(baseDirectory, db);
+			setUpStore(baseDirectory, db);
 		} 
 		catch(IOException e) 
 		{
 			System.out.println("BulletinStore: " + e);
 		}
+	}
+	
+	public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
+	{
+		database.initialize();
 	}
 	
 	public String getAccountId()
@@ -496,11 +506,11 @@ public class BulletinStore
 		return foldersContainingBulletin;
 	}
 	
-	public void deleteAllData()
+	public void deleteAllData() throws Exception
 	{
 		database.deleteAllData();
 		getFoldersFile().delete();
-		initialize(dir, database);
+		setUpStore(dir, database);
 	}
 
 	public Database getDatabase()
@@ -593,7 +603,7 @@ public class BulletinStore
 		folder.add(uId);
 	}
 
-	private void initialize(File baseDirectory, Database db)
+	private void setUpStore(File baseDirectory, Database db)
 	{
 		dir = baseDirectory;
 		database = db;

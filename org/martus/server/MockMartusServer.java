@@ -192,7 +192,7 @@ public class MockMartusServer extends MartusServer
 		authenticateResponse = response;	
 	}
 	
-	public void deleteAllData()
+	public void deleteAllData() throws Exception
 	{
 		getDatabase().deleteAllData();
 		lastClientId = null;

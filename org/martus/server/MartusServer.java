@@ -164,16 +164,22 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			System.out.println("MartusServer.main: " + e);
 			System.exit(3);
 		}
-		
-		Database diskDatabase = null;
+
+		Database diskDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"), server.getSecurity());
 		try
 		{
-			diskDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"), server.getSecurity());
+			diskDatabase.initialize();
 		}
 		catch(FileDatabase.MissingAccountMapException e)
 		{
 			e.printStackTrace();
 			System.out.println("Missing Account Map File");
+			System.exit(7);
+		}
+		catch(FileDatabase.MissingAccountMapSignatureException e)
+		{
+			e.printStackTrace();
+			System.out.println("Missing Account Map Signature File");
 			System.exit(7);
 		}
 		catch(FileVerificationException e)
@@ -195,7 +201,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				System.out.println("Unable to delete magicwords");
 				System.exit(4);
 			}
-
 			File keyPairFile = new File(server.startupConfigDirectory, getKeypairFilename());
 			if(!keyPairFile.delete())
 			{

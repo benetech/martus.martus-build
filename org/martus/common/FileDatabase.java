@@ -23,40 +23,38 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 
 public class FileDatabase implements Database
 {
-	public FileDatabase(File directory, MartusCrypto securityToUse) throws MissingAccountMapException, FileVerificationException
+	public FileDatabase(File directory, MartusCrypto securityToUse)
 	{
 		security = securityToUse;
-
-		accountMap = new TreeMap();
 		absoluteBaseDir = directory;
-		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
-		accountMapSignatureFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME + ".sig");
-		if(absoluteBaseDir.exists() && !accountMapFile.exists())
-		{
-			int fileCount = absoluteBaseDir.list().length;
-			if(fileCount > 0)
-				throw new MissingAccountMapException();
-		}
-		loadAccountMap();
 	}
 
 	public static class MissingAccountMapException extends Exception {}
+	public static class MissingAccountMapSignatureException extends Exception {}
 
 	// Database interface
-	public void deleteAllData()
+	public void deleteAllData() throws Exception
 	{
 		deleteAllPackets();
 
 		accountMapFile.delete();
 		if(accountMapSignatureFile.exists())
 			accountMapSignatureFile.delete();
-		try
-		{
+
 			loadAccountMap();
 		}
-		catch (FileVerificationException e)
+	
+	public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
+	{
+		accountMap = new TreeMap();
+		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
+		accountMapSignatureFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME + ".sig");
+		loadAccountMap();
+		if(absoluteBaseDir.exists() && !accountMapFile.exists())
 		{
-			;
+			int fileCount = absoluteBaseDir.list().length;
+			if(fileCount > 0)
+				throw new MissingAccountMapException();
 		}
 	}
 
@@ -519,22 +517,14 @@ public class FileDatabase implements Database
 		}
 	}
 
-	synchronized void loadAccountMap() throws FileVerificationException
+	synchronized void loadAccountMap() throws FileVerificationException, MissingAccountMapSignatureException
 	{
+		
+		accountMap.clear();
 
-//		try
-//		{
-//			verifyAccountMap();
-//		}
-//		catch(FileNotFoundException e)
-//		{
-//			;
-//		}
-//		catch(Exception e)
-//		{
-//			System.out.println("FileDatabase.verifyAccountMap: " + e);
-//			throw new FileVerificationException();
-//		}
+		if(!accountMapFile.exists()) return;
+
+		verifyAccountMap();
 
 		accountMap.clear();
 		try
@@ -762,17 +752,16 @@ public class FileDatabase implements Database
 		directory.delete();				
 	}
 	
-	private void signAccountMap() throws IOException, MartusCrypto.MartusSignatureException
+	public void signAccountMap() throws IOException, MartusCrypto.MartusSignatureException
 	{
 		accountMapSignatureFile = MartusUtilities.createSignatureFileFromFile(accountMapFile, security);
 	}
 	
-	private void verifyAccountMap() throws MartusUtilities.FileVerificationException, IOException, MartusCrypto.MartusSignatureException
+	private void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
 	{
 		if( !accountMapSignatureFile.exists() )
 		{
-			accountMapSignatureFile = MartusUtilities.createSignatureFileFromFile(accountMapFile, security);
-			return;
+			throw new MissingAccountMapSignatureException();
 		}
 		
 		MartusUtilities.verifyFileAndSignature(accountMapFile, accountMapSignatureFile, security, security.getPublicKeyString());

@@ -3,6 +3,7 @@ package org.martus.common;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
@@ -10,6 +11,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
+import org.martus.common.MartusUtilities.FileVerificationException;
 
 
 public class TestFileDatabase extends TestCaseEnhanced
@@ -26,9 +28,10 @@ public class TestFileDatabase extends TestCaseEnhanced
 		dir.delete();
 		dir.mkdir();
 		db = new FileDatabase(dir, security);
+		db.initialize();
 	}
 	
-	public void tearDown()
+	public void tearDown() throws Exception
 	{
 		db.deleteAllData();
 		assertTrue("Either a test failed or a file was left open.", dir.delete());
@@ -64,17 +67,60 @@ public class TestFileDatabase extends TestCaseEnhanced
 	}
 */
 	
-	public void testConstructorWhenNoMapExists() throws Exception
+	public void testInitializerWhenNoMapExists() throws Exception
 	{
 		db.getAccountDirectory("some stupid account");
 		db.accountMapFile.delete();
+		
+		FileDatabase fdb = new FileDatabase(dir, security);
 		try
 		{
-			new FileDatabase(dir, security);
-			fail("Should have thrown");
+			fdb.initialize();
+			fail("Should have thrown because map is missing");
 		}
 		catch(FileDatabase.MissingAccountMapException ignoreExpectedException)
 		{
+			;
+		}
+	}
+	
+	public void testInitializerWhenNoMapSignatureExists() throws Exception
+	{
+		db.getAccountDirectory("some stupid account");
+		db.accountMapSignatureFile.delete();
+		
+		FileDatabase fdb = new FileDatabase(dir, security);
+		try
+		{
+			fdb.initialize();
+			fail("Should have thrown because signature is missing");
+		}
+		catch(FileDatabase.MissingAccountMapSignatureException ignoreExpectedException)
+		{
+			;
+		}
+	}
+	
+	public void testInitializerWhenMapSignatureCorrupted() throws Exception
+	{
+		db.getAccountDirectory("some stupid account");
+
+		FileOutputStream out = new FileOutputStream(db.accountMapFile.getPath(), true);
+		UnicodeWriter writer = new UnicodeWriter(out);
+		writer.writeln("noacct=123456789");
+		writer.flush();
+		out.flush();
+		writer.close();
+		
+		FileDatabase fdb = new FileDatabase(dir, security);
+		try
+		{
+			fdb.initialize();
+			fail("Should have thrown because signature is corrupted");
+		}
+		catch(MartusUtilities.FileVerificationException ignoreExpectedException)
+		{
+			;
 		}
 	}
 
@@ -171,6 +217,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db.discardRecord(otherKey);
 
 		db = new FileDatabase(dir, security);
+		db.initialize();
 		assertEquals("count not back to one?", 1, getRecordCount());
 		
 		assertTrue("missing short?", db.doesRecordExist(shortKey));
@@ -361,6 +408,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		if( tmpDataDir.exists() ) tmpDataDir.delete();
 		tmpDataDir.mkdir();
 		FileDatabase fileDb = new FileDatabase(tmpDataDir, security);
+		fileDb.initialize();
 		
 		String bogusAccountId = "A false account id";
 		fileDb.getFolderForAccount(bogusAccountId);
@@ -372,6 +420,34 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertTrue("missing acctmap signature?", mapSigFile.exists());
 		
 		MartusUtilities.verifyFileAndSignature(acctMapFile, mapSigFile, security, security.getPublicKeyString());
+		
+		FileOutputStream out = new FileOutputStream(acctMapFile.getPath(), true);
+		UnicodeWriter writer = new UnicodeWriter(out);
+		writer.writeln("noacct=123456789");
+		writer.flush();
+		out.flush();
+		writer.close();
+				
+		try
+		{
+			MartusUtilities.verifyFileAndSignature(acctMapFile, mapSigFile, security, security.getPublicKeyString());
+			fail("Verification should have failed 1.");
+		}
+		catch(FileVerificationException expectedException)
+		{
+			;
+		}
+		
+		mapSigFile.delete();
+		try
+		{
+			MartusUtilities.verifyFileAndSignature(acctMapFile, mapSigFile, security, security.getPublicKeyString());
+			fail("Verification should have failed 2.");
+		}
+		catch (FileVerificationException expectedException)
+		{
+			;
+		}
 		
 		fileDb.deleteAllData();
 	}

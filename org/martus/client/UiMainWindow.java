@@ -55,6 +55,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
+import org.martus.client.MartusApp.MartusAppInitializationException;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
@@ -75,15 +76,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 		catch(MartusApp.MartusAppInitializationException e)
 		{
-			String title = "Error Starting Martus";
-			String cause = "Unable to start Martus: " + e.getMessage();
-			String ok = "OK";
-			String[] buttons = { ok };
-			JOptionPane pane = new JOptionPane(cause, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION,
-									null, buttons);
-			JDialog dialog = pane.createDialog(null, title);
-			dialog.show();
-			System.exit(1);
+			initializationErrorDlg(e.getMessage());
 		}
 		updateIcon(this);
 		
@@ -127,6 +120,16 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 
 		ConfigInfo info = app.getConfigInfo();
+
+		try
+		{
+			app.initializeDatabase();
+		}
+		catch (MartusAppInitializationException e)
+		{
+			initializationErrorDlg(e.getMessage());
+		}
+
 		if(!info.hasContactInfo())
 			doContactInfo();
 		else if(info.promptUserRequestSendToServer())
@@ -287,6 +290,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String[] buttons = {ok};
 		
 		UiNotifyDlg notify = new UiNotifyDlg(this, parent, title, contents, buttons);
+	}
+
+	private void initializationErrorDlg(String message)
+	{
+			String title = "Error Starting Martus";
+			String cause = "Unable to start Martus: " + message;
+			String ok = "OK";
+			String[] buttons = { ok };
+			JOptionPane pane = new JOptionPane(cause, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION,
+									null, buttons);
+			JDialog dialog = pane.createDialog(null, title);
+			dialog.show();
+			System.exit(1);
 	}
 
 	public String getStringInput(String baseTag, String description, String defaultText)

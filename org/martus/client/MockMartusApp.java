@@ -37,7 +37,7 @@ public class MockMartusApp extends MartusApp
 		super(crypto, dataDirectoryToUse);
 	}
 	
-	public void deleteAllFiles() throws IOException
+	public void deleteAllFiles() throws Exception
 	{
 		getStore().deleteAllData();
 		

@@ -114,7 +114,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_END();
 	}
 	
-	public void testConstructorExceptionForMissingAccountMap() throws Exception
+	public void testDbInitializerExceptionForMissingAccountMap() throws Exception
 	{
 		File fakeDataDirectory = null;
 		File packetDirectory = null;
@@ -133,7 +133,8 @@ public class TestMartusApp extends TestCaseEnhanced
 			
 			try
 			{
-				new MartusApp(mockSecurityForApp, fakeDataDirectory);
+				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
+				app.initializeDatabase();
 				fail("Should have thrown because map is missing");
 			}
 			catch(MartusApp.MartusAppInitializationException expectedException)
@@ -143,6 +144,125 @@ public class TestMartusApp extends TestCaseEnhanced
 		}
 		finally
 		{
+			if(subdirectory != null)
+				subdirectory.delete();
+			if(packetDirectory != null)
+				packetDirectory.delete();
+			if(fakeDataDirectory != null)
+			{
+				new File(fakeDataDirectory, "MartusConfig.dat").delete();
+				new File(fakeDataDirectory, "MartusConfig.sig").delete();
+				fakeDataDirectory.delete();
+			}
+		}
+	}
+	
+	public void testDbInitializerExceptionForMissingAccountMapSignature() throws Exception
+	{
+		File fakeDataDirectory = null;
+		File packetDirectory = null;
+		File subdirectory = null;
+		File acctMap = null;
+
+		try
+		{
+			fakeDataDirectory = File.createTempFile("$$$MartusTestApp", null);
+			fakeDataDirectory.deleteOnExit();
+			fakeDataDirectory.delete();
+			fakeDataDirectory.mkdir();
+			
+			packetDirectory = new File(fakeDataDirectory, "packets");
+			subdirectory = new File(packetDirectory, "anyfolder");
+			subdirectory.mkdirs();
+			
+			acctMap = new File(packetDirectory,"acctmap.txt");
+			acctMap.deleteOnExit();
+
+			FileOutputStream out = new FileOutputStream(acctMap.getPath(), true);
+			UnicodeWriter writer = new UnicodeWriter(out);
+			writer.writeln("noacct=123456789");
+			writer.flush();
+			out.flush();
+			writer.close();
+			
+			try
+			{
+				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
+				app.initializeDatabase();
+			}
+			catch(MartusApp.MartusAppInitializationException unExpectedException)
+			{
+				fail("Should not have thrown because of missing map signature");
+			}
+		}
+		finally
+		{
+			if(acctMap != null )
+				acctMap.delete();
+			if(subdirectory != null)
+				subdirectory.delete();
+			if(packetDirectory != null)
+				packetDirectory.delete();
+			if(fakeDataDirectory != null)
+			{
+				new File(fakeDataDirectory, "MartusConfig.dat").delete();
+				new File(fakeDataDirectory, "MartusConfig.sig").delete();
+				fakeDataDirectory.delete();
+			}
+		}
+	}
+	
+	public void testDbInitializerExceptionForInvalidAccountMapSignature() throws Exception
+	{
+		File fakeDataDirectory = null;
+		File packetDirectory = null;
+		File subdirectory = null;
+		File acctMap = null;
+		File signatureFile = null;
+
+		try
+		{
+			fakeDataDirectory = File.createTempFile("$$$MartusTestApp", null);
+			fakeDataDirectory.deleteOnExit();
+			fakeDataDirectory.delete();
+			fakeDataDirectory.mkdir();
+			
+			packetDirectory = new File(fakeDataDirectory, "packets");
+			subdirectory = new File(packetDirectory, "anyfolder");
+			subdirectory.mkdirs();
+			
+			acctMap = new File(packetDirectory,"acctmap.txt");
+			acctMap.deleteOnExit();
+
+			UnicodeWriter writer = new UnicodeWriter(acctMap);
+			writer.writeln("noacct=123456789");
+			writer.flush();
+			writer.close();
+			
+			signatureFile = new File(packetDirectory,"acctmap.txt.sig");
+			signatureFile.deleteOnExit();
+			
+			writer = new UnicodeWriter(signatureFile);
+			writer.writeln("a fake signature");
+			writer.flush();
+			writer.close();
+			
+			try
+			{
+				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
+				app.initializeDatabase();
+			}
+			catch(MartusApp.MartusAppInitializationException unExpectedException)
+			{
+				fail("Should not have thrown because of invalid map signature");
+			}
+		}
+		finally
+		{
+			if(acctMap != null )
+				acctMap.delete();
+			if(signatureFile != null)
+				signatureFile.delete();
 			if(subdirectory != null)
 				subdirectory.delete();
 			if(packetDirectory != null)
@@ -1717,7 +1837,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 	}
 	
-	public void testShouldShowSealedUploadReminderOnExit()
+	public void testShouldShowSealedUploadReminderOnExit() throws Exception
 	{
 		TRACE_BEGIN("testShouldShowSealedUploadReminderOnExit");
 		File file = appWithServer.getUploadInfoFile();
@@ -1741,7 +1861,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_END();
 	}
 
-	public void testShouldShowDraftUploadReminder()
+	public void testShouldShowDraftUploadReminder() throws Exception
 	{
 		TRACE_BEGIN("testShouldShowDraftUploadReminder");
 		File file = appWithServer.getUploadInfoFile();

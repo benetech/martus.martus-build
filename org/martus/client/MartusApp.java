@@ -42,7 +42,10 @@ import org.martus.common.NetworkResponse;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
+import org.martus.common.FileDatabase.MissingAccountMapException;
+import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.WrongAccountException;
@@ -76,25 +79,16 @@ public class MartusApp
 			dataDirectory = dataDirectoryToUse.getPath() + "/";
 			security = cryptoToUse;
 			localization = new MartusLocalization();
-			store = new BulletinStore(dataDirectoryToUse);
-			store.setSignatureGenerator(cryptoToUse);
+			store = new BulletinStore(dataDirectoryToUse, cryptoToUse);
 			store.setEncryptPublicData(true);
 			configInfo = new ConfigInfo();
 
 			currentUserName = "";
 			maxNewFolders = MAXFOLDERS;
 		}
-		catch(FileDatabase.MissingAccountMapException e)
-		{
-			throw new MartusAppInitializationException("ErrorMissingAccountMap");
-		}
 		catch(MartusCrypto.CryptoInitializationException e)
 		{
 			throw new MartusAppInitializationException("ErrorCryptoInitialization");
-		}
-		catch(MartusUtilities.FileVerificationException e)
-		{
-			throw new MartusAppInitializationException("ErrorAccountMapVerification");
 		}
 
 		File languageFlag = new File(getDataDirectory(),"lang.es");
@@ -246,6 +240,28 @@ public class MartusApp
 			//System.out.println("Loadconfiginfo: " + e);
 			throw new LoadConfigInfoException();
 		}
+	}
+	
+	public void initializeDatabase() throws MartusAppInitializationException
+	{
+			try
+			{
+				store.initialize();
+			}
+			catch (MissingAccountMapException e)
+			{
+				throw new MartusAppInitializationException("ErrorMissingAccountMap");
+			}
+			catch (FileVerificationException handlingPostponedException)
+			{
+				// For now, ignore problems with the account map sig
+				System.out.println("initializeDatabase: FileVerificationException = " + handlingPostponedException);
+			}
+			catch (MissingAccountMapSignatureException handlingPostponedException)
+			{
+				// For now, ignore problems with the account map sig
+				System.out.println("initializeDatabase: MissingAccountMapSignatureException = " + handlingPostponedException);
+			}
 	}
 	
 	public String getDataDirectory()

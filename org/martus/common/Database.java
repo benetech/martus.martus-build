@@ -5,9 +5,14 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 
+import org.martus.common.FileDatabase.MissingAccountMapException;
+import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
+import org.martus.common.MartusUtilities.FileVerificationException;
+
 public interface Database
 {
-	public void deleteAllData();
+	public void deleteAllData() throws Exception;
+	public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException;
 	public void writeRecord(DatabaseKey key, String record) throws IOException;
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws IOException, MartusCrypto.CryptoException;
 	public void writeRecord(DatabaseKey key, InputStream record) throws IOException;

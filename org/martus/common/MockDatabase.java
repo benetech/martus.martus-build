@@ -17,6 +17,8 @@ import java.util.TreeMap;
 import java.util.Vector;
 
 import org.martus.common.Database.PacketVisitor;
+import org.martus.common.FileDatabase.MissingAccountMapException;
+import org.martus.common.MartusUtilities.FileVerificationException;
 
 
 abstract public class MockDatabase implements Database
@@ -32,6 +34,12 @@ abstract public class MockDatabase implements Database
 	}
 
 	// Database interface
+	public void initialize() throws FileVerificationException, MissingAccountMapException
+	{}
+	
+	public void signAccountMap()
+	{}
+	
 	synchronized public void deleteAllData()
 	{
 		sealedQuarantine = new TreeMap();

@@ -9,9 +9,7 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 public class ClientFileDatabase extends FileDatabase 
 {
 	public ClientFileDatabase(File directory, MartusCrypto security)
-		throws MissingAccountMapException, FileVerificationException 
 	{
 		super(directory, security);
 	}
-
 }

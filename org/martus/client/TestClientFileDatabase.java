@@ -28,6 +28,7 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 		tempDir.delete();
 		tempDir.mkdir();
 		Database clientFileDatabase = new ClientFileDatabase(tempDir, security);
+		clientFileDatabase.initialize();
 		
 		internalTestFindLegacyRecords(mockDatabase);
 		internalTestFindLegacyRecords(clientFileDatabase);

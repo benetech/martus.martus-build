@@ -38,16 +38,18 @@ public class TestDatabase extends TestCaseEnhanced
 		goodDir1.delete();
 		goodDir1.mkdir();
 		clientFileDb = new ClientFileDatabase(goodDir1, security);
+		clientFileDb.initialize();
 		
 		goodDir2 = createTempFile();
 		goodDir2.delete();
 		goodDir2.mkdir();
 		serverFileDb = new ServerFileDatabase(goodDir2, security);
+		serverFileDb.initialize();
 		
 		largeBytes = largeString.getBytes("UTF-8");
 	}
 
-	public void tearDown()
+	public void tearDown() throws Exception
 	{
 		mockDb.deleteAllData();
 		clientFileDb.deleteAllData();

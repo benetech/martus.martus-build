@@ -51,6 +51,7 @@ public class VerifyAllPackets
 		{
 			MartusSecurity security = new MartusSecurity();
 			ServerFileDatabase db = new ServerFileDatabase(dir,security);
+			db.initialize();
 			verifyAllPackets(db, security);
 		}
 		catch (Exception e)

@@ -226,6 +226,7 @@ public class TestSpeed extends TestCaseEnhanced
 		dir.delete();
 		dir.mkdirs();
 		Database db = new ClientFileDatabase(dir, security);
+		db.initialize();
 
 		timeAttachments(db, 1);
 		timeAttachments(db, 100 * 1024);
