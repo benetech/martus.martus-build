@@ -17,11 +17,21 @@ public class IsPassphraseValid
 {
 	public static void main(String[] args)
 	{
-			if( args.length == 0 || !args[0].startsWith("--file") ) error("incorrect argument");
+			if( args.length == 0 || !args[0].startsWith("--file") )
+			{
+					System.err.println("Error: Incorrect argument.\nIsPassphraseValid --file=/path/keypair.dat" );
+					System.err.flush();
+					System.exit(2);
+			}
 
 			File keyPairFile = new File(args[0].substring(args[0].indexOf("=")+1));
 			
-			if(!keyPairFile.isFile() || !keyPairFile.exists() ) error(keyPairFile.toString() + " is not a file");
+			if(!keyPairFile.isFile() || !keyPairFile.exists() )
+			{
+				System.err.println("Error: " + keyPairFile.getAbsolutePath() + " is not a file" );
+				System.err.flush();
+				System.exit(3);
+			}
 
 			BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 			String passphrase = null;
@@ -31,7 +41,9 @@ public class IsPassphraseValid
 			}
 			catch (IOException e)
 			{
-				error(e.toString());
+				System.err.println("Error: " + e.toString() );
+				System.err.flush();
+				System.exit(3);
 			}
 
 			try
@@ -40,21 +52,17 @@ public class IsPassphraseValid
 			}
 			catch(AuthorizationFailedException e)
 			{
-				//System.err.println("failed: " + e);
-				System.exit(1);
+				System.err.println("Error: " + e.toString() );
+				System.err.flush();
+				System.exit(3);
 			}
 			catch(Exception e)
 			{
-				error(e.toString());
+				System.err.println("Error: " + e.toString() );
+				System.err.flush();
+				System.exit(3);
 			}
 			System.exit(0);
-	}
-	
-	private static void error(String msg)
-	{
-		System.err.println(msg);
-		System.err.flush();
-		System.exit(2);
 	}
 
 	private static void loadCurrentMartusSecurity(File keyPairFile, String passphrase)

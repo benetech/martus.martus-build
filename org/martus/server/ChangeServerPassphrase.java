@@ -24,17 +24,17 @@ public class ChangeServerPassphrase
 
 			if( args.length == 0 || !args[0].startsWith("--file"))
 			{
-					System.out.println("Error: Incorrect argument.\nChangeServerPassphrase --file=/path/keypair.dat" );
-					System.out.flush();
-					System.exit(1);				
+					System.err.println("Error: Incorrect argument.\nChangeServerPassphrase --file=/path/keypair.dat" );
+					System.err.flush();
+					System.exit(2);				
 			}
 			File keyPairFile = new File(args[0].substring(args[0].indexOf("=")+1));
 
 			if(!keyPairFile.exists())
 			{
-				System.out.println("Error: There is no keypair file at location " + keyPairFile + "." );
-				System.out.flush();
-				System.exit(1);
+				System.err.println("Error: There is no keypair file at location " + keyPairFile.getAbsolutePath() + "." );
+				System.err.flush();
+				System.exit(3);
 			}
 
 			System.out.print("Enter current passphrase:");
@@ -63,16 +63,18 @@ public class ChangeServerPassphrase
 				}
 				else
 				{
-					throw new NewPasswordsNotSame();
+					System.err.println("Passwords not the same");
+					System.exit(3);
 				}
 			}
 			catch(Exception e)
 			{
-				System.out.println("ChangeServerPassphrase.main: " + e);
+				System.err.println("ChangeServerPassphrase.main: " + e);
 				System.exit(3);
 			}
 			System.out.println("Server passphrase updated.");
-			System.out.flush();			
+			System.out.flush();
+			System.exit(0);
 	}
 	
 	private static void updateMartusPassphrase(File keyPairFile, String newPassphrase, MartusCrypto security)
@@ -91,6 +93,4 @@ public class ChangeServerPassphrase
 		in.close();
 		return security;
 	}
-	
-	public static class NewPasswordsNotSame extends Exception {}
 }

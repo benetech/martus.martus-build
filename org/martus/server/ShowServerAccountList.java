@@ -28,11 +28,12 @@ public class ShowServerAccountList
 		
 		if(!dataDir.exists() || !dataDir.isDirectory() )
 		{
-			System.out.println("Error: " + dataDir + " is not a valid data directory.");
-			System.exit(1);
+			System.err.println("Error: " + dataDir + " is not a valid data directory.");
+			System.exit(2);
 		}
 
 		new ShowServerAccountList(dataDir);
+		System.exit(0);
 	}
 	
 	ShowServerAccountList(File dataDirectory) throws CryptoInitializationException, MissingAccountMapException, FileVerificationException

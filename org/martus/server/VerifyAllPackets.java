@@ -32,8 +32,8 @@ public class VerifyAllPackets
 		}
 		else if(!args[0].startsWith("--packet-directory="))
 		{
-			System.out.println("  Usage: VerifyAllPackets [--packet-directory=<directory>]");
-			System.exit(1);
+			System.err.println("  Usage: VerifyAllPackets [--packet-directory=<directory>]");
+			System.exit(2);
 		}
 		else
 		{
@@ -42,9 +42,8 @@ public class VerifyAllPackets
 		
 		if(!dir.exists() || !dir.isDirectory())
 		{
-			System.out.println();
-			System.out.println("Cannot find directory: " + dir);
-			System.exit(2);
+			System.err.println("Cannot find directory: " + dir);
+			System.exit(3);
 		}
 		
 		try
@@ -56,7 +55,7 @@ public class VerifyAllPackets
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
+			System.err.println("Error: " + e.getMessage());
 			System.exit(3);
 		}
 		
@@ -118,8 +117,7 @@ public class VerifyAllPackets
 			}
 			catch (Exception e)
 			{
-				System.out.println();
-				System.out.println("Exception on packet: " + visitingLocalId);
+				System.err.println("Exception on packet: " + visitingLocalId);
 				e.printStackTrace();
 			}
 			
