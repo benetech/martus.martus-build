@@ -83,14 +83,13 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		hBoxOk.add(ok);
 		hBoxOk.add(Box.createHorizontalGlue());
 
+		final String disclaimer = app.getFieldLabel("aboutDlgDisclaimer");
+		final String credits = app.getFieldLabel("aboutDlgCredits");
+		final String notice = "\n" + disclaimer + "\n\n" + credits + "\n\n" + 
+					RSANOTICE + "\n" + IBMNOTICE + "\n" + APACHENOTICE;
+
 		Box vBoxDetails = Box.createVerticalBox();		
-		vBoxDetails.add(new JLabel(" "));
-		vBoxDetails.add(new JLabel(app.getFieldLabel("aboutDlgLine3")));
-		vBoxDetails.add(new JLabel(app.getFieldLabel("aboutDlgLine4")));
-		vBoxDetails.add(new JLabel(" "));
-		vBoxDetails.add(new JLabel(RSANOTICE));
-		vBoxDetails.add(new JLabel(IBMNOTICE));
-		vBoxDetails.add(new JLabel(" "));
+		vBoxDetails.add(new UiWrappedTextArea(this, notice));
 		vBoxDetails.add(hBoxOk);
 
 		Box hBoxDetails = Box.createHorizontalBox();
@@ -105,7 +104,6 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		Dimension size = getSize();
 		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
 		setLocation(MartusApp.center(size, screen));
-		setResizable(false);
 		show();
 	}
 
@@ -123,5 +121,6 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		} 
 	}
 	final String RSANOTICE = "This product includes code licensed from RSA Security, Inc.";
-	final String IBMNOTICE = "Some portions licensed from IBM are available at http://oss.software.ibm.com/icu4j/";
+	final String IBMNOTICE = "Some portions licensed from IBM are available at http://oss.software.ibm.com/icu4j/.";
+	final String APACHENOTICE = "This product includes software developed by the Apache Software Foundation (http://www.apache.org/).";
 }

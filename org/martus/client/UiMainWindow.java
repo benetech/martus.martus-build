@@ -53,7 +53,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
-import java.sql.Timestamp;
 import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -125,10 +124,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public boolean run()
 	{
 		mainWindowInitalizing = true;	
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		Timestamp expire = Timestamp.valueOf("2003-01-15 1:00:00.000000000");
-		if(stamp.after(expire))
-			notifyDlg(this, "BetaExpired");
 
 		if(app.doesAccountExist())
 		{
@@ -1485,8 +1480,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			return false;
 		String userName = newUserInfo.getUserName();
 		String userPassword = newUserInfo.getPassword();
-		//TODO remove this for final release
-		notifyDlg(this, "WarningBetaCopy");
+
 		UiModelessBusyDlg waitingForKeyPair = new UiModelessBusyDlg(app.getFieldLabel("waitingForKeyPairGeneration"));
 		try
 		{
