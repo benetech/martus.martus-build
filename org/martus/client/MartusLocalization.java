@@ -401,6 +401,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:search=Search");
 		addEnglishTranslation("wintitle:saveBackupKeyPair=Back up key pair file");
 		addEnglishTranslation("wintitle:BulletinPreview=Bulletin Preview");
+		addEnglishTranslation("wintitle:DeleteBulletinFile=Delete Bulletin File");
 
 		addEnglishTranslation("button:file=File");
 		addEnglishTranslation("button:edit=Edit");
@@ -439,6 +440,8 @@ public class MartusLocalization
 		addEnglishTranslation("button:DownloadableSummaries=Show bulletins that are only on the server.");
 		addEnglishTranslation("button:AllSummaries=Show all bulletins on this server and on this computer.");
 		addEnglishTranslation("button:Preview=Preview");
+		addEnglishTranslation("button:Delete=Delete");
+		addEnglishTranslation("button:Leave=Leave");
 
 		
 		addEnglishTranslation("button:FolderTreeRoot=Folders");
@@ -579,12 +582,13 @@ public class MartusLocalization
 		addEnglishTranslation("field:NoServerAvailableProgressMessage=Server Not Available");
 		addEnglishTranslation("field:UploadFailedProgressMessage=Upload Failed");
 		addEnglishTranslation("field:BulletinSize=Size (Kb)");
-		
 		addEnglishTranslation("field:ChunkProgressStatusMessage=Download Progress");
 		addEnglishTranslation("field:RetrieveMySealedBulletinSummaries=Retrieving Sealed Bulletin Summaries");
 		addEnglishTranslation("field:RetrieveMyDraftBulletinSummaries=Retrieving Draft Bulletin Summaries");
 		addEnglishTranslation("field:RetrieveHQSealedBulletinSummaries=Retrieving Field Desk Sealed Bulletin Summaries");
 		addEnglishTranslation("field:RetrieveHQDraftBulletinSummaries=Retrieving Field Desk Draft Bulletin Summaries");
+		addEnglishTranslation("field:DeleteBulletinFileMsg1=This bulletin has been pasted into Martus from the file:");
+		addEnglishTranslation("field:DeleteBulletinFileMsg2=Do you want to delete the original file, or leave it in place?");
 
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");
