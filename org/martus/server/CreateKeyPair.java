@@ -35,13 +35,6 @@ public class CreateKeyPair
 			System.exit(2);
 		}
 		
-		if(!keyPairFile.isFile() || !keyPairFile.exists() )
-		{
-			System.err.println("Error: " + keyPairFile.getAbsolutePath() + " is not a file" );
-			System.err.flush();
-			System.exit(3);
-		}
-		
 		if(prompt)
 		{
 			System.out.print("Enter passphrase: ");
