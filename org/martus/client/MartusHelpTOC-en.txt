@@ -1,0 +1,17 @@
+Installing Martus
+Uninstalling Martus
+Creating a username and password
+Contact information
+Setting up a server connection
+Changing the user interface language
+Changing the date format
+Creating a bulletin
+About the fields in a bulletin
+Editing a draft
+Using a template in the Details field
+Saving a draft
+Sending a bulletin
+Discarding the draft
+About using folders in Martus
+About the default folders
+About special folders Martus creates
