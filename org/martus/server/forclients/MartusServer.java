@@ -18,7 +18,6 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
@@ -54,7 +53,6 @@ import org.martus.common.Packet.WrongPacketTypeException;
 import org.martus.server.core.ServerConstants;
 import org.martus.server.core.ServerFileDatabase;
 import org.martus.server.core.XmlRpcThread;
-import org.martus.server.formirroring.MirroringRetriever;
 import org.martus.server.formirroring.ServerForMirroring;
 
 public class MartusServer implements NetworkInterfaceConstants
@@ -119,17 +117,9 @@ public class MartusServer implements NetworkInterfaceConstants
 		serverForClients = new ServerForClients(this);
 		failedUploadRequestsPerIp = new Hashtable();
 		
-		startTimer(new ShutdownRequestMonitor(), shutdownRequestIntervalMillis);
-		startTimer(new UploadRequestsMonitor(), getUploadRequestTimerInterval());
-		startTimer(new MirroringTask(null), mirroringIntervalMillis);
+		MartusUtilities.startTimer(new ShutdownRequestMonitor(), shutdownRequestIntervalMillis);
+		MartusUtilities.startTimer(new UploadRequestsMonitor(), getUploadRequestTimerInterval());
 	}
-
-	private void startTimer(TimerTask uploadRequestTask, long interval)
-	{
-		Timer failedUploadRequestsTimer = new Timer(true);
-		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, interval);
-	}
-
 
 	private void displayServerPublicCode() throws InvalidBase64Exception
 	{
@@ -2165,21 +2155,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 
-	private class MirroringTask extends TimerTask
-	{
-		MirroringTask(MirroringRetriever retrieverToUse)
-		{
-		}
-		
-		public void run()
-		{
-			if(mirrorRetriever != null)
-				mirrorRetriever.tick();
-		}
-
-		MirroringRetriever mirrorRetriever;
-	}
-	
 
 	public MartusCrypto security;
 	ServerForMirroring serverForMirroring;
@@ -2203,10 +2178,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
 	private static final String ADMINSTARTUPCONFIGDIRECTORY = "deleteOnStartup";
 	
-	private final long IMMEDIATELY = 0;
 	private final int MAX_FAILED_UPLOAD_ATTEMPTS = 100;
 	private static final long magicWordsGuessIntervalMillis = 60 * 1000;
 	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
-	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
 }

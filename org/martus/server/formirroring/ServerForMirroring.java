@@ -2,6 +2,7 @@ package org.martus.server.formirroring;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.TimerTask;
 import java.util.Vector;
 
 import org.martus.common.Base64;
@@ -26,6 +27,8 @@ public class ServerForMirroring implements ServerSupplierInterface
 		authorizedCallers = new Vector();
 		coreServer = coreServerToUse;
 		loadServersWhoAreAuthorizedToCallUs();
+
+		MartusUtilities.startTimer(new MirroringTask(null), mirroringIntervalMillis);
 	}
 
 	public void addListeners()
@@ -156,6 +159,23 @@ public class ServerForMirroring implements ServerSupplierInterface
 		authorizedCallers.add(publicKey);
 	}
 	
+	private class MirroringTask extends TimerTask
+	{
+		MirroringTask(MirroringRetriever retrieverToUse)
+		{
+		}
+		
+		public void run()
+		{
+			if(mirrorRetriever != null)
+				mirrorRetriever.tick();
+		}
+
+		MirroringRetriever mirrorRetriever;
+	}
+	
 	MartusServer coreServer;
 	Vector authorizedCallers;
+
+	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
 }

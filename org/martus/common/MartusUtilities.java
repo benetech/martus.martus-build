@@ -42,6 +42,8 @@ import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
 import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -1039,6 +1041,14 @@ public class MartusUtilities
 	
 		return sslContext.getSocketFactory();
 	
+	}
+
+	public static void startTimer(TimerTask task, long interval)
+	{
+		final long IMMEDIATELY = 0;
+	
+		Timer timer = new Timer(true);
+		timer.schedule(task, IMMEDIATELY, interval);
 	}
 
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
