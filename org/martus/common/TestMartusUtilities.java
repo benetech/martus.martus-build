@@ -124,7 +124,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 		try
 		{
-			Vector result = MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
+			MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
 		}
 		catch (InvalidPublicKeyFileException ignoreExpectedException)
 		{
@@ -136,7 +136,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		File keyFile = new File(BAD_FILENAME);
 		try
 		{
-			Vector result = MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
+			MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
 			fail("should have thrown");
 		}
 		catch (IOException ignoreExpectedException)
@@ -163,7 +163,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 		try
 		{
-			Vector result = MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
+			MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
 			fail("should have thrown");
 		}
 		catch (PublicInformationInvalidException ignoreExpectedException)
