@@ -53,7 +53,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		{
 			case cmdPing:
 			{
-				result.add(OK);
+				result.add(RESULT_OK);
 				return result;
 			}
 			case cmdListAccountsForMirroring:
@@ -107,7 +107,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 	int extractCommand(Object possibleCommand)
 	{
 		String cmdString = (String)possibleCommand;
-		if(cmdString.equals(CMD_PING))
+		if(cmdString.equals(CMD_PING_FOR_MIRRORING))
 			return cmdPing;
 
 		if(cmdString.equals(CMD_LIST_ACCOUNTS_FOR_MIRRORING))

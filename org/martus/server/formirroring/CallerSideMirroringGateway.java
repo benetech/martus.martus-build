@@ -14,6 +14,14 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 		handler = handlerToUse;
 	}
 	
+	public NetworkResponse ping(MartusCrypto signer) throws MartusSignatureException
+	{
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_PING_FOR_MIRRORING);
+		String signature = MartusUtilities.sign(parameters, signer);
+		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
+	}
+
 	public NetworkResponse listAccountsForMirroring(MartusCrypto signer) throws MartusSignatureException
 	{
 		Vector parameters = new Vector();

@@ -1992,6 +1992,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	private void createServerForMirroring()
 	{
 		serverForMirroring = new ServerForMirroring(this);
+		serverForMirroring.addListeners();
 	}
 
 	private void createServerForClients()

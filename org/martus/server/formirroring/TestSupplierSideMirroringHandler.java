@@ -76,7 +76,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_PING);
+		parameters.add(MirroringInterface.CMD_PING_FOR_MIRRORING);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(accountId, parameters, sig);
 		assertEquals(1, result.size());

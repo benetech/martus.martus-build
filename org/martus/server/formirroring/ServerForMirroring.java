@@ -16,6 +16,10 @@ public class ServerForMirroring implements ServerSupplierInterface
 	public ServerForMirroring(MartusServer coreServerToUse)
 	{
 		coreServer = coreServerToUse;
+	}
+
+	public void addListeners()
+	{
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this, getSecurity());
 		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, port);
