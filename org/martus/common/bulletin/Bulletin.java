@@ -154,6 +154,16 @@ public class Bulletin implements BulletinConstants
 	{
 		return getBulletinHeaderPacket().getStatus();
 	}
+	
+	public String[] getPublicFieldTags()
+	{
+		return fieldData.getFieldTags();
+	}
+	
+	public String[] getPrivateFieldTags()
+	{
+		return privateFieldData.getFieldTags();
+	}
 
 	public void set(String fieldName, String value)
 	{

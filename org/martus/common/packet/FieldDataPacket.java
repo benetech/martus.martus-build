@@ -40,9 +40,13 @@ import java.util.Vector;
 import org.martus.common.MartusXml;
 import org.martus.common.XmlWriterFilter;
 import org.martus.common.bulletin.AttachmentProxy;
-import org.martus.common.crypto.*;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.DecryptionException;
 import org.martus.common.crypto.MartusCrypto.EncryptionException;
-import org.martus.util.*;
+import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
+import org.martus.util.Base64;
+import org.martus.util.ByteArrayInputStreamWithSeek;
+import org.martus.util.InputStreamWithSeek;
 
 
 public class FieldDataPacket extends Packet
@@ -187,45 +191,57 @@ public class FieldDataPacket extends Packet
 	{
 		setEncrypted(false);
 		super.loadFromXmlInternal(inputStream, expectedSig, verifier);
-		if(encryptedDataDuringLoad != null)
+		if(encryptedDataDuringLoad == null)
+			return;
+
+		if(verifier == null)
+			throw new MartusCrypto.DecryptionException();
+
+		String encryptedData = encryptedDataDuringLoad;
+		encryptedDataDuringLoad = null;
+		loadFromXmlEncrypted(encryptedData, verifier);
+	}
+
+	private void loadFromXmlEncrypted(String encryptedData, MartusCrypto verifier)
+		throws
+			NoKeyPairException,
+			DecryptionException,
+			IOException,
+			InvalidPacketException,
+			WrongPacketTypeException,
+			SignatureVerificationException
+	{
+		try
 		{
-			if(verifier == null)
+			byte[] encryptedBytes = Base64.decode(encryptedData);
+			ByteArrayInputStreamWithSeek inEncrypted = new ByteArrayInputStreamWithSeek(encryptedBytes);
+			ByteArrayOutputStream outPlain = new ByteArrayOutputStream();
+			if(getAccountId().equals(verifier.getPublicKeyString()))
+				verifier.decrypt(inEncrypted, outPlain);
+			else if(encryptedHQSessionKeyDuringLoad != null)
+			{
+				byte[] encryptedHQSessionKey = Base64.decode(encryptedHQSessionKeyDuringLoad);
+				byte[] hqSessionKey = verifier.decryptSessionKey(encryptedHQSessionKey);
+				verifier.decrypt(inEncrypted, outPlain, hqSessionKey);
+			}
+			else
+			{
 				throw new MartusCrypto.DecryptionException();
-
-			String encryptedData = encryptedDataDuringLoad;
-			encryptedDataDuringLoad = null;
-			try
-			{
-				byte[] encryptedBytes = Base64.decode(encryptedData);
-				ByteArrayInputStreamWithSeek inEncrypted = new ByteArrayInputStreamWithSeek(encryptedBytes);
-				ByteArrayOutputStream outPlain = new ByteArrayOutputStream();
-				if(getAccountId().equals(verifier.getPublicKeyString()))
-					verifier.decrypt(inEncrypted, outPlain);
-				else if(encryptedHQSessionKeyDuringLoad != null)
-				{
-					byte[] encryptedHQSessionKey = Base64.decode(encryptedHQSessionKeyDuringLoad);
-					byte[] hqSessionKey = verifier.decryptSessionKey(encryptedHQSessionKey);
-					verifier.decrypt(inEncrypted, outPlain, hqSessionKey);
-				}
-				else
-				{
-					throw new MartusCrypto.DecryptionException();
-				}
-
-				byte[] plainXmlBytes = outPlain.toByteArray();
-				ByteArrayInputStreamWithSeek inPlainXml = new ByteArrayInputStreamWithSeek(plainXmlBytes);
-				UniversalId outerId = getUniversalId();
-				loadFromXml(inPlainXml, verifier);
-				if(outerId != getUniversalId())
-				{
-					// TODO: make sure this has a test!
-					throw new InvalidPacketException("Inner and outer ids are different");
-				}
 			}
-			catch(Base64.InvalidBase64Exception e)
+		
+			byte[] plainXmlBytes = outPlain.toByteArray();
+			ByteArrayInputStreamWithSeek inPlainXml = new ByteArrayInputStreamWithSeek(plainXmlBytes);
+			UniversalId outerId = getUniversalId();
+			loadFromXml(inPlainXml, verifier);
+			if(outerId != getUniversalId())
 			{
-				throw new InvalidPacketException("Base64Exception");
+				// TODO: make sure this has a test!
+				throw new InvalidPacketException("Inner and outer ids are different");
 			}
+		}
+		catch(Base64.InvalidBase64Exception e)
+		{
+			throw new InvalidPacketException("Base64Exception");
 		}
 	}
 

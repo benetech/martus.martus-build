@@ -30,13 +30,10 @@ import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.List;
 
-import org.martus.client.core.BulletinStore;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
@@ -203,20 +200,6 @@ public class TestBulletin extends TestCaseEnhanced
 		b.clear();
 		assertEquals("public info not cleared?", "", b.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info not cleared?", "", b.get(Bulletin.TAGPRIVATEINFO));
-	}
-
-	public void testGetStandardFieldNames()
-	{
-		List names = Arrays.asList(BulletinStore.getDefaultPublicFieldTags());
-		assertEquals(true, names.contains("author"));
-		assertEquals(false, names.contains("privateinfo"));
-		assertEquals(false, names.contains("nope"));
-		assertEquals(true, names.contains("language"));
-		assertEquals(true, names.contains("organization"));
-
-		List privateNames = Arrays.asList(BulletinStore.getDefaultPrivateFieldTags());
-		assertEquals(true, privateNames.contains("privateinfo"));
-		assertEquals(false, privateNames.contains("nope"));
 	}
 
 	public void testGetFieldType()

@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -41,8 +42,8 @@ import org.martus.common.MartusXml;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
-import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinForTesting;
+import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -102,6 +103,20 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		assertEquals("wrong author?", "", b.get("Author"));
 		assertEquals("wrong account?", security.getPublicKeyString(), b.getAccount());
+	}
+
+	public void testGetStandardFieldNames()
+	{
+		List names = Arrays.asList(BulletinStore.getDefaultPublicFieldTags());
+		assertEquals(true, names.contains("author"));
+		assertEquals(false, names.contains("privateinfo"));
+		assertEquals(false, names.contains("nope"));
+		assertEquals(true, names.contains("language"));
+		assertEquals(true, names.contains("organization"));
+
+		List privateNames = Arrays.asList(BulletinStore.getDefaultPrivateFieldTags());
+		assertEquals(true, privateNames.contains("privateinfo"));
+		assertEquals(false, privateNames.contains("nope"));
 	}
 
 	public void testGetAllBulletinUids() throws Exception
