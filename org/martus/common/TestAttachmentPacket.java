@@ -1,0 +1,230 @@
+package org.martus.common;
+
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.util.Arrays;
+
+
+
+public class TestAttachmentPacket extends TestCaseEnhanced
+{
+
+	public TestAttachmentPacket(String name)
+	{
+		super(name);
+	}
+
+	public void setUp() throws Exception
+	{
+		if(tempFile == null)
+		{
+			tempFile = File.createTempFile("$$$MartusTestAttIn", null);
+			tempFile.deleteOnExit();
+			FileOutputStream out = new FileOutputStream(tempFile);
+			out.write(sampleBytes);
+			out.close();
+		}
+		if(security == null)
+		{
+			int SHORTEST_LEGAL_KEY_SIZE = 512;
+			security = new MartusSecurity();
+			security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
+		}
+	}
+	
+	public void testCreateUniversalId()
+	{
+		String sampleAccount = "an account";
+		UniversalId uid = AttachmentPacket.createUniversalId(sampleAccount);
+		assertEquals("account", sampleAccount, uid.getAccountId());
+		assertStartsWith("prefix", "A-", uid.getLocalId());
+	}
+	
+	public void testCreateXmlFromFile() throws Exception
+	{
+		String account = security.getPublicKeyString();
+		AttachmentProxy a = new AttachmentProxy(tempFile);
+		AttachmentPacket ap = new AttachmentPacket(account, security.createSessionKey(), a.getFile(), security);
+		assertNotNull("null packet?", ap);
+		assertEquals("account", account, ap.getAccountId());
+
+		ByteArrayOutputStream dest = new ByteArrayOutputStream();
+		ap.writeXml(dest, security);
+		byte[] resultBytes = dest.toByteArray();
+		String result = new String(resultBytes);
+		assertContains("tag start", MartusXml.getTagStart(MartusXml.AttachmentBytesElementName), result);
+		assertNotContains("data", Base64.encode(sampleBytes), result);
+		assertContains("tag end", MartusXml.getTagEnd(MartusXml.AttachmentBytesElementName), result);
+	}
+	
+	public void testCreateFileFromXml() throws Exception
+	{
+		String account = security.getPublicKeyString();
+		byte[] sessionKeyBytes = security.createSessionKey();
+		AttachmentProxy a = new AttachmentProxy(tempFile);
+		AttachmentPacket ap1 = new AttachmentPacket(account, sessionKeyBytes, a.getFile(), security);
+		ByteArrayOutputStream dest = new ByteArrayOutputStream();
+		ap1.writeXml(dest, security);
+		byte[] resultBytes = dest.toByteArray();
+		
+		File destFile = File.createTempFile("$$$MartusTestAttOut", null);
+		destFile.deleteOnExit();
+		destFile.delete();
+		ByteArrayInputStream inBytes = new ByteArrayInputStream(resultBytes);
+		AttachmentPacket.exportRawFileFromXml(inBytes, sessionKeyBytes, security, destFile);
+		inBytes.close();
+
+		assertTrue("not created?", destFile.exists());
+		assertEquals("length?", sampleBytes.length, destFile.length());
+		byte[] fileBytes = new byte[sampleBytes.length];
+		FileInputStream inFile = new FileInputStream(destFile);
+		inFile.read(fileBytes);
+		inFile.close();
+		assertEquals("bad data?", true, Arrays.equals(sampleBytes, fileBytes));
+	}
+	
+	public void testEncrypted() throws Exception
+	{
+		String account = security.getPublicKeyString();
+		byte[] sessionKeyBytes = security.createSessionKey();
+		AttachmentProxy a = new AttachmentProxy(tempFile);
+		AttachmentPacket ap = new AttachmentPacket(account, sessionKeyBytes, a.getFile(), security);
+
+		ByteArrayOutputStream encryptedDest = new ByteArrayOutputStream();
+		ap.writeXml(encryptedDest, security);
+		byte[] encryptedBytes = encryptedDest.toByteArray();
+		String encryptedResult = new String(encryptedBytes);
+		assertNotContains("Encrypted data", Base64.encode(sampleBytes), encryptedResult);
+		
+		security.clearKeyPair();
+		
+		File decryptedFile = File.createTempFile("$$$MartusDecryptedAtt", null);
+		decryptedFile.deleteOnExit();
+		ByteArrayInputStream xmlIn = new ByteArrayInputStream(encryptedBytes);
+		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, decryptedFile);
+
+		byte[] fileBytes = new byte[sampleBytes.length];
+		FileInputStream inFile = new FileInputStream(decryptedFile);
+		inFile.read(fileBytes);
+		inFile.close();
+		assertEquals("bad data?", true, Arrays.equals(sampleBytes, fileBytes));
+		
+		int SHORTEST_LEGAL_KEY_SIZE = 512;
+		security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
+	}
+
+	public void testLargeAttachmentSpeed() throws Exception
+	{
+		long createRawStartedAt = System.currentTimeMillis();
+		
+		final int SIZE = 100 * 1024;
+		File largeFile = File.createTempFile("$$$MartusTestLargeAtt", null);
+		largeFile.deleteOnExit();
+		FileOutputStream rawOut = new FileOutputStream(largeFile);
+		BufferedOutputStream out = new BufferedOutputStream(rawOut);
+		for(int i = 0; i < SIZE; ++i)
+		{
+			out.write(i % 123);
+		}
+		out.close();
+		long createRawEndedAt = System.currentTimeMillis();
+		assertTrue("Create file took too long", createRawEndedAt - createRawStartedAt < 2000);
+		
+		long writeXmlStartedAt = System.currentTimeMillis();
+		String account = security.getPublicKeyString();
+		AttachmentProxy a = new AttachmentProxy(largeFile);
+		byte[] sessionKeyBytes = security.createSessionKey();
+		AttachmentPacket ap = new AttachmentPacket(account, sessionKeyBytes, a.getFile(), security);
+
+		File largeXmlFile = File.createTempFile("$$$MartusTestLargeXmlFile", null);
+		largeXmlFile.deleteOnExit();
+		FileOutputStream dest = new FileOutputStream(largeXmlFile);
+		ap.writeXml(dest, security);
+		long writeXmlEndedAt = System.currentTimeMillis();
+		//System.out.println("Write Xml Time = " + (writeXmlEndedAt - writeXmlStartedAt));
+		//assertTrue("Write Xml took too long", writeXmlEndedAt - writeXmlStartedAt < 10000);
+		
+		long verifySigStartedAt = System.currentTimeMillis();
+		FileInputStreamWithReset verifyIn = new FileInputStreamWithReset(largeXmlFile);
+		AttachmentPacket.verifyPacketSignature(verifyIn, security);
+		verifyIn.close();
+		long verifySigEndedAt = System.currentTimeMillis();
+		//System.out.println("Verify Sig Time = " + (verifySigEndedAt - verifySigStartedAt));
+		//assertTrue("verifySig took too long", verifySigEndedAt - verifySigStartedAt < 20000);
+
+		long readXmlStartedAt = System.currentTimeMillis();
+		File decryptedFile = File.createTempFile("$$$MartusDecryptedBufferedAtt", null);
+		decryptedFile.deleteOnExit();
+		FileInputStreamWithReset xmlIn = new FileInputStreamWithReset(largeXmlFile);
+		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, decryptedFile);
+		xmlIn.close();
+		long readXmlEndedAt = System.currentTimeMillis();
+		//System.out.println("Read Xml Time = " + (readXmlEndedAt - readXmlStartedAt));
+		//assertTrue("Read Xml took too long", readXmlEndedAt - readXmlStartedAt < 30000);
+		
+
+
+	}
+	
+/*	
+ * TODO see if any of these tests are still valid
+	public void setUp() throws Exception
+	{
+		FileAttachmentProxy original = new FileAttachmentProxy(sampleLabel, tempFile);
+		ap = AttachmentPacket.createFromAttachment(security.getPublicKeyString(), security, original);
+	}
+
+	public void testBasics() throws Exception
+	{
+		assertEquals("label", sampleLabel, ap.getLabel());
+		assertTrue("bytes", Arrays.equals(sampleBytes, ap.getBytes()));
+	}
+
+	public void testLoadFromXmlSimple() throws Exception
+	{
+		String id = "1234567";
+		String simplePacket = 
+			"<" + MartusXml.AttachmentPacketElementName + ">\n" + 
+			"<" + MartusXml.PacketIdElementName + ">" + id + 
+			"</" + MartusXml.PacketIdElementName + ">\n" + 
+			"<" + MartusXml.AccountElementName + ">" + security.getPublicKeyString() + 
+			"</" + MartusXml.AccountElementName + ">\n" + 
+			"<" + MartusXml.AttachmentLabelElementName + ">" + sampleLabel + 
+			"</" + MartusXml.AttachmentLabelElementName + ">\n" + 
+			"<" + MartusXml.AttachmentBytesElementName + ">" + Base64.encode(sampleBytes) + 
+			"</" + MartusXml.AttachmentBytesElementName + ">\n" + 
+			"</" + MartusXml.AttachmentPacketElementName + ">\n";
+		//System.out.println("{" + simplePacket + "}");
+
+		byte[] bytes = simplePacket.getBytes("UTF-8");
+		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		AttachmentPacket got = AttachmentPacket.createFromXmlStream(in, (MartusCrypto)null);
+		assertEquals("account", security.getPublicKeyString(), got.getAccountId());
+		assertEquals("id", id, got.getPacketId());
+		assertEquals("label", sampleLabel, got.getLabel());
+		assertTrue("bytes", Arrays.equals(sampleBytes, got.getBytes()));
+	}
+	
+	public void testWriteXml() throws Exception
+	{
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		ap.writeXml(out, security);
+		String result = new String(out.toByteArray(), "UTF-8");
+		
+		assertContains(MartusXml.getTagStart(MartusXml.AttachmentPacketElementName), result);
+		assertContains(MartusXml.getTagEnd(MartusXml.AttachmentPacketElementName), result);
+		assertContains(ap.getPacketId(), result);
+
+		assertContains("label", sampleLabel, result);
+		assertContains("bytes", Base64.encode(sampleBytes), result);
+	}
+	
+*/
+	static File tempFile;	
+	byte[] sampleBytes = {1,1,2,0,3,5,127,7,11};
+	static MartusSecurity security;
+}
