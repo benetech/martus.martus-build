@@ -164,7 +164,7 @@ public class Packet
 	{
 		verifyPacketSignature(inputStream, expectedSig, verifier);
 		XmlValidateHandler handler = new XmlValidateHandler();
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		BufferedReader reader = new UnicodeReader(inputStream);
 		try 
 		{
 			MartusXml.loadXmlWithExceptions(reader, handler);
@@ -199,6 +199,7 @@ public class Packet
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 		final long totalBytes = bufferedInputStream.available();
 		UnicodeReader reader = new UnicodeReader(bufferedInputStream);
+		
 		final String startComment = reader.readLine();
 		if(startComment == null || !startComment.equals(MartusXml.packetStartComment))
 			throw new InvalidPacketException("No start comment");
@@ -329,16 +330,10 @@ public class Packet
 		{
 			if(!gotStartTag)
 				return;
-			String raw = new String(data);
-			byte[] bytes = raw.getBytes();
 			try 
 			{
-				setFromXml(qName, new String(bytes,"UTF-8"));
+				setFromXml(qName, new String(data));
 			} 
-			catch(UnsupportedEncodingException e) 
-			{
-				System.out.println("Packet.endelement: " + e);
-			}
 			catch(Base64.InvalidBase64Exception e)
 			{
 				System.out.println("Packet.endelement: " + e);
@@ -434,7 +429,7 @@ public class Packet
 	{
 		if(verifier != null)
 			verifyPacketSignature(inputStream, expectedSig, verifier);
-		BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
+		BufferedReader reader = new UnicodeReader(inputStream);
 		try 
 		{
 			MartusXml.loadXmlWithExceptions(reader, handler);

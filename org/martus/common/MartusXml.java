@@ -109,6 +109,7 @@ public class MartusXml
 	public final static String packetSignatureStart = "<!--sig=";
 	public final static String packetSignatureEnd = "-->";
 
+
 	public final static String packetStartCommentStart = "<!--MartusPacket;";
 	public final static String packetStartCommentSigLen = "siglen=";
 	public final static String packetStartCommentEnd = ";-->";

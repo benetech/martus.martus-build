@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.martus.common.*;
-
 public class TestPacket extends TestCaseEnhanced
 {
     public TestPacket(String name)
@@ -90,6 +88,24 @@ public class TestPacket extends TestCaseEnhanced
 		assertStartsWith(MartusXml.packetStartComment, result);
 		assertContains(packet.getLocalId(), result);
 		assertContains(packet.getAccountId(), result);
+	}
+	
+	public void testWriteAndLoadUtf8() throws Exception
+	{
+		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
+		String utf8Data = "ßÑñú";
+		bhp.setFieldDataPacketId(utf8Data);
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		bhp.writeXml(out, security);
+		
+		bhp.setFieldDataPacketId("");
+		byte[] bytes = out.toByteArray();
+		String s8859 = new String(bytes);
+		String sUtf8 = new String(bytes, "UTF-8");
+		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		bhp.loadFromXml(in, null, security);
+		
+		assertEquals("utf-8 damaged?", utf8Data, bhp.getFieldDataPacketId());
 	}
 	
 	public void testLoadMoreSpecificPacketType() throws Exception
@@ -201,7 +217,7 @@ public class TestPacket extends TestCaseEnhanced
 		bhp.writeXml(out, security);
 		
 		byte[] bytes = out.toByteArray();
-		bytes[0] ^= 0xFF;
+		bytes[5] ^= 0xFF;
 
 		ByteArrayInputStream in1 = new ByteArrayInputStream(bytes);
 		try
