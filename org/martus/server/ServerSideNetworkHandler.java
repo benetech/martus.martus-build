@@ -2,9 +2,9 @@ package org.martus.server;
 
 import java.util.Vector;
 
+import org.martus.client.ClientSideNetworkGateway;
 import org.martus.common.*;
 
-import MartusJava.ClientSideNetworkGateway;
 
 public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterfaceConstants
 {
