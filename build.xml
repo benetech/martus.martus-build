@@ -4,7 +4,7 @@
   <!-- set global properties for this build -->
   <property file="build.properties" />
   <property environment="env"/>
-
+  
   <property name="dist"  value="dist"/>
   <property name="docs"  value="TechDocs/javadocs"/>
   <property name="martus-dir" value="org/martus"/>
@@ -14,6 +14,8 @@
   <property name="swing-dir" value="${martus-dir}/swing"/>
   <property name="hrvd-dir" value="org/hrvd"/>
   <property name="amplifier-dir" value="${martus-dir}/amplifier"/>
+  <property name="buildfiles-dir" value="${env.MARTUSBUILDFILES}"/>
+  <property name="htdocs-dir" value="${amplifier-dir}/presentation"/>
 
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
@@ -30,7 +32,9 @@
   <property name="server-package" value="${martus-package}.server"/>
   <property name="server-files" value="${server-dir}/*.class,
                     ${server-dir}/**/*.class,
-                    ${amplifier-dir}/**/*.class
+                    ${amplifier-dir}/**/*.class,
+                    ${buildfiles-dir}/Jars/*.jar,
+                    ${htdocs-dir}/**/*
                     "/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
