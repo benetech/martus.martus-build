@@ -1095,8 +1095,7 @@ public class MartusApp
 		}
 		catch (CryptoInitializationException e1)
 		{
-			e1.printStackTrace();
-			return false;
+			return clearCurrentUserNameKeyPair();
 		}
 
 		try
@@ -1105,17 +1104,16 @@ public class MartusApp
 		}
 		catch(IOException e)
 		{
-			return false;
+			return clearCurrentUserNameKeyPair();
 		}
 
-		boolean worked = true;
 		try
 		{
 			attemptSignInSecurityToUse.readKeyPair(inputStream, getCombinedPassPhrase(userName, userPassPhrase));
 		}
 		catch(Exception e)
 		{
-			worked = false;
+			return clearCurrentUserNameKeyPair();
 		}
 
 		try
@@ -1124,19 +1122,34 @@ public class MartusApp
 		}
 		catch(IOException e)
 		{
-			worked = false;
+			return clearCurrentUserNameKeyPair();
 		}
-		if(security.hasKeyPair() && !security.getPublicKeyString().equals(attemptSignInSecurityToUse.getPublicKeyString()))
-			worked = false;
 			
-		if(!worked)
-			return false;
+		if(!doesSecurityMatch(attemptSignInSecurityToUse))
+		{
+			return clearCurrentUserNameKeyPair();
+		}
+		
 		if(!security.hasKeyPair())
 		{
 			security = attemptSignInSecurityToUse;
 			setCurrentAccount(userName);
 		}
 		return true;
+	}
+
+	private boolean doesSecurityMatch(MartusCrypto attemptSignInSecurityToUse)
+	{
+		if(!security.hasKeyPair())
+			return true;
+		return security.getPublicKeyString().equals(attemptSignInSecurityToUse.getPublicKeyString());
+	}
+
+	private boolean clearCurrentUserNameKeyPair()
+	{
+		security.clearKeyPair();
+		currentUserName = "";
+		return false;
 	}
 
 	public void setCurrentAccount(String userName)
