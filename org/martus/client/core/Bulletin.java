@@ -68,11 +68,6 @@ public class Bulletin implements BulletinConstants
 		clear();
 	}
 
-	public BulletinStore getStore()
-	{
-		return store;
-	}
-
 	public MartusCrypto getSignatureGenerator()
 	{
 		return security;

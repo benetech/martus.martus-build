@@ -116,7 +116,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b = store.createEmptyBulletin();
 		assertNotEquals("", b.getLocalId());
 
-		assertEquals(store, b.getStore());
+		assertEquals(security, b.getSignatureGenerator());
 
 		assertEquals("account not initialized correctly?", store.getAccountId(), b.getAccount());
 		assertEquals("field data account?", store.getAccountId(), b.getFieldDataPacket().getAccountId());
@@ -407,7 +407,6 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.save();
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.pullDataFrom(b1);
-		assertEquals("store unchanged", store, b2.getStore());
 		assertEquals("signer", b1.getSignatureGenerator(), b2.getSignatureGenerator());
 		assertEquals("verifier", b1.getSignatureVerifier(), b2.getSignatureVerifier());
 		assertEquals("id unchanged", false, b2.getLocalId().equals(b1.getLocalId()));

@@ -629,7 +629,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b2 = newStoreSameDatabase.findBulletinByUniversalId(b.getUniversalId());
 		assertEquals("id", b.getLocalId(), b2.getLocalId());
 		assertEquals("author", b.get(Bulletin.TAGAUTHOR), b2.get(Bulletin.TAGAUTHOR));
-		assertEquals("Store is null", newStoreSameDatabase, b2.getStore());
+		assertEquals("wrong security?", store.getSignatureGenerator(), b2.getSignatureGenerator());
 
 	}
 
