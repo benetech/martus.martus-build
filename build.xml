@@ -193,14 +193,22 @@
         />
     </target>
 
+    <target name="check_keystore_location">
+        <available file="${sign.keystore}" type="file" property="keystore.exists"/>
+    </target>
+
+    <target name="fail_keystore_missing" unless="keystore.exists">
+        <fail message="FAILURE: ${sign.keystore} doesn't exist."/>
+    </target>
+
 <!-- ================================================================== -->
 <!-- J A R S I G N E R                                                  -->
 <!-- ================================================================== -->
 
-    <target name="jarsign" depends="check_storepass, check_keypass, check_keystore,jar" description="Sign jars">
+    <target name="jarsign" depends="check_storepass, check_keypass, check_keystore,check_keystore_location,fail_keystore_missing,jar" description="Sign jars">
         <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
             <fileset dir="${public.release.folder}">
-                <include name="*.jar"/>
+                <include name="*-${DSTAMP}.${build.number}.jar"/>
             </fileset>
         </signjar>
     </target>
@@ -222,7 +230,11 @@
 <!-- R E L E A S E                                                      -->
 <!-- ================================================================== -->
 
-    <target name="release" depends="check_storepass, check_keypass, check_keystore,test,jarsign,zip-client-src,md5">
+    <target name="release" depends="check_storepass, check_keypass, check_keystore,check_keystore_location,fail_keystore_missing,test,jarsign,zip-client-src,md5">
+        <echo message="Release Built."/>
+    </target>
+
+    <target name="test.release" depends="check_storepass, check_keypass, check_keystore,check_keystore_location,fail_keystore_missing,jar,jarsign,zip-client-src,md5">
         <echo message="Release Built."/>
     </target>
 
