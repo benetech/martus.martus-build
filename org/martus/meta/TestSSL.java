@@ -63,7 +63,10 @@ public class TestSSL extends TestCaseEnhanced
 	{
 		proxy1.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
 
-		assertEquals(NetworkInterfaceConstants.VERSION, proxy1.ping());
+		Vector parameters = new Vector();
+		NetworkResponse result = new NetworkResponse(proxy1.getServerInfo(parameters));
+		assertEquals(NetworkInterfaceConstants.OK, result.getResultCode());
+		assertEquals(NetworkInterfaceConstants.VERSION, result.getResultVector().get(0));
 
 		NetworkResponse response = new NetworkResponse(proxy1.getServerInfo(new Vector()));
 		assertEquals(NetworkInterfaceConstants.OK, response.getResultCode());
