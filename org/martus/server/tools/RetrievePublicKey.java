@@ -4,15 +4,14 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.MartusCrypto.MartusSignatureException;
-import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.formirroring.CallerSideMirroringGateway;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc;
+import org.martus.server.formirroring.MirroringInterface;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException;
 
 public class RetrievePublicKey
@@ -26,10 +25,10 @@ public class RetrievePublicKey
 	{
 		processArgs(args);
 		createGateway();
-		security = MartusServerUtilities.loadKeyPair(keyPairFileName, prompt);
 		Vector publicInfo = retrievePublicInfo();
 		writePublicInfo(publicInfo);
-		System.out.println("Success");
+		if(prompt)
+			System.out.println("Success");
 		System.exit(0);
 	}
 
@@ -71,7 +70,7 @@ public class RetrievePublicKey
 	{ 
 		try
 		{
-			NetworkResponse response = gateway.ping(security);
+			NetworkResponse response = gateway.ping();
 			String resultCode = response.getResultCode();
 			if(!NetworkInterfaceConstants.OK.equals(resultCode))
 			{
@@ -92,6 +91,8 @@ public class RetrievePublicKey
 	
 	void processArgs(String[] args)
 	{
+		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
+
 		for (int i = 0; i < args.length; i++)
 		{
 			String value = args[i].substring(args[i].indexOf("=")+1);
@@ -102,9 +103,7 @@ public class RetrievePublicKey
 				ip = value;
 			
 			if(args[i].startsWith("--port") && value != null)
-			{
 				port = new Integer(value).intValue();
-			}
 			
 			if(args[i].startsWith("--public-code"))
 				publicCode = MartusUtilities.removeNonDigits(value);
@@ -112,14 +111,11 @@ public class RetrievePublicKey
 			if(args[i].startsWith("--output-file"))
 				outputFileName = value;
 
-			if(args[i].startsWith("--keypair"))
-				keyPairFileName = value;
 		}
 
-		if(ip == null || port == 0 || publicCode == null || 
-			outputFileName == null || keyPairFileName == null)
+		if(ip == null || publicCode == null || outputFileName == null)
 		{
-			System.err.println("Incorrect arguments: RetrievePublicKey [--no-prompt] --ip=1.2.3.4 --port=5 --public-code=6.7.8.1.2 --output-file=pubkey.txt --keypair-file=keypair.dat\n");
+			System.err.println("Incorrect arguments: RetrievePublicKey [--no-prompt] --ip=1.2.3.4 [--port=5] --public-code=6.7.8.1.2 --output-file=pubkey.txt --keypair-file=keypair.dat\n");
 			System.exit(2);
 		}
 		
@@ -137,8 +133,6 @@ public class RetrievePublicKey
 	int port;
 	String publicCode;
 	String outputFileName;
-	String keyPairFileName;
 
-	MartusCrypto security; 
 	CallerSideMirroringGateway gateway; 
 }
