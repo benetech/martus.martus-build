@@ -5,11 +5,9 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
@@ -422,12 +420,6 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		security.readKeyPair(in, passphrase);
 	}
 	
-	void writeKeyPair(OutputStream out, String passphrase) throws 
-		IOException
-	{
-		security.writeKeyPair(out, passphrase);
-	}
-	
 	public static File getDefaultDataDirectory()
 	{
 		String dataDirectory = null;
@@ -696,222 +688,10 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		return bhp;
 	}
 
-	public static class DuplicatePacketException extends Exception
-	{
-		public DuplicatePacketException(String message)
-		{
-			super(message);
-		}
-	}
-	
-	public static class SealedPacketExistsException extends Exception
-	{
-		public SealedPacketExistsException(String message)
-		{
-			super(message);
-		}
-	}
-
 	public void serverExit(int exitCode) throws Exception
 	{
 		System.exit(exitCode);
 	}
-
-	abstract class SummaryCollector implements Database.PacketVisitor
-	{
-		SummaryCollector(Database dbToUse, String accountIdToUse, Vector retrieveTagsToUse)
-		{
-			db = dbToUse;
-			authorAccountId = accountIdToUse;
-			retrieveTags = retrieveTagsToUse;
-		}
-		
-		public void visit(DatabaseKey key)
-		{
-			// TODO: this should only be for maxmaxmaxlogging
-//				if(serverMaxLogging)
-//				{
-//					logging("listMyBulletinSummaries:visit " + 
-//						getFolderFromClientId(key.getAccountId()) +  " " +
-//						key.getLocalId());
-//				}
-			if(!BulletinHeaderPacket.isValidLocalId(key.getLocalId()))
-			{
-				//this would fire for every non-header packet
-				//logging("listMyBulletinSummaries:visit  Error:isValidLocalId Key=" + key.getLocalId() );					
-				return;
-			}
-				
-			addSummaryIfAppropriate(key);
-			return;
-		}
-
-		abstract public void addSummaryIfAppropriate(DatabaseKey key);
-		
-		public Vector getSummaries()
-		{
-			if(summaries == null)
-			{
-				summaries = new Vector();
-				summaries.add(NetworkInterfaceConstants.OK);
-				db.visitAllRecords(this);
-			}
-			return summaries;	
-		}
-		
-		void addToSummary(BulletinHeaderPacket bhp) 
-		{
-			String summary = bhp.getLocalId() + "=";
-			summary  += bhp.getFieldDataPacketId();
-			if(retrieveTags.contains(NetworkInterfaceConstants.TAG_BULLETIN_SIZE))
-			{
-				int size = MartusUtilities.getBulletinSize(database, bhp);
-				summary += "=" + size;
-			}
-			summaries.add(summary);
-		}
-
-		Database db;
-		String authorAccountId;
-		Vector summaries;
-		Vector retrieveTags;
-	}
-	
-	class MySealedSummaryCollector extends SummaryCollector
-	{
-		public MySealedSummaryCollector(Database dbToUse, String accountIdToUse, Vector retrieveTags) 
-		{
-			super(dbToUse, accountIdToUse, retrieveTags);
-		}
-
-		public void addSummaryIfAppropriate(DatabaseKey key) 
-		{
-			if(!keyBelongsToClient(key, authorAccountId))
-				return;
-
-			if(!key.isSealed())
-				return;
-				
-			try
-			{
-				addToSummary(loadBulletinHeaderPacket(db, key));
-			}
-			catch(Exception e)
-			{
-				logging("visit " + e);
-				e.printStackTrace();
-				//System.out.println("MartusServer.listMyBulletinSummaries: " + e);
-			}
-		}
-	}
-
-	class MyDraftSummaryCollector extends SummaryCollector
-	{
-		public MyDraftSummaryCollector(Database dbToUse, String accountIdToUse, Vector retrieveTagsToUse) 
-		{
-			super(dbToUse, accountIdToUse, retrieveTagsToUse);
-		}
-
-		public void addSummaryIfAppropriate(DatabaseKey key) 
-		{
-			if(!keyBelongsToClient(key, authorAccountId))
-				return;
-
-			if(!key.isDraft())
-				return;
-
-			try
-			{
-				addToSummary(loadBulletinHeaderPacket(db, key));
-			}
-			catch(Exception e)
-			{
-				logging("visit " + e);
-				e.printStackTrace();
-				//System.out.println("MartusAmplifierServer.listMyBulletinSummaries: " + e);
-			}
-		}
-	}
-
-
-	class FieldOfficeSealedSummaryCollector extends SummaryCollector
-	{
-		public FieldOfficeSealedSummaryCollector(Database dbToUse, String hqAccountIdToUse, String authorAccountIdToUse, Vector retrieveTagsToUse) 
-		{
-			super(dbToUse, authorAccountIdToUse, retrieveTagsToUse);
-			hqAccountId = hqAccountIdToUse;
-
-		}
-
-		public void addSummaryIfAppropriate(DatabaseKey key) 
-		{
-			if(!keyBelongsToClient(key, authorAccountId))
-				return;
-			if(!key.isSealed())
-				return;
-			
-			try
-			{
-				BulletinHeaderPacket bhp = loadBulletinHeaderPacket(db, key);
-				if(bhp.getHQPublicKey().equals(hqAccountId))
-					addToSummary(bhp);
-			}
-			catch(Exception e)
-			{
-				logging("visit " + e);
-				e.printStackTrace();
-				//System.out.println("MartusAmplifierServer.FieldOfficeSealedSummaryCollectors: " + e);
-			}
-		}
-		String hqAccountId;
-	}
-
-	class FieldOfficeDraftSummaryCollector extends SummaryCollector
-	{
-		public FieldOfficeDraftSummaryCollector(Database dbToUse, String hqAccountIdToUse, String authorAccountIdToUse, Vector retrieveTagsToUse) 
-		{
-			super(dbToUse, authorAccountIdToUse, retrieveTagsToUse);
-			hqAccountId = hqAccountIdToUse;
-
-		}
-
-		public void addSummaryIfAppropriate(DatabaseKey key) 
-		{
-			if(!keyBelongsToClient(key, authorAccountId))
-				return;
-			if(!key.isDraft())
-				return;
-			
-			try
-			{
-				BulletinHeaderPacket bhp = loadBulletinHeaderPacket(db, key);
-				if(bhp.getHQPublicKey().equals(hqAccountId))
-					addToSummary(bhp);
-			}
-			catch(Exception e)
-			{
-				logging("visit " + e);
-				e.printStackTrace();
-				//System.out.println("MartusAmplifierServer.FieldOfficeDraftSummaryCollectors: " + e);
-			}
-		}
-		String hqAccountId;
-	}
-	
-	public static void writeSyncFile(File syncFile) 
-	{
-		try 
-		{
-			FileOutputStream out = new FileOutputStream(syncFile);
-			out.write(0);
-			out.close();
-		} 
-		catch(Exception e) 
-		{
-			System.out.println("MartusAmplifierServer.main: " + e);
-			System.exit(6);
-		}
-	}	
 	
 	private class ShutdownRequestMonitor extends TimerTask
 	{
