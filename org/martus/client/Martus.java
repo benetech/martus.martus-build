@@ -1,14 +1,8 @@
 package org.martus.client;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-
-import org.martus.client.*;
+import javax.swing.UIManager;
 
 import org.martus.meta.TestAll;
-
-import java.util.Arrays;
 
 class Martus
 {
