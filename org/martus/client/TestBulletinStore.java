@@ -534,6 +534,22 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertNull("Folder three must not exist", store.findFolder("three"));
 	}
 
+	public void testLoadXmlLegacyFolders()
+	{
+		TRACE("testLoadXmlFolders");
+		
+		int count = store.getFolderCount();
+		String xml = "<FolderList><Folder name='Outbox'></Folder><Folder name='new two'></Folder></FolderList>";
+		assertTrue("Legacy folder didn't return true on load", store.loadFolders(new StringReader(xml)));
+		assertEquals(count+1, store.getFolderCount());
+		assertNotNull("Folder %OutBox must exist", store.findFolder("%OutBox"));
+		assertNull("Folder Outbox must not exist", store.findFolder("Outbox"));
+		assertNotNull("Folder two new must exist", store.findFolder("new two"));
+		assertNull("Folder three must not exist", store.findFolder("three"));
+		xml = "<FolderList><Folder name='%OutBox'></Folder><Folder name='new two'></Folder></FolderList>";
+		assertFalse("Not Legacy folder didn't return false on load", store.loadFolders(new StringReader(xml)));
+	}
+
 	/* missing tests:
 		- invalid xml (empty, badly nested tags, two root nodes)
 		- <Id> not nested within <Folder>

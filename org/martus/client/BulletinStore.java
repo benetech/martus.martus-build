@@ -441,13 +441,13 @@ public class BulletinStore
 	
 	public void createSystemFolders()
 	{
-		folderOutbox = createSystemFolder("Outbox");
+		folderOutbox = createSystemFolder(OUTBOX_FOLDER);
 		folderOutbox.setStatusAllowed(Bulletin.STATUSSEALED);
-		folderSent = createSystemFolder("Sent Bulletins");
+		folderSent = createSystemFolder(SENT_FOLDER);
 		folderSent.setStatusAllowed(Bulletin.STATUSSEALED);
-		folderDrafts = createSystemFolder("Draft Bulletins");
+		folderDrafts = createSystemFolder(DRAFT_FOLDER);
 		folderDrafts.setStatusAllowed(Bulletin.STATUSDRAFT);
-		folderDiscarded = createSystemFolder("Discarded Bulletins");
+		folderDiscarded = createSystemFolder(DISCARDED_FOLDER);
 		folderDraftOutbox = createSystemFolder(DRAFT_OUTBOX);
 		folderDraftOutbox.setStatusAllowed(Bulletin.STATUSDRAFT);
 	}
@@ -514,7 +514,8 @@ public class BulletinStore
 			
 			String folderXml = new String(out.toByteArray(), "UTF-8");
 			if(folderXml != null)
-				loadFolders(new StringReader(folderXml));
+				if(loadFolders(new StringReader(folderXml)))
+					saveFolders();
 		} 
 		catch(UnsupportedEncodingException e) 
 		{
@@ -680,6 +681,7 @@ public class BulletinStore
 		public FolderXmlHandler(BulletinStore storeToUse)
 		{
 			store = storeToUse;
+			startLoadingFolders = true;
 		}
 
 		public void startElement(String namespaceURI, String sName, String qName,
@@ -688,6 +690,23 @@ public class BulletinStore
 			if(qName.equals(MartusXml.tagFolder))
 			{
 				String name = attrs.getValue(MartusXml.attrFolder);
+				if(startLoadingFolders)
+				{
+					startLoadingFolders = false;	
+					if(name.equals("Outbox"))
+						legacyFolders = true;
+				}
+				if(legacyFolders)
+				{
+					if(name.equals("Outbox"))
+						name = OUTBOX_FOLDER;
+					if(name.equals("Sent Bulletins"))
+						name = SENT_FOLDER;
+					if(name.equals("Draft Bulletins"))
+						name = DRAFT_FOLDER;
+					if(name.equals("Discarded Bulletins"))
+						name = DISCARDED_FOLDER;
+				}
 				currentFolder = store.createOrFindFolder(name);
 			}
 
@@ -724,14 +743,18 @@ public class BulletinStore
 		BulletinStore store;
 		BulletinFolder currentFolder;
 		String buffer = "";
+		
+		boolean startLoadingFolders;
+		public boolean legacyFolders;
 	}
 
-	public synchronized void loadFolders(Reader xml)
+	public synchronized boolean loadFolders(Reader xml)
 	{
 		folders.clear();
 		createSystemFolders();
 		FolderXmlHandler handler = new FolderXmlHandler(this);
 		MartusXml.loadXml(xml, handler);
+		return handler.legacyFolders;
 	}
 
 	private String createUniqueId()

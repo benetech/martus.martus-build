@@ -39,7 +39,8 @@ public class TestFolderList extends TestCase
 		BulletinFolder folder = store.createFolder("test");
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
-		assertNotNull("Not found?", store.findFolder(list.getName(0)));
+		System.out.println(list.getName(0));
+		assertEquals("Outbox not first?", app.getFolderLabel(app.getFolderOutbox().getName()), list.getName(0));
 
 		node = list.getNode(baseCount);
 		assertEquals("test", node.toString());
@@ -73,7 +74,7 @@ public class TestFolderList extends TestCase
 		BulletinFolder folder = store.createFolder(app.getNameOfFolderRetrieved());
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
-		assertNotNull("not Found?", store.findFolder(list.getName(0)));
+		assertEquals("Outbox not first?", app.getFolderLabel(app.getFolderOutbox().getName()), list.getName(0));
 
 		FolderTreeNode node = list.getNode(baseCount);
 		assertEquals(app.getNameOfFolderRetrieved(), node.getInternalName());
