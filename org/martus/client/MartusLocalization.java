@@ -522,6 +522,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:RetrieveMyDraftBulletinProgress=Retrieving Draft Bulletins");
 		addEnglishTranslation("field:RetrieveHQSealedBulletinProgress=Retrieving Field Desk Sealed Bulletins");
 		addEnglishTranslation("field:RetrieveHQDraftBulletinProgress=Retrieving Field Desk Draft Bulletins");
+		addEnglishTranslation("field:NoServerAvailableProgressMessage=Server Not Available");
+		addEnglishTranslation("field:UploadFailedProgressMessage=Upload Failed");
+		
 		addEnglishTranslation("field:ChunkProgressStatusMessage=Download Progress");
 		addEnglishTranslation("field:RetrieveMySealedBulletinSummaries=Retrieving Sealed Bulletin Summaries");
 		addEnglishTranslation("field:RetrieveMyDraftBulletinSummaries=Retrieving Draft Bulletin Summaries");
