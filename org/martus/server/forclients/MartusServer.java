@@ -1493,7 +1493,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		catch(MartusSignatureException e)
 		{
 			logging("allowUploads: " + e);
-			System.out.println("MartusServer.allowUploads: " + e);
+			//System.out.println("MartusServer.allowUploads: " + e);
 		}
 	}
 
