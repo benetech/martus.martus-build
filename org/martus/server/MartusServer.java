@@ -63,6 +63,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		MartusServer server = null;
 		boolean secureMode = false;
+		String servername = null;
 		for(int arg = 0; arg < args.length; ++arg)
 		{
 			if (args[arg].indexOf("logging")>=0)
@@ -80,6 +81,11 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			
 			if(args[arg].equals("secure"))
 				secureMode = true;
+
+			if(args[arg].startsWith("--server-name="))
+			{
+				servername = args[arg].substring(args[arg].indexOf("=")+1);
+			}
 		}
 		
 		if(secureMode)
@@ -97,6 +103,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			System.out.println("Crypto Initialization Exception" + e);
 			System.exit(1);			
 		}
+		
+		server.setServerName(servername);
 
 		String versionInfo = MartusUtilities.getVersionDate(server.getClass());
 		System.out.println("Version " + versionInfo);
@@ -458,7 +466,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
-		if(!areUploadRequestAllowed())
+		if(!areUploadRequestsCurrentlyAllowed())
 		{
 			if(!magicWords.contains(tryMagicWord))
 				incrementFailedUploadRequests();
@@ -1801,6 +1809,18 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return(shutdownFile.exists());
 	}
 	
+	public synchronized void clientConnectionStart()
+	{
+		logging("start");
+		incrementActiveClientsCounter();
+	}
+	
+	public synchronized void clientConnectionExit()
+	{
+		logging("exit");
+		decrementActiveClientsCounter();
+	}
+	
 	public synchronized int getNumberActiveClients()
 	{
 		return activeClientsCounter;
@@ -1842,7 +1862,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return magicWordsGuessIntervalMillis;
 	}
 	
-	boolean areUploadRequestAllowed()
+	boolean areUploadRequestsCurrentlyAllowed()
 	{
 		return (failedUploadRequestCounter < getMaxFailedUploadAllowedAttempts());
 	}
@@ -1853,28 +1873,25 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		{
 			Timestamp stamp = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
-			String logEntry;
-			if(serverMaxLogging)
-			{
-				int threadId = Thread.currentThread().hashCode();
-				logEntry = getServerHostname() + " " + threadId + " : " + message;
-			}
-			else
-			{
-				logEntry = " : " + message;
-			}
-			System.out.println(formatDate.format(stamp) + " " + logEntry);
+
+			int threadId = Thread.currentThread().hashCode();
+			String hexThreadId = Integer.toHexString(threadId);
+			String logEntry = formatDate.format(stamp) + " " + getServerName() + " " + hexThreadId + " : " + message;
+
+			System.out.println(logEntry);
 		}
 	}
 	
-	String getServerHostname()
+	public void setServerName(String servername)
 	{
-		String hostname;
-		String address;
-
-		hostname = "hostname";
-		address = "address";
-		return hostname + "/" + address;
+		serverName = servername;
+	}
+	
+	String getServerName()
+	{
+		if(serverName == null)
+			return "host/address";
+		return serverName;
 	}
 
 	BulletinHeaderPacket loadBulletinHeaderPacket(Database db, DatabaseKey key)
@@ -2170,6 +2187,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public Vector clientsBanned;
 	public MartusCrypto security;
 	File keyPairFile;
+	String serverName;
 	public File dataDirectory;
 	public File allowUploadFile;
 	public File magicWordsFile;

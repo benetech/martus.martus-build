@@ -15,101 +15,110 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 
 	public String ping()
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
 		String strResponse = server.ping();
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return strResponse;
 	}
 
 	public Vector getServerInformation()
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
 		Vector vecResponse = server.getServerInformation();
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return vecResponse;
 	}
 
 	public String requestUploadRights(String authorAccountId, String tryMagicWord)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		String strResponse = server.requestUploadRights(authorAccountId, tryMagicWord);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return strResponse;
 	}
 
 	public String uploadBulletin(String authorAccountId, String bulletinLocalId, String data)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		String strResponse = server.uploadBulletin(authorAccountId, bulletinLocalId, data);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return strResponse;
 	}
 
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId,
 		int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		String strResponse = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
 						totalSize, chunkOffset, chunkSize, data, signature);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return strResponse;
 	}
 
 	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector vecResponse = server.downloadBulletin(authorAccountId, bulletinLocalId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return vecResponse;
 	}
 
 	public Vector downloadMyBulletinChunk(String authorAccountId,String bulletinLocalId,
 		int chunkOffset, int maxChunkSize, String signature)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector vecResponse = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize, signature);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return vecResponse;
 	}
 
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector vecResponse = server.legacyListMySealedBulletinIds(authorAccountId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return vecResponse;
 	}
 
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(hqAccountId));
 		Vector vecResponse = server.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return vecResponse;
 	}
 
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(hqAccountId));
 		Vector vecResponse = server.listFieldOfficeAccounts(hqAccountId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return vecResponse;
 	}
 
 	public Vector downloadPacket(String authorAccountId, String packetLocalId)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector vecResponse = server.legacyDownloadPacket(authorAccountId, packetLocalId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return vecResponse;
 	}
 
 	public String authenticateServer(String tokenToSign)
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
 		String strResponse = server.authenticateServer(tokenToSign);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return strResponse;
 	}
 	

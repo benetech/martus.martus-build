@@ -19,10 +19,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	// begin ServerInterface	
 	public Vector getServerInfo(Vector reservedForFuture)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("getServerInfo");
-		
-		server.incrementActiveClientsCounter();
 		
 		String version = server.ping();
 		Vector data = new Vector();
@@ -32,21 +31,23 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		result.add(OK);
 		result.add(data);
 		
-		server.decrementActiveClientsCounter();
+		if(MartusServer.serverSSLLogging)
+			server.logging("getServerInfo: exit");
+			
+		server.clientConnectionExit();
 		return result;
 	}
 
 	public Vector getUploadRights(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("getUploadRights");
-			
-		server.incrementActiveClientsCounter();
 
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
-			server.decrementActiveClientsCounter();
+			server.clientConnectionExit();
 			result.add(SIG_ERROR);
 			return result;
 		}
@@ -57,23 +58,21 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		String legacyResult = legacyRequestUploadRights(myAccountId, tryMagicWord);
 		result.add(legacyResult);
 		
-		server.decrementActiveClientsCounter();
-		
+		server.clientConnectionExit();
 		return result;
 	}
 
 	public Vector getSealedBulletinIds(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("getSealedBulletinIds");
-			
-		server.incrementActiveClientsCounter();
 
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			result.add(SIG_ERROR);
-			server.decrementActiveClientsCounter();
+			server.clientConnectionExit();
 			return result;
 		}
 			
@@ -88,22 +87,21 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		else
 			result = server.listFieldOfficeSealedBulletinIds(myAccountId, authorAccountId, retrieveTags);
 
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return result;
 	}
 
 	public Vector getDraftBulletinIds(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("getDraftBulletinIds");
-			
-		server.incrementActiveClientsCounter();
 
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			result.add(SIG_ERROR);			
-			server.decrementActiveClientsCounter();			
+			server.clientConnectionExit();			
 			return result;
 		}
 			
@@ -117,23 +115,22 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			result = server.listMyDraftBulletinIds(authorAccountId, retrieveTags);
 		else
 			result = server.listFieldOfficeDraftBulletinIds(myAccountId, authorAccountId, retrieveTags);
-		server.decrementActiveClientsCounter();
-		
+
+		server.clientConnectionExit();
 		return result;
 	}
 
 	public Vector getFieldOfficeAccountIds(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("getFieldOfficeAccountIds");
-			
-		server.incrementActiveClientsCounter();
 		
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			result.add(SIG_ERROR);			
-			server.decrementActiveClientsCounter();			
+			server.clientConnectionExit();			
 			return result;
 		}
 			
@@ -147,23 +144,22 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		result.add(resultCode);
 		result.add(legacyResult);
 		
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		
 		return result;
 	}
 
 	public Vector putBulletinChunk(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("putBulletinChunk");
-			
-		server.incrementActiveClientsCounter();
 
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			result.add(SIG_ERROR);			
-			server.decrementActiveClientsCounter();			
+			server.clientConnectionExit();			
 			return result;
 		}
 			
@@ -179,23 +175,22 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 					chunkSize, totalSize, chunkOffset, data);
 		result.add(legacyResult);
 		
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		
 		return result;
 	}
 
 	public Vector getBulletinChunk(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("getBulletinChunk");
-			
-		server.incrementActiveClientsCounter();
 			
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			result.add(SIG_ERROR);			
-			server.decrementActiveClientsCounter();			
+			server.clientConnectionExit();			
 			return result;
 		}
 			
@@ -213,23 +208,22 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		result.add(resultCode);
 		result.add(legacyResult);
 		
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		
 		return result;
 	}
 
 	public Vector getPacket(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("getPacket");
-			
-		server.incrementActiveClientsCounter();
 
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			result.add(SIG_ERROR);			
-			server.decrementActiveClientsCounter();			
+			server.clientConnectionExit();			
 			return result;
 		}
 			
@@ -239,6 +233,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		String bulletinLocalId= (String)parameters.get(index++);
 		String packetLocalId= (String)parameters.get(index++);
 
+		if(MartusServer.serverSSLLogging)
+			server.logging("getPacketId " + packetLocalId + " for bulletinId " + bulletinLocalId);
+
 		Vector legacyResult = server.getPacket(myAccountId, authorAccountId, bulletinLocalId, packetLocalId);
 		String resultCode = (String)legacyResult.get(0);
 		legacyResult.remove(0);
@@ -246,23 +243,22 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		result.add(resultCode);
 		result.add(legacyResult);
 		
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		
 		return result;
 	}
 
 	public Vector deleteDraftBulletins(String myAccountId, Vector parameters, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("deleteDraftBulletins");
-			
-		server.incrementActiveClientsCounter();
 
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			result.add(SIG_ERROR);			
-			server.decrementActiveClientsCounter();			
+			server.clientConnectionExit();			
 			return result;
 		}
 
@@ -275,147 +271,160 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 		result.add(server.deleteDraftBulletins(myAccountId, idList));
 		
-		server.decrementActiveClientsCounter();
-		
+		server.clientConnectionExit();
 		return result;
 	}
 	
 	public Vector putContactInfo(String myAccountId, Vector parameters, String signature) 
 	{
-		server.incrementActiveClientsCounter();
+		server.clientConnectionStart();
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			if(MartusServer.serverSSLLogging)
 				server.logging("putContactInfo:Signature Error");
 			result.add(SIG_ERROR);
-			server.decrementActiveClientsCounter();
+			server.clientConnectionExit();
 			return result;
 		}
 		result.add(server.putContactInfo(myAccountId, parameters));
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return result;
 	}
 
 
 	// begin legacy!
 	public String ping()
-	{		
+	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-Ping");
-		server.incrementActiveClientsCounter();
 		String response = server.ping();
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 
 	public String requestUploadRights(String authorAccountId, String tryMagicWord)
-	{		
+	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-requestUploadRights");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
+		
 		String response = legacyRequestUploadRights(authorAccountId, tryMagicWord);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 	
 	public String legacyRequestUploadRights(String authorAccountId, String tryMagicWord)
 	{
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		return server.requestUploadRights(authorAccountId, tryMagicWord);
 	}
 
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId,
 		int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-uploadBulletinChunk");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
+		
 		String response = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
 						totalSize, chunkOffset, chunkSize, data, signature);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 
 	public Vector downloadMyBulletinChunk(String authorAccountId,String bulletinLocalId,
 		int chunkOffset, int maxChunkSize, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadMyBulletinChunk");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector response = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize, signature);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 	
 	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadFieldOfficeBulletinChunk");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector response = server.downloadFieldOfficeBulletinChunk(authorAccountId, bulletinLocalId, hqAccountId, 
 					chunkOffset, maxChunkSize, signature);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 	
 	public Vector downloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadAuthorizedPacket");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector response = server.legacyDownloadAuthorizedPacket(authorAccountId, packetLocalId, myAccountId, signature);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-listMyBulletinSummaries");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector response = server.legacyListMySealedBulletinIds(authorAccountId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 	
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadFieldDataPacket");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(authorAccountId));
 		Vector response = server.downloadFieldDataPacket(authorAccountId, bulletinLocalId, packetLocalId, myAccountId, signature);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 	
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-listFieldOfficeBulletinSummaries");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(hqAccountId));
 		Vector response = server.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 	
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
+		server.clientConnectionStart();
 		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-listFieldOfficeAccounts");
-		server.incrementActiveClientsCounter();
+		server.logging("request for client " + server.getPublicCode(hqAccountId));
 		Vector response = legacyListFieldOfficeAccounts(hqAccountId);
-		server.decrementActiveClientsCounter();
+		server.clientConnectionExit();
 		return response;
 	}
 	
 	public Vector legacyListFieldOfficeAccounts(String hqAccountId)
 	{
+		server.logging("request for client " + server.getPublicCode(hqAccountId));
 		return server.listFieldOfficeAccounts(hqAccountId);
 	}
 	
 	private boolean isSignatureOk(String myAccountId, Vector parameters, String signature, MartusCrypto verifier)
 	{
+		server.logging("request for client " + server.getPublicCode(myAccountId));
 		return MartusUtilities.verifySignature(parameters, verifier, myAccountId, signature);
 	}
 
