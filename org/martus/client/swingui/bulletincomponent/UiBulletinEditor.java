@@ -30,6 +30,7 @@ import java.io.IOException;
 
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiBoolEditor;
+import org.martus.client.swingui.fields.UiDateEditor;
 import org.martus.client.swingui.fields.UiField;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
@@ -50,9 +51,7 @@ public class UiBulletinEditor extends UiBulletinComponent
 		return new UiBulletinComponentEditorSection(this, owner, encrypted);
 	}
 
-	public void validateData() throws 
-		EntryDateInvalidException,
-		EventDateInvalidException
+	public void validateData() throws UiField.DataInvalidException 
 		
 	{
 		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
@@ -61,13 +60,9 @@ public class UiBulletinEditor extends UiBulletinComponent
 			{
 				fields[fieldNum].validate();
 			} 
-			catch (UiField.ValidationException e) 
+			catch (UiDateEditor.DateFutureException e) 
 			{
-				if(fieldTags[fieldNum].equals(Bulletin.TAGENTRYDATE))
-					throw new EntryDateInvalidException();
-				if(fieldTags[fieldNum].equals(Bulletin.TAGEVENTDATE))
-					throw new EventDateInvalidException();
-				System.out.println("UiBulletinEditor.validateData: " + e);
+				throw new UiDateEditor.DateFutureException(owner.getLocalization().getFieldLabel(fieldTags[fieldNum]));
 			}
 		}
 	}

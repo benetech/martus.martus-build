@@ -51,6 +51,8 @@ import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.UiUtilities;
 import org.martus.client.swingui.bulletincomponent.UiBulletinComponent;
 import org.martus.client.swingui.bulletincomponent.UiBulletinEditor;
+import org.martus.client.swingui.fields.UiDateEditor;
+import org.martus.client.swingui.fields.UiField.DataInvalidException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
@@ -138,14 +140,14 @@ public class UiBulletinModifyDlg extends JFrame implements ActionListener, Windo
 			view.validateData();
 			view.copyDataToBulletin(bulletin);
 		}
-		catch(UiBulletinComponent.EntryDateInvalidException e)
+		catch(UiDateEditor.DateFutureException e)
 		{
-			observer.notifyDlg(this,"ErrorVerifyingEntryDate");
+			observer.messageDlg(this,"ErrorDateInFuture", e.getlocalizedTag());
 			return;
 		}
-		catch(UiBulletinComponent.EventDateInvalidException e)
+		catch (DataInvalidException e) 
 		{
-			observer.notifyDlg(this,"ErrorVerifyingEventDate");
+			System.out.println("UiModifyBulletinDlg.actionPerformed: " + e);
 			return;
 		}
 		catch(IOException e)
@@ -157,7 +159,7 @@ public class UiBulletinModifyDlg extends JFrame implements ActionListener, Windo
 		{
 			System.out.println("UiModifyBulletinDlg.actionPerformed: " + e);
 			return;
-		}
+		} 
 
 
 		Cursor originalCursor = getCursor();

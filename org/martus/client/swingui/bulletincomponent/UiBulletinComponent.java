@@ -98,17 +98,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	{
 	}
 	
-	public static class EntryDateInvalidException extends Exception
-	{
-	}
-	
-	public static class EventDateInvalidException extends Exception
-	{
-	}
-	
-	public void validateData() throws 
-		EntryDateInvalidException,
-		EventDateInvalidException
+
+	public void validateData() throws UiField.DataInvalidException 
 	{
 	}
 

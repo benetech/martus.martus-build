@@ -39,11 +39,24 @@ abstract public class UiField
 	abstract public void setText(String newText);
 	abstract public void disableEdits();
 
-	static public class ValidationException extends Exception
+	public static class DataInvalidException extends Exception
 	{
+		public DataInvalidException()
+		{
+			localizedTag = null;
+		}
+		public DataInvalidException(String tag)
+		{
+			localizedTag = tag;
+		}
+		public String getlocalizedTag()
+		{
+			return localizedTag;
+		}
+		String localizedTag;
 	}
 	
-	public void validate() throws ValidationException {}
+	public void validate() throws DataInvalidException {}
 	
 	public JComponent[] getFocusableComponents()
 	{

@@ -84,14 +84,26 @@ public class UiDateEditor extends UiField
 		return new JComponent[]{dayCombo, monthCombo, yearCombo};
 	}
 
-	public void validate() throws ValidationException 
+	public static class DateFutureException extends UiField.DataInvalidException
+	{
+		public DateFutureException()
+		{
+			super();
+		}
+		public DateFutureException(String tag)
+		{
+			super(tag);
+		}
+	}
+	
+	public void validate() throws UiField.DataInvalidException 
 	{
 		Date value = getDate();
 		Date today = new Date();
 		if (value.after(today))
 		{
 			dayCombo.requestFocus();	
-			throw new ValidationException();
+			throw new DateFutureException();
 		}
 	}
 
