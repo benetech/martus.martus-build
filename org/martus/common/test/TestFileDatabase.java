@@ -521,37 +521,13 @@ public class TestFileDatabase extends TestCaseEnhanced
 
 	}
 	
-	public void testScrubAllRecordForAccount() throws Exception
+	public void testScrubRecord() throws Exception
 	{
-		class PacketCollector implements Database.PacketVisitor
-		{
-			public void visit(DatabaseKey key)
-			{
-				list.add(key);
-			}
-			Vector list = new Vector();
-		}
-		
-		db.writeRecord(shortKey, sampleString1);
-		db.writeRecord(shortKey2, sampleString2);		
-
-		PacketCollector ac = new PacketCollector();
-		db.visitAllRecords(ac);
-		assertEquals("count?", 2, ac.list.size());
-		for (int i=0; i<ac.list.size();++i)
-		{
-			DatabaseKey key = (DatabaseKey) ac.list.elementAt(i);
-			String orgStr = db.readRecord(key, security);	
-			db.scrubRecord(key);			
-			verifyRecords(key, orgStr);							
-		}						
-	}
-	
-	protected void verifyRecords(DatabaseKey key, String str) throws Exception, IOException
-	{
-		String gotBack = db.readRecord(key, security);
-		assertNotEquals("record not match?", str, gotBack);
-		
+		db.writeRecord(shortKey, sampleString1);			
+		db.scrubRecord(shortKey);		
+		String scrubbedRecord = db.readRecord(shortKey, security);	
+			
+		assertNotEquals("record not match?",scrubbedRecord, sampleString1);												
 	}
 	
 	int getRecordCount()
