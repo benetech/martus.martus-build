@@ -1,44 +1,50 @@
-What is Martus(tm)?
-Why is security so important when using Martus?
-How does Martus keep the data secure?
-What does an individual need to do to keep data secure?
-What are the limitations to Martus security?
-Why send bulletins to the server?
-Getting Started
-Installing
-Choosing a password
-Setting up a server connection
-Setting your preferences
-Creating a Bulletin
-Completing fields in a bulletin
-Using a template in the Details field
-Saving and modifying Bulletins
-Saving a draft
-Modifying a copy of a sealed bulletin
-Modifying a draft
-Discarding a draft
-Managing Bulletins
-Default folders
-Other folders created by Martus
-Creating folders
-Discarding and deleting bulletins
-Organizing bulletins
-Dragging bulletins to the Windows desktop
-Retrieving sealed bulletins
-Retrieving draft bulletins
-Retrieving bulletins created by field desks
-Viewing and saving attachments
-Viewing damaged bulletins
-Searching for specific bulletins
-Printing bulletins
-Keeping Your Data Secure
-How Martus security works
-Back up your key pair file
-Restoring your key pair file
-Use your password wisely
-Use safe computing practices
-Sharing your private data with your organization 
-Instructions for Headquarters users
-Instructions for field users who want to provide access to Headquarters users
-Instructions for field users who want to deny future access to Headquarters users
-Frequently Asked Questions
+﻿INTRODUCTION TO THE MARTUS™ SOFTWARE
+WHAT IS MARTUS™?
+WHY IS SECURITY SO IMPORTANT WHEN USING MARTUS?
+HOW DOES MARTUS KEEP THE DATA SECURE?
+WHAT DOES AN INDIVIDUAL NEED TO DO TO KEEP DATA SECURE?
+WHAT ARE THE LIMITATIONS TO MARTUS SECURITY?
+WHY SEND BULLETINS TO THE SERVER?
+WHY IS MARTUS AN OPEN SOURCE APPLICATION?
+GETTING STARTED
+INSTALLING
+UNINSTALLING
+SETTING UP YOUR ACCOUNT
+CHOOSING A PASSWORD
+SETTING UP A SERVER CONNECTION
+SETTING YOUR PREFERENCES
+UPDATING THE MARTUS APPLICATION
+CREATING A BULLETIN
+COMPLETING FIELDS IN A BULLETIN
+USING A TEMPLATE IN THE DETAILS FIELD
+CUSTOMIZING BULLETIN FIELDS
+SAVING AND MODIFYING BULLETINS
+SENDING A BULLETIN TO THE MARTUS SERVER
+SAVING A DRAFT
+MODIFYING A COPY OF A SEALED BULLETIN
+MODIFYING A DRAFT
+DISCARDING A DRAFT
+MANAGING BULLETINS
+DEFAULT FOLDERS
+OTHER FOLDERS CREATED BY MARTUS
+CREATING FOLDERS
+DISCARDING AND DELETING BULLETINS
+DELETING ALL BULLETIN DATA
+ORGANIZING BULLETINS
+DRAGGING BULLETINS TO THE WINDOWS DESKTOP
+RETRIEVING SEALED BULLETINS
+RETRIEVING DRAFT BULLETINS
+RETRIEVING BULLETINS CREATED BY FIELD DESKS
+VIEWING AND SAVING ATTACHMENTS
+VIEWING DAMAGED BULLETINS
+SEARCHING FOR SPECIFIC BULLETINS
+PRINTING BULLETINS
+EXPORTING BULLETIN DATA
+KEEPING YOUR DATA SECURE
+HOW MARTUS SECURITY WORKS
+BACKING UP YOUR KEY PAIR FILE
+RESTORING YOUR KEY PAIR FILE
+USING YOUR PASSWORD WISELY
+USING SAFE COMPUTING PRACTICES
+SHARING YOUR PRIVATE DATA WITH YOUR ORGANIZATION
+FREQUENTLY ASKED QUESTIONS
