@@ -37,8 +37,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
-import org.martus.client.core.MartusApp;
-
 public class UiUtilities
 {
 	static void updateIcon(JFrame window)
@@ -93,42 +91,42 @@ public class UiUtilities
 		}
 	}
 
-	static void notifyDlg(MartusApp app, JFrame parent, String baseTag, String titleTag)
+	static void notifyDlg(MartusLocalization localization, JFrame parent, String baseTag, String titleTag)
 	{
-		String title = app.getWindowTitle(titleTag);
-		String cause = app.getFieldLabel("notify" + baseTag + "cause");
-		String ok = app.getButtonLabel("ok");
+		String title = localization.getWindowTitle(titleTag);
+		String cause = localization.getFieldLabel("notify" + baseTag + "cause");
+		String ok = localization.getButtonLabel("ok");
 		String[] contents = {cause};
 		String[] buttons = {ok};
 
 		new UiNotifyDlg(parent, title, contents, buttons);
 	}
 
-	static void messageDlg(MartusApp app, JFrame parent, String baseTag, String message)
+	static void messageDlg(MartusLocalization localization, JFrame parent, String baseTag, String message)
 	{
-		String title = app.getWindowTitle(baseTag);
-		String cause = app.getFieldLabel("message" + baseTag + "cause");
-		String ok = app.getButtonLabel("ok");
+		String title = localization.getWindowTitle(baseTag);
+		String cause = localization.getFieldLabel("message" + baseTag + "cause");
+		String ok = localization.getButtonLabel("ok");
 		String[] contents = {cause, "", message};
 		String[] buttons = {ok};
 
 		new UiNotifyDlg(parent, title, contents, buttons);
 	}
 
-	static boolean confirmDlg(MartusApp app, JFrame parent, String baseTag)
+	static boolean confirmDlg(MartusLocalization localization, JFrame parent, String baseTag)
 	{
-		String title = app.getWindowTitle("confirm" + baseTag);
-		String cause = app.getFieldLabel("confirm" + baseTag + "cause");
-		String effect = app.getFieldLabel("confirm" + baseTag + "effect");
-		String question = app.getFieldLabel("confirmquestion");
+		String title = localization.getWindowTitle("confirm" + baseTag);
+		String cause = localization.getFieldLabel("confirm" + baseTag + "cause");
+		String effect = localization.getFieldLabel("confirm" + baseTag + "effect");
+		String question = localization.getFieldLabel("confirmquestion");
 		String[] contents = {cause, "", effect, "", question};
-		return confirmDlg(app, parent, title, contents);
+		return confirmDlg(localization, parent, title, contents);
 	}
 
-	static boolean confirmDlg(MartusApp app, JFrame parent, String title, String[] contents)
+	static boolean confirmDlg(MartusLocalization localization, JFrame parent, String title, String[] contents)
 	{
-		String yes = app.getButtonLabel("yes");
-		String no = app.getButtonLabel("no");
+		String yes = localization.getButtonLabel("yes");
+		String no = localization.getButtonLabel("no");
 		String[] buttons = {yes, no};
 
 		UiNotifyDlg notify = new UiNotifyDlg(parent, title, contents, buttons);

@@ -40,7 +40,7 @@ public class ActionMenuQuickErase extends UiMenuAction
 		if(!mainWindow.reSignIn())
 			return;
 		//TODO Beep?
-		if(!UiUtilities.confirmDlg(mainWindow.getApp(), mainWindow, "DoQuickErase"))
+		if(!UiUtilities.confirmDlg(mainWindow.getLocalization(), mainWindow, "DoQuickErase"))
 			return;
 		//TODO Confirm if bulletins are in outbox / draftoutbox
 		if(mainWindow.getApp().deleteAllBulletinsAndUserFolders())

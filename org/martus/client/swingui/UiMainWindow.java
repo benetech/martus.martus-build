@@ -326,12 +326,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean confirmDlg(JFrame parent, String baseTag)
 	{
-		return UiUtilities.confirmDlg(getApp(), parent, baseTag);
+		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag);
 	}
 
 	public boolean confirmDlg(JFrame parent, String title, String[] contents)
 	{
-		return UiUtilities.confirmDlg(getApp(), parent, title, contents);
+		return UiUtilities.confirmDlg(getLocalization(), parent, title, contents);
 	}
 
 	public void notifyDlg(JFrame parent, String baseTag)
@@ -341,12 +341,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void notifyDlg(JFrame parent, String baseTag, String titleTag)
 	{
-		UiUtilities.notifyDlg(getApp(), parent, baseTag, titleTag);
+		UiUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag);
 	}
 
 	public void messageDlg(JFrame parent, String baseTag, String message)
 	{
-		UiUtilities.messageDlg(getApp(), parent, baseTag, message);
+		UiUtilities.messageDlg(getLocalization(), parent, baseTag, message);
 	}
 
 	private void initializationErrorDlg(String message)
