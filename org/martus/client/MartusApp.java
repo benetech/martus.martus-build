@@ -16,6 +16,7 @@ import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -344,6 +345,7 @@ public class MartusApp
 		b.set(Bulletin.TAGAUTHOR, configInfo.getAuthor());
 		b.set(Bulletin.TAGORGANIZATION, configInfo.getOrganization());
 		b.set(Bulletin.TAGPUBLICINFO, configInfo.getTemplateDetails());
+		b.set(Bulletin.TAGLANGUAGE, getCurrentLanguage());
 		b.setDraft();
 		b.setAllPrivate(true);
 		return b;
@@ -1259,6 +1261,7 @@ public class MartusApp
 			tempChoicesArray[i] = 
 				new ChoiceItem(languageCodes[i], getLanguageName(languageCodes[i]));	
 		}
+		Arrays.sort(tempChoicesArray);
 		return tempChoicesArray;
 	}
 	

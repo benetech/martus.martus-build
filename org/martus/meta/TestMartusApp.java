@@ -1765,11 +1765,11 @@ public class TestMartusApp extends TestCaseEnhanced
 	public void testGetLanguageNameChoices()
 	{
 		TRACE_BEGIN("testWindowTitles");
-		String[] testLanguageCodes = {"en", "es", "si"};
+		String[] testLanguageCodes = {"es", "en", "si"};
 		ChoiceItem[] languageChoicesTest = appWithServer.getLanguageNameChoices(testLanguageCodes);
 		assertEquals(languageChoicesTest[0].toString(), appWithServer.getLanguageName("en"));
-		assertEquals(languageChoicesTest[1].toString(), appWithServer.getLanguageName("es"));
-		assertEquals(languageChoicesTest[2].toString(), appWithServer.getLanguageName("si"));
+		assertEquals(languageChoicesTest[1].toString(), appWithServer.getLanguageName("si"));
+		assertEquals(languageChoicesTest[2].toString(), appWithServer.getLanguageName("es"));
 		TRACE_END();
 	}
 	

@@ -1,6 +1,6 @@
 package org.martus.client;
 
-public class ChoiceItem
+public class ChoiceItem implements Comparable
 {
 	public ChoiceItem(String codeToUse, String displayToUse)
 	{
@@ -18,7 +18,13 @@ public class ChoiceItem
 		return code;
 	}
 
+	public int compareTo(Object other)
+	{
+		return toString().compareTo(other.toString());
+	}
+
 	private String code;
 	private String display;
+
 }
 

@@ -482,6 +482,7 @@ public class MartusLocalization
 		addEnglishTranslation("menu:delete=Delete");
 		addEnglishTranslation("menu:selectall=Select All");
 		
+		addEnglishTranslation("language:?=-Other-");
 		addEnglishTranslation("language:en=English");
 		addEnglishTranslation("language:ar=Arabic");
 		addEnglishTranslation("language:az=Azerbaijani");
@@ -778,7 +779,7 @@ public class MartusLocalization
 
 	private Map languageTranslationsMap;
 	public static final String[] ALL_LANGUAGE_CODES = {
-				"en", "ar", 
+				"?", "en", "ar", 
 				"az", "bn", "my","zh", "nl", "eo", "fr", "de","gu","ha","he","hi","hu", 
 				"it", "ja","jv","kn","ko","ml","mr","or","pa","pl","pt","ro","ru","sr", 
 				"sr", "sd","si","es","ta","te", "th","tr","uk","ur","vi"};
