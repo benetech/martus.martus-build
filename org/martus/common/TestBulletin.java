@@ -279,13 +279,15 @@ public class TestBulletin extends TestCaseEnhanced
 		b2.pullDataFrom(b1, db);
 		assertEquals("public attachment count", 1, b2.getPublicAttachments().length);
 		assertEquals("private attachment count", 1, b2.getPrivateAttachments().length);
-		assertEquals("public attachment1 data", a1, b2.getPublicAttachments()[0]);
-		assertEquals("private attachment data", a2, b2.getPrivateAttachments()[0]);
+		AttachmentProxy clonedPublicAttachment = b2.getPublicAttachments()[0];
+		assertEquals("public attachment1 data", a1, clonedPublicAttachment);
+		AttachmentProxy clonedPrivateAttachment = b2.getPrivateAttachments()[0];
+		assertEquals("private attachment data", a2, clonedPrivateAttachment);
 		b2.pullDataFrom(b1, db);
 		assertEquals("again public attachment count", 1, b2.getPublicAttachments().length);
 		assertEquals("again private attachment count", 1, b2.getPrivateAttachments().length);
-		assertEquals("again public attachment1 data", a1, b2.getPublicAttachments()[0]);
-		assertEquals("again private attachment data", a2, b2.getPrivateAttachments()[0]);
+		assertEquals("again public attachment1 data", a1, clonedPublicAttachment);
+		assertEquals("again private attachment data", a2, clonedPrivateAttachment);
 		
 		b1.setAllPrivate(false);
 		b2.pullDataFrom(b1, db);
@@ -298,8 +300,12 @@ public class TestBulletin extends TestCaseEnhanced
 		BulletinSaver.saveToDatabase(b1,db,false,security);
 
 		b2.pullDataFrom(b1,db);
-		assertNotEquals("didn't clone the public attachment?", a1.getUniversalId().getLocalId(), b2.getPublicAttachments()[0].getUniversalId().getLocalId());
-		assertNotEquals("didn't clone the private attachment?", a2.getUniversalId().getLocalId(), b2.getPrivateAttachments()[0].getUniversalId().getLocalId());
+		clonedPublicAttachment = b2.getPublicAttachments()[0];
+		clonedPrivateAttachment = b2.getPrivateAttachments()[0];
+		assertNotEquals("didn't clone the public attachment?", a1.getUniversalId().getLocalId(), clonedPublicAttachment.getUniversalId().getLocalId());
+		assertNotEquals("didn't clone the private attachment?", a2.getUniversalId().getLocalId(), clonedPrivateAttachment.getUniversalId().getLocalId());
+		assertEquals("Public attachment label not the same?", a1.getLabel(), clonedPublicAttachment.getLabel());
+		assertEquals("Private attachment label not the same?", a2.getLabel(), clonedPrivateAttachment.getLabel());
 	}
 
 	public void testIsStringInArray()

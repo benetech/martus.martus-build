@@ -33,23 +33,28 @@ public class AttachmentProxy
 	public AttachmentProxy(File fileToAttach)
 	{
 		file = fileToAttach;
-		label = file.getName();
+		setLabel(file.getName());
 	}
 
 	public AttachmentProxy(UniversalId universalIdToUse, String labelToUse, byte[] sessionKeyBytes)
 	{
 		setUniversalIdAndSessionKey(universalIdToUse, sessionKeyBytes);
-		label = labelToUse;
+		setLabel(labelToUse);
 	}
 
 	public AttachmentProxy(String labelToUse)
 	{
-		label = labelToUse;
+		setLabel(labelToUse);
 	}
 
 	public String getLabel()
 	{
 		return label;
+	}
+	
+	public void setLabel(String labelToUse)
+	{
+		label = labelToUse;
 	}
 
 	public File getFile()

@@ -948,7 +948,7 @@ public class MartusUtilities
 		return false;
 	}
 
-	public static AttachmentProxy createFileProxyFromAttachmentPacket(InputStreamWithSeek attachmentIn, byte[] sessionKeyBytes, MartusCrypto verifier)
+	public static AttachmentProxy createFileProxyFromAttachmentPacket(InputStreamWithSeek attachmentIn, AttachmentProxy oldProxy, MartusCrypto verifier)
 		throws
 			IOException,
 			Packet.InvalidPacketException,
@@ -956,10 +956,12 @@ public class MartusUtilities
 			Packet.WrongPacketTypeException,
 			Base64.InvalidBase64Exception
 	{
+		byte[] sessionKeyBytes = oldProxy.getSessionKeyBytes();
 		File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
 		tempFile.deleteOnExit();
 		AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, tempFile);
 		AttachmentProxy ap = new AttachmentProxy(tempFile);
+		ap.setLabel(oldProxy.getLabel());
 		return ap;
 	}
 }

@@ -168,14 +168,13 @@ public class BulletinZipImporter
 	IOException
 	{
 		String localId = attachment.getUniversalId().getLocalId();
-		byte[] sessionKeyBytes = attachment.getSessionKeyBytes();
 		ZipEntry attachmentEntry = zip.getEntry(localId);
 		if(attachmentEntry == null)
 			throw new IOException("Attachment packet not found: " + localId);
 		InputStreamWithSeek attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
 		try
 		{
-			return MartusUtilities.createFileProxyFromAttachmentPacket(attachmentIn, sessionKeyBytes, verifier);
+			return MartusUtilities.createFileProxyFromAttachmentPacket(attachmentIn, attachment, verifier);
 		}
 		catch(Exception e)
 		{

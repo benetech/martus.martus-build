@@ -1587,11 +1587,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		modifyBulletin(b);
 	}
 
-	public void modifyBulletin(Bulletin b)
+	public boolean modifyBulletin(Bulletin b)
 	{
 		modifyingBulletin = true;
 		setEnabled(false);
-		currentActiveFrame = new UiModifyBulletinDlg(b, this);
+		UiModifyBulletinDlg dlg = new UiModifyBulletinDlg(b, this);
+		currentActiveFrame = dlg;
+		return dlg.wasBulletinSaved();
 	}
 
 	public void doneModifyingBulletin()

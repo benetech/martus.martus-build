@@ -170,6 +170,12 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		observer.selectBulletinInCurrentFolderIfExists(bulletin.getUniversalId());
 		weAreDoneSoClose();
 		setCursor(originalCursor);
+		wasBulletinSavedFlag = true;
+	}
+	
+	public boolean wasBulletinSaved()
+	{
+		return wasBulletinSavedFlag;
 	}
 
 	// WindowListener interface
@@ -246,5 +252,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 	JButton send;
 	JButton draft;
 	JButton cancel;
+	
+	boolean wasBulletinSavedFlag;
 }
 

@@ -64,6 +64,7 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
 import org.martus.common.Bulletin;
+import org.martus.common.DatabaseKey;
 import org.martus.common.UniversalId;
 
 
@@ -230,14 +231,19 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			createClone = true;
 		}
 
+		BulletinStore store = mainWindow.getApp().getStore();
 		if(createClone)
 		{
-			BulletinStore store = mainWindow.getApp().getStore();
 			Bulletin clone = store.createEmptyBulletin();
 			try
 			{
 				clone.pullDataFrom(b, store.getDatabase());
-				b = clone;
+				clone.setDraft();
+DatabaseKey akey = DatabaseKey.createKey(clone.getPublicAttachments()[0].getUniversalId(),clone.getStatus());
+store.getDatabase().doesRecordExist(akey);
+				store.saveBulletin(clone);
+				DatabaseKey key = DatabaseKey.createKey(clone.getUniversalId(),clone.getStatus());
+				b = store.loadFromDatabase(key);
 			}
 			catch (Exception e)
 			{
@@ -245,7 +251,11 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				return;
 			}
 		}
-		mainWindow.modifyBulletin(b);
+		boolean bulletinWasSaved = mainWindow.modifyBulletin(b);
+		if(createClone && ! bulletinWasSaved)
+		{
+			store.destroyBulletin(b);
+		}			
 	}
 
 	public void doCutBulletins()
