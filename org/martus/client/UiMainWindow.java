@@ -1085,8 +1085,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			notifyDlg(this, "retrievenoserver");
 			return null;
 		}
-
-		model.initialize(new UiProgressRetrieveSummariesDlg(this, summariesProgressTag));
+		UiProgressRetrieveSummariesDlg progressDlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag);
+		model.initialize(progressDlg);
+		if(progressDlg.shouldExit())
+			return null;
 		UiServerSummariesDlg summariesDlg = new UiServerSummariesDlg(this, model, dlgTitleTag, topMessageTag, okButtonTag);
 
 		// the following is required (for unknown reasons)

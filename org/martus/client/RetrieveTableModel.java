@@ -195,7 +195,11 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 					BulletinSummary bulletinSummary = app.createSummaryFromString(accountId, pair);
 					allSummaries.add(bulletinSummary);
 					if(retrieverDlg != null)
+					{
+						if(retrieverDlg.shouldExit())
+							break;
 						retrieverDlg.updateBulletinCountMeter(++count, maxCount);
+					}
 				}
 			} catch (ServerErrorException e) 
 			{
