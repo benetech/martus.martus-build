@@ -79,6 +79,15 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		normalFileSigByOtherSecurity.delete();
 		normalFile.delete();
 		anotherFile.delete();
+		
+		try
+		{
+			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security);
+			fail("Should have thrown FileVerificationException.");
+		}
+		catch (FileVerificationException ignoreExpectedException)
+		{
+		}
 	}
 	
 	static MartusSecurity security;

@@ -13,8 +13,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Vector;
@@ -138,12 +136,16 @@ public class MartusUtilities
 			return signature;
 	}
 	
+	public static File getSignatureFileFromFile(File originalFile)
+	{
+		return new File(originalFile.getAbsolutePath() + ".sig");	
+	}
+	
 	public static File createSignatureFileFromFile(File fileToSign, MartusCrypto signer)
 		throws IOException, MartusSignatureException
 	{		
-		String sigPath = fileToSign.getAbsolutePath();
-		File newSigFile = new File(sigPath + ".sig.new");
-		File existingSig = new File(sigPath + ".sig");
+		File newSigFile = new File(fileToSign.getAbsolutePath() + ".sig.new");
+		File existingSig = getSignatureFileFromFile(fileToSign);
 		
 		if( newSigFile.exists() )
 			newSigFile.delete();
@@ -196,6 +198,11 @@ public class MartusUtilities
 			{
 				;
 			}
+			catch (NullPointerException ignoredException)
+			{
+				;
+			}
+
 		}
 	}
 
