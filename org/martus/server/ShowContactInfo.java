@@ -43,7 +43,7 @@ public class ShowContactInfo
 
 			in = new DataInputStream(inputStream);
 			
-			String ignoredPK = in.readUTF();
+			in.readUTF(); //ignored
 			int dataSize = in.readInt();
 			int count = 0;
 			
