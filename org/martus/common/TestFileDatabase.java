@@ -11,9 +11,7 @@ import java.util.HashMap;
 import java.util.Random;
 import java.util.Vector;
 
-import org.martus.client.ClientFileDatabase;
 import org.martus.common.MartusUtilities.FileVerificationException;
-import org.martus.server.ServerFileDatabase;
 
 
 public class TestFileDatabase extends TestCaseEnhanced
@@ -83,84 +81,6 @@ public class TestFileDatabase extends TestCaseEnhanced
 		catch(FileDatabase.MissingAccountMapException ignoreExpectedException)
 		{
 			;
-		}
-	}
-	
-	public void testServerFileDbInitializerWhenNoMapSignatureExists() throws Exception
-	{
-		db.getAccountDirectory("some account");
-		db.accountMapSignatureFile.delete();
-		
-		ServerFileDatabase sfdb = new ServerFileDatabase(dir, security);
-		try
-		{
-			sfdb.initialize();
-			fail("Server should have thrown because signature is missing");
-		}
-		catch(FileDatabase.MissingAccountMapSignatureException ignoreExpectedException)
-		{
-			;
-		}
-	}
-
-	public void testServerFileDbInitializerWhenMapSignatureCorrupted() throws Exception
-	{
-		db.getAccountDirectory("some account");
-
-		FileOutputStream out = new FileOutputStream(db.accountMapFile.getPath(), true);
-		UnicodeWriter writer = new UnicodeWriter(out);
-		writer.writeln("noacct=123456789");
-		writer.flush();
-		out.flush();
-		writer.close();
-		
-		ServerFileDatabase sfdb = new ServerFileDatabase(dir, security);
-		try
-		{
-			sfdb.initialize();
-			fail("Server should have thrown because signature is corrupted");
-		}
-		catch(MartusUtilities.FileVerificationException ignoreExpectedException)
-		{
-			;
-		}
-	}
-	
-	public void testClientFileDbInitializerWhenNoMapSignatureExists() throws Exception
-	{
-		db.getAccountDirectory("some account");
-		db.accountMapSignatureFile.delete();
-		
-		ClientFileDatabase cfdb = new ClientFileDatabase(dir, security);
-		try
-		{
-			cfdb.initialize();
-		}
-		catch(FileDatabase.MissingAccountMapSignatureException expectedException)
-		{
-			fail("Client should not have thrown because of missing signature");
-		}
-	}
-
-	public void testClientFileDbInitializerWhenMapSignatureCorrupted() throws Exception
-	{
-		db.getAccountDirectory("some account");
-
-		FileOutputStream out = new FileOutputStream(db.accountMapFile.getPath(), true);
-		UnicodeWriter writer = new UnicodeWriter(out);
-		writer.writeln("noacct=123456789");
-		writer.flush();
-		out.flush();
-		writer.close();
-		
-		ClientFileDatabase cfdb = new ClientFileDatabase(dir, security);
-		try
-		{
-			cfdb.initialize();
-		}
-		catch(MartusUtilities.FileVerificationException expectedException)
-		{
-			fail("Client should not have thrown because of corrupted signature");
 		}
 	}
 

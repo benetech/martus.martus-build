@@ -18,6 +18,9 @@ import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
+import org.martus.common.FileDatabase.MissingAccountMapException;
+import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
+import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.ServerFileDatabase;
 
 
@@ -64,6 +67,195 @@ public class TestDatabase extends TestCaseEnhanced
 	}
 
 	////////// File
+	
+	public void testServerFileDbInitializerWhenNoMapSignatureExists() throws Exception
+	{
+		File dir = createTempFile();
+		dir.delete();
+		dir.mkdir();
+		ServerFileDatabase sfdb = new ServerFileDatabase(dir, security);
+		
+		File packets = new File(dir,"packets");
+		packets.delete();
+		packets.mkdirs();
+		
+		File contents = new File(packets,"packetContents");
+		UnicodeWriter writer = new UnicodeWriter(contents);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		
+		File accountMap = new File(dir, "acctmap.txt");
+		writer = new UnicodeWriter(accountMap);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		try
+		{
+			sfdb.initialize();
+			fail("Server should have thrown because signature is missing");
+		}
+		catch(MissingAccountMapSignatureException ignoreExpectedException)
+		{
+			;
+		}
+		finally
+		{
+			if(accountMap.exists())
+				accountMap.delete();
+			if(contents.exists())
+				contents.delete();
+			if(packets.exists())
+				packets.delete();
+			if(dir.exists())
+				dir.delete();
+		}
+	}
+
+	public void testServerFileDbInitializerWhenMapSignatureCorrupted() throws Exception
+	{
+		File dir = createTempFile();
+		dir.delete();
+		dir.mkdir();
+		ServerFileDatabase sfdb = new ServerFileDatabase(dir, security);
+		
+		File packets = new File(dir,"packets");
+		packets.delete();
+		packets.mkdirs();
+		
+		File contents = new File(packets,"packetContents");
+		UnicodeWriter writer = new UnicodeWriter(contents);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		
+		File accountMap = new File(dir, "acctmap.txt");
+		writer = new UnicodeWriter(accountMap);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		File accountMapSig = new File(dir, "acctmap.txt.sig");
+		writer = new UnicodeWriter(accountMapSig);
+		writer.writeln("noacct=123456789");
+		writer.close();
+
+		try
+		{
+			sfdb.initialize();
+			fail("Server should have thrown because signature is corrupted");
+		}
+		catch(FileVerificationException ignoreExpectedException)
+		{
+			;
+		}
+		finally
+		{
+			if(accountMap.exists())
+				accountMap.delete();
+			if(accountMapSig.exists())
+				accountMapSig.delete();
+			if(contents.exists())
+				contents.delete();
+			if(packets.exists())
+				packets.delete();
+			if(dir.exists())
+				dir.delete();
+		}
+	}
+
+	public void testClientFileDbInitializerWhenNoMapSignatureExists() throws Exception
+	{
+		File dir = createTempFile();
+		dir.delete();
+		dir.mkdir();
+		ClientFileDatabase cfdb = new ClientFileDatabase(dir, security);
+		
+		File packets = new File(dir,"packets");
+		packets.delete();
+		packets.mkdirs();
+		
+		File contents = new File(packets,"packetContents");
+		UnicodeWriter writer = new UnicodeWriter(contents);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		
+		File accountMap = new File(dir, "acctmap.txt");
+		writer = new UnicodeWriter(accountMap);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		try
+		{
+			cfdb.initialize();
+		}
+		catch(FileDatabase.MissingAccountMapSignatureException expectedException)
+		{
+			fail("Client should not have thrown because of missing signature");
+		}
+		finally
+		{
+			if(accountMap.exists())
+				accountMap.delete();
+			if(contents.exists())
+				contents.delete();
+			if(packets.exists())
+				packets.delete();
+			if(dir.exists())
+				dir.delete();
+		}
+	}
+
+	public void testClientFileDbInitializerWhenMapSignatureCorrupted() throws Exception
+	{
+		File dir = createTempFile();
+		dir.delete();
+		dir.mkdir();
+		ClientFileDatabase cfdb = new ClientFileDatabase(dir, security);
+		
+		File packets = new File(dir,"packets");
+		packets.delete();
+		packets.mkdirs();
+		
+		File contents = new File(packets,"packetContents");
+		UnicodeWriter writer = new UnicodeWriter(contents);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		
+		File accountMap = new File(dir, "acctmap.txt");
+		writer = new UnicodeWriter(accountMap);
+		writer.writeln("anacct=string");
+		writer.close();
+		
+		File accountMapSig = new File(dir, "acctmap.txt.sig");
+		writer = new UnicodeWriter(accountMapSig);
+		writer.writeln("noacct=123456789");
+		writer.close();
+
+		try
+		{
+			cfdb.initialize();
+		}
+		catch(FileVerificationException expectedException)
+		{
+			fail("Client should not have thrown because of corrupted signature");
+		}
+		finally
+		{
+			if(accountMap.exists())
+				accountMap.delete();
+			if(accountMapSig.exists())
+				accountMapSig.delete();
+			if(contents.exists())
+				contents.delete();
+			if(packets.exists())
+				packets.delete();
+			if(dir.exists())
+				dir.delete();
+		}
+	}
+
 	public void testEmptyDatabase() throws Exception
 	{
 		TRACE("testSmallWriteRecord");
