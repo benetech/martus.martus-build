@@ -171,15 +171,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	}
 	
 
-	public String requestUploadRights(String clientId, String tryMagicWord)
-	{
-		logging("ServerInterfaceXmlRpcHandler:requestUploadRights clientId=" + clientId + "tryMagicWord=" + tryMagicWord);
-		Vector params = new Vector();
-		params.add(clientId);
-		params.add(tryMagicWord);
-		return (String)callServer(server, CMD_UPLOAD_RIGHTS, params);
-	}
-
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
 		logging("ServerInterfaceXmlRpcHandler:uploadBulletinChunk clientId=" + authorAccountId + "bulletinId=" + bulletinLocalId);

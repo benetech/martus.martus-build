@@ -341,17 +341,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	}
 
 	// begin legacy!
-	public String requestUploadRights(String authorAccountId, String tryMagicWord)
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-requestUploadRights");
-		server.logging("request for client " + server.getPublicCode(authorAccountId));
-		
-		String response = legacyRequestUploadRights(authorAccountId, tryMagicWord);
-		server.clientConnectionExit();
-		return response;
-	}
 	
 	public String legacyRequestUploadRights(String authorAccountId, String tryMagicWord)
 	{

@@ -111,12 +111,6 @@ class ServerSideNetworkHandlerNotAvailable implements NetworkInterface
 		return null;
 	}
 	
-	public String requestUploadRights(
-		String authorAccountId,
-		String tryMagicWord)
-	{
-		return null;
-	}
 	public String uploadBulletinChunk(
 		String authorAccountId,
 		String bulletinLocalId,

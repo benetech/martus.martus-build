@@ -45,7 +45,6 @@ public interface NetworkInterfaceXmlRpcConstants
 
 	// legacy!
 	public static final String CMD_PING = "ping";
-	public static final String CMD_UPLOAD_RIGHTS = "requestUploadRights";
 	public static final String CMD_UPLOAD_CHUNK = "uploadBulletinChunk";
 	public static final String CMD_DOWNLOAD_CHUNK = "downloadMyBulletinChunk";
 	public static final String CMD_DOWNLOAD_FIELD_OFFICE_CHUNK = "downloadFieldOfficeBulletinChunk";
