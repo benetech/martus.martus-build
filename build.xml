@@ -15,6 +15,7 @@
   <property name="common-package" value="${martus-package}.common"/>
   <property name="BuildDateFile" value="${common-dir}/BuildDate.txt"/>
   <property name="common-files" value="${common-dir}/*.class,
+  					${common-dir}/**/*.class,
   					${BuildDateFile}
   					"/>
 
@@ -22,21 +23,15 @@
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
   <property name="server-package" value="${martus-package}.server"/>
   <property name="server-files" value="${server-dir}/*.class,
-  					${server-dir}/core/*.class,
-  					${server-dir}/foramplifiers/*.class,
-  					${server-dir}/forclients/*.class,
-  					${server-dir}/formirroring/*.class,
-  					${server-dir}/tools/*.class
+  					${server-dir}/**/*.class
   					"/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
   <property name="client-jar" value= "${dist}/martus.jar"/>
   <property name="client-package" value="${martus-package}.client"/>
   <property name="client-files" value="${client-dir}/*.class,
-  			${client-dir}/test/*.class,
-  			${client-dir}/core/*.class,
-  			${client-dir}/core/main-class.txt,
-  			${client-dir}/swingui/*.class,
+  				${client-dir}/**/*.class,
+  				${client-dir}/core/main-class.txt,
     			${client-dir}/swingui/Martus-es.mtf,
     			${client-dir}/swingui/MartusHelp-en.txt,
     			${client-dir}/swingui/MartusHelp-es.txt,
@@ -67,39 +62,28 @@
   <target name="clean">
   
     <!-- Remove dis jars & folder -->
-    <delete verbose="true" includeEmptyDirs="true">
-        <fileset dir="${dist}" includes="*.jar"/>
-    </delete>
     <delete dir="${dist}"/>
     
     <delete file="${BuildDateFile}"/>
     
     <!-- Remove common class files -->
     <delete>
-        <fileset dir="${common-dir}" includes="*.class"/>
+        <fileset dir="${common-dir}" includes="**/*.class"/>
     </delete>
     
     <!-- Remove meta class files -->
     <delete>
-        <fileset dir="${meta-dir}" includes="*.class"/>
+        <fileset dir="${meta-dir}" includes="**/*.class"/>
     </delete>
     
     <!-- Remove client class files -->
     <delete>
-        <fileset dir="${client-dir}" includes="*.class"/>
-        <fileset dir="${client-dir}/test/" includes="*.class"/>
-        <fileset dir="${client-dir}/core/" includes="*.class"/>
-        <fileset dir="${client-dir}/swingui/" includes="*.class"/>
+        <fileset dir="${client-dir}" includes="**/*.class"/>
     </delete>
     
     <!-- Remove server class files -->
     <delete>
-        <fileset dir="${server-dir}" includes="*.class"/>
-        <fileset dir="${server-dir}/core/" includes="*.class"/>
-        <fileset dir="${server-dir}/foramplifiers/" includes="*.class"/>
-        <fileset dir="${server-dir}/forclients/" includes="*.class"/>
-        <fileset dir="${server-dir}/formirroring/" includes="*.class"/>
-        <fileset dir="${server-dir}/tools/" includes="*.class"/>
+        <fileset dir="${server-dir}" includes="**/*.class"/>
     </delete>
   </target>
 
@@ -109,39 +93,36 @@
   <target name="build" depends="init">
 
     <echo message="${DSTAMP}" file="${BuildDateFile}"/>
-    <javac srcdir="${common-dir}" failonerror="true"/>
+    
+    <javac target="1.4" optimize="on" srcdir="${common-dir}" failonerror="true">
+    		<include name="**/*.java"/>
+    </javac>
 
-    <javac srcdir="${server-dir}" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${server-dir}/core" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${server-dir}/foramplifiers" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${server-dir}/forclients" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${server-dir}/formirroring" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${server-dir}/tools" classpath="${common-dir}" failonerror="true"/>
+    <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath="${common-dir}" failonerror="true">
+    		<include name="**/*.java"/>
+    </javac>
 
-    <javac srcdir="${client-dir}" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${client-dir}/core" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${client-dir}/swingui" classpath="${common-dir}" failonerror="true"/>
-    <javac srcdir="${client-dir}/test" classpath="${common-dir}" failonerror="true"/>
 
-    <javac srcdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true"/>
+    <javac target="1.4" optimize="on" srcdir="${client-dir}" classpath="${common-dir}" failonerror="true">
+    		<include name="**/*.java"/>
+    </javac>
+
+    <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true">
+    		<include name="**/*.java"/>
+    </javac>
 
     <mkdir dir="${dist}"/>
-    <jar jarfile="${common-jar}" basedir="." 
-    		includes="${common-files}"/>
+
+    <jar jarfile="${common-jar}" basedir="." includes="${common-files}"/>
+    		
     <jar jarfile="${server-jar}" basedir="." 
-    		includes="${server-files}, 
-    				${server-files}/core,
-    				${server-files}/foramplifiers,
-    				${server-files}/forclients,
-    				${server-files}/formirroring,
-    				${server-files}/tools,
-    				${common-files}"/>
+    		includes="${server-files}, ${common-files}"/>
+    		
     <jar jarfile="${client-jar}" basedir="." 
-			manifest="${client-dir}/core/main-class.txt" 
-    		includes="${client-files}/core,
-    				${client-files}/swingui,
-    				${client-files}/test,
-    				${common-files}"/>
+				manifest="${client-dir}/core/main-class.txt" 
+    		includes="${client-files},
+    							${common-files}"/>
+    		
     <jar jarfile="${meta-jar}" basedir="." 
     		includes="${meta-files}, 
     				${common-files}, 
@@ -207,11 +188,42 @@
 					bottom="Copyright &#169; 2003 Beneficent Technology, Inc. (Benetech)."
 					/>
 	</target>
+	
+<!-- ================================================================== -->
+<!-- C H E C K  V A R S                                                  -->
+<!-- ================================================================== -->
+	<target name="check_keypass" unless="sign.keypass">
+
+		<input
+			message="Please enter key pw:"
+			addproperty="sign.keypass"
+		/>
+
+	</target>
+	
+	<target name="check_storepass" unless="sign.storepass">
+
+		<input
+			message="Please enter store pw:"
+			addproperty="sign.storepass"
+		/>
+
+	</target>
+	
+	<target name="check_keystore" unless="sign.keystore">
+
+		<input
+			message="Please enter keystore location:"
+			addproperty="sign.keystore"
+		/>
+
+	</target>
 
 <!-- ================================================================== -->
 <!-- J A R S I G N E R                                                  -->
 <!-- ================================================================== -->
-	<target name="jarsigner" depends="build">
+	<target name="jarsigner" depends="check_storepass, check_keypass, check_keystore, build">
+ 
 		<signjar jar="${client-jar}"
 						keystore="${sign.keystore}"
 						storepass="${sign.storepass}"
