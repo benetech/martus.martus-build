@@ -301,10 +301,13 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		if(magicSig.exists())
 			magicSig.delete();
 
-		if(getTriggerDirectory().exists())
-			getTriggerDirectory().delete();
-		if(getStartupConfigDirectory().exists())
-			getStartupConfigDirectory().delete();
+		File triggerDirectory = getTriggerDirectory();
+		if(triggerDirectory.exists())
+			triggerDirectory.delete();
+			
+		File startupDirectory = getStartupConfigDirectory();
+		if(startupDirectory.exists())
+			startupDirectory.delete();
 
 		dataDirectory.delete();
 		if(dataDirectory.exists())
