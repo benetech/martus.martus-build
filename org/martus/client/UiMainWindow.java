@@ -84,11 +84,16 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			dialog.show();
 			System.exit(1);
 		}
-		ImageIcon imageicon = new ImageIcon(this.getClass().getResource("Martus.jpg"));
-		if(imageicon != null)
-			setIconImage(imageicon.getImage());
+		updateIcon(this);
 		
 		initalizeUiState();
+	}
+
+	public void updateIcon(JFrame window) 
+	{
+		ImageIcon imageicon = new ImageIcon(window.getClass().getResource("Martus.jpg"));
+		if(imageicon != null)
+			window.setIconImage(imageicon.getImage());
 	}
 
 	public boolean run()
