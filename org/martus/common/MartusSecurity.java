@@ -756,18 +756,23 @@ public class MartusSecurity implements MartusCrypto
 		ord.addElement(X509Principal.ST);
 		ord.addElement(X509Principal.EmailAddress);
 
-		//TODO: change these from Benetech to Martus?
-		values.addElement("US");
-		values.addElement("Benetech");
-		values.addElement("Palo Alto");
-		values.addElement("CA");
-		values.addElement("martus@benetech.org");
+		final String certificateCountry = "US";
+		final String certificateOrganization = "Benetech";
+		final String certificateLocation = "Palo Alto";
+		final String certificateState = "CA";
+		final String certificateEmail = "martus@benetech.org";
 
-		attrs.put(X509Principal.C, "US");
-		attrs.put(X509Principal.O, "Benetech");
-		attrs.put(X509Principal.L, "Palo Alto");
-		attrs.put(X509Principal.ST, "CA");
-		attrs.put(X509Principal.EmailAddress, "martus@benetech.org");
+		values.addElement(certificateCountry);
+		values.addElement(certificateOrganization);
+		values.addElement(certificateLocation);
+		values.addElement(certificateState);
+		values.addElement(certificateEmail);
+
+		attrs.put(X509Principal.C, certificateCountry);
+		attrs.put(X509Principal.O, certificateOrganization);
+		attrs.put(X509Principal.L, certificateLocation);
+		attrs.put(X509Principal.ST, certificateState);
+		attrs.put(X509Principal.EmailAddress, certificateEmail);
 
 		// create a certificate
 		X509V1CertificateGenerator  certGen1 = new X509V1CertificateGenerator();
