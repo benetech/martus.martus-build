@@ -65,7 +65,24 @@ public class FieldDataPacket extends Packet
 	
 	void setFieldTagsFromString(String commaSeparatedTags)
 	{
-		fieldTags = new String[0];
+		fieldTags = parseFieldTagsFromString(commaSeparatedTags);
+	}
+
+	static public String buildFieldListString(String[] tempFieldTags)
+	{
+		String fieldList = "";
+		for(int i = 0; i < tempFieldTags.length; ++i)
+		{
+			if(i > 0)
+				fieldList += ",";
+			fieldList += tempFieldTags[i];
+		}
+		return fieldList;
+	}
+
+	static public String[] parseFieldTagsFromString(String commaSeparatedTags)
+	{
+		String[] newFieldTags = new String[0];
 		int tagStart = 0;
 		while(tagStart >= 0 && tagStart < commaSeparatedTags.length())
 		{
@@ -73,20 +90,22 @@ public class FieldDataPacket extends Packet
 			if(comma < 0)
 				comma = commaSeparatedTags.length();
 			String thisTag = commaSeparatedTags.substring(tagStart, comma);
-			addTag(thisTag);
+
+			newFieldTags = appendTag(newFieldTags, thisTag);
 			tagStart = comma + 1;
 		}
-	}
-	
-	void addTag(String newTag)
-	{
-		int oldTagCount = fieldTags.length;
-		String[] newFieldTags = new String[oldTagCount + 1];
-		System.arraycopy(fieldTags, 0, newFieldTags, 0, oldTagCount);
-		newFieldTags[oldTagCount] = newTag;
-		fieldTags = newFieldTags;
+		return newFieldTags;
 	}
 
+	static private String[] appendTag(String[] existingFieldTags, String newTag)
+	{
+		int oldTagCount = existingFieldTags.length;
+		String[] tempFieldTags = new String[oldTagCount + 1];
+		System.arraycopy(existingFieldTags, 0, tempFieldTags, 0, oldTagCount);
+		tempFieldTags[oldTagCount] = newTag;
+		return tempFieldTags;
+	}
+	
 	public static UniversalId createUniversalId(String accountId)
 	{
 		return UniversalId.createFromAccountAndPrefix(accountId, prefix);
@@ -310,13 +329,7 @@ public class FieldDataPacket extends Packet
 		if(isEncrypted() && !isEmpty())
 			writeElement(dest, MartusXml.EncryptedFlagElementName, "");
 
-		String fieldList = "";
-		for(int i = 0; i < getFieldCount(); ++i)
-		{
-			if(i > 0)
-				fieldList += ",";
-			fieldList += getFieldTags()[i];
-		}
+		String fieldList = buildFieldListString(getFieldTags());
 		writeElement(dest, MartusXml.FieldListElementName, fieldList);
 		Iterator iterator = fieldData.keySet().iterator();
 		while(iterator.hasNext())
