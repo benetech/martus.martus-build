@@ -50,6 +50,9 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 	public Vector getAccountIds(String myAccountId, Vector parameters, String signature)
 	{
+		if(!server.isAuthorizedAmp(myAccountId))
+			return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
+
 		class AccountVisitor implements Database.AccountVisitor
 		{
 			AccountVisitor()
@@ -85,9 +88,6 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 				return result;
 			}
 			
-			if(!server.isAuthorizedAmp(myAccountId))
-				return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
-
 			log("Amp getAccountIds: " + publicCode);
 			AccountVisitor visitor = new AccountVisitor();
 			server.getDatabase().visitAllAccounts(visitor);
@@ -108,6 +108,9 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 
 	public Vector getContactInfo(String myAccountId, Vector parameters, String signature)
 	{
+		if(!server.isAuthorizedAmp(myAccountId))
+			return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
+
 		Vector result = new Vector();
 		try
 		{
@@ -119,6 +122,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 				return result;
 			}
 			
+
 			if(parameters.size() != 1)
 			{
 				result.add(NetworkInterfaceConstants.INCOMPLETE);
@@ -140,15 +144,15 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 	public Vector getPublicBulletinLocalIds(String myAccountId, Vector parameters, String signature)
 	{
+		if(!server.isAuthorizedAmp(myAccountId))
+			return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
+
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(NetworkInterfaceConstants.SIG_ERROR);
 			return result;
 		}
-		
-		if(!server.isAuthorizedAmp(myAccountId))
-			return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
 
 		String accountString = (String) parameters.get(0);
 
@@ -164,6 +168,9 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 	public Vector getAmplifierBulletinChunk(String myAccountId, Vector parameters, String signature)
 	{
+		if(!server.isAuthorizedAmp(myAccountId))
+			return server.returnSingleResponseAndLog(" returning NOT_AUTHORIZED", NetworkInterfaceConstants.NOT_AUTHORIZED);
+
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{

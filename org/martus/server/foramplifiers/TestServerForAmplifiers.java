@@ -146,6 +146,11 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		File compliance = new File(coreServer.getStartupConfigDirectory(), "compliance.txt");
 		compliance.deleteOnExit();
 		compliance.createNewFile();
+		coreServer.loadConfigurationFiles();
+
+		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), parameters, signature);
+		assertEquals("Should have rejected us since we are not authorized", ServerForAmplifiers.NOT_AUTHORIZED, response.get(0));
+
 		File ampsWhoCallUs = new File(coreServer.getStartupConfigDirectory(), "AmpsWhoCallUs");
 		ampsWhoCallUs.deleteOnExit();
 		ampsWhoCallUs.mkdirs();
@@ -161,7 +166,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		Vector invalidNumberOfParameters = new Vector();
 		String invalidNumberOfParamsSig = amplifier.createSignatureOfVectorOfStrings(invalidNumberOfParameters);
 
-		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), invalidNumberOfParameters, invalidNumberOfParamsSig);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), invalidNumberOfParameters, invalidNumberOfParamsSig);
 		assertEquals("Incomplete request should have been retuned", ServerForAmplifiers.INCOMPLETE, response.get(0));
 
 		response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), parameters, "bad sig");
@@ -276,6 +281,29 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		assertEquals("incorect # of bulletins found after mirroring, should only amplify own bulletins?", 1, uIds.size());
 	}
 
+	public void testGetAmplifierBulletinChunk() throws Exception
+	{
+		MockMartusSecurity amplifier = MockMartusSecurity.createAmplifier();
+
+		Vector parameters = new Vector();
+		parameters.add(clientSecurity.getPublicKeyString());
+		parameters.add(clientSecurity.getPublicKeyString());
+		parameters.add(new Integer(0));
+		parameters.add(new Integer(0));
+		String signature = amplifier.createSignatureOfVectorOfStrings(parameters);
+
+		File compliance = new File(coreServer.getStartupConfigDirectory(), "compliance.txt");
+		compliance.deleteOnExit();
+		compliance.createNewFile();
+		coreServer.loadConfigurationFiles();
+		compliance.delete();
+		
+		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getAmplifierBulletinChunk(amplifier.getPublicKeyString(), parameters, signature);
+		assertEquals("Should have rejected us since we are not authorized", ServerForAmplifiers.NOT_AUTHORIZED, response.get(0));
+		
+		//TODO:More tests needed here
+	}
+	
 	void uploadSampleBulletin(MockMartusServer serverToUse, String bulletinLocalId, String bulletinZip ) 
 	{
 		serverToUse.serverForClients.clearCanUploadList();
