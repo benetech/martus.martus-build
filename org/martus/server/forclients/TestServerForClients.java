@@ -120,7 +120,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		mockServer = new MockMartusServer(); 
 		mockServer.verifyAndLoadConfigurationFiles();
 		mockServer.setSecurity(testServerSecurity);
-		testServer = new ServerForClients(mockServer);
+		testServer = mockServer.serverForClients;
 		testServerInterface = new ServerSideNetworkHandler(testServer);
 		serverDatabase = (MockServerDatabase)mockServer.getDatabase();
 
@@ -153,7 +153,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		String bogusStringParameter = "this is never used in this call. right?";
 
 		testServer.allowUploads(clientId);
-		mockServer.loadBannedClients(tempBanned);
+		testServer.loadBannedClients(tempBanned);
 
 		Vector vecResult = testServer.legacyListMySealedBulletinIds(clientId);
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );

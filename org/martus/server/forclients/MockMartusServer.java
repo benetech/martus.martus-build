@@ -16,7 +16,6 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	public MockMartusServer() throws Exception
 	{
 		this(new TempDirectory());
-		serverForClients = new ServerForClients(this);
 	}
 	
 	public MockMartusServer(File dataDir) throws Exception

@@ -181,7 +181,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("ok", noNews.get(0));
 		assertEquals(0, ((Vector)noNews.get(1)).size());
 
-		testServer.clientsBanned.add(clientAccountId);
+		testServer.serverForClients.clientsBanned.add(clientAccountId);
 		Vector bannedNews = testServer.getNews(clientAccountId, "1.0.1", "01/01/03");
 		assertEquals(2, bannedNews.size());
 		assertEquals("ok", bannedNews.get(0));
@@ -191,7 +191,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertContains("blocked", (String)newsItems.get(0));
 		assertContains("Administrator", (String)newsItems.get(0));
 		
-		testServer.clientsBanned.remove(clientAccountId);
+		testServer.serverForClients.clientsBanned.remove(clientAccountId);
 
 		TRACE_END();
 	}

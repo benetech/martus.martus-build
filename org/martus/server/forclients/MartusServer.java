@@ -118,8 +118,8 @@ public class MartusServer implements NetworkInterfaceConstants
 		getStartupConfigDirectory().mkdirs();
 		
 		security = new MartusSecurity();
+		serverForClients = new ServerForClients(this);
 		clientsThatCanUpload = new Vector();
-		clientsBanned = new Vector();
 		magicWords = new Vector();
 		failedUploadRequestsPerIp = new Hashtable();
 		
@@ -172,7 +172,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		displayComplianceStatement();
 		displayServerAccountId();
 		displayServerPublicCode();
-		displayClientStatistics();
 	}
 	
 	public void verifyConfigurationFiles()
@@ -195,7 +194,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	public void loadConfigurationFiles() throws IOException
 	{
-		loadBannedClients();
+		serverForClients.loadBannedClients();
 		loadCanUploadFile();
 		loadMagicWordsFile();
 		//Tests will fail if compliance isn't last.
@@ -1327,13 +1326,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public boolean isClientBanned(String clientId)
 	{
-		if(clientsBanned.contains(clientId))
-		{
-			if(serverMaxLogging)
-				logging("client BANNED : ");
-			return true;
-		}
-		return false;
+		return serverForClients.isClientBanned(clientId);
 	}
 
 	public synchronized void allowUploads(String clientId)
@@ -1436,38 +1429,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		{
 			logging("Missing or unable to read file: " + getComplianceFile().getAbsolutePath());
 			throw e;
-		}
-	}
-
-	public synchronized void loadBannedClients()
-	{
-// Too much logging!
-//		if(serverMaxLogging)
-//			logging("loadBannedClients()");
-		loadBannedClients(getBannedFile());
-	}
-	
-	public void loadBannedClients(File bannedClientsFile)
-	{
-		try
-		{
-			long lastModified = bannedClientsFile.lastModified();
-			if( lastModified != bannedClientsFileLastModified )
-			{
-				clientsBanned.clear();
-				bannedClientsFileLastModified = lastModified;
-				UnicodeReader reader = new UnicodeReader(bannedClientsFile);
-				loadListFromFile(reader, clientsBanned);
-				reader.close();
-			}
-		}
-		catch(FileNotFoundException nothingToWorryAbout)
-		{
-			clientsBanned.clear();
-		}
-		catch (IOException e)
-		{
-			logging("loadBannedClients: " + e);
 		}
 	}
 
@@ -1747,14 +1708,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.exit(5);
 		}
 
-		if(getBannedFile().exists())
-		{
-			if(!getBannedFile().delete())
-			{
-				System.out.println("Unable to delete " + getBannedFile().getAbsolutePath() );
-				System.exit(5);
-			}
-		}
+		serverForClients.deleteBannedFile();
 
 		if(getComplianceFile().exists())
 		{
@@ -1767,7 +1721,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 
 	}
-	
+
 	public boolean isShutdownRequested()
 	{
 		return(getShutdownFile().exists());
@@ -2162,9 +2116,9 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	private void createServerForClients()
 	{
-		serverForClients = new ServerForClients(this);
 		serverForClients.handleNonSSL();
 		serverForClients.handleSSL(NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL);
+		serverForClients.displayClientStatistics();
 	}
 
 	private void deleteRunningFile()
@@ -2185,15 +2139,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		System.out.println("Version " + ServerConstants.version);
 		String versionInfo = MartusUtilities.getVersionDate();
 		System.out.println("Build Date " + versionInfo);
-	}
-
-
-	private void displayClientStatistics()
-	{
-		System.out.println();
-		System.out.println(clientsThatCanUpload.size() + " client(s) currently allowed to upload");
-		System.out.println(clientsBanned.size() + " client(s) are currently banned");
-		System.out.println(magicWords.size() + " active magic word(s)");
 	}
 
 
@@ -2275,11 +2220,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return new File(getStartupConfigDirectory(), getKeypairFilename());
 	}
 
-	File getBannedFile()
-	{
-		return new File(getStartupConfigDirectory(), BANNEDCLIENTSFILENAME);
-	}
-
 	File getComplianceFile()
 	{
 		return new File(getStartupConfigDirectory(), COMPLIANCESTATEMENTFILENAME);
@@ -2304,7 +2244,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		public void run()
 		{
-			loadBannedClients();
+			serverForClients.loadBannedClients();
 		}
 	}
 	
@@ -2368,12 +2308,9 @@ public class MartusServer implements NetworkInterfaceConstants
 	private String complianceStatement; 
 	
 	public Vector clientsThatCanUpload;
-	public Vector clientsBanned;
 	Hashtable failedUploadRequestsPerIp;
-	private Vector magicWords;
+	Vector magicWords;
 	
-	private long bannedClientsFileLastModified;
-
 	String serverName;
 	private boolean secureMode;
 	private boolean serverLogging;
@@ -2383,7 +2320,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
-	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
 	private static final String COMPLIANCESTATEMENTFILENAME = "compliance.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	

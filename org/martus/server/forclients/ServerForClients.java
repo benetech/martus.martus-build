@@ -1,9 +1,13 @@
 package org.martus.server.forclients;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
+import org.martus.common.UnicodeReader;
 import org.martus.server.core.MartusSecureWebServer;
 
 public class ServerForClients implements ServerForNonSSLClientsInterface, ServerForClientsInterface
@@ -11,6 +15,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	public ServerForClients(MartusServer coreServerToUse)
 	{
 		coreServer = coreServerToUse;
+		clientsBanned = new Vector();
 
 	}
 	
@@ -29,6 +34,25 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		coreServer.logging(message);
 	}
 	
+	void displayClientStatistics()
+	{
+		System.out.println();
+		System.out.println(coreServer.clientsThatCanUpload.size() + " client(s) currently allowed to upload");
+		System.out.println(clientsBanned.size() + " client(s) are currently banned");
+		System.out.println(coreServer.magicWords.size() + " active magic word(s)");
+	}
+
+
+	public boolean isClientBanned(String clientId)
+	{
+		if(clientsBanned.contains(clientId))
+		{
+			logging("client BANNED : ");
+			return true;
+		}
+		return false;
+	}
+
 	public boolean canExitNow()
 	{
 		return (getNumberActiveClients() == 0);
@@ -204,7 +228,57 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.legacyListMySealedBulletinIds(clientId);
 	}
 
+	File getBannedFile()
+	{
+		return new File(coreServer.getStartupConfigDirectory(), BANNEDCLIENTSFILENAME);
+	}
+
+	public synchronized void loadBannedClients()
+	{
+		loadBannedClients(getBannedFile());
+	}
+	
+	public void loadBannedClients(File bannedClientsFile)
+	{
+		try
+		{
+			long lastModified = bannedClientsFile.lastModified();
+			if( lastModified != bannedClientsFileLastModified )
+			{
+				clientsBanned.clear();
+				bannedClientsFileLastModified = lastModified;
+				UnicodeReader reader = new UnicodeReader(bannedClientsFile);
+				coreServer.loadListFromFile(reader, clientsBanned);
+				reader.close();
+			}
+		}
+		catch(FileNotFoundException nothingToWorryAbout)
+		{
+			clientsBanned.clear();
+		}
+		catch (IOException e)
+		{
+			logging("loadBannedClients: " + e);
+		}
+	}
+
+	void deleteBannedFile()
+	{
+		if(getBannedFile().exists())
+		{
+			if(!getBannedFile().delete())
+			{
+				System.out.println("Unable to delete " + getBannedFile().getAbsolutePath() );
+				System.exit(5);
+			}
+		}
+	}
+
+
 	MartusServer coreServer;
 	private int activeClientsCounter;
+	public Vector clientsBanned;
+	private long bannedClientsFileLastModified;
 
+	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
 }
