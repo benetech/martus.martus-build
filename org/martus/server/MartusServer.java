@@ -236,6 +236,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 		clientsThatCanUpload = new Vector();
 		clientsBanned = new Vector();
+		magicWords = new Vector();
 		bannedClientsFile = new File(dataDirectory, NOTAUTHORIZEDCLIENTSFILENAME);
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
@@ -267,8 +268,8 @@ public class MartusServer implements NetworkInterfaceConstants
 		try
 		{
 			UnicodeReader reader = new UnicodeReader(magicWordsFile);
-			String line = reader.readLine();
-			if(line != null)
+			String line = null;
+			while( (line = reader.readLine()) != null)
 				setMagicWord(line);
 			reader.close();
 		}
@@ -324,7 +325,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public void setMagicWord(String newMagicWord)
 	{
-		magicWord = newMagicWord;
+		if( !magicWords.contains(newMagicWord) )
+			magicWords.add(newMagicWord);
 	}
 	
 	public void createNonSSLXmlRpcServer()
@@ -393,13 +395,13 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(tryMagicWord.length() == 0 && clientsThatCanUpload.contains(clientId))
 			return NetworkInterfaceConstants.OK;
 		
-		if(!tryMagicWord.equals(magicWord))
+		if(!magicWords.contains(tryMagicWord))
 		{
-			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + "magicWord=" + magicWord + " tryMagicWord=" +tryMagicWord);
+			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + "magicWords=" + magicWords.toString() + " tryMagicWord=" +tryMagicWord);
 			return NetworkInterfaceConstants.REJECTED;
 		}
 		if(serverMaxLogging)
-			logging("requestUploadRights granted to :" + clientId);			
+			logging("requestUploadRights granted to :" + clientId + " with magicword=" + tryMagicWord);			
 		allowUploads(clientId);
 		return NetworkInterfaceConstants.OK;
 	}
@@ -1901,7 +1903,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	public File bannedClientsFile;
 	private Timer moderateTimer;
 	private Timer frequentTimer;
-	private String magicWord;
+	private Vector magicWords;
 	private long bannedClientsFileLastModified;
 	private static int activeClientsCounter;
 	private static boolean serverLogging;
