@@ -90,9 +90,9 @@ public class MartusSecurity implements MartusCrypto
 		try
 		{
 			sigEngine = Signature.getInstance(SIGN_ALGORITHM);
-			rsaCipher = Cipher.getInstance(RSA_ALGORITHM);
-			pbeCipher = Cipher.getInstance(PBE_ALGORITHM);
-			sessionCipher = Cipher.getInstance(SESSION_ALGORITHM);
+			rsaCipherEngine = Cipher.getInstance(RSA_ALGORITHM);
+			pbeCipherEngine = Cipher.getInstance(PBE_ALGORITHM);
+			sessionCipherEngine = Cipher.getInstance(SESSION_ALGORITHM);
 			keyPairGenerator = KeyPairGenerator.getInstance(RSA_ALGORITHM_NAME, "BC");
 			sessionKeyGenerator = KeyGenerator.getInstance(SESSION_ALGORITHM_NAME);
 			keyFactory = SecretKeyFactory.getInstance(PBE_ALGORITHM);
@@ -178,7 +178,7 @@ public class MartusSecurity implements MartusCrypto
 		encrypt(plainStream, cipherStream, createSessionKey());
 	}
 
-	public void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws 
+	public synchronized void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws 
 			EncryptionException,
 			NoKeyPairException
 	{
@@ -195,7 +195,7 @@ public class MartusSecurity implements MartusCrypto
 		
 			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
 			IvParameterSpec spec = new IvParameterSpec(ivBytes);
-			sessionCipher.init(Cipher.ENCRYPT_MODE, sessionKey, spec, rand);
+			sessionCipherEngine.init(Cipher.ENCRYPT_MODE, sessionKey, spec, rand);
 
 			BufferedOutputStream bufferedCipherStream = new BufferedOutputStream(cipherStream);
 			DataOutputStream output = new DataOutputStream(bufferedCipherStream);
@@ -204,7 +204,7 @@ public class MartusSecurity implements MartusCrypto
 			output.writeInt(ivBytes.length);
 			output.write(ivBytes);
 		
-			CipherOutputStream cos = new CipherOutputStream(output, sessionCipher);
+			CipherOutputStream cos = new CipherOutputStream(output, sessionCipherEngine);
 		
 			BufferedInputStream bufferedPlainStream = new BufferedInputStream(plainStream);
 			
@@ -225,13 +225,13 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws 
+	public synchronized byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws 
 		EncryptionException
 	{
 		try
 		{
-			rsaCipher.init(Cipher.ENCRYPT_MODE, extractPublicKey(publicKey), rand);
-			byte[] encryptedKeyBytes = rsaCipher.doFinal(sessionKeyBytes);
+			rsaCipherEngine.init(Cipher.ENCRYPT_MODE, extractPublicKey(publicKey), rand);
+			byte[] encryptedKeyBytes = rsaCipherEngine.doFinal(sessionKeyBytes);
 			return encryptedKeyBytes;
 		}
 		catch (Exception e)
@@ -270,14 +270,14 @@ public class MartusSecurity implements MartusCrypto
 		decrypt(cipherStream, plainStream, sessionKeyBytes);
 	}
 
-	public byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws 
+	public synchronized byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws 
 		DecryptionException
 	{
 		try
 		{
 			byte[] sessionKeyBytes;
-			rsaCipher.init(Cipher.DECRYPT_MODE, getPrivateKey(), rand);
-			sessionKeyBytes = rsaCipher.doFinal(encryptedSessionKeyBytes);
+			rsaCipherEngine.init(Cipher.DECRYPT_MODE, getPrivateKey(), rand);
+			sessionKeyBytes = rsaCipherEngine.doFinal(encryptedSessionKeyBytes);
 			return sessionKeyBytes;
 		}
 		catch(Exception e)
@@ -288,7 +288,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public void decrypt(InputStream cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
+	public synchronized void decrypt(InputStream cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
 			DecryptionException 
 	{
 		try
@@ -305,8 +305,8 @@ public class MartusSecurity implements MartusCrypto
 			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
 			IvParameterSpec spec = new IvParameterSpec(iv);
 		
-			sessionCipher.init(Cipher.DECRYPT_MODE, sessionKey, spec, rand);
-			CipherInputStream cis = new CipherInputStream(dis, sessionCipher);
+			sessionCipherEngine.init(Cipher.DECRYPT_MODE, sessionKey, spec, rand);
+			CipherInputStream cis = new CipherInputStream(dis, sessionCipherEngine);
 			BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
 			
 			final int SIZE = 1024;
@@ -326,7 +326,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public byte[] createSessionKey() throws
+	public synchronized byte[] createSessionKey() throws
 			EncryptionException
 	{
 		sessionKeyGenerator.init(bitsInSessionKey, rand);
@@ -541,18 +541,18 @@ public class MartusSecurity implements MartusCrypto
 		return salt;
 	}
 
-	protected boolean isKeyPairValid(KeyPair candidatePair)
+	protected synchronized boolean isKeyPairValid(KeyPair candidatePair)
 	{
 		if(candidatePair == null)
 			return false;
 
 		try
 		{
-			rsaCipher.init(Cipher.ENCRYPT_MODE, candidatePair.getPublic(), rand);
+			rsaCipherEngine.init(Cipher.ENCRYPT_MODE, candidatePair.getPublic(), rand);
 			byte[] samplePlainText = {1,2,3,4,127};
-			byte[] cipherText = rsaCipher.doFinal(samplePlainText);
-			rsaCipher.init(Cipher.DECRYPT_MODE, candidatePair.getPrivate(), rand);
-			byte[] result = rsaCipher.doFinal(cipherText);
+			byte[] cipherText = rsaCipherEngine.doFinal(samplePlainText);
+			rsaCipherEngine.init(Cipher.DECRYPT_MODE, candidatePair.getPrivate(), rand);
+			byte[] result = rsaCipherEngine.doFinal(cipherText);
 			if(!Arrays.equals(samplePlainText, result))
 				return false;
 		}
@@ -585,7 +585,7 @@ public class MartusSecurity implements MartusCrypto
 		return pbeEncryptDecrypt(Cipher.DECRYPT_MODE, inputText, passPhrase, salt);
 	}
 
-	private byte[] pbeEncryptDecrypt(int mode, byte[] inputText, String passPhrase, byte[] salt)
+	private synchronized byte[] pbeEncryptDecrypt(int mode, byte[] inputText, String passPhrase, byte[] salt)
 	{
 		char[] passPhraseChars = new char[passPhrase.length()];
 		passPhrase.getChars(0, passPhrase.length(), passPhraseChars, 0);
@@ -596,8 +596,8 @@ public class MartusSecurity implements MartusCrypto
 			SecretKey key = keyFactory.generateSecret(keySpec);
 			PBEParameterSpec paramSpec = new PBEParameterSpec(salt, ITERATION_COUNT);
 
-			pbeCipher.init(mode, key, paramSpec, rand);
-			byte[] outputText = pbeCipher.doFinal(inputText);
+			pbeCipherEngine.init(mode, key, paramSpec, rand);
+			byte[] outputText = pbeCipherEngine.doFinal(inputText);
 			return outputText;
 		}
 		catch(Exception e)
@@ -766,10 +766,10 @@ public class MartusSecurity implements MartusCrypto
 	private KeyPair jceKeyPair;
 	
 	private Signature sigEngine;
-	private Cipher rsaCipher;
-	private Cipher pbeCipher;
+	private Cipher rsaCipherEngine;
+	private Cipher pbeCipherEngine;
+	private Cipher sessionCipherEngine;
 	private KeyGenerator sessionKeyGenerator;
 	private KeyPairGenerator keyPairGenerator;
-	private Cipher sessionCipher;
 	private SecretKeyFactory keyFactory;
 }
