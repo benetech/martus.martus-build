@@ -340,7 +340,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			UnicodeReader reader = new UnicodeReader(magicWordsFile);
 			String line = null;
 			while( (line = reader.readLine()) != null)
-				setMagicWord(line);
+				setMagicWord(line.toLowerCase().trim().replaceAll(" ", ""));
 			reader.close();
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
@@ -490,7 +490,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		boolean uploadGranted = false;
 
-		if(magicWords.contains(tryMagicWord))
+		if(magicWords.contains(tryMagicWord.toLowerCase().trim().replaceAll(" ", "")))
 			uploadGranted = true;
 			
 		if(!areUploadRequestsAllowedForCurrentIp())
@@ -1477,7 +1477,13 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public boolean isClientBanned(String clientId)
 	{
-		return clientsBanned.contains(clientId);
+		if(clientsBanned.contains(clientId))
+			return true;
+		
+		if(serverMaxLogging)
+			logging("client BANNED : ");
+
+		return false;
 	}
 
 	public synchronized void allowUploads(String clientId)
