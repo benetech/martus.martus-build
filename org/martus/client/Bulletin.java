@@ -874,6 +874,15 @@ public class Bulletin implements BulletinConstants
 		return df.format(cal.getTime());
 	}
 
+	public static String getLastDayOfThisYear()
+	{
+		GregorianCalendar cal = new GregorianCalendar();
+		cal.set(GregorianCalendar.MONTH, 11);
+		cal.set(GregorianCalendar.DATE, 31);
+		DateFormat df = getStoredDateFormat();
+		return df.format(cal.getTime());
+	}
+
 	public static String getToday()
 	{
 		DateFormat df = getStoredDateFormat();

@@ -360,7 +360,6 @@ public class MartusLocalization
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
-		addEnglishTranslation("wintitle:inputsearch=Search");
 		addEnglishTranslation("wintitle:inputservermagicword=Request Upload Permission");
 		addEnglishTranslation("wintitle:inputexportPublicInfo=Export Public Account Information");
 		addEnglishTranslation("wintitle:inputImportPublicCode=Import Public Account Information");
@@ -387,6 +386,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:DeleteServerDraftsBulletinSummaries=Retrieving Bulletin Summaries");
 		addEnglishTranslation("wintitle:ConfigServer=Server Configuration");
 		addEnglishTranslation("wintitle:ServerSelectionResults=Server Configuration Results");
+		addEnglishTranslation("wintitle:search=Search");
 		
 
 		addEnglishTranslation("button:file=File");
@@ -622,7 +622,6 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyConfigNoServercause=The selected server is not responding. Before you choose a server, you must be connected to the internet, and that server must be available.");
 		addEnglishTranslation("field:notifyServerCodeWrongcause=The Server Public Code does not match the one you entered.");
 		
-		addEnglishTranslation("field:inputsearchentry=Search for:");
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
 		addEnglishTranslation("field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:");
 		
@@ -643,7 +642,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:timedout1=For security reasons, you must sign into Martus again.");
 		addEnglishTranslation("field:timedout2=Any unsaved bulletins will be lost unless you sign in and save them.");
 		addEnglishTranslation("field:defaultFolderName=New Folder");
-		addEnglishTranslation("field:searchrules=When searching for bulletins you can add the key words 'or', 'and' between multiple words.");
+		addEnglishTranslation("field:searchrules=When searching for bulletins you can add the key words 'or', 'and' between multiple words.  The 'starting on' and 'ending on' dates will further refine your search matching either the event date or the date entered.  If you leave the search text blank Martus will perform only a date search.");
 		addEnglishTranslation("field:AccountInfoUserName=User Name: ");
 		addEnglishTranslation("field:AccountInfoPublicKey=Public Key:");
 		addEnglishTranslation("field:AccountInfoPublicCode=Public Code:");
@@ -655,6 +654,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:ServerSelectionResults=The following server has been selected :");
 		addEnglishTranslation("field:ServerAcceptsUploads=You will be allowed to upload bulletins to this server.");
 		addEnglishTranslation("field:ServerDeclinesUploads=You will not be allowed to upload bulletins to this server.");
+		addEnglishTranslation("field:SearchEntry=Search for:");
+		addEnglishTranslation("field:SearchStartDate=Starting on:");
+		addEnglishTranslation("field:SearchEndDate=Ending on:");
 
 		addEnglishTranslation("folder:%RetrievedMyBulletin=Retrieved Bulletins");
 		addEnglishTranslation("folder:%RetrievedFieldOfficeBulletin=Field Desk Bulletins");

@@ -510,15 +510,18 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void doSearch()
 	{
-		String searchFor = getStringInput("search", "searchrules", "");
-		if(searchFor == null)
+		UiSearchDlg searchDlg = new UiSearchDlg(this);
+		if(!searchDlg.getResults())
 			return;
+		Cursor originalCursor = getCursor();
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 
-		app.search(searchFor, "", "");
+		app.search(searchDlg.getSearchString(), searchDlg.getStartDate(), searchDlg.getEndDate());
 		BulletinStore store = getStore();
 		BulletinFolder searchFolder = store.findFolder(store.getSearchFolderName());
 		folders.folderHasChanged(searchFolder);
 		int bulletinsFound = searchFolder.getBulletinCount();
+		setCursor(originalCursor);
 		if(bulletinsFound > 0)
 		{
 			selectSearchFolder();
