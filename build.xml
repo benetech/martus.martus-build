@@ -18,6 +18,7 @@
 
   <property name="jars-dir" value="ThirdPartyJars"/>
   <property name="htdocs-dir" value="www"/>
+  <property name="verifier-dir" value="verify"/>
 
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
@@ -37,9 +38,9 @@
                     ${server-dir}/**/*.class,
                     ${amplifier-dir}/**/*.class,
                     ${server-dir}/main/main-class.txt,
-                    ${jars-dir}/common/**/*,
-                    ${jars-dir}/server/**/*,
-                    ${htdocs-dir}/**/*
+                    ${jars-dir}/**/*,
+                    ${htdocs-dir}/**/*,
+                    ${verifier-dir}/**/*
                     "/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
