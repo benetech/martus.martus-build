@@ -35,6 +35,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(currentSummary.getAccountId(), currentSummary.getLocalId());
 			if(store.findBulletinByUniversalId(uid) != null)
 				continue;
+			currentSummary.setDownloadable(true);
 			result.add(currentSummary);
 		}
 		return result;
@@ -43,7 +44,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	public void setAllFlags(boolean flagState)
 	{
 		for(int i = 0; i < summaries.size(); ++i)
-			((BulletinSummary)summaries.get(i)).setFlag(flagState);
+			((BulletinSummary)summaries.get(i)).setChecked(flagState);
 		fireTableDataChanged();
 	}
 
@@ -54,7 +55,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		for(int i = 0; i < summaries.size(); ++i)
 		{
 			BulletinSummary summary = (BulletinSummary)summaries.get(i);
-			if(summary.getFlag())
+			if(summary.isChecked())
 			{
 				UniversalId uid = UniversalId.createFromAccountAndLocalId(summary.getAccountId(), summary.getLocalId());
 				uidList.add(uid);

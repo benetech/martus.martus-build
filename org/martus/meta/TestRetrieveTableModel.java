@@ -191,7 +191,33 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, null);
 		model.Initalize();
 
-		assertEquals("wrong all summaries count?", 3, model.getAllSummaries().size());
+		Vector allResult = model.getAllSummaries();
+		assertEquals("wrong all summaries count?", 3, allResult.size());
+
+		BulletinSummary allS1 = (BulletinSummary)allResult.get(0);
+		BulletinSummary allS2 = (BulletinSummary)allResult.get(1);
+		BulletinSummary allS3 = (BulletinSummary)allResult.get(2);
+		Bulletin allBulletins[] = new Bulletin[] {b1, b2, b3};
+		BulletinSummary allSummaries[] = new BulletinSummary[] {allS1, allS2, allS3};
+		boolean allFound[] = new boolean[allBulletins.length];
+		
+		for(int i = 0; i < allBulletins.length; ++i)
+		{
+			for(int j = 0; j < allSummaries.length; ++j)
+			{
+				Bulletin b = allBulletins[i];
+				BulletinSummary s = allSummaries[j];
+				if(b.getLocalId().equals(s.getLocalId()))
+				{
+					if(b.equals(b1))
+						assertTrue("B1 not downloadable?", s.isDownloadable());
+					if(b.equals(b2))
+						assertTrue("B2 not downloadable?", s.isDownloadable());
+					if(b.equals(b3))
+						assertFalse("B3 downloadable?", s.isDownloadable());
+				}
+			}
+		}
 
 		Vector result = model.getResults();
 		assertEquals("wrong count?", 2, result.size());
@@ -214,6 +240,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 					assertEquals(b.get(b.TAGTITLE), s.getTitle());
 					found[i] = true;
 				}
+				assertTrue("Not downloadable?", s.isDownloadable());
 			}
 		}
 		assertTrue("Missing 1?", found[0]);

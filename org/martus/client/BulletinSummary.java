@@ -10,14 +10,14 @@ public class BulletinSummary
 		author = authorToUse;
 	}
 	
-	public void setFlag(boolean newValue)
+	public void setChecked(boolean newValue)
 	{
-		flag = newValue;
+		checkedFlag = newValue;
 	}
 	
-	public boolean getFlag()
+	public boolean isChecked()
 	{
-		return flag;
+		return checkedFlag;
 	}
 	
 	public String getAccountId() 
@@ -40,9 +40,20 @@ public class BulletinSummary
 		return author;
 	}
 	
+	public boolean isDownloadable() 
+	{ 
+		return downloadable;
+	}
+
+	public void setDownloadable(boolean downloadable) 
+	{
+		this.downloadable = downloadable;
+	}
+
 	private String accountId;
 	String localId;
 	String title;
 	String author;
-	boolean flag;
+	boolean checkedFlag;
+	boolean downloadable;
 }

@@ -49,7 +49,7 @@ public class RetrieveHQDraftsTableModel extends RetrieveTableModel
 		switch(column)
 		{
 			case 0:
-				return new Boolean(summary.getFlag());
+				return new Boolean(summary.isChecked());
 			case 1:
 				return summary.getTitle();
 			case 2:
@@ -63,7 +63,7 @@ public class RetrieveHQDraftsTableModel extends RetrieveTableModel
 		BulletinSummary summary = (BulletinSummary)summaries.get(row);
 		if(column == 0)
 		{
-			summary.setFlag(((Boolean)value).booleanValue());
+			summary.setChecked(((Boolean)value).booleanValue());
 		}
 	}
 

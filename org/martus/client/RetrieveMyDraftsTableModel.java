@@ -37,7 +37,7 @@ public class RetrieveMyDraftsTableModel extends RetrieveTableModel
 		BulletinSummary summary = (BulletinSummary)summaries.get(row);
 		if(column == 0)
 		{
-			return new Boolean(summary.getFlag());
+			return new Boolean(summary.isChecked());
 		}
 		return summary.getTitle();
 	}
@@ -47,7 +47,7 @@ public class RetrieveMyDraftsTableModel extends RetrieveTableModel
 		BulletinSummary summary = (BulletinSummary)summaries.get(row);
 		if(column == 0)
 		{
-			summary.setFlag(((Boolean)value).booleanValue());
+			summary.setChecked(((Boolean)value).booleanValue());
 		}
 	}
 
