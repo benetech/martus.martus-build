@@ -44,7 +44,6 @@ public interface BulletinConstants
 	public static final String TAGTITLE = "title";
 	public static final String TAGLOCATION = "location";
 	public static final String TAGEVENTDATE = "eventdate";
-	public static final String TAGEVENTDATERANGE = "eventdaterange";
 	public static final String TAGENTRYDATE = "entrydate";
 	public static final String TAGKEYWORDS = "keywords";
 	public static final String TAGSUMMARY = "summary";

@@ -336,9 +336,6 @@ public class Bulletin implements BulletinConstants
 				lookFor.equals(TAGENTRYDATE) )
 			return DATE;
 			
-		if(lookFor.equals(TAGEVENTDATERANGE))
-			return DATERANGE;
-
 		if(lookFor.equals(TAGLANGUAGE))
 			return CHOICE;
 
