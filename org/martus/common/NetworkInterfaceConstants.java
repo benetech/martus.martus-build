@@ -14,6 +14,7 @@ public interface NetworkInterfaceConstants
 	public static final String SEALED_EXISTS = "sealed bulletin exists";
 	public static final String INVALID_DATA = "invalid data";
 	public static final String NO_SERVER = "no server";
+	public static final String SERVER_DOWN = "server is down";
 	public static final String SERVER_ERROR = "server error";
 	public static final String SIG_ERROR = "signature error";
 	public static final String INCOMPLETE = "incomplete result";
