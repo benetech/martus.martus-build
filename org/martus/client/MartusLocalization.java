@@ -422,6 +422,8 @@ public class MartusLocalization
 
 		addEnglishTranslation("menu:exit=Exit");
 		addEnglishTranslation("menu:newFolder=Add new Folder");
+		addEnglishTranslation("menu:DeleteFolder=Delete");
+		addEnglishTranslation("menu:RenameFolder=Rename");
 		addEnglishTranslation("menu:createBulletin=Create new Bulletin");
 		addEnglishTranslation("menu:editBulletin=Edit Bulletin");
 		addEnglishTranslation("menu:printBulletin=Print Bulletin");

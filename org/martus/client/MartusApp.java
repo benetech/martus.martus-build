@@ -1436,8 +1436,9 @@ public class MartusApp
 	private String currentUserName;
 	private int maxNewFolders;
 
-	public static final String RETRIEVE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
-	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
+	public static final String RETRIEVE_BULLETIN_FOLDER = "Retrieved Bulletins";
+	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "Retrieved Field Desk Bulletins";
+
 	public static final String PUBLIC_INFO_EXTENSION = ".mpi";
 	public static final String AUTHENTICATE_SERVER_FAILED = "Failed to Authenticate Server";
 	private final int MAXFOLDERS = 50;

@@ -122,7 +122,7 @@ class UiFolderTreePane extends JScrollPane
 	{
 		public ActionDelete(DefaultMutableTreeNode node)
 		{
-			String text = "Delete ";
+			String text = parent.getApp().getMenuLabel("DeleteFolder") + " ";
 			if(node != null)
 				text += node.toString();
 
@@ -159,7 +159,7 @@ class UiFolderTreePane extends JScrollPane
 	{
 		public ActionRename(DefaultMutableTreeNode node)
 		{
-			String text = "Rename ";
+			String text = parent.getApp().getMenuLabel("RenameFolder") + " ";
 			if(node != null)
 				text += node.toString();
 
