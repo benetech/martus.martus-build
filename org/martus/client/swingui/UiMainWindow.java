@@ -105,6 +105,7 @@ import org.martus.client.swingui.tablemodels.RetrieveTableModel;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.database.Database;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
@@ -183,6 +184,21 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		try
 		{
+			if(isAccountMapSignatureMissing())
+			{
+				if(confirmDlg(this, "WarnMissingAccountMapSignatureFile"))
+					exitWithoutSavingState();
+				try 
+				{
+					Database database = app.getStore().getDatabase();
+					database.signAccountMap();				
+				} 
+				catch (Exception e) 
+				{
+					e.printStackTrace();
+				} 
+			}
+			
 			app.doAfterSigninInitalization();
 		}
 		catch (MartusAppInitializationException e)
@@ -244,6 +260,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		mainWindowInitalizing = false;
 		return true;
     }
+
+	private boolean isAccountMapSignatureMissing() 
+	{
+		Database database = app.getStore().getDatabase();
+		return database.doesAccountMapExist() && !database.doesAccountMapSignatureExist();
+	}
 
 	void notifyClientCompliance(Frame owner)
 	{

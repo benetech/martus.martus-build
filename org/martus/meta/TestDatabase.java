@@ -186,10 +186,10 @@ public class TestDatabase extends TestCaseEnhanced
 		try
 		{
 			cfdb.initialize();
+			fail("Client should have thrown because of missing signature");
 		}
 		catch(FileDatabase.MissingAccountMapSignatureException expectedException)
 		{
-			fail("Client should not have thrown because of missing signature");
 		}
 		finally
 		{
@@ -234,10 +234,10 @@ public class TestDatabase extends TestCaseEnhanced
 		try
 		{
 			cfdb.initialize();
+			fail("Client should have thrown because of corrupted signature");
 		}
 		catch(FileVerificationException expectedException)
 		{
-			fail("Client should not have thrown because of corrupted signature");
 		}
 		finally
 		{

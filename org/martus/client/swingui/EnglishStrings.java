@@ -68,6 +68,7 @@ public class EnglishStrings
 "wintitle:confirmDoQuickErase=Quick Erase",
 "wintitle:confirmServerComplianceFailed=Server Compliance Statement",
 "wintitle:confirmBackupKeyPair=Backing Up Keypair",
+"wintitle:confirmWarnMissingAccountMapSignatureFile=Accountmap Signature File Missing",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -444,6 +445,8 @@ public class EnglishStrings
 "field:confirmServerComplianceFailedeffect=Benetech recommends that you do not use this server until a compliance statement is made available for you to read.  Continuing will select this non-compliant server anyway.",
 "field:confirmBackupKeyPaircause=We strongly recommend that you backup your keypair file at this time.  If something happens to this file, and you don't have a backup you will not be able to open any bulletins you have created with this keypair.",
 "field:confirmBackupKeyPaireffect=By choosing Yes, you will be prompted to save a copy of your keypair onto a removable disk.",
+"field:confirmWarnMissingAccountMapSignatureFilecause=Warning: accountmap.txt.sig file is missing.\n\nIf you have just upgraded to a new version of Martus this warning is harmless and you should click on No.  Otherwise this may indicate someone has tried to tamper with your data or could be caused by a hardware error.",		
+"field:confirmWarnMissingAccountMapSignatureFileeffect=Clicking on Yes will exit Martus.  Clicking on No will try to generate a new accountmap.txt.sig file and continue to load Martus.",		
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",

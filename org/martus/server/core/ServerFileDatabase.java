@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.text.ParseException;
 
+import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
@@ -87,6 +88,21 @@ public class ServerFileDatabase extends FileDatabase
 		}
 	}
 	
+	public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
+	{
+		File accountMapFile = super.getAccountMapFile();
+		File sigFile;
+		try 
+		{
+			sigFile = MartusServerUtilities.getLatestSignatureFileFromFile(accountMapFile);
+		} 
+		catch (Exception e) 
+		{
+			throw new MissingAccountMapSignatureException();
+		} 
+		MartusServerUtilities.verifyFileAndSignatureOnServer(accountMapFile, sigFile, security, security.getPublicKeyString());
+	}
+
 	public void signAccountMap() throws IOException, MartusCrypto.MartusSignatureException
 	{
 		File accountMapFile = super.getAccountMapFile();

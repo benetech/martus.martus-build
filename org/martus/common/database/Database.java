@@ -36,6 +36,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.DecryptionException;
@@ -88,6 +89,9 @@ abstract public class Database
 
 	abstract public boolean isInQuarantine(DatabaseKey key) throws RecordHiddenException;
 	abstract public void moveRecordToQuarantine(DatabaseKey key) throws RecordHiddenException;
+	abstract public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException;
+
+	abstract public void signAccountMap() throws IOException, MartusCrypto.MartusSignatureException;
 
 	public void hide(UniversalId uid)
 	{
@@ -105,6 +109,15 @@ abstract public class Database
 	}
 
 	public boolean mustEncryptLocalData()
+	{
+		return false;
+	}
+	
+	public boolean doesAccountMapExist()
+	{
+		return false;
+	}
+	public boolean doesAccountMapSignatureExist()
 	{
 		return false;
 	}

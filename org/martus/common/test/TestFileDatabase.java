@@ -40,6 +40,7 @@ import java.util.Vector;
 
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -61,7 +62,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		dir = File.createTempFile("$$$MartusTestFileDatabaseSetup", null);
 		dir.delete();
 		dir.mkdir();
-		db = new FileDatabase(dir, security);
+		db = new MyFileDatabase(dir, security);
 		db.initialize();
 	}
 
@@ -106,7 +107,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db.getAccountDirectory("some stupid account");
 		db.accountMapFile.delete();
 
-		FileDatabase fdb = new FileDatabase(dir, security);
+		FileDatabase fdb = new MyFileDatabase(dir, security);
 		try
 		{
 			fdb.initialize();
@@ -243,7 +244,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertEquals("count not two?", 2, getRecordCount());
 		db.discardRecord(otherKey);
 
-		db = new FileDatabase(dir, security);
+		db = new MyFileDatabase(dir, security);
 		db.initialize();
 		assertEquals("count not back to one?", 1, getRecordCount());
 
@@ -434,7 +435,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		File tmpDataDir = createTempFile();
 		if( tmpDataDir.exists() ) tmpDataDir.delete();
 		tmpDataDir.mkdir();
-		FileDatabase fileDb = new FileDatabase(tmpDataDir, security);
+		FileDatabase fileDb = new MyFileDatabase(tmpDataDir, security);
 		fileDb.initialize();
 
 		String bogusAccountId = "A false account id";
@@ -540,10 +541,21 @@ public class TestFileDatabase extends TestCaseEnhanced
 		return counter.count;
 	}
 
+	class MyFileDatabase extends FileDatabase
+	{
 
+		public MyFileDatabase(File directory, MartusCrypto securityToUse) 
+		{
+			super(directory, securityToUse);
+		}
+
+		public void verifyAccountMap() throws FileVerificationException, MissingAccountMapSignatureException 
+		{
+		}
+	}
 
 	MockMartusSecurity security;
-	FileDatabase db;
+	MyFileDatabase db;
 	File dir;
 	String accountString1 = "acct1";
 	DatabaseKey shortKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix(accountString1 , "x"));

@@ -54,13 +54,18 @@ import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeWriter;
 
 
-public class FileDatabase extends Database
+abstract public class FileDatabase extends Database
 {
+	abstract public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException;
+
 	public FileDatabase(File directory, MartusCrypto securityToUse)
 	{
 		security = securityToUse;
 		absoluteBaseDir = directory;
+		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
+		accountMapSignatureFile = MartusUtilities.getSignatureFileFromFile(accountMapFile);
 	}
+
 
 	public static class MissingAccountMapException extends Exception {}
 	public static class MissingAccountMapSignatureException extends Exception {}
@@ -88,8 +93,6 @@ public class FileDatabase extends Database
 	public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
 	{
 		accountMap = new TreeMap();
-		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
-		accountMapSignatureFile = MartusUtilities.getSignatureFileFromFile(accountMapFile);
 		loadAccountMap();
 		if(isAccountMapExpected(absoluteBaseDir) && !accountMapFile.exists())
 		{
@@ -579,8 +582,11 @@ public class FileDatabase extends Database
 	synchronized public void loadAccountMap() throws FileVerificationException, MissingAccountMapSignatureException
 	{
 		accountMap.clear();
+		if(!accountMapFile.exists())
+			return;
 		try
 		{
+			verifyAccountMap();
 			UnicodeReader reader = new UnicodeReader(accountMapFile);
 			String entry = null;
 			while( (entry = reader.readLine()) != null)
@@ -750,16 +756,6 @@ public class FileDatabase extends Database
 		accountMapSignatureFile = MartusUtilities.createSignatureFileFromFile(accountMapFile, security);
 	}
 
-	public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
-	{
-		if( !accountMapSignatureFile.exists() )
-		{
-			throw new MissingAccountMapSignatureException();
-		}
-
-		MartusUtilities.verifyFileAndSignature(accountMapFile, accountMapSignatureFile, security, security.getPublicKeyString());
-	}
-	
 	public File getAccountMapFile()
 	{
 		return accountMapFile;

@@ -31,8 +31,15 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
+import org.martus.common.MartusUtilities;
+import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
+
 public class MockServerDatabase extends MockDatabase
 {
+	public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
+	{
+	}
+
 	public void deleteAllData()
 	{
 		sealedPacketMap = new TreeMap();

@@ -28,6 +28,7 @@ package org.martus.client.core;
 
 import java.io.File;
 
+import org.martus.common.MartusUtilities;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.database.FileDatabase;
 
@@ -41,5 +42,24 @@ public class ClientFileDatabase extends FileDatabase
 	public boolean mustEncryptLocalData()
 	{
 		return true;
+	}
+	
+	public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
+	{
+		if( !accountMapSignatureFile.exists() )
+		{
+			throw new MissingAccountMapSignatureException();
+		}
+		MartusUtilities.verifyFileAndSignature(accountMapFile, accountMapSignatureFile, security, security.getPublicKeyString());
+	}
+	
+	public boolean doesAccountMapExist()
+	{
+		return accountMapFile.exists();
+	}
+
+	public boolean doesAccountMapSignatureExist()
+	{
+		return accountMapSignatureFile.exists();
 	}
 }

@@ -223,10 +223,10 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 				UiLocalization localization = new UiLocalization(fakeDataDirectory);
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
 				app.doAfterSigninInitalization();
+				fail("Should have thrown because of missing map signature");
 			}
-			catch(MartusApp.MartusAppInitializationException unExpectedException)
+			catch(MartusApp.MartusAppInitializationException expectedException)
 			{
-				fail("Should not have thrown because of missing map signature");
 			}
 		}
 		finally
@@ -286,10 +286,10 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 				UiLocalization localization = new UiLocalization(fakeDataDirectory);
 				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
 				app.doAfterSigninInitalization();
+				fail("Should have thrown because of invalid map signature");
 			}
-			catch(MartusApp.MartusAppInitializationException unExpectedException)
+			catch(MartusApp.MartusAppInitializationException expectedException)
 			{
-				fail("Should not have thrown because of invalid map signature");
 			}
 		}
 		finally
