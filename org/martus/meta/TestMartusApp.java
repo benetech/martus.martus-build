@@ -35,10 +35,10 @@ import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.Packet.WrongAccountException;
-import org.martus.server.MartusServer;
-import org.martus.server.MockMartusServer;
-import org.martus.server.ServerSideNetworkHandler;
-import org.martus.server.ServerSideNetworkHandlerForNonSSL;
+import org.martus.server.forclients.MartusServer;
+import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerSideNetworkHandler;
+import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
 
 public class TestMartusApp extends TestCaseEnhanced
 {

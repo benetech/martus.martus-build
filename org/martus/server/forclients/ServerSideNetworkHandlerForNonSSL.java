@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.forclients;
 
 import java.util.Vector;
 

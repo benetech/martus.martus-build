@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.formirroring;
 
 import java.util.Vector;
 
@@ -7,9 +7,9 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkResponse;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 
-class CallerSideMirroringGateway implements CallerSideMirroringGatewayInterface
+public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInterface
 {
-	CallerSideMirroringGateway(MirroringInterface handlerToUse)
+	public CallerSideMirroringGateway(MirroringInterface handlerToUse)
 	{
 		handler = handlerToUse;
 	}

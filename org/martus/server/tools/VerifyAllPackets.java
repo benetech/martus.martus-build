@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -19,6 +19,7 @@ import org.martus.common.Packet;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
+import org.martus.server.shared.ServerFileDatabase;
 
 public class VerifyAllPackets
 {

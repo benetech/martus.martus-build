@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.tools;
 
 import java.io.DataInputStream;
 import java.io.EOFException;

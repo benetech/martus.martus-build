@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.formirroring;
 
 import org.martus.common.BulletinRetrieverGatewayInterface;
 import org.martus.common.MartusCrypto;

@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.forclients;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -51,6 +51,12 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
+import org.martus.server.formirroring.MirroringInterface;
+import org.martus.server.formirroring.MirroringRetriever;
+import org.martus.server.formirroring.ServerSupplierInterface;
+import org.martus.server.formirroring.SupplierSideMirroringHandler;
+import org.martus.server.shared.*;
+import org.martus.server.shared.ServerFileDatabase;
 
 public class MartusServer implements NetworkInterfaceConstants, ServerSupplierInterface
 {

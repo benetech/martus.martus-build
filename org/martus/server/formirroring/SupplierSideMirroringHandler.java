@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.formirroring;
 
 import java.util.Vector;
 
@@ -13,7 +13,7 @@ import org.martus.common.NetworkInterfaceConstants;
 
 public class SupplierSideMirroringHandler implements MirroringInterface, NetworkInterfaceConstants
 {
-	SupplierSideMirroringHandler(ServerSupplierInterface supplierToUse)
+	public SupplierSideMirroringHandler(ServerSupplierInterface supplierToUse)
 	{
 		supplier = supplierToUse;
 		db = supplier.getDatabase();

@@ -17,8 +17,8 @@ import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
-import org.martus.server.MockMartusServer;
-import org.martus.server.ServerSideNetworkHandler;
+import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerSideNetworkHandler;
 
 public class TestRetrieveHQTableModel extends TestCaseEnhanced
 {

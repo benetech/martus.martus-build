@@ -5,7 +5,7 @@ import java.util.Vector;
 
 import org.martus.client.*;
 import org.martus.common.*;
-import org.martus.server.*;
+import org.martus.server.forclients.*;
 
 public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 {

@@ -1,4 +1,4 @@
-package org.martus.server;
+package org.martus.server.formirroring;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -17,7 +17,7 @@ import org.martus.common.MartusUtilities.ServerErrorException;
 
 public class MirroringRetriever
 {
-	MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, MartusCrypto securityToUse)
+	public MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, MartusCrypto securityToUse)
 	{
 		gateway = gatewayToUse;
 		security = securityToUse;
