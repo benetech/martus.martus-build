@@ -87,7 +87,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public boolean run()
 	{
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		Timestamp expire = Timestamp.valueOf("2002-11-15 1:00:00.000000000");
+		Timestamp expire = Timestamp.valueOf("2003-01-15 1:00:00.000000000");
 		if(stamp.after(expire))
 			notifyDlg(this, "BetaExpired");
 
