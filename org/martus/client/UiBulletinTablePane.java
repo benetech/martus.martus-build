@@ -101,20 +101,23 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 	{
 		public void mousePressed(MouseEvent e)
 		{
-			super.mousePressed(e);
-			handleRightClick(e);
+			if(e.isPopupTrigger())
+				handleRightClick(e);
 		}
+
 		public void mouseReleased(MouseEvent e)
 		{
-			super.mouseReleased(e);
-			handleRightClick(e);
+			if(e.isPopupTrigger())
+				handleRightClick(e);
 		}
+
 
 		public void mouseClicked(MouseEvent e)
 		{
-			super.mouseClicked(e);
-			handleRightClick(e);
+			if(e.isPopupTrigger())
+				handleRightClick(e);
 		}
+
 		private void handleRightClick(MouseEvent e)
 		{
 			if(!e.isPopupTrigger())
