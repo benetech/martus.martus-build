@@ -23,7 +23,11 @@ public class MirroringRetriever
 		security = securityToUse;
 	}
 	
-	public File retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
+	public void tick()
+	{
+	}
+	
+	File retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
 	{
 		File tempFile = File.createTempFile("$$$MirroringRetriever", null);
 		tempFile.deleteOnExit();

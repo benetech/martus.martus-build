@@ -17,11 +17,9 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.martus.common.AttachmentPacket;
@@ -217,22 +215,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	}
 
 
-	public static void writeSyncFile(File syncFile) 
-	{
-		try 
-		{
-			FileOutputStream out = new FileOutputStream(syncFile);
-			out.write(0);
-			out.close();
-		} 
-		catch(Exception e) 
-		{
-			System.out.println("MartusServer.main: " + e);
-			System.exit(6);
-		}
-	}
-
-
 	MartusServer(File dataDirectory) throws 
 					MartusCrypto.CryptoInitializationException
 	{
@@ -251,13 +233,17 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		keyPairFile = new File(dataDirectory, getKeypairFilename());
 		shutdownFile = new File(dataDirectory, MARTUSSHUTDOWNFILENAME);
 
-		moderateTimer = new Timer(true);
+		Timer bannedClientRefreshTimer = new Timer(true);
 		TimerTask bannedClientsTaskMonitor = new BannedClientsMonitor();
-		moderateTimer.schedule(bannedClientsTaskMonitor, IMMEDIATELY, bannedCheckIntervalMillis);
+		bannedClientRefreshTimer.schedule(bannedClientsTaskMonitor, IMMEDIATELY, bannedCheckIntervalMillis);
 		
- 		frequentTimer = new Timer(true);
+		Timer shutdownRequestTimer = new Timer(true);
  		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
- 		frequentTimer.schedule(shutdownRequestTaskMonitor, IMMEDIATELY, shutdownRequestIntervalMillis);
+ 		shutdownRequestTimer.schedule(shutdownRequestTaskMonitor, IMMEDIATELY, shutdownRequestIntervalMillis);
+
+		Timer mirroringTimer = new Timer(true);
+ 		TimerTask mirroringTask = new MirroringTask();
+ 		mirroringTimer.schedule(mirroringTask, IMMEDIATELY, mirroringIntervalMillis);
 
 		try
 		{
@@ -1592,9 +1578,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		ZipFile zip = null;
 		try
 		{
-			zip = new ZipFile(zipFile);
-			validateZipFilePacketsForServerImport(getDatabase(), authorAccountId, zip, security);
-			MartusUtilities.importBulletinPacketsFromZipFileToDatabase(getDatabase(), authorAccountId, zip, security);
+			MartusServerUtilities.saveZipFileToDatabase(getDatabase(), authorAccountId, zipFile, security);
 		}
 		catch (DuplicatePacketException e)
 		{
@@ -1622,20 +1606,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			result =  NetworkInterfaceConstants.INVALID_DATA;
 		}
 		
-		if(zip != null)
-		{
-			try
-			{
-				zip.close();
-			}
-			catch(IOException nothingWeCanDoAboutIt)
-			{
-				logging("saveUpload error closing zip file: nothingWeCanDoAboutIt");
-			}
-		}
-
 		return result;
 	}
+
 
 	private String getBulletinHQAccountId(DatabaseKey headerKey) throws
 			IOException,
@@ -1827,37 +1800,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 	}
 
-	public static void validateZipFilePacketsForServerImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
-		throws
-			Packet.InvalidPacketException,
-			IOException,
-			Packet.SignatureVerificationException,
-			SealedPacketExistsException,
-			DuplicatePacketException,
-			Packet.WrongAccountException,
-			MartusCrypto.DecryptionException 
-	{
-		MartusUtilities.validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
-
-		Enumeration entries = zip.entries();
-		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
-		while(entries.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
-			DatabaseKey trySealedKey = new DatabaseKey(uid);
-			trySealedKey.setSealed();
-			if(db.doesRecordExist(trySealedKey))
-			{
-				DatabaseKey newKey = MartusUtilities.createKeyWithHeaderStatus(header, uid);
-				if(newKey.isDraft())
-					throw new SealedPacketExistsException(entry.getName());
-				else
-					throw new DuplicatePacketException(entry.getName());
-			}
-		}
-	}
-
 	public void serverExit(int exitCode) throws Exception
 	{
 		System.exit(exitCode);
@@ -2044,6 +1986,22 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		String hqAccountId;
 	}
 	
+	public static void writeSyncFile(File syncFile) 
+	{
+		try 
+		{
+			FileOutputStream out = new FileOutputStream(syncFile);
+			out.write(0);
+			out.close();
+		} 
+		catch(Exception e) 
+		{
+			System.out.println("MartusServer.main: " + e);
+			System.exit(6);
+		}
+	}
+
+
 	private class BannedClientsMonitor extends TimerTask
 	{
 		public void run()
@@ -2075,11 +2033,22 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 	}
 
+	private class MirroringTask extends TimerTask
+	{
+		public void run()
+		{
+			if(mirrorRetriever != null)
+				mirrorRetriever.tick();
+		}
+	}
+	
 
 	Database database;
 	ServerSideNetworkHandlerForNonSSL nonSSLServerHandler;
 	ServerSideNetworkHandler serverHandler;
 	SupplierSideMirroringHandler supplierHandler;
+	MirroringRetriever mirrorRetriever;
+	
 	public Vector clientsThatCanUpload;
 	public Vector clientsBanned;
 	public MartusCrypto security;
@@ -2088,8 +2057,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public File magicWordsFile;
 	public File bannedClientsFile;
 	public File shutdownFile;
-	private Timer moderateTimer;
-	private Timer frequentTimer;
 	private Vector magicWords;
 	private long bannedClientsFileLastModified;
 	private int activeClientsCounter;
@@ -2103,6 +2070,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String BANNEDCLIENTSFILENAME = "notauthorized.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	private final long IMMEDIATELY = 0;
-	private static final long bannedCheckIntervalMillis = 60000;
+	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
+	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
 }
