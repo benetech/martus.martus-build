@@ -37,7 +37,6 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
@@ -1643,8 +1642,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String signature = Base64.encode(sigBytes);
 		return testServer.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
 	}
-	
-	public int TESTSERVERTESTPORT = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL + 35;
 	
 	static File tempFile;
 	static Bulletin b1;
