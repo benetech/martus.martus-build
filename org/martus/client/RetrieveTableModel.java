@@ -13,11 +13,14 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 
 abstract public class RetrieveTableModel extends AbstractTableModel
 {
-	public RetrieveTableModel(MartusApp appToUse)
+	public RetrieveTableModel(MartusApp appToUse, UiProgressRetrieveSummariesDlg retriever)
 	{
 		app = appToUse;
 		summaries = new Vector();
 		store = app.getStore();
+		retrieverDlg = retriever;
+		allSummaries = new Vector();
+
 	}
 
 	abstract public void Initalize() throws ServerErrorException;
@@ -74,25 +77,28 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		return false;
 	}
 
-	public Vector getMySummaries() throws ServerErrorException
+	public void getMySummaries() throws ServerErrorException
 	{
 		Vector summaryStrings = app.getMyServerBulletinSummaries();
-		return createSummariesFromStrings(app.getAccountId(), summaryStrings);
+		createSummariesFromStrings(app.getAccountId(), summaryStrings);
 	}
 
-	public Vector getMyDraftSummaries() throws ServerErrorException
+	public void getMyDraftSummaries() throws ServerErrorException
 	{
 		Vector summaryStrings = app.getMyDraftServerBulletinSummaries();
-		return createSummariesFromStrings(app.getAccountId(), summaryStrings);
+		createSummariesFromStrings(app.getAccountId(), summaryStrings);
 	}
 
-	public Vector getFieldOfficeSealedSummaries(String fieldOfficeAccountId) throws ServerErrorException
+	public void getFieldOfficeSealedSummaries(String fieldOfficeAccountId) throws ServerErrorException
 	{
 		try 
 		{
 			NetworkResponse response = app.getCurrentSSLServerProxy().getSealedBulletinIds(app.security, fieldOfficeAccountId);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
-				return createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
+			{
+				createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
+				return;
+			}
 		} 
 		catch (MartusSignatureException e)
 		{
@@ -101,13 +107,16 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		throw new ServerErrorException();
 	}
 
-	public Vector getFieldOfficeDraftSummaries(String fieldOfficeAccountId) throws ServerErrorException
+	public void getFieldOfficeDraftSummaries(String fieldOfficeAccountId) throws ServerErrorException
 	{
 		try 
 		{
 			NetworkResponse response = app.getCurrentSSLServerProxy().getDraftBulletinIds(app.security, fieldOfficeAccountId);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
-				return createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
+			{
+				createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
+				return;
+			}
 		} 
 		catch (MartusSignatureException e)
 		{
@@ -116,23 +125,87 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		throw new ServerErrorException();
 	}
 
-	public Vector createSummariesFromStrings(String accountId, Vector summaryStrings)
+	public void createSummariesFromStrings(String accountId, Vector summaryStrings)
 		throws ServerErrorException 
 	{
-		Vector allSummaries = new Vector();
-		Iterator iterator = summaryStrings.iterator();
-		while(iterator.hasNext())
-		{
-			String pair = (String)iterator.next();
-			BulletinSummary bulletinSummary = app.createSummaryFromString(accountId, pair);
-			allSummaries.add(bulletinSummary);
-		}
-		return allSummaries;
+		RetrieveThread worker = new RetrieveThread(accountId, summaryStrings);
+		worker.start();
+
+		if(retrieverDlg == null)
+			waitForThreadToTerminate(worker);
+		else
+			retrieverDlg.beginRetrieve();
+		checkIfErrorOccurred();
 	}
 
+	public void checkIfErrorOccurred() throws ServerErrorException 
+	{
+		if(errorThrown != null)
+			throw (errorThrown);
+	}
+	
+	public void waitForThreadToTerminate(RetrieveThread worker) 
+	{
+		try 
+		{
+			worker.join();
+		} 
+		catch (InterruptedException e) 
+		{
+		}
+	}
 
+	class RetrieveThread extends Thread
+	{
+		public RetrieveThread(String account, Vector summarys)
+		{
+			accountId = account;
+			summaryStrings = summarys;
+		}
+		
+		public void run()
+		{
+			try 
+			{
+				Iterator iterator = summaryStrings.iterator();
+				int count = 0;
+				int maxCount = summaryStrings.size();
+				while(iterator.hasNext())
+				{
+					String pair = (String)iterator.next();
+					BulletinSummary bulletinSummary = app.createSummaryFromString(accountId, pair);
+					allSummaries.add(bulletinSummary);
+					if(retrieverDlg != null)
+						retrieverDlg.updateBulletinCountMeter(++count, maxCount);
+				}
+			} catch (ServerErrorException e) 
+			{
+				errorThrown = e;
+			}
+			finishedRetrieve();
+		}
+
+		public void finishedRetrieve()
+		{
+			if(retrieverDlg != null)
+				retrieverDlg.finishedRetrieve();
+		}
+
+		private String accountId;
+		private Vector summaryStrings;	
+	}
+
+	public Vector getResults() throws ServerErrorException
+	{
+		if(errorThrown != null)
+			throw (errorThrown);
+		return allSummaries;	
+	}
 
 	MartusApp app;
 	Vector summaries;
 	BulletinStore store;
+	private UiProgressRetrieveSummariesDlg retrieverDlg;
+	protected Vector allSummaries;
+	ServerErrorException errorThrown;
 }

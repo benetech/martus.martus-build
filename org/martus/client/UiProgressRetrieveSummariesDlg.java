@@ -26,6 +26,16 @@ public class UiProgressRetrieveSummariesDlg extends JDialog
 		window.centerDlg(this);
 	}
 	
+	public void beginRetrieve()
+	{
+		show();
+	}
+	
+	public void finishedRetrieve()
+	{
+		dispose();	
+	}
+	
 	public void updateBulletinCountMeter(int currentValue, int maxValue)
 	{
 		bulletinCountMeter.updateProgressMeter(statusMessage, currentValue, maxValue);	

@@ -827,7 +827,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		try
 		{
 			String dlgTitleTag = "retrieve";
-			RetrieveTableModel model = new RetrieveMyTableModel(app);
+			UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, "RetrieveMySealedBulletinSummaries" );
+			RetrieveTableModel model = new RetrieveMyTableModel(app, dlg);
 			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
@@ -868,7 +869,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		try 
 		{
 			String dlgTitleTag = "RetrieveDrafts";
-			RetrieveTableModel model = new RetrieveMyDraftsTableModel(app);
+			UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, "RetrieveMyDraftBulletinSummaries" );
+			RetrieveTableModel model = new RetrieveMyDraftsTableModel(app, dlg);
 			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
@@ -896,7 +898,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		try 
 		{
 			String dlgTitleTag = "retrieveHQ";
-			RetrieveTableModel model = new RetrieveHQTableModel(app);
+			UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, "RetrieveHQSealedBulletinSummaries" );
+			RetrieveTableModel model = new RetrieveHQTableModel(app, dlg);
 			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
@@ -923,7 +926,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		try 
 		{
 			String dlgTitleTag = "retrieveHQDrafts";
-			RetrieveTableModel model = new RetrieveHQDraftsTableModel(app);
+			UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, "RetrieveHQDraftBulletinSummaries" );
+			RetrieveTableModel model = new RetrieveHQDraftsTableModel(app, dlg);
 			model.Initalize();
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)

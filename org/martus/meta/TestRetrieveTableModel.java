@@ -58,10 +58,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		try
 		{
-			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer);
+			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer, null);
 			model.Initalize();
-		
-			Vector failed = model.getMySummaries();
+			model.getMySummaries();
+			Vector failed = model.getResults();
 			fail("Got valid summaries?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -79,9 +79,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listMyResponse = desiredResult;
 		try
 		{
-			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer);
+			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, null);
 			model.Initalize();
-			Vector failed = model.getMySummaries();
+			Vector failed = model.getResults();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -116,9 +116,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
 		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
 
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, null);
 		model.Initalize();
-		Vector result = model.getMySummaries();
+		Vector result = model.getResults();
 		assertEquals("wrong count?", 2, result.size());
 		
 		BulletinSummary s1 = (BulletinSummary)result.get(0);
@@ -156,9 +156,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listMyResponse = desiredResult;
 		try
 		{
-			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer);
+			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer, null);
 			model.Initalize();
-			Vector failed = model.getMyDraftSummaries();
+			Vector failed = model.getResults();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -193,9 +193,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
 		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
 
-		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount);
+		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount, null);
 		model.Initalize();
-		Vector result = model.getMyDraftSummaries();
+		Vector result = model.getResults();
 		assertEquals("wrong count?", 2, result.size());
 		
 		BulletinSummary s1 = (BulletinSummary)result.get(0);
@@ -227,9 +227,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		try
 		{
-			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer);
+			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer, null);
 			model.Initalize();
-			Vector failed = model.getFieldOfficeSealedSummaries("");
+			model.getFieldOfficeSealedSummaries("");
+			Vector failed = model.getResults();
 			fail("Got valid sealed summaries?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -238,9 +239,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		
 		try
 		{
-			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer);
+			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer, null);
 			model.Initalize();
-			Vector failed = model.getFieldOfficeDraftSummaries("");
+			model.getFieldOfficeDraftSummaries("");
+			Vector failed = model.getResults();
 			fail("Got valid draft summaries?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -258,9 +260,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listFieldOfficeSummariesResponse = desiredResult;
 		try
 		{
-			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer);
+			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer, null);
 			model.Initalize();
-			Vector failed = model.getFieldOfficeSealedSummaries("");
+			model.getFieldOfficeSealedSummaries("");
+			Vector failed = model.getResults();
 			fail("rejected sealed didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -269,9 +272,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		try
 		{
-			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer);
+			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer, null);
 			model.Initalize();
-			Vector failed = model.getFieldOfficeDraftSummaries("");
+			model.getFieldOfficeDraftSummaries("");
+			Vector failed = model.getResults();
 			fail("rejected draft didn't throw?");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -325,9 +329,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		mockServer.listFieldOfficeSummariesResponse = desiredSealedResult;	
 
-		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp);
+		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, null);
 		model.Initalize();
-		Vector returnedSealedResults = model.getFieldOfficeSealedSummaries(b1.getAccount());
+		Vector returnedSealedResults = model.getResults();
 		assertEquals("Wrong size?", 2, returnedSealedResults.size());
 		BulletinSummary s1 = (BulletinSummary)returnedSealedResults.get(0);
 		BulletinSummary s2 = (BulletinSummary)returnedSealedResults.get(1);
@@ -348,9 +352,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		mockServer.listFieldOfficeSummariesResponse = desiredDraftResult;	
 
-		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp);
+		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, null);
 		model2.Initalize();
-		Vector returnedDraftResults = model2.getFieldOfficeDraftSummaries(b3.getAccount());
+		Vector returnedDraftResults = model2.getResults();
 		assertEquals("Wrong draft size?", 1, returnedDraftResults.size());
 		BulletinSummary s3 = (BulletinSummary)returnedDraftResults.get(0);
 		boolean found3 = false;

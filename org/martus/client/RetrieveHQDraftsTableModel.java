@@ -8,20 +8,18 @@ import org.martus.client.MartusApp.ServerErrorException;
 
 public class RetrieveHQDraftsTableModel extends RetrieveTableModel 
 {
-	public RetrieveHQDraftsTableModel(MartusApp appToUse)
+	public RetrieveHQDraftsTableModel(MartusApp appToUse, UiProgressRetrieveSummariesDlg retriever)
 	{
-		super(appToUse);
+		super(appToUse, retriever);
 	}
 
 	public void Initalize() throws ServerErrorException
 	{
 		Vector accounts = app.getFieldOfficeAccounts();
-		Vector allSummaries = new Vector();
 		for(int a = 0; a < accounts.size(); ++a)
 		{
 			String accountId = (String)accounts.get(a);
-			allSummaries.addAll(getFieldOfficeDraftSummaries(accountId));
-			
+			getFieldOfficeDraftSummaries(accountId);
 		}
 		summaries = getSummariesForBulletinsNotInStore(allSummaries);
 	}

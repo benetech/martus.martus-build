@@ -373,6 +373,10 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:RetrieveMyDraftBulletinProgress=Retrieving Bulletins");
 		addEnglishTranslation("wintitle:RetrieveHQSealedBulletinProgress=Retrieving Bulletins");
 		addEnglishTranslation("wintitle:RetrieveHQDraftBulletinProgress=Retrieving Bulletins");
+		addEnglishTranslation("wintitle:RetrieveMySealedBulletinSummaries=Retrieving Bulletin Summaries");
+		addEnglishTranslation("wintitle:RetrieveMyDraftBulletinSummaries=Retrieving Bulletin Summaries");
+		addEnglishTranslation("wintitle:RetrieveHQSealedBulletinSummaries=Retrieving Bulletin Summaries");
+		addEnglishTranslation("wintitle:RetrieveHQDraftBulletinSummaries=Retrieving Bulletin Summaries");
 
 		addEnglishTranslation("button:file=File");
 		addEnglishTranslation("button:edit=Edit");
@@ -503,6 +507,10 @@ public class MartusLocalization
 		addEnglishTranslation("field:RetrieveHQSealedBulletinProgress=Retrieving Headquarter Sealed Bulletins");
 		addEnglishTranslation("field:RetrieveHQDraftBulletinProgress=Retrieving Headquarter Draft Bulletins");
 		addEnglishTranslation("field:ChunkProgressStatusMessage=Download Progress");
+		addEnglishTranslation("field:RetrieveMySealedBulletinSummaries=Retrieving Sealed Bulletin Summaries");
+		addEnglishTranslation("field:RetrieveMyDraftBulletinSummaries=Retrieving Draft Bulletin Summaries");
+		addEnglishTranslation("field:RetrieveHQSealedBulletinSummaries=Retrieving Headquarter Sealed Bulletin Summaries");
+		addEnglishTranslation("field:RetrieveHQDraftBulletinSummaries=Retrieving Headquarter Draft Bulletin Summaries");
 
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");

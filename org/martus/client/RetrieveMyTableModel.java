@@ -8,14 +8,14 @@ import org.martus.client.MartusApp.ServerErrorException;
 
 public class RetrieveMyTableModel extends RetrieveTableModel 
 {
-	public RetrieveMyTableModel(MartusApp appToUse)
+	public RetrieveMyTableModel(MartusApp appToUse, UiProgressRetrieveSummariesDlg retriever)
 	{
-		super(appToUse);
+		super(appToUse, retriever);
 	}
 
 	public void Initalize() throws ServerErrorException
 	{
-		Vector allSummaries = getMySummaries();
+		getMySummaries();
 		summaries = getSummariesForBulletinsNotInStore(allSummaries);
 	}
 	
