@@ -657,8 +657,7 @@ public class MartusApp
 		if(serverName.length() == 0)
 			return false;
 
-		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL;
-		NetworkInterfaceForNonSSL server = new ClientSideNetworkHandlerUsingXmlRpcForNonSSL(serverName, port);
+		NetworkInterfaceForNonSSL server = new ClientSideNetworkHandlerUsingXmlRpcForNonSSL(serverName);
 		return isNonSSLServerAvailable(server);
 	}
 
@@ -722,8 +721,7 @@ public class MartusApp
 		ServerNotAvailableException,
 		PublicInformationInvalidException
 	{
-		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL;
-		NetworkInterfaceForNonSSL server = new ClientSideNetworkHandlerUsingXmlRpcForNonSSL(serverName, port);
+		NetworkInterfaceForNonSSL server = new ClientSideNetworkHandlerUsingXmlRpcForNonSSL(serverName);
 		return getServerPublicKey(server);
 	}
 

@@ -26,19 +26,25 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.core;
 
+import java.io.IOException;
+import java.net.ConnectException;
+import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.util.Vector;
 
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcClientLite;
-import org.martus.common.*;
+import org.apache.xmlrpc.XmlRpcException;
+import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.NetworkInterfaceForNonSSL;
+import org.martus.common.NetworkInterfaceXmlRpcConstants;
 
 public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInterfaceConstants, NetworkInterfaceXmlRpcConstants, NetworkInterfaceForNonSSL
 {
-	public ClientSideNetworkHandlerUsingXmlRpcForNonSSL(String serverName, int portToUse)
+	public ClientSideNetworkHandlerUsingXmlRpcForNonSSL(String serverName)
 	{
 		server = serverName;
-		port = portToUse;
+		ports = NetworkInterfaceXmlRpcConstants.defaultNonSSLPorts;
 	}
 
 	// begin MartusXmlRpc interface
@@ -59,21 +65,34 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 
 	public Object callServer(String serverName, String method, Vector params)
 	{
+		for(int i=0; i < ports.length; ++i)
+		{
+			int port = ports[i];
+			try
+			{
+				return callServerAtPort(serverName, method, params, port);
+			}
+			catch(ConnectException e)
+			{
+				continue;
+			}
+			catch(Exception e)
+			{
+				logging("MartusServerProxyViaXmlRpc:callServer Exception=" + e);
+				e.printStackTrace();
+				return null;
+			}
+		}
+		return null;
+	}
+	
+	private Object callServerAtPort(String serverName, String method, Vector params, int port)
+		throws MalformedURLException, XmlRpcException, IOException
+	{
 		final String serverUrl = "http://" + serverName + ":" + port + "/RPC2";
 		logging("MartusServerProxyViaXmlRpc:callServer serverUrl=" + serverUrl);
-		Object result = null;
-		try
-		{
-			XmlRpcClient client = new XmlRpcClientLite(serverUrl);
-			result = client.execute("MartusServer." + method, params);
-		}
-		catch (Exception e)
-		{
-			logging("MartusServerProxyViaXmlRpc:callServer Exception=" + e);
-			e.printStackTrace();
-		}
-
-		return result;
+		XmlRpcClient client = new XmlRpcClientLite(serverUrl);
+		return client.execute("MartusServer." + method, params);
 	}
 
 	private void logging(String message)
@@ -83,6 +102,6 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 	}
 
 	String server;
-	int port;
+	int[] ports;
 	boolean debugMode;
 }
