@@ -11,14 +11,19 @@ public class UiWrappedTextArea extends JTextArea
 {
 	public UiWrappedTextArea(UiMainWindow mainWindow, String message)
 	{
+		this(mainWindow, message, 80);	
+	}
+
+
+	public UiWrappedTextArea(UiMainWindow mainWindow, String message, int maxChars)
+	{
 		super(message);
-		final int MAXCHARS = 80;
 		int cols = message.length();
 		int rows = 1;
-		if(cols > MAXCHARS)
+		if(cols > maxChars)
 		{
-			rows = (cols / MAXCHARS) + 1;
-			cols = MAXCHARS;
+			rows = (cols / maxChars) + 1;
+			cols = maxChars;
 		}
 
 		int start = message.indexOf("\n\n");
@@ -37,11 +42,5 @@ public class UiWrappedTextArea extends JTextArea
 		setBackground(mainWindow.getBackground());
 		setForeground(mainWindow.getForeground());
 	}
-	
-	public void setFont(Font font, int columns)
-	{
-		setFont(font);
-		setColumns(columns);
-		setRows(0);
-	}
+
 }

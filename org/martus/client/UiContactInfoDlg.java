@@ -46,8 +46,9 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(space, ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(new JLabel());
 		
-		UiWrappedTextArea infoRequired = new UiWrappedTextArea(mainWindow, app.getFieldLabel("ContactInfoRequiredFields"));
-		infoRequired.setFont(space.getFont(), 60);
+		UiWrappedTextArea infoRequired = new UiWrappedTextArea(mainWindow, app.getFieldLabel("ContactInfoRequiredFields"), 60);
+		infoRequired.setFont(space.getFont());
+		infoRequired.setRows(2);
 		getContentPane().add(infoRequired);
 		
 		String authorPrompt = app.getFieldLabel("AuthorRequired");
@@ -69,8 +70,9 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(new JLabel(app.getFieldLabel("ContactInfoDescriptionOfFields")));
 
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-		UiWrappedTextArea infoFuture = new UiWrappedTextArea(mainWindow, app.getFieldLabel("ContactInfoFutureUseOfFields"));
-		infoFuture.setFont(space.getFont(), 60);
+		UiWrappedTextArea infoFuture = new UiWrappedTextArea(mainWindow, app.getFieldLabel("ContactInfoFutureUseOfFields"), 60);
+		infoFuture.setFont(space.getFont());
+		infoFuture.setRows(3);
 		getContentPane().add(infoFuture);
 
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
