@@ -61,6 +61,7 @@ public class TestClient
 		suite.addTest(new TestSuite(TestMartusUserNameAndPassword.class));
 		suite.addTest(new TestSuite(TestCacheOfSortableFields.class));
 		suite.addTest(new TestSuite(TestClientSideNetworkHandler.class));
+		suite.addTest(new TestSuite(TestCustomFieldSpecValidator.class));
 
 	    return suite;
 	}

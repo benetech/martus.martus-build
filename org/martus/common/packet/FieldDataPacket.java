@@ -118,7 +118,7 @@ public class FieldDataPacket extends Packet
 		return fieldDescription.substring(elementStart, trailingComma);
 	}
 
-	static private FieldSpec[] addFieldSpec(FieldSpec[] existingFieldTags, FieldSpec newFieldSpec)
+	static public FieldSpec[] addFieldSpec(FieldSpec[] existingFieldTags, FieldSpec newFieldSpec)
 	{
 		int oldTagCount = existingFieldTags.length;
 		FieldSpec[] tempFieldTags = new FieldSpec[oldTagCount + 1];

@@ -139,6 +139,7 @@ public class EnglishStrings
 "wintitle:notifyBackupKeyPairInformation=Backing Up Your Keypair",
 "wintitle:notifyExportFolderEmpty=Error Exporting Folder",
 "wintitle:notifyErrorPreviousBackupShareExists=Previous File Exists",
+"wintitle:notifyErrorInCustomFields=Customize Fields",
 				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -539,6 +540,7 @@ public class EnglishStrings
 "field:notifyExportFolderEmptycause=The folder you are trying to export does not contain any bulletins.  Select a folder which has bulletins before exporting the folder.",		
 "field:notifyBackupKeyPairMultipleInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
 "field:notifyErrorPreviousBackupShareExistscause=A previous share file exists.  You must save each file on its own removable media disk.",		
+"field:notifyErrorInCustomFieldscause=There is an error in the field customization string. Certain standard tags are required, blank tags are not allowed, duplicate tags are not allowed, custom fields must have labels, and standard fields cannot have labels.",
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occurs in the future:",

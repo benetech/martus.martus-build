@@ -217,7 +217,7 @@ public class TestSpeed extends TestCaseEnhanced
 	public void testXmlPlain() throws Exception
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(security.getPublicKeyString(), "localId");
-		FieldDataPacket fdp = new FieldDataPacket(uid, Bulletin.getDefaultPublicFieldTags());
+		FieldDataPacket fdp = new FieldDataPacket(uid, Bulletin.getDefaultPublicFieldSpecs());
 		
 		Writer writerPlain = new StringWriter();
 		
@@ -239,7 +239,7 @@ public class TestSpeed extends TestCaseEnhanced
 	public void testXmlEncrypted() throws Exception
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(security.getPublicKeyString(), "localId");
-		FieldDataPacket fdp = new FieldDataPacket(uid, Bulletin.getDefaultPublicFieldTags());
+		FieldDataPacket fdp = new FieldDataPacket(uid, Bulletin.getDefaultPublicFieldSpecs());
 		
 		Writer writerEncrypted = new StringWriter();
 		

@@ -60,7 +60,7 @@ public class Bulletin implements BulletinConstants
 
 	public Bulletin(MartusCrypto securityToUse)
 	{
-		this(securityToUse, Bulletin.getDefaultPublicFieldTags(), Bulletin.getDefaultPrivateFieldTags());
+		this(securityToUse, Bulletin.getDefaultPublicFieldSpecs(), Bulletin.getDefaultPrivateFieldSpecs());
 	}
 	
 	public Bulletin(MartusCrypto securityToUse, FieldSpec[] standardFieldNames, FieldSpec[] privateFieldNames)
@@ -505,25 +505,34 @@ public class Bulletin implements BulletinConstants
 	{
 		return pendingPrivateAttachments;
 	}
-
-	public static FieldSpec[] getDefaultPublicFieldTags()
+	
+	public static Vector getDefaultPublicFieldTags()
 	{
-		return new FieldSpec[]
-		{
-			new FieldSpec(BulletinConstants.TAGLANGUAGE),
-			new FieldSpec(BulletinConstants.TAGAUTHOR), 
-			new FieldSpec(BulletinConstants.TAGORGANIZATION),
-			new FieldSpec(BulletinConstants.TAGTITLE), 
-			new FieldSpec(BulletinConstants.TAGLOCATION), 
-			new FieldSpec(BulletinConstants.TAGKEYWORDS),
-			new FieldSpec(BulletinConstants.TAGEVENTDATE), 
-			new FieldSpec(BulletinConstants.TAGENTRYDATE),
-			new FieldSpec(BulletinConstants.TAGSUMMARY), 
-			new FieldSpec(BulletinConstants.TAGPUBLICINFO),
-		};
+		Vector tags = new Vector();
+		tags.add(BulletinConstants.TAGLANGUAGE);
+		tags.add(BulletinConstants.TAGAUTHOR);
+		tags.add(BulletinConstants.TAGORGANIZATION);
+		tags.add(BulletinConstants.TAGTITLE);
+		tags.add(BulletinConstants.TAGLOCATION); 
+		tags.add(BulletinConstants.TAGKEYWORDS);
+		tags.add(BulletinConstants.TAGEVENTDATE); 
+		tags.add(BulletinConstants.TAGENTRYDATE);
+		tags.add(BulletinConstants.TAGSUMMARY);
+		tags.add(BulletinConstants.TAGPUBLICINFO);
+		return tags;
+	}
+	
+	public static FieldSpec[] getDefaultPublicFieldSpecs()
+	{
+		Vector tags = getDefaultPublicFieldTags();
+		FieldSpec[] specs = new FieldSpec[tags.size()];
+		for(int i=0; i < tags.size(); ++i)
+			specs[i] = new FieldSpec((String)tags.get(i));
+			
+		return specs;
 	}
 
-	public static FieldSpec[] getDefaultPrivateFieldTags()
+	public static FieldSpec[] getDefaultPrivateFieldSpecs()
 	{
 		return new FieldSpec[]
 		{

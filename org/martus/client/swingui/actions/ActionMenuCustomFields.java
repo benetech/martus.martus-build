@@ -29,6 +29,7 @@ package org.martus.client.swingui.actions;
 import java.awt.event.ActionEvent;
 
 import org.martus.client.core.BulletinStore;
+import org.martus.client.core.CustomFieldSpecValidator;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.FieldSpec;
@@ -48,12 +49,28 @@ public class ActionMenuCustomFields extends UiMenuAction
 		
 		MartusApp app = mainWindow.getApp();
 		BulletinStore store = app.getStore();
-		FieldSpec[] tags = store.getPublicFieldTags();
-		String existingTags = FieldDataPacket.buildFieldListString(tags);
-		String newTags = mainWindow.getStringInput("CustomFields", "", existingTags);
-		if(newTags == null)
-			return;
-			
-		store.setPublicFieldTags(FieldDataPacket.parseFieldTagsFromString(newTags));
+		FieldSpec[] existingSpecs = store.getPublicFieldTags();
+		FieldSpec[] newSpecs = getCustomizedFieldsFromUser(existingSpecs);
+		if(newSpecs != null)
+			store.setPublicFieldTags(newSpecs);
 	}
+
+	private FieldSpec[] getCustomizedFieldsFromUser(FieldSpec[] existingSpecs)
+	{
+		String existingTags = FieldDataPacket.buildFieldListString(existingSpecs);
+		while(true)
+		{
+			String newTags = mainWindow.getStringInput("CustomFields", "", existingTags);
+			if(newTags == null)
+				return null;
+			FieldSpec[] newSpecs = FieldDataPacket.parseFieldTagsFromString(newTags);
+			CustomFieldSpecValidator checker = new CustomFieldSpecValidator(newSpecs);
+			if(checker.isValid())
+				return newSpecs;
+				
+			mainWindow.notifyDlg(mainWindow, "ErrorInCustomFields");
+			existingTags = newTags;
+		}
+	}
+	
 }

@@ -163,8 +163,8 @@ public class BulletinZipImporter
 		IOException, 
 		InvalidBase64Exception
 	{
-		FieldSpec[] standardFieldNames = Bulletin.getDefaultPublicFieldTags();
-		FieldSpec[] privateFieldNames = Bulletin.getDefaultPrivateFieldTags();
+		FieldSpec[] standardFieldNames = Bulletin.getDefaultPublicFieldSpecs();
+		FieldSpec[] privateFieldNames = Bulletin.getDefaultPrivateFieldSpecs();
 		Bulletin original = new Bulletin(security, standardFieldNames, privateFieldNames);
 		BulletinZipImporter.loadFromFile(original, inputFile, security);
 		Bulletin imported = new Bulletin(security, standardFieldNames, privateFieldNames);
