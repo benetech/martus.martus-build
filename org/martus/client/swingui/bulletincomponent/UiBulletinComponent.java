@@ -39,6 +39,7 @@ import javax.swing.event.ChangeListener;
 import org.martus.client.core.EncryptionChangeListener;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiField;
+import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.packet.FieldDataPacket;
@@ -54,8 +55,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 	public void createSections()
 	{
-		String[] standardFieldTags = currentBulletin.getPublicFieldTags();
-		String[] privateFieldTags = currentBulletin.getPrivateFieldTags();
+		FieldSpec[] standardFieldTags = currentBulletin.getPublicFieldTags();
+		FieldSpec[] privateFieldTags = currentBulletin.getPrivateFieldTags();
 
 		int numPublicFields = standardFieldTags.length;
 		int indexOfFirstPublicField = 0;
@@ -168,13 +169,13 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			encryptionListener.encryptionChanged(newState);
 	}
 
-	void createLabelsAndFields(UiBulletinComponentSection target, String[] tags, int startIndex)
+	void createLabelsAndFields(UiBulletinComponentSection target, FieldSpec[] tags, int startIndex)
 	{
 		UiField[] fieldsInThisSection = target.createLabelsAndFields(target, tags);
 		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
 		{
 			int thisField = startIndex + fieldNum;
-			fieldTags[thisField] = tags[fieldNum];
+			fieldTags[thisField] = tags[fieldNum].getTag();
 			fields[thisField] = fieldsInThisSection[fieldNum];
 		}
 		target.createAttachmentTable();

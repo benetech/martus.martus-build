@@ -31,6 +31,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.bulletin.BulletinConstants;
@@ -87,7 +88,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		bhp4.writeXmlToDatabase(db, key4, false, clientSecurity2);
 		
 		UniversalId fdpUid = FieldDataPacket.createUniversalId(clientSecurity1.getPublicKeyString());
-		String[] tags = {"whatever"};
+		FieldSpec[] tags = {new FieldSpec("whatever")};
 		FieldDataPacket fdp1 = new FieldDataPacket(fdpUid, tags);
 		fdp1.writeXmlToClientDatabase(db, false, clientSecurity1);
 		

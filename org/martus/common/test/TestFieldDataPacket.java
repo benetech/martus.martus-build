@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Arrays;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusXml;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.crypto.MartusCrypto;
@@ -84,7 +85,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	public void testIsEmpty()
 	{
 		assertEquals("didn't start out empty?", true, fdp.isEmpty());
-		fdp.set(fieldTags[0], "blah");
+		fdp.set(fieldTags[0].getTag(), "blah");
 		assertEquals("still empty after field?", false, fdp.isEmpty());
 		fdp.clearAll();
 		assertEquals("didn't return to empty after field?", true, fdp.isEmpty());
@@ -193,7 +194,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 			"</FieldDataPacket>\n";
 		//System.out.println("{" + simpleFieldDataPacket + "}");
 
-		String[] noTags = {};
+		FieldSpec[] noTags = {};
 		FieldDataPacket loaded = new FieldDataPacket(UniversalId.createDummyUniversalId(), noTags);
 
 		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
@@ -204,11 +205,11 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("id", id, loaded.getLocalId());
 		assertEquals("encrypted", true, loaded.isEncrypted());
 
-		String[] tags = loaded.getFieldTags();
+		FieldSpec[] tags = loaded.getFieldTags();
 		assertEquals("Not three fields?", 3, tags.length);
-		assertEquals(aTag, tags[0]);
-		assertEquals(bTag, tags[1]);
-		assertEquals(cTag, tags[2]);
+		assertEquals(aTag, tags[0].getTag());
+		assertEquals(bTag, tags[1].getTag());
+		assertEquals(cTag, tags[2].getTag());
 
 		assertEquals("aTag", data1, loaded.get(aTag));
 		
@@ -235,7 +236,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 			"</FieldDataPacket>\n";
 		//System.out.println("{" + simpleFieldDataPacket + "}");
 
-		String[] noTags = {};
+		FieldSpec[] noTags = {};
 		FieldDataPacket loaded = new FieldDataPacket(UniversalId.createDummyUniversalId(), noTags);
 
 		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
@@ -246,13 +247,13 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("id", id, loaded.getLocalId());
 		assertEquals("encrypted", true, loaded.isEncrypted());
 
-		String[] tags = loaded.getFieldTags();
+		FieldSpec[] tags = loaded.getFieldTags();
 		assertEquals("wrong field count?", 5, tags.length);
-		assertEquals("title", tags[0]);
-		assertEquals("author", tags[1]);
-		assertEquals("custom1", tags[2]);
-		assertEquals("entrydate", tags[3]);
-		assertEquals("language", tags[4]);
+		assertEquals("title", tags[0].getTag());
+		assertEquals("author", tags[1].getTag());
+		assertEquals("custom1", tags[2].getTag());
+		assertEquals("entrydate", tags[3].getTag());
+		assertEquals("language", tags[4].getTag());
 
 		assertEquals("custom", data1, loaded.get("custom1"));
 		
@@ -587,7 +588,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	String aData = "data for a";
 	String bData = line1 + "\n" + line2 + "\r\n" + line3 + "\n" + line4;
 	String cData = "after b";
-	String[] fieldTags = {aTag, bTag, cTag};
+	FieldSpec[] fieldTags = {new FieldSpec(aTag), new FieldSpec(bTag), new FieldSpec(cTag)};
 
 	int SHORTEST_LEGAL_KEY_SIZE = 512;
 	static MartusSecurity security;

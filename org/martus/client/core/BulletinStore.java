@@ -43,6 +43,7 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.zip.ZipFile;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.MartusUtilities.FileVerificationException;
@@ -648,18 +649,18 @@ public class BulletinStore
 
 	public Bulletin createEmptyBulletin()
 	{
-		String[] standardFieldNames = getPublicFieldTags();
-		String[] privateFieldNames = getPrivateFieldTags();
+		FieldSpec[] standardFieldNames = getPublicFieldTags();
+		FieldSpec[] privateFieldNames = getPrivateFieldTags();
 		Bulletin b = new Bulletin(getSignatureGenerator(), standardFieldNames, privateFieldNames);
 		return b;
 	}
 
-	private String[] getPrivateFieldTags()
+	private FieldSpec[] getPrivateFieldTags()
 	{
 		return privateFieldTags;
 	}
 
-	public String[] getPublicFieldTags()
+	public FieldSpec[] getPublicFieldTags()
 	{
 		return publicFieldTags;
 	}
@@ -698,7 +699,7 @@ public class BulletinStore
 		privateFieldTags = Bulletin.getDefaultPrivateFieldTags();
 	}
 	
-	public void setPublicFieldTags(String[] newTags)
+	public void setPublicFieldTags(FieldSpec[] newTags)
 	{
 		publicFieldTags = newTags;
 	}
@@ -1040,7 +1041,6 @@ public class BulletinStore
 	File cacheOfSortableFieldsFile;
 	private boolean encryptPublicDataFlag;
 
-	String[] publicFieldTags;
-
-	String[] privateFieldTags;
+	FieldSpec[] publicFieldTags;
+	FieldSpec[] privateFieldTags;
 }

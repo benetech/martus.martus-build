@@ -31,13 +31,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.StringReader;
 import java.util.Arrays;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.Vector;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusClientXml;
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusXml;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
@@ -107,16 +108,23 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testGetStandardFieldNames()
 	{
-		List names = Arrays.asList(Bulletin.getDefaultPublicFieldTags());
-		assertEquals(true, names.contains("author"));
-		assertEquals(false, names.contains("privateinfo"));
-		assertEquals(false, names.contains("nope"));
-		assertEquals(true, names.contains("language"));
-		assertEquals(true, names.contains("organization"));
+		FieldSpec[] publicFields = Bulletin.getDefaultPublicFieldTags();
+		Set publicTags = new HashSet();
+		for(int i = 0; i < publicFields.length; ++i)
+			publicTags.add(publicFields[i].getTag());
+		assertEquals(true, publicTags.contains("author"));
+		assertEquals(false, publicTags.contains("privateinfo"));
+		assertEquals(false, publicTags.contains("nope"));
+		assertEquals(true, publicTags.contains("language"));
+		assertEquals(true, publicTags.contains("organization"));
 
-		List privateNames = Arrays.asList(Bulletin.getDefaultPrivateFieldTags());
-		assertEquals(true, privateNames.contains("privateinfo"));
-		assertEquals(false, privateNames.contains("nope"));
+		FieldSpec[] privateFields = Bulletin.getDefaultPrivateFieldTags();
+		Set privateTags = new HashSet();
+		for(int i = 0; i < privateFields.length; ++i)
+			privateTags.add(privateFields[i].getTag());
+		
+		assertEquals(true, privateTags.contains("privateinfo"));
+		assertEquals(false, privateTags.contains("nope"));
 	}
 
 	public void testGetAllBulletinUids() throws Exception

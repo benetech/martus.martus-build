@@ -39,6 +39,7 @@ import javax.swing.border.LineBorder;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.fields.UiField;
+import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.packet.FieldDataPacket;
@@ -75,7 +76,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		add(damagedIndicator);
 	}
 
-	public UiField[] createLabelsAndFields(JPanel target, String[] tags)
+	public UiField[] createLabelsAndFields(JPanel target, FieldSpec[] tags)
 	{
 		fieldTags = tags;
 
@@ -84,7 +85,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		{
 			fields[fieldNum] = createField(tags[fieldNum]);
 			fields[fieldNum].initalize();
-			target.add(createLabel(tags[fieldNum]), ParagraphLayout.NEW_PARAGRAPH);
+			target.add(createLabel(tags[fieldNum].getTag()), ParagraphLayout.NEW_PARAGRAPH);
 			target.add(fields[fieldNum].getComponent());
 		}
 		JLabel attachments = new JLabel(localization.getFieldLabel("attachments"));
@@ -98,7 +99,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		{
 			String text = "";
 			if(fdp != null)
-				text = fdp.get(fieldTags[fieldNum]);
+				text = fdp.get(fieldTags[fieldNum].getTag());
 			fields[fieldNum].setText(text);
 		}
 
@@ -115,8 +116,9 @@ abstract public class UiBulletinComponentSection extends JPanel
 		return new JLabel(localization.getFieldLabel(fieldTag));
 	}
 
-	private UiField createField(String fieldName)
+	private UiField createField(FieldSpec fieldSpec)
 	{
+		String fieldName = fieldSpec.getTag();
 		UiField field = null;
 
 		switch(Bulletin.getFieldType(fieldName))
@@ -203,7 +205,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	JLabel encryptedIndicator;
 	JLabel damagedIndicator;
 	UiField[] fields;
-	String[] fieldTags;
+	FieldSpec[] fieldTags;
 
 	public final static boolean ENCRYPTED = true;
 	public final static boolean NOT_ENCRYPTED = false;

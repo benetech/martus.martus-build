@@ -24,33 +24,19 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui.actions;
+package org.martus.common;
 
-import java.awt.event.ActionEvent;
-
-import org.martus.client.core.BulletinStore;
-import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.FieldSpec;
-import org.martus.common.packet.FieldDataPacket;
-
-public class ActionMenuCustomFields extends UiMenuAction
+public class FieldSpec
 {
-	public ActionMenuCustomFields(UiMainWindow mainWindowToUse)
+	public FieldSpec(String tagToUse)
 	{
-		super(mainWindowToUse, "CustomFields");
+		tag = tagToUse;
 	}
 	
-	public void actionPerformed(ActionEvent arg0)
+	public String getTag()
 	{
-		MartusApp app = mainWindow.getApp();
-		BulletinStore store = app.getStore();
-		FieldSpec[] tags = store.getPublicFieldTags();
-		String existingTags = FieldDataPacket.buildFieldListString(tags);
-		String newTags = mainWindow.getStringInput("CustomFields", "", existingTags);
-		if(newTags == null)
-			return;
-			
-		store.setPublicFieldTags(FieldDataPacket.parseFieldTagsFromString(newTags));
+		return tag;
 	}
+
+	String tag;
 }

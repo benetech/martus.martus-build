@@ -35,6 +35,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.Vector;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusXml;
 import org.martus.common.XmlWriterFilter;
 import org.martus.common.bulletin.AttachmentProxy;
@@ -49,14 +50,14 @@ import org.martus.util.InputStreamWithSeek;
 public class FieldDataPacket extends Packet
 {
 	private static final char FIELD_TAG_DELIMITER = ';';
-	public FieldDataPacket(UniversalId universalIdToUse, String[] fieldTagsToUse)
+	public FieldDataPacket(UniversalId universalIdToUse, FieldSpec[] fieldTagsToUse)
 	{
 		super(universalIdToUse);
 		setFieldTags(fieldTagsToUse);
 		clearAll();
 	}
 
-	void setFieldTags(String[] fieldTagsToUse)
+	void setFieldTags(FieldSpec[] fieldTagsToUse)
 	{
 		fieldTags = fieldTagsToUse;
 	}
@@ -66,21 +67,21 @@ public class FieldDataPacket extends Packet
 		fieldTags = parseFieldTagsFromString(commaSeparatedTags);
 	}
 
-	static public String buildFieldListString(String[] tempFieldTags)
+	static public String buildFieldListString(FieldSpec[] tempFieldTags)
 	{
 		String fieldList = "";
 		for(int i = 0; i < tempFieldTags.length; ++i)
 		{
 			if(i > 0)
 				fieldList += FIELD_TAG_DELIMITER;
-			fieldList += tempFieldTags[i];
+			fieldList += tempFieldTags[i].getTag();
 		}
 		return fieldList;
 	}
 
-	static public String[] parseFieldTagsFromString(String delimitedTags)
+	static public FieldSpec[] parseFieldTagsFromString(String delimitedTags)
 	{
-		String[] newFieldTags = new String[0];
+		FieldSpec[] newFieldTags = new FieldSpec[0];
 		int tagStart = 0;
 		while(tagStart >= 0 && tagStart < delimitedTags.length())
 		{
@@ -103,12 +104,12 @@ public class FieldDataPacket extends Packet
 		return fieldDescription.substring(0, comma);
 	}
 
-	static private String[] appendTag(String[] existingFieldTags, String newTag)
+	static private FieldSpec[] appendTag(FieldSpec[] existingFieldTags, String newTag)
 	{
 		int oldTagCount = existingFieldTags.length;
-		String[] tempFieldTags = new String[oldTagCount + 1];
+		FieldSpec[] tempFieldTags = new FieldSpec[oldTagCount + 1];
 		System.arraycopy(existingFieldTags, 0, tempFieldTags, 0, oldTagCount);
-		tempFieldTags[oldTagCount] = newTag;
+		tempFieldTags[oldTagCount] = new FieldSpec(newTag);
 		return tempFieldTags;
 	}
 	
@@ -163,7 +164,7 @@ public class FieldDataPacket extends Packet
 		return fieldTags.length;
 	}
 
-	public String[] getFieldTags()
+	public FieldSpec[] getFieldTags()
 	{
 		return fieldTags;
 	}
@@ -172,7 +173,7 @@ public class FieldDataPacket extends Packet
 	{
 		for(int f = 0; f < fieldTags.length; ++f)
 		{
-			if(fieldTags[f].equals(fieldTag))
+			if(fieldTags[f].getTag().equals(fieldTag))
 				return true;
 		}
 		return false;
@@ -402,7 +403,7 @@ public class FieldDataPacket extends Packet
 	final String packetHeaderTag = "packet";
 
 	private boolean encryptedFlag;
-	private String[] fieldTags;
+	private FieldSpec[] fieldTags;
 	private Map fieldData;
 	private Vector attachments;
 

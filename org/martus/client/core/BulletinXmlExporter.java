@@ -30,6 +30,7 @@ import java.io.IOException;
 import java.io.Writer;
 import java.util.Vector;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.bulletin.AttachmentProxy;
@@ -100,12 +101,12 @@ public class BulletinXmlExporter
 		dest.write(MartusXml.getTagEnd(AttachmentsListElementName));
 	}
 
-	static void writeFields(Writer dest, Bulletin b, String[] tags)
+	static void writeFields(Writer dest, Bulletin b, FieldSpec[] tags)
 		throws IOException
 	{
 		for (int i = 0; i < tags.length; i++)
 		{
-			String tag = tags[i];
+			String tag = tags[i].getTag();
 			String rawFieldData = b.get(tag);
 			writeElement(dest, tag, rawFieldData);
 		}

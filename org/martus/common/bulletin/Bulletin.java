@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.database.Database;
@@ -62,7 +63,7 @@ public class Bulletin implements BulletinConstants
 		this(securityToUse, Bulletin.getDefaultPublicFieldTags(), Bulletin.getDefaultPrivateFieldTags());
 	}
 	
-	public Bulletin(MartusCrypto securityToUse, String[] standardFieldNames, String[] privateFieldNames)
+	public Bulletin(MartusCrypto securityToUse, FieldSpec[] standardFieldNames, FieldSpec[] privateFieldNames)
 	{
 		security = securityToUse;
 		String accountId = security.getPublicKeyString();
@@ -154,12 +155,12 @@ public class Bulletin implements BulletinConstants
 		return getBulletinHeaderPacket().getStatus();
 	}
 	
-	public String[] getPublicFieldTags()
+	public FieldSpec[] getPublicFieldTags()
 	{
 		return fieldData.getFieldTags();
 	}
 	
-	public String[] getPrivateFieldTags()
+	public FieldSpec[] getPrivateFieldTags()
 	{
 		return privateFieldData.getFieldTags();
 	}
@@ -266,11 +267,11 @@ public class Bulletin implements BulletinConstants
 
 	public boolean contains(String lookFor)
 	{
-		String fields[] = fieldData.getFieldTags();
+		FieldSpec fields[] = fieldData.getFieldTags();
 		String lookForLowerCase = lookFor.toLowerCase();
 		for(int f = 0; f < fields.length; ++f)
 		{
-			String contents = get(fields[f]).toLowerCase();
+			String contents = get(fields[f].getTag()).toLowerCase();
 			if(contents.indexOf(lookForLowerCase) >= 0)
 				return true;
 		}
@@ -374,18 +375,18 @@ public class Bulletin implements BulletinConstants
 		setAllPrivate(other.isAllPrivate());
 
 		{
-			String fields[] = fieldData.getFieldTags();
+			FieldSpec fields[] = fieldData.getFieldTags();
 			for(int f = 0; f < fields.length; ++f)
 			{
-				set(fields[f], other.get(fields[f]));
+				set(fields[f].getTag(), other.get(fields[f].getTag()));
 			}
 		}
 
 		{
-			String privateFields[] = privateFieldData.getFieldTags();
+			FieldSpec privateFields[] = privateFieldData.getFieldTags();
 			for(int f = 0; f < privateFields.length; ++f)
 			{
-				set(privateFields[f], other.get(privateFields[f]));
+				set(privateFields[f].getTag(), other.get(privateFields[f].getTag()));
 			}
 		}
 
@@ -505,24 +506,28 @@ public class Bulletin implements BulletinConstants
 		return pendingPrivateAttachments;
 	}
 
-	public static String[] getDefaultPublicFieldTags()
+	public static FieldSpec[] getDefaultPublicFieldTags()
 	{
-		return new String[]
+		return new FieldSpec[]
 		{
-			BulletinConstants.TAGLANGUAGE,
-	
-			BulletinConstants.TAGAUTHOR, BulletinConstants.TAGORGANIZATION,
-			BulletinConstants.TAGTITLE, BulletinConstants.TAGLOCATION, BulletinConstants.TAGKEYWORDS,
-			BulletinConstants.TAGEVENTDATE, BulletinConstants.TAGENTRYDATE,
-			BulletinConstants.TAGSUMMARY, BulletinConstants.TAGPUBLICINFO,
+			new FieldSpec(BulletinConstants.TAGLANGUAGE),
+			new FieldSpec(BulletinConstants.TAGAUTHOR), 
+			new FieldSpec(BulletinConstants.TAGORGANIZATION),
+			new FieldSpec(BulletinConstants.TAGTITLE), 
+			new FieldSpec(BulletinConstants.TAGLOCATION), 
+			new FieldSpec(BulletinConstants.TAGKEYWORDS),
+			new FieldSpec(BulletinConstants.TAGEVENTDATE), 
+			new FieldSpec(BulletinConstants.TAGENTRYDATE),
+			new FieldSpec(BulletinConstants.TAGSUMMARY), 
+			new FieldSpec(BulletinConstants.TAGPUBLICINFO),
 		};
 	}
 
-	public static String[] getDefaultPrivateFieldTags()
+	public static FieldSpec[] getDefaultPrivateFieldTags()
 	{
-		return new String[]
+		return new FieldSpec[]
 		{
-			BulletinConstants.TAGPRIVATEINFO,
+			new FieldSpec(BulletinConstants.TAGPRIVATEINFO),
 		};
 	}
 

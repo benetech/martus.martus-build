@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.martus.client.swingui.UiLocalization;
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
@@ -63,7 +64,7 @@ public class BulletinHtmlGenerator
 			allPrivateValueTag = "yes";
 		html.append(getFieldHtmlString("allprivate", localization.getButtonLabel(allPrivateValueTag)));
 
-		String[] standardFieldTags = b.getPublicFieldTags();
+		FieldSpec[] standardFieldTags = b.getPublicFieldTags();
 		html.append(getSectionHtmlString(b, standardFieldTags));
 		html.append(getAttachmentsHtmlString(b.getFieldDataPacket()));
 
@@ -73,7 +74,7 @@ public class BulletinHtmlGenerator
 		html.append(privateSectionTitle);
 		html.append("</b></u></td></tr>");
 		html.append("\n");
-		String[] privateFieldTags = b.getPrivateFieldTags();
+		FieldSpec[] privateFieldTags = b.getPrivateFieldTags();
 		html.append(getSectionHtmlString(b, privateFieldTags));
 		html.append(getAttachmentsHtmlString(b.getPrivateFieldDataPacket()));
 
@@ -82,12 +83,12 @@ public class BulletinHtmlGenerator
 		return new String(html);
 	}
 
-	private String getSectionHtmlString(Bulletin b, String[] standardFieldTags)
+	private String getSectionHtmlString(Bulletin b, FieldSpec[] standardFieldTags)
 	{
 		String sectionHtml = "";
 		for(int fieldNum = 0; fieldNum < standardFieldTags.length; ++fieldNum)
 		{
-			String tag = standardFieldTags[fieldNum];
+			String tag = standardFieldTags[fieldNum].getTag();
 			String value = MartusUtilities.getXmlEncoded(b.get(tag));
 			if(Bulletin.getFieldType(tag) == Bulletin.DATE)
 				value = localization.convertStoredDateToDisplay(value);
