@@ -35,9 +35,9 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.getPublicCode(clientId); 
 	}
 	
-	public synchronized void logging(String message)
+	public synchronized void log(String message)
 	{
-		coreServer.logging(message);
+		coreServer.log(message);
 	}
 	
 	void displayClientStatistics()
@@ -89,7 +89,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	{
 		if(clientsBanned.contains(clientId))
 		{
-			logging("client BANNED : ");
+			log("client BANNED : ");
 			return true;
 		}
 		return false;
@@ -248,7 +248,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		}
 		catch (IOException e)
 		{
-			logging("loadBannedClients: " + e);
+			log("loadBannedClients: " + e);
 		}
 	}
 
@@ -326,7 +326,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 
 	public synchronized void allowUploads(String clientId)
 	{
-		logging("allowUploads " + coreServer.getClientAliasForLogging(clientId) + " : " + getPublicCode(clientId));
+		log("allowUploads " + coreServer.getClientAliasForLogging(clientId) + " : " + getPublicCode(clientId));
 		clientsThatCanUpload.add(clientId);
 		
 		try
@@ -339,11 +339,11 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 			writer.close();
 			MartusCrypto security = getSecurity();
 			MartusServerUtilities.createSignatureFileFromFileOnServer(getAllowUploadFile(), security);
-			logging("allowUploads : Exit OK");
+			log("allowUploads : Exit OK");
 		}
 		catch(Exception e)
 		{
-			logging("allowUploads " + e);
+			log("allowUploads " + e);
 			//System.out.println("MartusServer.allowUploads: " + e);
 		}
 	}
@@ -374,7 +374,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	
 	public synchronized void loadCanUploadList(BufferedReader canUploadInput)
 	{
-		logging("loadCanUploadList");
+		log("loadCanUploadList");
 
 		try
 		{
@@ -382,10 +382,10 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		}
 		catch (IOException e)
 		{
-			logging("loadCanUploadList -- Error loading can-upload list: " + e);
+			log("loadCanUploadList -- Error loading can-upload list: " + e);
 		}
 		
-		logging("loadCanUploadList : Exit OK");
+		log("loadCanUploadList : Exit OK");
 	}
 	
 

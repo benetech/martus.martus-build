@@ -8,7 +8,7 @@ public interface ServerForNonSSLClientsInterface
 	public Vector getServerInformation();
 
 	public String getPublicCode(String clientId);
-	public void logging(String message);
+	public void log(String message);
 	public void clientConnectionStart();
 	public void clientConnectionExit();
 

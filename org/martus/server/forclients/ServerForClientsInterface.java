@@ -7,7 +7,7 @@ import org.martus.common.MartusCrypto;
 public interface ServerForClientsInterface
 {
 	public String getPublicCode(String clientId);
-	public void logging(String message);
+	public void log(String message);
 	public void clientConnectionStart();
 	public void clientConnectionExit();
 	public MartusCrypto getSecurity();

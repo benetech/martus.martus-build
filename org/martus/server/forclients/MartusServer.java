@@ -13,8 +13,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -233,15 +231,13 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public String ping()
 	{
-		if(serverMaxLogging)
-			logging("ping request");		
+		log("ping request");		
 		return NetworkInterfaceConstants.VERSION;
 	}
 
 	public Vector getServerInformation()
 	{
-		if(serverMaxLogging)
-			logging("getServerInformation");
+		log("getServerInformation");
 			
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
@@ -257,14 +253,13 @@ public class MartusServer implements NetworkInterfaceConstants
 			result.add(NetworkInterfaceConstants.OK);
 			result.add(publicKeyString);
 			result.add(Base64.encode(sigBytes));
-			if(serverMaxLogging)
-				logging("getServerInformation : Exit OK");
+			log("getServerInformation : Exit OK");
 		}
 		catch(Exception e)
 		{
 			result.add(NetworkInterfaceConstants.SERVER_ERROR);
 			result.add(e.toString());
-			logging("getServerInformation SERVER ERROR" + e);			
+			log("getServerInformation SERVER ERROR" + e);			
 		}
 		return result;
 	}
@@ -294,12 +289,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		if(!uploadGranted)
 		{
-			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + " tryMagicWord=" +tryMagicWord);
+			log("requestUploadRights: Rejected " + getPublicCode(clientId) + " tryMagicWord=" +tryMagicWord);
 			incrementFailedUploadRequestsForCurrentClientIp();
 			return NetworkInterfaceConstants.REJECTED;
 		}
-		if(serverMaxLogging)
-			logging("requestUploadRights granted to :" + clientId + " with magicword=" + tryMagicWord);
+		log("requestUploadRights granted to :" + clientId + " with magicword=" + tryMagicWord);
 			
 		serverForClients.allowUploads(clientId);
 		return NetworkInterfaceConstants.OK;
@@ -308,10 +302,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
-		if(serverMaxLogging)
-		{
-			logging("uploadBulletinChunk");
-		}
+		log("uploadBulletinChunk");
 		
 		if(isClientBanned(authorAccountId) )
 			return NetworkInterfaceConstants.REJECTED;
@@ -324,7 +315,7 @@ public class MartusServer implements NetworkInterfaceConstants
 					Integer.toString(chunkSize) + "," + data;
 		if(!isSignatureCorrect(signedString, signature, authorAccountId))
 		{
-			logging("  returning SIG_ERROR");
+			log("  returning SIG_ERROR");
 			return NetworkInterfaceConstants.SIG_ERROR;
 		}
 		
@@ -337,7 +328,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	public String putBulletinChunk(String uploaderAccountId, String authorAccountId, String bulletinLocalId,
 		int totalSize, int chunkOffset, int chunkSize, String data) 
 	{
-		if(serverMaxLogging)
 		{
 			StringBuffer logMsg = new StringBuffer();
 			logMsg.append("putBulletinChunk");
@@ -346,18 +336,18 @@ public class MartusServer implements NetworkInterfaceConstants
 			if(chunkSize != NetworkInterfaceConstants.MAX_CHUNK_SIZE)
 				logMsg.append(" Last Chunk = " + chunkSize);
 			
-			logging(logMsg.toString());
+			log(logMsg.toString());
 		}
 		
 		if(isClientBanned(authorAccountId) || !canClientUpload(authorAccountId))
 		{
-			logging("putBulletinChunk REJECTED");
+			log("putBulletinChunk REJECTED");
 			return NetworkInterfaceConstants.REJECTED;
 		}
 		
 		if( isShutdownRequested() )
 		{
-			logging(" returning SERVER_DOWN");
+			log(" returning SERVER_DOWN");
 			return NetworkInterfaceConstants.SERVER_DOWN;
 		}
 		
@@ -370,21 +360,20 @@ public class MartusServer implements NetworkInterfaceConstants
 		} 
 		catch (IOException e) 
 		{
-			logging("putBulletinChunk Error creating interim file." + e.getMessage());
+			log("putBulletinChunk Error creating interim file." + e.getMessage());
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		}
 		
 		if(chunkSize > NetworkInterfaceConstants.MAX_CHUNK_SIZE)
 		{
 			interimZipFile.delete();
-			logging("putBulletinChunk INVALID_DATA (> MAX_CHUNK_SIZE)");
+			log("putBulletinChunk INVALID_DATA (> MAX_CHUNK_SIZE)");
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}			
 		
 		if(chunkOffset == 0)
 		{
-			if(serverMaxLogging && interimZipFile.exists())
-				logging("putBulletinChunk : restarting at zero");
+			log("putBulletinChunk : restarting at zero");
 			interimZipFile.delete();
 		}
 		
@@ -392,14 +381,14 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(oldFileLength != chunkOffset)
 		{
 			interimZipFile.delete();
-			logging("putBulletinChunk INVALID_DATA (!= file length)");
+			log("putBulletinChunk INVALID_DATA (!= file length)");
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}
 		
 		if(oldFileLength + chunkSize > totalSize)
 		{
 			interimZipFile.delete();
-			logging("putBulletinChunk INVALID_DATA (> totalSize)");
+			log("putBulletinChunk INVALID_DATA (> totalSize)");
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}			
 		
@@ -426,7 +415,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			if(reader != null)
 				reader.close();
 			interimZipFile.delete();
-			logging("putBulletinChunk INVALID_DATA " + e);
+			log("putBulletinChunk INVALID_DATA " + e);
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}
 		
@@ -435,30 +424,26 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(chunkSize != newFileLength - oldFileLength)
 		{
 			interimZipFile.delete();
-			logging("putBulletinChunk INVALID_DATA (chunkSize != actual dataSize)");
+			log("putBulletinChunk INVALID_DATA (chunkSize != actual dataSize)");
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}			
 		
 		if(newFileLength >= totalSize)
 		{
-			if(serverMaxLogging)
-				logging("entering saveUploadedBulletinZipFile");
+			log("entering saveUploadedBulletinZipFile");
 			try 
 			{
 				result = saveUploadedBulletinZipFile(authorAccountId, bulletinLocalId, interimZipFile);
 			} catch (Exception e) 
 			{
-				if(serverMaxLogging)
-					logging("Exception =" + e);
+				log("Exception =" + e);
 				e.printStackTrace();
 			}
-			if(serverMaxLogging)
-				logging("returned from saveUploadedBulletinZipFile result =" + result);
+			log("returned from saveUploadedBulletinZipFile result =" + result);
 			interimZipFile.delete();
 		}
 		
-		if(serverMaxLogging)
-			logging("putBulletinChunk : Exit " + result);
+		log("putBulletinChunk : Exit " + result);
 		return result;
 	}
 
@@ -466,13 +451,12 @@ public class MartusServer implements NetworkInterfaceConstants
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId,
 		int chunkOffset, int maxChunkSize) 
 	{
-		if(serverMaxLogging)
 		{
 			StringBuffer logMsg = new StringBuffer();
 			logMsg.append("getBulletinChunk request by " + getClientAliasForLogging(myAccountId));
 			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
 			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
-			logging(logMsg.toString());
+			log(logMsg.toString());
 		}
 		
 		if(isClientBanned(myAccountId) )
@@ -507,16 +491,14 @@ public class MartusServer implements NetworkInterfaceConstants
 					authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize);
 		
-		if(serverMaxLogging)
-			logging("  exit: " + result.get(0));
+		log("  exit: " + result.get(0));
 		return result;
 	}
 
 
 	public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
 	{
-		if(serverMaxLogging)
-			logging("listMySealedBulletinIds " + getClientAliasForLogging(clientId));
+		log("listMySealedBulletinIds " + getClientAliasForLogging(clientId));
 		
 		if(isClientBanned(clientId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
@@ -532,15 +514,13 @@ public class MartusServer implements NetworkInterfaceConstants
 		Vector result = new Vector();
 		result.add(resultCode);
 		result.add(summaries);
-		if(serverMaxLogging)
-			logging("listMySealedBulletinIds : Exit");
+		log("listMySealedBulletinIds : Exit");
 		return result;
 	}
 
 	public Vector listMyDraftBulletinIds(String authorAccountId, Vector retrieveTags)
 	{
-		if(serverMaxLogging)
-			logging("listMyDraftBulletinIds " + getClientAliasForLogging(authorAccountId));
+		log("listMyDraftBulletinIds " + getClientAliasForLogging(authorAccountId));
 			
 		if(isClientBanned(authorAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
@@ -557,15 +537,13 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(resultCode);
 		result.add(summaries);
 
-		if(serverMaxLogging)
-			logging("listMyDraftBulletinIds : Exit");
+		log("listMyDraftBulletinIds : Exit");
 		return result;
 	}
 
 	public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 	{
-		if(serverMaxLogging)
-			logging("listFieldOfficeSealedBulletinIds " + getClientAliasForLogging(hqAccountId));
+		log("listFieldOfficeSealedBulletinIds " + getClientAliasForLogging(hqAccountId));
 			
 		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
@@ -583,15 +561,13 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(resultCode);
 		result.add(summaries);
 
-		if(serverMaxLogging)
-			logging("listFieldOfficeSealedBulletinIds : Exit");
+		log("listFieldOfficeSealedBulletinIds : Exit");
 		return result;	
 	}
 
 	public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 	{
-		if(serverMaxLogging)
-			logging("listFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));
+		log("listFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));
 
 		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
@@ -608,8 +584,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(resultCode);
 		result.add(summaries);
 
-		if(serverMaxLogging)
-			logging("listFieldOfficeDraftBulletinIds : Exit");
+		log("listFieldOfficeDraftBulletinIds : Exit");
 		return result;
 	}
 
@@ -641,7 +616,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				}
 				catch(Exception e)
 				{
-					logging("FieldOfficeAccountCollector:Visit " + e);
+					log("FieldOfficeAccountCollector:Visit " + e);
 					accounts.set(0, NetworkInterfaceConstants.SERVER_ERROR);
 				}
 			}
@@ -654,8 +629,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			Vector accounts;
 		}	
 
-		if(serverMaxLogging)
-			logging("listFieldOfficeAccounts " + getClientAliasForLogging(hqAccountId));
+		log("listFieldOfficeAccounts " + getClientAliasForLogging(hqAccountId));
 			
 		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
@@ -666,8 +640,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		FieldOfficeAccountCollector visitor = new FieldOfficeAccountCollector(hqAccountId);
 		getDatabase().visitAllRecords(visitor);
 	
-		if(serverMaxLogging)
-			logging("listFieldOfficeAccounts : Exit");
+		log("listFieldOfficeAccounts : Exit");
 		return visitor.getAccounts();	
 	}
 	
@@ -697,7 +670,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 			catch (Exception e)
 			{
-				logging("deleteDraftBulletins: " + e);
+				log("deleteDraftBulletins: " + e);
 				result = INCOMPLETE;
 			}
 		}
@@ -706,8 +679,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public String putContactInfo(String accountId, Vector contactInfo)
 	{
-		if(serverMaxLogging)
-			logging("putContactInfo " + getClientAliasForLogging(accountId));
+		log("putContactInfo " + getClientAliasForLogging(accountId));
 		if(isClientBanned(accountId) )
 			return NetworkInterfaceConstants.REJECTED;
 		
@@ -748,7 +720,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		} 
 		catch (IOException e) 
 		{
-			logging("putContactInfo Error" + e);
+			log("putContactInfo Error" + e);
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		}
 		return NetworkInterfaceConstants.OK;
@@ -758,13 +730,12 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		Vector result = new Vector();
 		Vector items = new Vector();
-		if(serverMaxLogging)
 		{
 			String loggingData = "getNews: " + getClientAliasForLogging(accountId);
 			if(versionLabel.length() > 0 && versionBuildDate.length() > 0)
 				loggingData = loggingData +", " + versionLabel + ", " + versionBuildDate;
 
-			logging(loggingData);
+			log(loggingData);
 		}		
 
 		if(isClientBanned(accountId))
@@ -786,8 +757,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	public Vector getServerCompliance()
 	{
-		if(serverMaxLogging)
-			logging("getServerCompliance");
+		log("getServerCompliance");
 		Vector result = new Vector();
 		result.add(OK);
 		Vector compliance = new Vector();
@@ -804,11 +774,9 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
-		if(serverMaxLogging)
-		{
-			logging("downloadFieldOfficeDataPacket: " + getClientAliasForLogging(authorAccountId) + "  " + bulletinLocalId);
-			logging("  packet " + packetLocalId + " requested by: " + getClientAliasForLogging(myAccountId));
-		}
+		log("downloadFieldOfficeDataPacket: " + getClientAliasForLogging(authorAccountId) + "  " + 
+				bulletinLocalId + "  packet " + packetLocalId + " requested by: " + 
+				getClientAliasForLogging(myAccountId));
 		
 		if(isClientBanned(myAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
@@ -826,8 +794,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		result = getPacket(myAccountId, authorAccountId, bulletinLocalId, packetLocalId);
 		
-		if(serverMaxLogging)
-			logging("downloadFieldDataPacket: Exit");
+		log("downloadFieldDataPacket: Exit");
 		return result;
 	}
 
@@ -890,7 +857,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		catch(Exception e)
 		{
 			//TODO: Make sure this has a test!
-			logging("  error loading " + e);
+			log("  error loading " + e);
 			result.clear();
 			result.add(NetworkInterfaceConstants.SERVER_ERROR);
 			return result;
@@ -899,8 +866,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	public String authenticateServer(String tokenToSign)
 	{
-		if(serverMaxLogging)
-			logging("authenticateServer");
+		log("authenticateServer");
 		try 
 		{
 			InputStream in = new ByteArrayInputStream(Base64.decode(tokenToSign));
@@ -909,14 +875,12 @@ public class MartusServer implements NetworkInterfaceConstants
 		} 
 		catch(MartusSignatureException e) 
 		{
-			if(serverMaxLogging)
-				logging("SERVER_ERROR: " + e);
+			log("SERVER_ERROR: " + e);
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		} 
 		catch(InvalidBase64Exception e) 
 		{
-			if(serverMaxLogging)
-				logging("INVALID_DATA: " + e);
+			log("INVALID_DATA: " + e);
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}
 	}
@@ -983,7 +947,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 		catch (IOException e)
 		{
-			logging("Missing or unable to read file: " + getComplianceFile().getAbsolutePath());
+			log("Missing or unable to read file: " + getComplianceFile().getAbsolutePath());
 			throw e;
 		}
 	}
@@ -1040,7 +1004,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	private Vector returnSingleResponseAndLog( String message, String responseCode )
 	{
 		if( message.length() > 0 )
-			logging( message.toString());
+			log( message.toString());
 		
 		Vector response = new Vector();
 		response.add( responseCode );
@@ -1094,27 +1058,27 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 		catch (DuplicatePacketException e)
 		{
-			logging("saveUpload DUPLICATE: " + e.getMessage());
+			log("saveUpload DUPLICATE: " + e.getMessage());
 			result =  NetworkInterfaceConstants.DUPLICATE;
 		}
 		catch (SealedPacketExistsException e)
 		{
-			logging("saveUpload SEALED_EXISTS: " + e.getMessage());
+			log("saveUpload SEALED_EXISTS: " + e.getMessage());
 			result =  NetworkInterfaceConstants.SEALED_EXISTS;
 		}
 		catch (Packet.SignatureVerificationException e)
 		{
-			logging("saveUpload SIG_ERROR: " + e);
+			log("saveUpload SIG_ERROR: " + e);
 			result =  NetworkInterfaceConstants.SIG_ERROR;
 		}
 		catch (Packet.WrongAccountException e)
 		{
-			logging("saveUpload NOTYOURBULLETIN: ");
+			log("saveUpload NOTYOURBULLETIN: ");
 			result =  NetworkInterfaceConstants.NOTYOURBULLETIN;
 		}
 		catch (Exception e)
 		{
-			logging("saveUpload INVALID_DATA: " + e);
+			log("saveUpload INVALID_DATA: " + e);
 			result =  NetworkInterfaceConstants.INVALID_DATA;
 		}
 		if(result != NetworkInterfaceConstants.OK)
@@ -1128,11 +1092,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 		catch (CreateDigestException e)
 		{
-			logging("saveUpload SERVER_ERROR: " + e);
+			log("saveUpload SERVER_ERROR: " + e);
 			result =  NetworkInterfaceConstants.SERVER_ERROR;
 		} catch (IOException e)
 		{
-			logging("saveUpload SERVER_ERROR: " + e);
+			log("saveUpload SERVER_ERROR: " + e);
 			result =  NetworkInterfaceConstants.SERVER_ERROR;
 		}
 		
@@ -1165,11 +1129,9 @@ public class MartusServer implements NetworkInterfaceConstants
 			MartusUtilities.FileVerificationException 
 	{
 		Vector result = new Vector();
-		if(serverMaxLogging)
-			logging("entering createInterimBulletinFile");
+		log("entering createInterimBulletinFile");
 		File tempFile = createInterimBulletinFile(headerKey);
-		if(serverMaxLogging)
-			logging("createInterimBulletinFile done");
+		log("createInterimBulletinFile done");
 		int totalLength = MartusUtilities.getCappedFileLength(tempFile);
 		
 		int chunkSize = totalLength - chunkOffset;
@@ -1198,8 +1160,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(new Integer(totalLength));
 		result.add(new Integer(chunkSize));
 		result.add(zipString);
-		if(serverMaxLogging)
-			logging("downloadBulletinChunk : Exit " + result.get(0));
+		log("downloadBulletinChunk : Exit " + result.get(0));
 		return result;
 	}
 
@@ -1227,8 +1188,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();
-		if(serverMaxLogging)
-			logging("    Total file size =" + tempFile.length());
+		log("    Total file size =" + tempFile.length());
 		
 		return tempFile;
 	}
@@ -1242,7 +1202,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			} 
 			catch (MartusUtilities.FileVerificationException e) 
 			{
-				logging("    verifyBulletinInterimFile: " + e);
+				log("    verifyBulletinInterimFile: " + e);
 			}
 		return false;	
 	}
@@ -1256,7 +1216,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 		catch(Exception e)
 		{
-			logging("  isSigCorrect exception: " + e);
+			log("  isSigCorrect exception: " + e);
 			return false;
 		}
 	}
@@ -1394,19 +1354,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		logger.log(message);
 	}
-
-	public synchronized void logging(String message)
-	{
-		if(serverLogging)
-		{
-			Timestamp stamp = new Timestamp(System.currentTimeMillis());
-			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
-			String threadId = getCurrentClientAddress();
-			
-			String logEntry = formatDate.format(stamp) + " " + getServerName() + ": " + threadId + ": " + message;
-			System.out.println(logEntry);
-		}
-	}
 	
 	String getServerName()
 	{
@@ -1534,7 +1481,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 			catch(Exception e)
 			{
-				logging("visit " + e);
+				log("visit " + e);
 				e.printStackTrace();
 				//System.out.println("MySealedSummaryCollector: " + e);
 			}
@@ -1562,7 +1509,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 			catch(Exception e)
 			{
-				logging("visit " + e);
+				log("visit " + e);
 				e.printStackTrace();
 				//System.out.println("MyDraftSummaryCollector: " + e);
 			}
@@ -1594,7 +1541,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 			catch(Exception e)
 			{
-				logging("visit " + e);
+				log("visit " + e);
 				e.printStackTrace();
 				//System.out.println("MartusServer.FieldOfficeSealedSummaryCollectors: " + e);
 			}
@@ -1626,7 +1573,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 			catch(Exception e)
 			{
-				logging("visit " + e);
+				log("visit " + e);
 				e.printStackTrace();
 				//System.out.println("MartusServer.FieldOfficeDraftSummaryCollectors: " + e);
 			}
@@ -1713,19 +1660,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		for(int arg = 0; arg < args.length; ++arg)
 		{
-			if (args[arg].indexOf("logging")>=0)
-			{
-				serverLogging = true;
-				if (args[arg].indexOf("max")>=0)
-				{
-					serverMaxLogging = true;
-					serverSSLLogging = true;
-					System.out.println("Server Error Logging set to Max");
-				}
-				else
-					System.out.println("Server Error Logging Enabled");
-			}
-			
 			if(args[arg].equals("secure"))
 				enterSecureMode();
 		
@@ -1825,11 +1759,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		{
 			if( isShutdownRequested() && canExitNow() )
 			{
-				logging("Shutdown request received.");
+				log("Shutdown request received.");
 				
 				serverForClients.prepareToShutdown();				
 				getShutdownFile().delete();
-				logging("Server has exited.");
+				log("Server has exited.");
 				try
 				{
 					serverExit(0);
@@ -1855,9 +1789,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	LoggerInterface logger;
 	String serverName;
 	private boolean secureMode;
-	private boolean serverLogging;
-	private boolean serverMaxLogging;
-	public static boolean serverSSLLogging;
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String COMPLIANCESTATEMENTFILENAME = "compliance.txt";
