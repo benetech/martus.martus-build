@@ -88,14 +88,9 @@ public class FileDatabase implements Database
 			IOException,
 			MartusCrypto.CryptoException
 	{
-		InputStream in = openInputStream(key, decrypter);
+		InputStreamWithSeek in = openInputStream(key, decrypter);
 		if(in == null)
 			return null;
-			
-		boolean isEncrypted = isEncryptedRecordStream(in);
-			
-		if(isEncrypted)
-			return decryptRecord(in, decrypter);
 			
 		try
 		{
@@ -110,19 +105,18 @@ public class FileDatabase implements Database
 		}
 	}
 
-	public boolean isEncryptedRecordStream(InputStream in) throws 
+	public boolean isEncryptedRecordStream(InputStreamWithSeek in) throws 
 			IOException 
 	{
-		in.mark(1);
 		int flagByte = in.read();
-		in.reset();
+		in.seek(0);
 		boolean isEncrypted = false;
 		if(flagByte == 0)
 			isEncrypted = true;
 		return isEncrypted;
 	}
 	
-	private String decryptRecord(InputStream in, MartusCrypto decrypter) throws 
+	private String decryptRecord(InputStreamWithSeek in, MartusCrypto decrypter) throws 
 			IOException,
 			MartusCrypto.CryptoException
 	{
@@ -134,15 +128,15 @@ public class FileDatabase implements Database
 		return new String(out.toByteArray(), "UTF-8");
 	}
 	
-	public InputStream openInputStream(DatabaseKey key, MartusCrypto decrypter) throws 
+	public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter) throws 
 			IOException,
 			MartusCrypto.CryptoException
 	{
 		try
 		{
 			File file = getFileForRecord(key);
-			InputStream in = null;
-			in = new FileInputStreamWithReset(file);
+			InputStreamWithSeek in = null;
+			in = new FileInputStreamWithSeek(file);
 			
 			if(!isEncryptedRecordStream(in))
 				return in;
@@ -153,7 +147,7 @@ public class FileDatabase implements Database
 			in.close();
 			
 			byte[] bytes = decryptedOut.toByteArray();
-			return new ByteArrayInputStream(bytes);
+			return new ByteArrayInputStreamWithSeek(bytes);
 		}
 		catch(IOException e)
 		{

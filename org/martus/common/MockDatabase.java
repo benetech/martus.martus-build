@@ -85,7 +85,7 @@ abstract public class MockDatabase implements Database
 		writeRecord(key, data);
 	}
 
-	public InputStream openInputStream(DatabaseKey key, MartusCrypto decrypter)
+	public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter)
 	{
 		String data = readRecord(key, decrypter);
 		if(data == null)
@@ -213,7 +213,7 @@ abstract public class MockDatabase implements Database
 	HashMap streamsThatAreOpen = new HashMap();
 }
 
-class MockRecordInputStream extends ByteArrayInputStream
+class MockRecordInputStream extends ByteArrayInputStreamWithSeek
 {
 	MockRecordInputStream(DatabaseKey key, byte[] inputBytes, Map observer)
 	{

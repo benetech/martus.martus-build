@@ -58,10 +58,10 @@ public interface MartusCrypto
 	public byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws 
 		EncryptionException;
 		
-	public void decrypt(InputStream cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
+	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
 			DecryptionException; 
 
-	public void decrypt(InputStream cipherStream, OutputStream plainStream) throws
+	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream) throws
 			NoKeyPairException,
 			DecryptionException;
 

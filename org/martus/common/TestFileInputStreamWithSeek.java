@@ -3,29 +3,30 @@ package org.martus.common;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Arrays;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
-public class TestZipEntryInputStream extends TestCaseEnhanced
+public class TestFileInputStreamWithSeek extends TestCaseEnhanced
 {
-	public TestZipEntryInputStream(String name)
+	public TestFileInputStreamWithSeek(String name)
 	{
 		super(name);
 	}
 	
 	public void setUp() throws Exception
 	{
-		zip = createSampleZipFile();
-		entry = zip.getEntry(sampleEntryName);
-		in = new ZipEntryInputStream(zip, entry);
+		tempFile = File.createTempFile("$$$MartusTestFileInputStreamWithReset", null);
+		tempFile.deleteOnExit();
+		FileOutputStream out = new FileOutputStream(tempFile);
+		out.write(sampleBytes);
+		out.close();
+		
+		in = new FileInputStreamWithSeek(tempFile);
 	}
-	
+
 	public void tearDown() throws Exception
 	{
 		in.close();
-		zip.close();
 	}
 
 	public void testSimpleRead() throws Exception
@@ -73,23 +74,13 @@ public class TestZipEntryInputStream extends TestCaseEnhanced
 		assertEquals("after skip and reset", sampleBytes[2], in.read());
 	}
 	
-	ZipFile createSampleZipFile() throws IOException
+	public void testClose() throws Exception
 	{
-		File tempFile = File.createTempFile("$$$MartusTestZipEntry", null);
-		tempFile.deleteOnExit();
-		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(tempFile));
-		
-		ZipEntry entry = new ZipEntry(sampleEntryName);
-		out.putNextEntry(entry);
-		out.write(sampleBytes);
-		out.close();
-		
-		return new ZipFile(tempFile);
+		in.close();
+		assertEquals("delete after close failed?", true, tempFile.delete());
 	}
 	
+	File tempFile;
+	InputStreamWithSeek in;
 	static final byte[] sampleBytes = {1,2,3,4,5,6,7,8,9,0,127};
-	static final String sampleEntryName = "sample.dat";
-	ZipFile zip;
-	ZipEntry entry;
-	ZipEntryInputStream in;
 }

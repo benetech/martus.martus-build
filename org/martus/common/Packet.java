@@ -149,7 +149,7 @@ public class Packet
 		return sig;
 	}
 
-	public void loadFromXmlInternal(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+	public void loadFromXmlInternal(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -163,7 +163,7 @@ public class Packet
 			throw new InvalidPacketException("No root tag");
 	}
 	
-	static public void validateXml(InputStream inputStream, String accountId, String localId, byte[] expectedSig, MartusCrypto verifier) throws 
+	static public void validateXml(InputStreamWithSeek inputStream, String accountId, String localId, byte[] expectedSig, MartusCrypto verifier) throws 
 		IOException,
 		InvalidPacketException,
 		SignatureVerificationException,
@@ -179,8 +179,7 @@ public class Packet
 		}
 		catch (Exception e)
 		{
-			e.printStackTrace();
-			throw new InvalidPacketException(e.getMessage());
+			throw new InvalidPacketException(e.toString());
 		}
 		if(!accountId.equals(handler.accountId))
 			throw new WrongAccountException();
@@ -189,7 +188,7 @@ public class Packet
 	}
 
 	// this is only used by tests--remove it!
-	protected static void verifyPacketSignature(InputStream inputStream, MartusCrypto verifier) throws
+	protected static void verifyPacketSignature(InputStreamWithSeek inputStream, MartusCrypto verifier) throws
 					IOException,
 					InvalidPacketException,
 					SignatureVerificationException
@@ -197,14 +196,11 @@ public class Packet
 		verifyPacketSignature(inputStream, null, verifier);
 	}
 	
-	public static void verifyPacketSignature(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws
+	public static void verifyPacketSignature(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
 					IOException,
 					InvalidPacketException,
 					SignatureVerificationException
 	{
-		// TODO: Should not use mark/reset due to memory issues!
-		inputStream.mark(infiniteMarkResetLength);
-
 		BufferedInputStream bufferedInputStream = new BufferedInputStream(inputStream);
 		final long totalBytes = bufferedInputStream.available();
 		UnicodeReader reader = new UnicodeReader(bufferedInputStream);
@@ -224,7 +220,7 @@ public class Packet
 			if(line.startsWith(MartusXml.packetSignatureStart))
 				sigLine = line;
 		} 
-		inputStream.reset();
+		inputStream.seek(0);
 		bufferedInputStream = new BufferedInputStream(inputStream);		
 
 		if(accountLine == null)		
@@ -264,7 +260,7 @@ public class Packet
 		
 		verifySignature(bufferedInputStream, dataLength, publicKey, sigBytes, verifier);
 
-		inputStream.reset();
+		inputStream.seek(0);
 	}
 
 	private static void verifySignature(BufferedInputStream bufferedInputStream,
@@ -431,7 +427,7 @@ public class Packet
 		dest.writeEndTag(tag);		
 	}
 	
-	public void loadFromXml(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -442,7 +438,7 @@ public class Packet
 		throw new WrongPacketTypeException("Can't call loadFromXml directly on a Packet object!");
 	}
 	
-	protected void loadFromXml(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier, DefaultHandler handler) throws 
+	protected void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier, DefaultHandler handler) throws 
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -479,5 +475,4 @@ public class Packet
 	}
 
 	UniversalId uid;
-	final static int infiniteMarkResetLength = 999999999;
 }

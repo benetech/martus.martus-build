@@ -167,7 +167,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		//System.out.println("{" + simpleFieldDataPacket + "}");
 
 		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		fdp.loadFromXml(in, (MartusCrypto)null);
 		assertEquals("account", account, fdp.getAccountId());
 		assertEquals("id", id, fdp.getLocalId());
@@ -198,7 +198,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		//System.out.println("{" + simpleFieldDataPacket + "}");
 
 		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		fdp.loadFromXml(in, (MartusCrypto)null);
 		assertEquals("id", id, fdp.getLocalId());
 		assertEquals("aTag", data1, fdp.get(aTag));
@@ -230,7 +230,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		//System.out.println("{" + simpleFieldDataPacket + "}");
 
 		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		fdp.loadFromXml(in, (MartusCrypto)null);
 		assertEquals("id", id, fdp.getLocalId());
 		assertEquals("aTag", data1, fdp.get(aTag));
@@ -263,7 +263,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		//System.out.println("{" + simpleFieldDataPacket + "}");
 
 		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		fdp.loadFromXml(in, (MartusCrypto)null);
 		assertEquals("id", id, fdp.getLocalId());
 		assertEquals("aTag", data1, fdp.get(aTag));
@@ -332,7 +332,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		FieldDataPacket got = new FieldDataPacket(uid, fieldTags);
 
 		byte[] bytes = result.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in, security);
 		
 		assertEquals("id", fdp.getLocalId(), got.getLocalId());
@@ -383,7 +383,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		UniversalId uid = UniversalId.createFromAccountAndPrefix("other acct", "");
 		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldTags());
 		byte[] bytes = result.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in, security);
 
 		assertEquals("account", fdp.getAccountId(), got.getAccountId());
@@ -415,7 +415,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		UniversalId uid = UniversalId.createFromAccountAndPrefix("other acct", "");
 		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldTags());
 		byte[] bytes = result.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in, securityHQ);
 
 		assertEquals("account", fdp.getAccountId(), got.getAccountId());
@@ -424,7 +424,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("b", fdp.get(bTag), got.get(bTag));
 		assertEquals("encrypted", fdp.isEncrypted(), got.isEncrypted());
 		
-		ByteArrayInputStream in2 = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in2 = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in2, security);
 		assertEquals("account", fdp.getAccountId(), got.getAccountId());
 
@@ -432,7 +432,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		otherSecurity.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
 		try
 		{
-			ByteArrayInputStream in3 = new ByteArrayInputStream(bytes);
+			ByteArrayInputStreamWithSeek in3 = new ByteArrayInputStreamWithSeek(bytes);
 			got.loadFromXml(in3, otherSecurity);
 			fail("Should have thrown decrption exception");
 		}
@@ -460,7 +460,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		byte[] bytes = out.toByteArray();
 		bytes[50] ^= 255;
 		
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		UniversalId newUid = UniversalId.createDummyUniversalId();
 		FieldDataPacket loadedBad = new FieldDataPacket(newUid, fieldTags);
 		try 
@@ -476,7 +476,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		
 	void verifyLoadException(byte[] input, Class expectedExceptionClass)
 	{
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
+		ByteArrayInputStreamWithSeek inputStream = new ByteArrayInputStreamWithSeek(input);
 		try
 		{
 			UniversalId uid = UniversalId.createDummyUniversalId();

@@ -162,7 +162,7 @@ public class BulletinHeaderPacket extends Packet
 		privateAttachments.clear();
 	}
 	
-	public void loadFromXml(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -173,7 +173,7 @@ public class BulletinHeaderPacket extends Packet
 		super.loadFromXmlInternal(inputStream, expectedSig, verifier);
 	}
 
-	public void loadFromXml(InputStream inputStream, MartusCrypto verifier) throws 
+	public void loadFromXml(InputStreamWithSeek inputStream, MartusCrypto verifier) throws 
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -190,7 +190,7 @@ public class BulletinHeaderPacket extends Packet
 	{
 		BulletinHeaderPacket header = new BulletinHeaderPacket("Unknown");
 		ZipEntry headerZipEntry = getBulletinHeaderEntry(zip);
-		InputStream headerIn = new ZipEntryInputStream(zip, headerZipEntry);
+		InputStreamWithSeek headerIn = new ZipEntryInputStream(zip, headerZipEntry);
 		try
 		{
 			header.loadFromXml(headerIn, verifier);

@@ -423,7 +423,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testDecryptWithoutKeyPair");
 		byte[] data = createRandomBytes(1000);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+		ByteArrayInputStreamWithSeek inputStream = new ByteArrayInputStreamWithSeek(data);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		try
 		{
@@ -442,7 +442,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testDecryptBadStreams");
 		byte[] data = createRandomBytes(1000);
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
+		ByteArrayInputStreamWithSeek inputStream = new ByteArrayInputStreamWithSeek(data);
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		try
 		{
@@ -479,7 +479,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		assertTrue("unreasonably long", encrypted.length < 3 * data.length);
 		assertEquals("not encrypted?", false, Arrays.equals(data, encrypted));
 
-		ByteArrayInputStream cipherInputStream = new ByteArrayInputStream(encrypted);
+		ByteArrayInputStreamWithSeek cipherInputStream = new ByteArrayInputStreamWithSeek(encrypted);
 		ByteArrayOutputStream plainOutputStream = new ByteArrayOutputStream();
 		security.decrypt(cipherInputStream, plainOutputStream);
 		byte[] decrypted = plainOutputStream.toByteArray();

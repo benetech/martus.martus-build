@@ -1,14 +1,11 @@
 package org.martus.client;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
@@ -24,6 +21,8 @@ import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileDatabase;
+import org.martus.common.FileInputStreamWithSeek;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
@@ -455,7 +454,7 @@ public class BulletinStore
 	{
 		try {
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			InputStream in = new BufferedInputStream(new FileInputStream(getFoldersFile()));
+			InputStreamWithSeek in = new FileInputStreamWithSeek(getFoldersFile());
 			getSignatureVerifier().decrypt(in, out);
 			in.close();
 			
@@ -547,7 +546,7 @@ public class BulletinStore
 		{
 			public void visit(DatabaseKey key)
 			{
-				InputStream in = null;
+				InputStreamWithSeek in = null;
 				try
 				{
 					in = database.openInputStream(key, getSignatureVerifier());

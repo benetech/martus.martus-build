@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import org.martus.common.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -61,7 +60,7 @@ public class AttachmentPacket extends Packet
 		return sig;
 	}
 
-	public static void exportRawFileFromXml(InputStream xmlIn, byte[] sessionKeyBytes, MartusCrypto verifier, File destFile) throws
+	public static void exportRawFileFromXml(InputStreamWithSeek xmlIn, byte[] sessionKeyBytes, MartusCrypto verifier, File destFile) throws
 		IOException,
 		org.martus.common.Packet.InvalidPacketException,
 		org.martus.common.Packet.SignatureVerificationException,
@@ -89,7 +88,7 @@ public class AttachmentPacket extends Packet
 		base64Reader.close();
 		base64File.delete();
 
-		InputStream inEncrypted = new FileInputStreamWithReset(encryptedFile);
+		InputStreamWithSeek inEncrypted = new FileInputStreamWithSeek(encryptedFile);
 		FileOutputStream outRaw = new FileOutputStream(destFile);
 		try 
 		{

@@ -1,6 +1,5 @@
 package org.martus.server;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -17,11 +16,9 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
-import java.util.Enumeration;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
 import org.martus.common.AttachmentPacket;
@@ -31,6 +28,7 @@ import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.FileDatabase;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -54,7 +52,6 @@ import org.martus.common.MartusUtilities.SealedPacketExistsException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
-import sun.security.krb5.internal.crypto.e;
 
 public class MartusServer
 {
@@ -1405,7 +1402,7 @@ public class MartusServer
 			DecryptionException
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(key.getAccountId());
-		InputStream in = db.openInputStream(key, security);
+		InputStreamWithSeek in = db.openInputStream(key, security);
 		bhp.loadFromXml(in, security);
 		in.close();
 		return bhp;

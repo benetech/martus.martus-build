@@ -102,7 +102,7 @@ public class TestPacket extends TestCaseEnhanced
 		byte[] bytes = out.toByteArray();
 		String s8859 = new String(bytes);
 		String sUtf8 = new String(bytes, "UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		bhp.loadFromXml(in, null, security);
 		
 		assertEquals("utf-8 damaged?", utf8Data, bhp.getFieldDataPacketId());
@@ -115,11 +115,11 @@ public class TestPacket extends TestCaseEnhanced
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		byte[] sig = bhp.writeXml(out, security);
 		
-		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(out.toByteArray());
 		Packet.validateXml(in, security.getPublicKeyString(), bhp.getLocalId(), sig, security);
 		try
 		{
-			ByteArrayInputStream in2 = new ByteArrayInputStream(out.toByteArray());
+			ByteArrayInputStreamWithSeek in2 = new ByteArrayInputStreamWithSeek(out.toByteArray());
 			Packet.validateXml(in2, security.getPublicKeyString(), "123444", null, security);
 			fail("Didn't throw for bad localid?");
 		}
@@ -130,7 +130,7 @@ public class TestPacket extends TestCaseEnhanced
 		try
 		{
 			sig[sig.length/2] ^= 0xFF;
-			ByteArrayInputStream in2 = new ByteArrayInputStream(out.toByteArray());
+			ByteArrayInputStreamWithSeek in2 = new ByteArrayInputStreamWithSeek(out.toByteArray());
 			Packet.validateXml(in2, security.getPublicKeyString(), bhp.getLocalId(), sig, security);
 			fail("Didn't throw for bad sig?");
 		}
@@ -161,7 +161,7 @@ public class TestPacket extends TestCaseEnhanced
 		bhp.writeXml(out, security);
 		try
 		{
-			ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
+			ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(out.toByteArray());
 			Packet.validateXml(in, security.getPublicKeyString(), bhp.getLocalId(), null, security);
 			fail("Didn't throw for bad xml?");
 		}
@@ -173,7 +173,7 @@ public class TestPacket extends TestCaseEnhanced
 	public void testVerifyPacketWithNonPacketData() throws Exception
 	{
 		byte[] invalidBytes = {1,2,3};
-		ByteArrayInputStream inInvalid = new ByteArrayInputStream(invalidBytes);
+		ByteArrayInputStreamWithSeek inInvalid = new ByteArrayInputStreamWithSeek(invalidBytes);
 		try
 		{
 			Packet.verifyPacketSignature(inInvalid, security);
@@ -193,7 +193,7 @@ public class TestPacket extends TestCaseEnhanced
 		bhp.writeXml(out, security);
 		
 		byte[] bytes = out.toByteArray();
-		ByteArrayInputStream in0 = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in0 = new ByteArrayInputStreamWithSeek(bytes);
 		Packet.verifyPacketSignature(in0, security);
 		assertEquals("UTF", "Josée",bhp.getPrivateFieldDataPacketId());
 	}
@@ -205,7 +205,7 @@ public class TestPacket extends TestCaseEnhanced
 		bhp.writeXml(out, security);
 		
 		byte[] bytes = out.toByteArray();
-		ByteArrayInputStream in0 = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in0 = new ByteArrayInputStreamWithSeek(bytes);
 		security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
 		Packet.verifyPacketSignature(in0, security);
 	}	
@@ -219,7 +219,7 @@ public class TestPacket extends TestCaseEnhanced
 		byte[] bytes = out.toByteArray();
 		bytes[5] ^= 0xFF;
 
-		ByteArrayInputStream in1 = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(bytes);
 		try
 		{
 			Packet.verifyPacketSignature(in1, security);
@@ -245,7 +245,7 @@ public class TestPacket extends TestCaseEnhanced
 		try
 		{
 			bytes[corruptSigStartAt] ^= 0xFF;
-			ByteArrayInputStream in1 = new ByteArrayInputStream(bytes);
+			ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(bytes);
 			Packet.verifyPacketSignature(in1, security);
 			fail("corrupted sigstart should have thrown InvalidPacketException");
 		}
@@ -258,7 +258,7 @@ public class TestPacket extends TestCaseEnhanced
 		try
 		{
 			bytes[corruptSigEndAt] ^= 0xFF;
-			ByteArrayInputStream in1 = new ByteArrayInputStream(bytes);
+			ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(bytes);
 			Packet.verifyPacketSignature(in1, security);
 			fail("corrupted sigend should have thrown InvalidPacketException");
 		}
@@ -279,7 +279,7 @@ public class TestPacket extends TestCaseEnhanced
 		try
 		{
 			bytes[corruptDataAt] ^= 0xFF;
-			ByteArrayInputStream in1 = new ByteArrayInputStream(bytes);
+			ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(bytes);
 			Packet.verifyPacketSignature(in1, security);
 			fail("corrupted data should have thrown SignatureVerificationException");
 		}
@@ -300,7 +300,7 @@ public class TestPacket extends TestCaseEnhanced
 		try
 		{
 			bytes[corruptSigAt] = ' ';
-			ByteArrayInputStream in1 = new ByteArrayInputStream(bytes);
+			ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(bytes);
 			Packet.verifyPacketSignature(in1, security);
 			fail("corrupted data should have thrown InvalidPacketException");
 		}
@@ -327,7 +327,7 @@ public class TestPacket extends TestCaseEnhanced
 
 		byte[] newBytes = newXml.getBytes("UTF-8");
 
-		ByteArrayInputStream in1 = new ByteArrayInputStream(newBytes);
+		ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(newBytes);
 		try
 		{
 			Packet.verifyPacketSignature(in1, security);
@@ -350,7 +350,7 @@ public class TestPacket extends TestCaseEnhanced
 		String newXml =	oldXml.replaceFirst(tagEnd, "\n" + tagEnd);
 		byte[] newBytes = newXml.getBytes("UTF-8");
 
-		ByteArrayInputStream in1 = new ByteArrayInputStream(newBytes);
+		ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(newBytes);
 		try
 		{
 			Packet.verifyPacketSignature(in1, security);
@@ -375,7 +375,7 @@ public class TestPacket extends TestCaseEnhanced
 		packet.writeXml(out, security);
 
 		byte[] wrongType = out.toByteArray();
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(wrongType);
+		ByteArrayInputStreamWithSeek inputStream = new ByteArrayInputStreamWithSeek(wrongType);
 		try
 		{
 			AnotherSimplePacketSubtype loaded = new AnotherSimplePacketSubtype();
@@ -401,7 +401,7 @@ public class TestPacket extends TestCaseEnhanced
 	
 	void verifyLoadException(byte[] input, Class expectedExceptionClass)
 	{
-		ByteArrayInputStream inputStream = new ByteArrayInputStream(input);
+		ByteArrayInputStreamWithSeek inputStream = new ByteArrayInputStreamWithSeek(input);
 		try
 		{
 			Packet.validateXml(inputStream, security.getPublicKeyString(), "", null, security);

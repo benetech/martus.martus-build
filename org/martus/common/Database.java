@@ -12,7 +12,7 @@ public interface Database
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws IOException, MartusCrypto.CryptoException;
 	public void writeRecord(DatabaseKey key, InputStream record) throws IOException;
 	public void importFiles(HashMap entries) throws IOException;
-	public InputStream openInputStream(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
+	public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
 	public String readRecord(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
 	public void discardRecord(DatabaseKey key);
 	public boolean doesRecordExist(DatabaseKey key);

@@ -219,17 +219,6 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertEquals("got wrong data?", sampleString1, result);
 	}
 	
-	public void testSupportMarkReset() throws Exception
-	{
-		db.writeRecord(shortKey, sampleString1);
-		InputStream in = db.openInputStream(shortKey, security);
-		assertTrue("Mark Not Supported?", in.markSupported());
-		in.mark(9999999);
-		in.read();
-		in.reset();
-		in.close();
-	}
-	
 	public void testHashFunction()
 	{
 		String s1 = "abcdefg";

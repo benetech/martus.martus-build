@@ -1,7 +1,6 @@
 package org.martus.meta;
 
 import java.io.File;
-import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipFile;
@@ -10,6 +9,7 @@ import org.martus.client.Bulletin;
 import org.martus.client.BulletinStore;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
@@ -248,7 +248,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 				{
 					Writer writer = new StringWriter();
 					bulletin.getBulletinHeaderPacket().writeXml(writer, security);
-					InputStream in = new StringInputStream(writer.toString());
+					InputStreamWithSeek in = new StringInputStream(writer.toString());
 					Packet.validateXml(in, bulletin.getAccount(), bulletin.getLocalId(), null, security);
 				}
 			} 

@@ -118,7 +118,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 
 		ByteArrayOutputStream out1 = new ByteArrayOutputStream();
 		bhp.writeXml(out1, security);
-		ByteArrayInputStream in1 = new ByteArrayInputStream(out1.toByteArray());
+		ByteArrayInputStreamWithSeek in1 = new ByteArrayInputStreamWithSeek(out1.toByteArray());
 		BulletinHeaderPacket loadedBhp1 = new BulletinHeaderPacket(UniversalId.createDummyUniversalId());
 		loadedBhp1.loadFromXml(in1, security);
 		assertEquals("private after load?", false, loadedBhp1.isAllPrivate());
@@ -128,7 +128,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 
 		ByteArrayOutputStream out2 = new ByteArrayOutputStream();
 		bhp.writeXml(out2, security);
-		ByteArrayInputStream in2 = new ByteArrayInputStream(out2.toByteArray());
+		ByteArrayInputStreamWithSeek in2 = new ByteArrayInputStreamWithSeek(out2.toByteArray());
 		BulletinHeaderPacket loadedBhp2 = new BulletinHeaderPacket(UniversalId.createDummyUniversalId());
 		loadedBhp2.loadFromXml(in2, security);
 		assertEquals("not private after load?", true, loadedBhp2.isAllPrivate());
@@ -137,7 +137,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		int startTagStart = result2.indexOf(MartusXml.AllPrivateElementName) - 1;
 		int endTagEnd = result2.indexOf("/" + MartusXml.AllPrivateElementName) + MartusXml.AllPrivateElementName.length() + 1;
 		String withoutTag = result2.substring(0, startTagStart) + result2.substring(endTagEnd);
-		ByteArrayInputStream in3 = new ByteArrayInputStream(withoutTag.getBytes("UTF-8"));
+		ByteArrayInputStreamWithSeek in3 = new ByteArrayInputStreamWithSeek(withoutTag.getBytes("UTF-8"));
 		BulletinHeaderPacket loadedBhp3 = new BulletinHeaderPacket(UniversalId.createDummyUniversalId());
 		loadedBhp3.loadFromXml(in3, null);
 		assertEquals("not private after load without tag?", true, loadedBhp3.isAllPrivate());
@@ -252,7 +252,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		
 		BulletinHeaderPacket loaded = new BulletinHeaderPacket("");
 		byte[] bytes = result.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		loaded.loadFromXml(in, security);
 		
 		assertEquals("time", bhp.getLastSavedTime(), loaded.getLastSavedTime());
@@ -282,7 +282,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		
 		BulletinHeaderPacket loaded = new BulletinHeaderPacket("");
 		byte[] bytes = result.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		loaded.loadFromXml(in, security);
 		
 		assertEquals("hqKey", bhp.getHQPublicKey(), loaded.getHQPublicKey());

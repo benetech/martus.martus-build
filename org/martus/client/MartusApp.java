@@ -3,7 +3,6 @@ package org.martus.client;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -11,7 +10,6 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.StringReader;
@@ -26,10 +24,13 @@ import java.util.Vector;
 
 import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.common.Base64;
+import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.FileDatabase;
+import org.martus.common.FileInputStreamWithSeek;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -221,7 +222,7 @@ public class MartusApp
 			if(!verified)
 				throw new LoadConfigInfoException();
 
-			InputStream encryptedConfigFileInputStream = new BufferedInputStream(new FileInputStream(fileName));
+			InputStreamWithSeek encryptedConfigFileInputStream = new FileInputStreamWithSeek(new File(fileName));
 			ByteArrayOutputStream plainTextConfigOutputStream = new ByteArrayOutputStream();
 			security.decrypt(encryptedConfigFileInputStream, plainTextConfigOutputStream);
 
@@ -926,7 +927,7 @@ public class MartusApp
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, dataPacketLocalId);
 		FieldDataPacket fdp = new FieldDataPacket(uid , Bulletin.getStandardFieldNames());
 		byte[] xmlBytes = xml.getBytes("UTF-8");
-		ByteArrayInputStream in =  new ByteArrayInputStream(xmlBytes);
+		ByteArrayInputStreamWithSeek in =  new ByteArrayInputStreamWithSeek(xmlBytes);
 		fdp.loadFromXml(in, security);
 		return fdp;
 	}

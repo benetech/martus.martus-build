@@ -1,14 +1,8 @@
 package org.martus.client;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,20 +11,19 @@ import java.util.GregorianCalendar;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
 import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
-import org.martus.common.MartusConstants;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.Packet;
-import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.ZipEntryInputStream;
 import org.martus.common.MartusCrypto.CryptoException;
@@ -39,7 +32,6 @@ import org.martus.common.MartusCrypto.EncryptionException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
-import org.martus.common.Packet.WrongAccountException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
 
@@ -249,7 +241,7 @@ public class Bulletin implements BulletinConstants
 		UniversalId uid = a.getUniversalId();
 		byte[] sessionKeyBytes = a.getSessionKeyBytes();
 		DatabaseKey key = new DatabaseKey(uid);
-		InputStream xmlIn = getDatabase().openInputStream(key, verifier);
+		InputStreamWithSeek xmlIn = getDatabase().openInputStream(key, verifier);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, destFile);
 	}
 
@@ -323,7 +315,7 @@ public class Bulletin implements BulletinConstants
 		{
 			if(db.doesRecordExist(key))
 			{
-				InputStream in = db.openInputStream(key, signer);
+				InputStreamWithSeek in = db.openInputStream(key, signer);
 				oldBhp.loadFromXml(in, signer);
 				bulletinAlreadyExisted = true;
 			}
@@ -429,7 +421,7 @@ public class Bulletin implements BulletinConstants
 		{
 			String xml = db.readRecord(key, crypto);
 			byte[] bytes = xml.getBytes("UTF-8");
-			ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+			ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 	
 			BulletinHeaderPacket oldHeader = new BulletinHeaderPacket("");
 			oldHeader.loadFromXml(in, store.getSignatureVerifier());
@@ -535,7 +527,7 @@ public class Bulletin implements BulletinConstants
 		packet.setUniversalId(key.getUniversalId());
 		try
 		{
-			InputStream in = db.openInputStream(key, verifier);
+			InputStreamWithSeek in = db.openInputStream(key, verifier);
 			if(in == null)
 			{
 				isValidFlag = false;
@@ -596,7 +588,7 @@ public class Bulletin implements BulletinConstants
 			Enumeration entries = zip.entries();
 			while(entries.hasMoreElements())
 				headerEntry = (ZipEntry)entries.nextElement();
-			InputStream headerIn = new ZipEntryInputStream(zip, headerEntry);
+			InputStreamWithSeek headerIn = new ZipEntryInputStream(zip, headerEntry);
 			try
 			{
 				header.loadFromXml(headerIn, verifier);
@@ -618,7 +610,7 @@ public class Bulletin implements BulletinConstants
 			ZipEntry dataEntry = zip.getEntry(header.getFieldDataPacketId());
 			if(dataEntry == null)
 				throw new IOException("Data packet not found");
-			InputStream dataIn = new ZipEntryInputStream(zip, dataEntry);
+			InputStreamWithSeek dataIn = new ZipEntryInputStream(zip, dataEntry);
 			try
 			{
 				data.loadFromXml(dataIn, header.getFieldDataSignature(), verifier);
@@ -642,7 +634,7 @@ public class Bulletin implements BulletinConstants
 			ZipEntry privateDataEntry = zip.getEntry(header.getPrivateFieldDataPacketId());
 			if(privateDataEntry == null)
 				throw new IOException("Private data packet not found");
-			InputStream privateDataIn = new ZipEntryInputStream(zip, privateDataEntry);
+			InputStreamWithSeek privateDataIn = new ZipEntryInputStream(zip, privateDataEntry);
 			try
 			{
 				privateData.loadFromXml(privateDataIn, header.getPrivateFieldDataSignature(), verifier);
@@ -691,7 +683,7 @@ public class Bulletin implements BulletinConstants
 		ZipEntry attachmentEntry = zip.getEntry(localId);
 		if(attachmentEntry == null)
 			throw new IOException("Attachment packet not found: " + localId);
-		InputStream attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
+		InputStreamWithSeek attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
 		try
 		{
 			File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
@@ -718,7 +710,7 @@ public class Bulletin implements BulletinConstants
 			ZipEntry attachmentEntry = zip.getEntry(localId);
 			if(attachmentEntry == null)
 				throw new IOException("Attachment packet not found: " + localId);
-			InputStream attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
+			InputStreamWithSeek attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
 			try
 			{
 				File tempFile = File.createTempFile("$$$MartusImportAttachment", null);

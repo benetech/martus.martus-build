@@ -74,7 +74,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		File destFile = File.createTempFile("$$$MartusTestAttOut", null);
 		destFile.deleteOnExit();
 		destFile.delete();
-		ByteArrayInputStream inBytes = new ByteArrayInputStream(resultBytes);
+		ByteArrayInputStreamWithSeek inBytes = new ByteArrayInputStreamWithSeek(resultBytes);
 		AttachmentPacket.exportRawFileFromXml(inBytes, sessionKeyBytes, security, destFile);
 		inBytes.close();
 
@@ -104,7 +104,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		
 		File decryptedFile = File.createTempFile("$$$MartusDecryptedAtt", null);
 		decryptedFile.deleteOnExit();
-		ByteArrayInputStream xmlIn = new ByteArrayInputStream(encryptedBytes);
+		ByteArrayInputStreamWithSeek xmlIn = new ByteArrayInputStreamWithSeek(encryptedBytes);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, decryptedFile);
 
 		byte[] fileBytes = new byte[sampleBytes.length];
@@ -149,7 +149,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		//assertTrue("Write Xml took too long", writeXmlEndedAt - writeXmlStartedAt < 10000);
 		
 		long verifySigStartedAt = System.currentTimeMillis();
-		FileInputStreamWithReset verifyIn = new FileInputStreamWithReset(largeXmlFile);
+		FileInputStreamWithSeek verifyIn = new FileInputStreamWithSeek(largeXmlFile);
 		AttachmentPacket.verifyPacketSignature(verifyIn, security);
 		verifyIn.close();
 		long verifySigEndedAt = System.currentTimeMillis();
@@ -159,7 +159,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		long readXmlStartedAt = System.currentTimeMillis();
 		File decryptedFile = File.createTempFile("$$$MartusDecryptedBufferedAtt", null);
 		decryptedFile.deleteOnExit();
-		FileInputStreamWithReset xmlIn = new FileInputStreamWithReset(largeXmlFile);
+		FileInputStreamWithSeek xmlIn = new FileInputStreamWithSeek(largeXmlFile);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, decryptedFile);
 		xmlIn.close();
 		long readXmlEndedAt = System.currentTimeMillis();

@@ -1,8 +1,9 @@
 package org.martus.client;
 
-import java.io.FileInputStream;
-import java.io.InputStream;
+import java.io.File;
 
+import org.martus.common.FileInputStreamWithSeek;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.Packet;
@@ -21,7 +22,7 @@ public class VerifyPacket
 		
 		try
 		{
-			InputStream in = new FileInputStream(localId);
+			InputStreamWithSeek in = new FileInputStreamWithSeek(new File(localId));
 			MartusCrypto security = new MartusSecurity();
 			Packet.verifyPacketSignature(in, null, security);
 			System.out.println("Signature OK!");

@@ -28,7 +28,7 @@ import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
-import org.martus.common.FileDatabase;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -1212,7 +1212,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(result);
 		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
 
-		InputStream in = new StringInputStream((String)result.get(1));
+		InputStreamWithSeek in = new StringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));
@@ -1234,7 +1234,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(result);
 		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
 		
-		InputStream in = new StringInputStream((String)result.get(1));
+		InputStreamWithSeek in = new StringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));

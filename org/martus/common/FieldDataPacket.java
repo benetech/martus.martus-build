@@ -147,7 +147,7 @@ public class FieldDataPacket extends Packet
 		return result;
 	}
 	
-	public void loadFromXml(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -166,7 +166,7 @@ public class FieldDataPacket extends Packet
 			try
 			{
 				byte[] encryptedBytes = Base64.decode(encryptedData);
-				ByteArrayInputStream inEncrypted = new ByteArrayInputStream(encryptedBytes);
+				ByteArrayInputStreamWithSeek inEncrypted = new ByteArrayInputStreamWithSeek(encryptedBytes);
 				ByteArrayOutputStream outPlain = new ByteArrayOutputStream();
 				if(getAccountId().equals(verifier.getPublicKeyString()))
 					verifier.decrypt(inEncrypted, outPlain);
@@ -182,7 +182,7 @@ public class FieldDataPacket extends Packet
 				}
 				
 				byte[] plainXmlBytes = outPlain.toByteArray();
-				ByteArrayInputStream inPlainXml = new ByteArrayInputStream(plainXmlBytes);
+				ByteArrayInputStreamWithSeek inPlainXml = new ByteArrayInputStreamWithSeek(plainXmlBytes);
 				UniversalId outerId = getUniversalId();
 				loadFromXml(inPlainXml, verifier);
 				if(outerId != getUniversalId())
@@ -198,7 +198,7 @@ public class FieldDataPacket extends Packet
 		}	
 	}
 	
-	public void loadFromXml(InputStream inputStream, MartusCrypto verifier) throws 
+	public void loadFromXml(InputStreamWithSeek inputStream, MartusCrypto verifier) throws 
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,

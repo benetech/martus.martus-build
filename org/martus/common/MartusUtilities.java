@@ -207,7 +207,7 @@ public class MartusUtilities
 		String headerXml = db.readRecord(headerKey, security);
 		byte[] headerBytes = headerXml.getBytes("UTF-8");
 		
-		ByteArrayInputStream headerIn = new ByteArrayInputStream(headerBytes);
+		ByteArrayInputStreamWithSeek headerIn = new ByteArrayInputStreamWithSeek(headerBytes);
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket("");
 		
 		MartusCrypto doNotCheckSigDuringDownload = null;
@@ -365,7 +365,7 @@ public class MartusUtilities
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(bulletinUid);
 		try 
 		{
-			InputStream in = db.openInputStream(headerKey, security);
+			InputStreamWithSeek in = db.openInputStream(headerKey, security);
 			bhp.loadFromXml(in, security);
 		} 
 		catch (Exception e) 
@@ -431,7 +431,7 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
-			InputStream in = new ZipEntryInputStream(zip, entry);
+			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}
 	}

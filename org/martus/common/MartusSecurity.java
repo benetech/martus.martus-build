@@ -241,24 +241,25 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public void decrypt(InputStream cipherStream, OutputStream plainStream) throws
+	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream) throws
 			NoKeyPairException,
 			DecryptionException
 	{
 		if(getPrivateKey() == null)
 			throw new NoKeyPairException();
 
-		byte[] sessionKeyBytes = null;
+		decrypt(cipherStream, plainStream, null);
+	}
+
+	byte[] readSessionKey(DataInputStream dis) throws DecryptionException 
+	{
+		byte[] encryptedKeyBytes = null;
 		
 		try
 		{
-			cipherStream.mark(999999999);
-			DataInputStream dis = new DataInputStream(cipherStream);
 			int keyByteCount = dis.readInt();
-			byte[] encryptedKeyBytes = new byte[keyByteCount];
+			encryptedKeyBytes = new byte[keyByteCount];
 			dis.readFully(encryptedKeyBytes);
-			sessionKeyBytes = decryptSessionKey(encryptedKeyBytes);
-			cipherStream.reset();
 		}
 		catch(Exception e)
 		{
@@ -266,8 +267,7 @@ public class MartusSecurity implements MartusCrypto
 			//e.printStackTrace();
 			throw new DecryptionException();
 		}
-
-		decrypt(cipherStream, plainStream, sessionKeyBytes);
+		return encryptedKeyBytes;
 	}
 
 	public synchronized byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws 
@@ -288,15 +288,17 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public synchronized void decrypt(InputStream cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
+	public synchronized void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
 			DecryptionException 
 	{
 		try
 		{
-			BufferedInputStream bufferedCipherStream = new BufferedInputStream(cipherStream);
-			DataInputStream dis = new DataInputStream(bufferedCipherStream);
-			int keyByteCount = dis.readInt();
-			dis.skip(keyByteCount);
+			DataInputStream dis = new DataInputStream(cipherStream);
+			byte[] storedSessionKey = readSessionKey(dis);
+			if(sessionKeyBytes == null)
+			{
+				sessionKeyBytes = decryptSessionKey(storedSessionKey);
+			}
 		
 			int ivByteCount = dis.readInt();
 			byte[] iv = new byte[ivByteCount];
