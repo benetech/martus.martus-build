@@ -58,7 +58,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 
 		MartusApp app = getApp();
 		setTitle(app.getWindowTitle("create"));
-		observer.updateIcon(this);
+		UiUtilities.updateIcon(this);
 		try
 		{
 			bulletin = b;
@@ -97,7 +97,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			Dimension editorDimension = observerToUse.getBulletinEditorDimension();
 			Point editorPosition = observerToUse.getBulletinEditorPosition();
 			boolean showMaximized = false;
-			if(observerToUse.isValidScreenPosition(screenSize, editorDimension, editorPosition))
+			if(UiUtilities.isValidScreenPosition(screenSize, editorDimension, editorPosition))
 			{
 				setLocation(editorPosition);
 				setSize(editorDimension);
@@ -109,7 +109,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			if(showMaximized)
 			{
 				setSize(screenSize.width - 50, screenSize.height - 50);
-				observerToUse.maximizeWindow(this);
+				UiUtilities.maximizeWindow(this);
 			}
 			show();
 		}

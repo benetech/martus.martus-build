@@ -52,7 +52,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -65,7 +64,6 @@ import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.AbstractAction;
-import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -78,7 +76,6 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
-import javax.swing.UIManager;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
@@ -93,6 +90,7 @@ import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
+import org.martus.client.swingui.UiUtilities.Delay;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -116,19 +114,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			initializationErrorDlg(e.getMessage());
 		}
-		updateIcon(this);
+		UiUtilities.updateIcon(this);
 
 		initalizeUiState();
-	}
-
-	public void updateIcon(JFrame window)
-	{
-		URL imageURL = window.getClass().getResource("Martus.png");
-		if(imageURL == null)
-			return;
-		ImageIcon imageicon = new ImageIcon(imageURL);
-		if(imageicon != null)
-			window.setIconImage(imageicon.getImage());
 	}
 
 	public boolean run()
@@ -458,17 +446,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		TransferableBulletinList tb = TransferableBulletinList.extractFrom(contents);
 		if(tb != null)
 			tb.dispose();
-	}
-
-
-	public boolean isMacintosh()
-	{
-		return (UIManager.getSystemLookAndFeelClassName().indexOf("MacLookAndFeel") >= 0);
-	}
-
-	public boolean isMSWindows()
-	{
-		return (UIManager.getSystemLookAndFeelClassName().indexOf("WindowsLookAndFeel") >= 0);
 	}
 
 
@@ -1480,7 +1457,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			userEnteredPublicCode = getStringInput(baseTag, "", userEnteredPublicCode);
 			if(userEnteredPublicCode == null)
 				return false; // user hit cancel
-			String normalizedPublicCode = removeNonDigits(userEnteredPublicCode);
+			String normalizedPublicCode = MartusUtilities.removeNonDigits(userEnteredPublicCode);
 
 			if(publicCode.equals(normalizedPublicCode))
 				return true;
@@ -1489,17 +1466,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			//System.out.println("Normalized:   " + normalizedPublicCode);
 			notifyDlg(this, errorBaseTag);
 		}
-	}
-
-	public String removeNonDigits(String userEnteredPublicCode)
-	{
-		String normalizedPublicCode = "";
-		for (int i=0 ; i < userEnteredPublicCode.length(); ++i)
-		{
-			if ("0123456789".indexOf(userEnteredPublicCode.substring(i, i+1)) >= 0)
-				normalizedPublicCode += userEnteredPublicCode.substring(i, i+1);
-		}
-		return normalizedPublicCode;
 	}
 
 	private void initializeViews()
@@ -1530,7 +1496,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		Dimension appDimension = uiState.getCurrentAppDimension();
 		Point appPosition = uiState.getCurrentAppPosition();
 		boolean showMaximized = false;
-		if(isValidScreenPosition(screenSize, appDimension, appPosition))
+		if(UiUtilities.isValidScreenPosition(screenSize, appDimension, appPosition))
 		{
 			setLocation(appPosition);
 			setSize(appDimension);
@@ -1542,28 +1508,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(showMaximized)
 		{
 			setSize(screenSize.width - 50 , screenSize.height - 50);
-			maximizeWindow(this);
+			UiUtilities.maximizeWindow(this);
 		}
-	}
-
-	public void maximizeWindow(JFrame window)
-	{
-		window.setVisible(true);//required for setting maximized
-		window.setExtendedState(MAXIMIZED_BOTH);
-	}
-
-	boolean isValidScreenPosition(Dimension screenSize, Dimension objectSize, Point objectPosition)
-	{
-		int height = objectSize.height;
-		if(height == 0 )
-			return false;
-		if(objectPosition.x > screenSize.width - 100)
-			return false;
-		if(objectPosition.y > screenSize.height - 100)
-			return false;
-		if(objectPosition.x < -100 || objectPosition.y < -100)
-			return false;
-		return true;
 	}
 
 	private boolean signIn(int mode)
@@ -1574,7 +1520,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			Delay delay = new Delay(seconds);
 			delay.start();
-			waitForThreadToTerminate(delay);
+			UiUtilities.waitForThreadToTerminate(delay);
 			if( busyDlg != null )
 			{
 				busyDlg.endDialog();
@@ -1626,18 +1572,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 		waitingForKeyPair.endDialog();
 		return true;
-	}
-
-	public void waitForThreadToTerminate(Delay worker)
-	{
-		try
-		{
-			worker.join();
-		}
-		catch (InterruptedException e)
-		{
-			// We don't care if this gets interrupted
-		}
 	}
 
 	private boolean doUploadReminderOnExit()
@@ -1741,28 +1675,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void setLastAttachmentSaveDirectory(File lastAttachmentSaveDirectory)
 	{
 		this.lastAttachmentSaveDirectory = lastAttachmentSaveDirectory;
-	}
-
-	class Delay extends Thread
-	{
-		public Delay(int sec)
-		{
-			timeInMillis = sec * 1000;
-		}
-
-		public void run()
-		{
-			try
-			{
-				sleep(timeInMillis);
-			}
-			catch(InterruptedException e)
-			{
-				;
-			}
-		}
-
-		private int timeInMillis;
 	}
 
 	static boolean isAnyBulletinSelected(UiMainWindow window)

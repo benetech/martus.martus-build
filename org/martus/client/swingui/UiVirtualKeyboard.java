@@ -58,7 +58,7 @@ public class UiVirtualKeyboard
 
 		Container vKeyboard = new Container();
 		int columns = 13;
-		if(mainWindow.isMacintosh())
+		if(UiUtilities.isMacintosh())
 			columns = 10;
 		int rows = keys.length() / columns;
 		vKeyboard.setLayout(new GridLayout(rows, columns));

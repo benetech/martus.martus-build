@@ -127,7 +127,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		if(serverName.length() == 0)
 			return errorMessage("InvalidServerName");
 
-		String normalizedPublicCode = mainWindow.removeNonDigits(userEnteredPublicCode);
+		String normalizedPublicCode = MartusUtilities.removeNonDigits(userEnteredPublicCode);
 		if(normalizedPublicCode.length() == 0)
 			return errorMessage("InvalidServerCode");
 

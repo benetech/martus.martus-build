@@ -964,4 +964,15 @@ public class MartusUtilities
 		ap.setLabel(oldProxy.getLabel());
 		return ap;
 	}
+
+	public static String removeNonDigits(String userEnteredPublicCode)
+	{
+		String normalizedPublicCode = "";
+		for (int i=0 ; i < userEnteredPublicCode.length(); ++i)
+		{
+			if ("0123456789".indexOf(userEnteredPublicCode.substring(i, i+1)) >= 0)
+				normalizedPublicCode += userEnteredPublicCode.substring(i, i+1);
+		}
+		return normalizedPublicCode;
+	}
 }
