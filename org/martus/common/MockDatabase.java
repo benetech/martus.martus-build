@@ -14,6 +14,7 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
+import java.util.Vector;
 
 import org.martus.common.Database.PacketVisitor;
 
@@ -149,6 +150,31 @@ abstract public class MockDatabase implements Database
 		}
 	}
 
+	public void visitAllAccounts(AccountVisitor visitor)
+	{
+		Vector visited = new Vector();
+
+		Set keys = getAllKeys();
+		Iterator iterator = keys.iterator();
+		while(iterator.hasNext())
+		{
+			DatabaseKey key = (DatabaseKey)iterator.next();
+			String accountString = key.getAccountId();
+			if(!visited.contains(accountString))
+			{
+				visited.add(accountString);
+				try
+				{
+					visitor.visit(accountString);
+				}
+				catch (RuntimeException nothingWeCanDoAboutIt)
+				{
+					// nothing we can do, so ignore it
+				}
+			}
+		}
+	}
+	
 	public String getFolderForAccount(String accountString)
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(accountString, "");

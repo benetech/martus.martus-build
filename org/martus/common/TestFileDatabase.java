@@ -380,7 +380,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 	{
 		class AccountCollector implements Database.AccountVisitor
 		{
-			public void visit(String accountString, File accountDir)
+			public void visit(String accountString)
 			{
 				list.add(accountString);
 			}

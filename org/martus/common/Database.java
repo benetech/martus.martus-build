@@ -17,6 +17,7 @@ public interface Database
 	public void discardRecord(DatabaseKey key);
 	public boolean doesRecordExist(DatabaseKey key);
 	public void visitAllRecords(PacketVisitor visitor);
+	public void visitAllAccounts(AccountVisitor visitor);
 	public String getFolderForAccount(String accountString);
 	public File getIncomingInterimFile(DatabaseKey key) throws IOException;
 	public File getOutgoingInterimFile(DatabaseKey key) throws IOException;
@@ -33,6 +34,6 @@ public interface Database
 	
 	public interface AccountVisitor
 	{
-		void visit(String accountString, File accountDir);
+		void visit(String accountString);
 	}
 }

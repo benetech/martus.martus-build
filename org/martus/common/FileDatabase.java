@@ -222,7 +222,7 @@ public class FileDatabase implements Database
 				packetVisitor = visitor;
 			}
 			
-			public void visit(String accountString, File accountDir)
+			public void visit(String accountString)
 			{
 				visitAllPacketsForAccount(packetVisitor, accountString);
 			}
@@ -324,8 +324,14 @@ public class FileDatabase implements Database
 		while(iterator.hasNext())
 		{
 			String accountString = (String)iterator.next();
-			File accountDir = new File(absoluteBaseDir, (String)accountMap.get(accountString));
-			visitor.visit(accountString, accountDir);
+			try
+			{
+				visitor.visit(accountString);
+			}
+			catch (RuntimeException nothingWeCanDoAboutIt)
+			{
+				// nothing we can do, so ignore it
+			}
 		}
 	}
 	
@@ -395,8 +401,9 @@ public class FileDatabase implements Database
 	{
 		class AccountDeleter implements AccountVisitor
 		{
-			public void visit(String accountString, File accountDir)
+			public void visit(String accountString)
 			{
+				File accountDir = getAbsoluteAccountDirectory(accountString);
 				File[] subdirectories = accountDir.listFiles();
 				for (int i = 0; i < subdirectories.length; i++) 
 				{
@@ -414,6 +421,11 @@ public class FileDatabase implements Database
 		visitAllAccounts(deleter);
 	}
 
+	public File getAbsoluteAccountDirectory(String accountString)
+	{
+		return new File(absoluteBaseDir, (String)accountMap.get(accountString));
+	}
+	
 	public File getFileForRecord(DatabaseKey key) throws IOException, TooManyAccountsException
 	{
 		return getFileForRecordWithPrefix(key, getBucketPrefix(key));

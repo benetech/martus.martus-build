@@ -136,6 +136,31 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestVisitAllRecords(serverFileDb);
 	}
 
+	public void testVisitAllAccounts() throws Exception
+	{
+		TRACE("testVisitAllAccounts");
+
+		internalTestVisitAllAccounts(mockDb);
+		internalTestVisitAllAccounts(clientFileDb);
+		internalTestVisitAllAccounts(serverFileDb);
+	}
+
+	public void testVisitAllRecordsWithNull() throws Exception
+	{
+		TRACE("testVisitAllRecordsWithNull");
+		internalTestVisitAllRecordsWithNull(mockDb);
+		internalTestVisitAllRecordsWithNull(clientFileDb);
+		internalTestVisitAllRecordsWithNull(serverFileDb);
+	}
+	
+	public void testVisitAllAccountsWithNull() throws Exception
+	{
+		TRACE("testVisitAllAccountsWithNull");
+		internalTestVisitAllAccountsWithNull(mockDb);
+		internalTestVisitAllAccountsWithNull(clientFileDb);
+		internalTestVisitAllAccountsWithNull(serverFileDb);
+	}
+	
 	public void testDeleteAllData() throws Exception
 	{
 		TRACE("testDeleteAllData");
@@ -214,14 +239,6 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestImportFiles(mockDb);
 		internalTestImportFiles(clientFileDb);
 		internalTestImportFiles(serverFileDb);
-	}
-	
-	public void testVisitAllRecordsWithNull() throws Exception
-	{
-		TRACE("testVisitAllRecordsWithNull");
-		internalTestVisitAllRecordsWithNull(mockDb);
-		internalTestVisitAllRecordsWithNull(clientFileDb);
-		internalTestVisitAllRecordsWithNull(serverFileDb);
 	}
 	
 	/////////////////////////////////////////////////////////////////////
@@ -381,6 +398,91 @@ public class TestDatabase extends TestCaseEnhanced
 		contactFile.delete();
 	}
 
+	private void internalTestVisitAllAccounts(Database db) throws Exception
+	{
+		class AccountCounter implements Database.AccountVisitor
+		{
+				public void visit(String accountId)
+				{
+					++count;
+				}
+				
+				public void clear()
+				{
+					count = 0;
+				}
+				
+				int count;
+		}
+	
+		AccountCounter counter = new AccountCounter();
+
+		String account1 = "account1";
+		String account2 = "account2";
+		DatabaseKey key1 = new DatabaseKey(UniversalId.createFromAccountAndPrefix(account1, "x"));
+		DatabaseKey key2 = new DatabaseKey(UniversalId.createFromAccountAndPrefix(account2, "x"));
+		DatabaseKey key3 = new DatabaseKey(UniversalId.createFromAccountAndPrefix(account1, "x"));
+
+		counter.clear();
+		db.visitAllAccounts(counter);
+		assertEquals(db.toString(), 0, counter.count);
+		
+		counter.clear();
+		db.writeRecord(key1, smallString);
+		db.visitAllAccounts(counter);
+		assertEquals(db.toString(), 1, counter.count);
+
+		counter.clear();
+		db.writeRecord(key2, smallString);
+		db.visitAllAccounts(counter);
+		assertEquals(db.toString(), 2, counter.count);
+
+		counter.clear();
+		db.writeRecord(key3, smallString);
+		db.visitAllAccounts(counter);
+		assertEquals(db.toString() + "dupe accounts?", 2, counter.count);
+	}
+	
+	private void internalTestVisitAllRecordsWithNull(Database db) throws Exception
+	{
+		class PacketNullThrower implements Database.PacketVisitor
+		{
+			public void visit(DatabaseKey key)
+			{
+				key = null;
+				key.getAccountId();
+				list.add(key);
+			}
+			Vector list = new Vector();
+		}
+		
+		db.writeRecord(smallKey, smallString);
+		
+		PacketNullThrower ac = new PacketNullThrower();
+		db.visitAllRecords(ac);
+		assertEquals("count?", 0, ac.list.size());
+	}
+	
+	private void internalTestVisitAllAccountsWithNull(Database db) throws Exception
+	{
+		class AccountNullThrower implements Database.AccountVisitor
+		{
+			public void visit(String accountString)
+			{
+				accountString = null;
+				accountString.toString();
+				list.add(accountString);
+			}
+			Vector list = new Vector();
+		}
+		
+		db.writeRecord(smallKey, smallString);
+		
+		AccountNullThrower ac = new AccountNullThrower();
+		db.visitAllAccounts(ac);
+		assertEquals("count?", 0, ac.list.size());
+	}
+	
 	private void internalTestDeleteAllData(Database db) throws Exception
 	{
 		db.writeRecord(smallKey, smallString);
@@ -599,30 +701,11 @@ public class TestDatabase extends TestCaseEnhanced
 		assertEquals(db.toString() + " record 2 incorrect?", largeString, db.readRecord(sealedKey2, security));
 	}
 
-	private void internalTestVisitAllRecordsWithNull(Database db) throws Exception
-	{
-		class PacketCollector implements Database.PacketVisitor
-		{
-			public void visit(DatabaseKey key)
-			{
-				key = null;
-				key.getAccountId();
-			}
-			Vector list = new Vector();
-		}
-		
-		db.writeRecord(smallKey, smallString);
-		
-		PacketCollector ac = new PacketCollector();
-		db.visitAllRecords(ac);
-		assertEquals("count?", 0, ac.list.size());
-	}
-	
 	static String buildLargeString()
 	{
 		String result = "";
 		for(int i = 0; i < 200; ++i)
-			result += "The length of this string must not íâ divide into blocksize!!!";
+			result += "The length of this string must not ï¿½ï¿½ divide into blocksize!!!";
 		return result;
 	}
 
