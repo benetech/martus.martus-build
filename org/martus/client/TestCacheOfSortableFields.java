@@ -36,9 +36,9 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		Bulletin b2 = new Bulletin((BulletinStore)null);
 		UniversalId uid2 = b2.getUniversalId();
 		b2.setSealed();
-		b2.set(b1.TAGEVENTDATE, eventdate2);
-		b2.set(b1.TAGSUMMARY, summary2);
-		b2.set(b1.TAGAUTHOR, author2);
+		b2.set(b2.TAGEVENTDATE, eventdate2);
+		b2.set(b2.TAGSUMMARY, summary2);
+		b2.set(b2.TAGAUTHOR, author2);
 		cache.setFieldData(b2);
 		assertEquals("2 wrong status?",b2.get(b2.TAGSTATUS), cache.getFieldData(uid2, b2.TAGSTATUS));
 		assertEquals("2 event date not correct?",eventdate2, cache.getFieldData(uid2, b2.TAGEVENTDATE));
@@ -61,4 +61,15 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		assertNull("found tag with no cache?", cache.getFieldData(null, "tag"));
 	}
 
+	public void testRemoveFieldData() 
+	{
+		CacheOfSortableFields cache = new CacheOfSortableFields();
+		Bulletin b2 = new Bulletin((BulletinStore)null);
+		b2.set(b2.TAGEVENTDATE, "1020");
+		UniversalId uid2 = b2.getUniversalId();
+		cache.setFieldData(b2);
+		assertEquals("Date not found in cache?", "1020", cache.getFieldData(uid2, b2.TAGEVENTDATE));
+		cache.removeFieldData(uid2);
+		assertNull("Date still in cache?", cache.getFieldData(uid2, b2.TAGEVENTDATE));
+	}
 }

@@ -12,7 +12,7 @@ public class CacheOfSortableFields
 		bulletinIdsHashMap = new HashMap(1000);
 	}
 	
-	public String getFieldData (UniversalId uid, String fieldTag)
+	public String getFieldData(UniversalId uid, String fieldTag)
 	{
 		HashMap dataHash = (HashMap)bulletinIdsHashMap.get(uid);
 		if(dataHash == null)
@@ -20,7 +20,7 @@ public class CacheOfSortableFields
 		return (String)dataHash.get(fieldTag);
 	}
 
-	public void setFieldData (Bulletin b)
+	public void setFieldData(Bulletin b)
 	{
 		HashMap dataHash = new HashMap();
 		dataHash.put(b.TAGSTATUS, b.getStatus());
@@ -28,6 +28,11 @@ public class CacheOfSortableFields
 		dataHash.put(b.TAGSUMMARY, b.get(b.TAGSUMMARY));
 		dataHash.put(b.TAGAUTHOR, b.get(b.TAGAUTHOR));
 		bulletinIdsHashMap.put(b.getUniversalId(), dataHash);
+	}
+	
+	public void removeFieldData(UniversalId uid)
+	{
+		bulletinIdsHashMap.remove(uid);
 	}
 	
 	HashMap bulletinIdsHashMap;
