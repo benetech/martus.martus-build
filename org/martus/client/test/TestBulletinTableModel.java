@@ -28,10 +28,10 @@ package org.martus.client.test;
 
 import junit.framework.TestCase;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.BulletinTableModel;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;

@@ -28,9 +28,9 @@ package org.martus.client.swingui;
 
 import java.io.IOException;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 
 public class UiBulletinEditor extends UiBulletinComponent

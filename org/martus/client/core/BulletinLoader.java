@@ -28,6 +28,7 @@ package org.martus.client.core;
 
 import java.io.IOException;
 
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -52,7 +53,7 @@ public class BulletinLoader
 			Bulletin.DamagedBulletinException,
 			MartusCrypto.NoKeyPairException
 	{
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(verifier);
 		b.clear();
 		b.setIsValid(false);
 	

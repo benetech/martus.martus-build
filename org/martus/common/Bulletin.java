@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.common;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,14 +34,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import org.martus.common.AttachmentPacket;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.BulletinConstants;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.DatabaseKey;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.MartusCrypto;
-import org.martus.common.UniversalId;
 
 
 public class Bulletin implements BulletinConstants
@@ -51,9 +43,9 @@ public class Bulletin implements BulletinConstants
 	{
 	}
 
-	public Bulletin(BulletinStore bulletinStore)
+	public Bulletin(MartusCrypto securityToUse)
 	{
-		security = bulletinStore.getSignatureGenerator();
+		security = securityToUse;
 		String accountId = security.getPublicKeyString();
 		UniversalId headerUid = BulletinHeaderPacket.createUniversalId(accountId);
 		UniversalId dataUid = FieldDataPacket.createUniversalId(accountId);
@@ -291,7 +283,7 @@ public class Bulletin implements BulletinConstants
 		getPrivateFieldDataPacket().setHQPublicKey(key);
 	}
 
-	DatabaseKey getDatabaseKeyForLocalId(String localId)
+	public DatabaseKey getDatabaseKeyForLocalId(String localId)
 	{
 		UniversalId uidFdp = UniversalId.createFromAccountAndLocalId(getAccount(), localId);
 		return new DatabaseKey(uidFdp);
@@ -485,7 +477,7 @@ public class Bulletin implements BulletinConstants
 		this.pendingPublicAttachments = pendingPublicAttachments;
 	}
 
-	Vector getPendingPublicAttachments()
+	public Vector getPendingPublicAttachments()
 	{
 		return pendingPublicAttachments;
 	}
@@ -495,7 +487,7 @@ public class Bulletin implements BulletinConstants
 		this.pendingPrivateAttachments = pendingPrivateAttachments;
 	}
 
-	Vector getPendingPrivateAttachments()
+	public Vector getPendingPrivateAttachments()
 	{
 		return pendingPrivateAttachments;
 	}

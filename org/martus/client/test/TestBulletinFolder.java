@@ -28,9 +28,9 @@ package org.martus.client.test;
 
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
+import org.martus.common.Bulletin;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;

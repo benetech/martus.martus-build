@@ -37,11 +37,10 @@ import java.io.OutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinZipImporter;
-import org.martus.client.core.BulletinStore;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -55,11 +54,11 @@ import org.martus.common.MartusCrypto.CryptoException;
 
 public class MockBulletin extends Bulletin
 {
-	public MockBulletin()
+	public MockBulletin(MartusCrypto securityToUse)
 	{
-		super((BulletinStore) null);
+		super(securityToUse);
 	}
-
+	
 	public static void loadFromZipString(Bulletin b, String zipString, MartusCrypto sigVerifier) throws IOException, Base64.InvalidBase64Exception
 	{
 		File tempFile = null;

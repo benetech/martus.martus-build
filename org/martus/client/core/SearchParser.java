@@ -27,7 +27,7 @@ Boston, MA 02111-1307, USA.
 /* $Id: SearchParser.java,v 1.3 2002/04/18 20:42:55 charles Exp $ */
 package org.martus.client.core;
 
-import org.martus.client.core.*;
+import org.martus.common.SearchTreeNode;
 
 public class SearchParser
 {

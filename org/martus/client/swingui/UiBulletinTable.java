@@ -59,12 +59,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
+import org.martus.common.Bulletin;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.Packet.InvalidPacketException;

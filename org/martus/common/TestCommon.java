@@ -48,6 +48,7 @@ public class TestCommon
 		// common stuff
 		suite.addTest(new TestSuite(TestUniversalId.class));
 		suite.addTest(new TestSuite(TestDatabaseKey.class));
+		suite.addTest(new TestSuite(TestSearchTreeNode.class));
 		suite.addTest(new TestSuite(TestFileDatabase.class));
 		suite.addTest(new TestSuite(TestMartusSecurity.class));
 		suite.addTest(new TestSuite(TestUnicodeFileWriter.class));

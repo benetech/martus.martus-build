@@ -24,23 +24,10 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.common;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.martus.common.AttachmentPacket;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Base64;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
-import org.martus.common.Packet;
-import org.martus.common.UniversalId;
 
 public class BulletinSaver
 {

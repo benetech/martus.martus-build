@@ -26,9 +26,9 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 
 
 

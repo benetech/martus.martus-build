@@ -29,10 +29,10 @@ package org.martus.client.test;
 import java.io.File;
 import java.io.IOException;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;

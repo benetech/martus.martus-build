@@ -33,8 +33,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
+import org.martus.common.Bulletin;
 import org.martus.common.UniversalId;
 
 public class UiBulletinTablePane extends JScrollPane

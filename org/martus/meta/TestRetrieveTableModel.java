@@ -2,7 +2,6 @@ package org.martus.meta;
 
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
@@ -10,6 +9,7 @@ import org.martus.client.swingui.RetrieveHQTableModel;
 import org.martus.client.swingui.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.RetrieveMyTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;

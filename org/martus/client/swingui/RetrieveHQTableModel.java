@@ -29,7 +29,6 @@ package org.martus.client.swingui;
 import java.util.Vector;
 
 import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.*;
 import org.martus.common.MartusUtilities.ServerErrorException;
 
 

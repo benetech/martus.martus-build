@@ -3,11 +3,20 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.*;
-import org.martus.client.swingui.*;
-import org.martus.client.test.*;
-import org.martus.common.*;
-import org.martus.server.forclients.*;
+import org.martus.client.swingui.RetrieveMyDraftsTableModel;
+import org.martus.client.test.MockMartusApp;
+import org.martus.common.Bulletin;
+import org.martus.common.FieldDataPacket;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MockMartusSecurity;
+import org.martus.common.NetworkInterface;
+import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.NetworkInterfaceForNonSSL;
+import org.martus.common.TestCaseEnhanced;
+import org.martus.common.UniversalId;
+import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerSideNetworkHandler;
+import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
 
 public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 {

@@ -43,10 +43,10 @@ import javax.swing.JFrame;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.EncryptionChangeListener;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 
 class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListener, EncryptionChangeListener

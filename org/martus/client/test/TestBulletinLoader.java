@@ -28,13 +28,12 @@ package org.martus.client.test;
 
 import java.io.File;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinZipImporter;
 import org.martus.client.core.BulletinLoader;
-import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.BulletinStore;
-import org.martus.client.core.Bulletin.DamagedBulletinException;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
@@ -43,6 +42,7 @@ import org.martus.common.MartusXml;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
 import org.martus.common.TestCaseEnhanced;
+import org.martus.common.Bulletin.DamagedBulletinException;
 
 public class TestBulletinLoader extends TestCaseEnhanced
 {

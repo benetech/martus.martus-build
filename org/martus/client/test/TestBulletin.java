@@ -36,13 +36,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinLoader;
-import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.SearchParser;
-import org.martus.client.core.SearchTreeNode;
+import org.martus.common.*;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.DatabaseKey;
@@ -52,6 +51,7 @@ import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
+import org.martus.common.SearchTreeNode;
 import org.martus.common.TestCaseEnhanced;
 
 
@@ -103,7 +103,7 @@ public class TestBulletin extends TestCaseEnhanced
 
     public void testBasics()
     {
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		assertEquals(false, b.isStandardField("Nope"));
 		assertEquals(true, b.isStandardField("Location"));
 		assertEquals(true, b.isStandardField("location"));
@@ -145,7 +145,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testId()
 	{
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		assertNotNull("Id was Null?", b.getLocalId());
 		assertEquals("Id was empty?", false, b.getLocalId().length()==0);
 	}

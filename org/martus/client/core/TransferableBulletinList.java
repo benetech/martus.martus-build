@@ -36,6 +36,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Vector;
 
+import org.martus.common.Bulletin;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;

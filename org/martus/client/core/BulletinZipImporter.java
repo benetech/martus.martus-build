@@ -34,7 +34,9 @@ import java.util.zip.ZipFile;
 
 import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;

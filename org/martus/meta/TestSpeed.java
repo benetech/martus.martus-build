@@ -12,10 +12,10 @@ import java.io.Writer;
 
 import junit.framework.TestSuite;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.ClientFileDatabase;
 import org.martus.common.AttachmentPacket;
 import org.martus.common.Base64;
+import org.martus.common.Bulletin;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;

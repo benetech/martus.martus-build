@@ -36,7 +36,7 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import org.martus.client.core.Bulletin;
+import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
 
 public class UiBulletinPreviewDlg extends JDialog implements ActionListener

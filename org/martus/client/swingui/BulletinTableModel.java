@@ -28,9 +28,9 @@ package org.martus.client.swingui;
 
 import javax.swing.table.AbstractTableModel;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.UniversalId;
 

@@ -43,7 +43,9 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.zip.ZipFile;
 
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileInputStreamWithSeek;
@@ -641,7 +643,7 @@ public class BulletinStore
 
 	public Bulletin createEmptyBulletin()
 	{
-		Bulletin b = new Bulletin(this);
+		Bulletin b = new Bulletin(getSignatureGenerator());
 		return b;
 	}
 

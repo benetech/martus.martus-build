@@ -31,10 +31,10 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinXmlExporter;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
@@ -59,7 +59,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 
 	public void testExportOneBulletin() throws Exception
 	{
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		b.setAllPrivate(false);
 
 		final String sampleAuthor = "someone special";
@@ -83,7 +83,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 
 	public void testExportWithPublicAttachments() throws Exception
 	{
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		b.setAllPrivate(false);
 		final File sampleAttachmentFile1 = addNewPublicSampleAttachment(b);
 		final File sampleAttachmentFile2 = addNewPublicSampleAttachment(b);
@@ -98,9 +98,9 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 
 	public void testExportMultipleBulletins() throws Exception
 	{
-		Bulletin b1 = new Bulletin(store);
+		Bulletin b1 = new Bulletin(store.getSignatureGenerator());
 		b1.setAllPrivate(false);
-		Bulletin b2 = new Bulletin(store);
+		Bulletin b2 = new Bulletin(store.getSignatureGenerator());
 		b2.setAllPrivate(false);
 
 		final String sampleTitle1 = "a big event took place!";
@@ -121,7 +121,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 
 	public void testExportPrivateData() throws Exception
 	{
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		b.setAllPrivate(false);
 
 		final String samplePublic = "someone special";
@@ -145,7 +145,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 
 	public void testExportWithPrivateAttachment() throws Exception
 	{
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		b.setAllPrivate(false);
 		final File sampleAttachmentFile1 = addNewPrivateSampleAttachment(b);
 
@@ -161,7 +161,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 
 	public void testExportAnAllPrivateBulletin() throws Exception
 	{
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		b.setAllPrivate(true);
 		final String sampleAuthor = "someone special";
 		b.set(BulletinConstants.TAGAUTHOR, sampleAuthor);

@@ -44,9 +44,9 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinXmlExporter;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;

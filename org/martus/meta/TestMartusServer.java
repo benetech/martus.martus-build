@@ -21,12 +21,12 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinLoader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.test.MockBulletin;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;

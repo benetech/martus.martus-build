@@ -32,11 +32,11 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.util.List;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.TestCaseEnhanced;

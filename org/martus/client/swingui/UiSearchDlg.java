@@ -34,8 +34,8 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 
 public class UiSearchDlg extends JDialog  implements ActionListener
 {

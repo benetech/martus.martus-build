@@ -30,12 +30,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;

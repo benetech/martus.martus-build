@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Date;
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
@@ -15,6 +14,7 @@ import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
 import org.martus.common.Base64;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;

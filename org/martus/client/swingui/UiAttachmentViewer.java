@@ -41,9 +41,9 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
-import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
 
 

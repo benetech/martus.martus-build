@@ -35,6 +35,7 @@ import java.util.HashMap;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;

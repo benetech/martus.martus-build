@@ -30,9 +30,9 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.ObjectInputStream;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.CacheOfSortableFields;
+import org.martus.common.Bulletin;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MockClientDatabase;
@@ -61,7 +61,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		String title1 = "1 Title";
 		String author1 = "1 Author";
 		String eventdate1 = "1 11-20-2002";
-		Bulletin b1 = new Bulletin(store);
+		Bulletin b1 = new Bulletin(store.getSignatureGenerator());
 		UniversalId uid1 = b1.getUniversalId();
 		b1.setDraft();
 		b1.set(Bulletin.TAGEVENTDATE, eventdate1);
@@ -76,7 +76,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		String title2 = "2 Title";
 		String author2 = "2 Author";
 		String eventdate2 = "2 11-20-2002";
-		Bulletin b2 = new Bulletin(store);
+		Bulletin b2 = new Bulletin(store.getSignatureGenerator());
 		UniversalId uid2 = b2.getUniversalId();
 		b2.setSealed();
 		b2.set(Bulletin.TAGEVENTDATE, eventdate2);
@@ -92,7 +92,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 	public void testGetBadTag()
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
-		Bulletin b2 = new Bulletin(store);
+		Bulletin b2 = new Bulletin(store.getSignatureGenerator());
 		UniversalId uid2 = b2.getUniversalId();
 		cache.setFieldData(b2);
 		assertNull("an invalid tag found in cache?", cache.getFieldData(uid2, "tag"));
@@ -107,7 +107,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 	public void testRemoveFieldData()
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
-		Bulletin b2 = new Bulletin(store);
+		Bulletin b2 = new Bulletin(store.getSignatureGenerator());
 		b2.set(Bulletin.TAGEVENTDATE, "1020");
 		UniversalId uid2 = b2.getUniversalId();
 		cache.setFieldData(b2);
@@ -122,7 +122,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		security.createKeyPair(512);
 
 		CacheOfSortableFields cache = new CacheOfSortableFields();
-		Bulletin b = new Bulletin(store);
+		Bulletin b = new Bulletin(store.getSignatureGenerator());
 		b.set(Bulletin.TAGEVENTDATE, "1020");
 		UniversalId uid = b.getUniversalId();
 		cache.setFieldData(b);

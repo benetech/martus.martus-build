@@ -36,10 +36,10 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
 
 abstract public class UiBulletinComponentSection extends JPanel

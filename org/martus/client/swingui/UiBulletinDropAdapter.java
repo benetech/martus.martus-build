@@ -39,11 +39,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;

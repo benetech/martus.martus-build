@@ -4,10 +4,10 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;

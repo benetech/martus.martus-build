@@ -34,14 +34,14 @@ import java.util.Arrays;
 import java.util.Set;
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinLoader;
-import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusClientXml;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;

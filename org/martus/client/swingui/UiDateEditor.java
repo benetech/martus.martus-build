@@ -37,8 +37,8 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 
 public class UiDateEditor extends UiField
 {

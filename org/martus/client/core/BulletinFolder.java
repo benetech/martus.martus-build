@@ -28,6 +28,7 @@ package org.martus.client.core;
 
 import java.util.Vector;
 
+import org.martus.common.Bulletin;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.UniversalId;

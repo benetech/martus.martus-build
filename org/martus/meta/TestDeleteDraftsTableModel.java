@@ -3,9 +3,9 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.core.Bulletin;
 import org.martus.client.swingui.DeleteMyServerDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MockMartusSecurity;
