@@ -32,6 +32,7 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.martus.client.core.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.packet.BulletinHeaderPacket;
@@ -162,8 +163,8 @@ public class BulletinZipImporter
 		IOException, 
 		InvalidBase64Exception
 	{
-		String[] standardFieldNames = Bulletin.getPublicFieldTags();
-		String[] privateFieldNames = Bulletin.getPrivateFieldTags();
+		String[] standardFieldNames = BulletinStore.getDefaultPublicFieldTags();
+		String[] privateFieldNames = BulletinStore.getDefaultPrivateFieldTags();
 		Bulletin original = new Bulletin(security, standardFieldNames, privateFieldNames);
 		BulletinZipImporter.loadFromFile(original, inputFile, security);
 		Bulletin imported = new Bulletin(security, standardFieldNames, privateFieldNames);

@@ -36,6 +36,7 @@ import javax.swing.Scrollable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.martus.client.core.BulletinStore;
 import org.martus.client.core.EncryptionChangeListener;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiField;
@@ -65,8 +66,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		publicStuff.add(privateStuff.createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
 		publicStuff.add(allPrivateField.getComponent());
 
-		String[] standardFieldTags = Bulletin.getPublicFieldTags();
-		String[] privateFieldTags = Bulletin.getPrivateFieldTags();
+		String[] standardFieldTags = BulletinStore.getDefaultPublicFieldTags();
+		String[] privateFieldTags = BulletinStore.getDefaultPrivateFieldTags();
 
 		int numFields = standardFieldTags.length + privateFieldTags.length;
 		fields = new UiField[numFields];

@@ -34,6 +34,7 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.martus.client.core.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.database.Database;
@@ -59,7 +60,7 @@ public class Bulletin implements BulletinConstants
 
 	public Bulletin(MartusCrypto securityToUse)
 	{
-		this(securityToUse, getPublicFieldTags(), getPrivateFieldTags());
+		this(securityToUse, BulletinStore.getDefaultPublicFieldTags(), BulletinStore.getDefaultPrivateFieldTags());
 	}
 	
 	public Bulletin(MartusCrypto securityToUse, String[] standardFieldNames, String[] privateFieldNames)
@@ -310,27 +311,6 @@ public class Bulletin implements BulletinConstants
 	public int getFieldCount()
 	{
 		return fieldData.getFieldCount();
-	}
-
-	public static String[] getPublicFieldTags()
-	{
-		return new String[]
-		{
-			TAGLANGUAGE,
-
-			TAGAUTHOR, TAGORGANIZATION,
-			TAGTITLE, TAGLOCATION, TAGKEYWORDS,
-			TAGEVENTDATE, TAGENTRYDATE,
-			TAGSUMMARY, TAGPUBLICINFO,
-		};
-	}
-
-	public static String[] getPrivateFieldTags()
-	{
-		return new String[]
-		{
-			TAGPRIVATEINFO,
-		};
 	}
 
 	public static int getFieldType(String fieldName)

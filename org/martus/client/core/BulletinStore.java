@@ -47,6 +47,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinZipImporter;
@@ -93,19 +94,12 @@ public class BulletinStore
 		setUpStore(baseDirectory, db);
 	}
 
-	public BulletinStore(Database db)
+	public BulletinStore(Database db) throws IOException
 	{
-		try
-		{
-			File tempFile = File.createTempFile("$$$MartusBulletinStore", null);
-			File baseDirectory = tempFile.getParentFile();
-			tempFile.delete();
-			setUpStore(baseDirectory, db);
-		}
-		catch(IOException e)
-		{
-			System.out.println("BulletinStore: " + e);
-		}
+		File tempFile = File.createTempFile("$$$MartusBulletinStore", null);
+		File baseDirectory = tempFile.getParentFile();
+		tempFile.delete();
+		setUpStore(baseDirectory, db);
 	}
 
 	public void doAfterSigninInitalization() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
@@ -701,8 +695,8 @@ public class BulletinStore
 
 		createSystemFolders();
 	
-		publicFieldTags = Bulletin.getPublicFieldTags();
-		privateFieldTags = Bulletin.getPrivateFieldTags();
+		publicFieldTags = BulletinStore.getDefaultPublicFieldTags();
+		privateFieldTags = BulletinStore.getDefaultPrivateFieldTags();
 	}
 
 	private void loadCacheOfSortableFields()
@@ -1009,6 +1003,27 @@ public class BulletinStore
 		Bulletin imported = BulletinZipImporter.loadFromFile(security, inputFile);
 		BulletinSaver.saveToClientDatabase(imported, getDatabase(), mustEncryptPublicData(), security);
 		return imported.getUniversalId();
+	}
+
+	public static String[] getDefaultPublicFieldTags()
+	{
+		return new String[]
+		{
+			BulletinConstants.TAGLANGUAGE,
+	
+			BulletinConstants.TAGAUTHOR, BulletinConstants.TAGORGANIZATION,
+			BulletinConstants.TAGTITLE, BulletinConstants.TAGLOCATION, BulletinConstants.TAGKEYWORDS,
+			BulletinConstants.TAGEVENTDATE, BulletinConstants.TAGENTRYDATE,
+			BulletinConstants.TAGSUMMARY, BulletinConstants.TAGPUBLICINFO,
+		};
+	}
+
+	public static String[] getDefaultPrivateFieldTags()
+	{
+		return new String[]
+		{
+			BulletinConstants.TAGPRIVATEINFO,
+		};
 	}
 
 	public static int maxCachedBulletinCount = 100;

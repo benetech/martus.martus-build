@@ -916,7 +916,7 @@ public class MartusApp
 
 		String xml = (String)response.getResultVector().get(0);
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, dataPacketLocalId);
-		FieldDataPacket fdp = new FieldDataPacket(uid , Bulletin.getPublicFieldTags());
+		FieldDataPacket fdp = new FieldDataPacket(uid , BulletinStore.getDefaultPublicFieldTags());
 		byte[] xmlBytes = xml.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in =  new ByteArrayInputStreamWithSeek(xmlBytes);
 		fdp.loadFromXml(in, security);
@@ -1122,13 +1122,23 @@ public class MartusApp
 			worked = false;
 		}
 
-		if(worked)
+		if(!worked)
+			return false;
+			
+		try
+		{
 			setCurrentAccount(userName);
+		}
+		catch (IOException e1)
+		{
+			e1.printStackTrace();
+			return false;
+		}
 
-		return worked;
+		return true;
 	}
 
-	public void setCurrentAccount(String userName)
+	public void setCurrentAccount(String userName) throws IOException
 	{
 		currentUserName = userName;
 		currentAccountDirectory = martusDataRootDirectory; 

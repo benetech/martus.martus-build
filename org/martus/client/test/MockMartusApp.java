@@ -101,7 +101,7 @@ public class MockMartusApp extends MartusApp
 
 	}
 
-	public void setCurrentAccount(String userName)
+	public void setCurrentAccount(String userName) throws IOException
 	{
 		super.setCurrentAccount(userName);
 		store = new BulletinStore(new MockClientDatabase());
