@@ -300,6 +300,14 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestReplaceWriteRecord(clientFileDb);
 		internalTestReplaceWriteRecord(serverFileDb);
 	}
+	
+	public void testScrubRecord() throws Exception
+	{
+		TRACE("testScrubRecord");
+		internalTestScrubRecord(mockDb);
+		internalTestScrubRecord(clientFileDb);
+		internalTestScrubRecord(serverFileDb);
+	}	
 
 	public void testDiscard() throws Exception
 	{
@@ -975,6 +983,25 @@ public class TestDatabase extends TestCaseEnhanced
 		
 		assertEquals(db.toString() + " record 1 incorrect?", smallString, db.readRecord(sealedKey1, security));
 		assertEquals(db.toString() + " record 2 incorrect?", largeString, db.readRecord(sealedKey2, security));
+	}
+	
+	private void internalTestScrubRecord(Database db) throws Exception
+	{
+		db.writeRecord(smallKey, smallString);		
+		db.scrubRecord(smallKey);		
+
+		String gotBack = db.readRecord(smallKey, security);
+		byte[] scrubBytes = gotBack.getBytes();
+		assertEquals(db.toString()+"wrong length?", smallString.length(), scrubBytes.length);
+		for (int i = 0; i < scrubBytes.length; i++)
+		{
+			byte b = scrubBytes[i];
+			assertEquals(db.toString()+"not scrubbed?", 0x55, b);
+		}
+		
+		assertNotNull(db.toString()+"read failed", gotBack);
+		assertNotEquals(db.toString()+"wrong data?", smallString, gotBack);
+		
 	}
 
 	static String buildLargeString()

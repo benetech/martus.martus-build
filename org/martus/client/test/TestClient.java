@@ -64,6 +64,8 @@ public class TestClient
 		suite.addTest(new TestSuite(TestMartusUserNameAndPassword.class));
 		suite.addTest(new TestSuite(TestTokenReplacement.class));
 		suite.addTest(new TestSuite(TestTransferableBulletin.class));
+		suite.addTest(new TestSuite(TestRandomAccessFileOverwrite.class));
+		
 
 	    return suite;
 	}

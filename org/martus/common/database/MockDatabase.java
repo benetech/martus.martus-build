@@ -244,6 +244,18 @@ abstract public class MockDatabase extends Database
 		FilterByAccount filter = new FilterByAccount(visitor, accountString);
 		visitAllRecords(filter);
 	}
+	
+	public void scrubRecord(DatabaseKey key) 
+			throws IOException, RecordHiddenException
+	{
+		String record = readRecord(key);
+		byte[] bytes = record.getBytes("UTF-8");
+		for (int i = 0; i < bytes.length; i++)
+		{
+			bytes[i] = 0x55;			
+		}
+		writeRecord(key, new String(bytes));			
+	}
 
 	public String getFolderForAccount(String accountString)
 	{

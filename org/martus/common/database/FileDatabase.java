@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.RandomAccessFile;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -443,6 +444,22 @@ abstract public class FileDatabase extends Database
 			}
 		}
 	}
+	
+	public void scrubRecord(DatabaseKey key) 
+			throws IOException, RecordHiddenException
+	{
+		File file = getFileForRecord(key);		
+		RandomAccessFile randomFile = new RandomAccessFile(file, "rw");
+		randomFile.seek(0);
+			
+		for (int i=0; i< randomFile.length();++i)
+		{
+			randomFile.write(0x55);
+		}
+			
+		randomFile.close();		
+	}
+
 
 	boolean isQuarantineBucketDirectory(File bucketDir)
 	{
@@ -757,7 +774,7 @@ abstract public class FileDatabase extends Database
 	{
 		return accountMapFile;
 	}
-
+	
 	protected static final String defaultBucketPrefix = "p";
 	protected static final String draftQuarantinePrefix = "qd-p";
 	protected static final String sealedQuarantinePrefix = "qs-p";

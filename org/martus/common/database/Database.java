@@ -93,6 +93,7 @@ abstract public class Database
 	abstract public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException;
 
 	abstract public void signAccountMap() throws IOException, MartusCrypto.MartusSignatureException;
+	abstract public void scrubRecord(DatabaseKey key) throws IOException, RecordHiddenException;
 
 	public void hide(UniversalId uid)
 	{
