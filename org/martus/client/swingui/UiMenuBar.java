@@ -52,14 +52,8 @@ public class UiMenuBar extends JMenuBar
 		file.add(UiActions.newActionMenuCreateNewBulletin(mainWindow));
 		file.add(actionMenuPrint);
 		file.addSeparator();
-		file.add(UiActions.newActionMenuBackupMyKeyPair(mainWindow));
-		file.add(UiActions.newActionMenuExportMyPublicKey(mainWindow));
-		file.addSeparator();
 		file.add(UiActions.newActionMenuExportFolder(mainWindow));
 		file.add(UiActions.newActionMenuExportBulletins(mainWindow));
-		file.addSeparator();
-		file.add(UiActions.newActionMenuImportHeadquarterPublicKey(mainWindow));
-		file.add(UiActions.newActionMenuRemoveExistingHeadquaterPublicKey(mainWindow));
 		file.addSeparator();
 		file.add(UiActions.newActionMenuExit(mainWindow));
 
@@ -109,6 +103,12 @@ public class UiMenuBar extends JMenuBar
 
 		JMenu tools = new JMenu(localization.getMenuLabel("tools"));
 		tools.add(new ActionMenuQuickErase(mainWindow));
+		tools.addSeparator();
+		tools.add(UiActions.newActionMenuBackupMyKeyPair(mainWindow));
+		tools.add(UiActions.newActionMenuExportMyPublicKey(mainWindow));
+		tools.addSeparator();
+		tools.add(UiActions.newActionMenuImportHeadquarterPublicKey(mainWindow));
+		tools.add(UiActions.newActionMenuRemoveExistingHeadquaterPublicKey(mainWindow));
 		
 		JMenu help = new JMenu(localization.getMenuLabel("help"));
 		help.add(UiActions.newActionMenuHelp(mainWindow));

@@ -1255,11 +1255,13 @@ if(result == NEW_ACCOUNT)
 
 	public void askToBackupKeyPair()
 	{
-		if(confirmDlg(this,"BackupKeyPair"))
-			doBackupKeyPair();
+		if(confirmDlg(this,"BackupKeyPairSingle"))
+			doBackupKeyPairToSingleEncryptedFile();
+		if(confirmDlg(this,"BackupKeyPairMultiple"))
+			doBackupKeyPairToMultipleUnencryptedFiles();
 	}
 
-	public void doBackupKeyPair()
+	private void doBackupKeyPairToSingleEncryptedFile() 
 	{
 		File keypairFile = app.getCurrentKeyPairFile();
 		if(keypairFile.length() > MAX_KEYPAIRFILE_SIZE)
@@ -1268,8 +1270,9 @@ if(result == NEW_ACCOUNT)
 			notifyDlg(this, "ErrorBackingupKeyPair");
 			return;
 		}
+		
 		notifyDlg(this, "BackupKeyPairInformation");
-
+		
 		UiFileChooser chooser = new UiFileChooser();
 		chooser.setDialogTitle(getLocalization().getWindowTitle("saveBackupKeyPair"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
@@ -1284,10 +1287,10 @@ if(result == NEW_ACCOUNT)
 			{
 				FileInputStream input = new FileInputStream(keypairFile);
 				FileOutputStream output = new FileOutputStream(newBackupFile);
-
+		
 				int originalKeyPairFileSize = (int) keypairFile.length();
 				byte[] inputArray = new byte[originalKeyPairFileSize];
-
+		
 				input.read(inputArray);
 				output.write(inputArray);
 				input.close();
@@ -1303,6 +1306,10 @@ if(result == NEW_ACCOUNT)
 				notifyDlg(this, "ErrorBackingupKeyPair");
 			}
 		}
+	}
+
+	private void doBackupKeyPairToMultipleUnencryptedFiles() 
+	{
 	}
 
 	class PublicInfoFileFilter extends FileFilter

@@ -701,7 +701,7 @@ public class UiActions
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			mainWindow.doBackupKeyPair();
+			mainWindow.askToBackupKeyPair();
 		}
 	}
 
