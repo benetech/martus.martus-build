@@ -31,6 +31,7 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -355,6 +356,25 @@ public class MartusLocalization
 		}
 
 		return labels;
+	}
+
+	public ChoiceItem[] getLanguageNameChoices()
+	{
+		return getLanguageNameChoices(ALL_LANGUAGE_CODES);
+	}
+
+	public ChoiceItem[] getLanguageNameChoices(String[] languageCodes)
+	{
+		if(languageCodes == null)
+			return null;
+		ChoiceItem[] tempChoicesArray = new ChoiceItem[languageCodes.length];
+		for(int i = 0; i < languageCodes.length; i++)
+		{
+			tempChoicesArray[i] =
+				new ChoiceItem(languageCodes[i], getLanguageName(languageCodes[i]));
+		}
+		Arrays.sort(tempChoicesArray);
+		return tempChoicesArray;
 	}
 
 

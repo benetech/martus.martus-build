@@ -126,8 +126,9 @@ abstract public class UiBulletinComponentSection extends JPanel
 				field = createDateField();
 				break;
 			case Bulletin.CHOICE:
+				MartusLocalization localization = app.getLocalization();
 				ChoiceItem[] languages =
-					app.getLanguageNameChoices(MartusLocalization.ALL_LANGUAGE_CODES);
+					localization.getLanguageNameChoices();
 				field = createChoiceField(languages);
 				break;
 			case Bulletin.NORMAL:
