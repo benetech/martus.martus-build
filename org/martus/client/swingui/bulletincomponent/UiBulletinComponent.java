@@ -109,12 +109,12 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 	public void copyDataFromBulletin(Bulletin bulletinToShow) throws IOException
 	{
+		removeAll();
 		currentBulletin = bulletinToShow;
 		if(currentBulletin == null)
 		{
 			publicStuff = null;
 			privateStuff = null;
-			removeAll();
 			repaint();
 			return;
 		}
@@ -145,6 +145,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		publicStuff.updateDamagedIndicator(isDamaged);
 		privateStuff.updateDamagedIndicator(isDamaged);
+		repaint();
 	}
 
 	public void updateEncryptedIndicator(boolean isEncrypted)
