@@ -1,18 +1,15 @@
-
 package org.martus.client;
-
-import javax.swing.JDialog;
-import javax.swing.JLabel;
-import javax.swing.JRootPane;
-import javax.swing.border.LineBorder;
-
-import org.martus.client.*;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.Rectangle;
+
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
 
 public class UiModelessBusyDlg extends JDialog
 {
@@ -32,11 +29,16 @@ public class UiModelessBusyDlg extends JDialog
 		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
 		setLocation(MartusApp.center(size, screen));
 		setResizable(false);
+		origCursor = getCursor();
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		show();
 	}
 	
 	public void endDialog()
 	{
+		setCursor(origCursor);
 		dispose();
 	}
+	
+	Cursor origCursor;
 }

@@ -542,6 +542,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:DeleteFlag=Delete?");
 		addEnglishTranslation("field:waitingForKeyPairGeneration=Please wait a minute while your account is being created...");
 		addEnglishTranslation("field:waitingForBulletinsToLoad=Loading Martus.  Please wait...");
+		addEnglishTranslation("field:waitAfterFailedSignIn=Please wait to sign in again ...");
 		addEnglishTranslation("field:HelpDefaultDetails=Enter questions, details, or other information your organization wants to have answered in future bulletins created.");
 		addEnglishTranslation("field:HelpExampleDefaultDetails=Example:");
 		addEnglishTranslation("field:HelpExample1DefaultDetails=Were there any witnesses?");

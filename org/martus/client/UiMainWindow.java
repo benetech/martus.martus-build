@@ -1298,9 +1298,17 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private boolean signIn(int mode)
 	{
 		int seconds = 0;
+		UiModelessBusyDlg busyDlg = null;
 		while(true)
 		{
-			delay(seconds);
+			Delay delay = new Delay(seconds);
+			delay.start();
+			waitForThreadToTerminate(delay);
+			if( busyDlg != null )
+			{
+				busyDlg.endDialog();
+			}
+			
 			seconds = seconds * 2 + 1;
 			UiSigninDlg signinDlg = new UiSigninDlg(this, currentActiveFrame, mode);
 			if(!signinDlg.getResult())
@@ -1308,6 +1316,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(!app.attemptSignIn(signinDlg.getName(), signinDlg.getPassword()))
 			{
 				notifyDlg(currentActiveFrame, "incorrectsignin");
+				busyDlg = new UiModelessBusyDlg(app.getFieldLabel("waitAfterFailedSignIn"));
 				continue;
 			}
 			break;
@@ -1340,14 +1349,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return true;
 	}
 
-	private void delay(int seconds)
+	public void waitForThreadToTerminate(Delay worker) 
 	{
-
-		try
+		try 
 		{
-			Thread.sleep(seconds*1000);
-		}
-		catch (InterruptedException e)
+			worker.join();
+		} 
+		catch (InterruptedException e) 
 		{
 			// We don't care if this gets interrupted
 		}
@@ -1409,6 +1417,28 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void setLastAttachmentSaveDirectory(File lastAttachmentSaveDirectory) 
 	{
 		this.lastAttachmentSaveDirectory = lastAttachmentSaveDirectory;
+	}
+	
+	class Delay extends Thread
+	{
+		public Delay(int sec)
+		{
+			timeInSeconds = sec * 1000;
+		}
+
+		public void run()
+		{
+			try
+			{
+				sleep(timeInSeconds);
+			}
+			catch(InterruptedException e)
+			{
+				;
+			}
+		}
+		
+		private int timeInSeconds;
 	}
 
 	class ActionCreate extends AbstractAction
