@@ -55,6 +55,7 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
+import org.martus.client.Exceptions.MartusClientRuntimeException;
 import org.martus.client.MartusApp.ServerErrorException;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -1066,7 +1067,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			{
 				FileInputStream input = new FileInputStream(keypairFile);
 				FileOutputStream output = new FileOutputStream(newBackupFile); 
-				int originalKeyPairFileSize = new Long(keypairFile.length()).intValue();
+				
+				if(keypairFile.length() > MAX_KEYPAIRFILE_SIZE)
+					throw new IOException("KeyPair file size too large.");
+				int originalKeyPairFileSize = (int) keypairFile.length();
 				byte[] inputArray = new byte[originalKeyPairFileSize];
 				
 				input.read(inputArray);
@@ -1080,6 +1084,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 			catch (IOException ioe)
 			{
+				System.out.println(ioe.getMessage());
 				notifyDlg(this, "ErrorBackingupKeyPair");
 			}
 		}
@@ -1977,6 +1982,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private JFrame currentActiveFrame;	
 	private boolean inConfigServer;
 
+	private static final int MAX_KEYPAIRFILE_SIZE = 32000;
 	private static final int TIMEOUT_SECONDS = (10 * 60);
 	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
