@@ -25,7 +25,8 @@ Boston, MA 02111-1307, USA.
 */
 
 package org.martus.common.test;
-
+//logi put back in after 30 day wait
+/*
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -42,7 +43,7 @@ import org.martus.util.ByteArrayInputStreamWithSeek;
 import org.martus.util.StringInputStream;
 import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeStringWriter;
-
+*/
 public class TestKeyShareSaveRestore extends TestCaseEnhanced
 {
 	public TestKeyShareSaveRestore(String name)
@@ -59,6 +60,8 @@ public class TestKeyShareSaveRestore extends TestCaseEnhanced
 	{
 	}
 
+//	logi put back in after 30 day wait
+/*
 	public void testSecretShare() throws Exception
 	{
 		MartusSecurity tempSecurity = new MartusSecurity();
@@ -90,7 +93,7 @@ public class TestKeyShareSaveRestore extends TestCaseEnhanced
 			recoveredSecret = tempSecurity.recoverShares(OneShareOnly);
 			fail("Secret returned with only one share?");
 		} 
-		catch (SecretSharingException expectedException) 
+		catch (SecretSharingException expectedException)
 		{
 		}
 
@@ -102,7 +105,7 @@ public class TestKeyShareSaveRestore extends TestCaseEnhanced
 			recoveredSecret = tempSecurity.recoverShares(sameTwoShares);
 			fail("Secrets matched with only 1 share used twice?");
 		} 
-		catch (SecretSharingException expectedException) 
+		catch (SecretSharingException expectedException)
 		{
 		}
 
@@ -252,4 +255,5 @@ public class TestKeyShareSaveRestore extends TestCaseEnhanced
 		assertEquals("Private Keys don't Match?",originalSecurity.getPrivateKeyString(), recoveredSecurity.getPrivateKeyString());
 	}
 	final int SMALLEST_LEGAL_KEY_FOR_TESTING = 512;
+*/
 }

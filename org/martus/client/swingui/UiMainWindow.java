@@ -162,7 +162,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(result == SIGNED_IN)
 				wantsNewAccount = false;
 		}
-		else
+//		logi put back in after 30 day wait
+/*		else
 		{
 			String title = localization.getWindowTitle("confirmRecoverUsingKeyShare");
 			String cause = localization.getFieldLabel("confirmRecoverUsingKeySharecause");
@@ -179,7 +180,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				wantsNewAccount = false;
 			}		
 		}
-
+*/
 		boolean createdNewAccount = false;
 		if(wantsNewAccount)
 		{
@@ -1303,12 +1304,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		if(confirmDlg(this,"BackupKeyPairSingle"))
 			doBackupKeyPairToSingleEncryptedFile();
-		if(confirmDlg(this,"BackupKeyPairMultiple", UiBackupRecoverKeyPair.getTokenReplacement()))
+//		logi put back in after 30 day wait
+/*		if(confirmDlg(this,"BackupKeyPairMultiple", UiBackupRecoverKeyPair.getTokenReplacement()))
 		{
 			UiBackupRecoverKeyPair backup = new UiBackupRecoverKeyPair(this);
 			backup.backupKeyPairToMultipleUnencryptedFiles();
 		}
-	}
+*/	}
 
 	private void doBackupKeyPairToSingleEncryptedFile() 
 	{

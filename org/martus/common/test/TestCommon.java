@@ -62,7 +62,7 @@ public class TestCommon
 		suite.addTest(new TestSuite(TestFileDatabase.class));
 		suite.addTest(new TestSuite(TestFileInputStreamWithSeek.class));
 		suite.addTest(new TestSuite(TestFileOutputStreamViaTemp.class));
-		suite.addTest(new TestSuite(TestKeyShareSaveRestore.class));
+//logi put back in after 30 day wait		suite.addTest(new TestSuite(TestKeyShareSaveRestore.class));
 		suite.addTest(new TestSuite(TestMartusSecurity.class));
 		suite.addTest(new TestSuite(TestMartusUtilities.class));
 		suite.addTest(new TestSuite(TestMartusXml.class));

@@ -37,7 +37,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
-import java.io.UnsupportedEncodingException;
+//logi put back in after 30 day wait import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -61,7 +61,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-import java.sql.Timestamp;
+//logi put back in after 30 day wait import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
@@ -83,17 +83,19 @@ import javax.net.ssl.KeyManagerFactory;
 import org.bouncycastle.jce.X509Principal;
 import org.bouncycastle.jce.X509V1CertificateGenerator;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-import org.logi.crypto.Crypto;
-import org.logi.crypto.secretshare.PolySecretShare;
-import org.logi.crypto.secretshare.SecretSharingException;
+//logi put back in after 30 day waitimport org.logi.crypto.Crypto;
+//logi put back in after 30 day waitimport org.logi.crypto.secretshare.PolySecretShare;
+//logi put back in after 30 day waitimport org.logi.crypto.secretshare.SecretSharingException;
 import org.martus.common.MartusConstants;
 import org.martus.util.Base64;
-import org.martus.util.ByteArrayInputStreamWithSeek;
+
 import org.martus.util.InputStreamWithSeek;
+//logi put back in after 30 day waitimport
+/*import org.martus.util.ByteArrayInputStreamWithSeek;
 import org.martus.util.StringInputStream;
 import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeStringWriter;
-
+*/
 import com.isnetworks.provider.random.InfiniteMonkeyProvider;
 
 public class MartusSecurity extends MartusCryptoImplementation
@@ -201,7 +203,7 @@ public class MartusSecurity extends MartusCryptoImplementation
 	{
 		return isValidSignatureOfStream(extractPublicKey(publicKeyString), inputStream, signature);
 	}
-
+/*	logi put back in after 30 day wait
 	public Vector buildShares(byte[] secretToShare) throws SecretSharingException
 	{
 		Vector shares = new Vector();
@@ -396,7 +398,7 @@ public class MartusSecurity extends MartusCryptoImplementation
 		inEncryptedKeyPair.close();
 		setKeyPairFromData(outDecryptedKeyPair.toByteArray());
 	}
-
+*/
 	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws
 			NoKeyPairException,
 			EncryptionException

@@ -25,7 +25,8 @@ Boston, MA 02111-1307, USA.
 */
 
 package org.martus.client.swingui;
-
+//logi put back in after 30 day wait
+/*
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
@@ -42,7 +43,7 @@ import org.martus.common.crypto.MartusCrypto.KeyShareException;
 import org.martus.swing.UiFileChooser;
 import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeWriter;
-
+*/
 public class UiBackupRecoverKeyPair 
 {
 	public UiBackupRecoverKeyPair(UiMainWindow windowToUse)
@@ -50,7 +51,8 @@ public class UiBackupRecoverKeyPair
 		mainWindow = windowToUse;
 		localization = mainWindow.getLocalization();
 	}
-	
+//	logi put back in after 30 day wait
+/*	
 	public static Map getTokenReplacement() 
 	{
 		HashMap map = new HashMap();
@@ -396,7 +398,7 @@ public class UiBackupRecoverKeyPair
 		String defaultName;
 		String defaultExtension;
 	}
-
+*/
 	UiMainWindow mainWindow;
 	UiLocalization localization;
 }
