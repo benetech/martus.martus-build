@@ -9,12 +9,12 @@
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
   <property name="common-package" value="${martus-package}.common"/>
   <property name="BuildDateFile" value="${common-dir}/BuildDate.txt"/>
-  <property name="common-files" value="${common-dir}/*.class, ${BuildDateFile}/>
+  <property name="common-files" value="${common-dir}/*.class, ${BuildDateFile}"/>
 
   <property name="server-dir" value="${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
   <property name="server-package" value="${martus-package}.server"/>
-  <property name="server-files" value="${server-dir}/*.class/>
+  <property name="server-files" value="${server-dir}/*.class"/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
   <property name="client-jar" value= "${dist}/martus.jar"/>
@@ -34,7 +34,7 @@
   <property name="meta-dir" value="${martus-dir}/meta"/>
   <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
   <property name="meta-package" value="${martus-package}.meta"/>
-  <property name="meta-files" value="${meta-dir}/*.class/>
+  <property name="meta-files" value="${meta-dir}/*.class"/>
 
   <target name="init">
     <!-- tstamp task initializes ${DSTAMP} etc -->
@@ -45,7 +45,7 @@
   	<delete file="${dist}/*"/>
   	<delete dir="${dist}"/>
 
-    <delete file="${BuildDateFile}/>
+    <delete file="${BuildDateFile}"/>
 
     <delete file="${common-dir}/*.class"/>
     <delete file="${common-jar}"/>
@@ -62,7 +62,7 @@
 
   <target name="build" depends="init">
 
-    <echo message="${DSTAMP}" file={BuildDateFile}/>
+    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
     <javac srcdir="${common-dir}" failonerror="true"/>
 
     <javac srcdir="${server-dir}" classpath="${common-dir}" failonerror="true"/>
