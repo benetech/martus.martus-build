@@ -27,7 +27,6 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.CryptoException;
@@ -251,7 +250,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	
 	public void createAmplifierXmlRpcServer()
 	{
-		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_AMPLIFIER;
+		int port = AmplifierInterfaceXmlRpcConstants.MARTUS_PORT_FOR_AMPLIFIER;
 		createAmplifierXmlRpcServerOnPort(port);
 	}
 
