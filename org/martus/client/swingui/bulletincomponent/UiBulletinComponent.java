@@ -149,7 +149,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		}
 		else if(currentBulletin.hasUnknownTags())
 		{
-			System.out.println("Damaged: " + currentBulletin.getLocalId());
+			System.out.println("Unknown tags: " + currentBulletin.getLocalId());
 			String text = mainWindow.getLocalization().getFieldLabel("BulletinHasUnknownStuff");
 			publicStuff.updateDamagedIndicator(text);
 			privateStuff.updateDamagedIndicator(text);
