@@ -1515,6 +1515,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 
 			seconds = seconds * 2 + 1;
+			if(mode == UiSigninDlg.TIMED_OUT)
+			{
+				//Forces this dialog to the top of all windows in system by switching from iconified to normal, then just make the main window not visible	
+				currentActiveFrame.setState(NORMAL);
+				currentActiveFrame.setVisible(false);
+			}
 			UiSigninDlg signinDlg = new UiSigninDlg(this, currentActiveFrame, mode);
 			if(!signinDlg.getResult())
 				return false;
@@ -1526,6 +1532,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 			break;
 		}
+		if(mode == UiSigninDlg.TIMED_OUT)
+			currentActiveFrame.setVisible(true);
+		
 		return true;
 	}
 
@@ -2424,12 +2433,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			public void run()
 			{
 				currentActiveFrame.setState(ICONIFIED);
-				if(currentActiveFrame != UiMainWindow.this)
-					UiMainWindow.this.setVisible(false);
 				if(!signIn(UiSigninDlg.TIMED_OUT))
 					exitWithoutPrompting();
-				if(currentActiveFrame != UiMainWindow.this)
-					UiMainWindow.this.setVisible(true);
 				currentActiveFrame.setState(NORMAL);
 			}
 		}
