@@ -17,10 +17,11 @@ import org.martus.common.Packet.SignatureVerificationException;
 
 public class SupplierSideMirroringHandler implements MirroringInterface
 {
-	SupplierSideMirroringHandler(Database supplierDatabase, MartusCrypto verifierToUse)
+	SupplierSideMirroringHandler(ServerSupplierInterface supplierToUse)
 	{
-		db = supplierDatabase;
-		verifier = verifierToUse;
+		supplier = supplierToUse;
+		db = supplier.getDatabase();
+		verifier = supplier.getSecurity();
 		authorizedCallers = new Vector();
 	}
 	
@@ -101,8 +102,9 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 				int maxChunkSize = ((Integer)parameters.get(4)).intValue();
 
 				Vector data = getBulletinChunk(authorAccountId, bulletinLocalId, offset, maxChunkSize);
+				String resultTag = (String)data.remove(0);
 				
-				result.add(OK);
+				result.add(resultTag);
 				result.add(data);
 				return result;
 			}
@@ -166,7 +168,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 	
 	Vector getBulletinChunk(String authorAccountId, String bulletinLocalId, int offset, int maxChunkSize)
 	{
-		return null;
+		return supplier.getBulletinChunk(authorAccountId, bulletinLocalId, offset, maxChunkSize);
 	}
 	
 	
@@ -201,6 +203,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 	final static int cmdListBulletinsForMirroring = 3;
 	final static int cmdGetBulletinChunkForMirroring = 4;
 	
+	ServerSupplierInterface supplier;
 	Database db;
 	MartusCrypto verifier;
 	

@@ -27,9 +27,10 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 	protected void setUp() throws Exception
 	{
-		db = new MockServerDatabase();
-		supplierSecurity = new MockMartusSecurity();
-		handler = new SupplierSideMirroringHandler(db, supplierSecurity);
+		supplier = new FakeServerSupplier();
+		db = supplier.getDatabase();
+		supplierSecurity = supplier.getSecurity();
+		handler = new SupplierSideMirroringHandler(supplier);
 		
 		callerSecurity = new MockMartusSecurity();
 		callerSecurity.createKeyPair();
@@ -230,6 +231,36 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
 	}
 	
+	public void testGetBulletinChunk() throws Exception
+	{
+		final String authorAccountId = "a";
+		final String bulletinLocalId = "b";
+		final int offset = 123;
+		final int maxChunkSize = 456;
+		handler.addAuthorizedCaller(callerAccountId);
+
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add(authorAccountId);
+		parameters.add(bulletinLocalId);
+		parameters.add(new Integer(offset));
+		parameters.add(new Integer(maxChunkSize));
+		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		Vector result = handler.request(callerAccountId, parameters, sig);
+
+		assertEquals(authorAccountId, supplier.gotAccount);
+		assertEquals(bulletinLocalId, supplier.gotLocalId);
+		assertEquals(offset, supplier.gotChunkOffset);
+		assertEquals(maxChunkSize, supplier.gotMaxChunkSize);
+	
+		assertEquals(2, result.size());
+		assertEquals(MirroringInterface.CHUNK_OK, result.get(0));
+		Vector details = (Vector)result.get(1);
+		assertEquals(new Integer(supplier.returnTotalLen), details.get(0));
+		assertEquals(new Integer(supplier.returnChunkSize), details.get(1));
+		assertEquals(supplier.returnZipData, details.get(2));
+	}
+	
 	Vector writeSampleHeaderPacket(BulletinHeaderPacket bhp) throws Exception
 	{
 		String accountId = bhp.getAccountId();
@@ -253,6 +284,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		return key.getLocalId();
 	}
 
+	FakeServerSupplier supplier;
 	MockServerDatabase db;
 	MartusCrypto supplierSecurity;
 	SupplierSideMirroringHandler handler;
@@ -260,4 +292,51 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	String callerAccountId;
 	
 	MartusCrypto authorSecurity;
+}
+
+class FakeServerSupplier implements ServerSupplierInterface
+{
+	FakeServerSupplier() throws Exception
+	{
+		db = new MockServerDatabase();
+		security = new MockMartusSecurity();
+	}
+	
+	public MockServerDatabase getDatabase()
+	{
+		return db;
+	}
+	
+	public MartusCrypto getSecurity()
+	{
+		return security;
+	}
+	
+	public Vector getBulletinChunk(String authorAccountId, String bulletinLocalId,
+			int chunkOffset, int maxChunkSize)
+	{
+		gotAccount = authorAccountId;
+		gotLocalId = bulletinLocalId;
+		gotChunkOffset = chunkOffset;
+		gotMaxChunkSize = maxChunkSize;
+		
+		Vector result = new Vector();
+		result.add(MirroringInterface.CHUNK_OK);
+		result.add(new Integer(returnTotalLen));
+		result.add(new Integer(returnChunkSize));
+		result.add(returnZipData);
+		return result;
+	}
+	
+	int returnTotalLen = 234;
+	int returnChunkSize = 345;
+	String returnZipData = "zip data";
+
+	MockServerDatabase db;
+	MartusCrypto security;
+	
+	String gotAccount;
+	String gotLocalId;
+	int gotChunkOffset;
+	int gotMaxChunkSize;
 }
