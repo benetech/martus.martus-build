@@ -660,7 +660,7 @@ public class BulletinStore
 		return privateFieldTags;
 	}
 
-	private String[] getPublicFieldTags()
+	public String[] getPublicFieldTags()
 	{
 		return publicFieldTags;
 	}
@@ -697,6 +697,11 @@ public class BulletinStore
 	
 		publicFieldTags = BulletinStore.getDefaultPublicFieldTags();
 		privateFieldTags = BulletinStore.getDefaultPrivateFieldTags();
+	}
+	
+	public void setPublicFieldTags(String[] newTags)
+	{
+		publicFieldTags = newTags;
 	}
 
 	private void loadCacheOfSortableFields()
