@@ -154,6 +154,73 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		assertTrue("Missing 2?", found[1]);
 	}
 
+	public void testGetAllMySummaries() throws Exception
+	{
+		String sampleSummary1 = "1 basic summary";
+		String sampleSummary2 = "2 silly summary";
+		String sampleSummary3 = "3 yet another!";
+		
+		appWithAccount.getStore().deleteAllData();
+		
+		Bulletin b1 = appWithAccount.createBulletin();
+		b1.setAllPrivate(true);
+		b1.set(Bulletin.TAGTITLE, sampleSummary1);
+		b1.setSealed();
+		b1.save();
+		
+		Bulletin b2 = appWithAccount.createBulletin();
+		b2.setAllPrivate(false);
+		b2.set(Bulletin.TAGTITLE, sampleSummary2);
+		b2.setSealed();
+		b2.save();
+				
+		Bulletin b3 = appWithAccount.createBulletin();
+		b3.setAllPrivate(true);
+		b3.set(Bulletin.TAGTITLE, sampleSummary3);
+		b3.setSealed();
+		b3.save();
+		
+		mockServer.allowUploads(appWithAccount.getAccountId());
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+
+		appWithAccount.getStore().destroyBulletin(b1);
+		appWithAccount.getStore().destroyBulletin(b2);
+
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, null);
+		model.Initalize();
+
+		assertEquals("wrong all summaries count?", 3, model.getAllSummaries().size());
+
+		Vector result = model.getResults();
+		assertEquals("wrong count?", 2, result.size());
+		
+		BulletinSummary s1 = (BulletinSummary)result.get(0);
+		BulletinSummary s2 = (BulletinSummary)result.get(1);
+
+		Bulletin bulletins[] = new Bulletin[] {b1, b2};
+		BulletinSummary summaries[] = new BulletinSummary[] {s1, s2};
+		boolean found[] = new boolean[bulletins.length];
+		
+		for(int i = 0; i < bulletins.length; ++i)
+		{
+			for(int j = 0; j < summaries.length; ++j)
+			{
+				Bulletin b = bulletins[i];
+				BulletinSummary s = summaries[j];
+				if(b.getLocalId().equals(s.getLocalId()))
+				{
+					assertEquals(b.get(b.TAGTITLE), s.getTitle());
+					found[i] = true;
+				}
+			}
+		}
+		assertTrue("Missing 1?", found[0]);
+		assertTrue("Missing 2?", found[1]);
+	}
+
+
 	public void testGetMyDraftBulletinSummariesErrors() throws Exception
 	{
 		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());

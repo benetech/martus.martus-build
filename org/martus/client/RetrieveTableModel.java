@@ -198,9 +198,15 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	public Vector getResults() throws ServerErrorException
 	{
 		checkIfErrorOccurred();
-		return allSummaries;	
+		return summaries;	
 	}
 
+	public Vector getAllSummaries() throws ServerErrorException
+	{
+		checkIfErrorOccurred();
+		return allSummaries;	
+	}
+	
 	MartusApp app;
 	Vector summaries;
 	BulletinStore store;
