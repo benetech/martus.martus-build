@@ -8,6 +8,7 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.border.BevelBorder;
 
 public class UiStatusBar extends JPanel
@@ -24,11 +25,13 @@ public class UiStatusBar extends JPanel
 		statusMessage.setPreferredSize(new Dimension(50,20));
 		horizontalBox.add( statusMessage );
 		
-		progressMeter = new JLabel( " ", JLabel.CENTER );
-		progressMeter.setPreferredSize(new Dimension(50,20));
+		progressMeter = new JProgressBar( 0, 10);
+		progressMeter.setMaximumSize(new Dimension(100,20));
+		progressMeter.setStringPainted(true);
 		progressMeter.setBorder( new BevelBorder( BevelBorder.LOWERED ));
 		horizontalBox.add( progressMeter );
-		
+		progressMeter.setValue(6);
+	
 		blankStatus();
 		add(horizontalBox);
 	}
@@ -41,10 +44,10 @@ public class UiStatusBar extends JPanel
 	public void blankStatus()
 	{
 		statusMessage.setText("          ");
-		progressMeter.setText("          ");
+		progressMeter.setVisible(false);
 	}
 	
 	private Box horizontalBox;
 	private JLabel statusMessage;
-	private JLabel progressMeter;
+	private JProgressBar progressMeter;
 }

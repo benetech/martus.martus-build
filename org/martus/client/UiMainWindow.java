@@ -1077,12 +1077,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		createActions();
 
 		preview = new UiBulletinPreview(this);
-		preview.setMinimumSize(new Dimension(400, 200));
 		table = new UiBulletinTablePane(this);
-		table.setMinimumSize(new Dimension(0, 55));
 		folders = new UiFolderTreePane(this);
-		folders.setMinimumSize(new Dimension(85, 0));
-
 		getContentPane().add(createTopStuff(), BorderLayout.NORTH);
 
 		previewSplitter = new JSplitPane(JSplitPane.VERTICAL_SPLIT, table, preview);
@@ -1094,7 +1090,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		getContentPane().add(folderSplitter);
 		statusBar = new UiStatusBar();
 		getContentPane().add(statusBar, BorderLayout.SOUTH );
-
+		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
 		Dimension appDimension = uiState.getCurrentAppDimension();
@@ -1645,7 +1641,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 			Exit();
 		}
 	}
-
+	
 	private class InactivityDetector implements AWTEventListener
 	{
 		public InactivityDetector()
