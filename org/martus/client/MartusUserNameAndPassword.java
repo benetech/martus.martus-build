@@ -57,6 +57,9 @@ public class MartusUserNameAndPassword
 		return false;
 	}
 
+	// if the strong password criteria get changed
+	// the old entry in MartusLocalization (RedoWeakPassword) must be deprecated
+	// and a new entry created
 	private static final int STRONG_PASSWORD_NUMBER_OF_NONALPHANUMERIC = 2;
 	private static final int STRONG_PASSWORD_LENGTH = 15;
 	private static final int BASIC_PASSWORD_LENGTH = 8;
