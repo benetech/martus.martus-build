@@ -2,7 +2,6 @@ package org.martus.client;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
@@ -39,6 +38,7 @@ import javax.print.attribute.standard.MediaSize;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
@@ -51,7 +51,6 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
-import javax.swing.border.LineBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
@@ -85,6 +84,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			dialog.show();
 			System.exit(1);
 		}
+		ImageIcon imageicon = new ImageIcon(this.getClass().getResource("Martus.jpg"));
+		if(imageicon != null)
+			setIconImage(imageicon.getImage());
+		
 		initalizeUiState();
 	}
 
