@@ -76,7 +76,7 @@ cleanCvsHome() # Clean the build environment
 downloadSourcesFromCvs()
 {
 	cleanCvsHome
-	martus_cvs_src_modules="client amplifier common hrdag meta server swing utils mspa logi"
+	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi"
 
 	echo
 	echo "Downloading source from CVS...";
@@ -418,7 +418,7 @@ updateCvsTree()
 	echo
 	echo "Labeling CVS with tag: v${CVS_DATE}_build-$BUILD_NUMBER"
 	cd $CVS_HOME
-	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi || error "Unable to add tag to CVS. Check any error messages displayed."
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-jar-verifier martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi || error "Unable to add tag to CVS. Check any error messages displayed."
 	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus-thirdparty
 	
 	#check if ClientJar directory structure already exists, if not add it
@@ -519,6 +519,7 @@ removeUnnecesarryBuildFiles()
 	rm -fR $MARTUSSOURCES/org/martus/server
 	rm -fR $MARTUSSOURCES/org/martus/mspa
 	rm -fR $MARTUSSOURCES/org/martus/amplifier
+	rm -fR $MARTUSSOURCES/org/martus/jarverifier
 	rm -f $MARTUSSOURCES/.classpath
 	rm -f $MARTUSSOURCES/.project
 	rm -f $MARTUSSOURCES/build.number
