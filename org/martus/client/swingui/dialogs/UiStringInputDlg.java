@@ -48,7 +48,7 @@ public class UiStringInputDlg extends JDialog
 
 		setTitle(localization.getWindowTitle("input" + baseTag));
 
-		JLabel label = new JLabel(localization.getFieldLabel("input" + baseTag + "entry"));
+		UiWrappedTextArea label = new UiWrappedTextArea(localization.getFieldLabel("input" + baseTag + "entry"));
 		text = new JTextField(30);
 		text.setText(defaultText);
 
@@ -75,6 +75,11 @@ public class UiStringInputDlg extends JDialog
 
 		Utilities.centerDlg(this);
 		setResizable(false);
+	}
+	
+	public void setFocusToInputField()
+	{
+		text.requestFocus();
 	}
 
 	class OkHandler implements ActionListener

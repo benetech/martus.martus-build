@@ -472,6 +472,7 @@ if(result == NEW_ACCOUNT)
 	public String getStringInput(String baseTag, String descriptionTag, String defaultText)
 	{
 		UiStringInputDlg inputDlg = new UiStringInputDlg(this, getLocalization(), baseTag, descriptionTag, defaultText);
+		inputDlg.setFocusToInputField();
 		inputDlg.show();
 		return inputDlg.getResult();
 	}
@@ -1320,9 +1321,14 @@ if(result == NEW_ACCOUNT)
 		if(defaultFileName == null)
 			return;
 		
+		Vector keyShareBundles = getApp().getSecurity().getKeyShareBundles();
+		if(keyShareBundles == null)
+		{
+			notifyDlg(this,"ErrorBackingUpKeyShare");
+			return;
+		}
 		int maxFiles = MartusConstants.numberOfFilesInShare;
 		String parent = "";
-		boolean saved;
 		for(int disk = 1; disk <= maxFiles; ++disk )
 		{
 			while(true)
@@ -1347,8 +1353,7 @@ if(result == NEW_ACCOUNT)
 						notifyDlg(this, "ErrorPreviousBackupShareExists");
 						continue;
 					}
-					byte[] dataToSave = {0};
-					if(writeSharePieceToFile(newBackupFile, dataToSave))
+					if(writeSharePieceToFile(newBackupFile, (String) keyShareBundles.get(disk - 1)))
 						break;
 				}
 				else
@@ -1358,14 +1363,17 @@ if(result == NEW_ACCOUNT)
 				}
 			}
 		}
+		
+		message = localization.getFieldLabel("BackupKeyShareCompleteInformation");
+		displayScrollableMessage("BackupKeyShareCompleteInformation", message, "ok");
 	}
 
-	private boolean writeSharePieceToFile(File newBackupFile, byte[] dataToSave) 
+	private boolean writeSharePieceToFile(File newBackupFile, String dataToSave) 
 	{
 		try
 		{
 			FileOutputStream output = new FileOutputStream(newBackupFile);
-			output.write(dataToSave);
+			output.write(dataToSave.getBytes());
 			output.close();
 			return true;
 		}

@@ -141,7 +141,8 @@ public class EnglishStrings
 "wintitle:notifyExportFolderEmpty=Error Exporting Folder",
 "wintitle:notifyErrorPreviousBackupShareExists=Previous File Exists",
 "wintitle:notifyErrorInCustomFields=Customize Fields",
-				
+"wintitle:notifyErrorBackingUpKeyShare=Error Backing Up KeyPair",				
+
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
 "wintitle:inputservermagicword=Request Upload Permission",
@@ -186,6 +187,7 @@ public class EnglishStrings
 "wintitle:BackupKeyPairToMultipleUnencryptedFilesInformation=Information on Sharing Your KeyPair",
 "wintitle:SaveShareKeyPair=Saving Share Disk",
 "wintitle:SaveShareKeyPairOf=of",
+"wintitle:BackupKeyShareCompleteInformation=Backup Complete",				
 
 "button:help=Help",
 "button:create=Create",
@@ -398,7 +400,7 @@ public class EnglishStrings
 "field:DefaultDetailFiles=Default Details",
 "field:ServerComplianceDescription=The server you have selected has provided the following statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  You can accept or reject this server based on its compliance statement.",
 "field:ServerComplianceChangedDescription=The current server has updated its statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  The new statement appears below. You can accept or reject this server based on its compliance statement.",
-"field:BackupKeyPairToMultipleUnencryptedFilesInformation=This is where the information goes explaining how the plain text keypair sharing occures and what the user is going to be prompted to go through, by saving 8 files onto 8 floppy disks and then pass them out to friends.  It will also explain that they will need at least 3 of them to get back their keypair without the use of a user name or password",
+"field:BackupKeyPairToMultipleUnencryptedFilesInformation=This is where the information goes explaining how the plain text keypair sharing occures and what the user is going to be prompted to go through, by saving 5 files onto 5 floppy disks and then pass them out to friends.  It will also explain that they will need at least 3 of them to get back their keypair without the use of a user name or password",
 
 "field:VirtualUserNameDescription=(Enter using regular keyboard)",
 "field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below",
@@ -467,8 +469,8 @@ public class EnglishStrings
 "field:confirmBackupKeyPairSingleeffect=By choosing Yes, you will be prompted to save a copy of your keypair onto a removable disk.",
 "field:confirmWarnMissingAccountMapSignatureFilecause=Warning: accountmap.txt.sig file is missing.\n\nIf you have just upgraded to a new version of Martus this warning is harmless and you should click on No.  Otherwise this may indicate someone has tried to tamper with your data or could be caused by a hardware error.",		
 "field:confirmWarnMissingAccountMapSignatureFileeffect=Clicking on Yes will exit Martus.  Clicking on No will try to generate a new accountmap.txt.sig file and continue to load Martus.",		
-"field:confirmBackupKeyPairMultiplecause=We recommend that you now create 8 separate files of which any 3 can be used to reconstruct your keypair without a user name or password being required.",
-"field:confirmBackupKeyPairMultipleeffect=By choosing Yes, you will be prompted to save 8 pieces of your keypair onto a removable disks.",
+"field:confirmBackupKeyPairMultiplecause=We recommend that you now create 5 separate files of which any 2 can be used to reconstruct your keypair without a user name or password being required.",
+"field:confirmBackupKeyPairMultipleeffect=By choosing Yes, you will be prompted to save f3 pieces of your keypair onto a removable disks.",
 "field:confirmCancelShareBackupcause=Do you wish to cancel this backup?",
 "field:confirmCancelShareBackupeffect=By choosing Yes, will exit this backup.",
 "field:confirmEnterCustomFieldscause=You have chosen to customize the fields that will be used in any new bulletins created by this account.",
@@ -544,9 +546,10 @@ public class EnglishStrings
 "field:notifyBackupKeyPairMultipleInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
 "field:notifyErrorPreviousBackupShareExistscause=A previous share file exists.  You must save each file on its own removable media disk.",		
 "field:notifyErrorInCustomFieldscause=There is an error in the field customization string. Certain standard tags are required, blank tags are not allowed, duplicate tags are not allowed, custom fields must have labels, and standard fields cannot have labels.",
+"field:notifyErrorBackingUpKeySharecause=An unexpected error occured in generating the individual key share files.",
 
 "field:messageServerNewscause=The current server has sent this message:",
-"field:messageErrorDateInFuturecause=This date occurs in the future:",
+"field:messageErrorDateInFuturecause=This date occures in the future:",
 
 "field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:",
 "field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:",
@@ -591,6 +594,7 @@ public class EnglishStrings
 "field:UntitledBulletin=Untitled Bulletin",
 "field:GetShareFileNameDescription=This file name should be unique and identifiable to you but we recommend not using your user name.  Each file will be generated with this name and its number sequence.",
 "field:UnknownFieldType=WARNING: This field requires a newer version of Martus to be viewed",
+"field:BackupKeyShareCompleteInformation=Backup complete, please give each disk to people you trust, so that you can in the future if you forget your user name and or password you can recreate your account.  You will need 2 of these disks to recreate your account.",
 
 "field:DateRangeFrom=Between",
 "field:DateRangeTo=and",

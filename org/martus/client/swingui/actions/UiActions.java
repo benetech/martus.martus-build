@@ -701,6 +701,8 @@ public class UiActions
 
 		public void actionPerformed(ActionEvent ae)
 		{
+			if(!mainWindow.reSignIn())
+				return;
 			mainWindow.askToBackupKeyPair();
 		}
 	}
