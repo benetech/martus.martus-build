@@ -266,6 +266,10 @@ public class MartusUtilities
 		UnsupportedEncodingException 
 	{
 		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
+// TODO: Setting the method to STORED seems like it should dramatically 
+// speed up writing and reading zip files. The javadocs say it is supported.
+// But every time I try it, the zip file ends up empty. kbs.
+//		zipOut.setMethod(zipOut.STORED);
 		
 		try 
 		{
@@ -283,6 +287,7 @@ public class MartusUtilities
 					zipOut.write(bytes, 0, got);
 					
 				in.close();
+				zipOut.flush();
 			}
 		} 
 		catch(CryptoException e) 
