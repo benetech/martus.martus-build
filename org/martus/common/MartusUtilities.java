@@ -588,7 +588,7 @@ public class MartusUtilities
 				!lastResponse.equals(NetworkInterfaceConstants.CHUNK_OK))
 			{
 				//System.out.println((String)result.get(0));
-				throw new ServerErrorException();
+				throw new ServerErrorException("result=" + lastResponse);
 			}
 			
 			Vector result = response.getResultVector();
