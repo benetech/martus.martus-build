@@ -211,6 +211,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 		server.createNonSSLXmlRpcServer();
 		server.createSSLXmlRpcServer();
+		server.createMirroringSupplierXmlRpcServer();
 		writeSyncFile(runningFile);
 		System.out.println("Waiting for connection...");
 	}
@@ -239,7 +240,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
 		serverHandler = new ServerSideNetworkHandler(this);
-		
+		supplierHandler = new SupplierSideMirroringHandler(this);
 
 		clientsThatCanUpload = new Vector();
 		clientsBanned = new Vector();
@@ -316,6 +317,11 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return serverHandler;
 	}
 	
+	MirroringInterface getMirroringSupplierHandler()
+	{
+		return supplierHandler;
+	}
+	
 	boolean hasAccount()
 	{
 		return keyPairFile.exists();
@@ -363,7 +369,18 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		MartusSecureWebServer.security = security;
 		XmlRpcServer.createSSLXmlRpcServer(getServerHandler(), port);
 	}
+	
+	public void createMirroringSupplierXmlRpcServer()
+	{
+		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
+		createMirroringSupplierXmlRpcServer(port);
+	}
 
+	public void createMirroringSupplierXmlRpcServer(int port)
+	{
+		XmlRpcServer.createSSLXmlRpcServer(getMirroringSupplierHandler(), port);
+	}
+	
 	public String ping()
 	{
 		if(serverMaxLogging)
@@ -2031,6 +2048,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	Database database;
 	ServerSideNetworkHandlerForNonSSL nonSSLServerHandler;
 	ServerSideNetworkHandler serverHandler;
+	SupplierSideMirroringHandler supplierHandler;
 	public Vector clientsThatCanUpload;
 	public Vector clientsBanned;
 	public MartusCrypto security;

@@ -21,13 +21,16 @@ public class TestSSL extends TestCaseEnhanced
 		if(mockSecurityForServer == null)
 		{
 			int testport = 1987;
+			int testPort2 = 1986;
 			mockSecurityForServer = new MockMartusSecurity();
 			mockServer = new MockMartusServer();
 			mockServer.setSecurity(mockSecurityForServer);
 			mockServer.createSSLXmlRpcServerOnPort(testport);
+			mockServer.createMirroringSupplierXmlRpcServer(testPort2);
 			
 //			XmlRpc.debug = true;
-			proxy = new ClientSideNetworkHandlerUsingXmlRpc("localhost", testport);
+			proxy1 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", testport);
+//			proxy2 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", testport);
 		}
 	}
 	
@@ -39,12 +42,17 @@ public class TestSSL extends TestCaseEnhanced
 	
 	public void testBasics()
 	{
-		proxy.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
-		assertEquals(NetworkInterfaceConstants.VERSION, proxy.ping());
+		proxy1.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
+		assertEquals(NetworkInterfaceConstants.VERSION, proxy1.ping());
+
+// TODO: After the callerSide of mirroring is available, hook up this test!
+//		proxy2.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
+//		assertEquals(NetworkInterfaceConstants.VERSION, proxy2.pingForMirroring());
 	}
 	
 	static MockMartusSecurity mockSecurityForServer;
 	static MockMartusServer mockServer;
 	static ServerSideNetworkHandler mockSSLServerInterface;
-	static ClientSideNetworkHandlerUsingXmlRpc proxy;
+	static ClientSideNetworkHandlerUsingXmlRpc proxy1;
+//	static ClientSideNetworkHandlerUsingXmlRpc proxy2;
 }
