@@ -952,9 +952,16 @@ public class MartusApp
 
 		if(!FieldDataPacket.isValidLocalId(packetlocalId))
 			throw new ServerErrorException();
+
+		UniversalId uId = UniversalId.createFromAccountAndLocalId(accountId, bulletinLocalId);
+		Bulletin bulletin = store.findBulletinByUniversalId(uId);
+		if (bulletin != null)
+			fdp = bulletin.getFieldDataPacket();
+
 		try 
 		{
-			fdp = retrieveFieldDataPacketFromServer(accountId, bulletinLocalId, packetlocalId);
+			if(fdp == null)
+				fdp = retrieveFieldDataPacketFromServer(accountId, bulletinLocalId, packetlocalId);
 		} 
 		catch(Exception e) 
 		{
