@@ -881,7 +881,7 @@ public class MartusUtilities
 
 			int thisChunkSize = ((Integer)result.get(1)).intValue();
 			if(thisChunkSize < 0 || thisChunkSize > totalSize - chunkOffset)
-				throw new ServerErrorException("chunkSize out of range");
+				throw new ServerErrorException("chunkSize out of range: " + thisChunkSize);
 
 			// TODO: validate that length of data == chunkSize that was returned
 			String data = (String)result.get(2);
