@@ -277,7 +277,7 @@ public class MartusUtilities
 		try 
 		{
 			ZipFile zip = new ZipFile(destZipFile);
-			validateIntegrityOfZipFilePackets(db, headerKey.getAccountId(), zip, security);
+			validateIntegrityOfZipFilePackets(headerKey.getAccountId(), zip, security);
 			zip.close();
 		}
 		catch (InvalidPacketException e)
@@ -377,7 +377,7 @@ public class MartusUtilities
 		if(authorAccountId == null)
 			authorAccountId = header.getAccountId();
 			
-		validateIntegrityOfZipFilePackets(db, authorAccountId, zip, security);
+		validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
 		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
 		
 		HashMap zipEntries = new HashMap();
@@ -455,7 +455,7 @@ public class MartusUtilities
 		db.discardRecord(key);
 	}
 
-	public static void validateIntegrityOfZipFilePackets(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+	public static void validateIntegrityOfZipFilePackets(String authorAccountId, ZipFile zip, MartusCrypto security)
 		throws
 			InvalidPacketException,
 			IOException,

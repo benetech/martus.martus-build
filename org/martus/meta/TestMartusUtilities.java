@@ -2,10 +2,13 @@ package org.martus.meta;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
@@ -17,7 +20,11 @@ import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.TestCaseEnhanced;
+import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongAccountException;
 
 public class TestMartusUtilities extends TestCaseEnhanced 
 {
@@ -47,18 +54,38 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		store.setSignatureGenerator(security);
 		Bulletin b = store.createEmptyBulletin();
 		b.save();
+		String accountId = b.getAccount();
 		DatabaseKey key = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 
-		File tempZipFile = createTempFile();
-		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, key, tempZipFile, security);
-		ZipFile zip = new ZipFile(tempZipFile);
-		MartusUtilities.validateIntegrityOfZipFilePackets(db, b.getAccount(), zip, security);
-		zip.close();
-		
+		File originalZipFile = createTempFile();
+		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, key, originalZipFile, security);
+		validateZipFile(accountId, originalZipFile);
+
+		File copiedZipFile = createCopyOfZipFile(originalZipFile);
+		validateZipFile(accountId, copiedZipFile);
+	}
+
+	private void validateZipFile(String accountId, File copiedZipFile)
+		throws
+			ZipException,
+			IOException,
+			InvalidPacketException,
+			SignatureVerificationException,
+			WrongAccountException,
+			DecryptionException
+	{
+		ZipFile copiedZip = new ZipFile(copiedZipFile);
+		MartusUtilities.validateIntegrityOfZipFilePackets(accountId, copiedZip, security);
+		copiedZip.close();
+	}
+
+	private File createCopyOfZipFile(File tempZipFile)
+		throws IOException, FileNotFoundException, ZipException
+	{
 		File copiedZipFile = createTempFile();
 		ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(copiedZipFile));
-
-		zip = new ZipFile(tempZipFile);
+		
+		ZipFile zip = new ZipFile(tempZipFile);
 		Enumeration entries = zip.entries();
 		while(entries.hasMoreElements())
 		{
@@ -72,10 +99,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		}
 		zip.close();
 		zipOut.close();
-		
-		ZipFile copiedZip = new ZipFile(tempZipFile);
-		MartusUtilities.validateIntegrityOfZipFilePackets(db, b.getAccount(), copiedZip, security);
-		copiedZip.close();
+		return copiedZipFile;
 	}
 	
 	public void testCreateSignatureFromFile()

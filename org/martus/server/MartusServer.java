@@ -1673,7 +1673,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			Packet.WrongAccountException,
 			MartusCrypto.DecryptionException 
 	{
-		MartusUtilities.validateIntegrityOfZipFilePackets(db, authorAccountId, zip, security);
+		MartusUtilities.validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
 
 		Enumeration entries = zip.entries();
 		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
