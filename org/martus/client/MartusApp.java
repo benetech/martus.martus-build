@@ -782,6 +782,9 @@ public class MartusApp
 
 	private void sendContactInfoToServer()
 	{
+		if(!isSSLServerAvailable())
+			return;
+
 		ConfigInfo info = getConfigInfo();
 		String result = "";
 		try 
@@ -790,12 +793,12 @@ public class MartusApp
 		} 
 		catch (MartusSignatureException e) 
 		{
-			System.out.println("MartusApp:putContactInfoOnServer :" + e);
+			System.out.println("MartusApp.sendContactInfoToServer :" + e);
 			return;
 		} 
 		if(!result.equals(NetworkInterfaceConstants.OK))
 		{
-			System.out.println("MartusApp:putContactInfoOnServer Failed:" + result);
+			System.out.println("MartusApp.sendContactInfoToServer failure:" + result);
 			return;
 		}
 		System.out.println("Contact info successfully sent to server");	
