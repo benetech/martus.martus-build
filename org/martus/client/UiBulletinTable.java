@@ -47,7 +47,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
     public UiBulletinTable(UiMainWindow mainWindowToUse)
 	{
 		mainWindow = mainWindowToUse;
-		bulletinsList = new BulletinsList(mainWindow.getApp());
+		bulletinsList = new BulletinTableModel(mainWindow.getApp());
 		setModel(bulletinsList);
 
 		// set widths for first two columns (status and date)
@@ -579,7 +579,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 
 	private UiMainWindow mainWindow;
-	private BulletinsList bulletinsList;
+	private BulletinTableModel bulletinsList;
 	private DragSource dragSource = DragSource.getDefaultDragSource();
 	private UiBulletinTableDropAdapter dropAdapter;
 	private TableKeyAdapter keyListener;

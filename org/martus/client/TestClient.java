@@ -26,7 +26,7 @@ public class TestClient
 		suite.addTest(new TestSuite(TestSearchParser.class));
 		suite.addTest(new TestSuite(TestConfigInfo.class));
 		suite.addTest(new TestSuite(TestMartusLocalization.class));
-		suite.addTest(new TestSuite(TestBulletinsList.class));
+		suite.addTest(new TestSuite(TestBulletinTableModel.class));
 		suite.addTest(new TestSuite(TestFolderList.class));
 		suite.addTest(new TestSuite(TestTransferableBulletin.class));
 		suite.addTest(new TestSuite(TestChoiceItem.class));
