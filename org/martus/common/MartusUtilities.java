@@ -94,22 +94,25 @@ public class MartusUtilities
 		return signature;
 	}
 
-	public static synchronized boolean verifySignature(Vector dataToSign, MartusCrypto verifier, String signedBy, String sig)
+	public static boolean verifySignature(Vector dataToSign, MartusCrypto verifier, String signedBy, String sig)
 	{
 		try
 		{
-			verifier.signatureInitializeVerify(signedBy);
-			for(int element = 0; element < dataToSign.size(); ++element)
+			synchronized(verifier)
 			{
-				String thisElement = dataToSign.get(element).toString();
-				byte[] bytesToSign = thisElement.getBytes("UTF-8");
-				//TODO: might want to optimize this for speed
-				for(int b = 0; b < bytesToSign.length; ++b)
-					verifier.signatureDigestByte(bytesToSign[b]);
-				verifier.signatureDigestByte((byte)0);
+				verifier.signatureInitializeVerify(signedBy);
+				for(int element = 0; element < dataToSign.size(); ++element)
+				{
+					String thisElement = dataToSign.get(element).toString();
+					byte[] bytesToSign = thisElement.getBytes("UTF-8");
+					//TODO: might want to optimize this for speed
+					for(int b = 0; b < bytesToSign.length; ++b)
+						verifier.signatureDigestByte(bytesToSign[b]);
+					verifier.signatureDigestByte((byte)0);
+				}
+				byte[] sigBytes = Base64.decode(sig);
+				return verifier.signatureIsValid(sigBytes);
 			}
-			byte[] sigBytes = Base64.decode(sig);
-			return verifier.signatureIsValid(sigBytes);
 		}
 		catch(Exception e)
 		{
@@ -117,22 +120,25 @@ public class MartusUtilities
 		}
 	}
 
-	public static synchronized String sign(Vector dataToSign, MartusCrypto signer) throws 
+	public static String sign(Vector dataToSign, MartusCrypto signer) throws 
 			MartusCrypto.MartusSignatureException
 	{
 		try
 		{
-			signer.signatureInitializeSign();
-			for(int element = 0; element < dataToSign.size(); ++element)
+			synchronized(signer)
 			{
-				String thisElement = dataToSign.get(element).toString();
-				byte[] bytesToSign = thisElement.getBytes("UTF-8");
-				//TODO: might want to optimize this for speed
-				for(int b = 0; b < bytesToSign.length; ++b)
-					signer.signatureDigestByte(bytesToSign[b]);
-				signer.signatureDigestByte((byte)0);
+				signer.signatureInitializeSign();
+				for(int element = 0; element < dataToSign.size(); ++element)
+				{
+					String thisElement = dataToSign.get(element).toString();
+					byte[] bytesToSign = thisElement.getBytes("UTF-8");
+					//TODO: might want to optimize this for speed
+					for(int b = 0; b < bytesToSign.length; ++b)
+						signer.signatureDigestByte(bytesToSign[b]);
+					signer.signatureDigestByte((byte)0);
+				}
+				return Base64.encode(signer.signatureGet());
 			}
-			return Base64.encode(signer.signatureGet());
 		}
 		catch(Exception e)
 		{
@@ -270,7 +276,7 @@ public class MartusUtilities
 		IOException, 
 		UnsupportedEncodingException 
 	{
-		ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(outputStream));
+		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
 		
 		try 
 		{
@@ -446,14 +452,4 @@ public class MartusUtilities
 			return DatabaseKey.createSealedKey(uid);
 	}
 
-	public static ByteArrayInputStream openStringInputStream(String data)
-		throws IOException, UnsupportedEncodingException 
-	{
-		if(data == null)
-			throw new IOException("Null data");
-
-		byte[] bytes = data.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-		return in;
-	}
 }

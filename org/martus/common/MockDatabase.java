@@ -28,7 +28,7 @@ abstract public class MockDatabase implements Database
 	}
 
 	// Database interface
-	public void deleteAllData()
+	synchronized public void deleteAllData()
 	{
 		sealedQuarantine = new TreeMap();
 		draftQuarantine = new TreeMap();
@@ -127,13 +127,13 @@ abstract public class MockDatabase implements Database
 		return getInterimFile(key, outgoingInterimMap);
 	}
 	
-	public boolean isInQuarantine(DatabaseKey key)
+	public synchronized boolean isInQuarantine(DatabaseKey key)
 	{
 		Map quarantine = getQuarantineFor(key);
 		return quarantine.containsKey(key);
 	}
 	
-	public void moveRecordToQuarantine(DatabaseKey key)
+	public synchronized void moveRecordToQuarantine(DatabaseKey key)
 	{
 		if(!doesRecordExist(key))
 			return;
@@ -163,7 +163,7 @@ abstract public class MockDatabase implements Database
 	}
 	// end Database interface
 	
-	private File getInterimFile(DatabaseKey key, Map map) 
+	private synchronized File getInterimFile(DatabaseKey key, Map map) 
 	{
 		if(map.containsKey(key))
 			return (File)map.get(key);
@@ -202,10 +202,14 @@ class MockRecordInputStream extends ByteArrayInputStream
 	{
 		super(inputBytes);
 		streamsThatAreOpen = observer;
+	}
+	
+	public synchronized void addAsOpen(DatabaseKey key)
+	{
 		streamsThatAreOpen.put(this, key);
 	}
 	
-	public void close()
+	public synchronized void close()
 	{
 		streamsThatAreOpen.remove(this);
 	}

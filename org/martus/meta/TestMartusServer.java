@@ -37,6 +37,7 @@ import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
+import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
@@ -1211,7 +1212,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(result);
 		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
 
-		InputStream in = MartusUtilities.openStringInputStream((String)result.get(1));
+		InputStream in = new StringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));
@@ -1233,7 +1234,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(result);
 		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
 		
-		InputStream in = MartusUtilities.openStringInputStream((String)result.get(1));
+		InputStream in = new StringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));

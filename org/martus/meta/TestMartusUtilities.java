@@ -1,6 +1,7 @@
 package org.martus.meta;
 
 import java.io.File;
+import java.io.InputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.zip.ZipFile;
@@ -13,6 +14,8 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
+import org.martus.common.Packet;
+import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;
 
 public class TestMartusUtilities extends TestCaseEnhanced 
@@ -26,8 +29,8 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	
 	public void testThreadedPacketWriting() throws Exception
 	{
-		final int threadCount = 100;
-		final int iterations = 100;
+		final int threadCount = 10;
+		final int iterations = 10;
 		ThreadFactory factory = new PacketWriteThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 	}
@@ -42,8 +45,8 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 	public void testThreadedimporting() throws Exception
 	{
-		final int threadCount = 10;
-		final int iterations = 10;
+		final int threadCount = 20;
+		final int iterations = 20;
 		ThreadFactory factory = new ImportThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 	}
@@ -194,6 +197,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 			Database db = b.getStore().getDatabase();
 			headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
+			store.destroyBulletin(b);
 		}
 		
 		public void run()
@@ -202,13 +206,13 @@ public class TestMartusUtilities extends TestCaseEnhanced
 			{
 				for(int i=0; i < copies; ++i)
 				{
-					Bulletin b = store.findBulletinByUniversalId(headerKey.getUniversalId());
-					if(b != null)
-						store.destroyBulletin(b);
-
 					ZipFile zip = new ZipFile(file);
 					MartusUtilities.importBulletinPacketsFromZipFileToDatabase(db, null, zip, security);
 					zip.close();
+
+					Bulletin b = store.findBulletinByUniversalId(headerKey.getUniversalId());
+					assertNotNull("import didn't work?", b);
+					store.destroyBulletin(b);
 				}
 			} 
 			catch (Exception e) 
@@ -243,7 +247,9 @@ public class TestMartusUtilities extends TestCaseEnhanced
 				for(int i=0; i < copies; ++i)
 				{
 					Writer writer = new StringWriter();
-					bulletin.getFieldDataPacket().writeXml(writer, security);
+					bulletin.getBulletinHeaderPacket().writeXml(writer, security);
+					InputStream in = new StringInputStream(writer.toString());
+					Packet.validateXml(in, bulletin.getAccount(), bulletin.getLocalId(), null, security);
 				}
 			} 
 			catch (Exception e) 

@@ -48,7 +48,7 @@ public class FileDatabase implements Database
 
 	public void writeRecord(DatabaseKey key, String record) throws IOException
 	{
-		writeRecord(key, MartusUtilities.openStringInputStream(record));
+		writeRecord(key, new StringInputStream(record));
 	}
 	
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
@@ -575,7 +575,7 @@ public class FileDatabase implements Database
 			try
 			{
 				out.write(0);
-				crypto.encrypt(MartusUtilities.openStringInputStream(data), out);
+				crypto.encrypt(new StringInputStream(data), out);
 			}
 			catch(MartusCrypto.CryptoException e)
 			{

@@ -19,13 +19,13 @@ public class MockServerDatabase extends MockDatabase
 		return getAllSealedKeys().size();
 	}
 	
-	void internalDiscardRecord(DatabaseKey key)
+	synchronized void internalDiscardRecord(DatabaseKey key)
 	{
 		Map map = getPacketMapFor(key);
 		map.remove(key);
 	}
 
-	Set internalGetAllKeys()
+	synchronized Set internalGetAllKeys()
 	{
 		Set keys = new HashSet();
 		keys.addAll(getAllSealedKeys());
@@ -33,12 +33,12 @@ public class MockServerDatabase extends MockDatabase
 		return keys;
 	}
 	
-	void addKeyToMap(DatabaseKey key, String record) 
+	synchronized void addKeyToMap(DatabaseKey key, String record) 
 	{
 		getPacketMapFor(key).put(key, record);
 	}
 	
-	String readRecord(DatabaseKey key)
+	synchronized String readRecord(DatabaseKey key)
 	{
 		Map map = getPacketMapFor(key);
 		return (String)map.get(key);

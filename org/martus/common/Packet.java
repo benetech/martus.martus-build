@@ -109,20 +109,23 @@ public class Packet
 		{
 			BufferedWriter bufferedWriter = new BufferedWriter(writer);
 			XmlWriterFilter dest = new XmlWriterFilter(bufferedWriter);
-			dest.startSignature(signer);
-
-			dest.writeDirect(MartusXml.packetStartComment + MartusXml.newLine);			
-			dest.writeStartTag(getPacketRootElementName());
-			internalWriteXml(dest);
-			dest.writeEndTag(getPacketRootElementName());
-			
-			byte[] sig = dest.getSignature();
-			dest.writeDirect(MartusXml.packetSignatureStart);
-			dest.writeDirect(Base64.encode(sig));
-			dest.writeDirect(MartusXml.packetSignatureEnd + MartusXml.newLine);
-
-			bufferedWriter.flush();
-			return sig;
+			synchronized(signer)
+			{
+				dest.startSignature(signer);
+	
+				dest.writeDirect(MartusXml.packetStartComment + MartusXml.newLine);			
+				dest.writeStartTag(getPacketRootElementName());
+				internalWriteXml(dest);
+				dest.writeEndTag(getPacketRootElementName());
+				
+				byte[] sig = dest.getSignature();
+				dest.writeDirect(MartusXml.packetSignatureStart);
+				dest.writeDirect(Base64.encode(sig));
+				dest.writeDirect(MartusXml.packetSignatureEnd + MartusXml.newLine);
+	
+				bufferedWriter.flush();
+				return sig;
+			}
 		}
 		catch(MartusCrypto.MartusSignatureException e)
 		{
@@ -181,7 +184,7 @@ public class Packet
 		if(!accountId.equals(handler.accountId))
 			throw new WrongAccountException();
 		if(!localId.equals(handler.localId))
-			throw new InvalidPacketException("Wrong Local ID");
+			throw new InvalidPacketException("Wrong Local ID: expected " + localId + " but was " + handler.localId);
 	}
 
 	// this is only used by tests--remove it!
@@ -263,7 +266,7 @@ public class Packet
 		inputStream.reset();
 	}
 
-	private static synchronized void verifySignature(BufferedInputStream bufferedInputStream,
+	private static void verifySignature(BufferedInputStream bufferedInputStream,
 									final long dataLength, final String publicKey, 
 									byte[] expectedSigBytes, MartusCrypto verifier) throws 
 			IOException, 
@@ -271,24 +274,27 @@ public class Packet
 	{
 		try
 		{
-			verifier.signatureInitializeVerify(publicKey);
-			int got;
-			long remaining = dataLength;
-			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
-			while(remaining >= bytes.length)
+			synchronized(verifier)
 			{
-				got = bufferedInputStream.read(bytes);
+				verifier.signatureInitializeVerify(publicKey);
+				int got;
+				long remaining = dataLength;
+				byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
+				while(remaining >= bytes.length)
+				{
+					got = bufferedInputStream.read(bytes);
+					for(int i = 0; i < got; ++i)
+						verifier.signatureDigestByte(bytes[i]);
+					remaining -= got;
+				}
+			
+				got = bufferedInputStream.read(bytes, 0, (int)remaining);
 				for(int i = 0; i < got; ++i)
 					verifier.signatureDigestByte(bytes[i]);
-				remaining -= got;
+			
+				if(!verifier.signatureIsValid(expectedSigBytes))
+					throw new SignatureVerificationException();
 			}
-		
-			got = bufferedInputStream.read(bytes, 0, (int)remaining);
-			for(int i = 0; i < got; ++i)
-				verifier.signatureDigestByte(bytes[i]);
-		
-			if(!verifier.signatureIsValid(expectedSigBytes))
-				throw new SignatureVerificationException();
 		}
 		catch(MartusCrypto.MartusSignatureException e)
 		{
