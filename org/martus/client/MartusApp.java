@@ -349,22 +349,22 @@ public class MartusApp
 	
 	public BulletinFolder getFolderRetrieved()
 	{
-		return store.findFolder("%RetrievedMyBulletin");
+		return store.findFolder(RETRIEVE_BULLETIN_FOLDER);
 	}
 
 	public BulletinFolder createFolderRetrieved()
 	{
-		return store.createOrFindFolder("%RetrievedMyBulletin");
+		return store.createOrFindFolder(RETRIEVE_BULLETIN_FOLDER);
 	}
 	
 	public BulletinFolder getFolderRetrievedFieldOffice()
 	{
-		return store.findFolder("%RetrievedFieldOfficeBulletin");
+		return store.findFolder(RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER);
 	}
 
 	public BulletinFolder createFolderRetrievedFieldOffice()
 	{
-		return store.createOrFindFolder("%RetrievedFieldOfficeBulletin");
+		return store.createOrFindFolder(RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER);
 	}
 
 	public void setMaxNewFolders(int numFolders)
@@ -1412,6 +1412,8 @@ public class MartusApp
 	private String currentUserName;
 	private int maxNewFolders;
 
+	public static final String RETRIEVE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
+	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
 	public static final String PUBLIC_INFO_EXTENSION = ".mpi";
 	public static final String AUTHENTICATE_SERVER_FAILED = "Failed to Authenticate Server";
 	private final int MAXFOLDERS = 50;
