@@ -683,10 +683,10 @@ public class MartusApp
 		if(serverName.length() == 0)
 			return null;
 	
-		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
 		try
 		{
-			ClientSideNetworkHandlerUsingXmlRpc handler = new ClientSideNetworkHandlerUsingXmlRpc(serverName, port);
+			int[] ports = NetworkInterfaceXmlRpcConstants.defaultSSLPorts;
+			ClientSideNetworkHandlerUsingXmlRpc handler = new ClientSideNetworkHandlerUsingXmlRpc(serverName, ports);
 			handler.getSimpleX509TrustManager().setExpectedPublicKey(serverPublicKey);
 			return handler;
 		}

@@ -30,6 +30,7 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final int MARTUS_PORT_FOR_NON_SSL = 988;
 	public static final int MARTUS_PORT_FOR_SSL = 987;
 
+	public static final int[] defaultSSLPorts = {987, 443};
 	public static final int[] defaultNonSSLPorts = {988, 80};
 
 	public static final String cmdGetServerInfo = "getServerInfo";

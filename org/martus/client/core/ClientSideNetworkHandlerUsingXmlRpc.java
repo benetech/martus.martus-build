@@ -47,10 +47,10 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 
 	static class SSLSocketSetupException extends Exception {}
 
-	public ClientSideNetworkHandlerUsingXmlRpc(String serverName, int portToUse) throws SSLSocketSetupException
+	public ClientSideNetworkHandlerUsingXmlRpc(String serverName, int[] portsToUse) throws SSLSocketSetupException
 	{
 		server = serverName;
-		port = portToUse;
+		ports = portsToUse;
 		try
 		{
 			tm = new SimpleX509TrustManager();
@@ -169,39 +169,48 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, cmdGetServerCompliance, params);
 	}
-	
 
 	public Object callServer(String serverName, String method, Vector params)
 	{
-		final String serverUrl = "https://" + serverName + ":" + port + "/RPC2";
-		//System.out.println("ServerInterfaceXmlRpcHandler:callServer serverUrl=" + serverUrl);
-		Object result = null;
-		try
+		for(int i=0; i < ports.length; ++i)
 		{
-			XmlRpcClient client = new XmlRpcClient(serverUrl);
-			result = client.execute("MartusServer." + method, params);
-		}
-		catch (IOException e)
-		{
-			//TODO throw IOExceptions so caller can decide what to do.
-			//This was added for connection refused: connect (no server connected)
-			//System.out.println("ServerInterfaceXmlRpcHandler:callServer Exception=" + e);
-			//e.printStackTrace();
-		}
-		catch (XmlRpcException e)
-		{
-			if(e.getMessage().indexOf("NoSuchMethodException") < 0)
+			// TODO: cache a successful port for the whole session
+			int port = ports[i];
+
+			try
 			{
-				System.out.println("ServerInterfaceXmlRpcHandler:callServer XmlRpcException=" + e);
+				final String serverUrl = "https://" + serverName + ":" + port + "/RPC2";
+				//System.out.println("ServerInterfaceXmlRpcHandler:callServer serverUrl=" + serverUrl);
+				XmlRpcClient client = new XmlRpcClient(serverUrl);
+				return client.execute("MartusServer." + method, params);
+			}
+			catch (IOException e)
+			{
+				if(e.getMessage().startsWith("Connection"))
+					continue;
+				//TODO throw IOExceptions so caller can decide what to do.
+				//This was added for connection refused: connect (no server connected)
+				//System.out.println("ServerInterfaceXmlRpcHandler:callServer Exception=" + e);
+				//e.printStackTrace();
+				return null;
+			}
+			catch (XmlRpcException e)
+			{
+				if(e.getMessage().indexOf("NoSuchMethodException") < 0)
+				{
+					System.out.println("ServerInterfaceXmlRpcHandler:callServer XmlRpcException=" + e);
+					e.printStackTrace();
+				}
+				return null;
+			}
+			catch (Exception e)
+			{
+				System.out.println("ServerInterfaceXmlRpcHandler:callServer Exception=" + e);
 				e.printStackTrace();
+				return null;
 			}
 		}
-		catch (Exception e)
-		{
-			System.out.println("ServerInterfaceXmlRpcHandler:callServer Exception=" + e);
-			e.printStackTrace();
-		}
-		return result;
+		return null;
 	}
 
 	public SimpleX509TrustManager getSimpleX509TrustManager()
@@ -217,5 +226,5 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 
 	SimpleX509TrustManager tm;
 	String server;
-	int port;
+	int[] ports;
 }
