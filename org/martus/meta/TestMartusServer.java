@@ -1629,17 +1629,26 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		String dataDirectory = testServer.dataDirectoryString;
 		
-		String sampleMagicWord = "kef7873n2";
+		String sampleMagicWord1 = "kef7873n2";
+		String sampleMagicWord2 = "fjk5dlkg8";
+		String nonExistentMagicWord = "ThisIsNotAMagicWord";
 		
 		File file = testServer.magicWordsFile;
 		UnicodeWriter writer = new UnicodeWriter(file);
-		writer.writeln(sampleMagicWord);
+		writer.writeln(sampleMagicWord1);
+		writer.writeln(sampleMagicWord2);
 		writer.close();
 		
 		MockMartusServer other = new MockMartusServer(new File(dataDirectory));
 		
-		String worked = other.requestUploadRights("whatever", sampleMagicWord);
+		String worked = other.requestUploadRights("whatever", sampleMagicWord1);
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+		
+		worked = other.requestUploadRights("whatever", sampleMagicWord2);
+		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+		
+		worked = other.requestUploadRights("whatever", nonExistentMagicWord);
+		assertEquals("didn't work?", NetworkInterfaceConstants.REJECTED, worked);
 	}
 
 	public void testGetAllPacketKeysSealed() throws Exception
