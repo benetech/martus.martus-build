@@ -352,7 +352,7 @@ public class BulletinHeaderPacket extends Packet
 		{
 			setStatus(data);
 		}
-		if(elementName.equals(MartusXml.LastSavedTimeElementName))
+		else if(elementName.equals(MartusXml.LastSavedTimeElementName))
 		{
 			lastSavedTime = Long.parseLong(data);
 		}
