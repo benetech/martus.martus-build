@@ -133,7 +133,7 @@
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr" showoutput="yes">
             <classpath>
                 <fileset dir="${public.release.folder}" >
-                    <include name="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar"/>
+                    <include name="martus-meta-${DSTAMP}.${build.number}.jar"/>
                 </fileset>
                 <pathelement path="${java.class.path}"/>
                 <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
