@@ -1865,8 +1865,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			public void run()
 			{
+				currentActiveFrame.setState(ICONIFIED);
+				if(currentActiveFrame != UiMainWindow.this)
+					UiMainWindow.this.setVisible(false);
 				if(!signIn(UiSigninDlg.TIMED_OUT))
 					ExitImmediately();
+				if(currentActiveFrame != UiMainWindow.this)
+					UiMainWindow.this.setVisible(true);
+				currentActiveFrame.setState(NORMAL);
 			}
 			
 		}
