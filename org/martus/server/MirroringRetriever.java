@@ -9,6 +9,7 @@ import org.martus.common.Database;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.NetworkResponse;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.MartusSignatureException;
@@ -27,22 +28,55 @@ public class MirroringRetriever
 	
 	public void tick()
 	{
-		UniversalId uid = getNextUidToRetrieve();
+		//UniversalId uid = getNextUidToRetrieve();
 	}
 	
 	UniversalId getNextUidToRetrieve()
 	{
-		if(uidsToRetrieve.size() == 0)
-			return null;
-		return (UniversalId)uidsToRetrieve.remove(0);
+		if(uidsToRetrieve.size() > 0)
+			return (UniversalId)uidsToRetrieve.remove(0);
+
+		try
+		{
+			String nextAccountId = getNextAccountToRetrieve();
+			if(nextAccountId != null)
+			{
+				NetworkResponse response = gateway.listBulletinsForMirroring(security, nextAccountId);
+				if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+				{
+					uidsToRetrieve.addAll(response.getResultVector());
+				}
+			}
+		}
+		catch (Throwable e)
+		{
+			// TODO: Better error handling
+			System.out.println("MirroringRetriever.getNextUidToRetrieve: " + e);
+		}
+
+		return null;
 	}
 	
 	String getNextAccountToRetrieve()
 	{
-		if(accountsToRetrieve.size() == 0)
-			return null;
+		if(accountsToRetrieve.size() > 0)
+			return (String)accountsToRetrieve.remove(0);
 
-		return (String)accountsToRetrieve.remove(0);
+		try
+		{
+			NetworkResponse response = gateway.listAccountsForMirroring(security);
+			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+			{
+				accountsToRetrieve.addAll(response.getResultVector());
+			}
+		}
+		catch (Throwable e)
+		{
+			// TODO: Better error handling
+			e.printStackTrace();
+			System.out.println("MirroringRetriever.getNextAccountToRetrieve: " + e);
+		}
+		return null;
 	}
 	
 	File retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException

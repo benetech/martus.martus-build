@@ -69,7 +69,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			}
 			case cmdListAccountsForMirroring:
 			{
-				Vector accounts = listAccountsForMirroring(callerAccountId);
+				Vector accounts = listAccountsForMirroring();
 	
 				result.add(OK);
 				result.add(accounts);
@@ -108,7 +108,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		return result;
 	}
 
-	Vector listAccountsForMirroring(String callerAccountId)
+	Vector listAccountsForMirroring()
 	{
 		class Collector implements Database.AccountVisitor
 		{

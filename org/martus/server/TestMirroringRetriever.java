@@ -16,6 +16,7 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusCrypto.MartusSignatureException;
 
 public class TestMirroringRetriever extends TestCaseEnhanced
 {
@@ -34,36 +35,43 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		supplier.authorizedCaller = security.getPublicKeyString();
 
 		handler = new SupplierSideMirroringHandler(supplier);
-		gateway = new CallerSideMirroringGateway(handler);
-		retriever = new MirroringRetriever(db, gateway, security);
+		realGateway = new CallerSideMirroringGateway(handler);
+		realRetriever = new MirroringRetriever(db, realGateway, security);
+		
+		fakeGateway = new FakeCallerSideMirroringGateway();
+		fakeRetriever = new MirroringRetriever(db, fakeGateway, security);
 	}
 	
 	public void testGetNextUidToRetrieve() throws Exception
 	{
-		assertNull("uid right after constructor?", retriever.getNextUidToRetrieve());
+		assertNull("uid right after constructor?", fakeRetriever.getNextUidToRetrieve());
 		Vector uids = new Vector();
 		for(int i=0; i < 3; ++i)
 			uids.add(UniversalId.createDummyUniversalId());
 
-		retriever.uidsToRetrieve.addAll(uids);
+		fakeRetriever.uidsToRetrieve.addAll(uids);
 		for(int i=0; i < uids.size(); ++i)
-			assertEquals("wrong " + i + "?", uids.get(i), retriever.getNextUidToRetrieve());
+			assertEquals("wrong " + i + "?", uids.get(i), fakeRetriever.getNextUidToRetrieve());
 
-		assertNull("uid after emptied?", retriever.getNextUidToRetrieve());
+		assertNull("uid right after emptied?", fakeRetriever.getNextUidToRetrieve());
+		UniversalId uid = fakeRetriever.getNextUidToRetrieve();
+		assertEquals("wrong fake uid?", fakeGateway.fakeUid, uid);
 	}
 	
 	public void testGetNextAccountToRetrieve() throws Exception
 	{
-		assertNull("account right after constructor?", retriever.getNextAccountToRetrieve());
+		assertNull("account right after constructor?", fakeRetriever.getNextAccountToRetrieve());
 		Vector accounts = new Vector();
 		for(int i=0; i < 3; ++i)
 			accounts.add(Integer.toString(i));
 			
-		retriever.accountsToRetrieve.addAll(accounts);
+		fakeRetriever.accountsToRetrieve.addAll(accounts);
+		assertEquals("wrong fake account1?", "a", fakeRetriever.getNextAccountToRetrieve());
 		for (int i = 0; i < accounts.size(); i++)
-			assertEquals("wrong " + i + "?", accounts.get(i), retriever.getNextAccountToRetrieve());
+			assertEquals("wrong " + i + "?", accounts.get(i), fakeRetriever.getNextAccountToRetrieve());
 
-		assertNull("account after emptied?", retriever.getNextAccountToRetrieve());
+		assertNull("account right after emptied?", fakeRetriever.getNextAccountToRetrieve());
+		assertEquals("wrong fake account2?", "a", fakeRetriever.getNextAccountToRetrieve());
 	}
 	
 	public void testRetrieveOneBulletin() throws Exception
@@ -71,7 +79,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		supplier.returnResultTag = NetworkInterfaceConstants.OK;
 		
 		UniversalId uid = UniversalId.createDummyUniversalId();
-		File gotFile = retriever.retrieveOneBulletin(uid);
+		File gotFile = realRetriever.retrieveOneBulletin(uid);
 		assertEquals(uid.getAccountId(), supplier.gotAccount);
 		assertEquals(uid.getLocalId(), supplier.gotLocalId);
 
@@ -83,6 +91,41 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 	MartusSecurity security;
 	FakeServerSupplier supplier;
 	SupplierSideMirroringHandler handler;
-	CallerSideMirroringGateway gateway;
-	MirroringRetriever retriever;
+	CallerSideMirroringGateway realGateway;
+	MirroringRetriever realRetriever;
+
+	FakeCallerSideMirroringGateway fakeGateway;
+	MirroringRetriever fakeRetriever;
+}
+
+class FakeCallerSideMirroringGateway implements CallerSideMirroringGatewayInterface
+{
+	public NetworkResponse listAccountsForMirroring(MartusCrypto signer) throws MartusSignatureException
+	{
+		Vector result = new Vector();
+		result.add(NetworkInterfaceConstants.OK);
+		Vector accounts = new Vector();
+		accounts.add("a");
+		result.add(accounts);
+		return new NetworkResponse(result);
+	}
+	
+	public NetworkResponse listBulletinsForMirroring(MartusCrypto signer, String authorAccountId) throws MartusSignatureException
+	{
+		Vector result = new Vector();
+		result.add(NetworkInterfaceConstants.OK);
+		Vector uids = new Vector();
+		uids.add(fakeUid);
+		result.add(uids);
+		return new NetworkResponse(result);
+	}
+
+	public NetworkResponse getBulletinChunk(MartusCrypto signer, String authorAccountId, String bulletinLocalId, 
+					int chunkOffset, int maxChunkSize) throws 
+			MartusCrypto.MartusSignatureException
+	{
+		return null;
+	}
+	
+	UniversalId fakeUid = UniversalId.createDummyUniversalId();
 }
