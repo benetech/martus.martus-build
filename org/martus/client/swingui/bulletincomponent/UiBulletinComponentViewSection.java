@@ -30,6 +30,7 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiAttachmentViewer;
 import org.martus.client.swingui.fields.UiChoiceViewer;
+import org.martus.client.swingui.fields.UiDateViewer;
 import org.martus.client.swingui.fields.UiField;
 import org.martus.client.swingui.fields.UiFlexiDateViewer;
 import org.martus.client.swingui.fields.UiMultilineViewer;
@@ -46,11 +47,16 @@ public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 		bulletinComponent = bulletinComponentToUse;
 	}
 
-	public UiField createDateField()
+	public UiField createFlexiDateField()
 	{		
-		return new UiFlexiDateViewer(localization); // for now
+		return new UiFlexiDateViewer(localization); 
 	}
-
+	
+	public UiField createDateField()
+	{
+		return new UiDateViewer(localization);
+	}
+	
 	public UiField createNormalField()
 	{
 		return new UiNormalTextViewer(localization);

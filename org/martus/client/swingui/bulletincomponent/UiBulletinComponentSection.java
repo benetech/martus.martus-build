@@ -127,11 +127,14 @@ abstract public class UiBulletinComponentSection extends JPanel
 			case Bulletin.DATE:
 				field = createDateField();
 				break;
+			case Bulletin.DATERANGE:
+				field = createFlexiDateField();
+				break;
 			case Bulletin.CHOICE:
 				ChoiceItem[] languages =
 					localization.getLanguageNameChoices();
 				field = createChoiceField(languages);
-				break;
+				break;						
 			case Bulletin.NORMAL:
 			default:
 				field = createNormalField();
@@ -209,6 +212,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	abstract public UiField createMultilineField();
 	abstract public UiField createChoiceField(ChoiceItem[] choices);
 	abstract public UiField createDateField();
+	abstract public UiField createFlexiDateField();
 	abstract public void createAttachmentTable();
 	abstract public void addAttachment(AttachmentProxy a);
 	abstract public void clearAttachments();

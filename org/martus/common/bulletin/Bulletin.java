@@ -332,10 +332,12 @@ public class Bulletin implements BulletinConstants
 				lookFor.equals(TAGPRIVATEINFO) )
 			return MULTILINE;
 
-		if(lookFor.equals(TAGEVENTDATE) ||
-				lookFor.equals(TAGENTRYDATE) )
+		if(lookFor.equals(TAGENTRYDATE))
 			return DATE;
 			
+		if(lookFor.equals(TAGEVENTDATE))
+			return DATERANGE;
+					
 		if(lookFor.equals(TAGLANGUAGE))
 			return CHOICE;
 

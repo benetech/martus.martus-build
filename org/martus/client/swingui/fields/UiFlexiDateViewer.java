@@ -46,14 +46,22 @@ public class UiFlexiDateViewer extends UiField
 	}
 
 	public String getText()
-	{
+	{	
 		return "";
 	}
 
 	public void setText(String newText)
 	{
 		value = localization.convertStoredDateToDisplay(newText);
-		label.setText("  " + value + "  ");
+		int dateBreak = newText.indexOf(COMMA_SEPARATED);
+		if (dateBreak > 0)			
+		{
+			String beginDate = newText.substring(0,dateBreak);
+			String endDate = newText.substring(dateBreak+1);			
+			label.setText("  Between "+ beginDate+ " and "+ endDate+"  ");				
+		}
+		else
+			label.setText("  " + value + "  ");
 	}
 
 	public void disableEdits()
@@ -63,4 +71,5 @@ public class UiFlexiDateViewer extends UiField
 	UiLocalization localization;
 	JLabel label;
 	String value;
+	private final String COMMA_SEPARATED = ",";
 }

@@ -30,6 +30,7 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiAttachmentEditor;
 import org.martus.client.swingui.fields.UiChoiceEditor;
+import org.martus.client.swingui.fields.UiDateEditor;
 import org.martus.client.swingui.fields.UiField;
 import org.martus.client.swingui.fields.UiFlexiDateEditor;
 import org.martus.client.swingui.fields.UiMultilineTextEditor;
@@ -63,8 +64,13 @@ public class UiBulletinComponentEditorSection extends UiBulletinComponentSection
 
 	public UiField createDateField()
 	{		
-		return new UiFlexiDateEditor(localization); // for now
-	}	
+		return new UiDateEditor(localization);		
+	}
+	
+	public UiField createFlexiDateField()
+	{
+		return new UiFlexiDateEditor(localization);	
+	}
 
 	public void addAttachment(AttachmentProxy a)
 	{
