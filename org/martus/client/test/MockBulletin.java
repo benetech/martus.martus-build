@@ -38,6 +38,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
 import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinZipImporter;
 import org.martus.client.core.BulletinStore;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
@@ -65,7 +66,7 @@ public class MockBulletin extends Bulletin
 		try
 		{
 			tempFile = Base64.decodeToTempFile(zipString);
-			b.loadFromFile(tempFile, b.getSignatureVerifier());
+			BulletinZipImporter.loadFromFile(b, tempFile, b.getSignatureVerifier());
 		}
 		finally
 		{

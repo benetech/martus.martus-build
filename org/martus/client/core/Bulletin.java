@@ -31,11 +31,8 @@ import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Enumeration;
 import java.util.GregorianCalendar;
 import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 
 import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
@@ -44,13 +41,8 @@ import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
-import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.UniversalId;
-import org.martus.common.ZipEntryInputStream;
-import org.martus.common.MartusCrypto.CryptoException;
-import org.martus.common.MartusCrypto.DecryptionException;
-import org.martus.common.MartusCrypto.EncryptionException;
 
 
 public class Bulletin implements BulletinConstants
@@ -349,178 +341,6 @@ public class Bulletin implements BulletinConstants
 	{
 		UniversalId uidFdp = UniversalId.createFromAccountAndLocalId(getAccount(), localId);
 		return new DatabaseKey(uidFdp);
-	}
-
-	static UniversalId importZipFileToStoreWithNewUids(File inputFile, BulletinStore store) throws
-		IOException,
-		EncryptionException,
-		CryptoException
-	{
-		Database db = store.getDatabase();
-		MartusCrypto verifier = store.getSignatureVerifier();
-
-		Bulletin original = store.createEmptyBulletin();
-		original.loadFromFile(inputFile, verifier);
-		Bulletin imported = store.createEmptyBulletin();
-		imported.pullDataFrom(original);
-		BulletinSaver.saveToDatabase(imported, db, store.mustEncryptPublicData());
-		return imported.getUniversalId();
-	}
-
-	public void loadFromFile(File inputFile, MartusCrypto verifier) throws IOException
-	{
-		clear();
-		ZipFile zip = new ZipFile(inputFile);
-		try
-		{
-
-			BulletinHeaderPacket header = getBulletinHeaderPacket();
-
-			ZipEntry headerEntry = null;
-			Enumeration entries = zip.entries();
-			while(entries.hasMoreElements())
-				headerEntry = (ZipEntry)entries.nextElement();
-			InputStreamWithSeek headerIn = new ZipEntryInputStream(zip, headerEntry);
-			try
-			{
-				header.loadFromXml(headerIn, verifier);
-				if(!header.getLocalId().equals(headerEntry.getName()))
-					throw new IOException("Misnamed header entry");
-			}
-			catch(Exception e)
-			{
-				throw new IOException(e.getMessage());
-			}
-			finally
-			{
-				headerIn.close();
-			}
-
-			FieldDataPacket data = getFieldDataPacket();
-
-			entries = zip.entries();
-			ZipEntry dataEntry = zip.getEntry(header.getFieldDataPacketId());
-			if(dataEntry == null)
-				throw new IOException("Data packet not found");
-			InputStreamWithSeek dataIn = new ZipEntryInputStream(zip, dataEntry);
-			try
-			{
-				data.loadFromXml(dataIn, header.getFieldDataSignature(), verifier);
-			}
-			catch(DecryptionException e)
-			{
-				//TODO mark bulletin as not complete
-			}
-			catch(Exception e)
-			{
-				throw new IOException(e.getMessage());
-			}
-			finally
-			{
-				dataIn.close();
-			}
-
-			FieldDataPacket privateData = getPrivateFieldDataPacket();
-
-			entries = zip.entries();
-			ZipEntry privateDataEntry = zip.getEntry(header.getPrivateFieldDataPacketId());
-			if(privateDataEntry == null)
-				throw new IOException("Private data packet not found");
-			InputStreamWithSeek privateDataIn = new ZipEntryInputStream(zip, privateDataEntry);
-			try
-			{
-				privateData.loadFromXml(privateDataIn, header.getPrivateFieldDataSignature(), verifier);
-			}
-			catch(DecryptionException e)
-			{
-				//TODO Mark bulletin as not complete
-			}
-			catch(Exception e)
-			{
-				System.out.println(e);
-				e.printStackTrace();
-				throw new IOException(e.getMessage());
-			}
-			finally
-			{
-				privateDataIn.close();
-			}
-
-			AttachmentProxy[] attachments = getPublicAttachments();
-			clearPublicAttachments();
-			for(int i=0; i < attachments.length; ++i)
-				addPublicAttachment(extractZipAttachmentToFileProxy(verifier, zip, attachments[i]));
-
-			AttachmentProxy[] attachmentsPrivate = getPrivateAttachments();
-			clearPrivateAttachments();
-			for(int i=0; i < attachmentsPrivate.length; ++i)
-				addPrivateAttachment(extractZipAttachmentToFileProxy(verifier, zip, attachmentsPrivate[i]));
-		}
-		catch(Exception e)
-		{
-			throw new IOException(e.getMessage());
-		}
-		finally
-		{
-			zip.close();
-		}
-		setHQPublicKey(header.getHQPublicKey());
-	}
-
-	public AttachmentProxy extractZipAttachmentToFileProxy(MartusCrypto verifier, ZipFile zip, AttachmentProxy attachment) throws
-	IOException
-	{
-		String localId = attachment.getUniversalId().getLocalId();
-		byte[] sessionKeyBytes = attachment.getSessionKeyBytes();
-		ZipEntry attachmentEntry = zip.getEntry(localId);
-		if(attachmentEntry == null)
-			throw new IOException("Attachment packet not found: " + localId);
-		InputStreamWithSeek attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
-		try
-		{
-			File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
-			tempFile.deleteOnExit();
-			AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, tempFile);
-			AttachmentProxy ap = new AttachmentProxy(tempFile);
-			return ap;
-		}
-		catch(Exception e)
-		{
-			throw new IOException(e.getMessage());
-		}
-		finally
-		{
-			attachmentIn.close();
-		}
-	}
-
-	public void extractZipAttachmentsToFileProxies(MartusCrypto verifier, ZipFile zip, AttachmentProxy[] attachments) throws IOException {
-		for(int i=0; i < attachments.length; ++i)
-		{
-			String localId = attachments[i].getUniversalId().getLocalId();
-			byte[] sessionKeyBytes = attachments[i].getSessionKeyBytes();
-			ZipEntry attachmentEntry = zip.getEntry(localId);
-			if(attachmentEntry == null)
-				throw new IOException("Attachment packet not found: " + localId);
-			InputStreamWithSeek attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
-			try
-			{
-				File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
-				tempFile.deleteOnExit();
-				AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, tempFile);
-				AttachmentProxy ap = new AttachmentProxy(tempFile);
-				addPublicAttachment(ap);
-			}
-			catch(Exception e)
-			{
-				throw new IOException(e.getMessage());
-			}
-			finally
-			{
-				attachmentIn.close();
-			}
-		}
-
 	}
 
 	public boolean isStandardField(String fieldName)

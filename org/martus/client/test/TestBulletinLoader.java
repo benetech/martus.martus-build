@@ -26,7 +26,10 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.test;
 
+import java.io.File;
+
 import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinZipImporter;
 import org.martus.client.core.BulletinLoader;
 import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.BulletinStore;
@@ -136,6 +139,24 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		assertEquals("public info", b.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info", b.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals("status", b.getStatus(), loaded.getStatus());
+	}
+
+	public void testLoadAndSaveWithHQPublicKey() throws Exception
+	{
+		Bulletin original = store.createEmptyBulletin();
+		original.set(Bulletin.TAGPUBLICINFO, "public info");
+		String key = security.getPublicKeyString();
+		original.setHQPublicKey(key);
+		original.save();
+		DatabaseKey dbKey = new DatabaseKey(original.getUniversalId());
+		Bulletin loaded = BulletinLoader.loadFromDatabase(store, dbKey);
+		assertEquals("Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded.getFieldDataPacket().getHQPublicKey());
+
+		File tempFile = createTempFile();
+		MockBulletin.saveToFile(db, original, tempFile);
+		Bulletin loaded2 = store.createEmptyBulletin();
+		BulletinZipImporter.loadFromFile(loaded2, tempFile, security);
+		assertEquals("Loaded Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded2.getFieldDataPacket().getHQPublicKey());
 	}
 
 	public void testLoadFromDatabaseEncrypted() throws Exception

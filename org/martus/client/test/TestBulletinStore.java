@@ -29,7 +29,6 @@ package org.martus.client.test;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.StringReader;
 import java.util.Arrays;
 import java.util.Set;
@@ -79,8 +78,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 
     	if(tempFile1 == null)
     	{
-			tempFile1 = createSampleFile(sampleBytes1);
-			tempFile2 = createSampleFile(sampleBytes2);
+			tempFile1 = createTempFile(sampleBytes1);
+			tempFile2 = createTempFile(sampleBytes2);
     	}
     }
 
@@ -1165,15 +1164,6 @@ public class TestBulletinStore extends TestCaseEnhanced
 	private String getFieldEntity(Bulletin b, String fieldName)
 	{
 		return MartusXml.getFieldTagStart(fieldName) + b.get(fieldName) + MartusXml.getFieldTagEnd();
-	}
-
-	private File createSampleFile(byte[] data) throws Exception
-	{
-		File tempFile = createTempFile();
-		FileOutputStream out = new FileOutputStream(tempFile);
-		out.write(data);
-		out.close();
-		return tempFile;
 	}
 
 	final int sampleRecordCount = 5;

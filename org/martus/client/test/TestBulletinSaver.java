@@ -28,7 +28,6 @@ package org.martus.client.test;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.util.Arrays;
 
 import org.martus.client.core.Bulletin;
@@ -53,12 +52,12 @@ public class TestBulletinSaver extends TestCaseEnhanced
 	{
 		if(tempFile1 == null)
 		{
-			tempFile1 = createSampleFile(sampleBytes1);
-			tempFile2 = createSampleFile(sampleBytes2);
-			tempFile3 = createSampleFile(sampleBytes3);
-			tempFile4 = createSampleFile(sampleBytes4);
-			tempFile5 = createSampleFile(sampleBytes5);
-			tempFile6 = createSampleFile(sampleBytes6);
+			tempFile1 = createTempFile(sampleBytes1);
+			tempFile2 = createTempFile(sampleBytes2);
+			tempFile3 = createTempFile(sampleBytes3);
+			tempFile4 = createTempFile(sampleBytes4);
+			tempFile5 = createTempFile(sampleBytes5);
+			tempFile6 = createTempFile(sampleBytes6);
 		}
 		proxy1 = new AttachmentProxy(tempFile1);
 		proxy2 = new AttachmentProxy(tempFile2);
@@ -312,16 +311,6 @@ public class TestBulletinSaver extends TestCaseEnhanced
 			assertEquals(tag + i + "got bad data?", true, Arrays.equals(gotBytes, expectedBytes));
 			tempFile.delete();
 		}
-	}
-
-	private File createSampleFile(byte[] data) throws Exception
-	{
-		File tempFile = File.createTempFile("$$$MartusTest", null);
-		tempFile.deleteOnExit();
-		FileOutputStream out = new FileOutputStream(tempFile);
-		out.write(data);
-		out.close();
-		return tempFile;
 	}
 
 	static File tempFile1;

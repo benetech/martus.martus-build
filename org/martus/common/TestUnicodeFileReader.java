@@ -67,7 +67,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 
 		File file = File.createTempFile("$$$MartusTestUnicodeFileReader", null);
 		file.deleteOnExit();
-		createSampleFile(file);
+		createTempFile(file);
 		UnicodeReader reader = new UnicodeReader(file);
 
 		assertEquals("Can read line 1 from open reader", text, reader.readLine());
@@ -108,7 +108,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
     public void testReadAll() throws Exception
     {
 		File file = File.createTempFile("$$test", null);
-		createSampleFile(file);
+		createTempFile(file);
 		UnicodeReader reader = new UnicodeReader(file);
 
 		String result = reader.readAll(100);
@@ -118,7 +118,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 		file.delete();
 	}
 
-	void createSampleFile(File file) throws Exception
+	void createTempFile(File file) throws Exception
 	{
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.write(text + NEWLINE + text2 + NEWLINE);

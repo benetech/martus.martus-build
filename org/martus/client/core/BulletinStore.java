@@ -943,7 +943,7 @@ public class BulletinStore
 			Packet.InvalidPacketException,
 			Packet.SignatureVerificationException
 	{
-		return Bulletin.importZipFileToStoreWithNewUids(inputFile, this);
+		return BulletinZipImporter.importZipFileToStoreWithNewUids(inputFile, this);
 	}
 
 	public boolean canPutBulletinInFolder(BulletinFolder folder, String bulletinAuthorAccount, String bulletinStatus)
