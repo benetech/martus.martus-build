@@ -44,15 +44,36 @@ public class TestMartusFlexidate extends TestCaseEnhanced
 	
 	public void testFlexiDate()
 	{
-		MartusFlexidate mf = new MartusFlexidate("20030105+2");
-		
+		MartusFlexidate mf = new MartusFlexidate("20030105+2");		
 		assertEquals("20030105+2", mf.getMatusFlexidate());
 		
 		DateFormat df = Bulletin.getStoredDateFormat();						
 		assertEquals("2003-01-05", df.format(mf.getBeginDate()));
-		assertEquals("2003-01-07", df.format(mf.getEndDate()));
-									
+		assertEquals("2003-01-07", df.format(mf.getEndDate()));			
+										
 	}
+	
+	public void testFlexiDateOverMonths()
+	{
+		MartusFlexidate mf = new MartusFlexidate("20030105+120");		
+		assertEquals("20030105+120", mf.getMatusFlexidate());
+
+		DateFormat df = Bulletin.getStoredDateFormat();						
+		assertEquals("2003-01-05", df.format(mf.getBeginDate()));
+		assertEquals("2003-05-05", df.format(mf.getEndDate()));
+	
+	}
+	
+	public void testFlexiDateOverYear()
+	{
+		MartusFlexidate mf = new MartusFlexidate("20020105+366");		
+		assertEquals("20020105+366", mf.getMatusFlexidate());
+
+		DateFormat df = Bulletin.getStoredDateFormat();						
+		assertEquals("2002-01-05", df.format(mf.getBeginDate()));
+		assertEquals("2003-01-06", df.format(mf.getEndDate()));		
+	}
+	
 	
 	public void testExactDate()
 	{
@@ -77,6 +98,20 @@ public class TestMartusFlexidate extends TestCaseEnhanced
 		DateFormat df = Bulletin.getStoredDateFormat();										
 		assertEquals("2000-01-10", df.format(mf.getBeginDate()));
 		assertEquals("2000-01-15", df.format(mf.getEndDate()));	
+	}
+	
+	public void testDateRangeSwap()
+	{
+		Date beginDate = getDate(2000,Calendar.JANUARY,10);
+		Date endDate = getDate(1999,Calendar.JANUARY, 15);
+					
+		MartusFlexidate mf = new MartusFlexidate(beginDate, endDate);
+	
+		assertEquals("19990115+360", mf.getMatusFlexidate());	
+	
+		DateFormat df = Bulletin.getStoredDateFormat();										
+		assertEquals("1999-01-15", df.format(mf.getBeginDate()));
+		assertEquals("2000-01-10", df.format(mf.getEndDate()));	
 	}
 
 	private Date getDate(int year, int month, int day)
