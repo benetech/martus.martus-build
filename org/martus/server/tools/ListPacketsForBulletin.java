@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.DatabaseKey;
-import org.martus.common.FileDatabase;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -107,9 +106,7 @@ public class ListPacketsForBulletin
 			
 			for (int i = 0; i < keys.length; i++)
 			{			
-				FileDatabase fdb = (FileDatabase) db;
-				File bucket = fdb.getFileForRecord(keys[i]);
-				String path = bucket.getParent().substring(bucket.getParent().indexOf("packets") );
+				String path = db.getFolderForAccount(accountPublicKey);
 				System.out.println(path + "\\" + keys[i].getLocalId());
 			}
 		}
