@@ -85,7 +85,6 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		getRootPane().setDefaultButton(ok);
 		owner.centerDlg(this);
 		setResizable(false);
-		show();
 	}
 
 
@@ -120,19 +119,16 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 			if(returnVal == JFileChooser.APPROVE_OPTION)
 			{
 				File importFile = chooser.getSelectedFile();
-				String fileContent = RetrieveTextData(importFile);
-				if(fileContent != null)
-				{
-					details.setText(fileContent);
-				}		
+				if(importFile.exists())
+					RetrieveTextData(importFile);
 			}
 		}
 		
 	}
 
-	public String RetrieveTextData(File importFile)
+	public void RetrieveTextData(File importFile)
 	{
-		String details = "";
+		String data = "";
 		try
 		{
 			InputStreamReader inputStreamReader = new InputStreamReader(new FileInputStream(importFile));
@@ -142,18 +138,17 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 				String line = reader.readLine();
 				if(line == null)
 					break;
-				details += line;
-				details += "\n";
+				data += line;
+				data += "\n";
 			}
 			inputStreamReader.close();
+			details.setText(data);
 			mainWindow.notifyDlg(mainWindow, "ConfirmCorrectDefaultDetailsData");
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
-			return null;
 		}
-		return details;
 	}
 
 	class DefaultDetailsFilter extends FileFilter

@@ -313,6 +313,11 @@ public class MartusApp
 		return new File(getDataDirectory() + "UiState.dat");
 	}
 
+	public File getDefaultDetailsFile()
+	{
+		return new File(getDataDirectory() + "Default.mdd");
+	}
+
 	public String getUploadLogFilename()
 	{
 		return  getDataDirectory() + "MartusUploadLog.txt";

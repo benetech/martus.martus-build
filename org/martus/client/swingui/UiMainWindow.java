@@ -132,7 +132,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public boolean run()
 	{
 		mainWindowInitalizing = true;	
-
+		boolean newAccount = false;
 		if(app.doesAccountExist())
 		{
 			if(!signIn(UiSigninDlg.INITIAL))
@@ -142,6 +142,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			if(!createAccount())
 				return false;
+			newAccount = true;
 		}
 		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
 
@@ -155,6 +156,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 
 		ConfigInfo info = app.getConfigInfo();
+		if(newAccount)
+		{
+			File defaultDetailsFile = app.getDefaultDetailsFile();
+			if(defaultDetailsFile.exists())
+				updateBulletinDetails(defaultDetailsFile);
+		}
 
 		try
 		{
@@ -172,7 +179,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			requestToUpdateContactInfoOnServerAndSaveInfo();
 			info.clearPromptUserRequestSendToServer();
 		}
-		
 
 		int quarantineCount = app.quarantineUnreadableBulletins();
 
@@ -1023,10 +1029,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		notifyDlg(this, "RewriteKeyPairWorked");
 	}
 	
-	private void doChangeBulletinDetails()
+	public void updateBulletinDetails(File defaultFile)
 	{
 		ConfigInfo info = app.getConfigInfo();
 		UiTemplateDlg templateDlg = new UiTemplateDlg(this, info);
+		if(defaultFile != null)
+			templateDlg.RetrieveTextData(defaultFile);
+		templateDlg.show();
 		if(templateDlg.getResult())
 		{
 			try
@@ -2055,7 +2064,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doChangeBulletinDetails();
+			updateBulletinDetails(null);
 		}
 	}
 
