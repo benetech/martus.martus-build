@@ -1,14 +1,18 @@
 package org.martus.server.formirroring;
 
 import java.io.File;
+import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
+import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
+import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
@@ -34,18 +38,32 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		clientSecurity1 = MockMartusSecurity.createClient();
 		clientSecurity2 = MockMartusSecurity.createOtherClient();
 
-		bhp1 = new BulletinHeaderPacket(clientSecurity1.getPublicKeyString());
-		bhp2 = new BulletinHeaderPacket(clientSecurity1.getPublicKeyString());
-		bhp3 = new BulletinHeaderPacket(clientSecurity2.getPublicKeyString());
 		Database db = server.getDatabase();
-		bhp1.writeXmlToDatabase(db, false, clientSecurity1);
-		bhp2.writeXmlToDatabase(db, false, clientSecurity1);
-		bhp3.writeXmlToDatabase(db, false, clientSecurity2);
+
+		bhp1 = new BulletinHeaderPacket(clientSecurity1.getPublicKeyString());
+		bhp1.setStatus(BulletinConstants.STATUSSEALED);
+		DatabaseKey key1 = MartusUtilities.createKeyWithHeaderStatus(bhp1, bhp1.getUniversalId());
+		bhp1.writeXmlToDatabase(db, key1, false, clientSecurity1);
+
+		bhp2 = new BulletinHeaderPacket(clientSecurity1.getPublicKeyString());
+		bhp2.setStatus(BulletinConstants.STATUSSEALED);
+		DatabaseKey key2 = MartusUtilities.createKeyWithHeaderStatus(bhp2, bhp2.getUniversalId());
+		bhp2.writeXmlToDatabase(db, key2, false, clientSecurity1);
+
+		bhp3 = new BulletinHeaderPacket(clientSecurity2.getPublicKeyString());
+		bhp3.setStatus(BulletinConstants.STATUSSEALED);
+		DatabaseKey key3 = MartusUtilities.createKeyWithHeaderStatus(bhp3, bhp3.getUniversalId());
+		bhp3.writeXmlToDatabase(db, key3, false, clientSecurity2);
+
+		bhp4 = new BulletinHeaderPacket(clientSecurity2.getPublicKeyString());
+		bhp4.setStatus(BulletinConstants.STATUSDRAFT);
+		DatabaseKey key4 = MartusUtilities.createKeyWithHeaderStatus(bhp4, bhp4.getUniversalId());
+		bhp4.writeXmlToDatabase(db, key4, false, clientSecurity2);
 		
 		UniversalId fdpUid = FieldDataPacket.createUniversalId(clientSecurity1.getPublicKeyString());
 		String[] tags = {"whatever"};
 		FieldDataPacket fdp1 = new FieldDataPacket(fdpUid, tags);
-		fdp1.writeXmlToDatabase(db, false, clientSecurity2);
+		fdp1.writeXmlToClientDatabase(db, false, clientSecurity2);
 		
 		UniversalId otherPacketId = UniversalId.createFromAccountAndPrefix(clientSecurity2.getPublicKeyString(), "X");
 		DatabaseKey key = new DatabaseKey(otherPacketId);
@@ -124,7 +142,24 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	
 	public void testListBulletins() throws Exception
 	{
-		Vector result1 = server.listBulletinsForMirroring(clientSecurity1.getPublicKeyString());
+		Database db = coreServer.getDatabase();
+		MockServerDatabase mdb = (MockServerDatabase)db;
+		assertEquals(6, mdb.getRecordCount());
+		Set allKeys = mdb.getAllKeys();
+		int drafts = 0;
+		int sealeds = 0;
+		for (Iterator iter = allKeys.iterator(); iter.hasNext();)
+		{
+			DatabaseKey key = (DatabaseKey)iter.next();
+			if(key.isDraft())
+				++drafts;
+			else
+				++sealeds;
+		}
+		assertEquals(5, sealeds);
+		assertEquals(1, drafts);
+		String publicKeyString1 = clientSecurity1.getPublicKeyString();
+		Vector result1 = server.listBulletinsForMirroring(publicKeyString1);
 		assertEquals(2, result1.size());
 		Vector ids1 = new Vector();
 		ids1.add(((Vector)result1.get(0)).get(0));
@@ -132,7 +167,8 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		assertContains(bhp1.getLocalId(), ids1);
 		assertContains(bhp2.getLocalId(), ids1);
 		
-		Vector result2 = server.listBulletinsForMirroring(clientSecurity2.getPublicKeyString());
+		String publicKeyString2 = clientSecurity2.getPublicKeyString();
+		Vector result2 = server.listBulletinsForMirroring(publicKeyString2);
 		assertEquals(1, result2.size());
 		Vector ids2 = new Vector();
 		ids2.add(((Vector)result2.get(0)).get(0));
@@ -188,4 +224,5 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	BulletinHeaderPacket bhp1;
 	BulletinHeaderPacket bhp2;
 	BulletinHeaderPacket bhp3;
+	BulletinHeaderPacket bhp4;
 }
