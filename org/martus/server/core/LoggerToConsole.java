@@ -19,25 +19,23 @@ public class LoggerToConsole implements LoggerInterface
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
 		String threadId = getCurrentClientAddress();
-			
-		String logEntry = formatDate.format(stamp) + " " + getServerName() + ": " + threadId + ": " + message;
+		if(threadId == null)
+			threadId = "";
+		else
+			threadId = threadId + ": ";
+		String logEntry = formatDate.format(stamp) + " " + threadId + message;
 		System.out.println(logEntry);
 	}
 
 	protected String getCurrentClientAddress()
 	{
-		String ip;
 		Thread currThread = Thread.currentThread();
 		if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
 		{
-			ip = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
+			String ip = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
+			return ip;
 		}
-		else
-		{
-			ip = Integer.toHexString(currThread.hashCode());
-		}
-
-		return ip;
+		return null;
 	}
 
 	String getServerName()
