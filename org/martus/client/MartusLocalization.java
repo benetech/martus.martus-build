@@ -313,13 +313,17 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmCloneBulletinAsMine=Confirm Create Copy of Someone Else's Bulletin");
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedDraftBulletinWithOutboxCopy=Confirm Delete Draft Bulletin");
 		addEnglishTranslation("wintitle:confirmPrinterWarning=Print Configuration Warning");
+		addEnglishTranslation("wintitle:notifyInvalidServerName=Invalid Server Name or IP Address");
+		addEnglishTranslation("wintitle:notifyInvalidServerCode=Invalid Server Public Code");
+		addEnglishTranslation("wintitle:notifyServerInfoInvalid=Server Response Invalid");
+		addEnglishTranslation("wintitle:notifyConfigNoServer=Unable to Connect to Server");
+		addEnglishTranslation("wintitle:notifyServerCodeWrong=Incorrect Server Public Code");
 
 		addEnglishTranslation("wintitle:notifyDropNotAllowed=Cannot Move Bulletin");
 		addEnglishTranslation("wintitle:notifyDropError=Error Moving Bulletin");
 		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenothing=Retrieve Bulletins");
-		addEnglishTranslation("wintitle:notifyconfignoserver=Unable to Connect to Server");
 		addEnglishTranslation("wintitle:notifyretrievenoserver=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifypasswordsdontmatch=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyusernamessdontmatch=Invalid Setup Information");
@@ -331,8 +335,6 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifydraftuploadreminder=Draft Upload Reminder");
 		addEnglishTranslation("wintitle:notifyuploadrejected=Error Sending Bulletin");
 		addEnglishTranslation("wintitle:notifycorruptconfiginfo=Error Loading Configuration File");
-		addEnglishTranslation("wintitle:notifyservercodewrong=Incorrect Server Public Code");
-		addEnglishTranslation("wintitle:notifyserverinfoinvalid=Server Response Invalid");
 		addEnglishTranslation("wintitle:notifyserverok=Server Selection Complete");
 		addEnglishTranslation("wintitle:notifymagicwordok=Upload Permission Granted");
 		addEnglishTranslation("wintitle:notifymagicwordrejected=Upload Permission Rejected");
@@ -380,6 +382,9 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:RetrieveMyDraftBulletinSummaries=Retrieving Bulletin Summaries");
 		addEnglishTranslation("wintitle:RetrieveHQSealedBulletinSummaries=Retrieving Bulletin Summaries");
 		addEnglishTranslation("wintitle:RetrieveHQDraftBulletinSummaries=Retrieving Bulletin Summaries");
+		addEnglishTranslation("wintitle:ConfigServer=Server Configuration");
+		addEnglishTranslation("wintitle:ServerSelectionResults=Server Configuration Results");
+		
 
 		addEnglishTranslation("button:file=File");
 		addEnglishTranslation("button:edit=Edit");
@@ -568,7 +573,6 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
 		addEnglishTranslation("field:notifyretrievenothingcause=No bulletins were selected");
-		addEnglishTranslation("field:notifyconfignoservercause=The selected server is not responding. Before you choose a server, you must be connected to the internet, and that server must be available.");
 		addEnglishTranslation("field:notifyretrievenoservercause=The current server is not responding");
 		addEnglishTranslation("field:notifypasswordsdontmatchcause=You must enter the same password twice");
 		addEnglishTranslation("field:notifyusernamessdontmatchcause=You must enter the same username twice");
@@ -580,8 +584,6 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifydraftuploadremindercause=Please Note: There are draft bulletins that have been modified and not yet sent to a server.");
 		addEnglishTranslation("field:notifyuploadrejectedcause=The current Martus Server has refused to accept a bulletin");
 		addEnglishTranslation("field:notifycorruptconfiginfocause=The configuration file may be corrupted");
-		addEnglishTranslation("field:notifyservercodewrongcause=The Server Public Code does not match the one you entered.");
-		addEnglishTranslation("field:notifyserverinfoinvalidcause=The Server has responded with invalid account information.");
 		addEnglishTranslation("field:notifyserverokcause=The Server has been selected.");
 		addEnglishTranslation("field:notifymagicwordokcause=The Server has accepted your request for permission to upload bulletins.");
 		addEnglishTranslation("field:notifymagicwordrejectedcause=The Server has rejected your request. The magic word is probably not correct.");
@@ -603,9 +605,12 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyAuthenticateServerFailedcause=Martus could not authenticate the server. The server may have been compromised.  Please verify your server configuration and contact the server operator.");
 		addEnglishTranslation("field:notifyWelcomeToMartuscause=Welcome to the Martus system. Before you can begin working, you must create an account by choosing a username and passphrase. You can choose any username you wish, and you can choose any reasonably secure passphrase. We recommend that your passphrase be fairly long and complex, to prevent other people from guessing it. Anyone who guesses or learns your username and passphrase will be able to view your bulletins (including the private portions), and will be able to create bulletins that everyone will believe were created by you. \n\nEvery time you start Martus after this, you will need to enter your username and pasphrase in order to access your bulletins. At certain times, you will also be prompted to re-enter your username and passphrase within Martus to prevent someone else from using the system after you have logged in.\n\nIf you forget your username or passphrase, you will not be able to retrieve your data, so please remember them or write them down and store them in a very secure location. Your username and passphrase are not stored or backed up anywhere, and nobody can 'reset' them for you.");
 		addEnglishTranslation("field:notifyUnexpectedErrorcause=An unexpected error has occured. Please report this problem to www.martus.org.");
-
-		addEnglishTranslation("field:inputservernameentry=Enter the name or IP address of the server:");
-		addEnglishTranslation("field:inputserverpubliccodeentry=Enter the Public Identification Code for this server:");
+		addEnglishTranslation("field:notifyInvalidServerNamecause=You must have a server name or IP address.");
+		addEnglishTranslation("field:notifyInvalidServerCodecause=You must have a server public code.");
+		addEnglishTranslation("field:notifyServerInfoInvalidcause=The Server has responded with invalid account information.");
+		addEnglishTranslation("field:notifyConfigNoServercause=The selected server is not responding. Before you choose a server, you must be connected to the internet, and that server must be available.");
+		addEnglishTranslation("field:notifyServerCodeWrongcause=The Server Public Code does not match the one you entered.");
+		
 		addEnglishTranslation("field:inputsearchentry=Search for:");
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
 		addEnglishTranslation("field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:");
@@ -633,6 +638,12 @@ public class MartusLocalization
 		addEnglishTranslation("field:AccountInfoPublicCode=Public Code:");
 		addEnglishTranslation("field:NameOfExportedFile=Please enter a name for the file you wish to export.");
 		addEnglishTranslation("field:NameOfExportedFile=Please enter a name for the file you wish to export.");
+		addEnglishTranslation("field:ServerNameEntry=Server name or IP address:");
+		addEnglishTranslation("field:ServerPublicCodeEntry=Server Public Identification Code:");
+		addEnglishTranslation("field:ServerMagicWordEntry=Server Magic Word:");
+		addEnglishTranslation("field:ServerSelectionResults=The following server has been selected :");
+		addEnglishTranslation("field:ServerAcceptsUploads=You will be allowed up upload bulletins to this server.");
+		addEnglishTranslation("field:ServerDeclinesUploads=You will not be allowed to upload bulletins to this server.");
 
 		addEnglishTranslation("folder:%RetrievedMyBulletin=Retrieved Bulletins");
 		addEnglishTranslation("folder:%RetrievedFieldOfficeBulletin=Field Desk Bulletins");

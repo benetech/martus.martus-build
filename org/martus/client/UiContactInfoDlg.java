@@ -11,13 +11,12 @@ import javax.swing.JTextField;
 
 public class UiContactInfoDlg extends JDialog implements ActionListener
 {
-	public UiContactInfoDlg(UiMainWindow owner, ConfigInfo infoToUse)
+	public UiContactInfoDlg(UiMainWindow mainWindow, ConfigInfo infoToUse)
 	{
-		super(owner, "", true);
-		mainWindow = owner;
+		super(mainWindow, "", true);
 		info = infoToUse;
 
-		MartusApp app = owner.getApp();
+		MartusApp app = mainWindow.getApp();
 		setTitle(app.getWindowTitle("setupcontact"));
 		ok = new JButton(app.getButtonLabel("ok"));
 		ok.addActionListener(this);
@@ -47,7 +46,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(space, ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(new JLabel());
 		
-		UiWrappedTextArea infoRequired = new UiWrappedTextArea(owner, app.getFieldLabel("ContactInfoRequiredFields"));
+		UiWrappedTextArea infoRequired = new UiWrappedTextArea(mainWindow, app.getFieldLabel("ContactInfoRequiredFields"));
 		infoRequired.setFont(space.getFont(), 60);
 		getContentPane().add(infoRequired);
 		
@@ -70,7 +69,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(new JLabel(app.getFieldLabel("ContactInfoDescriptionOfFields")));
 
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-		UiWrappedTextArea infoFuture = new UiWrappedTextArea(owner, app.getFieldLabel("ContactInfoFutureUseOfFields"));
+		UiWrappedTextArea infoFuture = new UiWrappedTextArea(mainWindow, app.getFieldLabel("ContactInfoFutureUseOfFields"));
 		infoFuture.setFont(space.getFont(), 60);
 		getContentPane().add(infoFuture);
 
@@ -109,9 +108,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		dispose();
 	}
 
-	UiMainWindow mainWindow;
 	ConfigInfo info;
-
 	boolean result;
 
 	JTextField source;

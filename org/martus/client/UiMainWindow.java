@@ -734,47 +734,43 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			return;
 		
 		ConfigInfo info = app.getConfigInfo();
-		String serverName = getStringInput("servername", "", info.getServerName());
-		if(serverName == null)
-			return;
-
-		if(!app.isNonSSLServerAvailable(serverName))
+		UiConfigServerDlg serverInfoDlg = new UiConfigServerDlg(this, info);
+		if(serverInfoDlg.getResult())
 		{
-			notifyDlg(this, "confignoserver");
-			return;
-		}
-
-		String serverPublicKey = null;
-		String serverPublicCode = null;
-		try
-		{		
-			serverPublicKey = app.getServerPublicKey(serverName);
-			serverPublicCode = MartusUtilities.computePublicCode(serverPublicKey);
-		}
-		catch(Exception e)
-		{
-			System.out.println(e);
-			notifyDlg(this, "serverinfoinvalid");
-			return;
-		}
-
-		if(!confirmPublicCode(serverPublicCode, "serverpubliccode", "servercodewrong"))
-			return;
-
-		app.setServerInfo(serverName, serverPublicKey);
-		notifyDlg(this, "serverok");
-		
-		while (true)
-		{
-			String magicWord = getStringInput("servermagicword", "", "");
-			if(magicWord == null)
-				return; // user hit cancel
-			if(app.requestServerUploadRights(magicWord))
+			String serverIPAddress = serverInfoDlg.getServerIPAddress();
+			boolean magicAccepted = false;
+			app.setServerInfo(serverIPAddress, serverInfoDlg.getServerPublicKey());
+			if(app.requestServerUploadRights(""))
+				magicAccepted = true;
+			else
 			{
-				notifyDlg(this, "magicwordok");
-				return;
+				while (true)
+				{
+					String magicWord = getStringInput("servermagicword", "", "");
+					if(magicWord == null)
+						break; 
+					if(app.requestServerUploadRights(magicWord))
+					{
+						magicAccepted = true;
+						break;
+					}
+					notifyDlg(this, "magicwordrejected");
+				}
 			}
-			notifyDlg(this, "magicwordrejected");
+
+			String title = app.getWindowTitle("ServerSelectionResults");
+			String serverSelected = app.getFieldLabel("ServerSelectionResults") + serverIPAddress;
+			String uploadGranted = "";
+			if(magicAccepted)
+				uploadGranted = app.getFieldLabel("ServerAcceptsUploads");
+			else
+				uploadGranted = app.getFieldLabel("ServerDeclinesUploads");
+			
+			String ok = app.getButtonLabel("ok");
+			String[] contents = {serverSelected, uploadGranted};
+			String[] buttons = {ok};
+			
+			UiNotifyDlg notify = new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
 		}
 	}
 
@@ -1196,7 +1192,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private String removeNonDigits(String userEnteredPublicCode) 
+	public String removeNonDigits(String userEnteredPublicCode) 
 	{
 		String normalizedPublicCode = "";
 		for (int i=0 ; i < userEnteredPublicCode.length(); ++i)
