@@ -21,7 +21,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		{
 			if(!isSignatureAcceptable(callerAccountId, parameters, signature))
 			{
-				supplier.log("Mirror: request: bad sig");
+				log("request: bad sig");
 				Vector result = new Vector();
 				result.add(SIG_ERROR);		
 				return result;
@@ -53,7 +53,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 
 		if(!isAuthorized(cmd, callerAccountId))
 		{
-			supplier.log("Mirror: request: not authorized");
+			log("request: not authorized");
 			result.add(NOT_AUTHORIZED);
 			return result;
 		}
@@ -62,14 +62,14 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		{
 			case cmdPing:
 			{
-				supplier.log("Mirror: ping");
+				log("ping");
 				result.add(RESULT_OK);
 				result.add(supplier.getPublicInfo());
 				return result;
 			}
 			case cmdListAccountsForMirroring:
 			{
-				supplier.log("Mirror: listAccounts");
+				log("listAccounts");
 				Vector accounts = supplier.listAccountsForMirroring();
 	
 				result.add(OK);
@@ -86,11 +86,11 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 				}
 				catch (InvalidBase64Exception e)
 				{
-					supplier.log("Mirror: listBulletins: Bad account:" + authorAccountId);
+					log("listBulletins: Bad account:" + authorAccountId);
 					result.add(INVALID_DATA);
 					return result;
 				}
-				supplier.log("Mirror: listBulletins: " + publicCode);
+				log("listBulletins: " + MartusUtilities.formatPublicCode(publicCode));
 				Vector infos = supplier.listBulletinsForMirroring(authorAccountId);
 				
 				result.add(OK);
@@ -101,7 +101,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			{
 				String authorAccountId = (String)parameters.get(1);
 				String bulletinLocalId = (String)parameters.get(2);
-				supplier.log("Mirror: getBulletinUploadRecord: " + bulletinLocalId);
+				log("getBulletinUploadRecord: " + bulletinLocalId);
 				String bur = supplier.getBulletinUploadRecord(authorAccountId, bulletinLocalId);
 				if(bur == null)
 				{
@@ -121,7 +121,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			{
 				String authorAccountId = (String)parameters.get(1);
 				String bulletinLocalId = (String)parameters.get(2);
-				supplier.log("Mirror: getBulletinChunk: " + bulletinLocalId);
+				log("getBulletinChunk: " + bulletinLocalId);
 				int offset = ((Integer)parameters.get(3)).intValue();
 				int maxChunkSize = ((Integer)parameters.get(4)).intValue();
 
@@ -134,7 +134,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			}
 			default:
 			{
-				supplier.log("Mirror: request: Unknown command");
+				log("request: Unknown command");
 				result = new Vector();
 				result.add(UNKNOWN_COMMAND);
 			}
@@ -182,6 +182,11 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 	boolean isAuthorizedForMirroring(String callerAccountId)
 	{
 		return supplier.isAuthorizedForMirroring(callerAccountId);
+	}
+	
+	void log(String message)
+	{
+		supplier.log("Mirror handler: " + message);
 	}
 
 	public static class UnknownCommandException extends Exception {}
