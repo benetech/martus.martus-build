@@ -154,6 +154,8 @@ public class EnglishStrings
 "wintitle:notifyRecoveryOfKeyShareComplete=Recovery Complete",
 "wintitle:notifyOperationCompleted=Finished",
 "wintitle:notifyErrorBackingupKeyPair=Error",
+"wintitle:notifycontactRejected=Error Sending ContactInfo",
+
 
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -592,7 +594,8 @@ public class EnglishStrings
 "field:notifyVerifyKeyPairSharePassedcause=Verification of all disks passed.",
 "field:notifyOperationCompletedcause=Operation completed.",
 "field:notifyErrorBackingupKeyPaircause=Unable to back up the key pair file on this disk.",
-
+"field:notifycontactRejectedcause=The current Martus Server has refused to accept your contact info",
+		
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occures in the future:",
 

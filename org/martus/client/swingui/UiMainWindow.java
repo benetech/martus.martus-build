@@ -66,6 +66,7 @@ import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
 
+import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinHtmlGenerator;
 import org.martus.client.core.BulletinStore;
@@ -1751,9 +1752,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				notifyDlg(UiMainWindow.this, "AuthenticateServerFailed");
 				authenticationErrorShown = true;
 			}
+			if(uploadResult.equals(BackgroundUploader.CONTACT_INFO_NOT_SENT) && !contactInfoErrorShown)
+			{
+				notifyDlg(UiMainWindow.this, "contactRejected");
+				contactInfoErrorShown = true;
+			}
 		}
 		boolean authenticationErrorShown;
 		boolean rejectedErrorShown;
+		boolean contactInfoErrorShown;
 	}
 
 	private MartusApp app;

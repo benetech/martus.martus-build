@@ -72,7 +72,7 @@ public class BackgroundUploader
 		else if(folderDraftOutbox.getBulletinCount() > 0)
 			uploadResult = backgroundUploadOneDraftBulletin(folderDraftOutbox);
 		else if(app.getConfigInfo().shouldContactInfoBeSentToServer())
-			sendContactInfoToServer();
+			uploadResult = sendContactInfoToServer();
 	
 		if(uploadResult.isHopelesslyDamaged)
 			throw new MartusApp.DamagedBulletinException(uploadResult.exceptionThrown);
@@ -280,10 +280,13 @@ public class BackgroundUploader
 		return response.getResultCode();
 	}
 
-	void sendContactInfoToServer()
+	UploadResult sendContactInfoToServer()
 	{
+		BackgroundUploader.UploadResult uploadResult = new BackgroundUploader.UploadResult();
+		uploadResult.result = CONTACT_INFO_NOT_SENT;
+		
 		if(!app.isSSLServerAvailable())
-			return;
+			return uploadResult;
 	
 		ConfigInfo info = app.getConfigInfo();
 		String result = "";
@@ -294,14 +297,15 @@ public class BackgroundUploader
 		catch (MartusCrypto.MartusSignatureException e)
 		{
 			System.out.println("MartusApp.sendContactInfoToServer :" + e);
-			return;
+			return uploadResult;
 		}
 		if(!result.equals(NetworkInterfaceConstants.OK))
 		{
 			System.out.println("MartusApp.sendContactInfoToServer failure:" + result);
-			return;
+			return uploadResult;
 		}
 		System.out.println("Contact info successfully sent to server");
+		uploadResult.result = result;
 	
 		try
 		{
@@ -312,6 +316,7 @@ public class BackgroundUploader
 		{
 			System.out.println("MartusApp:putContactInfoOnServer Failed to save configinfo locally:" + e);
 		}
+		return uploadResult;
 	}
 
 	public static class UploadResult
@@ -321,6 +326,7 @@ public class BackgroundUploader
 		public String exceptionThrown;
 		public boolean isHopelesslyDamaged;
 	}
+	public static final String CONTACT_INFO_NOT_SENT="Contact Info Not Sent";
 
 	MartusApp app;
 	ProgressMeterInterface progressMeter;
