@@ -292,14 +292,12 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	public Vector putContactInfo(String myAccountId, Vector parameters, String signature) 
 	{
-		if(server.serverSSLLogging)
-			server.logging("putContactInfo");
 		server.incrementActiveClientsCounter();
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			if(server.serverSSLLogging)
-				server.logging("Signature Error");
+				server.logging("putContactInfo:Signature Error");
 			result.add(SIG_ERROR);
 			server.decrementActiveClientsCounter();
 			return result;

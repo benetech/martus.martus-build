@@ -52,6 +52,7 @@ import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongAccountException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
 public class MartusServer implements NetworkInterfaceConstants
@@ -979,6 +980,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public String putContactInfo(String accountId, Vector contactInfo)
 	{
+		if(serverMaxLogging)
+			logging("putContactInfo " + getClientAliasForLogging(accountId));
 		if( !isClientAuthorized(accountId) )
 			return NetworkInterfaceConstants.REJECTED;
 		
@@ -1019,8 +1022,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		} 
 		catch (IOException e) 
 		{
-			System.out.println(e);
-			e.printStackTrace();
+			logging("putContactInfo Error" + e);
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		}
 		return NetworkInterfaceConstants.OK;
@@ -1522,9 +1524,25 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		File tempFile = getDatabase().getOutgoingInterimFile(headerKey);
 		if(tempFile.exists())
-			return tempFile;
-
+		{
+			ZipFile zip = new ZipFile(tempFile);
+			try 
+			{
+				MartusUtilities.validateIntegrityOfZipFilePackets(getDatabase(), headerKey.getAccountId(), zip, security);
+				zip.close();
+				return tempFile;
+			} 
+			catch (Throwable e) 
+			{
+				logging("    Invalid Interim File: "+ tempFile.getPath() + e);
+			}
+			zip.close();
+			tempFile.delete();
+		}
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
+		if(serverMaxLogging)
+			logging("    Total file size =" + tempFile.length());
+		
 		return tempFile;
 	}
 
