@@ -107,12 +107,12 @@ public class MartusApp
 
 	private void initializeCurrentLanguage(Localization localization)
 	{
-		File languageFlag = new File(getMartusDataRootDirectory(),"lang.es");
+		File languageFlag = new File(getMartusDataRootDirectory(),"lang.ru");
 		if(languageFlag.exists())
 		{
 			languageFlag.delete();
-			localization.setCurrentLanguageCode("es");
-			localization.setCurrentDateFormatCode(DateUtilities.DMY_SLASH.getCode());
+			localization.setCurrentLanguageCode("ru");
+			localization.setCurrentDateFormatCode(DateUtilities.DMY_DOT.getCode());
 		}
 		else
 		{
