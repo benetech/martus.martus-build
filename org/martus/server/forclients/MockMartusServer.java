@@ -3,6 +3,7 @@ package org.martus.server.forclients;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Vector;
 
 import org.martus.common.Base64;
@@ -260,12 +261,37 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		}
 	}
 	
+	public void deleteSignaturesForFile(File originalFile)
+	{
+		Vector sigFiles = MartusServerUtilities.getSignaturesForFile(originalFile);
+		if(sigFiles.size() > 0)
+		{
+			for (Iterator iter = sigFiles.iterator(); iter.hasNext();)
+			{
+				File signature = (File) iter.next();
+				if(signature.exists())
+				{
+					signature.delete();
+				}
+			}
+		}
+		
+		File sigDir = MartusServerUtilities.getSignatureDirectoryForFile(originalFile);
+		String[] filenamessAvailable = sigDir.list();
+		if(filenamessAvailable != null && filenamessAvailable.length == 0)
+		{
+			sigDir.delete();
+		}
+	}
+
 	public void deleteAllFiles() throws IOException
 	{
 		File allowUploadFile = serverForClients.getAllowUploadFile();
 		allowUploadFile.delete();
 		if(allowUploadFile.exists())
 			throw new IOException("allowUploadFile");
+			
+		deleteSignaturesForFile(allowUploadFile);
 			
 		File magicWordsFile = serverForClients.getMagicWordsFile();
 		magicWordsFile.delete();
@@ -274,10 +300,6 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		getKeyPairFile().delete();
 		if(getKeyPairFile().exists())
 			throw new IOException("keyPairFile");
-			
-		File uploadSig = MartusUtilities.getSignatureFileFromFile(allowUploadFile);
-		if(uploadSig.exists())
-			uploadSig.delete();
 			
 		File magicSig = MartusUtilities.getSignatureFileFromFile(magicWordsFile);
 		if(magicSig.exists())

@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
@@ -105,7 +106,7 @@ public class MartusServerUtilities
 		return security;
 	}
 
-	public static File getPathToSignatureDirForFile(File originalFile)
+	public static File getSignatureDirectoryForFile(File originalFile)
 	{
 		return new File(originalFile.getParent() + File.separatorChar + "signature");
 	}
@@ -142,10 +143,9 @@ public class MartusServerUtilities
 	public static File getLatestSignatureFileFromFile(File originalFile)
 		throws IOException, ParseException, MartusSignatureFileDoesntExistsException
 	{
-		File sigDir = getPathToSignatureDirForFile(originalFile);
-		File [] signatureFiles =  sigDir.listFiles();
+		Vector signatureFiles =  getSignaturesForFile(originalFile);
 		
-		if(signatureFiles == null)
+		if(signatureFiles.size() == 0)
 		{
 			throw new MartusSignatureFileDoesntExistsException();
 		}
@@ -153,18 +153,15 @@ public class MartusServerUtilities
 		Date latestSigDate = null;
 		File latestSignatureFile = null;
 		
-		for(int x = 0; x < signatureFiles.length; x++)
+		for(int x = 0; x < signatureFiles.size(); x++)
 		{
-			File nextSignatureFile = signatureFiles[x];
+			File nextSignatureFile = (File) signatureFiles.get(x);
 
-			if(isMatchingSigFile(originalFile, nextSignatureFile))
+			Date nextSigDate = getDateOfSignatureFile(nextSignatureFile);
+			if(isDateLatest(nextSigDate, latestSigDate))
 			{
-				Date nextSigDate = getDateOfSignatureFile(nextSignatureFile);
-				if(isDateLatest(nextSigDate, latestSigDate))
-				{
-					latestSigDate = nextSigDate;
-					latestSignatureFile = nextSignatureFile;
-				}
+				latestSigDate = nextSigDate;
+				latestSignatureFile = nextSignatureFile;
 			}
 		}
 		
@@ -207,7 +204,7 @@ public class MartusServerUtilities
 		Thread.sleep(1000);
 		String dateStamp = createTimeStamp();
 		
-		File sigDir = getPathToSignatureDirForFile(fileToSign);
+		File sigDir = getSignatureDirectoryForFile(fileToSign);
 		File signatureFile = new File(sigDir.getPath() + File.separatorChar + fileToSign.getName() + "." + dateStamp + ".sig");
 		
 		if(signatureFile.exists() )
@@ -323,6 +320,27 @@ public class MartusServerUtilities
 			{
 			}
 		}
+	}
+	
+	public static Vector getSignaturesForFile(File originalFile)
+	{
+		File sigDir = getSignatureDirectoryForFile(originalFile);
+		
+		File[] filesAvailable = sigDir.listFiles();
+		Vector signatureFiles = new Vector();
+		
+		if(filesAvailable != null)
+		{
+			for (int i = 0; i < filesAvailable.length; i++)
+			{
+				File file = filesAvailable[i];
+				if(isMatchingSigFile(originalFile, file))
+				{
+					signatureFiles.add(file);
+				}
+			}
+		}
+		return signatureFiles;
 	}
 	
 	public static byte [] getFileContents(File plainTextFile) throws IOException

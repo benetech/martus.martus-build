@@ -8,11 +8,9 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
-import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.core.MartusSecureWebServer;
 import org.martus.server.core.MartusXmlRpcServer;
@@ -53,18 +51,24 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 
 	public void verifyConfigurationFiles()
 	{
-		File allowUploadFileSignature = MartusUtilities.getSignatureFileFromFile(getAllowUploadFile());
-		if(getAllowUploadFile().exists() || allowUploadFileSignature.exists())
+		try
 		{
-			try
-			{
-				MartusCrypto security = getSecurity();
-				MartusUtilities.verifyFileAndSignature(getAllowUploadFile(), allowUploadFileSignature, security, security.getPublicKeyString());
-			}
-			catch(FileVerificationException e)
+			File allowUploadFileSignature = MartusServerUtilities.getLatestSignatureFileFromFile(getAllowUploadFile());
+			MartusCrypto security = getSecurity();
+			MartusServerUtilities.verifyFileAndSignatureOnServer(getAllowUploadFile(), allowUploadFileSignature, security, security.getPublicKeyString());
+		}
+		catch(FileVerificationException e)
+		{
+			e.printStackTrace();
+			System.out.println(UPLOADSOKFILENAME + " did not verify against signature file");
+			System.exit(7);
+		}
+		catch(Exception e)
+		{
+			if(getAllowUploadFile().exists())
 			{
 				e.printStackTrace();
-				System.out.println(UPLOADSOKFILENAME + " did not verify against signature file");
+				System.out.println("Unable to verify " + UPLOADSOKFILENAME + " against a signature file");
 				System.exit(7);
 			}
 		}
@@ -333,17 +337,12 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 			}
 			writer.close();
 			MartusCrypto security = getSecurity();
-			MartusUtilities.createSignatureFileFromFile(getAllowUploadFile(), security);
+			MartusServerUtilities.createSignatureFileFromFileOnServer(getAllowUploadFile(), security);
 			logging("allowUploads : Exit OK");
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			logging("allowUploads " + e);
-			//System.out.println("MartusServer.allowUploads: " + e);
-		}
-		catch(MartusSignatureException e)
-		{
-			logging("allowUploads: " + e);
 			//System.out.println("MartusServer.allowUploads: " + e);
 		}
 	}

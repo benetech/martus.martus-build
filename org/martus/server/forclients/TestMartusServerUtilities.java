@@ -92,7 +92,7 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 	public void testGetLatestSignatureFile() throws Exception
 	{
 		File fileToSign = createTempFileWithContents("Line 1 of test text\n");
-		File sigDir = MartusServerUtilities.getPathToSignatureDirForFile(fileToSign);
+		File sigDir = MartusServerUtilities.getSignatureDirectoryForFile(fileToSign);
 
 		File earliestFile = new File(sigDir, fileToSign.getName() + "1.sig");
 		MartusServerUtilities.writeSignatureFileWithDatestamp(earliestFile, "20010109-120001", fileToSign, serverSecurity);
