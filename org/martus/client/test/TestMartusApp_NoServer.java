@@ -327,6 +327,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		appWithDifferentAccount = MockMartusApp.create(mockSecurityForApp);
 		appWithDifferentAccount.createAccount("bogusName","bogusPassword");
 		assertFalse("This is our bulletin?", appWithDifferentAccount.isOurBulletin(b));
+		appWithDifferentAccount.deleteAllFiles();
 		TRACE_END();
 	}
 
