@@ -26,6 +26,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URL;
 import java.sql.Timestamp;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -85,7 +86,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void updateIcon(JFrame window) 
 	{
-		ImageIcon imageicon = new ImageIcon(window.getClass().getResource("Martus.jpg"));
+		URL imageURL = window.getClass().getResource("Martus.png");
+		if(imageURL == null)
+			return;
+		ImageIcon imageicon = new ImageIcon(imageURL);
 		if(imageicon != null)
 			window.setIconImage(imageicon.getImage());
 	}
