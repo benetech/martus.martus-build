@@ -47,8 +47,7 @@ field:BulletinSize=Tamaño (Kb)
 field:ChunkProgressStatusMessage=Bajando...
 field:ContactInfoDescriptionOfFields=Los campos no requeridos son guardados en su unidad de disco duro pero no son usados en los boletines.
 field:ContactInfoFutureUseOfFields=En el futuro esta información va a estar disponible a todos los que puedan acceder su información pública.
-field:ContactInfoRequiredFields=Esta información identifica a su organización.
-Escriba su Nombre ú Organización para que esta sea incluída en los boletines que escriba.
+field:ContactInfoRequiredFields=Esta información identifica a su organización.\nEscriba su Nombre ú Organización para que esta sea incluída en los boletines que escriba.
 field:ContactInfoUpdateLater=Puede cambiar su información en cualquier momento usando el menú Preferencias/Información de contacto.
 field:CreateNewUserNamePassword=Escriba su nuevo nombre de usuario y contraseña.
 field:DefaultDetailFiles=Detalles predeterminados
