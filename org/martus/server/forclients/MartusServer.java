@@ -626,7 +626,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return result;
 	}
 
-	public Vector listFieldOfficeAccounts(String hqAccountId)
+	public Vector listFieldOfficeAccounts(String hqAccountIdToUse)
 	{
 
 		class FieldOfficeAccountCollector implements Database.PacketVisitor
@@ -667,15 +667,15 @@ public class MartusServer implements NetworkInterfaceConstants
 			Vector accounts;
 		}	
 
-		log("listFieldOfficeAccounts " + getClientAliasForLogging(hqAccountId));
+		log("listFieldOfficeAccounts " + getClientAliasForLogging(hqAccountIdToUse));
 			
-		if(isClientBanned(hqAccountId) )
+		if(isClientBanned(hqAccountIdToUse) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog("  returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN);
 
-		FieldOfficeAccountCollector visitor = new FieldOfficeAccountCollector(hqAccountId);
+		FieldOfficeAccountCollector visitor = new FieldOfficeAccountCollector(hqAccountIdToUse);
 		getDatabase().visitAllRecords(visitor);
 	
 		log("listFieldOfficeAccounts : Exit");

@@ -80,7 +80,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		{
 			PacketVisitor(Database databaseToUse)
 			{
-				db = databaseToUse;
+				dbase = databaseToUse;
 			}
 			
 			public void visit(DatabaseKey key)
@@ -89,7 +89,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 				assertFalse("should not be a BUR packet", localId.startsWith("BUR-"));
 			}
 			
-			Database db;
+			Database dbase;
 		}
 
 		PacketVisitor visitor = new PacketVisitor(db);
@@ -150,17 +150,17 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		{
 			Counter(Database databaseToUse, Vector expected)
 			{
-				db = databaseToUse;
+				dbase = databaseToUse;
 				expectedKeys = expected;
 			}
 			
 			public void visit(DatabaseKey key)
 			{
-				assertContains(db.toString()+"wrong key?", key, expectedKeys);
+				assertContains(dbase.toString()+"wrong key?", key, expectedKeys);
 				expectedKeys.remove(key);
 			}
 			
-			Database db;
+			Database dbase;
 			Vector expectedKeys;
 		}
 		

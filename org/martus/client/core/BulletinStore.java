@@ -189,7 +189,7 @@ public class BulletinStore
 		return uidCollector.uidList;
 	}
 
-	public void visitAllBulletins(Database.PacketVisitor visitor)
+	public void visitAllBulletins(Database.PacketVisitor visitorToUse)
 	{
 		class BulletinKeyFilter implements Database.PacketVisitor
 		{
@@ -211,7 +211,7 @@ public class BulletinStore
 			int count;
 		}
 
-		new BulletinKeyFilter(getDatabase(), visitor);
+		new BulletinKeyFilter(getDatabase(), visitorToUse);
 	}
 
 	public Set getSetOfAllBulletinUniversalIds()
