@@ -42,7 +42,8 @@ public class MirroringRetriever
 			
 		try
 		{
-			log("Retrieving from mirror: " + uid.getLocalId());
+			String publicCode = MartusUtilities.getPublicCode(uid.getAccountId());
+			log("Mirroring: Get bulletin: " + publicCode + "->" + uid.getLocalId());
 			String bur = retrieveBurFromMirror(uid);
 			File zip = File.createTempFile("$$$MirroringRetriever", null);
 			try
@@ -56,6 +57,10 @@ public class MirroringRetriever
 			{
 				zip.delete();
 			}
+		}
+		catch(ServerErrorException e)
+		{
+			log("Mirroring: Supplier server error");
 		}
 		catch (Exception e)
 		{
@@ -89,6 +94,8 @@ public class MirroringRetriever
 			if(nextAccountId == null)
 				return null;
 
+			String publicCode = MartusUtilities.getPublicCode(nextAccountId);
+			log("Mirroring: List bulletins: " + publicCode);
 			NetworkResponse response = gateway.listBulletinsForMirroring(security, nextAccountId);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
@@ -113,7 +120,7 @@ public class MirroringRetriever
 
 		return null;
 	}
-	
+
 	String getNextAccountToRetrieve()
 	{
 		if(accountsToRetrieve.size() > 0)
@@ -121,6 +128,7 @@ public class MirroringRetriever
 
 		try
 		{
+			log("Mirroring: Getting list of accounts");
 			NetworkResponse response = gateway.listAccountsForMirroring(security);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
