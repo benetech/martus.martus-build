@@ -18,7 +18,6 @@ import java.util.TreeMap;
 import org.martus.common.Database.AccountVisitor;
 import org.martus.common.Database.PacketVisitor;
 
-import MartusJava.FileInputStreamWithReset;
 
 public class FileDatabase implements Database
 {
