@@ -3,7 +3,6 @@ package org.martus.server.forclients;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.Vector;
 
 import org.martus.common.Base64;
@@ -255,20 +254,6 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 			mkdir();
 		}
 	}
-	
-	public void deleteSignaturesForFile(File originalFile)
-	{
-		Vector sigFiles = MartusServerUtilities.getSignaturesForFile(originalFile);
-
-		for (Iterator iter = sigFiles.iterator(); iter.hasNext();)
-		{
-			File signature = (File) iter.next();
-			signature.delete();
-		}
-		
-		File sigDir = MartusServerUtilities.getSignatureDirectoryForFile(originalFile);
-		sigDir.delete();
-	}
 
 	public void deleteAllFiles() throws IOException
 	{
@@ -277,7 +262,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		if(allowUploadFile.exists())
 			throw new IOException("allowUploadFile");
 			
-		deleteSignaturesForFile(allowUploadFile);
+		MartusServerUtilities.deleteSignaturesForFile(allowUploadFile);
 			
 		File magicWordsFile = serverForClients.getMagicWordsFile();
 		magicWordsFile.delete();
