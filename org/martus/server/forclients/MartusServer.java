@@ -952,32 +952,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return formattedCode;
 	}
 	
-	public synchronized void loadListFromFile(BufferedReader readerInput, Vector result)
-		throws IOException
-	{
-		try
-		{
-			while(true)
-			{
-				String currentLine = readerInput.readLine();
-				if(currentLine == null)
-					break;
-				if(currentLine.length() == 0)
-					continue;
-					
-				if( result.contains(currentLine) )
-					continue;
-
-				result.add(currentLine);
-				//System.out.println("MartusServer.loadListFromFile: " + currentLine);
-			}
-		}
-		catch(IOException e)
-		{
-			throw new IOException(e.getMessage());
-		}
-	}
-
 	public void loadComplianceStatementFile() throws IOException
 	{
 		try

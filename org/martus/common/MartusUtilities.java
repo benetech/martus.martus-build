@@ -555,6 +555,35 @@ public class MartusUtilities
 		return ip;
 	}
 
+	public static synchronized Vector loadListFromFile(BufferedReader readerInput)
+		throws IOException
+	{
+		Vector result = new Vector();
+		try
+		{
+			while(true)
+			{
+				String currentLine = readerInput.readLine();
+				if(currentLine == null)
+					break;
+				if(currentLine.length() == 0)
+					continue;
+					
+				if( result.contains(currentLine) )
+					continue;
+	
+				result.add(currentLine);
+				//System.out.println("loadListFromFile: " + currentLine);
+			}
+			
+			return result;
+		}
+		catch(IOException e)
+		{
+			throw new IOException(e.getMessage());
+		}
+	}
+
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
 	static final String PUBLIC_KEY_TYPE_SERVER = "Server";
 }

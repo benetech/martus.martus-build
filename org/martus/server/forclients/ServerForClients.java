@@ -33,6 +33,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.server.core.MartusSecureWebServer;
@@ -269,17 +270,16 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 			long lastModified = bannedClientsFile.lastModified();
 			if( lastModified != bannedClientsFileLastModified )
 			{
-				clientsBanned.clear();
 				bannedClientsFileLastModified = lastModified;
 				UnicodeReader reader = new UnicodeReader(bannedClientsFile);
-				coreServer.loadListFromFile(reader, clientsBanned);
+				clientsBanned = MartusUtilities.loadListFromFile(reader);
 				reader.close();
 			}
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
 			log("Banned clients file not found: " + bannedClientsFile.getName());
-			clientsBanned.clear();
+			clientsBanned = new Vector();
 		}
 		catch (IOException e)
 		{
@@ -413,11 +413,12 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 
 		try
 		{
-			coreServer.loadListFromFile(canUploadInput, clientsThatCanUpload);
+			clientsThatCanUpload = MartusUtilities.loadListFromFile(canUploadInput);
 		}
 		catch (IOException e)
 		{
 			log("loadCanUploadList -- Error loading can-upload list: " + e);
+			clientsThatCanUpload = new Vector();
 		}
 		
 		log("loadCanUploadList : Exit OK");
