@@ -28,13 +28,13 @@ package org.martus.common.bulletin;
 
 import java.io.IOException;
 
-import org.martus.client.core.BulletinStore;
-import org.martus.common.crypto.*;
-import org.martus.common.database.*;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.Packet;
-import org.martus.util.*;
+import org.martus.util.InputStreamWithSeek;
 
 
 public class BulletinLoader
@@ -45,8 +45,8 @@ public class BulletinLoader
 			Bulletin.DamagedBulletinException,
 			MartusCrypto.NoKeyPairException
 	{
-		String[] standardFieldNames = BulletinStore.getDefaultPublicFieldTags();
-		String[] privateFieldNames = BulletinStore.getDefaultPrivateFieldTags();
+		String[] standardFieldNames = Bulletin.getDefaultPublicFieldTags();
+		String[] privateFieldNames = Bulletin.getDefaultPrivateFieldTags();
 		Bulletin b = new Bulletin(verifier, standardFieldNames, privateFieldNames);
 		b.clear();
 		b.setIsValid(false);

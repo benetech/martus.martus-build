@@ -916,7 +916,7 @@ public class MartusApp
 
 		String xml = (String)response.getResultVector().get(0);
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, dataPacketLocalId);
-		FieldDataPacket fdp = new FieldDataPacket(uid , BulletinStore.getDefaultPublicFieldTags());
+		FieldDataPacket fdp = new FieldDataPacket(uid , Bulletin.getDefaultPublicFieldTags());
 		byte[] xmlBytes = xml.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in =  new ByteArrayInputStreamWithSeek(xmlBytes);
 		fdp.loadFromXml(in, security);

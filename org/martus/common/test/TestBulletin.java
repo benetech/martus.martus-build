@@ -208,7 +208,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(Bulletin.MULTILINE, Bulletin.getFieldType("summary"));
 		assertEquals(Bulletin.MULTILINE, Bulletin.getFieldType("publicinfo"));
 		assertEquals(Bulletin.MULTILINE, Bulletin.getFieldType("privateinfo"));
-		assertEquals(Bulletin.DATE, Bulletin.getFieldType("eventdate"));
+		assertEquals(Bulletin.DATERANGE, Bulletin.getFieldType("eventdate"));
 		assertEquals(Bulletin.DATE, Bulletin.getFieldType("entrydate"));
 		assertEquals(Bulletin.CHOICE, Bulletin.getFieldType("language"));
 

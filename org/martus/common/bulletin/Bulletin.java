@@ -34,7 +34,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
-import org.martus.client.core.BulletinStore;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.common.database.Database;
@@ -60,7 +59,7 @@ public class Bulletin implements BulletinConstants
 
 	public Bulletin(MartusCrypto securityToUse)
 	{
-		this(securityToUse, BulletinStore.getDefaultPublicFieldTags(), BulletinStore.getDefaultPrivateFieldTags());
+		this(securityToUse, Bulletin.getDefaultPublicFieldTags(), Bulletin.getDefaultPrivateFieldTags());
 	}
 	
 	public Bulletin(MartusCrypto securityToUse, String[] standardFieldNames, String[] privateFieldNames)
@@ -504,6 +503,27 @@ public class Bulletin implements BulletinConstants
 	public Vector getPendingPrivateAttachments()
 	{
 		return pendingPrivateAttachments;
+	}
+
+	public static String[] getDefaultPublicFieldTags()
+	{
+		return new String[]
+		{
+			BulletinConstants.TAGLANGUAGE,
+	
+			BulletinConstants.TAGAUTHOR, BulletinConstants.TAGORGANIZATION,
+			BulletinConstants.TAGTITLE, BulletinConstants.TAGLOCATION, BulletinConstants.TAGKEYWORDS,
+			BulletinConstants.TAGEVENTDATE, BulletinConstants.TAGENTRYDATE,
+			BulletinConstants.TAGSUMMARY, BulletinConstants.TAGPUBLICINFO,
+		};
+	}
+
+	public static String[] getDefaultPrivateFieldTags()
+	{
+		return new String[]
+		{
+			BulletinConstants.TAGPRIVATEINFO,
+		};
 	}
 
 	private boolean encryptedFlag;

@@ -107,14 +107,14 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testGetStandardFieldNames()
 	{
-		List names = Arrays.asList(BulletinStore.getDefaultPublicFieldTags());
+		List names = Arrays.asList(Bulletin.getDefaultPublicFieldTags());
 		assertEquals(true, names.contains("author"));
 		assertEquals(false, names.contains("privateinfo"));
 		assertEquals(false, names.contains("nope"));
 		assertEquals(true, names.contains("language"));
 		assertEquals(true, names.contains("organization"));
 
-		List privateNames = Arrays.asList(BulletinStore.getDefaultPrivateFieldTags());
+		List privateNames = Arrays.asList(Bulletin.getDefaultPrivateFieldTags());
 		assertEquals(true, privateNames.contains("privateinfo"));
 		assertEquals(false, privateNames.contains("nope"));
 	}

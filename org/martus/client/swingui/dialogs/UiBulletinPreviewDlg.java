@@ -36,9 +36,9 @@ import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
-import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.bulletincomponent.UiBulletinComponentViewSection;
+import org.martus.common.bulletin.Bulletin;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.Utilities;
@@ -53,7 +53,7 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 		getContentPane().setLayout(new ParagraphLayout());
 
 		UiBulletinComponentViewSection view = new UiBulletinComponentViewSection(null, owner, isEncrypted);
-		String[] standardFieldTags = BulletinStore.getDefaultPublicFieldTags();
+		String[] standardFieldTags = Bulletin.getDefaultPublicFieldTags();
 		view.createLabelsAndFields(view, standardFieldTags);
 		view.createAttachmentTable();
 		view.copyDataFromPacket(fdp);

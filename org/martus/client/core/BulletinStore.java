@@ -47,7 +47,6 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinZipImporter;
@@ -695,8 +694,8 @@ public class BulletinStore
 
 		createSystemFolders();
 	
-		publicFieldTags = BulletinStore.getDefaultPublicFieldTags();
-		privateFieldTags = BulletinStore.getDefaultPrivateFieldTags();
+		publicFieldTags = Bulletin.getDefaultPublicFieldTags();
+		privateFieldTags = Bulletin.getDefaultPrivateFieldTags();
 	}
 	
 	public void setPublicFieldTags(String[] newTags)
@@ -1008,27 +1007,6 @@ public class BulletinStore
 		Bulletin imported = BulletinZipImporter.loadFromFile(security, inputFile);
 		BulletinSaver.saveToClientDatabase(imported, getDatabase(), mustEncryptPublicData(), security);
 		return imported.getUniversalId();
-	}
-
-	public static String[] getDefaultPublicFieldTags()
-	{
-		return new String[]
-		{
-			BulletinConstants.TAGLANGUAGE,
-	
-			BulletinConstants.TAGAUTHOR, BulletinConstants.TAGORGANIZATION,
-			BulletinConstants.TAGTITLE, BulletinConstants.TAGLOCATION, BulletinConstants.TAGKEYWORDS,
-			BulletinConstants.TAGEVENTDATE, BulletinConstants.TAGENTRYDATE,
-			BulletinConstants.TAGSUMMARY, BulletinConstants.TAGPUBLICINFO,
-		};
-	}
-
-	public static String[] getDefaultPrivateFieldTags()
-	{
-		return new String[]
-		{
-			BulletinConstants.TAGPRIVATEINFO,
-		};
 	}
 
 	public static int maxCachedBulletinCount = 100;
