@@ -1677,6 +1677,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		MockMartusServer other = new MockMartusServer(new File(dataDirectory));
 		assertEquals("didn't get saved/loaded?", true, other.canClientUpload(sampleId));
+		other.deleteAllFiles();
 	}
 	
 	public void testRequestUploadRights() throws Exception
@@ -1718,6 +1719,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		worked = other.requestUploadRights("whatever", nonExistentMagicWord);
 		assertEquals("didn't work?", NetworkInterfaceConstants.REJECTED, worked);
+		
+		other.deleteAllFiles();
 	}
 
 	public void testGetAllPacketKeysSealed() throws Exception
@@ -1799,6 +1802,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		InputStream in = new ByteArrayInputStream(Base64.decode(base64data));
 		assertTrue("Invalid signature?", clientSecurity.isSignatureValid(server.security.getPublicKeyString(), in, signature));
 		
+		server.deleteAllFiles();
 	}
 	
 	public void testBannedClients()

@@ -89,6 +89,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		new File(appWithAccount.getConfigInfoSignatureFilename()).delete();
 		
 		mockServer.deleteAllData();
+		mockServerNotAvailable.deleteAllFiles();
 
 		TRACE_END();
     }
@@ -480,14 +481,17 @@ public class TestMartusApp extends TestCaseEnhanced
 
 	public void testGetServerPublicKeyNoServer() throws Exception
 	{
+		MartusServer noServer = null;
 		try
 		{
-			MartusServer noServer = new MockServerNotAvailable();
+			noServer = new MockServerNotAvailable();
 			appWithoutServer.getServerPublicKey(new ServerSideNetworkHandlerForNonSSL(noServer));
 			fail("Should have thrown");
 		}
 		catch(MartusApp.ServerNotAvailableException expectedException)
 		{
+			MockMartusServer mock = (MockMartusServer) noServer;
+			mock.deleteAllFiles();
 		}
 	}
 		

@@ -51,6 +51,8 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 
 		mockServer.deleteAllData();
+		
+		mockServerNotAvailable.deleteAllFiles();
 	}
 
 	public void tearDown() throws Exception
