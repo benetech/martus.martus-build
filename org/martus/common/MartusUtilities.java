@@ -249,7 +249,7 @@ public class MartusUtilities
 		}
 	}
 
-	static class InvalidPublicKeyFileException extends Exception {}
+	public static class InvalidPublicKeyFileException extends Exception {}
 	
 	public static Vector importServerPublicKeyFromFile(File file, MartusCrypto verifier) throws 
 		IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
