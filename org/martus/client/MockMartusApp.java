@@ -73,7 +73,7 @@ public class MockMartusApp extends MartusApp
 		
 	}
 	
-	void loadSampleData()
+	public void loadSampleData()
 	{
 		BulletinFolder f = this.getFolderSent();
 		{

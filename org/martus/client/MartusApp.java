@@ -61,7 +61,7 @@ public class MartusApp
 		this(null, determineDataDirectory());
 	}
 	
-	protected MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse) throws MartusAppInitializationException
+	public MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse) throws MartusAppInitializationException
 	{
 		try
 		{
@@ -596,8 +596,8 @@ public class MartusApp
 		return getServerPublicKey(server);
 	}
 	
-	class ServerNotAvailableException extends Exception {}
-	class PublicInformationInvalidException extends Exception {}
+	public class ServerNotAvailableException extends Exception {}
+	public class PublicInformationInvalidException extends Exception {}
 	
 	public String getServerPublicKey(NetworkInterfaceForNonSSL server) throws
 		ServerNotAvailableException,
@@ -978,7 +978,7 @@ public class MartusApp
 		return fdp;
 	}
 
-	void retrieveOneBulletin(UniversalId uid, BulletinFolder retrievedFolder) throws Exception
+	public void retrieveOneBulletin(UniversalId uid, BulletinFolder retrievedFolder) throws Exception
 	{
 		File tempFile = File.createTempFile("$$$MartusApp", null);
 		tempFile.deleteOnExit();
@@ -1217,7 +1217,7 @@ public class MartusApp
 		return store.getAccountId();
 	}
 
-	protected void createAccountInternal(File keyPairFile, String userName, String userPassPhrase) throws
+	public void createAccountInternal(File keyPairFile, String userName, String userPassPhrase) throws
 					AccountAlreadyExistsException,
 					CannotCreateAccountFileException,
 					IOException
@@ -1271,7 +1271,7 @@ public class MartusApp
 		
 	}
 
-	protected boolean attemptSignInInternal(File keyPairFile, String userName, String userPassPhrase)
+	public boolean attemptSignInInternal(File keyPairFile, String userName, String userPassPhrase)
 	{
 		FileInputStream inputStream = null;
 		security.clearKeyPair();
@@ -1311,7 +1311,7 @@ public class MartusApp
 		return worked;
 	}
 
-	protected String getCombinedPassPhrase(String userName, String userPassPhrase)
+	public String getCombinedPassPhrase(String userName, String userPassPhrase)
 	{
 		return(userPassPhrase + ":" + userName);
 	}
@@ -1461,12 +1461,12 @@ public class MartusApp
 
 	String dataDirectory;
 	private MartusLocalization localization;
-	BulletinStore store;
+	public BulletinStore store;
 	private ConfigInfo configInfo;
-	NetworkInterface currentSSLServer;
+	public NetworkInterface currentSSLServer;
 	ClientSideNetworkGateway currentSSLServerProxy;
 	private boolean logUploads;
-	MartusCrypto security;
+	public MartusCrypto security;
 	private String currentUserName;
 	private int maxNewFolders;
 
@@ -1474,7 +1474,7 @@ public class MartusApp
 	public static final String PUBLIC_INFO_EXTENSION = ".mpi";
 	public static final String AUTHENTICATE_SERVER_FAILED = "Failed to Authenticate Server";
 	private final int MAXFOLDERS = 50;
-	int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
+	public int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 	private String currentLanguage;
 	private String currentDateFormat;
 }

@@ -26,7 +26,15 @@ public class TestAll extends java.lang.Object
 		// meta stuff
 		suite.addTest(new TestSuite(TestSSL.class));
 		suite.addTest(new TestSuite(TestDatabase.class));
+
 		suite.addTest(new TestSuite(TestMartusServer.class));
+
+		suite.addTest(new TestSuite(TestMartusApp.class));
+		suite.addTest(new TestSuite(TestRetrieveMyTableModel.class));
+		suite.addTest(new TestSuite(TestRetrieveMyDraftsTableModel.class));
+		suite.addTest(new TestSuite(TestRetrieveHQTableModel.class));
+		suite.addTest(new TestSuite(TestRetrieveHQDraftsTableModel.class));
+		suite.addTest(new TestSuite(TestSimpleX509TrustManager.class));
 		
 		// shared stuff
 		suite.addTest(org.martus.common.TestAll.suite());

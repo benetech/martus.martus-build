@@ -1,5 +1,7 @@
 package org.martus.client;
 
+import org.martus.meta.*;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -19,7 +21,6 @@ public class TestAll
 	{
 		TestSuite suite= new TestSuite("All Client Martus Tests");
 
-		suite.addTest(new TestSuite(TestMartusApp.class));
 		suite.addTest(new TestSuite(TestBulletinFolder.class));
 		suite.addTest(new TestSuite(TestBulletinStore.class));
 		suite.addTest(new TestSuite(TestBulletin.class));
@@ -31,12 +32,7 @@ public class TestAll
 		suite.addTest(new TestSuite(TestFolderList.class));
 		suite.addTest(new TestSuite(TestTransferableBulletin.class));
 		suite.addTest(new TestSuite(TestChoiceItem.class));
-		suite.addTest(new TestSuite(TestRetrieveMyTableModel.class));
-		suite.addTest(new TestSuite(TestRetrieveMyDraftsTableModel.class));
-		suite.addTest(new TestSuite(TestRetrieveHQTableModel.class));
-		suite.addTest(new TestSuite(TestRetrieveHQDraftsTableModel.class));
 		suite.addTest(new TestSuite(TestCurrentUiState.class));
-		suite.addTest(new TestSuite(TestSimpleX509TrustManager.class));
 		suite.addTest(new TestSuite(TestClientFileDatabase.class));
 
 	    return suite;
