@@ -164,7 +164,7 @@ public class TransferableBulletinList implements Transferable
 
 	static public File extractFileFrom(Transferable t)
 	{
-		if(!t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+		if(t==null || !t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			return null;
 		try
 		{
