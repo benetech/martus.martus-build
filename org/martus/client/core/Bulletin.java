@@ -363,7 +363,8 @@ public class Bulletin implements BulletinConstants
 
 		BulletinHeaderPacket headerPacket = b.getBulletinHeaderPacket();
 		DatabaseKey headerKey = key;
-		b.loadAnotherPacket(headerPacket, headerKey, null, verifier);
+		final Database db = store.getDatabase();
+		loadAnotherPacket(headerPacket, db, headerKey, null, verifier);
 		if(!b.isValid())
 			isHeaderValid = false;
 
@@ -375,12 +376,13 @@ public class Bulletin implements BulletinConstants
 			DatabaseKey dataKey = b.getDatabaseKeyForLocalId(headerPacket.getFieldDataPacketId());
 
 			byte[] dataSig = headerPacket.getFieldDataSignature();
-			b.loadAnotherPacket(dataPacket, dataKey, dataSig, verifier);
+			boolean isDataValid = loadAnotherPacket(dataPacket, db, dataKey, dataSig, verifier);
 
 			DatabaseKey privateDataKey = b.getDatabaseKeyForLocalId(headerPacket.getPrivateFieldDataPacketId());
 			byte[] privateDataSig = headerPacket.getPrivateFieldDataSignature();
-			b.loadAnotherPacket(privateDataPacket, privateDataKey, privateDataSig, verifier);
+			boolean isPrivateDataValid = loadAnotherPacket(privateDataPacket, db, privateDataKey, privateDataSig, verifier);
 
+			b.isValidFlag = (isDataValid && isPrivateDataValid);
 		}
 
 		if(b.isValid())
@@ -400,22 +402,23 @@ public class Bulletin implements BulletinConstants
 		return b;
 	}
 
-	void loadAnotherPacket(Packet packet, DatabaseKey key, byte[] expectedSig, MartusCrypto verifier) throws
+	static boolean loadAnotherPacket(Packet packet, Database db, DatabaseKey key, byte[] expectedSig, MartusCrypto verifier) throws
 			IOException,
 			NoKeyPairException
 	{
+		boolean isValidFlag = false;
 		packet.setUniversalId(key.getUniversalId());
 		try
 		{
-			Database db = getDatabase();
 			InputStreamWithSeek in = db.openInputStream(key, verifier);
 			if(in == null)
 			{
-				System.out.println("Packet not found: " + key.getLocalId());
+				//System.out.println("Packet not found: " + key.getLocalId());
 				isValidFlag = false;
-				return;
+				return false;
 			}
 			packet.loadFromXml(in, expectedSig, verifier);
+			isValidFlag = true;
 		}
 		catch(IOException e)
 		{
@@ -433,6 +436,8 @@ public class Bulletin implements BulletinConstants
 			//e.printStackTrace();
 			isValidFlag = false;
 		}
+		
+		return isValidFlag;
 	}
 
 	DatabaseKey getDatabaseKeyForLocalId(String localId)
