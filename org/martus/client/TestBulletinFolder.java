@@ -21,11 +21,11 @@ public class TestBulletinFolder extends TestCaseEnhanced
 
 			b = store.createEmptyBulletin();
 			b.save();
-			testFolder.add(b.getUniversalId());
+			testFolder.add(b);
 	
 			b2 = store.createEmptyBulletin();
 			b2.save();
-			testFolder.add(b2.getUniversalId());
+			testFolder.add(b2);
     	}
     }
 
@@ -134,7 +134,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		// can't add unsaved bulletin to a folder
 		Bulletin b = store.createEmptyBulletin();
 		assertTrue(b != null);
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		assertEquals(0, folder.getBulletinCount());
 
 		final int count = 7;
@@ -147,12 +147,12 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		Vector v = store.getAllBulletinUids();
 		UniversalId uid0 = (UniversalId)v.get(0);
 		b = store.findBulletinByUniversalId(uid0);
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		assertEquals(1, folder.getBulletinCount());
 		assertEquals(true, folder.contains(b));
 
 		// adding has no effect if it's already there
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		assertEquals(1, folder.getBulletinCount());
 		assertEquals(true, folder.contains(b));
 
@@ -174,7 +174,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 
 		testFolder.remove(b.getUniversalId());
 		assertEquals(1, testFolder.getBulletinCount());
-		testFolder.add(b.getUniversalId());
+		testFolder.add(b);
 	}
 
 	public void testRemoveAll()
@@ -207,22 +207,22 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		b.set("eventdate","20010101");
 		b.set("author","billy bob");
 		b.save();
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		b = store.createEmptyBulletin();
 		b.set("eventdate","20010201");
 		b.set("author","tom tupa");
 		b.save();
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		b = store.createEmptyBulletin();
 		b.set("eventdate","20010301");
 		b.set("author","adam ant");
 		b.save();
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		b = store.createEmptyBulletin();
 		b.set("eventdate","20010401");
 		b.set("author","nervous nellie");
 		b.save();
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		assertEquals("initial count", 4, folder.getBulletinCount());
 		b = folder.getBulletinSorted(0);
 		assertEquals("20010101", b.get("eventdate"));
@@ -261,7 +261,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		b.set("eventdate","20010401");
 		b.set("author","zippy zorro");
 		b.save();
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		b = folder.getBulletinSorted(0);
 		assertEquals("zippy zorro", b.get("author"));
 	}
@@ -273,7 +273,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		{
 			Bulletin b = store.createEmptyBulletin();
 			b.save();
-			folder.add(b.getUniversalId());
+			folder.add(b);
 		}
 	}
 

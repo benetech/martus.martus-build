@@ -98,7 +98,7 @@ public class MockMartusApp extends MartusApp
 			b.set("privateinfo",	"");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 		{
 			Bulletin b = createBulletin();
@@ -123,7 +123,7 @@ public class MockMartusApp extends MartusApp
 			b.set("privateinfo","");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 		{
 			Bulletin b = createBulletin();
@@ -132,7 +132,7 @@ public class MockMartusApp extends MartusApp
 			b.set("title", "Kidnapping in town square");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 		{
 			Bulletin b = createBulletin();
@@ -141,7 +141,7 @@ public class MockMartusApp extends MartusApp
 			b.set("title", "Missing child near river");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 		{
 			Bulletin b = createBulletin();
@@ -150,7 +150,7 @@ public class MockMartusApp extends MartusApp
 			b.set("title", "Child with broken arm");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 		{
 			Bulletin b = createBulletin();
@@ -171,7 +171,7 @@ public class MockMartusApp extends MartusApp
 							"shop is in the tourist  district, and has been confiscated.");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 		
 		{
@@ -190,7 +190,7 @@ public class MockMartusApp extends MartusApp
 								"the back of the office during the attack.");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 			
 		{
@@ -205,7 +205,7 @@ public class MockMartusApp extends MartusApp
 			b.set("publicinfo", "The legal research to be used in the upcoming War Crimes Tribunal was lost when computers with the research and strategy were stolen in March.  Government officials claim that the computers loss was due to petty theft, but many in the NGO community believe that it is a targeted campaign to thwart justice in the upcoming tribunal.");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 			
 		{
@@ -220,7 +220,7 @@ public class MockMartusApp extends MartusApp
 			b.set("publicinfo", "Toxic storage tanks used by the chemical plant facilities south of St. Petersburg are not meeting international standards.  Workers fear that contamination of air and groundwater could ensue.");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 			
 		{
@@ -236,7 +236,7 @@ public class MockMartusApp extends MartusApp
 			b.set("publicinfo", "Two men arrived in the middle of the night and pounded on the door.  The men abducted the husband and the woman tried to stop them.  They broke her arm and she has not seen her husband since.");
 			b.setSealed();
 			b.save();
-			f.add(b.getUniversalId());
+			f.add(b);
 		}
 	}
 		

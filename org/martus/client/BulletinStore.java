@@ -283,7 +283,7 @@ public class BulletinStore
 
 	public synchronized void discardBulletin(BulletinFolder f, Bulletin b)
 	{
-		getFolderDiscarded().add(b.getUniversalId());
+		getFolderDiscarded().add(b);
 		removeBulletinFromFolder(b, f);
 		if(isOrphan(b))
 			destroyBulletin(b);
@@ -329,7 +329,7 @@ public class BulletinStore
 		while(folder.getBulletinCount() > 0)
 		{
 			Bulletin b = folder.getBulletinSorted(0);
-			discarded.add(b.getUniversalId());
+			discarded.add(b);
 			folder.remove(b.getUniversalId());
 		}
 
@@ -483,7 +483,7 @@ public class BulletinStore
 	{
 		if(from.equals(to))
 			return;
-		to.add(b.getUniversalId());
+		to.add(b);
 		removeBulletinFromFolder(b, from);
 	}
 
@@ -600,7 +600,7 @@ public class BulletinStore
 		if(b == null)
 			return;
 
-		folder.add(uId);
+		folder.add(b);
 	}
 
 	private void setUpStore(File baseDirectory, Database db)

@@ -101,7 +101,12 @@ public class BulletinFolder
 		return (getStatusAllowed().indexOf(bulletinStatus) != -1);
 	}
 
-	public synchronized void add(UniversalId id) 
+	public synchronized void add(Bulletin b) 
+	{
+		add(b.getUniversalId());		
+	}
+	
+	synchronized void add(UniversalId id) 
 	{
 		if(rawIdList.contains(id))
 		{

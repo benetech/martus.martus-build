@@ -158,7 +158,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		
 		b.save();
 		BulletinFolder f = store.createFolder("test");
-		f.add(b.getUniversalId());
+		f.add(b);
 		store.destroyBulletin(b);
 		assertEquals(0, store.getBulletinCount());
 		assertEquals(0, f.getBulletinCount());
@@ -240,7 +240,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		
 		Bulletin start1 = store.createEmptyBulletin();
 		start1.save();
-		f.add(start1.getUniversalId());
+		f.add(start1);
 		
 		Bulletin b = f.getBulletinSorted(0);
 		assertNotNull("Sent folder should have bulletins", b);
@@ -256,8 +256,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		b2.save();
 		BulletinFolder user1 = store.createFolder("1");
 		BulletinFolder user2 = store.createFolder("2");
-		user1.add(b2.getUniversalId());
-		user2.add(b2.getUniversalId());
+		user1.add(b2);
+		user2.add(b2);
 
 		assertEquals(true, user1.contains(b2));
 		assertEquals(true, user2.contains(b2));
@@ -284,7 +284,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		Bulletin b1 = store.createEmptyBulletin();
 		b1.save();
-		f.add(b1.getUniversalId());
+		f.add(b1);
 		assertEquals(true, f.contains(b1));
 		store.removeBulletinFromFolder(b1, f);
 		assertEquals(false, f.contains(b1));
@@ -406,7 +406,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		b.set("subject", "golly");
 		b.save();
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		assertEquals(true, folder.contains(b));
 		store.deleteFolder("b");
 		folder = store.getFolderDiscarded();
@@ -470,7 +470,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		Bulletin b = store.createEmptyBulletin();
 		b.save();
-		folder.add(b.getUniversalId());
+		folder.add(b);
 		xml = store.folderToXml(folder);
 		assertStartsWith(MartusXml.getFolderTagStart("Test"), xml);
 		assertContains(MartusXml.getIdTag(folder.getBulletinSorted(0).getUniversalIdString()), xml);
@@ -496,7 +496,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		BulletinFolder f1 = store.createFolder("First");
 		Bulletin b = store.createEmptyBulletin();
-		f1.add(b.getUniversalId());
+		f1.add(b);
 
 		expected = MartusXml.getFolderListTagStart();
 		Vector updatedFolderNames = store.getAllFolderNames();
@@ -599,7 +599,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinFolder f = store.createFolder(folderName);
 		Bulletin b = store.createEmptyBulletin();
 		b.save();
-		f.add(b.getUniversalId());
+		f.add(b);
 		store.saveFolders();
 
 		assertEquals("keys", 3*store.getBulletinCount(), db.getRecordCount());
@@ -649,8 +649,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.save();
 		BulletinFolder folder = store.createFolder("blah");
-		folder.add(b1.getUniversalId());
-		folder.add(b2.getUniversalId());
+		folder.add(b1);
+		folder.add(b2);
 		assertEquals(store.getBulletinCount(), folder.getBulletinCount());
 		store.clearFolder("blah");
 		assertEquals(0, folder.getBulletinCount());
@@ -1008,9 +1008,9 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Set stillEmptySet = store.getSetOfBulletinUniversalIdsInFolders();
 		assertTrue("not still empty", stillEmptySet.isEmpty());
 
-		store.getFolderDrafts().add(b1.getUniversalId());
-		store.getFolderDiscarded().add(b1.getUniversalId());
-		store.getFolderDiscarded().add(b2.getUniversalId());
+		store.getFolderDrafts().add(b1);
+		store.getFolderDiscarded().add(b1);
+		store.getFolderDiscarded().add(b2);
 		Set two = store.getSetOfBulletinUniversalIdsInFolders();
 		
 		assertEquals("not two?", 2, two.size());
@@ -1033,13 +1033,13 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("two Missing b1?", two.contains(b1.getUniversalId()));
 		assertTrue("two Missing b2?", two.contains(b2.getUniversalId()));
 
-		store.getFolderDrafts().add(b1.getUniversalId());
-		store.getFolderDiscarded().add(b1.getUniversalId());
+		store.getFolderDrafts().add(b1);
+		store.getFolderDiscarded().add(b1);
 		Set one = store.getSetOfOrphanedBulletinUniversalIds();
 		assertEquals("not one?", 1, one.size());
 		assertTrue("one Missing b2?", one.contains(b2.getUniversalId()));
 		
-		store.getFolderDiscarded().add(b2.getUniversalId());
+		store.getFolderDiscarded().add(b2);
 		Set emptyAgain = store.getSetOfOrphanedBulletinUniversalIds();
 		assertTrue("not empty again?", emptyAgain.isEmpty());
 
@@ -1052,11 +1052,11 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.save();
 		
-		store.getFolderDraftOutbox().add(b1.getUniversalId());
+		store.getFolderDraftOutbox().add(b1);
 		assertEquals("hidden-only not an orphan?", true, store.isOrphan(b1));
 
-		store.getFolderDrafts().add(b2.getUniversalId());
-		store.getFolderDraftOutbox().add(b2.getUniversalId());
+		store.getFolderDrafts().add(b2);
+		store.getFolderDraftOutbox().add(b2);
 		assertEquals("hidden-plus is an orphan?", false, store.isOrphan(b2));
 	}
 
