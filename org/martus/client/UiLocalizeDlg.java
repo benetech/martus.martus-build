@@ -16,7 +16,7 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 		owner = mainWindow;
 		MartusApp app = owner.getApp();
 
-		setTitle(app.getWindowTitle("options"));
+		setTitle(app.getMenuLabel("Preferences"));
 
 		dateFormatDropdown = new UiChoiceEditor(MartusLocalization.getDateFormats());
 		dateFormatDropdown.setText(owner.getApp().getCurrentDateFormatCode());
