@@ -13,6 +13,7 @@
   <property name="util-dir" value="${martus-dir}/util"/>
   <property name="swing-dir" value="${martus-dir}/swing"/>
   <property name="hrvd-dir" value="org/hrvd"/>
+  <property name="amplifier-dir" value="${martus-dir}/amplifier"/>
 
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
@@ -28,7 +29,8 @@
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
   <property name="server-package" value="${martus-package}.server"/>
   <property name="server-files" value="${server-dir}/*.class,
-                    ${server-dir}/**/*.class
+                    ${server-dir}/**/*.class,
+                    ${amplifier-dir}/**/*.class
                     "/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
@@ -130,7 +132,7 @@
   <!-- Build server -->
   <target name="build-server" depends="init,build-common">
 
-    <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath=".;${common-jar}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${server-dir};${amplifier-dir}" classpath=".;${common-jar}" failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
