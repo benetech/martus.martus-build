@@ -28,6 +28,7 @@ import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
+import org.martus.common.MartusXml;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
 import org.martus.common.TestCaseEnhanced;
@@ -819,7 +820,7 @@ public class TestBulletin extends TestCaseEnhanced
 	{
 		saveAndVerifyValid(label, b);
 		String packetContents = db.readRecord(packetKey, security);
-		final int positionAfterHeaderSig = packetContents.indexOf(";;");
+		final int positionAfterHeaderSig = packetContents.indexOf(MartusXml.packetStartCommentEnd);
 		int removeCharAt = positionAfterHeaderSig;
 		db.writeRecord(packetKey, packetContents.substring(0,removeCharAt-1) + packetContents.substring(removeCharAt+1));
 		verifyBulletinIsInvalid(label, b, headerIsValid, expectedPublic, expectedPrivate);

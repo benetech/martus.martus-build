@@ -1,11 +1,8 @@
 package org.martus.common;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
@@ -113,8 +110,10 @@ public class Packet
 			synchronized(signer)
 			{
 				dest.startSignature(signer);
-	
-				dest.writeDirect(MartusXml.packetStartComment + MartusXml.newLine);			
+				String startComment = 	MartusXml.packetStartCommentStart +
+										MartusUtilities.getVersionDate(getClass()) +
+										MartusXml.packetStartCommentEnd;
+				dest.writeDirect(startComment + MartusXml.newLine);			
 				dest.writeStartTag(getPacketRootElementName());
 				internalWriteXml(dest);
 				dest.writeEndTag(getPacketRootElementName());
@@ -205,7 +204,7 @@ public class Packet
 		UnicodeReader reader = new UnicodeReader(in);
 		
 		final String startComment = reader.readLine();
-		if(startComment == null || !startComment.equals(MartusXml.packetStartComment))
+		if(!isValidStartComment(startComment))
 			throw new InvalidPacketException("No start comment");
 
 		final String packetType = reader.readLine();
@@ -253,6 +252,15 @@ public class Packet
 		}
 
 		in.seek(0);
+	}
+
+	public static boolean isValidStartComment(final String startComment)
+	{
+		if( startComment == null ||
+			!startComment.startsWith(MartusXml.packetStartCommentStart) ||
+			!startComment.endsWith(MartusXml.packetStartCommentEnd))
+				return false;
+		return true;
 	}
 
 	static void digestOneLine(final String packetType, MartusCrypto verifier)

@@ -7,6 +7,8 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
+import org.martus.client.Bulletin;
+
 public class TestPacket extends TestCaseEnhanced
 {
     public TestPacket(String name)
@@ -28,6 +30,27 @@ public class TestPacket extends TestCaseEnhanced
 		Packet packet = new Packet();
 	}
 	
+	public void testIsValidVersion()
+	{
+		assertFalse("Valid null comment?", Packet.isValidStartComment(null));
+		assertFalse("No End Comment is valid?", Packet.isValidStartComment(MartusXml.packetStartCommentStart));
+		assertFalse("No Start Comment is valid?", Packet.isValidStartComment(MartusXml.packetStartCommentEnd));
+
+		String noVersion = MartusXml.packetStartCommentStart + MartusXml.packetStartCommentEnd;
+		assertTrue("no version # is valid for backward compatability.", Packet.isValidStartComment(noVersion));
+
+		String validVersionString = Bulletin.getToday();
+		String ValidVersion2String = validVersionString + "b";
+
+		String validVersionStartComment = MartusXml.packetStartCommentStart + validVersionString + MartusXml.packetStartCommentEnd;
+		String validVersion2StartComment = MartusXml.packetStartCommentStart + ValidVersion2String + MartusXml.packetStartCommentEnd;
+		String validVersion3StartComment = MartusXml.packetStartCommentStart + "happydayok" + MartusXml.packetStartCommentEnd;
+
+		assertTrue("Valid version Start Comment", Packet.isValidStartComment(validVersionStartComment));
+		assertTrue("Valid version too long Start Comment", Packet.isValidStartComment(validVersion2StartComment));
+		assertTrue("Valid version not a date Start Comment", Packet.isValidStartComment(validVersion3StartComment));
+	}
+	
 	public void testWriteXmlToStream() throws Exception
 	{
 		Packet packet = new Packet();
@@ -47,7 +70,14 @@ public class TestPacket extends TestCaseEnhanced
 		byte[] bytes = out.toByteArray();
 
 		String result = new String(bytes, "UTF-8");
-		assertStartsWith(MartusXml.packetStartComment, result);
+		assertStartsWith(MartusXml.packetStartCommentStart, result);
+		
+		int startCommentLength = MartusXml.packetStartCommentStart.length();
+		int endCommentPosition = result.indexOf(MartusXml.packetStartCommentEnd);
+		assertTrue("No end startComment?", endCommentPosition >= startCommentLength);
+		String version = result.substring(startCommentLength, endCommentPosition);
+		assertEquals("Invalid Version", MartusUtilities.getVersionDate(getClass()) , version);
+		
 		assertContains(packet.getLocalId(), result);
 		assertContains(packet.getAccountId(), result);
 		assertContains(MartusXml.packetSignatureStart, result);
@@ -85,7 +115,7 @@ public class TestPacket extends TestCaseEnhanced
 		StringWriter writer = new StringWriter();
 		packet.writeXml(writer, security);
 		String result = writer.toString();
-		assertStartsWith(MartusXml.packetStartComment, result);
+		assertStartsWith(MartusXml.packetStartCommentStart, result);
 		assertContains(packet.getLocalId(), result);
 		assertContains(packet.getAccountId(), result);
 	}
@@ -275,7 +305,7 @@ public class TestPacket extends TestCaseEnhanced
 		
 		byte[] bytes = out.toByteArray();
 
-		int corruptDataAt = MartusXml.packetStartComment.length() + 5;
+		int corruptDataAt = MartusXml.packetStartCommentStart.length() + MartusXml.packetStartCommentEnd.length() + 15;
 		try
 		{
 			bytes[corruptDataAt] ^= 0xFF;

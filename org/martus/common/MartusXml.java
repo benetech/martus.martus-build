@@ -115,8 +115,6 @@ public class MartusXml
 	public final static String packetStartCommentStart = "<!--MartusPacket;";
 	public final static String packetStartCommentSigLen = "siglen=";
 	public final static String packetStartCommentEnd = ";-->";
-	public final static String packetStartComment = packetStartCommentStart + 
-											packetStartCommentEnd;
 											
 	public final static String PacketElementName = "Packet";
 	public final static String FieldDataPacketElementName = "FieldDataPacket";
