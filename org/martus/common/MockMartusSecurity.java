@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.KeyPair;
-import java.util.Arrays;
 
 public class MockMartusSecurity extends MartusSecurity
 {
