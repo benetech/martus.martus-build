@@ -1109,9 +1109,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(showMaximized)
 		{
 			setSize(screenSize.width - 50 , screenSize.height - 50);
-			setVisible(true);//required for setting maximized
-			setExtendedState(MAXIMIZED_BOTH);	
+			maximizeWindow(this);
 		}
+	}
+
+	public void maximizeWindow(JFrame window) 
+	{
+		window.setVisible(true);//required for setting maximized
+		window.setExtendedState(MAXIMIZED_BOTH);	
 	}
 	
 	boolean isValidScreenPosition(Dimension screenSize, Dimension objectSize, Point objectPosition)
