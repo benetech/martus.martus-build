@@ -26,6 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.common;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.Arrays;
@@ -303,12 +304,9 @@ public class TestBulletinSaver extends TestCaseEnhanced
 		AttachmentProxy[] list = loaded.getPublicAttachments();
 		assertEquals("count wrong?", 2, list.length);
 
-		File destFile1 = File.createTempFile("$$$MartusTestBulletinExt", null);
-		destFile1.deleteOnExit();
-		destFile1.delete();
-
-		BulletinSaver.extractAttachmentToFile(db, list[0], security, destFile1);
-		assertTrue("didn't create?", destFile1.exists());
+		ByteArrayOutputStream result = new ByteArrayOutputStream();
+		BulletinSaver.extractAttachmentToStream(db, list[0], security, result);
+		assertTrue("Wrong bytes?", Arrays.equals(result.toByteArray(), sampleBytes1));
 	}
 
 	static File tempFile1;

@@ -1044,24 +1044,14 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("attachment", true, db.doesRecordExist(new DatabaseKey(reloaded.getPublicAttachments()[0].getUniversalId())));
 		assertEquals("attachment Private", true, db.doesRecordExist(new DatabaseKey(reloaded.getPrivateAttachments()[0].getUniversalId())));
 
-		File tempRawFile = File.createTempFile("$$$MartusTestImpDraftZipRaw",null);
-		tempRawFile.deleteOnExit();
-		BulletinSaver.extractAttachmentToFile(db, reloaded.getPublicAttachments()[0], security, tempRawFile);
+		ByteArrayOutputStream publicStream = new ByteArrayOutputStream();
+		BulletinSaver.extractAttachmentToStream(db, reloaded.getPublicAttachments()[0], security, publicStream);
+		byte[] rawBytes = publicStream.toByteArray();
+		assertEquals("wrong bytes Public", true, Arrays.equals(sampleBytes1,rawBytes));
 
-		byte[] rawBytes = new byte[sampleBytes1.length];
-		FileInputStream in = new FileInputStream(tempRawFile);
-		in.read(rawBytes);
-		in.close();
-		assertEquals("wrong bytes", true, Arrays.equals(sampleBytes1,rawBytes));
-
-		File tempRawFilePrivate = File.createTempFile("$$$MartusTestImpDraftZipRawPrivate",null);
-		tempRawFilePrivate.deleteOnExit();
-		BulletinSaver.extractAttachmentToFile(db, reloaded.getPrivateAttachments()[0], security, tempRawFilePrivate);
-
-		byte[] rawBytesPrivate = new byte[sampleBytes2.length];
-		FileInputStream in2 = new FileInputStream(tempRawFilePrivate);
-		in2.read(rawBytesPrivate);
-		in2.close();
+		ByteArrayOutputStream privateStream = new ByteArrayOutputStream();
+		BulletinSaver.extractAttachmentToStream(db, reloaded.getPrivateAttachments()[0], security, privateStream);
+		byte[] rawBytesPrivate = privateStream.toByteArray();
 		assertEquals("wrong bytes Private", true, Arrays.equals(sampleBytes2, rawBytesPrivate));
 	}
 

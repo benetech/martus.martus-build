@@ -29,6 +29,13 @@ package org.martus.common;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+
+import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongPacketTypeException;
 
 public class BulletinSaver
 {
@@ -139,11 +146,24 @@ public class BulletinSaver
 		Packet.WrongPacketTypeException,
 		MartusCrypto.CryptoException
 	{
+		FileOutputStream out = new FileOutputStream(destFile);
+		extractAttachmentToStream(db, a, verifier, out);
+	}
+
+
+	public static void extractAttachmentToStream(Database db, AttachmentProxy a, MartusCrypto verifier, OutputStream out)
+		throws
+			IOException,
+			CryptoException,
+			InvalidPacketException,
+			SignatureVerificationException,
+			WrongPacketTypeException,
+			InvalidBase64Exception
+	{
 		UniversalId uid = a.getUniversalId();
 		byte[] sessionKeyBytes = a.getSessionKeyBytes();
 		DatabaseKey key = new DatabaseKey(uid);
 		InputStreamWithSeek xmlIn = db.openInputStream(key, verifier);
-		FileOutputStream out = new FileOutputStream(destFile);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, out);
 	}
 }
