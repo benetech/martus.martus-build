@@ -1415,7 +1415,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		editingBulletin = true;
 		setEnabled(false);
-		currentActiveFrame = new UiEditBulletinDlg(b, this);
+		currentActiveFrame = new UiBulletinEditDlg(b, this);
 	}
 	
 	public void stopEditing()
