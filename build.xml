@@ -15,8 +15,8 @@
   <property name="hrvd-dir" value="org/hrvd"/>
   <property name="amplifier-dir" value="${martus-dir}/amplifier"/>
 
-  <property name="jars-dir" value="martus-third-party-jars"/>
-  <property name="htdocs-dir" value="htdocs"/>
+  <property name="jars-dir" value="ThirdPartyJars"/>
+  <property name="htdocs-dir" value="www"/>
 
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
@@ -34,7 +34,8 @@
   <property name="server-files" value="${server-dir}/*.class,
                     ${server-dir}/**/*.class,
                     ${amplifier-dir}/**/*.class,
-                    ${jars-dir}/**/*.jar,
+                    ${server-dir}/main/main-class.txt,
+                    ${jars-dir}/**/*,
                     ${htdocs-dir}/**/*
                     "/>
 
@@ -51,7 +52,8 @@
                 ${client-dir}/**/Martus.png,
                 ${client-dir}/**/MartusLogo.gif,
                 ${client-dir}/**/locked.jpg,
-                ${client-dir}/**/unlocked.jpg
+                ${client-dir}/**/unlocked.jpg,
+                ${jars-dir}/common/**/*
                 "/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
@@ -144,6 +146,7 @@
     <mkdir dir="${dist}"/>
 
     <jar jarfile="${server-jar}" basedir="."
+    	manifest="${server-dir}/main/main-class.txt"
             includes="${server-files}, ${common-files}"/>
   </target>
 
