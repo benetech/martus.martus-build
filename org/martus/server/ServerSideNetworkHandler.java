@@ -306,14 +306,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			return result;
 		}
 
-// The following will be required when the server has real news
-// They are here because CLIENTS ARE ALREADY CODED WITH THESE PARAMETERS!
-//		int index = 0;
-//		long wantNewsSince = ((Long)parameters.get(index++)).longValue();
-//		String newsCategory = (String)parameters.get(index++);
-//		String preferredLanguage = (String)parameters.get(index++);
-//		String versionLabel = (String)parameters.get(index++);
-//		String buildDate = (String)parameters.get(index++);
 		result = server.getNews(myAccountId);
 
 		server.clientConnectionExit();
