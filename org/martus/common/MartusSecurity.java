@@ -433,6 +433,20 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 	
+	public synchronized void signatureDigestBytes(byte[] bytes) throws
+			MartusSignatureException
+	{
+		try
+		{
+			sigEngine.update(bytes);
+		}
+		catch(SignatureException e)
+		{
+			//System.out.println("signatureGet:" + e);
+			throw(new MartusSignatureException());
+		}
+	}
+	
 	public String createRandomToken()
 	{
 		byte[] token = new byte[TOKEN_BYTE_COUNT];

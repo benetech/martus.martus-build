@@ -54,8 +54,7 @@ public class XmlWriterFilter
 			try
 			{
 				byte[] bytes = s.getBytes("UTF-8");
-				for(int i=0; i < bytes.length; ++i)
-					sigGen.signatureDigestByte(bytes[i]);
+				sigGen.signatureDigestBytes(bytes);
 			}
 			catch(MartusCrypto.MartusSignatureException e)
 			{

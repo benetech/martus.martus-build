@@ -34,6 +34,9 @@ public interface MartusCrypto
 	public void signatureDigestByte(byte b) throws 
 		MartusSignatureException;
 
+	public void signatureDigestBytes(byte[] bytes) throws
+			MartusSignatureException;
+
 	public byte[] signatureGet() throws 
 		MartusSignatureException;
 		

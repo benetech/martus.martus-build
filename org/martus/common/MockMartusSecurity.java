@@ -1,4 +1,3 @@
-/* $Id: */
 package org.martus.common;
 
 import java.io.ByteArrayInputStream;
@@ -53,6 +52,13 @@ public class MockMartusSecurity extends MartusSecurity
 		MartusSignatureException
 	{
 		checksum += b;
+	}
+
+	public void signatureDigestBytes(byte[] bytes)
+		throws MartusSignatureException
+	{
+		for (int i = 0; i < bytes.length; i++)
+			signatureDigestByte(bytes[i]);
 	}
 
 	public byte[] signatureGet() throws 
