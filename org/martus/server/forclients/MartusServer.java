@@ -1586,16 +1586,16 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 
-	void createUploadRecord(OutputStream out, String bulletinLocalId) throws IOException, CreateDigestException
+	void createBulletinUploadRecord(OutputStream out, String bulletinLocalId) throws IOException, CreateDigestException
 	{
 		String timeStamp = MartusServerUtilities.createTimeStamp();
 		byte[] partOfPrivateKey = security.getDigestOfPartOfPrivateKey();
-		String stringToDigest = UPLOADED_BULLETIN_TOKEN + bulletinLocalId + 
+		String stringToDigest = BULLETIN_UPLOAD_RECORD_IDENTIFIER + bulletinLocalId + 
 								timeStamp + Base64.encode(partOfPrivateKey);
 		String digest = MartusSecurity.createDigestString(stringToDigest);
 
 		UnicodeWriter writer = new UnicodeWriter(out);
-		writer.writeln(UPLOADED_BULLETIN_TOKEN);
+		writer.writeln(BULLETIN_UPLOAD_RECORD_IDENTIFIER);
 		writer.writeln(bulletinLocalId);
 		writer.writeln(timeStamp);
 		writer.writeln(digest);
@@ -2212,7 +2212,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
 	private static final String ADMINSTARTUPCONFIGDIRECTORY = "deleteOnStartup";
 	
-	private static final String UPLOADED_BULLETIN_TOKEN = "Martus Uploaded Bulletin Token 1.0";
+	private static final String BULLETIN_UPLOAD_RECORD_IDENTIFIER = "Martus Bulletin Upload Record 1.0";
 	
 	private final int MAX_FAILED_UPLOAD_ATTEMPTS = 100;
 	private static final long magicWordsGuessIntervalMillis = 60 * 1000;
