@@ -105,9 +105,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 		
 		server.setServerName(servername);
-
+		
+		
+		System.out.println("Version " + ServerConstants.version);
+		
 		String versionInfo = MartusUtilities.getVersionDate();
-		System.out.println("Version " + versionInfo);
+		System.out.println("Build Date " + versionInfo);
 
 		System.out.print("Enter passphrase: ");
 		System.out.flush();
