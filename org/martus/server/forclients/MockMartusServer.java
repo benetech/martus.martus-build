@@ -280,7 +280,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	
 	public void deleteAllFiles() throws IOException
 	{
-		File allowUploadFile = getAllowUploadFile();
+		File allowUploadFile = serverForClients.getAllowUploadFile();
 		allowUploadFile.delete();
 		if(allowUploadFile.exists())
 			throw new IOException("allowUploadFile");
@@ -308,7 +308,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 
 		dataDirectory.delete();
 		if(dataDirectory.exists())
-			throw new IOException("dataDirectory");
+			throw new IOException("dataDirectory: " + dataDirectory.getPath());
 	}
 
 	public Vector getNews(String accountId, String versionLabel, String versionBuildDate)
@@ -350,11 +350,9 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		return super.getPacket(myAccountId, authorAccountId, bulletinLocalId, packetLocalId);
 	}
 
-	public File getAllowUploadFile()
+	public void allowUploads(String clientId)
 	{
-		if(allowUploadFile != null)
-			return allowUploadFile;
-		return super.getAllowUploadFile();
+		serverForClients.allowUploads(clientId);
 	}
 
 	public int countDownToGetPacketFailure;
@@ -368,8 +366,6 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	public Vector listFieldOfficeSummariesResponse;
 	public Vector listFieldOfficeAccountsResponse;
 	public Vector complianceResponse;
-	
-	public File allowUploadFile;
 	
 	public String lastClientId;
 	public String lastUploadedBulletinId;

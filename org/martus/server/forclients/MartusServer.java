@@ -7,7 +7,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -38,7 +37,6 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.Packet;
 import org.martus.common.UnicodeReader;
-import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
@@ -119,7 +117,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		security = new MartusSecurity();
 		serverForClients = new ServerForClients(this);
-		clientsThatCanUpload = new Vector();
 		failedUploadRequestsPerIp = new Hashtable();
 		
 		startTimer(new ShutdownRequestMonitor(), shutdownRequestIntervalMillis);
@@ -175,50 +172,17 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public void verifyConfigurationFiles()
 	{
-		File allowUploadFileSignature = MartusUtilities.getSignatureFileFromFile(getAllowUploadFile());
-		if(getAllowUploadFile().exists() || allowUploadFileSignature.exists())
-		{
-			try
-			{
-				MartusUtilities.verifyFileAndSignature(getAllowUploadFile(), allowUploadFileSignature, security, security.getPublicKeyString());
-			}
-			catch(FileVerificationException e)
-			{
-				e.printStackTrace();
-				System.out.println(UPLOADSOKFILENAME + " did not verify against signature file");
-				System.exit(7);
-			}
-		}
+		serverForClients.verifyConfigurationFiles();
 	}
 
 	public void loadConfigurationFiles() throws IOException
 	{
-		serverForClients.loadBannedClients();
-		loadCanUploadFile();
-		serverForClients.loadMagicWordsFile();
+		serverForClients.loadConfigurationFiles();
+
 		//Tests will fail if compliance isn't last.
 		loadComplianceStatementFile();
 	}
 
-	void loadCanUploadFile()
-	{
-		try
-		{
-			BufferedReader reader = new BufferedReader(new FileReader(getAllowUploadFile()));
-			loadCanUploadList(reader);
-			reader.close();
-		}
-		catch(FileNotFoundException nothingToWorryAbout)
-		{
-			;
-		}
-		catch(IOException e)
-		{
-			// TODO: Log this so the administrator knows
-			System.out.println("MartusServer constructor: " + e);
-		}
-	}
-	
 	public Database getDatabase()
 	{
 		return database;
@@ -311,7 +275,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return NetworkInterfaceConstants.SERVER_DOWN;
 			
-		if(tryMagicWord.length() == 0 && clientsThatCanUpload.contains(clientId))
+		if(tryMagicWord.length() == 0 && canClientUpload(clientId))
 			return NetworkInterfaceConstants.OK;
 		
 		if(!uploadGranted)
@@ -323,7 +287,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(serverMaxLogging)
 			logging("requestUploadRights granted to :" + clientId + " with magicword=" + tryMagicWord);
 			
-		allowUploads(clientId);
+		serverForClients.allowUploads(clientId);
 		return NetworkInterfaceConstants.OK;
 	}
 	
@@ -1294,42 +1258,12 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	public boolean canClientUpload(String clientId)
 	{
-		return clientsThatCanUpload.contains(clientId);
+		return serverForClients.canClientUpload(clientId);
 	}
 	
 	public boolean isClientBanned(String clientId)
 	{
 		return serverForClients.isClientBanned(clientId);
-	}
-
-	public synchronized void allowUploads(String clientId)
-	{
-		if(serverMaxLogging)
-			logging("allowUploads " + getClientAliasForLogging(clientId) + " : " + getPublicCode(clientId));
-		clientsThatCanUpload.add(clientId);
-		
-		try
-		{
-			UnicodeWriter writer = new UnicodeWriter(getAllowUploadFile());
-			for(int i = 0; i < clientsThatCanUpload.size(); ++i)
-			{
-				writer.writeln((String)clientsThatCanUpload.get(i));
-			}
-			writer.close();
-			MartusUtilities.createSignatureFileFromFile(getAllowUploadFile(), security);
-			if(serverMaxLogging)
-				logging("allowUploads : Exit OK");
-		}
-		catch(IOException e)
-		{
-			logging("allowUploads " + e);
-			//System.out.println("MartusServer.allowUploads: " + e);
-		}
-		catch(MartusSignatureException e)
-		{
-			logging("allowUploads: " + e);
-			//System.out.println("MartusServer.allowUploads: " + e);
-		}
 	}
 
 	public String getPublicCode(String clientId) 
@@ -1372,24 +1306,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 
-	public synchronized void loadCanUploadList(BufferedReader canUploadInput)
-	{
-		if(serverMaxLogging)
-			logging("loadCanUploadList");
-
-		try
-		{
-			loadListFromFile(canUploadInput, clientsThatCanUpload);
-		}
-		catch (IOException e)
-		{
-			logging("loadCanUploadList -- Error loading can-upload list: " + e);
-		}
-		
-		if(serverMaxLogging)
-				logging("loadCanUploadList : Exit OK");
-	}
-	
 	public void loadComplianceStatementFile() throws IOException
 	{
 		try
@@ -1659,7 +1575,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 	
-	private String getClientAliasForLogging(String clientId)
+	String getClientAliasForLogging(String clientId)
 	{
 		return getDatabase().getFolderForAccount(clientId);
 	}
@@ -2169,11 +2085,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		setDatabase(diskDatabase);
 	}
 
-	public File getAllowUploadFile()
-	{
-		return new File(dataDirectory, UPLOADSOKFILENAME);
-	}
-
 	File getKeyPairFile()
 	{
 		return new File(getStartupConfigDirectory(), getKeypairFilename());
@@ -2228,7 +2139,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			{
 				logging("Shutdown request received.");
 				
-				clientsThatCanUpload.clear();				
+				serverForClients.prepareToShutdown();				
 				getShutdownFile().delete();
 				logging("Server has exited.");
 				try
@@ -2266,7 +2177,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	Database database;
 	private String complianceStatement; 
 	
-	public Vector clientsThatCanUpload;
 	Hashtable failedUploadRequestsPerIp;
 	
 	String serverName;
@@ -2276,7 +2186,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	public static boolean serverSSLLogging;
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
-	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 	private static final String COMPLIANCESTATEMENTFILENAME = "compliance.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	

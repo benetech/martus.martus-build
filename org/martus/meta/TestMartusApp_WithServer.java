@@ -369,7 +369,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		MockMartusServerChunks server = new MockMartusServerChunks();
 		server.verifyAndLoadConfigurationFiles();
 		server.setSecurity(mockSecurityForServer);
-		server.clientsThatCanUpload.clear();
+		server.serverForClients.clearCanUploadList();
 		server.allowUploads(appWithServer.getAccountId());
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(server));
 		appWithServer.serverChunkSize = 100;
@@ -434,7 +434,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("It was sent", 1, appWithServer.getFolderSent().getBulletinCount());
 
 		assertNull("Again Empty outbox", appWithServer.backgroundUpload(null));
-		mockServer.clientsThatCanUpload.clear();
+		mockServer.serverForClients.clearCanUploadList();
 		TRACE_END();
 	}
 
@@ -454,7 +454,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("second returned an error?", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
 		assertEquals("second didn't get removed?", 0, draftOutbox.getBulletinCount());
 
-		mockServer.clientsThatCanUpload.clear();
+		mockServer.serverForClients.clearCanUploadList();
 		TRACE_END();
 	}
 

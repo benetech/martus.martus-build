@@ -1,13 +1,19 @@
 package org.martus.server.forclients;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.UnicodeReader;
+import org.martus.common.UnicodeWriter;
+import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.core.MartusSecureWebServer;
 
 public class ServerForClients implements ServerForNonSSLClientsInterface, ServerForClientsInterface
@@ -17,6 +23,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		coreServer = coreServerToUse;
 		clientsBanned = new Vector();
 		magicWords = new Vector();
+		clientsThatCanUpload = new Vector();
 
 	}
 	
@@ -38,11 +45,41 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	void displayClientStatistics()
 	{
 		System.out.println();
-		System.out.println(coreServer.clientsThatCanUpload.size() + " client(s) currently allowed to upload");
+		System.out.println(clientsThatCanUpload.size() + " client(s) currently allowed to upload");
 		System.out.println(clientsBanned.size() + " client(s) are currently banned");
 		System.out.println(magicWords.size() + " active magic word(s)");
 	}
 
+	public void verifyConfigurationFiles()
+	{
+		File allowUploadFileSignature = MartusUtilities.getSignatureFileFromFile(getAllowUploadFile());
+		if(getAllowUploadFile().exists() || allowUploadFileSignature.exists())
+		{
+			try
+			{
+				MartusCrypto security = getSecurity();
+				MartusUtilities.verifyFileAndSignature(getAllowUploadFile(), allowUploadFileSignature, security, security.getPublicKeyString());
+			}
+			catch(FileVerificationException e)
+			{
+				e.printStackTrace();
+				System.out.println(UPLOADSOKFILENAME + " did not verify against signature file");
+				System.exit(7);
+			}
+		}
+	}
+
+	public void loadConfigurationFiles() throws IOException
+	{
+		loadBannedClients();
+		loadCanUploadFile();
+		loadMagicWordsFile();
+	}
+
+	void prepareToShutdown()
+	{
+		clearCanUploadList();
+	}
 
 	public boolean isClientBanned(String clientId)
 	{
@@ -88,10 +125,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, port);
 	}
 	
-	public void allowUploads(String clientId)
-	{
-		coreServer.allowUploads(clientId);
-	}
 	
 
 
@@ -325,13 +358,95 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return original.toLowerCase().trim().replaceAll("\\s", "");
 	}
 
+	public boolean canClientUpload(String clientId)
+	{
+		return clientsThatCanUpload.contains(clientId);
+	}
+	
+	public void clearCanUploadList()
+	{
+		clientsThatCanUpload.clear();
+	}
+
+	public synchronized void allowUploads(String clientId)
+	{
+		logging("allowUploads " + coreServer.getClientAliasForLogging(clientId) + " : " + getPublicCode(clientId));
+		clientsThatCanUpload.add(clientId);
+		
+		try
+		{
+			UnicodeWriter writer = new UnicodeWriter(getAllowUploadFile());
+			for(int i = 0; i < clientsThatCanUpload.size(); ++i)
+			{
+				writer.writeln((String)clientsThatCanUpload.get(i));
+			}
+			writer.close();
+			MartusCrypto security = getSecurity();
+			MartusUtilities.createSignatureFileFromFile(getAllowUploadFile(), security);
+			logging("allowUploads : Exit OK");
+		}
+		catch(IOException e)
+		{
+			logging("allowUploads " + e);
+			//System.out.println("MartusServer.allowUploads: " + e);
+		}
+		catch(MartusSignatureException e)
+		{
+			logging("allowUploads: " + e);
+			//System.out.println("MartusServer.allowUploads: " + e);
+		}
+	}
+
+	public File getAllowUploadFile()
+	{
+		return new File(coreServer.dataDirectory, UPLOADSOKFILENAME);
+	}
+
+	void loadCanUploadFile()
+	{
+		try
+		{
+			BufferedReader reader = new BufferedReader(new FileReader(getAllowUploadFile()));
+			loadCanUploadList(reader);
+			reader.close();
+		}
+		catch(FileNotFoundException nothingToWorryAbout)
+		{
+			;
+		}
+		catch(IOException e)
+		{
+			// TODO: Log this so the administrator knows
+			System.out.println("MartusServer constructor: " + e);
+		}
+	}
+	
+	public synchronized void loadCanUploadList(BufferedReader canUploadInput)
+	{
+		logging("loadCanUploadList");
+
+		try
+		{
+			coreServer.loadListFromFile(canUploadInput, clientsThatCanUpload);
+		}
+		catch (IOException e)
+		{
+			logging("loadCanUploadList -- Error loading can-upload list: " + e);
+		}
+		
+		logging("loadCanUploadList : Exit OK");
+	}
+	
+
 
 	MartusServer coreServer;
 	private int activeClientsCounter;
 	Vector magicWords;
+	public Vector clientsThatCanUpload;
 	public Vector clientsBanned;
 	private long bannedClientsFileLastModified;
 
 	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
+	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 }
