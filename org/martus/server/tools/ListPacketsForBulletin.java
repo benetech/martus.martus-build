@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.common.utilities;
+package org.martus.server.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -36,6 +36,7 @@ import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.UniversalId;
+import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.server.forclients.MartusServer;
 import org.martus.util.InputStreamWithSeek;
 
