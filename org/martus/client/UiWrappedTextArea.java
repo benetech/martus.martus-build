@@ -26,17 +26,19 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client;
 
+import java.awt.Window;
+
 import javax.swing.JTextArea;
 
 public class UiWrappedTextArea extends JTextArea
 {
-	public UiWrappedTextArea(UiMainWindow mainWindow, String message)
+	public UiWrappedTextArea(Window mainWindow, String message)
 	{
 		this(mainWindow, message, 80);	
 	}
 
 
-	public UiWrappedTextArea(UiMainWindow mainWindow, String message, int maxChars)
+	public UiWrappedTextArea(Window mainWindow, String message, int maxChars)
 	{
 		super(message);
 		int messageLength = message.length();
