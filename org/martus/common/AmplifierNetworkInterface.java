@@ -40,7 +40,7 @@ import java.util.Vector;
 public interface AmplifierNetworkInterface
 {
 	public Vector getAccountIds(String myAccountId, Vector parameters, String signature);
-	public Vector getAccountUniversalIds(String myAccountId, Vector parameters, String signature);
+	public Vector getPublicBulletinUniversalIds(String myAccountId, Vector parameters, String signature);
 	//public Vector getBulletinChunk(String myAccountId, Vector parameters, String signature);
 	public Vector getAmplifierBulletinChunk(String myAccountId, Vector parameters, String signature);
 }
