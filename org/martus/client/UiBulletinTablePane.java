@@ -62,9 +62,9 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 		}
 	}
 
-	public void bulletinHasChanged(Bulletin b)
+	public void bulletinContentsHaveChanged(Bulletin b)
 	{
-		table.bulletinHasChanged(b);
+		table.bulletinContentsHaveChanged(b);
 	}
 
 	public void doEditBulletin()

@@ -165,10 +165,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return getApp().getStore();
 	}
 	
-	public void bulletinHasChanged(Bulletin b)
+	public void bulletinContentsHaveChanged(Bulletin b)
 	{
-		table.bulletinHasChanged(b);
-		preview.bulletinHasChanged(b);
+		table.bulletinContentsHaveChanged(b);
+		preview.bulletinContentsHaveChanged(b);
 	}
 
 	public void folderHasChanged(BulletinFolder f)
@@ -201,7 +201,7 @@ System.out.println("UiMainWindow.bulletinSelectionHasChanged: " + selectedBullet
 			b = selectedBulletins[0];
 System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITLE));
 		}
-		preview.refresh(b);
+		preview.setCurrentBulletin(b);
 	}
 
 	public boolean isDiscardedFolderSelected()
@@ -671,7 +671,7 @@ System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITL
 	{
 		boolean printCancelled = false;
 		//System.out.println("Print");
-		if(preview.getBulletin() == null)
+		if(preview.getCurrentBulletin() == null)
 			return;
 		
 		preview.startPrintMode();

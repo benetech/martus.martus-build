@@ -16,9 +16,9 @@ public class UiBulletinPreview extends JScrollPane
 		getViewport().add(view);
 	}
 
-	public Bulletin getBulletin()
+	public Bulletin getCurrentBulletin()
 	{
-		return bulletin;
+		return currentBulletin;
 	}
 
 	public JComponent getView()
@@ -36,16 +36,16 @@ public class UiBulletinPreview extends JScrollPane
 		view.endPrintMode();	
 	}
 
-	public void refresh(Bulletin b)
+	public void setCurrentBulletin(Bulletin b)
 	{
-		if(bulletin != null && b != null &&
-				b.getUniversalId().equals(bulletin.getUniversalId()))
+		if(currentBulletin != null && b != null &&
+				b.getUniversalId().equals(currentBulletin.getUniversalId()))
 		{
 			//System.out.println("UiBulletinPreview.refresh: skipping");
 			return;
 		}
 		
-		bulletin = b;
+		currentBulletin = b;
 		try
 		{
 			view.copyDataFromBulletin(b);
@@ -61,13 +61,13 @@ public class UiBulletinPreview extends JScrollPane
 		indicateEncrypted(isEncrypted);
 	}
 
-	public void bulletinHasChanged(Bulletin b)
+	public void bulletinContentsHaveChanged(Bulletin b)
 	{
-		if(bulletin == null)
+		if(currentBulletin == null)
 			return;
 
-		if(b.getLocalId().equals(bulletin.getLocalId()))
-			refresh(b);
+		if(b.getLocalId().equals(currentBulletin.getLocalId()))
+			setCurrentBulletin(b);
 	}
 
 	private void indicateEncrypted(boolean isEncrypted)
@@ -75,6 +75,6 @@ public class UiBulletinPreview extends JScrollPane
 		view.updateEncryptedIndicator(isEncrypted);
 	}
 
-	Bulletin bulletin;
+	Bulletin currentBulletin;
 	UiBulletinView view = null;
 }
