@@ -39,7 +39,6 @@ public class TestFolderList extends TestCase
 		BulletinFolder folder = store.createFolder("test");
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
-		System.out.println(list.getName(0));
 		assertEquals("Outbox not first?", app.getFolderLabel(app.getFolderOutbox().getName()), list.getName(0));
 
 		node = list.getNode(baseCount);
