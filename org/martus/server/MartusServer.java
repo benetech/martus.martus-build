@@ -130,7 +130,15 @@ public class MartusServer implements NetworkInterfaceConstants
 			String passphrase = reader.readLine();
 			if(server.hasAccount())
 			{
-				server.loadAccount(passphrase);
+				try
+				{
+					server.loadAccount(passphrase);
+				}
+				catch (Exception e)
+				{
+					System.out.println("Invalid password: " + e);
+					System.exit(73);
+				}
 			}
 			else
 			{
@@ -160,7 +168,12 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.out.println(MartusUtilities.formatPublicCode(publicCode));
 			System.out.println();
 		}
-		catch(Exception e)
+		catch(IOException e)
+		{
+			System.out.println("MartusServer.main: " + e);
+			System.exit(3);
+		}
+		catch (InvalidBase64Exception e)
 		{
 			System.out.println("MartusServer.main: " + e);
 			System.exit(3);
