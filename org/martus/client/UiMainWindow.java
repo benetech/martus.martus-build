@@ -136,6 +136,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
 		int quarantineCount = app.quarantineUnreadableBulletins();
+	
+		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_OK))
+		{
+			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_UNKNOWN);
+			uiState.save(app.getUiStateFile());
+		}
+
 		app.loadFolders();
 		int orphanCount = app.repairOrphans();
 
@@ -164,6 +171,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		errorChecker = new javax.swing.Timer(10*1000, new UploadErrorChecker());
 		errorChecker.start();
+
+		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_UNKNOWN))
+		{
+			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_OK);
+			uiState.save(app.getUiStateFile());
+		}
 		return true;
     }
 
@@ -458,9 +471,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private void initalizeUiState()
 	{
 		uiState = new CurrentUiState();
-		uiState.load(app.getUiStateFile());
+		File stateFile = app.getUiStateFile();
+		uiState.load(stateFile);
 		uiState.setCurrentLanguage(app.getCurrentLanguage());
 		uiState.setCurrentDateFormat(app.getCurrentDateFormatCode());
+		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_UNKNOWN))
+		{
+			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_BAD);
+			uiState.save(stateFile);
+		}
 	}
 	
 	public void selectBulletinInCurrentFolderIfExists(UniversalId id)

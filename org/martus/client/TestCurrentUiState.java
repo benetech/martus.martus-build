@@ -36,11 +36,13 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		Dimension sampleEditorDimension = new Dimension(123, 43);	
 		Point sampleEditorPosition = new Point(2, 99);
 		boolean sampleEditorMaximized = true;
+		String sampleOperationState = CurrentUiState.OPERATING_STATE_UNKNOWN;
 
 		CurrentUiState state = new CurrentUiState();
 		assertEquals("Default Keyboard not Virtual?", true, state.isCurrentDefaultKeyboardVirtual());
 		assertEquals("Default PreviewSplitterPosition not 100?", 100, state.getCurrentPreviewSplitterPosition());
 		assertEquals("Default FolderSplitterPosition not 180?", 180, state.getCurrentFolderSplitterPosition());
+		assertEquals("Default state not OK?", CurrentUiState.OPERATING_STATE_OK, state.getCurrentOperatingState());
 
 		state.setCurrentFolder(sampleFolder);	
 		assertEquals("Not the same folder name?", sampleFolder, state.getCurrentFolder());
@@ -61,6 +63,8 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		state.setCurrentEditorPosition(sampleEditorPosition);
 		state.setCurrentEditorMaximized(sampleEditorMaximized);
 		
+		state.setCurrentOperatingState(sampleOperationState);
+
 		File file = File.createTempFile("$$$TestCurrentFolder",null);
 		file.deleteOnExit();
 		state.save(file);
@@ -83,6 +87,8 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		assertEquals("Wrong Editor Dimension?", sampleEditorDimension, loaded.getCurrentEditorDimension());
 		assertEquals("Wrong Editor Position?", sampleEditorPosition, loaded.getCurrentEditorPosition());
 		assertEquals("Wrong Editor Maximized?", sampleEditorMaximized, loaded.isCurrentEditorMaximized());
+		
+		assertEquals("Wrong Operating State?", sampleOperationState, loaded.getCurrentOperatingState());
 	}
 	public void testLoadAndSaveErrors() throws Exception
 	{

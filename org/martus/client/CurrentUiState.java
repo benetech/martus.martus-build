@@ -26,6 +26,7 @@ public class CurrentUiState implements Serializable
 		currentAppPosition = new Point();
 		currentEditorDimension = new Dimension();
 		currentEditorPosition = new Point();
+		currentOperatingState = OPERATING_STATE_OK;
 	}
 	
 	public void setCurrentFolder(String folderName)
@@ -148,6 +149,11 @@ public class CurrentUiState implements Serializable
 		return currentEditorPosition;
 	}
 
+	public String getCurrentOperatingState() 
+	{
+		return currentOperatingState;
+	}
+
 	public void setCurrentAppDimension(Dimension currentAppDimension) 
 	{
 		this.currentAppDimension = currentAppDimension;
@@ -176,6 +182,11 @@ public class CurrentUiState implements Serializable
 	public void setCurrentEditorPosition(Point currentEditorPosition) 
 	{
 		this.currentEditorPosition = currentEditorPosition;
+	}
+
+	public void setCurrentOperatingState(String currentOperatingState) 
+	{
+		this.currentOperatingState = currentOperatingState;
 	}
 
 	public void save(File file)
@@ -208,7 +219,9 @@ public class CurrentUiState implements Serializable
 			out.writeInt(currentEditorPosition.x);
 			out.writeInt(currentEditorPosition.y);
 			out.writeBoolean(currentEditorMaximized);
-			
+
+			out.writeUTF(currentOperatingState);
+						
 			out.flush();
 			out.close();
 		}
@@ -252,6 +265,10 @@ public class CurrentUiState implements Serializable
 						currentEditorPosition.x = in.readInt();
 						currentEditorPosition.y = in.readInt();
 						currentEditorMaximized = in.readBoolean();
+						if(version > 3)
+						{
+							currentOperatingState = in.readUTF();
+						}
 					}
 				}
 			}		
@@ -270,7 +287,8 @@ public class CurrentUiState implements Serializable
 		return (firstIntegerIn == uiStateFirstIntegerInFile);	
 	}
 	
-	private static final short VERSION = 3;
+	private static final short VERSION = 4;
+	//Initial Version
 	protected static int uiStateFirstIntegerInFile = 2002;
 	protected String currentFolderName;
 	protected String currentSortTag;
@@ -280,15 +298,24 @@ public class CurrentUiState implements Serializable
 	protected String currentDateFormat;
 	protected String currentLanguage;
 
+	//Version 1
 	protected int currentPreviewSplitterPosition = 100;
 	protected int currentFolderSplitterPosition = 180;
 
+	//Version 2
 	protected Dimension currentAppDimension;
 	protected Point currentAppPosition;
 	protected boolean currentAppMaximized;
 
+	//Version 3
 	protected Dimension currentEditorDimension;
 	protected Point currentEditorPosition;
 	protected boolean currentEditorMaximized;
+	
+	//Version 4
+	protected String currentOperatingState;
+	static final String OPERATING_STATE_OK = "OK";
+	static final String OPERATING_STATE_UNKNOWN = "UNKNOWN";
+	static final String OPERATING_STATE_BAD = "BAD";
 
 }
