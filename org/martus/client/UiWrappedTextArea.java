@@ -22,16 +22,22 @@ public class UiWrappedTextArea extends JTextArea
 		int rows = 1;
 		if(cols > maxChars)
 		{
-			rows = (cols / maxChars) + 1;
 			cols = maxChars;
 		}
 
-		int start = message.indexOf("\n\n");
-		while(start >= 0 )
+		int startOfParagraph = 0;
+		int endOfParagraph = message.indexOf("\n");
+		while(endOfParagraph >= 0 )
 		{
-			++rows;	
-			start = message.indexOf("\n\n", start+2);
+			int paragraphLength = endOfParagraph - startOfParagraph;
+			rows += (paragraphLength / cols) + 1;
+
+			startOfParagraph = endOfParagraph + 1;
+			endOfParagraph = message.indexOf("\n", startOfParagraph);
 		}
+		
+		// cushion for safety
+		++rows;
 
 		setRows(rows);
 		setColumns(cols);
