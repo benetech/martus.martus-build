@@ -74,6 +74,14 @@ public class TestCaseEnhanced extends TestCase
 		out.close();
 		return tempFile;
 	}
+	
+	protected File createTempDirectory() throws IOException
+	{
+		File dir = createTempFile();
+		dir.delete();
+		dir.mkdirs();
+		return dir;
+	}
 
 
 	public static void assertFalse(String message, boolean actual)
