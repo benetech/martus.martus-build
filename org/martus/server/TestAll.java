@@ -21,6 +21,7 @@ public class TestAll
 
 		suite.addTest(new TestSuite(TestServerFileDatabase.class));
 		suite.addTest(new TestSuite(TestServerSideNetworkHandler.class));
+		suite.addTest(new TestSuite(TestSupplierSideMirroringHandler.class));
 
 	    return suite;
 	}
