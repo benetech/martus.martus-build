@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 
-import org.martus.common.*;
+import org.martus.common.TestCaseEnhanced;
 
 
 public class TestCurrentUiState extends TestCaseEnhanced
@@ -18,7 +18,18 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		super(name);
 	}
 
-	public void testBasics() throws Exception
+	public void testDefaultValues() throws Exception
+	{
+		CurrentUiState state = new CurrentUiState();
+		assertEquals("Current Version not 4 - more tests needed?", 4, CurrentUiState.VERSION);
+
+		assertEquals("Default Keyboard not Virtual?", true, state.isCurrentDefaultKeyboardVirtual());
+		assertEquals("Default PreviewSplitterPosition not 100?", 100, state.getCurrentPreviewSplitterPosition());
+		assertEquals("Default FolderSplitterPosition not 180?", 180, state.getCurrentFolderSplitterPosition());
+		assertEquals("Default state not OK?", CurrentUiState.OPERATING_STATE_OK, state.getCurrentOperatingState());
+	}
+
+	public void testSaveAndLoadState() throws Exception
 	{
 		String sampleFolder = "myFolder";
 		String sampleTag = "lfdlsj";
@@ -39,10 +50,6 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		String sampleOperationState = CurrentUiState.OPERATING_STATE_UNKNOWN;
 
 		CurrentUiState state = new CurrentUiState();
-		assertEquals("Default Keyboard not Virtual?", true, state.isCurrentDefaultKeyboardVirtual());
-		assertEquals("Default PreviewSplitterPosition not 100?", 100, state.getCurrentPreviewSplitterPosition());
-		assertEquals("Default FolderSplitterPosition not 180?", 180, state.getCurrentFolderSplitterPosition());
-		assertEquals("Default state not OK?", CurrentUiState.OPERATING_STATE_OK, state.getCurrentOperatingState());
 
 		state.setCurrentFolder(sampleFolder);	
 		assertEquals("Not the same folder name?", sampleFolder, state.getCurrentFolder());
@@ -90,6 +97,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		
 		assertEquals("Wrong Operating State?", sampleOperationState, loaded.getCurrentOperatingState());
 	}
+
 	public void testLoadAndSaveErrors() throws Exception
 	{
 		File file = File.createTempFile("$$$TestCurrentFolder2",null);
@@ -213,5 +221,4 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		assertEquals("Didn't get Default PreviewSplitterPosition?", 100, loaded.getCurrentPreviewSplitterPosition());
 		assertEquals("Didn't get Default FolderSplitterPosition?", 180, loaded.getCurrentFolderSplitterPosition());
 	}
-
 }

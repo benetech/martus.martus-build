@@ -287,8 +287,8 @@ public class CurrentUiState implements Serializable
 		return (firstIntegerIn == uiStateFirstIntegerInFile);	
 	}
 	
-	private static final short VERSION = 4;
-	//Initial Version
+	protected static final short VERSION = 4;
+	//Version 1
 	protected static int uiStateFirstIntegerInFile = 2002;
 	protected String currentFolderName;
 	protected String currentSortTag;
@@ -298,16 +298,15 @@ public class CurrentUiState implements Serializable
 	protected String currentDateFormat;
 	protected String currentLanguage;
 
-	//Version 1
+	//Version 2
 	protected int currentPreviewSplitterPosition = 100;
 	protected int currentFolderSplitterPosition = 180;
 
-	//Version 2
+	//Version 3
 	protected Dimension currentAppDimension;
 	protected Point currentAppPosition;
 	protected boolean currentAppMaximized;
 
-	//Version 3
 	protected Dimension currentEditorDimension;
 	protected Point currentEditorPosition;
 	protected boolean currentEditorMaximized;
