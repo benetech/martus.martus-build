@@ -1,0 +1,481 @@
+<!-- Ant build.xml - Needs Ant v1.5.1 or later -->
+<project name="martus" default="build" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property file="build.properties" />
+  <property environment="env"/>
+
+  <property name="dist"  value="dist"/>
+  <property name="bin"  value="bin"/>
+  <property name="docs"  value="TechDocs/javadocs"/>
+  <property name="martus-dir" value="org/martus"/>
+  <property name="martus-package" value="org.martus"/>
+
+  <property name="util-dir" value="${cvs.home}/martus-utils/source/${martus-dir}/util"/>
+  <property name="swing-dir" value="${cvs.home}/martus-swing/source/${martus-dir}/swing"/>
+  <property name="hrvd-dir" value="${cvs.home}/martus-hrdag/source/org/hrvd"/>
+  <property name="logi-dir" value="${cvs.home}/martus-logi/source/org/logi"/>
+  <property name="amplifier-dir" value="${cvs.home}/martus-amplifier/source/${martus-dir}/amplifier"/>
+
+  <property name="jars-dir" value="ThirdPartyJars"/>
+  <property name="htdocs-dir" value="www"/>
+  <property name="verifier-dir" value="verify"/>
+
+  <property name="common-dir" value="${cvs.home}/martus-common/source/${martus-dir}/common"/>
+  <property name="common-jar" value= "${dist}/martus-common.jar"/>
+  <property name="common-package" value="${martus-package}.common"/>
+
+  <property name="common-files" value="${common-dir}/**/*.class,
+                        ${util-dir}/**/*.class,
+                        ${hrvd-dir}/**/*.class,
+                        ${logi-dir}/**/*.class,
+                    	${common-dir}/**/*.class,
+                    	${swing-dir}/**/*.class
+                    	"/>
+
+  <property name="mspa-dir" value="${cvs.home}/martus-mspa/source/${martus-dir}/mspa"/>
+  <property name="mspa-package" value="${martus-package}.mspa"/>
+
+  <property name="mspa-client-jar" value= "${dist}/martus-mspa-client.jar"/>
+  <property name="mspa-client-files" value="${mspa-dir}/client/**/*.class,
+                                            ${mspa-dir}/main/**/*.class,
+                                            ${mspa-dir}/common/**/*.class,
+                                            ${mspa-dir}/main/main-class.txt"/>
+
+  <property name="server-dir" value="${cvs.home}/martus-server/source/${martus-dir}/server"/>
+  <property name="server-jar" value= "${dist}/martus-server.jar"/>
+  <property name="server-package" value="${martus-package}.server"/>
+  <property name="server-files" value="${server-dir}/*.class,
+                    ${server-dir}/**/*.class,
+                    ${amplifier-dir}/**/*.class,
+                    ${amplifier-dir}/**/LanguageNames*.txt,
+                    ${amplifier-dir}/**/index.html,
+                    ${mspa-dir}/common/**/*.class,
+                    ${mspa-dir}/roothelper/**/*.class,
+                    ${mspa-dir}/server/**/*.class,
+                    ${server-dir}/main/main-class.txt,
+                    ${jars-dir}/**/*,
+                    ${htdocs-dir}/**/*,
+                    ${verifier-dir}/**/*
+                    "/>
+
+  <property name="client-dir" value="${cvs.home}/martus-client/source/${martus-dir}/client"/>
+  <property name="client-jar" value= "${dist}/martus.jar"/>
+  <property name="client-package" value="${martus-package}.client"/>
+  <property name="client-files" value="${client-dir}/*.class,
+                ${client-dir}/**/*.class,
+                ${client-dir}/core/main-class.txt,
+                ${client-dir}/**/Martus-ru.mtf,
+                ${client-dir}/**/Martus-es.mtf,
+                ${client-dir}/**/MartusHelp-en.txt,
+                ${client-dir}/**/MartusHelpTOC-en.txt,
+                ${client-dir}/**/MartusHelp-es.txt,
+                ${client-dir}/**/MartusHelpTOC-es.txt,
+                ${client-dir}/**/MartusHelp-ru.txt,
+                ${client-dir}/**/MartusHelpTOC-ru.txt,
+                ${client-dir}/**/*.png,
+                ${client-dir}/**/*.gif,
+                ${client-dir}/**/*.jpg
+                "/>
+
+  <property name="meta-dir" value="${cvs.home}/martus-meta/source/${martus-dir}/meta"/>
+  <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
+  <property name="meta-package" value="${martus-package}.meta"/>
+  <property name="meta-files" value="${meta-dir}/*.class"/>
+
+<!-- ================================================================== -->
+<!-- I N I T                                                            -->
+<!-- ================================================================== -->
+  <target name="init">
+    <!-- tstamp task initializes ${DSTAMP} etc -->
+    <tstamp/>
+    <buildnumber/>
+    <property name="martus.version" value=" ${env.CURRENT_VERSION}"/>
+  </target>
+
+<!-- ================================================================== -->
+<!-- C L E A N                                                          -->
+<!-- ================================================================== -->
+  <target name="clean">
+
+    <!-- Remove dis jars & folder -->
+    <delete dir="${dist}"/>
+    <delete dir="${bin}"/>
+
+    <delete file="${BuildDateFile}"/>
+
+    <!-- Remove common class files -->
+    <delete>
+        <fileset dir="${common-dir}" includes="**/*.class"/>
+        <fileset dir="${hrvd-dir}" includes="**/*.class"/>
+        <fileset dir="${logi-dir}" includes="**/*.class"/>
+        <fileset dir="${util-dir}" includes="**/*.class"/>
+        <fileset dir="${swing-dir}" includes="**/*.class"/>
+    </delete>
+
+    <!-- Remove meta class files -->
+    <delete>
+        <fileset dir="${meta-dir}" includes="**/*.class"/>
+    </delete>
+
+    <!-- Remove client class files -->
+    <delete>
+        <fileset dir="${client-dir}" includes="**/*.class"/>
+    </delete>
+
+    <!-- Remove server class files -->
+    <delete>
+        <fileset dir="${server-dir}" includes="**/*.class"/>
+    </delete>
+  </target>
+
+<!-- ================================================================== -->
+<!-- B U I L D                                                          -->
+<!-- ================================================================== -->
+
+    <!-- Build common -->
+  <target name="build-common" depends="init">
+    <mkdir dir="${bin}"/>
+
+    <replace file="${common-dir}/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
+
+    <javac destdir="bin" target="1.4" optimize="on" srcdir="${hrvd-dir};${logi-dir};${util-dir};${swing-dir};${common-dir}" classpath="." failonerror="true">
+            <include name="**/*.java"/>
+    </javac>
+
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${common-jar}" basedir="${bin}" includes="**/*.class"/>
+    
+    <!-- clean up -->
+    <delete dir="${bin}"/>
+
+  </target>
+
+  <!-- Build client -->
+  <target name="build-client" depends="init,build-common">
+
+    <javac target="1.4" optimize="on" srcdir="${swing-dir};${client-dir}" classpath=".;${common-jar}" failonerror="true">
+            <include name="**/*.java"/>
+    </javac>
+
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${client-jar}" basedir="."
+                manifest="${client-dir}/core/main-class.txt"
+            includes="${client-files},
+                                ${common-files}"/>
+  </target>
+
+  <!-- Build server -->
+  <target name="build-server" depends="init,build-common">
+
+    <javac target="1.4" optimize="on" srcdir="${server-dir};${amplifier-dir};${mspa-dir}" classpath=".;${common-jar}" failonerror="true">
+            <include name="**/*.java"/>
+    </javac>
+
+    <rmic classname="org.martus.mspa.roothelper.MessengerImpl" base="."/>
+
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${server-jar}" basedir="."
+    	    manifest="${server-dir}/main/main-class.txt"
+            includes="${server-files}, ${common-files}"/>
+
+    <jar jarfile="${mspa-client-jar}" basedir="."
+            manifest="${mspa-dir}/main/main-class.txt"
+            includes="${mspa-client-files}"/>
+
+  </target>
+
+  <!-- Build meta -->
+  <target name="build-meta" depends="init,build-common,build-server,build-client">
+
+    <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath=".;${client-jar};${server-jar}" failonerror="true">
+            <include name="**/*.java"/>
+    </javac>
+
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${meta-jar}" basedir="."
+            includes="${meta-files},
+                    ${common-files},
+                    ${server-files},
+                    ${client-files}"/>
+  </target>
+
+  <!-- Build all (same as meta) -->
+  <target name="build" depends="build-meta"/>
+
+<!-- ================================================================== -->
+<!-- T E S T S                                                          -->
+<!-- ================================================================== -->
+  <target name="test-common" depends="build-common">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <pathelement location="${common-jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="${common-package}.TestCommon"/>
+        </junit>
+  </target>
+
+  <target name="test-server" depends="build-server">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <pathelement location="${server-jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="${server-package}.core.TestAll"/>
+        </junit>
+
+        <!-- mspa client -->
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <pathelement location="${mspa-client-jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="${mspa-package}.client.test.TestAll"/>
+        </junit>
+  </target>
+
+  <target name="test-client" depends="build-client">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <pathelement location="${client-jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="${client-package}.test.TestAll"/>
+        </junit>
+  </target>
+
+  <target name="testall" depends="build">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <pathelement location="${meta-jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="${meta-package}.TestAll"/>
+        </junit>
+  </target>
+
+<!-- ================================================================== -->
+<!-- J A V A D O C S                                                    -->
+<!-- ================================================================== -->
+    <target name="docs">
+            <mkdir dir="${docs}"/>
+            <javadoc
+                    destdir="${docs}"
+                    sourcepath="."
+            packagenames="${martus-package}.*"
+                    access="private"
+                    use="false"
+                    bottom="Copyright &#169; 2003 Beneficent Technology, Inc. (Benetech)."
+                    />
+    </target>
+
+<!-- ================================================================== -->
+<!-- C H E C K  V A R S                                                  -->
+<!-- ================================================================== -->
+    <target name="check_keypass" unless="sign.keypass">
+
+        <input
+            message="Please enter key pw:"
+            addproperty="sign.keypass"
+        />
+
+    </target>
+
+    <target name="check_storepass" unless="sign.storepass">
+
+        <input
+            message="Please enter store pw:"
+            addproperty="sign.storepass"
+        />
+
+    </target>
+
+    <target name="check_keystore" unless="sign.keystore">
+
+        <input
+            message="Please enter keystore location:"
+            addproperty="sign.keystore"
+        />
+
+    </target>
+
+    <target name="check_cvspass" unless="cvs.pass">
+
+        <input
+            message="Please enter CVS password:"
+            addproperty="cvs.pass"
+        />
+
+    </target>
+
+    <target name="check_cvsroot" unless="cvs.cvsroot">
+
+        <input
+            message="Please enter CVS location (:protocol:username@server:path) :"
+            addproperty="cvs.cvsroot"
+        />
+
+    </target>
+
+<!-- ================================================================== -->
+<!-- J A R S I G N E R                                                  -->
+<!-- ================================================================== -->
+    <!-- Sign client jar -->
+    <target name="jarsign-client" depends="check_storepass, check_keypass, check_keystore, build">
+
+        <signjar jar="${client-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+    </target>
+
+    <!-- Sign server jar -->
+    <target name="jarsign-server" depends="check_storepass, check_keypass, check_keystore, build">
+
+        <signjar jar="${server-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+        <signjar jar="${mspa-client-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+    </target>
+
+    <!-- Sign common jar -->
+    <target name="jarsign-common" depends="check_storepass, check_keypass, check_keystore, build">
+
+        <signjar jar="${common-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+    </target>
+
+    <!-- Sign meta jar -->
+    <target name="jarsign-meta" depends="check_storepass, check_keypass, check_keystore, build">
+
+        <signjar jar="${meta-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+    </target>
+
+    <!-- Sign all jars -->
+    <target name="jarsigner" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta, testall"/>
+
+    <!-- Sign all jars, skip the tests -->
+    <target name="jarsigner-no-tests" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta"/>
+
+<!-- ================================================================== -->
+<!-- M D 5                                                              -->
+<!-- ================================================================== -->
+    <target name="md5" depends="jarsigner">
+        <checksum>
+            <fileset dir="${dist}">
+                <include name="*.jar"/>
+            </fileset>
+        </checksum>
+    </target>
+
+    <target name="md5-no-tests" depends="jarsigner-no-tests">
+        <checksum>
+            <fileset dir="${dist}">
+                <include name="*.jar"/>
+            </fileset>
+        </checksum>
+    </target>
+
+<!-- ================================================================== -->
+<!-- C V S  -   T A G                                                   -->
+<!-- ================================================================== -->
+    <target name="cvs-tag" depends="init,check_cvspass,check_cvsroot">
+        <cvspass cvsroot="${cvs.cvsroot}"
+                 password="${cvs.pass}"
+        />
+        <cvs cvsRoot="${cvs.cvsroot}"
+                 package="martus"
+                 quiet="true"
+                 command="tag v${DSTAMP}"
+        />
+    </target>
+
+<!-- ================================================================== -->
+<!-- Z I P  -  S O U R C E S                                            -->
+<!-- ================================================================== -->
+    <target name="zip-src" depends="init">
+        <mkdir dir="${dist}"/>
+        <property name="zip-filename"  value="${dist}/martus-${DSTAMP}-src.zip"/>
+        <delete file="${zip-filename}"/>
+
+        <zip zipfile="${zip-filename}"
+                    basedir="."
+                    includes="org/**/*.java,
+                                        org/**/MartusHelpTOC-*.txt,
+                                        org/**/Martus-*.mtf,
+                                        org/**/MartusLogo.gif,
+                                        org/**/Martus.png,
+                                        org/**/*locked.jpg"
+            excludes="org/martus/server/**,org/martus/meta/**"
+                    />
+        <!-- Set a variable if the library sources exists-->
+    </target>
+
+    <target name="zip-lib-src" depends="zip-src" if="env.MARTUSISPROJECTDIR">
+        <property name="zip-filename"  value="${dist}/martus-${DSTAMP}-src.zip"/>
+        <echo message="dir = ${env.MARTUSISPROJECTDIR}"/>
+        <zip zipfile="${zip-filename}"
+                    basedir="."
+                    includes="${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/BouncyCastle/*,
+                                        ${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/Sun/*,
+                                        ${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/InfiniteMonkey1.0/src/**/*,
+                                        ${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/InfiniteMonkey1.0/**/*.txt,
+                                        ${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/junit3.7/**/src.jar,
+                                        ${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/xmlrpc-1.1/**/*"
+            excludes=""
+                    />
+    </target>
+
+<!-- ================================================================== -->
+<!-- E X P O R T   L O C A L I Z A T I O N                              -->
+<!-- ================================================================== -->
+    <target name="check_export_lang" unless="export.lang">
+
+        <input
+            message="Please enter two letter language code (es = Spanish) :"
+            addproperty="export.lang"
+        />
+
+    </target>
+    <target name="localize" depends="check_export_lang, build-client">
+       <java classname="org.martus.client.swingui.MartusLocalization">
+         <arg value="${export.lang}"/>
+         <arg value="MartusLocalization_${export.lang}.mtf"/>
+         <classpath>
+           <pathelement path="${dist}"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+       </java>
+    </target>
+
+
+</project>
