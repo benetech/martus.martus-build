@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.server.forclients.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
 
 public class ServerFileSignerAndVerifier
 {
@@ -85,20 +86,12 @@ public class ServerFileSignerAndVerifier
 			}
 			else
 			{
-				if(fileSignature == null)
-				{
-					fileSignature = MartusServerUtilities.getLatestSignatureFileFromFile(fileForOperation);
-					if(fileSignature == null)
-					{
-						System.err.println("Error: unable to locate a signature file for " +  fileForOperation.getAbsolutePath());
-						System.err.println("You need to indicate the path to the signature file on the command-line.");
-						System.err.flush();
-						System.exit(3);
-					}
-				}
-				
 				try
 				{
+					if(fileSignature == null)
+					{
+						fileSignature = MartusServerUtilities.getLatestSignatureFileFromFile(fileForOperation);
+					}
 					MartusServerUtilities.verifyFileAndSignatureOnServer(fileForOperation, fileSignature, security, security.getPublicKeyString());
 				}
 				catch (FileVerificationException e)
@@ -106,6 +99,13 @@ public class ServerFileSignerAndVerifier
 					System.err.println("File " + fileForOperation.getAbsolutePath()
 										+ " did not verify against signature file "
 										+ fileSignature.getAbsolutePath() + ".");
+					System.exit(3);
+				}
+				catch(MartusSignatureFileDoesntExistsException e)
+				{
+					System.err.println("Error: unable to locate a signature file for " +  fileForOperation.getAbsolutePath());
+					System.err.println("You need to indicate the path to the signature file on the command-line.");
+					System.err.flush();
 					System.exit(3);
 				}
 				System.out.println("File " + fileForOperation.getAbsolutePath()

@@ -22,6 +22,7 @@ public class TestForClients
 		suite.addTest(new TestSuite(TestMartusServer.class));
 		suite.addTest(new TestSuite(TestServerForClients.class));
 		suite.addTest(new TestSuite(TestServerSideNetworkHandler.class));
+		suite.addTest(new TestSuite(TestMartusServerUtilities.class));
 
 		return suite;
 	}

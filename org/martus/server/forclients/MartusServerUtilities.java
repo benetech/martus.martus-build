@@ -103,17 +103,23 @@ public class MartusServerUtilities
 
 	public static File getPathToSignatureDirForFile(File originalFile)
 	{
-		return new File(originalFile.getParentFile().getPath() + File.separatorChar + "signature");
+		return new File(originalFile.getParent() + File.separatorChar + "signature");
 	}
 	
-	public static Date getDateForSignatureFile(File signatureFile)
+	public static Date getDateOfSignatureFile(File signatureFile)
 		throws IOException
 	{
 		UnicodeReader reader = new UnicodeReader(signatureFile);
+		String identifier = reader.readLine();
 		String timestampDate = reader.readLine();
 		reader.close();
 		
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMdd-HHmmss");
+		if(identifier.compareTo(MARTUS_SIGNATURE_FILE_IDENTIFIER) != 0)
+		{
+			return null;
+		}
+		
+		SimpleDateFormat formatDate = new SimpleDateFormat(MARTUS_SIGNATURE_FILE_DATE_FORMAT);
 		formatDate.setCalendar(Calendar.getInstance());
 		
 		Date date;
@@ -132,10 +138,15 @@ public class MartusServerUtilities
 	}
 	
 	public static File getLatestSignatureFileFromFile(File originalFile)
-		throws IOException, ParseException
+		throws IOException, ParseException, MartusSignatureFileDoesntExistsException
 	{
 		File sigDir = getPathToSignatureDirForFile(originalFile);
 		String [] signatureFilenames =  sigDir.list();
+		
+		if(signatureFilenames == null)
+		{
+			throw new MartusSignatureFileDoesntExistsException();
+		}
 		
 		String latestSignatureFilename = null;
 		Date latestSigDate = null;
@@ -150,7 +161,7 @@ public class MartusServerUtilities
 				if(latestSignatureFilename == null)
 				{
 					latestSignatureFilename = signatureFilenames[x];
-					latestSigDate = getDateForSignatureFile(new File(sigDir, latestSignatureFilename));
+					latestSigDate = getDateOfSignatureFile(new File(sigDir, latestSignatureFilename));
 					if(latestSigDate == null)
 					{
 						latestSignatureFilename = null;
@@ -159,7 +170,7 @@ public class MartusServerUtilities
 				else
 				{
 					nextSignatureFilename = signatureFilenames[x];
-					nextSigDate = getDateForSignatureFile(new File(sigDir, nextSignatureFilename));
+					nextSigDate = getDateOfSignatureFile(new File(sigDir, nextSignatureFilename));
 			
 					if(nextSigDate != null && nextSigDate.after(latestSigDate))
 					{
@@ -169,75 +180,63 @@ public class MartusServerUtilities
 				}
 			}
 		}
+		
+		if(latestSignatureFilename == null)
+		{
+			throw new MartusSignatureFileDoesntExistsException();
+		}
 		 
 		return new File(sigDir, latestSignatureFilename);
 	}
-	
-	public static void deleteSignatureFileOnServer(File sigFile)
-	{
-		if(sigFile.exists() )
-		{
-			sigFile.delete();
-		}
-		
-		File sigDir = sigFile.getParentFile();
-		String [] files = sigDir.list();
-		if(files.length == 0)
-		{
-			sigDir.delete();
-		}
-	}
 
-	public static File createSignatureFileFromFileOnServer(File fileToSign, MartusCrypto signer)
-		throws IOException, MartusSignatureException, InterruptedException
+	public synchronized static File createSignatureFileFromFileOnServer(File fileToSign, MartusCrypto signer)
+		throws IOException, MartusSignatureException, InterruptedException, MartusSignatureFileAlreadyExistsException
 	{
 		Thread.sleep(1000);
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMdd-HHmmss");
-		String tstamp = formatDate.format(stamp);
+		SimpleDateFormat formatDate = new SimpleDateFormat(MARTUS_SIGNATURE_FILE_DATE_FORMAT);
+		String dateStamp = formatDate.format(stamp);
 		
 		File sigDir = getPathToSignatureDirForFile(fileToSign);
-		File signatureFile = new File(sigDir.getPath() + File.separatorChar + fileToSign.getName() + "." + tstamp + ".sig");
+		File signatureFile = new File(sigDir.getPath() + File.separatorChar + fileToSign.getName() + "." + dateStamp + ".sig");
 		
+		if(signatureFile.exists() )
+		{
+			throw new MartusSignatureFileAlreadyExistsException();
+		}
+
+		if(! sigDir.exists())
+		{
+			sigDir.mkdir();
+		}
 		
-		File newSigFile = new File(signatureFile.getAbsolutePath() + ".new");
+		writeSignatureFileWithDatestamp(signatureFile, dateStamp, fileToSign, signer);
 
-		if( newSigFile.exists() )
-			newSigFile.delete();
 
+		return signatureFile;
+	}
+	
+	public synchronized static void writeSignatureFileWithDatestamp(File signatureFile, String date, File fileToSign, MartusCrypto signer)
+	throws IOException, MartusSignatureException
+	{	
 		long filesize = fileToSign.length();
 		long lineCount = getLineCountForFile(fileToSign);
 		byte[] signature = MartusUtilities.createSignatureFromFile(fileToSign, signer);
 		String sigString = Base64.encode(signature);
 
-		UnicodeWriter writer = new UnicodeWriter(newSigFile);
-		writer.writeln(tstamp);
+		UnicodeWriter writer = new UnicodeWriter(signatureFile);
+		writer.writeln(MARTUS_SIGNATURE_FILE_IDENTIFIER);
+		writer.writeln(date);
 		writer.writeln(Long.toString(filesize));
 		writer.writeln(Long.toString(lineCount));
 		writer.writeln(signer.getPublicKeyString());
 		writer.writeln(sigString);
 		writer.flush();
 		writer.close();
-
-		if(signatureFile.exists() )
-		{
-			signatureFile.delete();
-		}
-		else
-		{
-			if(! sigDir.exists())
-			{
-				sigDir.mkdir();
-			}
-		}
-
-		newSigFile.renameTo(signatureFile);
-
-		return signatureFile;
 	}
 	
 	static long getLineCountForFile(File file)
-	throws IOException
+		throws IOException
 	{
 		LineNumberReader in = new LineNumberReader(new FileReader(file));
 		long numLines = 0;
@@ -248,7 +247,7 @@ public class MartusServerUtilities
 		 
 		return numLines;
 		
-	}
+	}	
 	
 	public static void verifyFileAndSignatureOnServer(File fileToVerify, File signatureFile, MartusCrypto verifier, String accountId)
 		throws FileVerificationException
@@ -257,6 +256,8 @@ public class MartusServerUtilities
 		try
 		{
 			UnicodeReader reader = new UnicodeReader(signatureFile);
+			// get Identifier
+			reader.readLine();
 			// get signature date
 			reader.readLine();
 			long filesize = Long.parseLong(reader.readLine());
@@ -293,4 +294,10 @@ public class MartusServerUtilities
 			}
 		}
 	}
+	
+	public static class MartusSignatureFileAlreadyExistsException extends Exception {}
+	public static class MartusSignatureFileDoesntExistsException extends Exception {}
+	
+	private static final String MARTUS_SIGNATURE_FILE_DATE_FORMAT = "yyyyMMdd-HHmmss";
+	private static final String MARTUS_SIGNATURE_FILE_IDENTIFIER = "Martus Signature File";
 }
