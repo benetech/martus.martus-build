@@ -1,4 +1,3 @@
-/* $Id: UiFolderTreeDropAdapter.java,v 1.4 2002/09/25 22:35:42 kevins Exp $ */
 package org.martus.client;
 
 import java.awt.Point;

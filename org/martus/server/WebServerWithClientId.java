@@ -1,4 +1,4 @@
-package org.martus.server;
+
 
 /*
  * The Apache Software License, Version 1.1
@@ -54,6 +54,8 @@ package org.martus.server;
  * information on the Apache Software Foundation, please see
  * <http://www.apache.org/>.
  */
+package org.martus.server;
+
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;

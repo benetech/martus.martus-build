@@ -1,4 +1,6 @@
-/* $Id: JComponentVista.java,v 1.3 2002/04/18 20:42:55 charles Exp $ */
+
+
+/* used with the permission of Richard Blanchard */
 package org.martus.client;
 
 import java.awt.*;

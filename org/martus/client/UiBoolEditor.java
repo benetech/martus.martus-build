@@ -1,4 +1,3 @@
-/* $Id: UiBoolEditor.java,v 1.3 2002/04/05 21:34:34 kevins Exp $ */
 package org.martus.client;
 
 import javax.swing.JComponent;

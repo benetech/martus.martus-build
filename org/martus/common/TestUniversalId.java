@@ -1,4 +1,3 @@
-/* $Id: $ */
 package org.martus.common;
 
 import org.martus.common.*;

@@ -1,14 +1,6 @@
-/* $Id: ParagraphLayout.java,v 1.3 2002/04/18 20:42:55 charles Exp $ */
-/*
-	ParagraphLayout was written by Jerry Huxtable (jerry@jhlabs.com)
 
-	The home page for this package (as of June 6 2001) was:
-		http://www.jhlabs.com/java/layout/
 
-	The copyright, according to that web page, is:
-		"You can use these in your own code freely, though I'd appreciate
-		an email message if you use them or if you find any bugs."
-*/
+/* used with the permission of Jerry Huxtable */
 package org.martus.client;
 
 

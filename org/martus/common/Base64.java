@@ -1,10 +1,18 @@
 package org.martus.common;
 
-import java.util.*;
-import java.io.*;
-// this class is (more or less) as presented in
-// the book "Java Cryptography" by Jonathan Knudsen,
-// which is copyright 1998 O'Reilly & Associates
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.Reader;
+import java.io.StringReader;
+import java.io.Writer;
+import java.util.Vector;
 
 public class Base64
 {
