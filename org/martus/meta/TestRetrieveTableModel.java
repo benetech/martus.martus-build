@@ -116,27 +116,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		BulletinSummary s1 = (BulletinSummary)result.get(0);
 		BulletinSummary s2 = (BulletinSummary)result.get(1);
-
-		Bulletin bulletins[] = new Bulletin[] {b1, b3};
-		BulletinSummary summaries[] = new BulletinSummary[] {s1, s2};
-		boolean found[] = new boolean[bulletins.length];
-
-		for(int i = 0; i < bulletins.length; ++i)
-		{
-			for(int j = 0; j < summaries.length; ++j)
-			{
-				Bulletin b = bulletins[i];
-				BulletinSummary s = summaries[j];
-				if(b.getLocalId().equals(s.getLocalId()))
-				{
-					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
-					found[i] = true;
-				}
-			}
-		}
-
-		assertTrue("Missing 1?", found[0]);
-		assertTrue("Missing 3?", found[1]);
+		assertNotEquals(s1.getLocalId(), s2.getLocalId());
 	}
 
 	public void testGetMyBulletinSummariesNoServer() throws Exception

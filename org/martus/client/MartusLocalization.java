@@ -369,6 +369,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyDamagedBulletinMovedToDiscarded=Moved Damaged Bulletin");
 		addEnglishTranslation("wintitle:notifyPreviewOneBulletinOnly=Preview One Bulletin Only");
 		addEnglishTranslation("wintitle:notifyPreviewNoBulletinsSelected=No Bulletin Selected");
+		addEnglishTranslation("wintitle:notifyRetrievedOnlySomeSummaries=Error During Retrieve");
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
@@ -700,7 +701,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyDamagedBulletinMovedToDiscardedcause=An error occured during upload, and the damaged bulletin has been moved to the damaged bulletin folder.");
 		addEnglishTranslation("field:notifyPreviewOneBulletinOnlycause=You may only preview one bulletin at a time.  Please only select one bulletin to preview.");
 		addEnglishTranslation("field:notifyPreviewNoBulletinsSelectedcause=No bulletin selected.  Please select the bulletin you wish to preview.");
-
+		addEnglishTranslation("field:notifyRetrievedOnlySomeSummariescause=Errors occured while retrieving bulletin summaries.  Some of the bulletins on the server will not be shown.");
+		
 		addEnglishTranslation("field:messageServerNewscause=The current server has sent this message:");
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");

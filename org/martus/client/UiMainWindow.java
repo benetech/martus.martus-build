@@ -1165,9 +1165,16 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 		UiProgressRetrieveSummariesDlg progressDlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag);
 		model.initialize(progressDlg);
-		model.checkIfErrorOccurred();
 		if(progressDlg.shouldExit())
 			return null;
+		try
+		{
+			model.checkIfErrorOccurred();
+		}
+		catch (ServerErrorException e)
+		{
+			notifyDlg(this, "RetrievedOnlySomeSummaries", dlgTitleTag);
+		}
 		UiServerSummariesDlg summariesDlg = new UiServerSummariesDlg(this, model, dlgTitleTag, topMessageTag, okButtonTag, noneSelectedTag);
 
 		// the following is required (for unknown reasons)

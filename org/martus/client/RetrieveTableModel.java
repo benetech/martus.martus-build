@@ -189,26 +189,28 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 
 		public void retrieveAllSummaries()
 		{
-			try 
+			Iterator iterator = summaryStrings.iterator();
+			int count = 0;
+			int maxCount = summaryStrings.size();
+			while(iterator.hasNext())
 			{
-				Iterator iterator = summaryStrings.iterator();
-				int count = 0;
-				int maxCount = summaryStrings.size();
-				while(iterator.hasNext())
+				String pair = (String)iterator.next();
+				try
 				{
-					String pair = (String)iterator.next();
 					BulletinSummary bulletinSummary = app.createSummaryFromString(accountId, pair);
 					allSummaries.add(bulletinSummary);
-					if(retrieverDlg != null)
-					{
-						if(retrieverDlg.shouldExit())
-							break;
-						retrieverDlg.updateBulletinCountMeter(++count, maxCount);
-					}
+				} 
+				catch (ServerErrorException e)
+				{
+					errorThrown = e;
 				}
-			} catch (ServerErrorException e) 
-			{
-				errorThrown = e;
+					
+				if(retrieverDlg != null)
+				{
+					if(retrieverDlg.shouldExit())
+						break;
+					retrieverDlg.updateBulletinCountMeter(++count, maxCount);
+				}
 			}
 		}
 
