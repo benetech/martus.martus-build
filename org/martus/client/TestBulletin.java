@@ -1113,20 +1113,6 @@ public class TestBulletin extends TestCaseEnhanced
 		assertTrue("didn't create?", destFile1.exists());
 	}
 	
-	public void testGetDatabaseKey() throws Exception
-	{
-		String sampleId1 = "abc";
-		String sampleId2 = "123";
-		DatabaseKey sampleKey1 = new DatabaseKey(store.getAccountId() + "-" + sampleId1);
-		DatabaseKey sampleKey2 = new DatabaseKey(store.getAccountId() + "-" + sampleId2);
-
-		Bulletin b = store.createEmptyBulletin();
-		UniversalId uid1 = UniversalId.createFromAccountAndLocalId(store.getAccountId(), sampleId1);
-		UniversalId uid2 = UniversalId.createFromAccountAndLocalId(store.getAccountId(), sampleId2);
-		assertEquals("bad key1?", sampleKey1, new DatabaseKey(uid1));
-		assertEquals("bad key2?", sampleKey2, new DatabaseKey(uid2));
-	}
-	
 	public void testDetectFieldPacketWithWrongSig() throws Exception
 	{
 		Database db = store.getDatabase();

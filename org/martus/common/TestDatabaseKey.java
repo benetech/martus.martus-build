@@ -1,9 +1,6 @@
 package org.martus.common;
 
-import java.io.*;
-import java.util.*;
 
-import org.martus.common.*;
 
 public class TestDatabaseKey extends TestCaseEnhanced
 {
@@ -20,20 +17,25 @@ public class TestDatabaseKey extends TestCaseEnhanced
 	{
 		//System.out.println(text);
 	}
+	
+	public void testConstructors() throws Exception
+	{
+		
+	}
 
 	public void testEqualsStrings() throws Exception
 	{
-		String keyValue1 = "blah-yada";
-		String keyValue2 = "woo-woo!";
+		UniversalId uid1 = UniversalId.createDummyUniversalId();
+		UniversalId uid2 = UniversalId.createDummyUniversalId();
 
-		DatabaseKey key1 = new DatabaseKey(keyValue1);
-		DatabaseKey key2 = new DatabaseKey(new String(keyValue1));
-		DatabaseKey key3 = new DatabaseKey(keyValue2);
-		DatabaseKey key4 = new DatabaseKey(keyValue1);
+		DatabaseKey key1 = new DatabaseKey(uid1);
+		DatabaseKey key2 = new DatabaseKey(UniversalId.createFromAccountAndLocalId(uid1.getAccountId(), uid1.getLocalId()));
+		DatabaseKey key3 = new DatabaseKey(uid2);
+		DatabaseKey key4 = new DatabaseKey(uid1);
 		key4.setDraft();
 		assertEquals("self should match", key1, key1);
 		assertEquals("never match null", false, key1.equals(null));
-		assertEquals("never match string", false, key1.equals(keyValue1));
+		assertEquals("never match uid", false, key1.equals(uid1));
 		assertEquals("Keys should match", key1, key2);
 		assertEquals("symmetrical equals", key2, key1);
 		assertEquals("should not match", false, key1.equals(key3));
@@ -43,9 +45,6 @@ public class TestDatabaseKey extends TestCaseEnhanced
 		assertEquals("hash self should match", key1.hashCode(), key1.hashCode());
 		assertEquals("hash Keys should match", key1.hashCode(), key2.hashCode());
 		assertNotEquals("hash didn't use status?", key1.hashCode(), key4.hashCode());
-		
-		UniversalId uid = UniversalId.createFromAccountAndLocalId("blah", "yada");
-		assertEquals("uid?", uid, key1.getUniversalId());
 	}
 
 	public void testEquals() throws Exception
@@ -67,24 +66,11 @@ public class TestDatabaseKey extends TestCaseEnhanced
 		assertEquals("hash Keys should match", key1.hashCode(), key2.hashCode());
 	}
 
-	public void testGetString() throws Exception
-	{
-		UniversalId uid = UniversalId.createDummyUniversalId();
-		DatabaseKey key1 = new DatabaseKey(uid.toString());
-		DatabaseKey key2 = new DatabaseKey(uid);
-		assertEquals("bad string?", key1.getString(), key2.getString());
-	}
-	
 	public void testGetAccount() throws Exception
 	{
 		UniversalId uid = UniversalId.createDummyUniversalId();
 		DatabaseKey key = new DatabaseKey(uid);
 		assertEquals("wrong account?", uid.getAccountId(), key.getAccountId());
-		
-		String value = "acct-local";
-		DatabaseKey key2 = new DatabaseKey(value);
-		assertEquals("account?", "acct", key2.getAccountId());
-		assertEquals("local?", "local", key2.getLocalId());
 	}
 
 	public void testStatus() throws Exception

@@ -640,7 +640,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	public void testAutomaticSaving() throws Exception
 	{
 		Database db = store.getDatabase();
-		DatabaseKey foldersKey = new DatabaseKey("-folders");
+		DatabaseKey foldersKey = new DatabaseKey(UniversalId.createDummyUniversalId());
 
 		{
 			store.deleteAllData();
@@ -659,7 +659,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			BulletinFolder folder1 = store.createFolder("a");
 			store.saveFolders();
 			assertTrue("createFolder f ", store.getFoldersFile().exists());
-			DatabaseKey bulletinKey = new DatabaseKey(b.getLocalId());
+			DatabaseKey bulletinKey = new DatabaseKey(b.getUniversalId());
 			assertNull("createFolder b ", store.getDatabase().readRecord(bulletinKey, security));
 		}
 
@@ -672,7 +672,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			store.getDatabase().deleteAllData();
 			store.clearFolder(drafts.getName());
 			assertTrue("clearFolder f ", store.getFoldersFile().exists());
-			DatabaseKey bulletinKey = new DatabaseKey(b.getLocalId());
+			DatabaseKey bulletinKey = new DatabaseKey(b.getUniversalId());
 			assertNull("clearFolder b ", store.getDatabase().readRecord(bulletinKey, security));
 
 			b.save();
@@ -688,7 +688,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			db.discardRecord(foldersKey);
 			store.renameFolder("x", "b");
 			assertTrue("renameFolder f ", store.getFoldersFile().exists());
-			DatabaseKey bulletinKey = new DatabaseKey(b.getLocalId());
+			DatabaseKey bulletinKey = new DatabaseKey(b.getUniversalId());
 			assertNull("renameFolder b ", store.getDatabase().readRecord(bulletinKey, security));
 		}
 
@@ -700,7 +700,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			db.discardRecord(foldersKey);
 			store.deleteFolder("z");
 			assertTrue("deleteFolder f ", store.getFoldersFile().exists());
-			DatabaseKey bulletinKey = new DatabaseKey(b.getLocalId());
+			DatabaseKey bulletinKey = new DatabaseKey(b.getUniversalId());
 			assertNull("deleteFolder b ", store.getDatabase().readRecord(bulletinKey, security));
 		}
 	}

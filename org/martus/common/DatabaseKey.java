@@ -1,34 +1,15 @@
 package org.martus.common;
 
-import java.io.UnsupportedEncodingException;
-import java.util.Arrays;
 
-import org.martus.common.*;
 
 public class DatabaseKey implements Comparable
 {
-	public DatabaseKey(String keyValue) throws 
-			UniversalId.NotUniversalIdException
-	{
-		this(UniversalId.createFromString(keyValue));
-	}
-
 	public DatabaseKey(UniversalId uidToUse)
 	{
 		uid = uidToUse;
 		status = statusSealed;
 	}
 
-	public String getString()
-	{
-		String statusCode = "?";
-		if(isDraft())
-			statusCode = "D";
-		else if(isSealed())
-			statusCode = "S";
-		return statusCode + "-" + uid.toString();
-	}
-	
 	public UniversalId getUniversalId()
 	{
 		return uid;
@@ -88,6 +69,16 @@ public class DatabaseKey implements Comparable
 		return getString().compareTo(((DatabaseKey)other).getString());
 	}
 
+	private String getString()
+	{
+		String statusCode = "?";
+		if(isDraft())
+			statusCode = "D";
+		else if(isSealed())
+			statusCode = "S";
+		return statusCode + "-" + uid.toString();
+	}
+	
 	private static final int statusUnknown = 0;
 	private static final int statusSealed = 1;
 	private static final int statusDraft = 2;
