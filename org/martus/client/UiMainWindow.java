@@ -1092,7 +1092,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		
 		getContentPane().add(folderSplitter);
 		statusBar = new UiStatusBar();
-		app.setProgressMeter(statusBar.getBackgroundProgressMeter());
 		getContentPane().add(statusBar, BorderLayout.SOUTH );
 		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -1719,7 +1718,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 				statusBar.getBackgroundProgressMeter().blankStatus();
 				statusBar.getBackgroundProgressMeter().hideProgressMeter();
 			}
-			uploadResult = app.backgroundUpload();
+			uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
 			if(uploadResult != null)
 			{
 				System.out.println(uploadResult);

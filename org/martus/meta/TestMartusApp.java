@@ -612,11 +612,11 @@ public class TestMartusApp extends TestCaseEnhanced
 		Bulletin b = appWithAccount.createBulletin();
 		b.setSealed();
 		b.save();
-		assertEquals("result not ok?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b));
+		assertEquals("result not ok?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b, null));
 		assertTrue("count not > 1?", server.chunkCount > 1);
 
 		server.uploadResponse = NetworkInterfaceConstants.INVALID_DATA;
-		assertEquals("result ok?", NetworkInterfaceConstants.INVALID_DATA, appWithAccount.uploadBulletin(b));
+		assertEquals("result ok?", NetworkInterfaceConstants.INVALID_DATA, appWithAccount.uploadBulletin(b, null));
 
 		appWithAccount.setSSLServerForTesting(oldSSLServer);
 		appWithAccount.serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
@@ -629,7 +629,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_BEGIN("testBackgroundUploadSealedWithBadPort");
 
 		createSealedBulletin(appWithoutServer);
-		assertNull("No server", appWithoutServer.backgroundUpload());
+		assertNull("No server", appWithoutServer.backgroundUpload(null));
 		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderOutbox().getBulletinCount());
 		TRACE_END();
 	}
@@ -639,7 +639,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_BEGIN("testBackgroundUploadDraftWithBadPort");
 
 		createDraftBulletin(appWithoutServer);
-		assertNull("No server", appWithoutServer.backgroundUpload());
+		assertNull("No server", appWithoutServer.backgroundUpload(null));
 		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderDraftOutbox().getBulletinCount());
 		TRACE_END();
 	}
@@ -651,7 +651,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		BulletinFolder outbox = appWithServer.getFolderOutbox();
 
 		assertEquals("Empty outbox", 0, outbox.getBulletinCount());
-		assertNull("Empty outbox", appWithServer.backgroundUpload());
+		assertNull("Empty outbox", appWithServer.backgroundUpload(null));
 		TRACE_END();
 	}
 
@@ -665,11 +665,11 @@ public class TestMartusApp extends TestCaseEnhanced
 		mockServer.allowUploads(appWithAccount.getAccountId());
 
 		Bulletin toBeSent = createSealedBulletin(appWithAccount);
-		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload());
+		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload(null));
 		assertEquals("It was sent", 0, outbox.getBulletinCount());
 		assertEquals("It was sent", 1, appWithAccount.getFolderSent().getBulletinCount());
 
-		assertNull("Again Empty outbox", appWithAccount.backgroundUpload());
+		assertNull("Again Empty outbox", appWithAccount.backgroundUpload(null));
 		mockServer.clientsThatCanUpload.clear();
 		TRACE_END();
 	}
@@ -685,9 +685,9 @@ public class TestMartusApp extends TestCaseEnhanced
 
 		Bulletin toBeSent1 = createDraftBulletin(appWithAccount);
 		Bulletin toBeSent2 = createDraftBulletin(appWithAccount);
-		assertEquals("first returned an error?", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload());
+		assertEquals("first returned an error?", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload(null));
 		assertEquals("first didn't get removed?", 1, draftOutbox.getBulletinCount());
-		assertEquals("second returned an error?", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload());
+		assertEquals("second returned an error?", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload(null));
 		assertEquals("second didn't get removed?", 0, draftOutbox.getBulletinCount());
 
 		mockServer.clientsThatCanUpload.clear();
@@ -704,7 +704,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		createSealedBulletin(appWithServer);
 		String FAILRESULT = "Some error tag would go here";
 		mockServer.uploadResponse = FAILRESULT;
-		assertEquals("Should fail", FAILRESULT, appWithServer.backgroundUpload());
+		assertEquals("Should fail", FAILRESULT, appWithServer.backgroundUpload(null));
 		assertEquals("Still in outbox", 1, outbox.getBulletinCount());
 		assertEquals("Not in sent folder", 0, appWithServer.getFolderSent().getBulletinCount());
 		Bulletin stillSealed = outbox.getBulletin(0);
@@ -723,7 +723,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		createDraftBulletin(appWithServer);
 		String FAILRESULT = "Some error tag would go here";
 		mockServer.uploadResponse = FAILRESULT;
-		assertEquals("Should fail", FAILRESULT, appWithServer.backgroundUpload());
+		assertEquals("Should fail", FAILRESULT, appWithServer.backgroundUpload(null));
 		assertEquals("Still in draft outbox", 1, draftOutbox.getBulletinCount());
 		mockServer.uploadResponse = null;
 		TRACE_END();
@@ -740,12 +740,12 @@ public class TestMartusApp extends TestCaseEnhanced
 
 		Bulletin notLogged = createSealedBulletin(appWithServer);
 		mockServer.uploadResponse = NetworkInterfaceConstants.OK;
-		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload());
+		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
 		assertEquals("Created a log?", false, logFile.exists());
 
 		appWithServer.enableUploadLogging();
 		Bulletin logged = createSealedBulletin(appWithServer);
-		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload());
+		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
 		assertEquals("No log?", true, logFile.exists());
 		mockServer.uploadResponse = null;
 
@@ -834,9 +834,9 @@ public class TestMartusApp extends TestCaseEnhanced
 		b3.setSealed();
 		b3.save();
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("upload b1", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1));
-		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2));
-		assertEquals("upload b3", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3));
+		assertEquals("upload b1", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
+		assertEquals("upload b3", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
 		store.removeBulletinFromStore(b1.getUniversalId());
 		store.removeBulletinFromStore(b3.getUniversalId());
 		assertEquals("not just one left?", 1, store.getBulletinCount());
@@ -1233,8 +1233,8 @@ public class TestMartusApp extends TestCaseEnhanced
 
 		String accountId = appWithAccount.getAccountId();
 		mockServer.allowUploads(accountId);
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
 
 		String fdpId1 = b1.getFieldDataPacket().getLocalId();		
 		String fdpId2 = b2.getFieldDataPacket().getLocalId();		
@@ -1300,9 +1300,9 @@ public class TestMartusApp extends TestCaseEnhanced
 		b3.setDraft();
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
 
 		Vector result = appWithAccount.getMySummaries();
 		assertEquals("wrong count?", 2, result.size());
@@ -1358,9 +1358,9 @@ public class TestMartusApp extends TestCaseEnhanced
 		b3.setSealed();
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
 
 		Vector result = appWithAccount.getMyDraftSummaries();
 		assertEquals("wrong count?", 2, result.size());
@@ -1446,9 +1446,9 @@ public class TestMartusApp extends TestCaseEnhanced
 		appWithAccount.setHQKeyInBulletin(b3);
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
 
 		Vector desiredSealedResult = new Vector();
 		desiredSealedResult.add(NetworkInterfaceConstants.OK);
@@ -1522,8 +1522,8 @@ public class TestMartusApp extends TestCaseEnhanced
 		b3.setSealed();
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
 
 		Vector uidList = new Vector();
 		uidList.add(b1.getUniversalId());
@@ -1974,7 +1974,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setSealed();
 		b2.save();
-		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2));
+		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
 		store.destroyBulletin(b2);
 		return b2;
 	}

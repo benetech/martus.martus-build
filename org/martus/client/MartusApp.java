@@ -498,11 +498,6 @@ public class MartusApp
 		setUploadInfoElements(uploaded, reminded);
 	}
 	
-	public void setProgressMeter(UiProgressMeter meter)
-	{
-		progressMeter = meter;	
-	}
-
 	public void resetLastUploadedTime()
 	{
 		setLastUploadedTime(new Date());
@@ -658,7 +653,7 @@ public class MartusApp
 		return false;
 	}
 	
-	public String uploadBulletin(Bulletin b)
+	public String uploadBulletin(Bulletin b, UiProgressMeter progressMeter)
 	{
 		String result = null;
 		File tempFile = null;
@@ -713,25 +708,25 @@ public class MartusApp
 		return result;
 	}
 	
-	public String backgroundUpload()
+	public String backgroundUpload(UiProgressMeter progressMeter)
 	{
 		if(getFolderOutbox().getBulletinCount() > 0)
-			return backgroundUploadOneSealedBulletin();
+			return backgroundUploadOneSealedBulletin(progressMeter);
 			
 		if(getFolderDraftOutbox().getBulletinCount() > 0)
-			return backgroundUploadOneDraftBulletin();
+			return backgroundUploadOneDraftBulletin(progressMeter);
 
 		return null;
 	}
 
-	String backgroundUploadOneSealedBulletin() 
+	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) 
 	{
 		if(!isSSLServerAvailable())
 			return null;
 		
 		BulletinFolder outbox = getFolderOutbox();
 		Bulletin b = outbox.getBulletin(0);
-		String result = uploadBulletin(b);
+		String result = uploadBulletin(b, progressMeter);
 		
 		if(result.equals(NetworkInterfaceConstants.OK) || result.equals(NetworkInterfaceConstants.DUPLICATE))
 		{
@@ -760,14 +755,14 @@ public class MartusApp
 		return result;
 	}
 
-	String backgroundUploadOneDraftBulletin() 
+	String backgroundUploadOneDraftBulletin(UiProgressMeter progressMeter) 
 	{
 		if(!isSSLServerAvailable())
 			return null;
 		
 		BulletinFolder draftOutbox = getFolderDraftOutbox();
 		Bulletin b = draftOutbox.getBulletin(0);
-		String result = uploadBulletin(b);
+		String result = uploadBulletin(b, progressMeter);
 		
 		if(result.equals(NetworkInterfaceConstants.OK))
 		{
@@ -1473,6 +1468,5 @@ public class MartusApp
 	public int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 	private String currentLanguage;
 	private String currentDateFormat;
-	private UiProgressMeter progressMeter;
 }
 
