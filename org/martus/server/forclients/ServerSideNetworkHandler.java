@@ -11,7 +11,7 @@ import org.martus.common.NetworkInterfaceConstants;
 public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterfaceConstants
 {
 
-	public ServerSideNetworkHandler(MartusServer serverToUse)
+	public ServerSideNetworkHandler(ServerForClientsInterface serverToUse)
 	{
 		server = serverToUse;
 	}
@@ -45,7 +45,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("getUploadRights");
 
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			server.clientConnectionExit();
 			result.add(SIG_ERROR);
@@ -69,7 +69,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("getSealedBulletinIds");
 
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(SIG_ERROR);
 			server.clientConnectionExit();
@@ -98,7 +98,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("getDraftBulletinIds");
 
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(SIG_ERROR);			
 			server.clientConnectionExit();			
@@ -127,7 +127,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("getFieldOfficeAccountIds");
 		
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(SIG_ERROR);			
 			server.clientConnectionExit();			
@@ -156,7 +156,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("putBulletinChunk");
 
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(SIG_ERROR);			
 			server.clientConnectionExit();			
@@ -187,7 +187,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("getBulletinChunk");
 			
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(SIG_ERROR);			
 			server.clientConnectionExit();			
@@ -220,7 +220,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("getPacket");
 
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(SIG_ERROR);			
 			server.clientConnectionExit();			
@@ -255,7 +255,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.logging("deleteDraftBulletins");
 
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(SIG_ERROR);			
 			server.clientConnectionExit();			
@@ -279,7 +279,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	{
 		server.clientConnectionStart();
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			if(MartusServer.serverSSLLogging)
 				server.logging("putContactInfo:Signature Error");
@@ -297,7 +297,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		server.clientConnectionStart();
 		Vector result = new Vector();
 
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			if(MartusServer.serverSSLLogging)
 				server.logging("getNews:Signature Error");
@@ -326,7 +326,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		server.clientConnectionStart();
 		Vector result = new Vector();
 
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			if(MartusServer.serverSSLLogging)
 				server.logging("getServerCompliance:Signature Error");
@@ -477,5 +477,5 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	final static String defaultReservedResponse = "";
 
-	MartusServer server;
+	ServerForClientsInterface server;
 }

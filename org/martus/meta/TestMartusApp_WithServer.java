@@ -33,7 +33,6 @@ import org.martus.common.UnicodeReader;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.Packet.WrongAccountException;
-import org.martus.server.forclients.MartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
@@ -1261,7 +1260,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler
 	{
-		MockServerInterfaceHandler(MartusServer serverToUse)
+		MockServerInterfaceHandler(MockMartusServer serverToUse)
 		{
 			super(serverToUse);
 		}

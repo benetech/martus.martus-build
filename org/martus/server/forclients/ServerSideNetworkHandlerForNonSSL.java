@@ -8,7 +8,7 @@ import org.martus.common.*;
 public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNonSSL
 {
 
-	public ServerSideNetworkHandlerForNonSSL(MartusServer serverToUse)
+	public ServerSideNetworkHandlerForNonSSL(ServerForNonSSLClientsInterface serverToUse)
 	{
 		server = serverToUse;
 	}
@@ -122,5 +122,5 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 		return strResponse;
 	}
 	
-	MartusServer server;
+	ServerForNonSSLClientsInterface server;
 }

@@ -11,7 +11,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterfaceConstants;
 
-public class MockMartusServer extends MartusServer
+public class MockMartusServer extends MartusServer implements ServerForClientsInterface, ServerForNonSSLClientsInterface
 {
 	public MockMartusServer() throws Exception
 	{

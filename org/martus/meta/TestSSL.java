@@ -8,6 +8,7 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
+import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 
 
@@ -24,13 +25,14 @@ public class TestSSL extends TestCaseEnhanced
 		if(mockSecurityForServer == null)
 		{
 			int testport = 1987;
-			int testPort2 = 1986;
 			mockSecurityForServer = MockMartusSecurity.createServer();
 			mockServer = new MockMartusServer();
 			mockServer.verifyAndLoadConfigurationFiles();
 			mockServer.setSecurity(mockSecurityForServer);
-			mockServer.createSSLXmlRpcServerOnPort(testport);
-			mockServer.createMirroringSupplierXmlRpcServer(testPort2);
+
+			ServerForClients serverForClients = new ServerForClients(mockServer);
+			serverForClients.handleNonSSL();
+			serverForClients.handleSSL(testport);
 			
 //			XmlRpc.debug = true;
 			proxy1 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", testport);
@@ -49,9 +51,6 @@ public class TestSSL extends TestCaseEnhanced
 		verifyBadCertBeforeGoodCertHasBeenAccepted();
 		verifyGoodCertAndItWillNotBeReverifiedThisSession();
 
-// TODO: After the callerSide of mirroring is available, hook up this test!
-//		proxy2.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
-//		assertEquals(NetworkInterfaceConstants.VERSION, proxy2.pingForMirroring());
 	}
 	
 	public void verifyBadCertBeforeGoodCertHasBeenAccepted()
@@ -75,5 +74,4 @@ public class TestSSL extends TestCaseEnhanced
 	static MockMartusServer mockServer;
 	static ServerSideNetworkHandler mockSSLServerInterface;
 	static ClientSideNetworkHandlerUsingXmlRpc proxy1;
-//	static ClientSideNetworkHandlerUsingXmlRpc proxy2;
 }

@@ -53,16 +53,13 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
-import org.martus.server.core.MartusSecureWebServer;
 import org.martus.server.core.ServerConstants;
 import org.martus.server.core.ServerFileDatabase;
 import org.martus.server.core.XmlRpcThread;
-import org.martus.server.formirroring.MirroringInterface;
 import org.martus.server.formirroring.MirroringRetriever;
-import org.martus.server.formirroring.ServerSupplierInterface;
-import org.martus.server.formirroring.SupplierSideMirroringHandler;
+import org.martus.server.formirroring.ServerForMirroring;
 
-public class MartusServer implements NetworkInterfaceConstants, ServerSupplierInterface
+public class MartusServer implements NetworkInterfaceConstants
 {
 
 	public static void main(String[] args)
@@ -259,11 +256,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return security;
 	}
 	
-	public boolean isAuthorizedForMirroring(String callerAccountId)
-	{
-		return false;
-	}
-
 	
 	boolean hasAccount()
 	{
@@ -287,25 +279,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		if( !magicWords.contains(newMagicWord) )
 			magicWords.add(newMagicWord);
-	}
-	
-	public void createSSLXmlRpcServerOnPort(int port) 
-	{
-		ServerSideNetworkHandler serverHandler = new ServerSideNetworkHandler(this);
-		MartusSecureWebServer.security = security;
-		MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, port);
-	}
-	
-	public void createMirroringSupplierXmlRpcServer()
-	{
-		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
-		createMirroringSupplierXmlRpcServer(port);
-	}
-
-	public void createMirroringSupplierXmlRpcServer(int port)
-	{
-		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this);
-		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, port);
 	}
 	
 	public String ping()
@@ -2207,15 +2180,14 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	private void createServerForMirroring()
 	{
-		createMirroringSupplierXmlRpcServer();
+		serverForMirroring = new ServerForMirroring(this);
 	}
 
 	private void createServerForClients()
 	{
-		ServerSideNetworkHandlerForNonSSL nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
-		MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL);
-		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
-		createSSLXmlRpcServerOnPort(port);
+		serverForClients = new ServerForClients(this);
+		serverForClients.handleNonSSL();
+		serverForClients.handleSSL(NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL);
 	}
 
 	private void deleteRunningFile()
@@ -2412,6 +2384,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 
 	public MartusCrypto security;
+	ServerForMirroring serverForMirroring;
+	ServerForClients serverForClients;
 	public File dataDirectory;
 	Database database;
 	private String complianceStatement; 

@@ -15,7 +15,6 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.MartusUtilities.ServerErrorException;
-import org.martus.server.forclients.MartusServer;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 
@@ -592,7 +591,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler
 	{
-		MockServerInterfaceHandler(MartusServer serverToUse)
+		MockServerInterfaceHandler(MockMartusServer serverToUse)
 		{
 			super(serverToUse);
 		}
