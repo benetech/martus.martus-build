@@ -39,7 +39,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		handler = new SupplierSideMirroringHandler(supplier, security);
 		realGateway = new CallerSideMirroringGateway(handler);
 		LoggerForTesting logger = new LoggerForTesting();
-		realRetriever = new MirroringRetriever(db, realGateway, logger, security);
+		realRetriever = new MirroringRetriever(db, realGateway, "Dummy IP", logger, security);
 		
 	}
 	

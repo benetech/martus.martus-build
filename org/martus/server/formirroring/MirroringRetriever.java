@@ -21,10 +21,12 @@ import org.martus.server.forclients.MartusServerUtilities;
 
 public class MirroringRetriever
 {
-	public MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, LoggerInterface loggerToUse, MartusCrypto securityToUse)
+	public MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, 
+						String ipToUse, LoggerInterface loggerToUse, MartusCrypto securityToUse)
 	{
 		db = databaseToUse;
 		gateway = gatewayToUse;
+		ip = ipToUse;
 		logger = loggerToUse;
 		security = securityToUse;
 		
@@ -43,7 +45,7 @@ public class MirroringRetriever
 		try
 		{
 			String publicCode = MartusUtilities.getPublicCode(uid.getAccountId());
-			log("Mirroring: Get bulletin: " + publicCode + "->" + uid.getLocalId());
+			log("Get bulletin: " + publicCode + "->" + uid.getLocalId());
 			String bur = retrieveBurFromMirror(uid);
 			File zip = File.createTempFile("$$$MirroringRetriever", null);
 			try
@@ -60,7 +62,7 @@ public class MirroringRetriever
 		}
 		catch(ServerErrorException e)
 		{
-			log("Mirroring: Supplier server error");
+			log("Supplier server error: " + e);
 		}
 		catch (Exception e)
 		{
@@ -128,7 +130,7 @@ public class MirroringRetriever
 
 		try
 		{
-			log("Mirroring: Getting list of accounts");
+			log("Getting list of accounts");
 			NetworkResponse response = gateway.listAccountsForMirroring(security);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
@@ -139,7 +141,7 @@ public class MirroringRetriever
 		{
 			// TODO: Better error handling
 			e.printStackTrace();
-			System.out.println("MirroringRetriever.getNextAccountToRetrieve: " + e);
+			log("getNextAccountToRetrieve: " + e);
 		}
 		return null;
 	}
@@ -162,11 +164,12 @@ public class MirroringRetriever
 	
 	void log(String message)
 	{
-		logger.log(message);
+		logger.log("Mirror " + ip + ": " + message);
 	}
 
 	Database db;	
 	CallerSideMirroringGatewayInterface gateway;
+	String ip;
 	LoggerInterface logger;
 	MartusCrypto security;
 	

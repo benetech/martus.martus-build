@@ -226,18 +226,18 @@ public class ServerForMirroring implements ServerSupplierInterface
 			PublicInformationInvalidException, 
 			SSLSocketSetupException
 	{
-		CallerSideMirroringGateway gateway = createGatewayToCall(publicKeyFile);
-		MirroringRetriever retriever = new MirroringRetriever(getDatabase(), gateway, logger, getSecurity());
+		String ip = extractIpFromFileName(publicKeyFile.getName());
+		CallerSideMirroringGateway gateway = createGatewayToCall(ip, publicKeyFile);
+		MirroringRetriever retriever = new MirroringRetriever(getDatabase(), gateway, ip, logger, getSecurity());
 		return retriever;
 	}
 	
-	CallerSideMirroringGateway createGatewayToCall(File publicKeyFile) throws 
+	CallerSideMirroringGateway createGatewayToCall(String ip, File publicKeyFile) throws 
 			IOException, 
 			InvalidPublicKeyFileException, 
 			PublicInformationInvalidException, 
 			SSLSocketSetupException
 	{
-		String ip = extractIpFromFileName(publicKeyFile.getName());
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 		Vector publicInfo = MartusUtilities.importServerPublicKeyFromFile(publicKeyFile, getSecurity());
 		String publicKey = (String)publicInfo.get(0);
