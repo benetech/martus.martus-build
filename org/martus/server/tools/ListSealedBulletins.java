@@ -37,21 +37,21 @@ import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.InputStreamWithSeek;
 
-public class ListPublicBulletins
+public class ListSealedBulletins
 {
 	public static void main(String[] args)
 	{
-		new ListPublicBulletins(args);
+		new ListSealedBulletins(args);
 	}
 	
-	public ListPublicBulletins(String[] args)
+	public ListSealedBulletins(String[] args)
 	{
 		try
 		{
 			processArgs(args);
 			security = MartusServerUtilities.loadKeyPair(keyPairFileName, prompt);
 			initializeDatabase();
-			listPublicBulletins();
+			listAllSealedBulletins();
 			
 		}
 		catch (Exception e)
@@ -62,7 +62,7 @@ public class ListPublicBulletins
 		
 	}
 	
-	void listPublicBulletins()
+	void listAllSealedBulletins()
 	{
 		BulletinVisitor visitor = new BulletinVisitor(); 
 		db.visitAllRecords(visitor);
@@ -107,7 +107,7 @@ public class ListPublicBulletins
 
 		if(packetDirName == null || keyPairFileName == null)
 		{
-			System.err.println("Incorrect arguments: ListPublicBulletins --packet-directory=<packetdir> --keypair-file=<keypair> [--no-prompt]\n");
+			System.err.println("Incorrect arguments: ListSealedBulletins --packet-directory=<packetdir> --keypair-file=<keypair> [--no-prompt]\n");
 			System.exit(2);
 		}
 	}
@@ -138,8 +138,7 @@ public class ListPublicBulletins
 			BulletinHeaderPacket bhp = new BulletinHeaderPacket(key.getUniversalId());
 			InputStreamWithSeek in = db.openInputStream(key, security);
 			bhp.loadFromXml(in, security);
-			if(!bhp.isAllPrivate())
-				displayBulletinDetails(bhp);
+			displayBulletinDetails(bhp);
 			in.close();
 		}
 		
@@ -147,10 +146,14 @@ public class ListPublicBulletins
 		{
 			String accountId = bhp.getAccountId();
 			String publicCode = MartusCrypto.getFormattedPublicCode(accountId);
-			String dir = db.getFolderForAccount(accountId);
+			String bhpDir = db.getFolderForAccount(accountId);
 			String bulletinLocalId = bhp.getLocalId();
 			String dataLocalId = bhp.getFieldDataPacketId();
-			System.out.println(publicCode + "," + dir + "," + bulletinLocalId + "," + dataLocalId);
+			String privateLocalId = bhp.getPrivateFieldDataPacketId();
+			System.out.println(publicCode + "," + 
+					bhpDir + "," + bulletinLocalId + "," + 
+					dataLocalId + "," + 
+					privateLocalId);
 		}
 			
 		public Vector foundKeys = new Vector();
