@@ -2,12 +2,14 @@ package org.martus.meta;
 
 import java.util.Vector;
 
+import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.swingui.RetrieveHQTableModel;
 import org.martus.client.swingui.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.RetrieveMyTableModel;
+import org.martus.client.swingui.UiProgressMeter;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusUtilities;
@@ -50,6 +52,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount = MockMartusApp.create(mockSecurityForApp);
 		appWithAccount.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
+		
+		UiProgressMeter nullProgressMeter = null;
+		uploader = new BackgroundUploader(appWithAccount, nullProgressMeter);
 
 		mockServer.deleteAllData();
 		
@@ -89,9 +94,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.getStore().saveBulletin(b3);
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
 
 		BulletinStore store = appWithAccount.getStore();
 		store.destroyBulletin(b1);
@@ -194,9 +199,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.getStore().saveBulletin(b3);
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
 		
 		BulletinStore store = appWithAccount.getStore();
 		store.destroyBulletin(b1);
@@ -261,9 +266,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.getStore().saveBulletin(b3);
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
 
 		appWithAccount.getStore().destroyBulletin(b1);
 		appWithAccount.getStore().destroyBulletin(b2);
@@ -374,9 +379,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.getStore().saveBulletin(b3);
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
 
 		BulletinStore store = appWithAccount.getStore();
 		store.destroyBulletin(b1);
@@ -515,9 +520,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.getStore().saveBulletin(b3);
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
-		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b2));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, uploader.uploadBulletin(b3));
 
 		Vector desiredSealedResult = new Vector();
 		desiredSealedResult.add(NetworkInterfaceConstants.OK);
@@ -642,4 +647,6 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	private MockMartusServer mockServer;
 	private MockServerInterfaceHandler mockSSLServerHandler;
+	
+	BackgroundUploader uploader;
 }

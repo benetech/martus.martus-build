@@ -50,8 +50,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
 
@@ -77,8 +75,6 @@ import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.CurrentUiState;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
-import org.martus.client.core.Exceptions.ServerCallFailedException;
-import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
@@ -201,7 +197,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		inactivityDetector = new InactivityDetector();
 
 		uploader = new java.util.Timer(true);
-		uploader.schedule(new TickBackgroundUpload(), 0, BACKGROUND_UPLOAD_CHECK_MILLIS);
+		uploader.schedule(new BackgroundUploadTimerTask(this), 0, BACKGROUND_UPLOAD_CHECK_MILLIS);
 
 		timeoutChecker = new java.util.Timer(true);
 		timeoutChecker.schedule(new TickTimeout(), 0, BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS);
@@ -1592,167 +1588,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		long lastActivityAt = now();
 	}
 
-	class TickBackgroundUpload extends TimerTask
-	{
-		public TickBackgroundUpload()
-		{
-		}
-
-		public void run()
-		{
-			if(inConfigServer)
-				return;
-			if(inComplianceDialog)
-				return;
-			try
-			{
-				checkComplianceStatement();
-				checkForNewsFromServer();
-				try
-				{
-					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
-				}
-				catch (MartusApp.DamagedBulletinException e)
-				{
-					ThreadedNotify damagedBulletin = new ThreadedNotify("DamagedBulletinMovedToDiscarded");
-					SwingUtilities.invokeAndWait(damagedBulletin);
-					folderContentsHaveChanged(getStore().getFolderOutbox());
-					folderContentsHaveChanged(getStore().getFolderDraftOutbox());
-					folderContentsHaveChanged(app.createOrFindFolder(getStore().getNameOfFolderDamaged()));
-					folderTreeContentsHaveChanged();
-				}
-				if(uploadResult != null)
-				{
-					//System.out.println("UiMainWindow.Tick.run: " + uploadResult);
-					folderContentsHaveChanged(getStore().getFolderSent());
-					folderContentsHaveChanged(getStore().getFolderOutbox());
-					folderContentsHaveChanged(getStore().getFolderDraftOutbox());
-					folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
-				}
-			}
-			catch(Exception e)
-			{
-				e.printStackTrace();
-			}
-		}
-		
-		public void checkComplianceStatement()
-		{
-			if(alreadyCheckedCompliance)
-				return;
-			try
-			{
-				ClientSideNetworkGateway gateway = app.getCurrentNetworkInterfaceGateway();
-				String compliance = app.getServerCompliance(gateway);
-				alreadyCheckedCompliance = true;
-				if(!compliance.equals(app.getConfigInfo().getServerCompliance()))
-				{
-					ThreadedServerComplianceDlg dlg = new ThreadedServerComplianceDlg(compliance);
-					SwingUtilities.invokeAndWait(dlg);
-				}
-			}
-			catch (ServerCallFailedException userAlreadyKnows)
-			{
-				alreadyCheckedCompliance = true;
-				return;
-			}
-			catch (ServerNotAvailableException weWillTryAgainLater)
-			{
-				return;
-			} 
-			catch (InterruptedException e)
-			{
-				e.printStackTrace();
-			} 
-			catch (InvocationTargetException e)
-			{
-				e.printStackTrace();
-			}
-		}
-
-		public void checkForNewsFromServer()
-		{
-			if(alreadyGotNews)
-				return;
-			Vector newsItems = app.getNewsFromServer();
-			for (Iterator iter = newsItems.iterator(); iter.hasNext();)
-			{
-				String newsItem = (String) iter.next();
-				ThreadedMessageDlg newsDlg = new ThreadedMessageDlg("ServerNews", newsItem);
-				try
-				{
-					SwingUtilities.invokeAndWait(newsDlg);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-			alreadyGotNews = true;
-		}
-
-		class ThreadedNotify implements Runnable
-		{
-			public ThreadedNotify(String tag)
-			{
-				notifyTag = tag;
-			}
-
-			public void run()
-			{
-				notifyDlg(UiMainWindow.this, notifyTag);
-			}
-			String notifyTag;
-		}
-		
-		class ThreadedServerComplianceDlg implements Runnable
-		{
-			public ThreadedServerComplianceDlg(String newComplianceToUse)
-			{
-				newCompliance = newComplianceToUse;
-			}
-			
-			public void run()
-			{
-				inComplianceDialog = true;
-				if(confirmServerCompliance("ServerComplianceChangedDescription", newCompliance))
-				{
-					String serverAddress = app.getConfigInfo().getServerName();
-					String serverKey = app.getConfigInfo().getServerPublicKey();
-					app.setServerInfo(serverAddress, serverKey, newCompliance);
-				}
-				else
-				{
-					app.setServerInfo("", "", "");
-					notifyDlg(UiMainWindow.this, "ExistingServerRemoved");
-				}
-				inComplianceDialog = false;
-			}
-			
-			String newCompliance;
-		}
-		
-		class ThreadedMessageDlg implements Runnable
-		{
-			public ThreadedMessageDlg(String tag, String message)
-			{
-				titleTag = tag;
-				messageContents = message;
-			}
-
-			public void run()
-			{
-				messageDlg(UiMainWindow.this, titleTag, messageContents);
-			}
-			String titleTag;
-			String messageContents;
-		}
-
-		boolean alreadyCheckedCompliance;
-		boolean inComplianceDialog;
-		boolean alreadyGotNews;
-	}
-
 	class TickTimeout extends TimerTask
 	{
 		public TickTimeout()
@@ -1828,15 +1663,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private java.util.Timer uploader;
 	private java.util.Timer timeoutChecker;
 	private javax.swing.Timer errorChecker;
-	private String uploadResult;
+	String uploadResult;
 	private InactivityDetector inactivityDetector;
 
 	private UiMenuBar menuBar;
 	private UiToolBar toolBar;
-	private UiStatusBar statusBar;
+	UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;
-	private boolean inConfigServer;
+	boolean inConfigServer;
 
 	private static final int MAX_KEYPAIRFILE_SIZE = 32000;
 	private static final int TIMEOUT_SECONDS = (10 * 60);

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.Date;
 import java.util.Vector;
 
+import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
@@ -12,6 +13,7 @@ import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.swingui.Retriever;
 import org.martus.client.swingui.UiConstants;
+import org.martus.client.swingui.UiProgressMeter;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
@@ -29,7 +31,6 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.NetworkResponse;
 import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UnicodeReader;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
@@ -78,7 +79,10 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		appWithServer.getUploadInfoFile().delete();
 		new File(appWithServer.getConfigInfoFilename()).delete();
 		new File(appWithServer.getConfigInfoSignatureFilename()).delete();
-		
+
+		UiProgressMeter nullProgressMeter = null;
+		uploaderWithServer = new BackgroundUploader(appWithServer, nullProgressMeter);		
+		uploaderWithoutServer = new BackgroundUploader(appWithoutServer, nullProgressMeter);		
 		mockServer.deleteAllData();
 
 		TRACE_END();
@@ -377,153 +381,16 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Bulletin b = appWithServer.createBulletin();
 		b.setSealed();
 		appWithServer.getStore().saveBulletin(b);
-		assertEquals("result not ok?", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b, null));
+		assertEquals("result not ok?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b));
 		assertTrue("count not > 1?", server.chunkCount > 1);
 
 		server.uploadResponse = NetworkInterfaceConstants.INVALID_DATA;
-		assertEquals("result ok?", NetworkInterfaceConstants.INVALID_DATA, appWithServer.uploadBulletin(b, null));
+		assertEquals("result ok?", NetworkInterfaceConstants.INVALID_DATA, uploaderWithServer.uploadBulletin(b));
 
 		appWithServer.setSSLNetworkInterfaceHandlerForTesting(oldSSLServer);
 		appWithServer.serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 		
 		server.deleteAllFiles();
-	}
-
-	public void testBackgroundUploadSealedWithBadPort() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadSealedWithBadPort");
-
-		createSealedBulletin(appWithoutServer);
-		assertNull("No server", appWithoutServer.backgroundUpload(null));
-		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderOutbox().getBulletinCount());
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadDraftWithBadPort() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadDraftWithBadPort");
-
-		createDraftBulletin(appWithoutServer);
-		assertNull("No server", appWithoutServer.backgroundUpload(null));
-		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderDraftOutbox().getBulletinCount());
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadNothingToSend() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadNothingToSend");
-		mockSecurityForApp.loadSampleAccount();
-		BulletinFolder outbox = appWithServer.getFolderOutbox();
-
-		assertEquals("Empty outbox", 0, outbox.getBulletinCount());
-		assertNull("Empty outbox", appWithServer.backgroundUpload(null));
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadSealedWorked() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadSealedWorked");
-		mockSecurityForApp.loadSampleAccount();
-		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
-		BulletinFolder outbox = appWithServer.getFolderOutbox();
-		
-		mockServer.allowUploads(appWithServer.getAccountId());
-
-		createSealedBulletin(appWithServer);
-		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
-		assertEquals("It was sent", 0, outbox.getBulletinCount());
-		assertEquals("It was sent", 1, appWithServer.getFolderSent().getBulletinCount());
-
-		assertNull("Again Empty outbox", appWithServer.backgroundUpload(null));
-		mockServer.serverForClients.clearCanUploadList();
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadDraftWorked() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadDraftWorked");
-		mockSecurityForApp.loadSampleAccount();
-		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
-		BulletinFolder draftOutbox = appWithServer.getFolderDraftOutbox();
-		
-		mockServer.allowUploads(appWithServer.getAccountId());
-
-		createDraftBulletin(appWithServer);
-		createDraftBulletin(appWithServer);
-		assertEquals("first returned an error?", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
-		assertEquals("first didn't get removed?", 1, draftOutbox.getBulletinCount());
-		assertEquals("second returned an error?", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
-		assertEquals("second didn't get removed?", 0, draftOutbox.getBulletinCount());
-
-		mockServer.serverForClients.clearCanUploadList();
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadSealedFail() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadSealedFail");
-		mockSecurityForApp.loadSampleAccount();
-		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
-		BulletinFolder outbox = appWithServer.getFolderOutbox();
-
-		createSealedBulletin(appWithServer);
-		String FAILRESULT = "Some error tag would go here";
-		mockServer.uploadResponse = FAILRESULT;
-		assertEquals("Should fail", FAILRESULT, appWithServer.backgroundUpload(null));
-		assertEquals("Still in outbox", 1, outbox.getBulletinCount());
-		assertEquals("Not in sent folder", 0, appWithServer.getFolderSent().getBulletinCount());
-		Bulletin stillSealed = outbox.getBulletinSorted(0);
-		assertTrue("Should still be sealed", stillSealed.isSealed());
-		mockServer.uploadResponse = null;
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadDraftFail() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadDraftFail");
-		mockSecurityForApp.loadSampleAccount();
-		assertTrue("must be able to ping", appWithServer.isSSLServerAvailable());
-		BulletinFolder draftOutbox = appWithServer.getFolderDraftOutbox();
-
-		createDraftBulletin(appWithServer);
-		String FAILRESULT = "Some error tag would go here";
-		mockServer.uploadResponse = FAILRESULT;
-		assertEquals("Should fail", FAILRESULT, appWithServer.backgroundUpload(null));
-		assertEquals("Still in draft outbox", 1, draftOutbox.getBulletinCount());
-		mockServer.uploadResponse = null;
-		TRACE_END();
-	}
-
-	public void testBackgroundUploadLogging() throws Exception
-	{
-		TRACE_BEGIN("testBackgroundUploadLogging");
-		String serverName = "some silly server";
-		appWithServer.setServerInfo(serverName, mockServer.getAccountId(), "");
-		appWithServer.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
-		File logFile = new File(appWithServer.getUploadLogFilename());
-		logFile.delete();
-
-		createSealedBulletin(appWithServer);
-		mockServer.uploadResponse = NetworkInterfaceConstants.OK;
-		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
-		assertEquals("Created a log?", false, logFile.exists());
-
-		appWithServer.enableUploadLogging();
-		Bulletin logged = createSealedBulletin(appWithServer);
-		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
-		assertEquals("No log?", true, logFile.exists());
-		mockServer.uploadResponse = null;
-
-		UnicodeReader reader = new UnicodeReader(logFile);
-		String line1 = reader.readLine();
-		assertEquals(logged.getLocalId(), line1);
-		String line2 = reader.readLine();
-		assertEquals(serverName, line2);
-		String line3 = reader.readLine();
-		assertEquals(logged.get(Bulletin.TAGTITLE), line3);
-		reader.close();
-		
-		TRACE_END();
 	}
 
 	public void testRetrieveBulletinsOnlyBadId() throws Exception
@@ -559,9 +426,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		b3.setSealed();
 		appWithServer.getStore().saveBulletin(b3);
 		mockServer.allowUploads(appWithServer.getAccountId());
-		assertEquals("upload b1", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b1, null));
-		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
-		assertEquals("upload b3", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b3, null));
+		assertEquals("upload b1", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+		assertEquals("upload b2", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
+		assertEquals("upload b3", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b3));
 
 		BulletinStore store = appWithServer.getStore();
 		store.removeBulletinFromStore(b1.getUniversalId());
@@ -643,9 +510,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		b3.setSealed();
 		appWithServer.getStore().saveBulletin(b3);
 		mockServer.allowUploads(appWithServer.getAccountId());
-		assertEquals("upload b1", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b1, null));
-		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
-		assertEquals("upload b3", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b3, null));
+		assertEquals("upload b1", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+		assertEquals("upload b2", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
+		assertEquals("upload b3", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b3));
 		store.removeBulletinFromStore(b1.getUniversalId());
 		store.removeBulletinFromStore(b3.getUniversalId());
 		assertEquals("not just one left?", 1, store.getBulletinCount());
@@ -973,7 +840,9 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockResponse.add(NetworkInterfaceConstants.OK);
 		gateway.response = mockResponse;
 
-		String result = app.putContactInfoOnServer(contact);
+		UiProgressMeter nullProgressMeter = null;
+		BackgroundUploader uploader = new BackgroundUploader(app, nullProgressMeter);
+		String result = uploader.putContactInfoOnServer(contact);
 		assertEquals("wrong result?", mockResponse.get(0), result);
 		assertEquals("wrong crypto?", app.getSecurity(), gateway.gotSigner);
 		assertEquals("wrong author?", app.getAccountId(), gateway.gotAuthor);
@@ -986,7 +855,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		gateway.throwSigError = true;
 		try
 		{
-			app.putContactInfoOnServer(contact);
+			uploader.putContactInfoOnServer(contact);
 			fail("Should have thrown for sig error (no key pair)");
 		}
 		catch (MartusSignatureException ignoreExpectedException)
@@ -1067,8 +936,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		String accountId = appWithServer.getAccountId();
 		mockServer.allowUploads(accountId);
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b1, null));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
 
 		String fdpId1 = b1.getFieldDataPacket().getLocalId();		
 		String fdpId2 = b2.getFieldDataPacket().getLocalId();		
@@ -1165,8 +1034,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		appWithServer.getStore().saveBulletin(b3);
 
 		mockServer.allowUploads(appWithServer.getAccountId());
-		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b1, null));
-		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b1));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
 
 		Vector uidList = new Vector();
 		uidList.add(b1.getUniversalId());
@@ -1309,7 +1178,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setSealed();
 		store.saveBulletin(b2);
-		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
+		assertEquals("upload b2", NetworkInterfaceConstants.OK, uploaderWithServer.uploadBulletin(b2));
 		store.destroyBulletin(b2);
 		return b2;
 	}
@@ -1329,6 +1198,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private NetworkInterfaceForNonSSL mockNonSSLServerHandler;
 	private MockServerInterfaceHandler mockSSLServerHandler;
 	
+	private BackgroundUploader uploaderWithServer;
+	private BackgroundUploader uploaderWithoutServer;
 	static final String sampleMagicWord = "beans!";
 
 }

@@ -51,8 +51,6 @@ import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinSearcher;
 import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.FileInputStreamWithSeek;
 import org.martus.common.InputStreamWithSeek;
@@ -67,7 +65,6 @@ import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.NetworkResponse;
 import org.martus.common.SearchParser;
 import org.martus.common.SearchTreeNode;
-import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.FileDatabase.MissingAccountMapException;
 import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
@@ -75,7 +72,6 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.MartusUtilities.ServerErrorException;
-import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.WrongAccountException;
 
 
@@ -761,86 +757,6 @@ public class MartusApp
 		return false;
 	}
 
-	public String uploadBulletin(Bulletin b, UiProgressMeter progressMeter) throws
-			InvalidPacketException
-	{
-		String result = null;
-		File tempFile = null;
-		try
-		{
-			tempFile = File.createTempFile("$$$MartusUploadBulletin", null);
-			DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
-			Database db = store.getDatabase();
-			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
-			FileInputStream inputStream = new FileInputStream(tempFile);
-			int totalSize = MartusUtilities.getCappedFileLength(tempFile);
-			int offset = 0;
-			byte[] rawBytes = new byte[serverChunkSize];
-
-			String message;
-			if(b.isDraft())
-				message = getLocalization().getFieldLabel("UploadingDraftBulletin");
-			else
-				message = getLocalization().getFieldLabel("UploadingSealedBulletin");
-
-			while(true)
-			{
-				if(progressMeter != null)
-					progressMeter.updateProgressMeter(message, offset, totalSize);
-				int chunkSize = inputStream.read(rawBytes);
-				if(chunkSize <= 0)
-					break;
-				byte[] chunkBytes = new byte[chunkSize];
-				System.arraycopy(rawBytes, 0, chunkBytes, 0, chunkSize);
-
-				String authorId = getAccountId();
-				String bulletinLocalId = b.getLocalId();
-				String encoded = Base64.encode(chunkBytes);
-
-				NetworkResponse response = getCurrentNetworkInterfaceGateway().putBulletinChunk(security,
-									authorId, bulletinLocalId, totalSize, offset, chunkSize, encoded);
-				result = response.getResultCode();
-				if(!result.equals(NetworkInterfaceConstants.CHUNK_OK) && !result.equals(NetworkInterfaceConstants.OK))
-					break;
-				offset += chunkSize;
-			}
-			inputStream.close();
-		}
-		catch(InvalidPacketException e)
-		{
-			System.out.println("MartusApp.uploadBulletin: " + e);
-			throw e;
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-			System.out.println("MartusApp.uploadBulletin: " + e);
-			throw new InvalidPacketException(e.toString());
-		}
-
-		if(tempFile != null)
-			tempFile.delete();
-
-		return result;
-	}
-
-	public String backgroundUpload(UiProgressMeter progressMeter) throws
-		DamagedBulletinException
-	{
-		String result = null;
-
-		if(getFolderOutbox().getBulletinCount() > 0)
-			result = backgroundUploadOneSealedBulletin(progressMeter);
-		else if(getFolderDraftOutbox().getBulletinCount() > 0)
-			result = backgroundUploadOneDraftBulletin(progressMeter);
-		else if(getConfigInfo().shouldContactInfoBeSentToServer())
-			sendContactInfoToServer();
-
-		if(progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("StatusReady"));
-		return result;
-	}
-
 	public Vector getNewsFromServer()
 	{
 		if(!isSSLServerAvailable())
@@ -878,148 +794,14 @@ public class MartusApp
 		throw new ServerCallFailedException();
 	}
 
-	private void sendContactInfoToServer()
+	void moveBulletinToDamaged(BulletinFolder outbox, UniversalId uid)
 	{
-		if(!isSSLServerAvailable())
-			return;
-
-		ConfigInfo info = getConfigInfo();
-		String result = "";
-		try
-		{
-			result = putContactInfoOnServer(info.getContactInfo(security));
-		}
-		catch (MartusSignatureException e)
-		{
-			System.out.println("MartusApp.sendContactInfoToServer :" + e);
-			return;
-		}
-		if(!result.equals(NetworkInterfaceConstants.OK))
-		{
-			System.out.println("MartusApp.sendContactInfoToServer failure:" + result);
-			return;
-		}
-		System.out.println("Contact info successfully sent to server");
-
-		try
-		{
-			info.setSendContactInfoToServer(false);
-			saveConfigInfo();
-		}
-		catch (SaveConfigInfoException e)
-		{
-			System.out.println("MartusApp:putContactInfoOnServer Failed to save configinfo locally:" + e);
-		}
+		System.out.println("Moving bulletin to damaged");
+		BulletinFolder damaged = createOrFindFolder(store.getNameOfFolderDamaged());
+		Bulletin b = store.findBulletinByUniversalId(uid);
+		store.moveBulletin(b, outbox, damaged);
+		store.saveFolders();
 	}
-
-	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) throws
-		DamagedBulletinException
-	{
-		if(!isSSLServerAvailable())
-		{
-			if(progressMeter != null)
-				progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("NoServerAvailableProgressMessage"));
-			return null;
-		}
-
-		BulletinFolder outbox = getFolderOutbox();
-		Bulletin b = outbox.getBulletinSorted(0);
-		String exceptionThrown = null;
-		try
-		{
-			String result = uploadBulletin(b, progressMeter);
-
-			if(result != null)
-			{
-				if(result.equals(NetworkInterfaceConstants.OK) || result.equals(NetworkInterfaceConstants.DUPLICATE))
-				{
-					outbox.remove(b.getUniversalId());
-					store.moveBulletin(b, outbox, getFolderSent());
-					store.saveFolders();
-					resetLastUploadedTime();
-					if(logUploads)
-					{
-						try
-						{
-							File file = new File(getUploadLogFilename());
-							UnicodeWriter log = new UnicodeWriter(file, UnicodeWriter.APPEND);
-							log.writeln(b.getLocalId());
-							log.writeln(configInfo.getServerName());
-							log.writeln(b.get(Bulletin.TAGTITLE));
-							log.close();
-							log = null;
-						}
-						catch(Exception e)
-						{
-							System.out.println("MartusApp.backgroundUpload: " + e);
-						}
-					}
-				}
-				return result;
-			}
-		}
-		catch (InvalidPacketException e)
-		{
-			exceptionThrown = e.toString();
-			System.out.println("MartusApp.backgroundUploadOneSealedBulletin: ");
-			System.out.println("  InvalidPacket. Moving from outbox to damaged");
-			BulletinFolder damaged = createOrFindFolder(store.getNameOfFolderDamaged());
-			store.moveBulletin(b, outbox, damaged);
-			store.saveFolders();
-		}
-
-		if(progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("UploadFailedProgressMessage"));
-		if(exceptionThrown != null)
-			throw new DamagedBulletinException(exceptionThrown);
-		return null;
-	}
-
-	String backgroundUploadOneDraftBulletin(UiProgressMeter progressMeter) throws
-		DamagedBulletinException
-	{
-		if(!isSSLServerAvailable())
-		{
-			if(progressMeter != null)
-				progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("NoServerAvailableProgressMessage"));
-			return null;
-		}
-
-		BulletinFolder draftOutbox = getFolderDraftOutbox();
-		Bulletin b = draftOutbox.getBulletinSorted(0);
-		String exceptionThrown = null;
-		try
-		{
-			String result = uploadBulletin(b, progressMeter);
-
-			if(result != null)
-			{
-				if(result.equals(NetworkInterfaceConstants.OK))
-				{
-					draftOutbox.remove(b.getUniversalId());
-					store.saveFolders();
-				}
-				return result;
-			}
-		}
-		catch (InvalidPacketException e)
-		{
-			exceptionThrown = e.toString();
-			System.out.println("MartusApp.backgroundUploadOneDraftBulletin: ");
-			System.out.println("  InvalidPacket. Removing from draftoutbox");
-			BulletinFolder damaged = createOrFindFolder(store.getNameOfFolderDamaged());
-			store.moveBulletin(b, draftOutbox, damaged);
-			store.saveFolders();
-		}
-
-		if(progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(getLocalization().getFieldLabel("UploadFailedProgressMessage"));
-		if(exceptionThrown != null)
-			throw new DamagedBulletinException(exceptionThrown);
-		return null;
-	}
-
-
 
 	public static class DamagedBulletinException extends Exception
 	{
@@ -1179,14 +961,6 @@ public class MartusApp
 		NetworkResponse response = getCurrentNetworkInterfaceGateway().deleteServerDraftBulletins(getSecurity(), getAccountId(), localIds);
 		return response.getResultCode();
 	}
-
-	public String putContactInfoOnServer(Vector info)  throws
-			MartusCrypto.MartusSignatureException
-	{
-		NetworkResponse response = getCurrentNetworkInterfaceGateway().putContactInfo(getSecurity(), getAccountId(), info);
-		return response.getResultCode();
-	}
-
 
 	public static class AccountAlreadyExistsException extends Exception {}
 	public static class CannotCreateAccountFileException extends IOException {}
@@ -1502,7 +1276,7 @@ public class MartusApp
 	private ConfigInfo configInfo;
 	public NetworkInterface currentNetworkInterfaceHandler;
 	public ClientSideNetworkGateway currentNetworkInterfaceGateway;
-	private boolean logUploads;
+	boolean logUploads;
 	public MartusCrypto security;
 	private String currentUserName;
 	private int maxNewFolders;
