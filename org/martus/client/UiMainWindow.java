@@ -868,7 +868,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String[] buttons = {ok};
 			
 			UiNotifyDlg notify = new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
-			requestToUpdateContactInfoOnServerAndSaveInfo();
+			if(magicAccepted)
+				requestToUpdateContactInfoOnServerAndSaveInfo();
 			inConfigServer = false;
 		}
 	}
