@@ -725,6 +725,18 @@ public class BulletinStore
 			{
 				currentFolder = null;
 			}
+			else if(qName.equals(MartusClientXml.tagId))
+			{
+				try 
+				{
+					UniversalId bId = UniversalId.createFromString(buffer);
+					currentFolder.add(bId, "");
+				} 
+				catch(NotUniversalIdException e) 
+				{
+					System.out.println("BulletinStore::endElement : " + e);
+				}
+			}
 
 			buffer = "";
 		}
