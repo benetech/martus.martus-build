@@ -41,7 +41,7 @@ public class UiUtilities
 {
 	static void updateIcon(JFrame window)
 	{
-		URL imageURL = window.getClass().getResource("Martus.png");
+		URL imageURL = UiMainWindow.class.getResource("Martus.png");
 		if(imageURL == null)
 			return;
 		ImageIcon imageicon = new ImageIcon(imageURL);

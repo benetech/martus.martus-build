@@ -36,11 +36,12 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.border.EmptyBorder;
+
 class UiSplashDlg extends JDialog implements ActionListener
 {
-	UiSplashDlg(MartusLocalization localization, String text)
+	UiSplashDlg(Frame owner, MartusLocalization localization, String text)
 	{
-		super((Frame)null, true);
+		super(owner, owner.getTitle(), true);
 		Container contents = getContentPane();
 		JLabel body = new JLabel(text);
 		body.setBorder(new EmptyBorder(20, 20, 20, 20));

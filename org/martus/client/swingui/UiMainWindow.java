@@ -31,6 +31,7 @@ import java.awt.BorderLayout;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
+import java.awt.Frame;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.Toolkit;
@@ -112,8 +113,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean run()
 	{
-		notifyClientCompliance();
+		MartusLocalization localization = getLocalization();
+		JFrame hiddenFrame = new JFrame(UiConstants.programName);
+		UiUtilities.updateIcon(hiddenFrame);
+		hiddenFrame.setState(Frame.ICONIFIED);
+		hiddenFrame.show();
+		currentActiveFrame = hiddenFrame;
+		notifyClientCompliance(hiddenFrame);
 
+		hiddenFrame.setTitle(UiSigninDlg.getTextForTitle(localization));
 		mainWindowInitalizing = true;
 		boolean newAccount = false;
 		if(app.doesAccountExist())
@@ -127,6 +135,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return false;
 			newAccount = true;
 		}
+		currentActiveFrame = this;
+		hiddenFrame.dispose();
 		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitingForBulletinsToLoad"));
 
 		try
@@ -187,6 +197,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			notifyDlg(this, "FoundOrphans");
 
 		show();
+		toFront();
 
 		inactivityDetector = new InactivityDetector();
 
@@ -209,7 +220,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return true;
     }
 
-	void notifyClientCompliance()
+	void notifyClientCompliance(Frame owner)
 	{
 		// NOTE: If this program contains ANY changes that have 
 		// not been officially released by Benetech, you MUST 
@@ -237,7 +248,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			"created by Benetech.</font></p></html>";
 		}
 
-		new UiSplashDlg(getLocalization(), complianceStatementAlwaysEnglish);
+		new UiSplashDlg(owner, getLocalization(), complianceStatementAlwaysEnglish);
 	}
 	
     public boolean isMainWindowInitalizing()
