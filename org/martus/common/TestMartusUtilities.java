@@ -42,6 +42,8 @@ import java.util.zip.ZipOutputStream;
 
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
+import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
@@ -64,6 +66,111 @@ public class TestMartusUtilities extends TestCaseEnhanced
     }
 
 	// TODO: create tests for all the MartusUtilities methods
+	public void testExportServerPublicKey() throws Exception
+	{
+		File keyFile = createTempFile();
+		MartusUtilities.exportServerPublicKey(security, keyFile);
+		
+		UnicodeReader reader = new UnicodeReader(keyFile);
+		String sigFileIdentifier = reader.readLine();
+		String sigFileType = reader.readLine();
+		String key = reader.readLine();
+		String sig = reader.readLine();
+		reader.close();
+		assertStartsWith("Martus Public Key", sigFileIdentifier);
+		assertEquals("Server", sigFileType);
+		assertEquals("wrong public key?", security.getPublicKeyString(), key);
+		MartusUtilities.validatePublicInfo(key, sig, security);
+		
+		File badFile = new File(BAD_FILENAME);
+		try
+		{
+			MartusUtilities.exportServerPublicKey(security, badFile);
+			fail("Should have thrown");
+		}
+		catch (IOException ignoreExpectedException)
+		{
+		}
+	}
+	
+	public void testImportServerPublicKeyFromFile() throws Exception
+	{
+		String key = security.getPublicKeyString();
+		byte[] publicKeyBytes = Base64.decode(key);
+		InputStream in = new ByteArrayInputStream(publicKeyBytes);
+		byte[] sigBytes = security.createSignature(in);
+		String sig = Base64.encode(sigBytes);
+
+		File keyFile = createTempFile();
+		UnicodeWriter writer = new UnicodeWriter(keyFile);
+		writer.writeln("Martus Public Key:1.0");
+		writer.writeln("Server");
+		writer.writeln(key);
+		writer.writeln(sig);
+		writer.close();
+
+		Vector result = MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
+		assertEquals(2, result.size());
+		String gotKey = (String)result.get(0);
+		String gotSig = (String)result.get(1);
+		assertEquals("wrong public key?", key, gotKey);
+		assertEquals("wrong sig?", sig, gotSig);
+	}
+
+	public void testImportServerPublicKeyFromFileThatIsClient() throws Exception
+	{
+		File keyFile = createTempFile();
+		MartusUtilities.exportClientPublicKey(security, keyFile);
+
+		try
+		{
+			Vector result = MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
+		}
+		catch (InvalidPublicKeyFileException ignoreExpectedException)
+		{
+		}
+	}
+
+	public void testImportServerPublicKeyFromFileBad() throws Exception
+	{
+		File keyFile = new File(BAD_FILENAME);
+		try
+		{
+			Vector result = MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
+			fail("should have thrown");
+		}
+		catch (IOException ignoreExpectedException)
+		{
+		}
+	}
+
+	public void testImportServerPublicKeyFromFileBadSig() throws Exception
+	{
+		MockMartusSecurity other = MockMartusSecurity.createOtherServer();
+		String key = other.getPublicKeyString();
+		byte[] publicKeyBytes = Base64.decode(key);
+		InputStream in = new ByteArrayInputStream(publicKeyBytes);
+		byte[] sigBytes = security.createSignature(in);
+		String sig = Base64.encode(sigBytes);
+
+		File keyFile = createTempFile();
+		UnicodeWriter writer = new UnicodeWriter(keyFile);
+		writer.writeln("Martus Public Key:1.0");
+		writer.writeln("Server");
+		writer.writeln(key);
+		writer.writeln(sig);
+		writer.close();
+
+		try
+		{
+			Vector result = MartusUtilities.importServerPublicKeyFromFile(keyFile, security);
+			fail("should have thrown");
+		}
+		catch (PublicInformationInvalidException ignoreExpectedException)
+		{
+		}
+	}
+
 	public void testExportClientPublicKey() throws Exception
 	{
 		File keyFile = createTempFile();

@@ -244,6 +244,62 @@ public class MartusUtilities
 		}
 	}
 
+	static class InvalidPublicKeyFileException extends Exception {}
+	
+	public static Vector importServerPublicKeyFromFile(File file, MartusCrypto verifier) throws 
+		IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
+	{
+		Vector result = new Vector();
+
+		UnicodeReader reader = new UnicodeReader(file);
+		try
+		{
+			String fileType = reader.readLine();
+			String keyType = reader.readLine();
+			String publicKey = reader.readLine();
+			String signature = reader.readLine();
+
+			if(!fileType.startsWith(PUBLIC_KEY_FILE_IDENTIFIER))
+				throw new InvalidPublicKeyFileException();
+			if(!keyType.equals(PUBLIC_KEY_TYPE_SERVER))
+				throw new InvalidPublicKeyFileException();
+
+			validatePublicInfo(publicKey, signature, verifier);
+
+			result.add(publicKey);
+			result.add(signature);
+		}
+		finally
+		{
+			reader.close();
+		}
+
+		return result;
+	}
+	
+	public static void exportServerPublicKey(MartusCrypto security, File outputfile)
+		throws MartusSignatureException, InvalidBase64Exception, IOException
+	{
+		String publicKeyString = security.getPublicKeyString();
+		byte[] publicKeyBytes = Base64.decode(publicKeyString);
+
+		ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
+		byte[] sigBytes = security.createSignature(in);
+
+		UnicodeWriter writer = new UnicodeWriter(outputfile);
+		try
+		{
+			writer.writeln(PUBLIC_KEY_FILE_IDENTIFIER + "1.0");
+			writer.writeln(PUBLIC_KEY_TYPE_SERVER);
+			writer.writeln(publicKeyString);
+			writer.writeln(Base64.encode(sigBytes));
+		}
+		finally
+		{
+			writer.close();
+		}
+	}
+	
 	public static Vector importClientPublicKeyFromFile(File file) throws IOException
 	{
 		Vector result = new Vector();
@@ -957,4 +1013,7 @@ public class MartusUtilities
 			throw new PublicInformationInvalidException();
 		}
 	}
+
+	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
+	static final String PUBLIC_KEY_TYPE_SERVER = "Server";
 }
