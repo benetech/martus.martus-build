@@ -21,6 +21,7 @@ import java.util.zip.ZipOutputStream;
 
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinStore;
+import org.martus.client.MockBulletin;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
@@ -134,7 +135,7 @@ public class TestMartusServer extends TestCaseEnhanced
 			privateBulletin.setSealed();
 			privateBulletin.save();
 
-			b1ZipString = b1.saveToZipString();
+			b1ZipString = MockBulletin.saveToZipString(b1);
 			b1ZipBytes = Base64.decode(b1ZipString);
 			b1ChunkBytes0 = new byte[100];
 			b1ChunkBytes1 = new byte[b1ZipBytes.length - b1ChunkBytes0.length];
@@ -143,7 +144,7 @@ public class TestMartusServer extends TestCaseEnhanced
 			b1ChunkData0 = Base64.encode(b1ChunkBytes0);
 			b1ChunkData1 = Base64.encode(b1ChunkBytes1);
 			
-			draftZipString = draft.saveToZipString();
+			draftZipString = MockBulletin.saveToZipString(draft);
 			draftZipBytes = Base64.decode(draftZipString);
 
 		}
@@ -306,7 +307,7 @@ public class TestMartusServer extends TestCaseEnhanced
 
 	public void testUploadTwoBulletinsByChunks() throws Exception
 	{
-		String b2ZipString = b2.saveToZipString();
+		String b2ZipString = MockBulletin.saveToZipString(b2);
 
 		byte[] b2ZipBytes = Base64.decode(b2ZipString);
 		byte[] b2ChunkBytes0 = new byte[100];
@@ -443,7 +444,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		draft.setHQPublicKey(hqSecurity.getPublicKeyString());
 		draft.save();
 		draft = Bulletin.loadFromDatabase(store, new DatabaseKey(draft.getUniversalId()));
-		String draftZipString = draft.saveToZipString();
+		String draftZipString = MockBulletin.saveToZipString(draft);
 		byte[] draftZipBytes = Base64.decode(draftZipString);
 
 		Database originalDatabase = testServer.getDatabase();
@@ -475,7 +476,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		draftHeader1.setDraft();
 		DatabaseKey attachmentKey1 = new DatabaseKey(attachmentUid1);
 		attachmentKey1.setDraft();
-		String draft1ZipString = b.saveToZipString();
+		String draft1ZipString = MockBulletin.saveToZipString(b);
 		byte[] draft1ZipBytes = Base64.decode(draft1ZipString);
 
 		b.clearPublicAttachments();
@@ -490,7 +491,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		DatabaseKey draftHeader2 = new DatabaseKey(b.getUniversalId());
 		draftHeader2.setDraft();
 		attachmentKey2.setDraft();
-		String draft2ZipString = b.saveToZipString();
+		String draft2ZipString = MockBulletin.saveToZipString(b);
 		byte[] draft2ZipBytes = Base64.decode(draft2ZipString);
 
 		b.clearPublicAttachments();
@@ -506,7 +507,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		DatabaseKey sealedHeader3 = new DatabaseKey(b.getUniversalId());
 		sealedHeader3.setSealed();
 		attachmentKey3.setSealed();
-		String sealedZipString = b.saveToZipString();
+		String sealedZipString = MockBulletin.saveToZipString(b);
 		byte[] sealedZipBytes = Base64.decode(sealedZipString);
 
 		testServer.clientsThatCanUpload.clear();
@@ -626,7 +627,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		bulletin.set(bulletin.TAGPUBLICINFO, "public info");
 		bulletin.set(bulletin.TAGPRIVATEINFO, "private info");
 		bulletin.setSealed();
-		String data = bulletin.saveToZipString();
+		String data = MockBulletin.saveToZipString(bulletin);
 		assertEquals(NetworkInterfaceConstants.OK, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletin.getLocalId(), data));
 		Vector result = testServer.downloadBulletin(clientSecurity.getPublicKeyString(), bulletin.getLocalId());
 		assertNotNull("result null", result);
@@ -922,18 +923,18 @@ public class TestMartusServer extends TestCaseEnhanced
 		bulletinSealed.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletinSealed.setSealed();
 		bulletinSealed.save();
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinSealed.getLocalId(), bulletinSealed.saveToZipString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinSealed.getLocalId(), MockBulletin.saveToZipString(bulletinSealed));
 
 		Bulletin bulletinDraft = store.createEmptyBulletin();
 		bulletinDraft.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletinDraft.setDraft();
 		bulletinDraft.save();
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), bulletinDraft.saveToZipString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), MockBulletin.saveToZipString(bulletinDraft));
 
 		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		
 		privateBulletin.save();
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), privateBulletin.saveToZipString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(privateBulletin));
 				
 		Vector list2 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
 		assertEquals("wrong length list2", 3, list2.size());
@@ -970,13 +971,13 @@ public class TestMartusServer extends TestCaseEnhanced
 		bulletinSealed.setSealed();
 		bulletinSealed.setAllPrivate(true);
 		bulletinSealed.save();
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinSealed.getLocalId(), bulletinSealed.saveToZipString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinSealed.getLocalId(), MockBulletin.saveToZipString(bulletinSealed));
 
 		Bulletin bulletinDraft = store.createEmptyBulletin();
 		bulletinDraft.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletinDraft.setDraft();
 		bulletinDraft.save();
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), bulletinDraft.saveToZipString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), MockBulletin.saveToZipString(bulletinDraft));
 
 		Vector list2 = testServer.listFieldOfficeDraftBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
 		assertEquals("wrong length list2", 2, list2.size());
@@ -1022,11 +1023,11 @@ public class TestMartusServer extends TestCaseEnhanced
 		bulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletin.setSealed();
 		bulletin.save();
-		String result2 = testServer.uploadBulletin(bulletin.getAccount(), bulletin.getLocalId(), bulletin.saveToZipString());
+		String result2 = testServer.uploadBulletin(bulletin.getAccount(), bulletin.getLocalId(), MockBulletin.saveToZipString(bulletin));
 
 		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		privateBulletin.save();
-		testServer.uploadBulletin(privateBulletin.getAccount(), privateBulletin.getLocalId(), privateBulletin.saveToZipString());
+		testServer.uploadBulletin(privateBulletin.getAccount(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(privateBulletin));
 
 		testServer.security = myMock;
 		myMock.shouldFailNext = true;
@@ -1051,7 +1052,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		b.set(b.TAGPUBLICINFO, "Detasdfsdfils1");
 		b.set(b.TAGPRIVATEINFO, "PrivasdfsdfteDetails1");
 		b.save();
-		testServer.uploadBulletin(nonFieldSecurity.getPublicKeyString(), b.getLocalId(), b.saveToZipString());
+		testServer.uploadBulletin(nonFieldSecurity.getPublicKeyString(), b.getLocalId(), MockBulletin.saveToZipString(b));
 
 		Vector list1 = testServer.listFieldOfficeAccounts(hqSecurity.getPublicKeyString());
 		assertNotNull("listFieldOfficeAccounts returned null", list1);
@@ -1064,11 +1065,11 @@ public class TestMartusServer extends TestCaseEnhanced
 		Bulletin bulletin = store.createEmptyBulletin();
 		bulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletin.save();
-		testServer.uploadBulletin(fieldSecurity1.getPublicKeyString(), bulletin.getLocalId(), bulletin.saveToZipString());
+		testServer.uploadBulletin(fieldSecurity1.getPublicKeyString(), bulletin.getLocalId(), MockBulletin.saveToZipString(bulletin));
 
 		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		privateBulletin.save();
-		testServer.uploadBulletin(fieldSecurity1.getPublicKeyString(), privateBulletin.getLocalId(), privateBulletin.saveToZipString());
+		testServer.uploadBulletin(fieldSecurity1.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(privateBulletin));
 				
 		Vector list2 = testServer.listFieldOfficeAccounts(hqSecurity.getPublicKeyString());
 		assertEquals("wrong length", 2, list2.size());
@@ -1088,7 +1089,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
 
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), privateBulletin.saveToZipString());
+		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(privateBulletin));
 
 		Vector list2 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
 		assertNotNull("listMyBulletinSummaries returned null", list2);
@@ -1262,7 +1263,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(notFoundResult);
 		assertEquals("Not notfound?", NetworkInterfaceConstants.NOT_FOUND, notFoundResult.get(0));
 		
-		String zip = privateBulletin.saveToZipString();
+		String zip = MockBulletin.saveToZipString(privateBulletin);
 		testServer.uploadBulletin(clientId, privateBulletin.getLocalId(), zip);
 
 		String localId =privateBulletin.getFieldDataPacket().getLocalId();
@@ -1302,7 +1303,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(notFoundResult);
 		assertEquals("Not notfound?", NetworkInterfaceConstants.NOT_FOUND, notFoundResult.get(0));
 		
-		String zip = privateBulletin.saveToZipString();
+		String zip = MockBulletin.saveToZipString(privateBulletin);
 		testServer.uploadBulletin(clientId, privateBulletin.getLocalId(), zip);
 
 		String localId =privateBulletin.getFieldDataPacket().getLocalId();

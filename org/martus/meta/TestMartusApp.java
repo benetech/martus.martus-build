@@ -13,6 +13,7 @@ import org.martus.client.BulletinFolder;
 import org.martus.client.BulletinStore;
 import org.martus.client.ConfigInfo;
 import org.martus.client.MartusApp;
+import org.martus.client.MockBulletin;
 import org.martus.client.MockMartusApp;
 import org.martus.client.Retriever;
 import org.martus.common.Base64;
@@ -913,7 +914,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.OK);
 		response.add(new Integer(totalSize));
 		response.add(new Integer(chunkSize));
-		response.add(b.saveToZipString());
+		response.add(MockBulletin.saveToZipString(b));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -941,7 +942,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.OK);
 		response.add(new Integer(-1));
 		response.add(new Integer(bulletinBytes.length));
-		response.add(b.saveToZipString());
+		response.add(MockBulletin.saveToZipString(b));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -969,7 +970,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.CHUNK_OK);
 		response.add(new Integer(bulletinBytes.length));
 		response.add(new Integer(bulletinBytes.length / 3 * 2));
-		response.add(b.saveToZipString());
+		response.add(MockBulletin.saveToZipString(b));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -1691,7 +1692,7 @@ public class TestMartusApp extends TestCaseEnhanced
 
 	byte[] getBulletinZipBytes(Bulletin b) throws Exception
 	{
-		return Base64.decode(b.saveToZipString());
+		return Base64.decode(MockBulletin.saveToZipString(b));
 	}
 		
 	private void TRACE_BEGIN(String method)

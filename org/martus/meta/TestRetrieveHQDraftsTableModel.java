@@ -4,6 +4,7 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.Bulletin;
+import org.martus.client.MockBulletin;
 import org.martus.client.MockMartusApp;
 import org.martus.client.RetrieveHQDraftsTableModel;
 import org.martus.common.FieldDataPacket;
@@ -68,9 +69,9 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		hqApp.setSSLServerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQDraftsTableModel(hqApp, null);
 		modelWithData.Initalize();
-		String z0 = b0.saveToZipString();
-		String z1 = b1.saveToZipString();
-		String z2 = b2.saveToZipString();
+		String z0 = MockBulletin.saveToZipString(b0);
+		String z1 = MockBulletin.saveToZipString(b1);
+		String z2 = MockBulletin.saveToZipString(b2);
 		Bulletin hqB0 = hqApp.createBulletin();
 		hqB0.loadFromZipString(z0);
 		hqB0.save();

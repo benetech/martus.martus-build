@@ -560,72 +560,6 @@ public class Bulletin implements BulletinConstants
 		return new DatabaseKey(uidFdp);
 	}
 
-	public void saveToFile(File destFile) throws 
-		IOException,
-		MartusCrypto.CryptoException
-	{
-		BulletinHeaderPacket header = getBulletinHeaderPacket();
-		
-		FieldDataPacket publicDataPacket = getFieldDataPacket();
-		boolean shouldEncryptPublicData = (isDraft() || header.isAllPrivate());
-		publicDataPacket.setEncrypted(shouldEncryptPublicData);
-			
-		OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(destFile));
-		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
-		try
-		{
-			byte[] dataSig = writePacketToZip(zipOut, getFieldDataPacket());
-			header.setFieldDataSignature(dataSig);
-			
-			byte[] privateDataSig = writePacketToZip(zipOut, getPrivateFieldDataPacket());
-			header.setPrivateFieldDataSignature(privateDataSig);
-			
-			writeAttachmentsToZip(zipOut, getPublicAttachments());
-			writeAttachmentsToZip(zipOut, getPrivateAttachments());
-
-			writePacketToZip(zipOut, header);
-		}
-		finally
-		{
-			zipOut.close();
-		}
-	}
-
-	public void writeAttachmentsToZip(ZipOutputStream zipOut, AttachmentProxy[] attachments) throws 
-		IOException, 
-		CryptoException 
-	{
-		for(int i = 0 ; i < attachments.length ; ++i)
-		{
-			UniversalId uid = attachments[i].getUniversalId();
-			ZipEntry attachmentEntry = new ZipEntry(uid.getLocalId());
-			zipOut.putNextEntry(attachmentEntry);
-			InputStream in = new BufferedInputStream(db.openInputStream(new DatabaseKey(uid), store.getSignatureVerifier()));
-
-			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
-			int got;
-			while((got = in.read(bytes)) != -1)
-			{
-				zipOut.write(bytes, 0, got);
-			}
-			in.close();
-			zipOut.flush();	
-		}
-	}
-	
-	byte[] writePacketToZip(ZipOutputStream zipOut, Packet packet) throws 
-		IOException
-	{
-		ZipEntry entry = new ZipEntry(packet.getLocalId());
-		zipOut.putNextEntry(entry);
-		
-		MartusCrypto signer = store.getSignatureGenerator();
-		UnicodeWriter writer = new UnicodeWriter(zipOut);
-		byte[] sig = packet.writeXml(writer, signer);
-		writer.flush();
-		return sig;
-	}
-	
 	static void importZipFileToStoreWithSameUids(ZipFile zip, BulletinStore store) throws 
 		IOException,
 		Packet.InvalidPacketException,
@@ -853,29 +787,6 @@ public class Bulletin implements BulletinConstants
 			}
 		}
 		
-	}
-
-	public String saveToZipString() throws 
-		IOException,
-		MartusCrypto.CryptoException
-	{
-		File tempFile = File.createTempFile("$$$Martus-saveToZipString", null);
-		try
-		{
-			tempFile.deleteOnExit();
-			saveToFile(tempFile);
-			FileInputStream inputStream = new FileInputStream(tempFile);
-			int len = inputStream.available();
-			byte[] rawBytes = new byte[len];
-			inputStream.read(rawBytes);
-			inputStream.close();
-			return Base64.encode(rawBytes);
-		}
-		finally
-		{
-			tempFile.delete();
-		}
-
 	}
 
 	public void loadFromZipString(String zipString) throws IOException, Base64.InvalidBase64Exception

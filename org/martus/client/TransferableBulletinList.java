@@ -7,6 +7,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
+import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
+
 
 public class TransferableBulletinList implements Transferable
 {
@@ -33,10 +38,14 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 			String summary = MartusApp.toFileName(bulletin.get(bulletin.TAGTITLE));
 			file = File.createTempFile(summary, BULLETIN_FILE_EXTENSION);
 			file.deleteOnExit();
-			bulletin.saveToFile(file);
+			Database db = bulletin.getStore().getDatabase();
+			DatabaseKey headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
+			MartusCrypto security = bulletin.getStore().getSignatureGenerator();
+			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 		}
 		catch(Exception e)
 		{
+			e.printStackTrace();
 			System.out.println("TransferableBulletin createTransferableZipFile: " + e);
 			return false;
 		}
@@ -73,15 +82,15 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 		if(flavor.equals(bulletinListDataFlavor))
 			return this;
 
-		if(file == null)
-		{
-			//System.out.println("TransferableBulletin.getTransferData : creatingZipFile");
-			if (!createTransferableZipFile())
-				throw new UnsupportedFlavorException(flavor);
-		}
-
 		if(flavor.equals(DataFlavor.javaFileListFlavor))
 		{
+			if(file == null)
+			{
+				//System.out.println("TransferableBulletin.getTransferData : creatingZipFile");
+				if (!createTransferableZipFile())
+					throw new UnsupportedFlavorException(flavor);
+			}
+
 			LinkedList list = new LinkedList();
 			list.add(file);
 			return list;
