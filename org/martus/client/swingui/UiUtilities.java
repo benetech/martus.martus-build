@@ -27,6 +27,8 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -37,13 +39,19 @@ public class UiUtilities
 {
 	static void notifyDlg(UiLocalization localization, JFrame parent, String baseTag, String titleTag)
 	{
+		HashMap emptyTokenReplacement = new HashMap();
+		notifyDlg(localization, parent, baseTag, titleTag, emptyTokenReplacement);
+	}
+
+	static void notifyDlg(UiLocalization localization, JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
+	{
 		String title = localization.getWindowTitle(titleTag);
 		String cause = localization.getFieldLabel("notify" + baseTag + "cause");
 		String ok = localization.getButtonLabel("ok");
 		String[] contents = {cause};
 		String[] buttons = {ok};
 
-		new UiNotifyDlg(parent, title, contents, buttons);
+		new UiNotifyDlg(parent, title, contents, buttons, tokenReplacement);
 	}
 
 	static void messageDlg(UiLocalization localization, JFrame parent, String baseTag, String message)
@@ -59,6 +67,12 @@ public class UiUtilities
 
 	public static boolean confirmDlg(UiLocalization localization, JFrame parent, String baseTag)
 	{
+		HashMap emptyTokenReplacement = new HashMap();
+		return confirmDlg(localization, parent, baseTag, emptyTokenReplacement);
+	}
+	
+	public static boolean confirmDlg(UiLocalization localization, JFrame parent, String baseTag, Map tokenReplacement)
+	{
 		String title = localization.getWindowTitle("confirm" + baseTag);
 		String cause = localization.getFieldLabel("confirm" + baseTag + "cause");
 		String effect = localization.getFieldLabel("confirm" + baseTag + "effect");
@@ -69,22 +83,35 @@ public class UiUtilities
 
 	public static boolean confirmDlg(UiLocalization localization, JFrame parent, String title, String[] contents)
 	{
+		HashMap emptyTokenReplacement = new HashMap();
+		return confirmDlg(localization, parent, title, contents, emptyTokenReplacement);
+	}
+
+	public static boolean confirmDlg(UiLocalization localization, JFrame parent, String title, String[] contents, Map tokenReplacement)
+	{
 		String yes = localization.getButtonLabel("yes");
 		String no = localization.getButtonLabel("no");
 		String[] buttons = {yes, no};
 
-		return confirmDlg(parent, title, contents, buttons);
+		return confirmDlg(parent, title, contents, buttons, tokenReplacement);
 	}
 
 	public static boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons) 
 	{
-		UiNotifyDlg notify = new UiNotifyDlg(parent, title, contents, buttons);
+		HashMap emptyTokenReplacement = new HashMap();
+		return confirmDlg(parent, title, contents, buttons, emptyTokenReplacement); 
+	}
+
+	public static boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons, Map tokenReplacement) 
+	{
+		UiNotifyDlg notify = new UiNotifyDlg(parent, title, contents, buttons, tokenReplacement);
 		String result = notify.getResult();
 		if(result == null)
 			return false;
 		return(result.equals(buttons[0]));
 	}
 
+	
 	static public void updateIcon(JFrame window)
 	{
 		URL imageURL = UiMainWindow.class.getResource("Martus.png");

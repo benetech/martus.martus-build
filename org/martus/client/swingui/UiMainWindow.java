@@ -47,6 +47,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimerTask;
 import java.util.Vector;
 
@@ -451,6 +453,11 @@ if(result == NEW_ACCOUNT)
 		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag);
 	}
 
+	public boolean confirmDlg(JFrame parent, String baseTag, Map tokenReplacement)
+	{
+		return UiUtilities.confirmDlg(getLocalization(), parent, baseTag, tokenReplacement);
+	}
+
 	public boolean confirmDlg(JFrame parent, String title, String[] contents)
 	{
 		return UiUtilities.confirmDlg(getLocalization(), parent, title, contents);
@@ -463,12 +470,24 @@ if(result == NEW_ACCOUNT)
 
 	public void notifyDlg(JFrame parent, String baseTag)
 	{
-		notifyDlg(parent, baseTag, "notify" + baseTag);
+		HashMap emptyTokenReplacement = new HashMap();
+		notifyDlg(parent, baseTag, emptyTokenReplacement);
+	}
+
+	public void notifyDlg(JFrame parent, String baseTag, Map tokenReplacement)
+	{
+		notifyDlg(parent, baseTag, "notify" + baseTag, tokenReplacement);
 	}
 
 	public void notifyDlg(JFrame parent, String baseTag, String titleTag)
 	{
-		UiUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag);
+		HashMap emptyTokenReplacement = new HashMap();
+		notifyDlg(parent, baseTag, titleTag, emptyTokenReplacement);
+	}
+
+	public void notifyDlg(JFrame parent, String baseTag, String titleTag, Map tokenReplacement)
+	{
+		UiUtilities.notifyDlg(getLocalization(), parent, baseTag, titleTag, tokenReplacement);
 	}
 
 	public void messageDlg(JFrame parent, String baseTag, String message)
@@ -1287,7 +1306,7 @@ if(result == NEW_ACCOUNT)
 	{
 		if(confirmDlg(this,"BackupKeyPairSingle"))
 			doBackupKeyPairToSingleEncryptedFile();
-		if(confirmDlg(this,"BackupKeyPairMultiple"))
+		if(confirmDlg(this,"BackupKeyPairMultiple", UiBackupRecoverKeyPair.getTokenReplacement()))
 		{
 			UiBackupRecoverKeyPair backup = new UiBackupRecoverKeyPair(this);
 			backup.backupKeyPairToMultipleUnencryptedFiles();
@@ -1341,9 +1360,9 @@ if(result == NEW_ACCOUNT)
 		}
 	}
 	
-	void displayScrollableMessage(String titleTag, String message, String okButtonTag) 
+	void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement) 
 	{
-		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, "", "", message);
+		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, "", "", message, tokenReplacement);
 	}
 
 	class PublicInfoFileFilter extends FileFilter

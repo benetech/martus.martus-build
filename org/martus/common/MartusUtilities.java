@@ -37,6 +37,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
+import java.util.Iterator;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -45,14 +47,22 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
-import org.martus.common.bulletin.*;
-import org.martus.common.crypto.*;
+import org.martus.common.bulletin.BulletinZipUtilities;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.database.*;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.Database.RecordHiddenException;
-import org.martus.common.network.*;
-import org.martus.common.packet.*;
-import org.martus.util.*;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.SimpleX509TrustManager;
+import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.common.packet.Packet;
+import org.martus.common.packet.UniversalId;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
+import org.martus.util.StreamFilter;
+import org.martus.util.UnicodeReader;
+import org.martus.util.UnicodeWriter;
 import org.martus.util.Base64.InvalidBase64Exception;
 
 public class MartusUtilities
@@ -524,7 +534,34 @@ public class MartusUtilities
 		String newFileName = createValidFileName(originalFileName);
 		return newFileName.equals(originalFileName);
 	}
-	
+
+	public static String replaceTokens(String original, Map tokenReplacement)
+	{
+		if(tokenReplacement.isEmpty())
+			return original;
+
+		String revised = original;
+		for (Iterator keys = tokenReplacement.keySet().iterator(); keys.hasNext();)
+		{
+			String token = (String) keys.next();
+			String replacement = (String)tokenReplacement.get(token);
+			revised = revised.replaceAll(token, replacement);
+		}
+		return revised;		
+	}
+
+	public static String[] replaceTokens(String[] original, Map tokenReplacement)
+	{
+		if(tokenReplacement.isEmpty())
+			return original;
+
+		String[] revised = new String[original.length];
+		for (int i = 0; i < original.length; ++i)
+		{
+			revised[i] = replaceTokens(original[i], tokenReplacement);
+		}
+		return revised;		
+	}
 
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
 	static final String PUBLIC_KEY_TYPE_SERVER = "Server";

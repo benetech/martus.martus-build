@@ -28,6 +28,8 @@ package org.martus.client.swingui.dialogs;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -36,6 +38,7 @@ import javax.swing.JScrollPane;
 
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
+import org.martus.common.MartusUtilities;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.UiTextArea;
 import org.martus.swing.UiWrappedTextArea;
@@ -47,17 +50,25 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 {
 	public UiShowScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text)
 	{
+		this(owner, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text, (Map)(new HashMap()));
+	}
+	
+	public UiShowScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text, Map tokenReplacement)
+	{
 		super(owner, "", true);
 		mainWindow = owner;
 
 		UiLocalization localization = mainWindow.getLocalization();
-		setTitle(localization.getWindowTitle(titleTag));
-		ok = new JButton(localization.getButtonLabel(okButtonTag));
+		String windowTitle = localization.getWindowTitle(titleTag);
+		setTitle(MartusUtilities.replaceTokens(windowTitle, tokenReplacement));
+		String buttonLabel = localization.getButtonLabel(okButtonTag);
+		ok = new JButton(MartusUtilities.replaceTokens(buttonLabel, tokenReplacement));
 		ok.addActionListener(this);
 		JButton cancel = null;
 		if(cancelButtonTag.length() != 0)
 		{
-			cancel = new JButton(localization.getButtonLabel(cancelButtonTag));
+			buttonLabel = localization.getButtonLabel(cancelButtonTag);
+			cancel = new JButton(MartusUtilities.replaceTokens(buttonLabel, tokenReplacement));
 			cancel.addActionListener(this);
 		}
 
@@ -67,11 +78,13 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 		details.setEditable(false);
 		JScrollPane detailScrollPane = new JScrollPane(details, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		details.setText(text);
+		details.setText(MartusUtilities.replaceTokens(text, tokenReplacement));
 
 		getContentPane().setLayout(new ParagraphLayout());
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(new UiWrappedTextArea(localization.getFieldLabel(descriptionTag)));
+		String fieldLabel = localization.getFieldLabel(descriptionTag);
+		fieldLabel = MartusUtilities.replaceTokens(fieldLabel, tokenReplacement);
+		getContentPane().add(new UiWrappedTextArea(fieldLabel));
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(detailScrollPane);
 

@@ -31,6 +31,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.swing.Box;
 import javax.swing.JButton;
@@ -39,12 +41,22 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
+import org.martus.common.MartusUtilities;
+
 public class UiNotifyDlg extends JDialog implements ActionListener
 {
 
 	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons)
 	{
-		super(owner, title , true);
+		this(owner, title, contents, buttons, new HashMap());
+	}
+	
+	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	{
+		super(owner, MartusUtilities.replaceTokens(title, tokenReplacement) , true);
+		contents = MartusUtilities.replaceTokens(contents, tokenReplacement);
+		buttons = MartusUtilities.replaceTokens(buttons, tokenReplacement);
+
 		getContentPane().add(new JLabel("      "), BorderLayout.WEST);
 		getContentPane().add(new JLabel("      "), BorderLayout.EAST);
 

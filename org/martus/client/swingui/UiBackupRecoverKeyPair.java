@@ -29,6 +29,8 @@ package org.martus.client.swingui;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 
 import javax.swing.JFileChooser;
@@ -49,9 +51,17 @@ public class UiBackupRecoverKeyPair
 		localization = mainWindow.getLocalization();
 	}
 	
+	public static Map getTokenReplacement() 
+	{
+		HashMap map = new HashMap();
+		map.put("#M#", Integer.toString(MartusConstants.numberOfFilesInShare));
+		map.put("#N#", Integer.toString(MartusConstants.minNumberOfFilesNeededToRecreateSecret));
+		return map;
+	}
+
 	public boolean recoverKeyPairFromMultipleUnencryptedFiles()
 	{
-		mainWindow.notifyDlg(mainWindow, "RecoveryProcessKeyShare");
+		mainWindow.notifyDlg(mainWindow, "RecoveryProcessKeyShare",UiBackupRecoverKeyPair.getTokenReplacement());
 		
 		File firstShareFile = getRecoveryDriveToUse();
 		if(firstShareFile == null)
@@ -79,7 +89,7 @@ public class UiBackupRecoverKeyPair
 	public void backupKeyPairToMultipleUnencryptedFiles() 
 	{
 		String message = localization.getFieldLabel("BackupKeyPairToMultipleUnencryptedFilesInformation");
-		mainWindow.displayScrollableMessage("BackupKeyPairToMultipleUnencryptedFilesInformation", message, "Continue");
+		mainWindow.displayScrollableMessage("BackupKeyPairToMultipleUnencryptedFilesInformation", message, "Continue", getTokenReplacement());
 
 		String defaultFileName = getDefaultKeyShareFileName();
 		if(defaultFileName == null)
@@ -100,7 +110,7 @@ public class UiBackupRecoverKeyPair
 			return;
 
 		message = localization.getFieldLabel("BackupKeyShareCompleteInformation");
-		mainWindow.displayScrollableMessage("BackupKeyShareCompleteInformation", message, "ok");
+		mainWindow.displayScrollableMessage("BackupKeyShareCompleteInformation", message, "ok", getTokenReplacement());
 	}
 
 	private Vector recoverMinimumKeySharesNeededFromFiles(File firstShareFile) 
@@ -219,7 +229,7 @@ public class UiBackupRecoverKeyPair
 		String enteredFileName = mainWindow.getStringInput("GetShareFileName","GetShareFileNameDescription",defaultInputText);
 		if(enteredFileName == null)
 			return null;
-		String defaultFileName = MartusUtilities.toFileName(enteredFileName);
+		String defaultFileName = MartusUtilities.createValidFileName(enteredFileName);
 		return defaultFileName;
 	}
 
