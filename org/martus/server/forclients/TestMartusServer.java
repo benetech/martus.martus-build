@@ -167,30 +167,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 	
-	public void testCreateBulletinUploadRecord() throws Exception
-	{
-		TRACE_BEGIN("testCreateBulletinUploadRecord");
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		testServer.createBulletinUploadRecord(out, b1.getLocalId());
-
-		ByteArrayInputStream in = new ByteArrayInputStream(out.toByteArray());
-		UnicodeReader reader = new UnicodeReader(in);
-		String gotFileTypeIdentifier = reader.readLine();
-		assertEquals("Martus Bulletin Upload Record 1.0", gotFileTypeIdentifier);
-		assertEquals(b1.getLocalId(), reader.readLine());
-		String gotTimeStamp = reader.readLine();
-		String now = MartusServerUtilities.createTimeStamp();
-		assertStartsWith(now.substring(0, 13), gotTimeStamp);
-		String gotDigest = reader.readLine();
-		byte[] partOfPrivateKey = testServer.getSecurity().getDigestOfPartOfPrivateKey();
-		String stringToDigest = gotFileTypeIdentifier + b1.getLocalId() + gotTimeStamp + Base64.encode(partOfPrivateKey); 
-		assertEquals(MartusSecurity.createDigestString(stringToDigest), gotDigest);
-		String bogusStringToDigest = gotFileTypeIdentifier + gotTimeStamp + b1.getLocalId() + Base64.encode(partOfPrivateKey); 
-		assertNotEquals(MartusSecurity.createDigestString(bogusStringToDigest), gotDigest);
-		TRACE_END();
-	}
-
 	public void testGetNews() throws Exception
 	{
 		TRACE_BEGIN("testGetNews");

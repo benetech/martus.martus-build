@@ -34,11 +34,9 @@ import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.Packet;
 import org.martus.common.UnicodeReader;
-import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
-import org.martus.common.MartusCrypto.CreateDigestException;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.DecryptionException;
@@ -1235,22 +1233,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 
-	void createBulletinUploadRecord(OutputStream out, String bulletinLocalId) throws IOException, CreateDigestException
-	{
-		String timeStamp = MartusServerUtilities.createTimeStamp();
-		byte[] partOfPrivateKey = security.getDigestOfPartOfPrivateKey();
-		String stringToDigest = BULLETIN_UPLOAD_RECORD_IDENTIFIER + bulletinLocalId + 
-								timeStamp + Base64.encode(partOfPrivateKey);
-		String digest = MartusSecurity.createDigestString(stringToDigest);
-
-		UnicodeWriter writer = new UnicodeWriter(out);
-		writer.writeln(BULLETIN_UPLOAD_RECORD_IDENTIFIER);
-		writer.writeln(bulletinLocalId);
-		writer.writeln(timeStamp);
-		writer.writeln(digest);
-		writer.flush();
-	}
-	
 	String getClientAliasForLogging(String clientId)
 	{
 		return getDatabase().getFolderForAccount(clientId);
@@ -1860,8 +1842,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
 	private static final String ADMINSTARTUPCONFIGDIRECTORY = "deleteOnStartup";
-	
-	private static final String BULLETIN_UPLOAD_RECORD_IDENTIFIER = "Martus Bulletin Upload Record 1.0";
 	
 	private final int MAX_FAILED_UPLOAD_ATTEMPTS = 100;
 	private static final long magicWordsGuessIntervalMillis = 60 * 1000;

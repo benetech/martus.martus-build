@@ -28,6 +28,7 @@ import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
+import org.martus.common.MartusCrypto.CreateDigestException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
@@ -224,7 +225,13 @@ public class MartusServerUtilities
 
 	public static String createTimeStamp()
 	{
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
+		long millisSince1970 = System.currentTimeMillis();
+		return getFormattedTimeStamp(millisSince1970);
+	}
+
+	public static String getFormattedTimeStamp(long millisSince1970)
+	{
+		Timestamp stamp = new Timestamp(millisSince1970);
 		SimpleDateFormat formatDate = new SimpleDateFormat(MARTUS_SIGNATURE_FILE_DATE_FORMAT);
 		String dateStamp = formatDate.format(stamp);
 		return dateStamp;
@@ -332,6 +339,68 @@ public class MartusServerUtilities
 		
 		return result;
 	}
+
+	public static MartusCrypto loadKeyPair(String keyPairFileName, boolean showPrompt)
+	{
+		File keyPairFile = new File(keyPairFileName);
+		if(!keyPairFile.exists())
+		{
+			System.out.println("Error missing keypair");
+			System.exit(3);
+		}
+		
+		if(showPrompt)
+		{
+			System.out.print("Enter server passphrase:");
+			System.out.flush();
+		}
+	
+		try
+		{
+			UnicodeReader reader = new UnicodeReader(System.in);
+			String passphrase = reader.readLine();
+			return MartusServerUtilities.loadCurrentMartusSecurity(keyPairFile, passphrase);
+		}
+		catch (MartusCrypto.AuthorizationFailedException e)
+		{
+			System.err.println("Error probably bad passphrase: " + e + "\n");
+			System.exit(1);
+		}
+		catch(Exception e)
+		{
+			System.err.println("Error loading keypair: " + e + "\n");
+			System.exit(3);
+		}
+		return null;
+	}
+
+	public static String createBulletinUploadRecord(String bulletinLocalId, MartusCrypto security) throws MartusCrypto.CreateDigestException
+	{
+		String timeStamp = MartusServerUtilities.createTimeStamp();
+		return createBulletinUploadRecordWithSpecificTimeStamp(
+			bulletinLocalId, timeStamp, security);
+	}
+
+	public static String createBulletinUploadRecordWithSpecificTimeStamp(
+		String bulletinLocalId,
+		String timeStamp,
+		MartusCrypto security)
+		throws CreateDigestException
+	{
+		String newline = "\n";
+		byte[] partOfPrivateKey = security.getDigestOfPartOfPrivateKey();
+		String stringToDigest = 
+				BULLETIN_UPLOAD_RECORD_IDENTIFIER + newline +
+				bulletinLocalId + newline +
+				timeStamp + newline +
+				Base64.encode(partOfPrivateKey) + newline;
+		String digest = MartusSecurity.createDigestString(stringToDigest);
+		return 
+			BULLETIN_UPLOAD_RECORD_IDENTIFIER + newline + 
+			bulletinLocalId + newline +
+			timeStamp + newline +
+			digest + newline;
+	}
 	
 	public static class MartusSignatureFileAlreadyExistsException extends Exception {}
 	public static class MartusSignatureFileDoesntExistsException extends Exception {}
@@ -340,4 +409,7 @@ public class MartusServerUtilities
 	private static final String MARTUS_SIGNATURE_FILE_DATE_FORMAT = "yyyyMMdd-HHmmss";
 	private static final String MARTUS_SIGNATURE_FILE_IDENTIFIER = "Martus Signature File";
 	private static final int MAX_ALLOWED_ENCRYPTED_FILESIZE = 1000*1000;
+
+	private static final String BULLETIN_UPLOAD_RECORD_IDENTIFIER = "Martus Bulletin Upload Record 1.0";
+	
 }

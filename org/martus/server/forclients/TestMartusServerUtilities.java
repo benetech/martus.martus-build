@@ -1,9 +1,14 @@
 package org.martus.server.forclients;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.StringReader;
 
+import org.martus.common.Base64;
+import org.martus.common.Bulletin;
 import org.martus.common.MartusSecurity;
+import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.MartusUtilities.FileVerificationException;
@@ -101,6 +106,36 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		newestFile.delete();
 		sigDir.delete();
 	}
+
+	public void testCreateBulletinUploadRecord() throws Exception
+	{
+		TRACE_BEGIN("testCreateBulletinUploadRecord");
+
+		MockMartusSecurity clientSecurity = MockMartusSecurity.createClient();
+		Bulletin b1 = new Bulletin(clientSecurity);
+		b1.set(Bulletin.TAGTITLE, "Title1");
+
+		String bur = MartusServerUtilities.createBulletinUploadRecord(b1.getLocalId(), serverSecurity);
+		String bur2 = MartusServerUtilities.createBulletinUploadRecord(b1.getLocalId(), serverSecurity);
+		assertEquals(bur, bur2);
+
+		BufferedReader reader = new BufferedReader(new StringReader(bur));
+		String gotFileTypeIdentifier = reader.readLine();
+		assertEquals("Martus Bulletin Upload Record 1.0", gotFileTypeIdentifier);
+		assertEquals(b1.getLocalId(), reader.readLine());
+		String gotTimeStamp = reader.readLine();
+		String now = MartusServerUtilities.createTimeStamp();
+		assertStartsWith(now.substring(0, 13), gotTimeStamp);
+		String gotDigest = reader.readLine();
+		byte[] partOfPrivateKey = serverSecurity.getDigestOfPartOfPrivateKey();
+		String stringToDigest = gotFileTypeIdentifier + "\n" + b1.getLocalId() + "\n" + gotTimeStamp + "\n" + Base64.encode(partOfPrivateKey) + "\n"; 
+		assertEquals(gotDigest, MartusSecurity.createDigestString(stringToDigest));
+
+		String bogusStringToDigest = gotFileTypeIdentifier + gotTimeStamp + b1.getLocalId() + Base64.encode(partOfPrivateKey); 
+		assertNotEquals(MartusSecurity.createDigestString(bogusStringToDigest), gotDigest);
+		TRACE_END();
+	}
+
 	
 	public File createTempFileWithContents(String content)
 		throws IOException

@@ -8,9 +8,7 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
-import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
-import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.formirroring.CallerSideMirroringGateway;
@@ -28,7 +26,7 @@ public class RetrievePublicKey
 	{
 		processArgs(args);
 		createGateway();
-		loadKeyPair();
+		security = MartusServerUtilities.loadKeyPair(keyPairFileName, prompt);
 		Vector publicInfo = retrievePublicInfo();
 		writePublicInfo(publicInfo);
 		System.out.println("Success");
@@ -90,39 +88,6 @@ public class RetrievePublicKey
 			System.exit(3);
 		}
 		return null;
-	}
-	
-	void loadKeyPair()
-	{
-		File keyPairFile = new File(keyPairFileName);
-		if(!keyPairFile.exists())
-		{
-			System.out.println("Error missing keypair");
-			System.exit(3);
-		}
-		
-		if(prompt)
-		{
-			System.out.print("Enter server passphrase:");
-			System.out.flush();
-		}
-
-		try
-		{
-			UnicodeReader reader = new UnicodeReader(System.in);
-			String passphrase = reader.readLine();
-			security = MartusServerUtilities.loadCurrentMartusSecurity(keyPairFile, passphrase);
-		}
-		catch (AuthorizationFailedException e)
-		{
-			System.err.println("Error probably bad passphrase: " + e + "\n");
-			System.exit(1);
-		}
-		catch(Exception e)
-		{
-			System.err.println("Error loading keypair: " + e + "\n");
-			System.exit(3);
-		} 
 	}
 	
 	void processArgs(String[] args)
