@@ -52,12 +52,11 @@ abstract public class MockDatabase implements Database
 		while(keys.hasNext())
 		{
 			DatabaseKey key = (DatabaseKey) keys.next();
-			String filePath = (String) fileMapping.get(key);
-			InputStream in = new FileInputStream(filePath);
+			File file = (File) fileMapping.get(key);
+			
+			InputStream in = new FileInputStream(file.getAbsolutePath());
 			writeRecord(key,in);
 			in.close();
-			
-			File file = new File(filePath);
 			file.delete();
 		}
 	}

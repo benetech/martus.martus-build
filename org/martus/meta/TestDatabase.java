@@ -200,11 +200,12 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestFindSealed(serverFileDb);
 	}
 	
-	public void testWriteRecords() throws Exception
+	public void testImportFiles() throws Exception
 	{
 		TRACE("testWriteRecords");
 		internalTestImportFiles(mockDb);
-		
+		internalTestImportFiles(clientFileDb);
+		internalTestImportFiles(serverFileDb);
 	}
 	
 	/////////////////////////////////////////////////////////////////////
@@ -523,8 +524,8 @@ public class TestDatabase extends TestCaseEnhanced
 		DatabaseKey sealedKey2 = DatabaseKey.createSealedKey(uid2);
 
 		HashMap entries = new HashMap();
-		entries.put(sealedKey1, temp1.getAbsolutePath());
-		entries.put(sealedKey2, temp2.getAbsolutePath());
+		entries.put(sealedKey1, temp1);
+		entries.put(sealedKey2, temp2);
 
 		db.importFiles(entries);
 		

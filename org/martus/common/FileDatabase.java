@@ -65,7 +65,6 @@ public class FileDatabase implements Database
 			InputStream in = new FileInputStream(file.getAbsolutePath());
 			writeRecord(key,in);
 			in.close();
-
 			file.delete();
 		}
 	}
