@@ -247,15 +247,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);		
 		bannedClientsFile = new File(dataDirectory, BANNEDCLIENTSFILENAME);
-		
-		if(!bannedClientsFile.exists())
-		{
-			File deprecated_bannedClientsFile = new File(dataDirectory, DEPRECATED_BANNEDCLIENTSFILENAME);
-			if(deprecated_bannedClientsFile.exists())
-			{
-				deprecated_bannedClientsFile.renameTo(bannedClientsFile);
-			}
-		}
 
 		Timer bannedClientRefreshTimer = new Timer(true);
 		TimerTask bannedClientsTaskMonitor = new BannedClientsMonitor();
@@ -2093,7 +2084,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
-	private static final String DEPRECATED_BANNEDCLIENTSFILENAME = "notauthorized.txt";
 	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	
