@@ -35,11 +35,11 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 
 		handler = new SupplierSideMirroringHandler(supplier);
 		gateway = new CallerSideMirroringGateway(handler);
+		retriever = new MirroringRetriever(db, gateway, security);
 	}
 	
 	public void testGetNextUidToRetrieve() throws Exception
 	{
-		MirroringRetriever retriever = new MirroringRetriever(db, gateway, security);
 		assertNull("uid right after constructor?", retriever.getNextUidToRetrieve());
 		Vector uids = new Vector();
 		for(int i=0; i < 3; ++i)
@@ -52,11 +52,24 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		assertNull("uid after emptied?", retriever.getNextUidToRetrieve());
 	}
 	
+	public void testGetNextAccountToRetrieve() throws Exception
+	{
+		assertNull("account right after constructor?", retriever.getNextAccountToRetrieve());
+		Vector accounts = new Vector();
+		for(int i=0; i < 3; ++i)
+			accounts.add(Integer.toString(i));
+			
+		retriever.accountsToRetrieve.addAll(accounts);
+		for (int i = 0; i < accounts.size(); i++)
+			assertEquals("wrong " + i + "?", accounts.get(i), retriever.getNextAccountToRetrieve());
+
+		assertNull("account after emptied?", retriever.getNextAccountToRetrieve());
+	}
+	
 	public void testRetrieveOneBulletin() throws Exception
 	{
 		supplier.returnResultTag = NetworkInterfaceConstants.OK;
 		
-		MirroringRetriever retriever = new MirroringRetriever(db, gateway, security);
 		UniversalId uid = UniversalId.createDummyUniversalId();
 		File gotFile = retriever.retrieveOneBulletin(uid);
 		assertEquals(uid.getAccountId(), supplier.gotAccount);
@@ -71,4 +84,5 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 	FakeServerSupplier supplier;
 	SupplierSideMirroringHandler handler;
 	CallerSideMirroringGateway gateway;
+	MirroringRetriever retriever;
 }

@@ -22,6 +22,7 @@ public class MirroringRetriever
 		security = securityToUse;
 		
 		uidsToRetrieve = new Vector();
+		accountsToRetrieve = new Vector();
 	}
 	
 	public void tick()
@@ -34,6 +35,14 @@ public class MirroringRetriever
 		if(uidsToRetrieve.size() == 0)
 			return null;
 		return (UniversalId)uidsToRetrieve.remove(0);
+	}
+	
+	String getNextAccountToRetrieve()
+	{
+		if(accountsToRetrieve.size() == 0)
+			return null;
+
+		return (String)accountsToRetrieve.remove(0);
 	}
 	
 	File retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
@@ -60,4 +69,5 @@ public class MirroringRetriever
 	MartusCrypto security;
 	
 	Vector uidsToRetrieve;
+	Vector accountsToRetrieve;
 }
