@@ -257,7 +257,7 @@ public class BulletinStore
 		return possibleOrphans;
 	}
 
-	public synchronized void destroyBulletin(Bulletin b)
+	public synchronized void destroyBulletin(Bulletin b) throws IOException
 	{
 		UniversalId id = b.getUniversalId();
 
@@ -269,7 +269,7 @@ public class BulletinStore
 		removeBulletinFromStore(id);
 	}
 
-	public synchronized void removeBulletinFromStore(UniversalId uid)
+	public synchronized void removeBulletinFromStore(UniversalId uid) throws IOException
 	{
 		Bulletin foundBulletin = findBulletinByUniversalId(uid);
 		MartusCrypto crypto = getSignatureVerifier();
@@ -279,8 +279,8 @@ public class BulletinStore
 		}
 		catch(Exception e)
 		{
-			//TODO: NEED BETTER ERROR HANDLING HERE!!!
-			//System.out.println("removeBulletinFromDatabase: " + e);
+			//e.printStackTrace();
+			throw new IOException("Unable to delete bulletin");
 		}
 		bulletinCache.remove(uid);
 		cacheOfSortableFields.removeFieldData(uid);
@@ -358,7 +358,7 @@ public class BulletinStore
 		}
 	}
 
-	public synchronized void discardBulletin(BulletinFolder f, Bulletin b)
+	public synchronized void discardBulletin(BulletinFolder f, Bulletin b) throws IOException
 	{
 		getFolderDiscarded().add(b);
 		removeBulletinFromFolder(b, f);

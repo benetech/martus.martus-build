@@ -31,6 +31,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.client.core.BulletinFolder;
@@ -41,6 +42,8 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiUtilities;
 import org.martus.common.Bulletin;
+import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
@@ -86,6 +89,39 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		BulletinStore store = appWithAccount.getStore();
 		assertNotNull("BulletinStore", store);
 		TRACE_END();
+	}
+	
+	public void testDiscardBulletinsFromFolder() throws Exception
+	{
+		Bulletin b1 = appWithAccount.createBulletin();
+		Bulletin b2 = appWithAccount.createBulletin();
+		Bulletin b3 = appWithAccount.createBulletin();
+		appWithAccount.getStore().saveBulletin(b1);
+		appWithAccount.getStore().saveBulletin(b2);
+		appWithAccount.getStore().saveBulletin(b3);
+
+		BulletinFolder f1 = appWithAccount.createUniqueFolder();
+		f1.add(b1);
+		f1.add(b2);
+		f1.add(b3);
+		
+		appWithAccount.discardBulletinsFromFolder(f1, new Bulletin[] {b1, b3});
+		assertEquals(3, appWithAccount.getStore().getBulletinCount());
+		assertEquals(1, f1.getBulletinCount());
+		
+		Database db = appWithAccount.getStore().getDatabase();
+		DatabaseKey key = new DatabaseKey(b1.getBulletinHeaderPacket().getUniversalId());
+		db.discardRecord(key);
+
+		BulletinFolder trash = appWithAccount.getFolderDiscarded();
+		try
+		{
+			appWithAccount.discardBulletinsFromFolder(trash, new Bulletin[] {b1, b3});
+			fail("discard damaged record should have thrown");
+		}
+		catch(IOException ignoreExpectedException)
+		{
+		}
 	}
 	
 	public void testDeleteAllBulletins()

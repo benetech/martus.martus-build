@@ -271,7 +271,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(b.get("summary"), b2.get("summary"));
 	}
 
-	public void testDiscardBulletin()
+	public void testDiscardBulletin() throws Exception
 	{
 		TRACE("testDiscardBulletin");
 

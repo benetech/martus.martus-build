@@ -547,6 +547,19 @@ public class MartusApp
 		return true;
 	}
 
+	public BulletinFolder discardBulletinsFromFolder(BulletinFolder folderToDiscardFrom, Bulletin[] bulletinsToDiscard) throws IOException 
+	{
+		BulletinFolder draftOutBox = getFolderDraftOutbox();
+		BulletinFolder discardedFolder = getFolderDiscarded();
+		for (int i = 0; i < bulletinsToDiscard.length; i++)
+		{
+			Bulletin b = bulletinsToDiscard[i];
+			draftOutBox.getStore().discardBulletin(draftOutBox, b);
+			folderToDiscardFrom.getStore().discardBulletin(folderToDiscardFrom, b);
+		}
+		return discardedFolder;
+	}
+
 	public Date getUploadInfoElement(int index)
 	{
 		File file = getUploadInfoFile();

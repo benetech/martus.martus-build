@@ -260,8 +260,15 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 	{
 		public void onCancel(BulletinStore store, Bulletin b)
 		{
-System.out.println("Destroying cancelled bulletin");
-			store.destroyBulletin(b);
+			try
+			{
+				store.destroyBulletin(b);
+			}
+			catch (IOException e)
+			{
+				// TODO Notify user of the error?
+				e.printStackTrace();
+			}
 		}
 	}
 

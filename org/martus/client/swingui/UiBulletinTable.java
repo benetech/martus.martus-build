@@ -45,6 +45,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.JPopupMenu;
@@ -482,18 +483,20 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		Bulletin[] bulletinsToDiscard = getSelectedBulletins();
 
-		MartusApp app = mainWindow.getApp();
-		BulletinFolder draftOutBox = app.getFolderDraftOutbox();
-		BulletinFolder discardedFolder = app.getFolderDiscarded();
 		BulletinFolder folderToDiscardFrom = getFolder();
 
-		for (int i = 0; i < bulletinsToDiscard.length; i++)
+		MartusApp app = mainWindow.getApp();
+		try
 		{
-			Bulletin b = bulletinsToDiscard[i];
-			draftOutBox.getStore().discardBulletin(draftOutBox, b);
-			folderToDiscardFrom.getStore().discardBulletin(folderToDiscardFrom, b);
+			app.discardBulletinsFromFolder(folderToDiscardFrom, bulletinsToDiscard);
+		}
+		catch (IOException e)
+		{
+			// TODO Notify user of an error
+			e.printStackTrace();
 		}
 
+		BulletinFolder discardedFolder = app.getFolderDiscarded(); 
 		folderToDiscardFrom.getStore().saveFolders();
 		mainWindow.folderContentsHaveChanged(folderToDiscardFrom);
 		mainWindow.folderContentsHaveChanged(discardedFolder);
