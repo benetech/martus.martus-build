@@ -64,18 +64,29 @@ public class MirroringRetriever
 		{
 			log("Supplier server error: " + e);
 		}
+		catch(ServerNotAvailableException e)
+		{
+			// TODO: Notify once per hour that something is wrong
+		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		
 	}
+	
+	static class ServerNotAvailableException extends Exception {}
 
 	private String retrieveBurFromMirror(UniversalId uid)
-		throws MartusSignatureException, MissingBulletinUploadRecordException
+		throws MartusSignatureException, MissingBulletinUploadRecordException, ServerNotAvailableException
 	{
 		NetworkResponse response = gateway.getBulletinUploadRecord(security, uid);
-		if(!response.getResultCode().equals(NetworkInterfaceConstants.OK))
+		String resultCode = response.getResultCode();
+		if(resultCode.equals(NetworkInterfaceConstants.NO_SERVER))
+		{
+			throw new ServerNotAvailableException();
+		}
+		if(!resultCode.equals(NetworkInterfaceConstants.OK))
 		{
 			throw new MissingBulletinUploadRecordException();
 		}
