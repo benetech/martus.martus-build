@@ -71,6 +71,7 @@ import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.server.core.LoggerForTesting;
 
 
 public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfaceConstants
@@ -219,12 +220,12 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String isHiddenNoTrailingNewline,
 		String[] accountIds,
 		String[] localIds)
-		throws IOException
+		throws Exception
 	{
 		Database db = new MockServerDatabase();
 		byte[] bytes = isHiddenNoTrailingNewline.getBytes("UTF-8");
 		UnicodeReader reader = new UnicodeReader(new ByteArrayInputStream(bytes));
-		MartusServer.loadHiddenPacketsList(reader, db);
+		MartusServer.loadHiddenPacketsList(reader, db, new LoggerForTesting());
 		assertTrue(db.isHidden(UniversalId.createFromAccountAndLocalId(accountIds[0], localIds[0])));
 		assertTrue(db.isHidden(UniversalId.createFromAccountAndLocalId(accountIds[0], localIds[1])));
 		assertTrue(db.isHidden(UniversalId.createFromAccountAndLocalId(accountIds[2], localIds[0])));

@@ -1776,31 +1776,31 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 	
+	private File getHiddenPacketsFile()
+	{
+		return new File(getStartupConfigDirectory(), HIDDENPACKETSFILENAME);
+	}
+	
 	public void loadHiddenPacketsFile()
 	{
 		File isHiddenFile = getHiddenPacketsFile();
 		try
 		{
 			UnicodeReader reader = new UnicodeReader(isHiddenFile);
-			loadHiddenPacketsList(reader, database);
+			loadHiddenPacketsList(reader, database, logger);
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
 			log("Deleted packets file not found: " + isHiddenFile.getName());
 		}
-		catch (IOException e)
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			log("Error loading Deleted Packets file: " + isHiddenFile.getName());
 		}
 	}
 
-	private File getHiddenPacketsFile()
-	{
-		return new File(getStartupConfigDirectory(), HIDDENPACKETSFILENAME);
-	}
-	
-	public static void loadHiddenPacketsList(UnicodeReader reader, Database db) throws IOException
+	public static void loadHiddenPacketsList(UnicodeReader reader, Database db, LoggerInterface logger) throws IOException, InvalidBase64Exception
 	{
 		String accountId = null;
 		try
@@ -1811,7 +1811,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				if(thisLine == null)
 					return;
 				if(thisLine.startsWith(" "))
-					hidePackets(db, accountId, thisLine);
+					hidePackets(db, accountId, thisLine, logger);
 				else
 					accountId = thisLine;
 			}
@@ -1822,14 +1822,16 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 	
-	static void hidePackets(Database db, String accountId, String packetList)
+	static void hidePackets(Database db, String accountId, String packetList, LoggerInterface logger) throws InvalidBase64Exception
 	{
+		String publicCode = MartusCrypto.getFormattedPublicCode(accountId);
 		String[] packetIds = packetList.trim().split("\\s+");
 		for (int i = 0; i < packetIds.length; i++)
 		{
 			String localId = packetIds[i].trim();
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localId);
 			db.hide(uid);
+			logger.log("Deleting " + publicCode + ": " + localId);
 		}
 	}
 	
