@@ -138,12 +138,6 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		checkIfErrorOccurred();
 	}
 
-	public void checkIfErrorOccurred() throws ServerErrorException 
-	{
-		if(errorThrown != null)
-			throw (errorThrown);
-	}
-	
 	public void waitForThreadToTerminate(RetrieveThread worker) 
 	{
 		try 
@@ -195,10 +189,15 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		private Vector summaryStrings;	
 	}
 
-	public Vector getResults() throws ServerErrorException
+	private void checkIfErrorOccurred() throws ServerErrorException 
 	{
 		if(errorThrown != null)
 			throw (errorThrown);
+	}
+	
+	public Vector getResults() throws ServerErrorException
+	{
+		checkIfErrorOccurred();
 		return allSummaries;	
 	}
 
@@ -207,5 +206,5 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	BulletinStore store;
 	private UiProgressRetrieveSummariesDlg retrieverDlg;
 	protected Vector allSummaries;
-	ServerErrorException errorThrown;
+	private ServerErrorException errorThrown;
 }
