@@ -285,6 +285,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 		{
 			if(retrievers.size() == 0)
 				return;
+			++nextRetriever;
 			if(nextRetriever >= retrievers.size())
 				nextRetriever = 0;
 				
