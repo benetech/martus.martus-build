@@ -26,14 +26,16 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.server.core;
 
+import java.net.InetAddress;
+
 
 public class MartusXmlRpcServer
 {
-	public static WebServerWithClientId createNonSSLXmlRpcServer(Object server, int port)
+	public static WebServerWithClientId createNonSSLXmlRpcServer(Object server, int port, InetAddress address)
 	{
 		try
 		{
-			WebServerWithClientId webServer = new WebServerWithClientId(port);
+			WebServerWithClientId webServer = new WebServerWithClientId(port, address);
 			webServer.addHandler("MartusServer", server);
 			return webServer;
 		}
@@ -45,11 +47,11 @@ public class MartusXmlRpcServer
 		return null;
 	}
 	
-	public static MartusSecureWebServer createSSLXmlRpcServer(Object server, String destObjectName, int port)
+	public static MartusSecureWebServer createSSLXmlRpcServer(Object server, String destObjectName, int port, InetAddress address)
 	{
 		try
 		{
-			MartusSecureWebServer secureWebServer = new MartusSecureWebServer(port);
+			MartusSecureWebServer secureWebServer = new MartusSecureWebServer(port, address);
 			secureWebServer.addHandler(destObjectName, server);
 			return secureWebServer;
 		}

@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.InetAddress;
 import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
@@ -57,6 +58,7 @@ import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.server.core.MartusSecureWebServer;
+import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;
@@ -252,8 +254,9 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		if(MartusSecureWebServer.security == null)
 			MartusSecureWebServer.security = getSecurity();
 
-		log("Opening port " + port + " for amplifiers...");
-		MartusAmplifierXmlRpcServer.createSSLXmlRpcServer(getAmplifierHandler(), port);
+		InetAddress mainIpAddress = MartusServer.getMainIpAddress();
+		log("Opening port "+ mainIpAddress + ":" + port + " for amplifiers...");
+		MartusXmlRpcServer.createSSLXmlRpcServer(getAmplifierHandler(),"MartusAmplifierServer", port, mainIpAddress);
 	}
 
 	public Vector getServerInformation()

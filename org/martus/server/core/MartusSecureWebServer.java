@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.server.core;
 
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 
 import javax.net.ssl.SSLContext;
@@ -38,7 +39,12 @@ public class MartusSecureWebServer extends WebServerWithClientId
 {
 	public MartusSecureWebServer(int port) throws IOException
 	{
-		super(port, null);
+		this(port, null);
+	}
+
+	public MartusSecureWebServer(int port, InetAddress internetAddress) throws IOException
+	{
+		super(port, internetAddress);
 	}
 	
 	public ServerSocket createServerSocket(int port, int backlog, java.net.InetAddress add)
@@ -49,7 +55,7 @@ public class MartusSecureWebServer extends WebServerWithClientId
 			SSLContext sslContext = createSSLContext();
 			SSLServerSocketFactory sf = sslContext.getServerSocketFactory();
 
-	    	ServerSocket ss = sf.createServerSocket( port );
+	    	ServerSocket ss = sf.createServerSocket( port, backlog, add);
 	    	return ss;
 	    }
 	    catch(Exception e)

@@ -172,7 +172,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	{
 		ServerSideNetworkHandlerForNonSSL nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
 		for(int i=0; i < ports.length; ++i)
-			activeWebServers.add(MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, ports[i]));
+			activeWebServers.add(MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, ports[i], MartusServer.getMainIpAddress()));
 	}
 	
 	public void handleSSL(int[] ports)
@@ -180,7 +180,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		ServerSideNetworkHandler serverHandler = new ServerSideNetworkHandler(this);
 		MartusSecureWebServer.security = getSecurity();
 		for(int i=0; i < ports.length; ++i)
-			activeWebServers.add(MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, "MartusServer", ports[i]));
+			activeWebServers.add(MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, "MartusServer", ports[i], MartusServer.getMainIpAddress()));
 	}
 	
 	

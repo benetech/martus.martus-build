@@ -28,6 +28,7 @@ package org.martus.server.formirroring;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.util.TimerTask;
 import java.util.Vector;
 
@@ -97,10 +98,11 @@ public class ServerForMirroring implements ServerSupplierInterface
 	{
 		log("Initializing ServerForMirroring");
 		
+		InetAddress mainIpAddress = MartusServer.getMainIpAddress();
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
-		log("Opening port " + port + " for mirroring...");
+		log("Opening port " + mainIpAddress +":" + port + " for mirroring...");
 		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this, getSecurity());
-		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, MirroringInterface.DEST_OBJECT_NAME, port);
+		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, MirroringInterface.DEST_OBJECT_NAME, port, mainIpAddress);
 
 		MartusUtilities.startTimer(new MirroringTask(retrieversWeWillCall), mirroringIntervalMillis);
 		log("Mirroring port opened and mirroring task scheduled");

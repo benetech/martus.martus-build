@@ -37,6 +37,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -1726,11 +1728,14 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	private void processCommandLine(String[] args)
 	{
+		String mainIpTag = "mainip=";
 		for(int arg = 0; arg < args.length; ++arg)
 		{
-			if(args[arg].equals("secure"))
+			String argument = args[arg];
+			if(argument.equals("secure"))
 				enterSecureMode();
-		
+			if(argument.startsWith(mainIpTag))
+				mainIpAddress = argument.substring(mainIpTag.length());
 		}
 		
 		if(isSecureMode())
@@ -1739,6 +1744,18 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.out.println("***RUNNING IN INSECURE MODE***");
 	}
 
+	public static InetAddress getMainIpAddress()
+	{
+		try
+		{
+			return InetAddress.getByName(mainIpAddress);
+		}
+		catch (UnknownHostException e)
+		{
+			e.printStackTrace();
+		}
+		return null;
+	}
 
 	private void setDataDirectory(File dataDirectory)
 	{
@@ -1906,7 +1923,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	LoggerInterface logger;
 	String serverName;
 	private boolean secureMode;
-	
+	private static String mainIpAddress; 
+
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String HIDDENPACKETSFILENAME = "isHidden.txt";
 	private static final String COMPLIANCESTATEMENTFILENAME = "compliance.txt";
