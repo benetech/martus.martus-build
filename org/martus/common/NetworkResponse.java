@@ -28,8 +28,6 @@ package org.martus.common;
 
 import java.util.Vector;
 
-import org.martus.common.*;
-
 public class NetworkResponse
 {
 	public NetworkResponse(Vector rawServerReturnData)

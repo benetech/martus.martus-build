@@ -29,8 +29,6 @@ package org.martus.common;
 import java.io.File;
 import java.util.Arrays;
 
-import org.martus.common.*;
-
 public class TestAttachmentProxy extends TestCaseEnhanced
 {
 	public TestAttachmentProxy(String name)
