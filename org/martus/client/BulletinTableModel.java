@@ -45,6 +45,11 @@ public class BulletinTableModel extends AbstractTableModel
 		return folder.getBulletinSorted(rowIndex);
 	}
 
+	public UniversalId getBulletinUid(int rowIndex)
+	{
+		return folder.getBulletinUniversalIdSorted(rowIndex);
+	}
+
 	public int findBulletin(UniversalId uid)
 	{
 		if(uid == null)

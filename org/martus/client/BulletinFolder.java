@@ -206,13 +206,13 @@ public class BulletinFolder
 		if(sortedIdList == null)
 			return;
 			
-		Bulletin b = store.findBulletinByUniversalId(uid);
-		String thisValue = b.get(sortTag);
+		String thisValue = store.getFieldData(uid, sortTag);
 		int index;
 		for(index = 0; index < sortedIdList.size(); ++index)
 		{
-			Bulletin tryBulletin = getBulletinSorted(index);
-			if(tryBulletin.get(sortTag).compareTo(thisValue) * sortDir > 0)
+			UniversalId tryUid = getBulletinUniversalIdSorted(index);
+			String tryValue = getStore().getFieldData(tryUid, sortTag);
+			if(tryValue.compareTo(thisValue) * sortDir > 0)
 				break;
 		}
 		sortedIdList.insertElementAt(uid, index);

@@ -1544,7 +1544,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	static private boolean isAnyBulletinSelected(UiMainWindow window)
 	{
-		return (window.table.getSelectedBulletins().length > 0);
+		return (window.table.getSelectedBulletinUids().length > 0);
 	}
 
 	static private boolean isOnlyOneBulletinSelected(UiMainWindow window)

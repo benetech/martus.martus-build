@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
+import org.martus.common.UniversalId;
+
 public class UiBulletinTablePane extends JScrollPane
 {
     public UiBulletinTablePane(UiMainWindow mainWindow)
@@ -31,9 +33,9 @@ public class UiBulletinTablePane extends JScrollPane
 			selectFirstBulletin();
 	}
 	
-	public Bulletin[] getSelectedBulletins()
+	public UniversalId[] getSelectedBulletinUids()
 	{
-		return table.getSelectedBulletins();
+		return table.getSelectedBulletinUids();
 	}
 
 	public Bulletin getSingleSelectedBulletin()
@@ -64,10 +66,9 @@ public class UiBulletinTablePane extends JScrollPane
 	
 	public void folderContentsHaveChanged(BulletinFolder folder)
 	{
-System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 		if(folder.equals(table.getFolder()))
 		{
-			Bulletin[] selected = table.getSelectedBulletins();
+			UniversalId[] selected = table.getSelectedBulletinUids();
 			table.setFolder(folder);
 			table.selectBulletins(selected);
 			parent.bulletinSelectionHasChanged();

@@ -2,7 +2,10 @@ package org.martus.client;
 
 import java.util.Vector;
 
-import org.martus.common.*;
+import org.martus.common.MockClientDatabase;
+import org.martus.common.MockMartusSecurity;
+import org.martus.common.TestCaseEnhanced;
+import org.martus.common.UniversalId;
 
 public class TestBulletinFolder extends TestCaseEnhanced
 {

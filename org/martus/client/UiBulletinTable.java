@@ -37,6 +37,7 @@ import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import org.martus.client.BulletinStore.StatusNotAllowedException;
+import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
@@ -47,8 +48,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
     public UiBulletinTable(UiMainWindow mainWindowToUse)
 	{
 		mainWindow = mainWindowToUse;
-		bulletinsList = new BulletinTableModel(mainWindow.getApp());
-		setModel(bulletinsList);
+		model = new BulletinTableModel(mainWindow.getApp());
+		setModel(model);
 
 		// set widths for first two columns (status and date)
 		setColumnWidthToHeaderWidth(0);
@@ -77,26 +78,14 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public BulletinFolder getFolder()
 	{
-		return bulletinsList.getFolder();
+		return model.getFolder();
 	}
 
 	public void setFolder(BulletinFolder folder)
 	{
-		bulletinsList.setFolder(folder);
+		model.setFolder(folder);
 	}
 
-	public Bulletin getSelectedBulletin()
-	{
-		int selectedRow = getSelectedRow();
-		if(selectedRow < 0)
-		{
-			//System.out.println("There is no selected bulletin");
-			return null;
-		}
-
-		return bulletinsList.getBulletin(selectedRow);
-	}
-	
 	public Bulletin[] getSelectedBulletins()
 	{
 		int[] selectedRows = getSelectedRows();
@@ -104,10 +93,24 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		
 		for (int row = 0; row < selectedRows.length; row++) 
 		{
-			bulletins[row] = bulletinsList.getBulletin(selectedRows[row]);
+			bulletins[row] = model.getBulletin(selectedRows[row]);
 		}
 		
 		return bulletins;
+	}
+
+
+	public UniversalId[] getSelectedBulletinUids()
+	{
+		int[] selectedRows = getSelectedRows();
+		UniversalId[] bulletinUids = new UniversalId[selectedRows.length];
+		
+		for (int row = 0; row < selectedRows.length; row++) 
+		{
+			bulletinUids[row] = model.getBulletinUid(selectedRows[row]);
+		}
+		
+		return bulletinUids;
 	}
 
 	public Bulletin getSingleSelectedBulletin()
@@ -123,15 +126,15 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void selectBulletin(Bulletin b)
 	{
-		selectRow(bulletinsList.findBulletin(b.getUniversalId()));
+		selectRow(model.findBulletin(b.getUniversalId()));
 	}
 	
-	public void selectBulletins(Bulletin[] bulletins)
+	public void selectBulletins(UniversalId[] uids)
 	{
 		clearSelection();
-		for (int i = 0; i < bulletins.length; i++)
+		for (int i = 0; i < uids.length; i++)
 		{
-			int row = bulletinsList.findBulletin(bulletins[i].getUniversalId());
+			int row = model.findBulletin(uids[i]);
 			if(row >= 0)
 				addRowSelectionInterval(row, row);
 		}
@@ -139,15 +142,15 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void bulletinContentsHaveChanged(Bulletin b)
 	{
-		Bulletin[] selected = getSelectedBulletins();
-		tableChanged(new TableModelEvent(bulletinsList));
+		UniversalId[] selected = getSelectedBulletinUids();
+		tableChanged(new TableModelEvent(model));
 		selectBulletins(selected);
 	}
 
 	// ListSelectionListener interface
 	public void valueChanged(ListSelectionEvent e)
 	{
-		if(!e.getValueIsAdjusting() && bulletinsList != null)
+		if(!e.getValueIsAdjusting() && model != null)
 		{
 			mainWindow.bulletinSelectionHasChanged();
 		}
@@ -335,7 +338,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			{
 				JTableHeader header = (JTableHeader)e.getSource();
 				int col = header.columnAtPoint(e.getPoint());
-				bulletinsList.sortByColumn(col);
+				model.sortByColumn(col);
 				mainWindow.folderContentsHaveChanged(getFolder());
 			}
 		}
@@ -579,7 +582,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 
 	private UiMainWindow mainWindow;
-	private BulletinTableModel bulletinsList;
+	private BulletinTableModel model;
 	private DragSource dragSource = DragSource.getDefaultDragSource();
 	private UiBulletinTableDropAdapter dropAdapter;
 	private TableKeyAdapter keyListener;
