@@ -122,8 +122,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		}
 		if(tempFile == null)
 		{
-			tempFile = File.createTempFile("$$$MartusTestMartusServer", null);
-			tempFile.deleteOnExit();
+			tempFile = createTempFileFromName("$$$MartusTestMartusServer");
 			tempFile.delete();
 		}
 		if(clientDatabase == null)
@@ -191,6 +190,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		assertEquals("isShutdownRequested", false, testServer.isShutdownRequested());
 		testServer.deleteAllFiles();
+		tempFile.delete();
 
 		TRACE_END();
 	}
@@ -402,7 +402,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testCreateInterimBulletinFile");
 
 		testServer.setSecurity(serverSecurity);
-		File nullZipFile = createTempFile("$$$MartusServerBulletinZip");
+		File nullZipFile = createTempFileFromName("$$$MartusServerBulletinZip");
 		File nullZipSignatureFile = MartusUtilities.getSignatureFileFromFile(nullZipFile);
 		nullZipSignatureFile.deleteOnExit();
 		assertFalse("Both zip & sig Null files verified?", testServer.verifyBulletinInterimFile(nullZipFile, nullZipSignatureFile, serverSecurity.getPublicKeyString()));

@@ -87,8 +87,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		}
 		if(tempFile == null)
 		{
-			tempFile = File.createTempFile("$$$MartusTestMartusServer", null);
-			tempFile.deleteOnExit();
+			tempFile = createTempFileFromName("$$$MartusTestMartusServer");
 			tempFile.delete();
 		}
 		if(clientDatabase == null)
@@ -157,6 +156,7 @@ public class TestServerForClients extends TestCaseEnhanced
 
 		assertEquals("isShutdownRequested", false, mockServer.isShutdownRequested());
 		mockServer.deleteAllFiles();
+		tempFile.delete();
 
 		TRACE_END();
 	}

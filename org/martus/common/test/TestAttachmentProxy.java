@@ -44,8 +44,7 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 
 	public void testFileProxy() throws Exception
 	{
-		File file = File.createTempFile("$$$TestAttachmentProxy", null);
-		file.deleteOnExit();
+		File file = createTempFileFromName("$$$TestAttachmentProxy");
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.writeln("This is some text");
 		writer.close();
@@ -64,6 +63,8 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 		assertEquals("wrong uid?", uid, a.getUniversalId());
 		assertEquals("wrong key?", true, Arrays.equals(sessionKeyBytes, a.getSessionKeyBytes()));
 		assertNull("still has file?", a.getFile());
+
+		file.delete();
 	}
 
 	public void testUidProxy() throws Exception

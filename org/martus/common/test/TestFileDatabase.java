@@ -59,7 +59,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		security = MockMartusSecurity.createClient();
-		dir = File.createTempFile("$$$MartusTestFileDatabaseSetup", null);
+		dir = createTempFileFromName("$$$MartusTestFileDatabaseSetup");
 		dir.delete();
 		dir.mkdir();
 		db = new MyFileDatabase(dir, security);
@@ -121,7 +121,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 	
 	public void testIsAccountMapExpected() throws Exception
 	{
-		File testDir = File.createTempFile("$$$MartusTestFileDatabase", null);
+		File testDir = createTempFileFromName("$$$MartusTestFileDatabase");
 		testDir.delete();
 		testDir.mkdir();
 		assertFalse("empty dir", FileDatabase.isAccountMapExpected(testDir));

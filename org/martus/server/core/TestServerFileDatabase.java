@@ -62,8 +62,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testBURHandling");
 
-		File tmpPacketDir = File.createTempFile("$$$MartusTestMartusServer", null);
-		tmpPacketDir.deleteOnExit();
+		File tmpPacketDir = createTempFileFromName("$$$MartusTestMartusServer");
 		tmpPacketDir.delete();
 		tmpPacketDir.mkdir();
 		ServerFileDatabase db = new ServerFileDatabase(tmpPacketDir, security);
@@ -96,8 +95,8 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		PacketVisitor visitor = new PacketVisitor(db);
 		db.visitAllRecords(visitor);
 		
-		//db.deleteAllData();
-		
+		db.deleteAllData();
+		tmpPacketDir.delete();
 		TRACE_END();
 	}
 	
@@ -105,7 +104,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 	{
 		UniversalId uid = UniversalId.createDummyUniversalId();
 		DatabaseKey key = new DatabaseKey(uid);
-		File dir = File.createTempFile("$$$MartusTestServerFileDatabase", null);
+		File dir = createTempFileFromName("$$$MartusTestServerFileDatabase");
 		dir.delete();
 		dir.mkdir();
 		ServerFileDatabase db = new ServerFileDatabase(dir, security);

@@ -103,8 +103,7 @@ public class TestZipEntryInputStream extends TestCaseEnhanced
 
 	ZipFile createSampleZipFile() throws IOException
 	{
-		File tempFile = File.createTempFile("$$$MartusTestZipEntry", null);
-		tempFile.deleteOnExit();
+		File tempFile = createTempFileFromName("$$$MartusTestZipEntry");
 		ZipOutputStream out = new ZipOutputStream(new FileOutputStream(tempFile));
 
 		ZipEntry entry = new ZipEntry(sampleEntryName);

@@ -67,8 +67,7 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 			// exception was expected
 		}
 
-		File tempFile = File.createTempFile("testmartus", null);
-		tempFile.deleteOnExit();
+		File tempFile = createTempFileFromName("$$$testmartusUnicodeReader");
 		UnicodeWriter writer = new UnicodeWriter(tempFile);
 		writer.write("hello");
 		writer.close();
@@ -100,7 +99,7 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 
     public void testBasics() throws Exception
     {
-		File file = File.createTempFile("$$test", null);
+		File file = createTempFileFromName("$$$MartustestFileWriter");
 		file.delete();
 		assertTrue("Delete should work", !file.exists());
 
@@ -138,18 +137,17 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 		}
 		assertTrue("Unicode length should be different", len2 != text2.length());
 
-		File file = File.createTempFile("testmartus", null);
-		file.deleteOnExit();
+		File file = createTempFileFromName("$$$Martustestmartusunicodechars");
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.write(text2);
 		writer.close();
 		assertEquals(len2, file.length());
+		file.delete();
     }
 
     public void testAppend() throws Exception
     {
-		File file = File.createTempFile("$$test", null);
-		file.deleteOnExit();
+		File file = createTempFileFromName("$$$Martustestappend");
 		String text = "Testing";
 		int len = text.length();
 
@@ -170,12 +168,13 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 		append.close();
 		assertTrue("still there?", file.exists());
 		assertEquals("create length", len * 2, file.length());
+	
+		file.delete();
 	}
 
 	public void testWriteln() throws Exception
 	{
-		File file = File.createTempFile("$$test", null);
-		file.deleteOnExit();
+		File file = createTempFileFromName("$$$MartustestWriteln");
 		String text = "Testing";
 		int len = text.length();
 
@@ -184,6 +183,8 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 		create.close();
 		assertTrue("created?", file.exists());
 		assertEquals("create length", len + UnicodeWriter.NEWLINE.length(), file.length());
+
+		file.delete();
 	}
 
 }

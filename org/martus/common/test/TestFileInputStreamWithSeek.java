@@ -42,8 +42,7 @@ public class TestFileInputStreamWithSeek extends TestCaseEnhanced
 
 	public void setUp() throws Exception
 	{
-		tempFile = File.createTempFile("$$$MartusTestFileInputStreamWithReset", null);
-		tempFile.deleteOnExit();
+		tempFile = createTempFileFromName("$$$MartusTestFileInputStreamWithReset");
 		FileOutputStream out = new FileOutputStream(tempFile);
 		out.write(sampleBytes);
 		out.close();
@@ -54,6 +53,7 @@ public class TestFileInputStreamWithSeek extends TestCaseEnhanced
 	public void tearDown() throws Exception
 	{
 		in.close();
+		tempFile.delete();
 	}
 
 	public void testSimpleRead() throws Exception

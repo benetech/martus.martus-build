@@ -46,12 +46,17 @@ public class TestCaseEnhanced extends TestCase
 	public File createTempFile() throws IOException
 	{
 		final String tempFileName = "$$$" + getName();
-		File file = File.createTempFile(tempFileName, null);
+		return createTempFileFromName(tempFileName);
+	}
+
+	public File createTempFileFromName(String name) throws IOException
+	{
+		File file = File.createTempFile(name, null);
 		file.deleteOnExit();
 		return file;
 	}
 
-	public File createTempFile(String contents) throws IOException
+	public File createTempFileWithData(String contents) throws IOException
 	{
 		File file = createTempFile();
 		UnicodeWriter writer = new UnicodeWriter(file);
@@ -61,10 +66,9 @@ public class TestCaseEnhanced extends TestCase
 		return file;
 	}
 
-	protected File createTempFile(byte[] data) throws Exception
+	protected File createTempFileWithData(byte[] data) throws Exception
 	{
-		File tempFile = File.createTempFile("$$$MartusTest", null);
-		tempFile.deleteOnExit();
+		File tempFile = createTempFile();
 		FileOutputStream out = new FileOutputStream(tempFile);
 		out.write(data);
 		out.close();

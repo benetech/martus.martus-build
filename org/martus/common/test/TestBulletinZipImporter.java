@@ -79,8 +79,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b.setSealed();
 
-		File tempFile = File.createTempFile("$$$MartusTest", null);
-		tempFile.deleteOnExit();
+		File tempFile = createTempFileFromName("$$$MartusTest");
 		BulletinForTesting.saveToFile(db, b, tempFile, security);
 
 		Bulletin loaded = new Bulletin(security);
@@ -89,6 +88,8 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		assertEquals("public info", b.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info", b.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals("status", b.getStatus(), loaded.getStatus());
+
+		tempFile.delete();
 	}
 
 	public void testLoadFromFileEmpty() throws Exception
@@ -104,8 +105,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 	{
 		MartusCrypto signer = security;
 
-		File tempFile = File.createTempFile("$$$MartusTest", null);
-		tempFile.deleteOnExit();
+		File tempFile = createTempFileFromName("$$$MartusTest");
 		if(mode != MODE_EMPTY_FILE)
 		{
 			Bulletin b = new Bulletin(security);
@@ -149,12 +149,13 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		{
 			//expected exception
 		}
+		tempFile.delete();
 	}
 
 	public void testSaveToFileWithAttachment() throws Exception
 	{
-		File tempFile1 = createTempFile(sampleBytes1);
-		File tempFile2 = createTempFile(sampleBytes2);
+		File tempFile1 = createTempFileWithData(sampleBytes1);
+		File tempFile2 = createTempFileWithData(sampleBytes2);
 		UniversalId dummyUid = UniversalId.createDummyUniversalId();
 
 		Bulletin original = new Bulletin(security);
@@ -177,8 +178,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		DatabaseKey keyPrivate = new DatabaseKey(originalPrivateAttachments[0].getUniversalId());
 		assertEquals("private attachment wasn't saved?", true,  db.doesRecordExist(keyPrivate));
 
-		File tmpFile = File.createTempFile("$$$MartusTestBullSaveFileAtta1", null);
-		tmpFile.deleteOnExit();
+		File tmpFile = createTempFileFromName("$$$MartusTestBullSaveFileAtta1");
 		BulletinForTesting.saveToFile(db, original, tmpFile, security);
 		assertTrue("unreasonable file size?", tmpFile.length() > 20);
 
@@ -210,6 +210,8 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		assertEquals("bhp id?", original.getUniversalId(), bhp.getUniversalId());
 
 		assertEquals("too many entries?", false, entries.hasMoreElements());
+
+		tmpFile.delete();
 	}
 
 	public void verifyAttachmentInZipFile(String label, AttachmentProxy a, byte[] bytes, ZipFile zip, ZipEntry attachmentEntry) throws Exception
@@ -217,8 +219,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		assertStartsWith(label + " attachment id wrong?", "A", attachmentEntry.getName());
 		ZipEntryInputStream in = new ZipEntryInputStream(zip, attachmentEntry);
 
-		File tempRawFile = File.createTempFile("$$$MartusTestBullSaveFileAtt2", null);
-		tempRawFile.deleteOnExit();
+		File tempRawFile = createTempFileFromName("$$$MartusTestBullSaveFileAtt2");
 		FileOutputStream out = new FileOutputStream(tempRawFile);
 		AttachmentPacket.exportRawFileFromXml(in, a.getSessionKeyBytes(), security, out);
 		out.close();
@@ -229,6 +230,8 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		assertEquals(label + " read count?", raw.length, inRaw.read(raw));
 		inRaw.close();
 		assertEquals(label + " wrong bytes?", true, Arrays.equals(bytes, raw));
+
+		tempRawFile.delete();
 	}
 
 	public void testSaveToFile() throws Exception
@@ -237,8 +240,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		b.set(Bulletin.TAGPUBLICINFO, "public info");
 		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 
-		File tempFile = File.createTempFile("$$$MartusTest", null);
-		tempFile.deleteOnExit();
+		File tempFile = createTempFileFromName("$$$MartusTest");
 		BulletinForTesting.saveToFile(db, b, tempFile, security);
 		assertTrue("unreasonable file size?", tempFile.length() > 20);
 
@@ -276,6 +278,8 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		assertEquals("wrong privatedata name?", header.getPrivateFieldDataPacketId(), privateDataEntry.getName());
 
 		assertEquals("too many entries?", false, entries.hasMoreElements());
+
+		tempFile.delete();
 	}
 
 	public void testExportAndImportZipBetweenAccounts() throws Exception

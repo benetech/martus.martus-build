@@ -142,8 +142,7 @@ public class TestMartusLocalization extends TestCase
 			bd..loadTranslationFile("xx", "@#<>%#$%#");
 			assertEquals("xx should exist now", true, bd.isLanguageLoaded("xx"));
 
-			File file = File.createTempFile("$$$MartusTestLoadTranslations", null);
-			file.deleteOnExit();
+			File file = createTempFileFromName("$$$MartusTestLoadTranslations");
 			UnicodeWriter writer = new UnicodeWriter(file);
 			writer.write("f:g=fg\n");
 			writer.write("j:k=jk\n");
@@ -158,6 +157,8 @@ public class TestMartusLocalization extends TestCase
 		{
 			assertTrue(e.toString(), false);
 		}
+
+		file.delete();
 	}
 */
 

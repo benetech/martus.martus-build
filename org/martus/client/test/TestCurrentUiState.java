@@ -99,8 +99,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 
 		state.setCurrentOperatingState(sampleOperationState);
 
-		File file = File.createTempFile("$$$TestCurrentFolder",null);
-		file.deleteOnExit();
+		File file = createTempFileFromName("$$$TestCurrentFolder");
 		state.save(file);
 		CurrentUiState loaded = new CurrentUiState();
 		loaded.load(file);
@@ -123,12 +122,13 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		assertEquals("Wrong Editor Maximized?", sampleEditorMaximized, loaded.isCurrentEditorMaximized());
 
 		assertEquals("Wrong Operating State?", sampleOperationState, loaded.getCurrentOperatingState());
+
+		file.delete();
 	}
 
 	public void testLoadAndSaveErrors() throws Exception
 	{
-		File file = File.createTempFile("$$$TestCurrentFolder2",null);
-		file.deleteOnExit();
+		File file = createTempFileFromName("$$$TestCurrentFolder2");
 		file.delete();
 		CurrentUiState loaded = new CurrentUiState();
 		loaded.load(file);
@@ -140,6 +140,8 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		out.close();
 		loaded.load(file);
 		assertNotNull("State was null2?", loaded);
+
+		file.delete();
 	}
 
 	public class OldVersionUiState extends CurrentUiState

@@ -56,8 +56,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 	{
 		if(tempFile == null)
 		{
-			tempFile = File.createTempFile("$$$MartusTestAttIn", null);
-			tempFile.deleteOnExit();
+			tempFile = createTempFileFromName("$$$MartusTestAttIn");
 			FileOutputStream out = new FileOutputStream(tempFile);
 			out.write(sampleBytes);
 			out.close();
@@ -105,8 +104,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		ap1.writeXml(dest, security);
 		byte[] resultBytes = dest.toByteArray();
 
-		File destFile = File.createTempFile("$$$MartusTestAttOut", null);
-		destFile.deleteOnExit();
+		File destFile = createTempFileFromName("$$$MartusTestAttOut");
 		destFile.delete();
 		ByteArrayInputStreamWithSeek inBytes = new ByteArrayInputStreamWithSeek(resultBytes);
 		FileOutputStream out = new FileOutputStream(destFile);
@@ -121,6 +119,8 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		inFile.read(fileBytes);
 		inFile.close();
 		assertEquals("bad data?", true, Arrays.equals(sampleBytes, fileBytes));
+
+		destFile.delete();
 	}
 
 	public void testEncrypted() throws Exception
@@ -138,8 +138,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 
 		security.clearKeyPair();
 
-		File decryptedFile = File.createTempFile("$$$MartusDecryptedAtt", null);
-		decryptedFile.deleteOnExit();
+		File decryptedFile = createTempFileFromName("$$$MartusDecryptedAtt");
 		ByteArrayInputStreamWithSeek xmlIn = new ByteArrayInputStreamWithSeek(encryptedBytes);
 		FileOutputStream out = new FileOutputStream(decryptedFile);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, out);
@@ -153,6 +152,8 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 
 		int SHORTEST_LEGAL_KEY_SIZE = 512;
 		security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
+		
+		decryptedFile.delete();
 	}
 
 	public void testLargeAttachmentSpeed() throws Exception
@@ -160,8 +161,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		long createRawStartedAt = System.currentTimeMillis();
 
 		final int SIZE = 100 * 1024;
-		File largeFile = File.createTempFile("$$$MartusTestLargeAtt", null);
-		largeFile.deleteOnExit();
+		File largeFile = createTempFileFromName("$$$MartusTestLargeAtt");
 		FileOutputStream rawOut = new FileOutputStream(largeFile);
 		BufferedOutputStream out = new BufferedOutputStream(rawOut);
 		for(int i = 0; i < SIZE; ++i)
@@ -178,8 +178,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		byte[] sessionKeyBytes = security.createSessionKey();
 		AttachmentPacket ap = new AttachmentPacket(account, sessionKeyBytes, a.getFile(), security);
 
-		File largeXmlFile = File.createTempFile("$$$MartusTestLargeXmlFile", null);
-		largeXmlFile.deleteOnExit();
+		File largeXmlFile = createTempFileFromName("$$$MartusTestLargeXmlFile");
 		FileOutputStream dest = new FileOutputStream(largeXmlFile);
 		ap.writeXml(dest, security);
 		//long writeXmlEndedAt = System.currentTimeMillis();
@@ -195,8 +194,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		//assertTrue("verifySig took too long", verifySigEndedAt - verifySigStartedAt < 20000);
 
 		//long readXmlStartedAt = System.currentTimeMillis();
-		File decryptedFile = File.createTempFile("$$$MartusDecryptedBufferedAtt", null);
-		decryptedFile.deleteOnExit();
+		File decryptedFile = createTempFileFromName("$$$MartusDecryptedBufferedAtt");
 		FileInputStreamWithSeek xmlIn = new FileInputStreamWithSeek(largeXmlFile);
 		FileOutputStream finalOut = new FileOutputStream(decryptedFile);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, finalOut);
@@ -206,8 +204,9 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		//System.out.println("Read Xml Time = " + (readXmlEndedAt - readXmlStartedAt));
 		//assertTrue("Read Xml took too long", readXmlEndedAt - readXmlStartedAt < 30000);
 
-
-
+		largeFile.delete();
+		largeXmlFile.delete();
+		decryptedFile.delete();
 	}
 
 /*

@@ -99,6 +99,7 @@ public class BulletinStore
 		try
 		{
 			File tempFile = File.createTempFile("$$$MartusBulletinStore", null);
+			tempFile.deleteOnExit();
 			File baseDirectory = tempFile.getParentFile();
 			tempFile.delete();
 			setUpStore(baseDirectory, db);

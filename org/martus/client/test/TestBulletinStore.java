@@ -83,8 +83,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 
     	if(tempFile1 == null)
     	{
-			tempFile1 = createTempFile(sampleBytes1);
-			tempFile2 = createTempFile(sampleBytes2);
+			tempFile1 = createTempFileWithData(sampleBytes1);
+			tempFile2 = createTempFileWithData(sampleBytes2);
     	}
     }
 
@@ -860,8 +860,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.addPrivateAttachment(aPrivate);
 		original.setSealed();
 		BulletinSaver.saveToClientDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
-		File zipFile = File.createTempFile("$$$MartusTestZipSealed", null);
-		zipFile.deleteOnExit();
+		File zipFile = createTempFileFromName("$$$MartusTestZipSealed");
 		Bulletin loaded = store.loadFromDatabase(originalKey);
 		BulletinForTesting.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 		store.deleteAllData();
@@ -888,8 +887,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("public?", original.get(Bulletin.TAGTITLE), reloaded.get(Bulletin.TAGTITLE));
 		assertEquals("private?", original.get(Bulletin.TAGPRIVATEINFO), reloaded.get(Bulletin.TAGPRIVATEINFO));
 
-		File tempRawFilePublic = File.createTempFile("$$$MartusTestImpSealedZipRawPublic",null);
-		tempRawFilePublic.deleteOnExit();
+		File tempRawFilePublic = createTempFileFromName("$$$MartusTestImpSealedZipRawPublic");
 		BulletinSaver.extractAttachmentToFile(db, reloaded.getPublicAttachments()[0], security, tempRawFilePublic);
 		byte[] rawBytesPublic = new byte[sampleBytes1.length];
 		FileInputStream in = new FileInputStream(tempRawFilePublic);
@@ -897,14 +895,18 @@ public class TestBulletinStore extends TestCaseEnhanced
 		in.close();
 		assertEquals("wrong bytes", true, Arrays.equals(sampleBytes1, rawBytesPublic));
 
-		File tempRawFilePrivate = File.createTempFile("$$$MartusTestImpSealedZipRawPrivate",null);
-		tempRawFilePrivate.deleteOnExit();
+		File tempRawFilePrivate = createTempFileFromName("$$$MartusTestImpSealedZipRawPrivate");
 		BulletinSaver.extractAttachmentToFile(db, reloaded.getPrivateAttachments()[0], security, tempRawFilePrivate);
 		byte[] rawBytesPrivate = new byte[sampleBytes2.length];
 		FileInputStream in2 = new FileInputStream(tempRawFilePrivate);
 		in2.read(rawBytesPrivate);
 		in2.close();
 		assertEquals("wrong Private bytes", true, Arrays.equals(sampleBytes2, rawBytesPrivate));
+
+		zipFile.delete();
+		tempRawFilePublic.delete();
+		tempRawFilePrivate.delete();
+
 	}
 
 	public void testImportZipFileBulletin() throws Exception
@@ -992,8 +994,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b = creator.createEmptyBulletin();
 		b.setSealed();
 
-		File tempFile = File.createTempFile("$$$MartusTestStoreImportZip", null);
-		tempFile.deleteOnExit();
+		File tempFile = createTempFileFromName("$$$MartusTestStoreImportZip");
 		BulletinForTesting.saveToFile(db,b, tempFile, creator.getSignatureVerifier());
 
 		creator.importZipFileBulletin(tempFile, creator.getFolderOutbox(), false);
@@ -1009,6 +1010,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		{
 		}
 		assertEquals("imported even though the folder prevented it?", 0, thisApp.getStore().getBulletinCount());
+		tempFile.delete();
 	}
 
 	public void testImportDraftZipFile() throws Exception
@@ -1045,8 +1047,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		Bulletin loaded = store.loadFromDatabase(originalKey);
 
-		File zipFile = File.createTempFile("$$$MartusTestZipDraft", null);
-		zipFile.deleteOnExit();
+		File zipFile = createTempFileFromName("$$$MartusTestZipDraft");
 		BulletinForTesting.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 
 		store.deleteAllData();
@@ -1085,6 +1086,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinSaver.extractAttachmentToStream(db, reloaded.getPrivateAttachments()[0], security, privateStream);
 		byte[] rawBytesPrivate = privateStream.toByteArray();
 		assertEquals("wrong bytes Private", true, Arrays.equals(sampleBytes2, rawBytesPrivate));
+
+		zipFile.delete();
 	}
 
 	public void testCanPutBulletinInFolder() throws Exception

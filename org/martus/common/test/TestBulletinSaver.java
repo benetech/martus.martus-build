@@ -52,12 +52,12 @@ public class TestBulletinSaver extends TestCaseEnhanced
 	{
 		if(tempFile1 == null)
 		{
-			tempFile1 = createTempFile(sampleBytes1);
-			tempFile2 = createTempFile(sampleBytes2);
-			tempFile3 = createTempFile(sampleBytes3);
-			tempFile4 = createTempFile(sampleBytes4);
-			tempFile5 = createTempFile(sampleBytes5);
-			tempFile6 = createTempFile(sampleBytes6);
+			tempFile1 = createTempFileWithData(sampleBytes1);
+			tempFile2 = createTempFileWithData(sampleBytes2);
+			tempFile3 = createTempFileWithData(sampleBytes3);
+			tempFile4 = createTempFileWithData(sampleBytes4);
+			tempFile5 = createTempFileWithData(sampleBytes5);
+			tempFile6 = createTempFileWithData(sampleBytes6);
 		}
 		proxy1 = new AttachmentProxy(tempFile1);
 		proxy2 = new AttachmentProxy(tempFile2);
@@ -270,8 +270,7 @@ public class TestBulletinSaver extends TestCaseEnhanced
 			DatabaseKey key1 = new DatabaseKey(gotA.getUniversalId());
 			assertEquals(tag + i + " missing original record?", true,  db.doesRecordExist(key1));
 
-			File tempFile = File.createTempFile("$$$MartusTestBullSvAtt", null);
-			tempFile.deleteOnExit();
+			File tempFile = createTempFileFromName("$$$MartusTestBullSvAtt");
 			BulletinSaver.extractAttachmentToFile(db, gotA, security, tempFile);
 			FileInputStream in = new FileInputStream(tempFile);
 			byte[] gotBytes = new byte[in.available()];

@@ -239,7 +239,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	{
 		Database db = new MockClientDatabase();
 
-		File sampleAttachment = createTempFile("This is some data");
+		File sampleAttachment = createTempFileFromName("This is some data");
 		AttachmentProxy ap = new AttachmentProxy(sampleAttachment);
 
 		Bulletin b = new Bulletin(security);
@@ -405,8 +405,8 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		String string1 = "The string to write into the file to sign.";
 		String string2 = "The other string to write to another file to sign.";
 
-		File normalFile = createTempFile(string1);
-		File anotherFile = createTempFile(string2);
+		File normalFile = createTempFileWithData(string1);
+		File anotherFile = createTempFileWithData(string2);
 
 		File normalFileSigBySecurity = MartusUtilities.createSignatureFileFromFile(normalFile, security);
 

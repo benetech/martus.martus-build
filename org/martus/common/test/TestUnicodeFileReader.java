@@ -68,8 +68,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 			// exception was expected
 		}
 
-		File file = File.createTempFile("$$$MartusTestUnicodeFileReader", null);
-		file.deleteOnExit();
+		File file = createTempFileFromName("$$$MartusTestUnicodeFileReader");
 		createTempFile(file);
 		UnicodeReader reader = new UnicodeReader(file);
 
@@ -110,7 +109,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 
     public void testReadAll() throws Exception
     {
-		File file = File.createTempFile("$$test", null);
+		File file = createTempFileFromName("$$testUnicodeReadAll");
 		createTempFile(file);
 		UnicodeReader reader = new UnicodeReader(file);
 

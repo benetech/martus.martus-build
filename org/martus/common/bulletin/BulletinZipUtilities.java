@@ -271,6 +271,7 @@ public class BulletinZipUtilities
 	
 			final String tempFileName = "$$$importZip";
 			File file = File.createTempFile(tempFileName, null);
+			file.deleteOnExit();
 			FileOutputStream rawOut = new FileOutputStream(file);
 	
 			StreamFilter filter = copier;

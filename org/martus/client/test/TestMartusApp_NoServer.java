@@ -153,8 +153,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 		try
 		{
-			fakeDataDirectory = File.createTempFile("$$$MartusTestApp", null);
-			fakeDataDirectory.deleteOnExit();
+			fakeDataDirectory = createTempFileFromName("$$$MartusTestApp");
 			fakeDataDirectory.delete();
 			fakeDataDirectory.mkdir();
 
@@ -199,8 +198,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 		try
 		{
-			fakeDataDirectory = File.createTempFile("$$$MartusTestApp", null);
-			fakeDataDirectory.deleteOnExit();
+			fakeDataDirectory = createTempFileFromName("$$$MartusTestApp");
 			fakeDataDirectory.delete();
 			fakeDataDirectory.mkdir();
 
@@ -257,8 +255,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 		try
 		{
-			fakeDataDirectory = File.createTempFile("$$$MartusTestApp", null);
-			fakeDataDirectory.deleteOnExit();
+			fakeDataDirectory = createTempFileFromName("$$$MartusTestApp");
 			fakeDataDirectory.delete();
 			fakeDataDirectory.mkdir();
 

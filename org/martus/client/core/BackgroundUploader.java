@@ -85,6 +85,7 @@ public class BackgroundUploader
 		File tempFile = File.createTempFile("$$$MartusUploadBulletin", null);
 		try
 		{
+			tempFile.deleteOnExit();
 			UniversalId uid = b.getUniversalId();
 
 			Database db = app.getStore().getDatabase();

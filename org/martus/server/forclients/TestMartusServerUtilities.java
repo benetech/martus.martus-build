@@ -183,7 +183,7 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 	public File createTempFileWithContents(String content)
 		throws IOException
 	{
-		File file = File.createTempFile("$$$MartusTestMartusServerUtilities", null);
+		File file = createTempFileFromName("$$$MartusTestMartusServerUtilities");
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.writeln(content);
 		writer.flush();

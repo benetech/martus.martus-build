@@ -37,6 +37,7 @@ public class FileOutputStreamViaTemp extends OutputStream
 	{
 		realDestFile = destFile;
 		tempFile = File.createTempFile("$$$" + destFile.getName(), null);
+		tempFile.deleteOnExit();
 		tempOutputStream = new FileOutputStream(tempFile);
 	}
 
