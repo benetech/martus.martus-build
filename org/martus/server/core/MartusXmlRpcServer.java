@@ -29,26 +29,29 @@ package org.martus.server.core;
 
 public class MartusXmlRpcServer
 {
-	public static void createNonSSLXmlRpcServer(Object server, int port)
+	public static WebServerWithClientId createNonSSLXmlRpcServer(Object server, int port)
 	{
 		try
 		{
 			WebServerWithClientId webServer = new WebServerWithClientId(port);
 			webServer.addHandler("MartusServer", server);
+			return webServer;
 		}
 		catch (Exception e)
 		{
 			System.err.println("createNonSSLXmlRpcServer " + port + ": " + e.toString());
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
-	public static void createSSLXmlRpcServer(Object server, String destObjectName, int port)
+	public static MartusSecureWebServer createSSLXmlRpcServer(Object server, String destObjectName, int port)
 	{
 		try
 		{
 			MartusSecureWebServer secureWebServer = new MartusSecureWebServer(port);
 			secureWebServer.addHandler(destObjectName, server);
+			return secureWebServer;
 		}
 		catch (Exception e)
 		{
@@ -56,5 +59,6 @@ public class MartusXmlRpcServer
 			System.err.println( e.getMessage() );
 			e.printStackTrace();
 		}
+		return null;
 	}
 }

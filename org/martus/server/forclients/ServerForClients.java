@@ -37,6 +37,7 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.server.core.MartusSecureWebServer;
 import org.martus.server.core.MartusXmlRpcServer;
+import org.martus.server.core.WebServerWithClientId;
 import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeWriter;
 
@@ -48,6 +49,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		clientsBanned = new Vector();
 		magicWords = new Vector();
 		clientsThatCanUpload = new Vector();
+		activeWebServers = new Vector();
 
 	}
 	
@@ -106,9 +108,15 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		loadMagicWordsFile();
 	}
 
-	void prepareToShutdown()
+	public void prepareToShutdown()
 	{
 		clearCanUploadList();
+		for(int i = 0 ; i < activeWebServers.size(); ++i)
+		{
+			WebServerWithClientId server = (WebServerWithClientId)(activeWebServers.get(i));
+			if(server != null)
+				server.shutdown();
+		}
 	}
 
 	public boolean isClientBanned(String clientId)
@@ -146,7 +154,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	{
 		ServerSideNetworkHandlerForNonSSL nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
 		for(int i=0; i < ports.length; ++i)
-			MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, ports[i]);
+			activeWebServers.add(MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, ports[i]));
 	}
 	
 	public void handleSSL(int[] ports)
@@ -154,7 +162,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		ServerSideNetworkHandler serverHandler = new ServerSideNetworkHandler(this);
 		MartusSecureWebServer.security = getSecurity();
 		for(int i=0; i < ports.length; ++i)
-			MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, "MartusServer", ports[i]);
+			activeWebServers.add(MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, "MartusServer", ports[i]));
 	}
 	
 	
@@ -424,6 +432,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	public Vector clientsThatCanUpload;
 	public Vector clientsBanned;
 	private long bannedClientsFileLastModified;
+	private Vector activeWebServers;
 
 	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";

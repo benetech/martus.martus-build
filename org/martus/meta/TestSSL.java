@@ -31,7 +31,7 @@ public class TestSSL extends TestCaseEnhanced
 			mockServer.verifyAndLoadConfigurationFiles();
 			mockServer.setSecurity(mockSecurityForServer);
 
-			ServerForClients serverForClients = new ServerForClients(mockServer);
+			serverForClients = new ServerForClients(mockServer);
 			serverForClients.handleNonSSL(nonSslPorts);
 			serverForClients.handleSSL(sslPorts);
 			
@@ -44,6 +44,7 @@ public class TestSSL extends TestCaseEnhanced
 	public void tearDown() throws Exception
 	{
 		mockServer.deleteAllFiles();
+		serverForClients.prepareToShutdown();
 	}
 
 	
@@ -78,4 +79,5 @@ public class TestSSL extends TestCaseEnhanced
 	static MockMartusServer mockServer;
 	static ServerSideNetworkHandler mockSSLServerInterface;
 	static ClientSideNetworkHandlerUsingXmlRpc proxy1;
+	static ServerForClients serverForClients;
 }

@@ -321,7 +321,7 @@ public class WebServerWithClientId implements Runnable
         }
         finally
         {
-            System.err.println("Closing XML-RPC server socket.");
+	       //System.err.println("Closing XML-RPC server socket.");
             try
             {
                 serverSocket.close();
