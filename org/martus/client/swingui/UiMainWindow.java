@@ -91,8 +91,8 @@ import org.martus.client.core.CurrentUiState;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
-import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
+import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -292,6 +292,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return folders.getSelectedFolderName().equals(app.getStore().getFolderDiscarded().getName());
 	}
 
+	public boolean isCurrentFolderEmpty()
+	{
+		if(table.getBulletinCount() == 0)
+			return true;
+		return false;
+	}
+
 	public void selectSentFolder()
 	{
 		BulletinStore store = getStore();
@@ -382,6 +389,17 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return inputDlg.getResult();
 	}
 
+	public boolean canPaste()
+	{
+		if(getClipboardTransferableBulletin() != null)
+			return true;
+			
+		if(getClipboardTransferableFile() != null)
+			return true;
+			
+		return false;
+	}
+
 	public TransferableBulletinList getClipboardTransferableBulletin()
 	{
 		Transferable t = getTransferableFromClipboard();
@@ -403,33 +421,33 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return clipboard.getContents(this);
 	}
 
-	public ActionMenuModifyBulletin getActionMenuEdit()
+	public AbstractAction getActionMenuEdit()
 	{
 		return actionMenuModifyBulletin;
 	}
 
 	
-	public ActionMenuSelectAllBulletins getActionMenuSelectAll()
+	public AbstractAction getActionMenuSelectAll()
 	{
 		return actionMenuSelectAllBulletins;
 	}
 
-	public ActionMenuCutBulletins getActionMenuCut()
+	public AbstractAction getActionMenuCut()
 	{
 		return actionMenuCutBulletins;
 	}
 
-	public ActionMenuCopyBulletins getActionMenuCopy()
+	public AbstractAction getActionMenuCopy()
 	{
 		return actionMenuCopyBulletins;
 	}
 
-	public ActionMenuPasteBulletins getActionMenuPaste()
+	public AbstractAction getActionMenuPaste()
 	{
 		return actionMenuPasteBulletins;
 	}
 
-	public ActionMenuDiscardBulletins getActionMenuDiscard()
+	public AbstractAction getActionMenuDiscard()
 	{
 		return actionMenuDiscardBulletins;
 	}
@@ -442,14 +460,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			tb.dispose();
 	}
 
-
-	private void createActions()
-	{
-		actionCreate = new ActionCreate(this);
-		actionEdit = new ActionModify(this);
-		actionSearch = new ActionSearch(this);
-		actionPrint = new ActionPrint(this);
-	}
 
 	public boolean isMacintosh()
 	{
@@ -608,38 +618,53 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return topStuff;
 	}
 
+	private void createActions()
+	{
+		actionCreate = UiActions.newActionCreate(this);
+		actionEdit = UiActions.newActionModify(this);
+		actionSearch = UiActions.newActionSearch(this);
+		actionPrint = UiActions.newActionPrint(this);
+
+		actionMenuPrint = UiActions.newActionMenuPrint(this);
+
+		actionMenuModifyBulletin = UiActions.newActionMenuModifyBulletin(this);
+		actionMenuSelectAllBulletins = UiActions.newActionMenuSelectAllBulletins(this);
+		actionMenuCutBulletins = UiActions.newActionMenuCutBulletins(this);
+		actionMenuCopyBulletins = UiActions.newActionMenuCopyBulletins(this);
+		actionMenuPasteBulletins = UiActions.newActionMenuPasteBulletins(this);
+		actionMenuDiscardBulletins = UiActions.newActionMenuDiscardBulletins(this);
+
+		actionMenuRenameFolder = UiActions.newActionMenuRenameFolder(this);
+		actionMenuDeleteFolder = UiActions.newActionMenuDeleteFolder(this);
+	}
+
 	private JComponent createMenubar()
 	{
 		JMenu file = new JMenu(app.getMenuLabel("file"));
-		actionMenuPrint = new ActionMenuPrintBulletin(this);
-		file.addMenuListener(actionMenuPrint);
+		PrintMenuListener printMenuListener = new PrintMenuListener();
+		file.addMenuListener(printMenuListener);
+		printMenuListener.initalize();
 
-		file.add(new ActionMenuCreateNewBulletin(this));
+		file.add(UiActions.newActionMenuCreateNewBulletin(this));
 		file.add(actionMenuPrint);
 		file.addSeparator();
-		file.add(new ActionMenuBackupMyKeyPair(this));
-		file.add(new ActionMenuExportMyPublicKey(this));
+		file.add(UiActions.newActionMenuBackupMyKeyPair(this));
+		file.add(UiActions.newActionMenuExportMyPublicKey(this));
 		file.addSeparator();
-		file.add(new ActionMenuExportBulletins(this));
+		file.add(UiActions.newActionMenuExportBulletins(this));
 		file.addSeparator();
-		file.add(new ActionMenuImportHeadquarterPublicKey(this));
-		file.add(new ActionMenuRemoveExistingHeadquaterPublicKey(this));
+		file.add(UiActions.newActionMenuImportHeadquarterPublicKey(this));
+		file.add(UiActions.newActionMenuRemoveExistingHeadquaterPublicKey(this));
 		file.addSeparator();
-		file.add(new ActionMenuExit(this));
+		file.add(UiActions.newActionMenuExit(this));
 
 
 		JMenu edit = new JMenu(app.getMenuLabel("edit"));
-		actionMenuModifyBulletin = new ActionMenuModifyBulletin(this);
-		actionMenuSelectAllBulletins = new ActionMenuSelectAllBulletins(this);
-		actionMenuCutBulletins = new ActionMenuCutBulletins(this);
-		actionMenuCopyBulletins = new ActionMenuCopyBulletins(this);
-		actionMenuPasteBulletins = new ActionMenuPasteBulletins(this);
-		actionMenuDiscardBulletins = new ActionMenuDiscardBulletins(this);
 		EditMenuListener menuListener = new EditMenuListener();
 		edit.addMenuListener(menuListener);
 		menuListener.initalize();
 
-		edit.add(new ActionMenuSearch(this));
+		edit.add(UiActions.newActionMenuSearch(this));
 		edit.addSeparator();
 		edit.add(actionMenuModifyBulletin);
 		edit.addSeparator();
@@ -651,40 +676,38 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		edit.add(actionMenuDiscardBulletins);
 
 		JMenu folders = new JMenu(app.getMenuLabel("folders"));
-		actionMenuRenameFolder = new ActionMenuRenameFolder(this);
-		actionMenuDeleteFolder = new ActionMenuDeleteFolder(this);
 		FoldersMenuListener menuFolderListener = new FoldersMenuListener();
 		folders.addMenuListener(menuFolderListener);
 		menuFolderListener.initalize();
 
-		folders.add(new ActionMenuCreateFolder(this));
+		folders.add(UiActions.newActionMenuCreateFolder(this));
 		folders.add(actionMenuRenameFolder);
 		folders.add(actionMenuDeleteFolder);
 
 
 		JMenu server = new JMenu(app.getMenuLabel("server"));
-		server.add(new ActionMenuRetrieveMySealedBulletins(this));
-		server.add(new ActionMenuRetrieveMyDraftBulletins(this));
-		server.add(new ActionMenuDeleteMyServerDraftBulletins(this));
+		server.add(UiActions.newActionMenuRetrieveMySealedBulletins(this));
+		server.add(UiActions.newActionMenuRetrieveMyDraftBulletins(this));
+		server.add(UiActions.newActionMenuDeleteMyServerDraftBulletins(this));
 		server.addSeparator();
-		server.add(new ActionMenuRetrieveHQSealedBulletins(this));
-		server.add(new ActionMenuRetrieveHQDraftBulletins(this));
+		server.add(UiActions.newActionMenuRetrieveHQSealedBulletins(this));
+		server.add(UiActions.newActionMenuRetrieveHQDraftBulletins(this));
 		server.addSeparator();
-		server.add(new ActionMenuSelectServer(this));
+		server.add(UiActions.newActionMenuSelectServer(this));
 
 
 		JMenu options = new JMenu(app.getMenuLabel("options"));
-		options.add(new ActionMenuPreferences(this));
-		options.add(new ActionMenuContactInfo(this));
-		options.add(new ActionMenuDefaultDetailsFieldContent(this));
-		options.add(new ActionMenuChangeUserNamePassword(this));
+		options.add(UiActions.newActionMenuPreferences(this));
+		options.add(UiActions.newActionMenuContactInfo(this));
+		options.add(UiActions.newActionMenuDefaultDetailsFieldContent(this));
+		options.add(UiActions.newActionMenuChangeUserNamePassword(this));
 
 
 		JMenu help = new JMenu(app.getMenuLabel("help"));
-		help.add(new ActionMenuHelp(this));
-		help.add(new ActionMenuAbout(this));
+		help.add(UiActions.newActionMenuHelp(this));
+		help.add(UiActions.newActionMenuAbout(this));
 		help.addSeparator();
-		help.add(new ActionMenuAccountDetails(this));
+		help.add(UiActions.newActionMenuAccountDetails(this));
 
 		JMenuBar menubar = new JMenuBar();
 		menubar.add(file);
@@ -708,12 +731,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	}
 
 
-	private void doModifyBulletin()
+	void doModifyBulletin()
 	{
 		table.doModifyBulletin();
 	}
 
-	private void doSelectAllBulletins()
+	void doSelectAllBulletins()
 	{
 		table.doSelectAllBulletins();	
 	}
@@ -733,12 +756,40 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		table.doPasteBulletins();
 	}
 
-	private void doDiscardBulletins()
+	void doDiscardBulletins()
 	{
 		table.doDiscardBulletins();
 	}
+	
+	void doCreateFolder()
+	{
+		folders.createNewFolder();
+	}
+	
+	void doRenameFolder()
+	{
+		folders.renameCurrentFolder();
+	}
+	
+	void doDeleteFolder()
+	{
+		folders.deleteCurrentFolderIfPossible();
+	}
+	
+	boolean canModifyCurrentFolder()
+	{
+		BulletinFolder folder = folders.getSelectedFolder();
+		return canModifyFolder(folder);
+	}
+	
+	boolean canModifyFolder(BulletinFolder folder)
+	{
+		if(folder == null)
+			return false;
+		return folder.canRename();
+	}
 
-	private void doSearch()
+	void doSearch()
 	{
 		UiSearchDlg searchDlg = new UiSearchDlg(this);
 		if(!searchDlg.getResults())
@@ -771,12 +822,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private void aboutMartus()
+	void aboutMartus()
 	{
 		new UiAboutDlg(this);
 	}
 
-	private void showAccountInfo()
+	void showAccountInfo()
 	{
 		String title = app.getWindowTitle("AccountInfo");
 		String userName = app.getFieldLabel("AccountInfoUserName")
@@ -801,7 +852,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		new UiNotifyDlg(this, this, title, contents, buttons);
 	}
 
-	private void displayHelpMessage()
+	void displayHelpMessage()
 	{
 
 		InputStream helpStream = null;
@@ -887,7 +938,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		private boolean mustWarnUser;
 	}
 
-	private void doPrint()
+	void doPrint()
 	{
 		boolean printCancelled = false;
 		Bulletin currentBulletin = table.getSingleSelectedBulletin();
@@ -945,7 +996,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		requestFocus(true);
 	}
 
-	private void doLocalize()
+	void doLocalize()
 	{
 		saveState();
 		new UiLocalizeDlg(this);
@@ -954,7 +1005,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		show();
 	}
 
-	private boolean doContactInfo()
+	boolean doContactInfo()
 	{
 		ConfigInfo info = app.getConfigInfo();
 		UiContactInfoDlg setupContactDlg = new UiContactInfoDlg(this, info);
@@ -969,7 +1020,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	}
 
 
-	private void doConfigureServer()
+	void doConfigureServer()
 	{
 		if(!reSignIn())
 			return;
@@ -1041,7 +1092,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	}
 
 
-	private void doChangeUserNamePassword()
+	void doChangeUserNamePassword()
 	{
 		if(!reSignIn())
 			return;
@@ -1097,7 +1148,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private void doRetrieveMySealedBulletins()
+	void doRetrieveMySealedBulletins()
 	{
 		String dlgTitleTag = "RetrieveMySealedBulletins";
 		String summariesProgressTag = "RetrieveMySealedBulletinSummaries";
@@ -1108,7 +1159,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	private void doRetrieveMyDraftBulletins()
+	void doRetrieveMyDraftBulletins()
 	{
 		String dlgTitleTag = "RetrieveMyDraftBulletins";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
@@ -1119,7 +1170,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	private void doRetrieveHQBulletins()
+	void doRetrieveHQBulletins()
 	{
 		String dlgTitleTag = "RetrieveHQSealedBulletins";
 		String summariesProgressTag = "RetrieveHQSealedBulletinSummaries";
@@ -1130,7 +1181,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	private void doRetrieveHQDraftsBulletins()
+	void doRetrieveHQDraftsBulletins()
 	{
 		String dlgTitleTag = "RetrieveHQDraftBulletins";
 		String summariesProgressTag = "RetrieveHQDraftBulletinSummaries";
@@ -1141,7 +1192,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
-	private void doDeleteServerDraftBulletins()
+	void doDeleteServerDraftBulletins()
 	{
 		String dlgTitleTag = "DeleteMyDraftsFromServer";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
@@ -1273,7 +1324,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return summariesDlg.getUniversalIdList();
 	}
 
-	private void doExportMyPublicKey()
+	void doExportMyPublicKey()
 	{
 		try
 		{
@@ -1305,7 +1356,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private void doBackupKeyPair()
+	void doBackupKeyPair()
 	{
 		File keypairFile = app.getKeyPairFile();
 		if(keypairFile.length() > MAX_KEYPAIRFILE_SIZE)
@@ -1365,7 +1416,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private void doImportHQPublicKey()
+	void doImportHQPublicKey()
 	{
 		if(!reSignIn())
 			return;
@@ -1399,7 +1450,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private void doClearPublicAccountInfo()
+	void doClearPublicAccountInfo()
 	{
 		if(!reSignIn())
 			return;
@@ -1607,7 +1658,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return dontExitApplication;
 	}
 
-	private void exitNormally()
+	void exitNormally()
 	{
 		if(doUploadReminderOnExit())
 			return;
@@ -1714,381 +1765,33 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		private int timeInMillis;
 	}
 
-	static private boolean isAnyBulletinSelected(UiMainWindow window)
+	static boolean isAnyBulletinSelected(UiMainWindow window)
 	{
 		return (window.table.getSelectedBulletinUids().length > 0);
 	}
 
-	static private boolean isOnlyOneBulletinSelected(UiMainWindow window)
+	static boolean isOnlyOneBulletinSelected(UiMainWindow window)
 	{
 		return (window.table.getSingleSelectedBulletin() != null);
 	}
 	
-	abstract static class MartusAction extends AbstractAction
+	class PrintMenuListener implements MenuListener
 	{
-		public MartusAction(UiMainWindow mainWindowToUse, String label)
+		public void initalize()
 		{
-			super(label);
-			mainWindow = mainWindowToUse;
-		}
-		
-		UiMainWindow mainWindow;
-	}
-
-	abstract static class ButtonAction extends MartusAction
-	{
-		public ButtonAction(UiMainWindow mainWindowToUse, String tag)
-		{
-			super(mainWindowToUse, mainWindowToUse.getApp().getButtonLabel(tag));
-		}
-	}
-
-	abstract static class MenuAction extends MartusAction
-	{
-		public MenuAction(UiMainWindow mainWindowToUse, String tag)
-		{
-			super(mainWindowToUse, mainWindowToUse.getApp().getMenuLabel(tag));
-		}
-	}
-
-	static class ActionCreate extends ButtonAction
-	{
-		public ActionCreate(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "create");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.createBulletin();
-		}
-	}
-
-	static class ActionModify extends ButtonAction
-	{
-		public ActionModify(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "modify");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doModifyBulletin();
-		}
-	}
-
-	static class ActionSearch extends ButtonAction
-	{
-		public ActionSearch(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "search");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doSearch();
-		}
-	}
-
-	static class ActionPrint extends ButtonAction
-	{
-		public ActionPrint(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "print");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doPrint();
-		}
-	}
-
-	static class ActionMenuExit extends MenuAction
-	{
-		public ActionMenuExit(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "exit");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.exitNormally();
-		}
-	}
-
-	static class ActionMenuCreateFolder extends MenuAction
-	{
-		public ActionMenuCreateFolder(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "CreateNewFolder");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.folders.createNewFolder();
-		}
-	}
-
-	static class ActionMenuRenameFolder extends MenuAction
-	{
-		public ActionMenuRenameFolder(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "RenameFolder");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.folders.renameCurrentFolder();
-		}
-
-		public boolean isEnabled()
-		{
-			BulletinFolder folder = mainWindow.folders.getSelectedFolder();
-			if(folder != null && folder.canRename())
-				return true;
-			return false;
-		}
-	}
-
-	static class ActionMenuDeleteFolder extends MenuAction
-	{
-		public ActionMenuDeleteFolder(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "DeleteFolder");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.folders.deleteCurrentFolderIfPossible();
-		}
-
-		public boolean isEnabled()
-		{
-			BulletinFolder folder = mainWindow.folders.getSelectedFolder();
-			if(folder != null && folder.canRename())
-				return true;
-			return false;
-		}
-	}
-
-	static class ActionMenuCreateNewBulletin extends MenuAction
-	{
-		public ActionMenuCreateNewBulletin(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "CreateNewBulletin");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.createBulletin();
-		}
-	}
-
-	static class ActionMenuExportBulletins extends MenuAction
-	{
-		public ActionMenuExportBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "ExportBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doExportBulletins();
-		}
-	}
-
-	static class ActionMenuPrintBulletin extends MenuAction implements MenuListener
-	{
-		public ActionMenuPrintBulletin(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "printBulletin");
 			//Java Bug, menu items need to be disabled before correct behavior occures.
-			setEnabled(false);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doPrint();
-		}
-
-		public boolean isEnabled()
-		{
-			return isOnlyOneBulletinSelected(mainWindow);
+			actionMenuPrint.setEnabled(false);
 		}
 
 		public void menuSelected(MenuEvent e)
 		{
-			mainWindow.actionMenuPrint.setEnabled(mainWindow.actionMenuPrint.isEnabled());
+			actionMenuPrint.setEnabled(actionMenuPrint.isEnabled());
 		}
 
 		public void menuDeselected(MenuEvent e) {}
 		public void menuCanceled(MenuEvent e) {}
 	}
-
-	static class ActionMenuAbout extends MenuAction
-	{
-		public ActionMenuAbout(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "about");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.aboutMartus();
-		}
-	}
-
-	static class ActionMenuAccountDetails extends MenuAction
-	{
-		public ActionMenuAccountDetails(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "ViewMyAccountDetails");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.showAccountInfo();
-		}
-	}
-
-	static class ActionMenuHelp extends MenuAction
-	{
-		public ActionMenuHelp(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "helpMessage");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.displayHelpMessage();
-		}
-	}
-
-	static class ActionMenuModifyBulletin extends MenuAction
-	{
-		public ActionMenuModifyBulletin(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "modifyBulletin");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doModifyBulletin();
-		}
-
-		public boolean isEnabled()
-		{
-			return isOnlyOneBulletinSelected(mainWindow);
-		}
-	}
-
-	static class ActionMenuSelectAllBulletins extends MenuAction
-	{
-
-		public ActionMenuSelectAllBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "SelectAllBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doSelectAllBulletins();
-		}
-
-		public boolean isEnabled()
-		{
-			if(mainWindow.table.getBulletinCount() > 0)
-				return true;
-			return false;
-		}
-	}
-
-	static class ActionMenuCutBulletins extends MenuAction
-	{
-		
-		public ActionMenuCutBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "CutBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doCutBulletins();
-		}
-
-		public boolean isEnabled()
-		{
-			if(mainWindow.isDiscardedFolderSelected())
-				return false;
-			return isAnyBulletinSelected(mainWindow);
-		}
-	}
-
-	static class ActionMenuCopyBulletins extends MenuAction
-	{
-		public ActionMenuCopyBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "CopyBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doCopyBulletins();
-		}
-
-		public boolean isEnabled()
-		{
-			return isAnyBulletinSelected(mainWindow);
-		}
-	}
-
-	static class ActionMenuDiscardBulletins extends MenuAction
-	{
-		public ActionMenuDiscardBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "DiscardBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doDiscardBulletins();
-		}
-
-		public boolean isEnabled()
-		{
-			updateName();
-			return isAnyBulletinSelected(mainWindow);
-		}
-
-		public void updateName()
-		{
-			if(mainWindow.isDiscardedFolderSelected())
-				mainWindow.actionMenuDiscardBulletins.putValue(ActionMenuDiscardBulletins.NAME, mainWindow.getApp().getMenuLabel("DeleteBulletins"));
-			else
-				mainWindow.actionMenuDiscardBulletins.putValue(ActionMenuDiscardBulletins.NAME, mainWindow.getApp().getMenuLabel("DiscardBulletins"));
-		}
-	}
-
-	static class ActionMenuPasteBulletins extends MenuAction
-	{
-		public ActionMenuPasteBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "PasteBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doPasteBulletins();
-		}
-		public boolean isEnabled()
-		{
-			boolean enable = (mainWindow.getClipboardTransferableBulletin() != null);
-			if(!enable)
-				enable = (mainWindow.getClipboardTransferableFile() != null);
-			 return enable;
-		}
-	}
-
+	
 	class EditMenuListener implements MenuListener
 	{
 		public void menuSelected(MenuEvent e)
@@ -2133,200 +1836,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void menuDeselected(MenuEvent e) {}
 		public void menuCanceled(MenuEvent e) {}
-	}
-
-	static class ActionMenuSearch extends MenuAction
-	{
-		public ActionMenuSearch(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "search");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doSearch();
-		}
-	}
-
-	static class ActionMenuPreferences extends MenuAction
-	{
-		public ActionMenuPreferences(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "Preferences");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doLocalize();
-		}
-	}
-
-	static class ActionMenuContactInfo extends MenuAction
-	{
-		public ActionMenuContactInfo(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "contactinfo");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doContactInfo();
-		}
-	}
-
-	static class ActionMenuSelectServer extends MenuAction
-	{
-		public ActionMenuSelectServer(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "SelectServer");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doConfigureServer();
-		}
-	}
-
-	static class ActionMenuChangeUserNamePassword extends MenuAction
-	{
-		public ActionMenuChangeUserNamePassword(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "changeUserNamePassword");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doChangeUserNamePassword();
-		}
-	}
-
-	static class ActionMenuDefaultDetailsFieldContent extends MenuAction
-	{
-		public ActionMenuDefaultDetailsFieldContent(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "DefaultDetailsFieldContent");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.updateBulletinDetails(null);
-		}
-	}
-
-	static class ActionMenuRetrieveMySealedBulletins extends MenuAction
-	{
-		public ActionMenuRetrieveMySealedBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "RetrieveMySealedBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doRetrieveMySealedBulletins();
-		}
-	}
-
-	static class ActionMenuRetrieveMyDraftBulletins extends MenuAction
-	{
-		public ActionMenuRetrieveMyDraftBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "RetrieveMyDraftsBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doRetrieveMyDraftBulletins();
-		}
-	}
-	static class ActionMenuDeleteMyServerDraftBulletins extends MenuAction
-	{
-		public ActionMenuDeleteMyServerDraftBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "DeleteMyServerDrafts");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doDeleteServerDraftBulletins();
-		}
-	}
-
-	static class ActionMenuRetrieveHQSealedBulletins extends MenuAction
-	{
-		public ActionMenuRetrieveHQSealedBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "RetrieveHQSealedBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doRetrieveHQBulletins();
-		}
-	}
-
-	static class ActionMenuRetrieveHQDraftBulletins extends MenuAction
-	{
-		public ActionMenuRetrieveHQDraftBulletins(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "RetrieveHQDraftBulletins");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doRetrieveHQDraftsBulletins();
-		}
-	}
-
-	static class ActionMenuBackupMyKeyPair extends MenuAction
-	{
-		public ActionMenuBackupMyKeyPair(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "BackupMyKeyPair");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doBackupKeyPair();
-		}
-	}
-
-	static class ActionMenuExportMyPublicKey extends MenuAction
-	{
-		public ActionMenuExportMyPublicKey(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "ExportMyPublicKey");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doExportMyPublicKey();
-		}
-	}
-
-	static class ActionMenuImportHeadquarterPublicKey extends MenuAction
-	{
-		public ActionMenuImportHeadquarterPublicKey(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "ImportHQPublicKey");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doImportHQPublicKey();
-		}
-	}
-
-	static class ActionMenuRemoveExistingHeadquaterPublicKey extends MenuAction
-	{
-		public ActionMenuRemoveExistingHeadquaterPublicKey(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "RemoveExistingHQPublicKey");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			mainWindow.doClearPublicAccountInfo();
-		}
 	}
 
 	class WindowEventHandler extends WindowAdapter
@@ -2536,10 +2045,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private MartusApp app;
 	private CurrentUiState uiState;
-	private ActionCreate actionCreate;
-	private ActionModify actionEdit;
-	private ActionSearch actionSearch;
-	private ActionPrint actionPrint;
 	private UiBulletinPreview preview;
 	private JSplitPane previewSplitter;
 	private JSplitPane folderSplitter;
@@ -2550,15 +2055,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private javax.swing.Timer errorChecker;
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
-	private ActionMenuPrintBulletin actionMenuPrint;
-	private ActionMenuModifyBulletin actionMenuModifyBulletin;
-	private ActionMenuSelectAllBulletins actionMenuSelectAllBulletins;
-	private ActionMenuCutBulletins actionMenuCutBulletins;
-	private ActionMenuCopyBulletins actionMenuCopyBulletins;
-	private ActionMenuPasteBulletins actionMenuPasteBulletins;
-	private ActionMenuDiscardBulletins actionMenuDiscardBulletins;
-	private ActionMenuRenameFolder actionMenuRenameFolder;
-	private ActionMenuDeleteFolder actionMenuDeleteFolder;
+	private AbstractAction actionCreate;
+	private AbstractAction actionEdit;
+	private AbstractAction actionSearch;
+	private AbstractAction actionPrint;
+	private AbstractAction actionMenuPrint;
+	private AbstractAction actionMenuModifyBulletin;
+	private AbstractAction actionMenuSelectAllBulletins;
+	private AbstractAction actionMenuCutBulletins;
+	private AbstractAction actionMenuCopyBulletins;
+	private AbstractAction actionMenuPasteBulletins;
+	private AbstractAction actionMenuDiscardBulletins;
+	private AbstractAction actionMenuRenameFolder;
+	private AbstractAction actionMenuDeleteFolder;
 
 
 	private UiStatusBar statusBar;
