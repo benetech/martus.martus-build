@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-    <classpathentry kind="src" path=""/>
-    <classpathentry kind="src" path="/martus-hrdag"/>
-    <classpathentry kind="src" path="/martus-swing"/>
-    <classpathentry kind="src" path="/martus-utils"/>
-    <classpathentry kind="src" path="/martus-common"/>
-    <classpathentry kind="output" path=""/>
+	<classpathentry kind="src" path=""/>
+	<classpathentry kind="output" path=""/>
 </classpath>
