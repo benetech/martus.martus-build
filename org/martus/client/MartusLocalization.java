@@ -316,6 +316,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmRequestToSendContactInfoToServer=Request to Send Contact Info to Server");
 		addEnglishTranslation("wintitle:confirmUploadReminder=Upload Reminder");
 		addEnglishTranslation("wintitle:confirmDraftUploadReminder=Draft Upload Reminder");
+		addEnglishTranslation("wintitle:confirmRedoWeakPassword=Weak Password Warning");
 
 		addEnglishTranslation("wintitle:notifyDropNotAllowed=Cannot Move Bulletin");
 		addEnglishTranslation("wintitle:notifyDropError=Error Moving Bulletin");
@@ -361,6 +362,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyConfigNoServer=Unable to Connect to Server");
 		addEnglishTranslation("wintitle:notifyServerCodeWrong=Incorrect Server Public Code");
 		addEnglishTranslation("wintitle:notifyRetrieveCanceled=Bulletin Download Canceled");
+		addEnglishTranslation("wintitle:notifyRememberPassword=Remember Your Password");
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
@@ -619,6 +621,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmUploadRemindereffect=Clicking on Yes will exit Martus, and leave the unsent bulletins in the outbox which will be sent the next time you start Martus.");
 		addEnglishTranslation("field:confirmDraftUploadRemindercause=Please Note: There are draft bulletins that have been modified and not yet sent to a server.  Do you still want to exit?");
 		addEnglishTranslation("field:confirmDraftUploadRemindereffect=Clicking on Yes will exit Martus, but these bulletins will be sent to the server when you run Martus again.");
+		addEnglishTranslation("field:confirmRedoWeakPasswordcause=The password you chose has fewer than 15 characters and less than 2 non-alphanumeric characters. We recommend choosing a stronger password.");
+		addEnglishTranslation("field:confirmRedoWeakPasswordeffect=Clicking on Yes will continue with the password you just entered.");
 
 		addEnglishTranslation("field:notifyDropNotAllowedcause=This bulletin cannot be moved to that folder. This may be because of its Draft/Sealed status, or its author.");
 		addEnglishTranslation("field:notifyDropErrorcause=An unexpected error occured while moving this bulletin. The file may be damaged.");
@@ -664,6 +668,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyConfigNoServercause=The selected server is not responding. Before you choose a server, you must be connected to the internet, and that server must be available.");
 		addEnglishTranslation("field:notifyServerCodeWrongcause=The Server Public Code does not match the one you entered.");
 		addEnglishTranslation("field:notifyRetrieveCanceledcause=Bulletin download cancelled.  Some bulletins may have already been downloaded.");
+		addEnglishTranslation("field:notifyRememberPasswordcause=Please remember your username and password. It cannot be recovered.");
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
 		addEnglishTranslation("field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:");

@@ -32,6 +32,7 @@ public class TestAll
 		suite.addTest(new TestSuite(TestChoiceItem.class));
 		suite.addTest(new TestSuite(TestCurrentUiState.class));
 		suite.addTest(new TestSuite(TestClientFileDatabase.class));
+		suite.addTest(new TestSuite(TestMartusUserNameAndPassword.class));
 
 	    return suite;
 	}

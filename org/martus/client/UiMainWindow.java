@@ -806,8 +806,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(!reSignIn())
 			return;
 		String originalUserName = app.getUserName();
-		CreateNewUserNameAndPassword newUserInfo = new CreateNewUserNameAndPassword(this, originalUserName);
-		if(!newUserInfo.validData())
+		UiCreateNewUserNameAndPasswordDlg newUserInfo = new UiCreateNewUserNameAndPasswordDlg(this, originalUserName);
+		if(!newUserInfo.isDataValid())
 			return;
 		String userName = newUserInfo.getUserName();
 		String userPassword = newUserInfo.getPassword();
@@ -824,24 +824,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		
 		notifyDlg(this, "RewriteKeyPairWorked");
 	}
-
-	class BlankUserNameException extends Exception {}
-	class PasswordInvalidException extends Exception {}
-	class PasswordMatchedUserNameException extends Exception {}
-
-	public void ValidateUserNameAndPassword(String username, String password) throws
-		BlankUserNameException,
-		PasswordInvalidException,
-		PasswordMatchedUserNameException
-	{
-		if(username.length() == 0)
-			throw new BlankUserNameException();
-		if(password.length() < 8)
-			throw new PasswordInvalidException();
-		if(password.equals(username))
-			throw new PasswordMatchedUserNameException();
-	}
-
 	
 	private void doChangeBulletinDetails()
 	{
@@ -858,82 +840,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				System.out.println("doContactInfo: Unable to Save ConfigInfo" + e);
 			}
 		}
-	}
-	
-	class CreateNewUserNameAndPassword
-	{
-		public CreateNewUserNameAndPassword(UiMainWindow window, String originalUserName)
-		{
-			while(true)
-			{
-				UiSigninDlg signinDlg1 = new UiSigninDlg(window, window, UiSigninDlg.CREATE_NEW, originalUserName);
-				if(!signinDlg1.getResult())
-					return;
-				userName1 = signinDlg1.getName();
-				userPassword1 = signinDlg1.getPassword();
-				String defaultUserName = userName1;
-				if(originalUserName == null || originalUserName.length() == 0)
-					defaultUserName = "";
-				UiSigninDlg signinDlg2 = new UiSigninDlg(window, window, UiSigninDlg.RETYPE_USERNAME_PASSWORD, defaultUserName);
-				if(!signinDlg2.getResult())
-					return;
-				String userName2 = signinDlg2.getName();
-				String userPassword2 = signinDlg2.getPassword();
-				
-				try 
-				{
-					ValidateUserNameAndPassword(userName1, userPassword1);
-				} 
-				catch(BlankUserNameException e) 
-				{
-					window.notifyDlg(window, "UserNameBlank");
-					continue;
-				} 
-				catch(PasswordInvalidException e) 
-				{
-					window.notifyDlg(window, "PasswordInvalid");
-					continue;
-				}
-				catch(PasswordMatchedUserNameException e)
-				{
-					window.notifyDlg(window, "PasswordMatchesUserName");
-					continue;
-				}
-					
-				if(!userPassword1.equals(userPassword2))
-				{
-					window.notifyDlg(window, "passwordsdontmatch");
-					continue;
-				}
-				
-				if(!userName1.equals(userName2))
-				{
-					window.notifyDlg(window, "usernamessdontmatch");
-					continue;
-				}
-				result = true;
-				break;
-			} 
-		}
-			
-		public boolean validData()
-		{
-			return result;
-		}
-		
-		public String getUserName()
-		{
-			return userName1;
-		}
-		
-		public String getPassword()
-		{
-			return userPassword1;
-		}
-
-		private String userName1;
-		private String userPassword1;
-		boolean result;
 	}
 	
 	private void doRetrieveMySealedBulletins()
@@ -1333,8 +1239,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private boolean createAccount() 
 	{
 		notifyDlg(this, "WelcomeToMartus");
-		CreateNewUserNameAndPassword newUserInfo = new CreateNewUserNameAndPassword(this, "");
-		if(!newUserInfo.validData())
+		UiCreateNewUserNameAndPasswordDlg newUserInfo = new UiCreateNewUserNameAndPasswordDlg(this, "");
+		if(!newUserInfo.isDataValid())
 			return false;
 		String userName = newUserInfo.getUserName();
 		String userPassword = newUserInfo.getPassword();
