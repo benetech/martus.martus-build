@@ -18,6 +18,9 @@ public class ChangeServerPassphrase
 {
 	public static void main(String[] args) throws Exception
 	{
+			System.out.println("ChangeServerPassphrase:\nThis program will replace your keypair.dat file."
+				+ "\nWe strongly recommend that you make sure you have a backup copy before running this program. "
+				+ "\nAlso, after successfully changing the password, we strongly recommend that you create a backup of the new keypair.dat file.\n");
 			File dataDirectory = MartusServer.getDataDirectory();
 			String keyPairFilename = MartusServer.getKeypairFilename();
 			File keyPairFile = new File(dataDirectory, keyPairFilename);
@@ -28,7 +31,7 @@ public class ChangeServerPassphrase
 				System.out.flush();
 				System.exit(1);
 			}
-			
+
 			System.out.print("Enter current passphrase:");
 			System.out.flush();
 			
@@ -36,23 +39,26 @@ public class ChangeServerPassphrase
 			BufferedReader reader = new BufferedReader(rawReader);
 			try
 			{
-				String passphrase = reader.readLine();
+				String oldPassphrase = reader.readLine();
 				
-				MartusCrypto security = getCurrentMartusSecurity(keyPairFile, passphrase);
+				MartusCrypto security = loadCurrentMartusSecurity(keyPairFile, oldPassphrase);
 				
 				System.out.print("Enter new passphrase:");
 				System.out.flush();
-				String newPassphrase = reader.readLine();
+				String newPassphrase1 = reader.readLine();
 				System.out.print("Re-enter the new passphrase:");
 				System.out.flush();
+				String newPassphrase2 = reader.readLine();
 				
-				if( newPassphrase.equals(reader.readLine()) )
+				if( newPassphrase1.equals(newPassphrase2) )
 				{
-					updateMartusPassphrase(keyPairFile, security, newPassphrase);
+					System.out.println("Updating passphrase...");
+					System.out.flush();
+					updateMartusPassphrase(keyPairFile, newPassphrase1, security);
 				}
 				else
 				{
-					throw new Exception();
+					throw new NewPasswordsNotSame();
 				}
 			}
 			catch(Exception e)
@@ -64,16 +70,14 @@ public class ChangeServerPassphrase
 			System.out.flush();			
 	}
 	
-	private static void updateMartusPassphrase(File keyPairFile, MartusCrypto security, String newPassphrase)
+	private static void updateMartusPassphrase(File keyPairFile, String newPassphrase, MartusCrypto security)
 		throws FileNotFoundException, IOException
 	{
-		System.out.println("Updating passphrase...");
-		System.out.flush();
 		FileOutputStream out = new FileOutputStream(keyPairFile);
 		security.writeKeyPair(out, newPassphrase);
 	}
 	
-	private static MartusCrypto getCurrentMartusSecurity(File keyPairFile, String passphrase)
+	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
 		throws CryptoInitializationException, FileNotFoundException, IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException
 	{
 		MartusCrypto security = new MartusSecurity();
@@ -82,4 +86,6 @@ public class ChangeServerPassphrase
 		in.close();
 		return security;
 	}
+	
+	public static class NewPasswordsNotSame extends Exception {}
 }
