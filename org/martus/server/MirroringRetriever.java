@@ -3,9 +3,8 @@ package org.martus.server;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.zip.ZipFile;
+import java.util.Vector;
 
-import org.martus.common.BulletinRetrieverGatewayInterface;
 import org.martus.common.Database;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -17,14 +16,24 @@ import org.martus.common.MartusUtilities.ServerErrorException;
 
 public class MirroringRetriever
 {
-	MirroringRetriever(Database databaseToUse, BulletinRetrieverGatewayInterface gatewayToUse, MartusCrypto securityToUse)
+	MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, MartusCrypto securityToUse)
 	{
 		gateway = gatewayToUse;
 		security = securityToUse;
+		
+		uidsToRetrieve = new Vector();
 	}
 	
 	public void tick()
 	{
+		UniversalId uid = getNextUidToRetrieve();
+	}
+	
+	UniversalId getNextUidToRetrieve()
+	{
+		if(uidsToRetrieve.size() == 0)
+			return null;
+		return (UniversalId)uidsToRetrieve.remove(0);
 	}
 	
 	File retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
@@ -47,6 +56,8 @@ public class MirroringRetriever
 		return tempFile;
 	}
 	
-	BulletinRetrieverGatewayInterface gateway;
+	CallerSideMirroringGatewayInterface gateway;
 	MartusCrypto security;
+	
+	Vector uidsToRetrieve;
 }

@@ -24,17 +24,36 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		super(name);
 	}
 	
-	public void testBasics() throws Exception
+	public void setUp() throws Exception
 	{
-		MockServerDatabase db = new MockServerDatabase();
-		MartusSecurity security = new MockMartusSecurity();
+		db = new MockServerDatabase();
+		security = new MockMartusSecurity();
 		security.createKeyPair();
 		
-		FakeServerSupplier supplier = new FakeServerSupplier();
+		supplier = new FakeServerSupplier();
 		supplier.authorizedCaller = security.getPublicKeyString();
 
-		SupplierSideMirroringHandler handler = new SupplierSideMirroringHandler(supplier);
-		CallerSideMirroringGateway gateway = new CallerSideMirroringGateway(handler);
+		handler = new SupplierSideMirroringHandler(supplier);
+		gateway = new CallerSideMirroringGateway(handler);
+	}
+	
+	public void testGetNextUidToRetrieve() throws Exception
+	{
+		MirroringRetriever retriever = new MirroringRetriever(db, gateway, security);
+		assertNull("uid right after constructor?", retriever.getNextUidToRetrieve());
+		Vector uids = new Vector();
+		for(int i=0; i < 3; ++i)
+			uids.add(UniversalId.createDummyUniversalId());
+
+		retriever.uidsToRetrieve.addAll(uids);
+		for(int i=0; i < uids.size(); ++i)
+			assertEquals("wrong " + i + "?", uids.get(i), retriever.getNextUidToRetrieve());
+
+		assertNull("uid after emptied?", retriever.getNextUidToRetrieve());
+	}
+	
+	public void testRetrieveOneBulletin() throws Exception
+	{
 		supplier.returnResultTag = NetworkInterfaceConstants.OK;
 		
 		MirroringRetriever retriever = new MirroringRetriever(db, gateway, security);
@@ -46,30 +65,10 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		int expectedLength = Base64.decode(supplier.returnZipData).length;
 		assertEquals("file wrong length?", expectedLength, gotFile.length());
 	}
+
+	MockServerDatabase db;
+	MartusSecurity security;
+	FakeServerSupplier supplier;
+	SupplierSideMirroringHandler handler;
+	CallerSideMirroringGateway gateway;
 }
-
-
-class CallerSideMirroringGateway implements BulletinRetrieverGatewayInterface
-{
-	CallerSideMirroringGateway(MirroringInterface handlerToUse)
-	{
-		handler = handlerToUse;
-	}
-	
-	public NetworkResponse getBulletinChunk(MartusCrypto signer, String authorAccountId, String bulletinLocalId, 
-					int chunkOffset, int maxChunkSize) throws 
-			MartusCrypto.MartusSignatureException
-	{
-		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
-		parameters.add(authorAccountId);
-		parameters.add(bulletinLocalId);
-		parameters.add(new Integer(chunkOffset));
-		parameters.add(new Integer(maxChunkSize));
-		String signature = MartusUtilities.sign(parameters, signer);
-		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
-	}
-					
-	MirroringInterface handler;
-}
-
