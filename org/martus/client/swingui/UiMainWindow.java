@@ -73,6 +73,7 @@ import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.CurrentUiState;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
+import org.martus.client.core.Exceptions.KeyShareException;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
 import org.martus.client.swingui.bulletincomponent.UiBulletinPreview;
 import org.martus.client.swingui.bulletintable.UiBulletinTablePane;
@@ -118,6 +119,7 @@ import org.martus.swing.UiFileChooser;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.Utilities;
 import org.martus.swing.Utilities.Delay;
+import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeWriter;
 import org.martus.util.Base64.InvalidBase64Exception;
 
@@ -165,6 +167,22 @@ if(result == NEW_ACCOUNT)
 				
 			if(result == SIGNED_IN)
 				wantsNewAccount = false;
+		}
+		else
+		{
+			String title = localization.getWindowTitle("confirmRecoverUsingKeyShare");
+			String cause = localization.getFieldLabel("confirmRecoverUsingKeySharecause");
+			String effect = localization.getFieldLabel("confirmRecoverUsingKeyShareeffect");
+			String[] contents = {cause, "", effect};
+			String createNewAccountButton =  localization.getButtonLabel("CreateNewAccount");
+			String restoreFromShareButton =  localization.getButtonLabel("RestoreFromShare");
+			String[] buttons = {createNewAccountButton, restoreFromShareButton};
+			if(!confirmDlg(this, title, contents, buttons))
+			{
+				if(!recoverKeyPairFromMultipleUnencryptedFiles())
+					return false;
+				wantsNewAccount = false;
+			}		
 		}
 
 		boolean createdNewAccount = false;
@@ -440,6 +458,11 @@ if(result == NEW_ACCOUNT)
 	public boolean confirmDlg(JFrame parent, String title, String[] contents)
 	{
 		return UiUtilities.confirmDlg(getLocalization(), parent, title, contents);
+	}
+
+	public boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons)
+	{
+		return UiUtilities.confirmDlg(parent, title, contents, buttons);
 	}
 
 	public void notifyDlg(JFrame parent, String baseTag)
@@ -995,25 +1018,32 @@ if(result == NEW_ACCOUNT)
 	{
 		if(!reSignIn())
 			return;
+		if(!getAndSaveUserNamePassword(app.getCurrentKeyPairFile()))
+			return;
+
+		notifyDlg(this, "RewriteKeyPairSaved");
+		askToBackupKeyPair();
+	}
+
+	private boolean getAndSaveUserNamePassword(File keyPairFile) 
+	{
 		String originalUserName = app.getUserName();
 		UiCreateNewUserNameAndPasswordDlg newUserInfo = new UiCreateNewUserNameAndPasswordDlg(this, originalUserName);
 		if(!newUserInfo.isDataValid())
-			return;
+			return false;
 		String userName = newUserInfo.getUserName();
 		String userPassword = newUserInfo.getPassword();
 		try
 		{
-			app.writeKeyPairFile(userName, userPassword);
+			app.writeKeyPairFileWithBackup(keyPairFile, userName, userPassword);
 		}
 		catch(Exception e)
 		{
 			notifyDlg(this, "RewriteKeyPairFailed");
-			return;
+			return false;
 			//TODO eventually try to restore keypair from backup.
 		}
-
-		notifyDlg(this, "RewriteKeyPairSaved");
-		askToBackupKeyPair();
+		return true;
 	}
 
 	public void updateBulletinDetails(File defaultFile)
@@ -1311,6 +1341,74 @@ if(result == NEW_ACCOUNT)
 			}
 		}
 	}
+	
+	private boolean recoverKeyPairFromMultipleUnencryptedFiles()
+	{
+		notifyDlg(this, "RecoveryProcessKeyShare");
+		
+		int minNumber = MartusConstants.minNumberOfFilesNeededToRecreateSecret;
+		String parent = "";
+		Vector shares = new Vector();
+		for(int disk = 1; disk <= minNumber; ++disk )
+		{
+			while(true)
+			{
+				UiFileChooser chooser = new UiFileChooser();
+				String windowTitle = localization.getWindowTitle("RecoverShareKeyPair");
+				windowTitle = windowTitle + " " + Integer.toString(disk) + " " + 
+								localization.getWindowTitle("SaveRestoreShareKeyPairOf") + " " +
+								Integer.toString(minNumber);
+				chooser.setDialogTitle(windowTitle);
+				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				chooser.setSelectedFile(new File(parent,""));
+				if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
+				{
+					File shareFile = chooser.getSelectedFile();
+					parent = shareFile.getParent();
+					try 
+					{
+						UnicodeReader reader = new UnicodeReader(shareFile);
+						shares.add(reader.readAll(6));
+						reader.close();
+						break;
+					} 
+					catch (IOException e) 
+					{
+						e.printStackTrace();
+						notifyDlg(this, "RecoverShareDiskError");
+						continue;
+					}
+					
+				}
+				else
+				{
+					if(confirmDlg(this, "CancelShareRestore"))
+						return false;
+				}
+			}
+		}
+		
+		try 
+		{
+			getApp().getSecurity().recoverFromKeyShareBundles(shares);
+		} 
+		catch (KeyShareException e) 
+		{
+			e.printStackTrace();
+			if(confirmDlg(this, "RecoveredKeyShareFailedTryAgain"))
+				return recoverKeyPairFromMultipleUnencryptedFiles();
+			return false;			
+		}
+
+		notifyDlg(this, "RecoveredKeyShareSucceededNewUserNamePasswordRequired");
+
+		if(!getAndSaveUserNamePassword(app.getKeyPairFile(app.getMartusDataRootDirectory())))	
+			return false;
+		
+		notifyDlg(this, "RecoveryOfKeyShareComplete");
+
+		return true;
+	}
 
 	private void doBackupKeyPairToMultipleUnencryptedFiles() 
 	{
@@ -1337,7 +1435,7 @@ if(result == NEW_ACCOUNT)
 				UiFileChooser chooser = new UiFileChooser();
 				String windowTitle = localization.getWindowTitle("SaveShareKeyPair");
 				windowTitle = windowTitle + " " + Integer.toString(disk) + " " + 
-								localization.getWindowTitle("SaveShareKeyPairOf") + " " +
+								localization.getWindowTitle("SaveRestoreShareKeyPairOf") + " " +
 								Integer.toString(maxFiles);
 				chooser.setDialogTitle(windowTitle);
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);

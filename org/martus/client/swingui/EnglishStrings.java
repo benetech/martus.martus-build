@@ -73,6 +73,9 @@ public class EnglishStrings
 "wintitle:confirmCancelShareBackup=Cancel Backup",
 "wintitle:confirmEnterCustomFields=Customize Fields",
 "wintitle:confirmUndoCustomFields=Customize Fields",
+"wintitle:confirmRecoverUsingKeyShare=Create New Account / Recover Old Account",
+"wintitle:confirmCancelShareRestore=Cancel Restore",
+"wintitle:confirmRecoveredKeyShareFailedTryAgain=Recovery Failed",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -142,6 +145,10 @@ public class EnglishStrings
 "wintitle:notifyErrorPreviousBackupShareExists=Previous File Exists",
 "wintitle:notifyErrorInCustomFields=Customize Fields",
 "wintitle:notifyErrorBackingUpKeyShare=Error Backing Up KeyPair",				
+"wintitle:notifyRecoveryProcessKeyShare=Recover Account from KeyShare",				
+"wintitle:notifyRecoveredKeyShareSucceededNewUserNamePasswordRequired=Recovery Succeded",				
+"wintitle:notifyRecoverShareDiskError=KeyShare File Error",				
+"wintitle:notifyRecoveryOfKeyShareComplete=Recovery Complete",				
 
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -186,8 +193,9 @@ public class EnglishStrings
 "wintitle:ExportBulletinsSaveAs=Export Bulletins",
 "wintitle:BackupKeyPairToMultipleUnencryptedFilesInformation=Information on Sharing Your KeyPair",
 "wintitle:SaveShareKeyPair=Saving Share Disk",
-"wintitle:SaveShareKeyPairOf=of",
+"wintitle:SaveRestoreShareKeyPairOf=of",
 "wintitle:BackupKeyShareCompleteInformation=Backup Complete",				
+"wintitle:RecoverShareKeyPair=Recover from Share Disk",				
 
 "button:help=Help",
 "button:create=Create",
@@ -236,6 +244,8 @@ public class EnglishStrings
 "button:ServerComplianceReject=Reject",
 "button:SignIn=Sign In",
 "button:NewAccount=New Account",
+"button:CreateNewAccount=New Account",
+"button:RestoreFromShare=Restore Account",
 
 "menu:file=File",
 "menu:CreateNewBulletin=Create New Bulletin",
@@ -477,7 +487,13 @@ public class EnglishStrings
 "field:confirmEnterCustomFieldseffect=Customizing fields is an advanced operation, and can be dangerous. You should only proceed if you are certain that you understand the feature.",
 "field:confirmUndoCustomFieldscause=You have chosen to revert to the standard set of Martus fields.",
 "field:confirmUndoCustomFieldseffect=New bulletins created with this account will not have any custom fields.",
-		
+"field:confirmRecoverUsingKeySharecause=Welcome to Martus.  What would you like to do?",
+"field:confirmRecoverUsingKeyShareeffect=Create a new account, or recover an old account from floppy?",
+"field:confirmCancelShareRestorecause=Do you wish to cancel the keypair restore process?",
+"field:confirmCancelShareRestoreeffect=By choosing Yes, will exit Martus.",
+"field:confirmRecoveredKeyShareFailedTryAgaincause=Recovery of Keypair failed, we suggest you try again with a different set of files. Choose Yes to try again, No to exit Martus.",
+"field:confirmRecoveredKeyShareFailedTryAgaineffect=Choosing Yes will begin the recovery process again.",
+	
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
 "field:notifyPasteErrorNotAllowedcause=One or more bulletins cannot be pasted in that folder. This may be because of their Draft/Sealed status, or their author.",
@@ -547,6 +563,10 @@ public class EnglishStrings
 "field:notifyErrorPreviousBackupShareExistscause=A previous share file exists.  You must save each file on its own removable media disk.",		
 "field:notifyErrorInCustomFieldscause=There is an error in the field customization string. Certain standard tags are required, blank tags are not allowed, duplicate tags are not allowed, custom fields must have labels, and standard fields cannot have labels.",
 "field:notifyErrorBackingUpKeySharecause=An unexpected error occured in generating the individual key share files.",
+"field:notifyRecoveryProcessKeySharecause=You will now have to provide 2 out of the 5 files you previously saved when you backed up your keypair.",
+"field:notifyRecoveredKeyShareSucceededNewUserNamePasswordRequiredcause=Recovery of keypair succeeded!  You now have to enter a user name and password.",
+"field:notifyRecoverShareDiskErrorcause=An error occured reading this keyshare file.",
+"field:notifyRecoveryOfKeyShareCompletecause=You have successfully restored your keypair from your keyshare files.  It is very important that you now re-scatter your key share.  We also recommend you backup your keypair as an encrypted file, you do not need to recreate the multi-file keyshare.",
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occures in the future:",

@@ -67,17 +67,22 @@ public class UiUtilities
 		return confirmDlg(localization, parent, title, contents);
 	}
 
-	static boolean confirmDlg(UiLocalization localization, JFrame parent, String title, String[] contents)
+	public static boolean confirmDlg(UiLocalization localization, JFrame parent, String title, String[] contents)
 	{
 		String yes = localization.getButtonLabel("yes");
 		String no = localization.getButtonLabel("no");
 		String[] buttons = {yes, no};
 
+		return confirmDlg(parent, title, contents, buttons);
+	}
+
+	public static boolean confirmDlg(JFrame parent, String title, String[] contents, String[] buttons) 
+	{
 		UiNotifyDlg notify = new UiNotifyDlg(parent, title, contents, buttons);
 		String result = notify.getResult();
 		if(result == null)
 			return false;
-		return(result.equals(yes));
+		return(result.equals(buttons[0]));
 	}
 
 	static public void updateIcon(JFrame window)

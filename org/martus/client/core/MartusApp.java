@@ -975,13 +975,6 @@ public class MartusApp
 		createAccountInternal(getMartusDataRootDirectory(), userName, userPassPhrase);
 	}
 
-	public void writeKeyPairFile(String userName, String userPassPhrase) throws
-		IOException,
-		CannotCreateAccountFileException
-	{
-		writeKeyPairFileWithBackup(getCurrentKeyPairFile(), userName, userPassPhrase);
-	}
-
 	public boolean doesAnyAccountExist()
 	{
 		return getKeyPairFile(getMartusDataRootDirectory()).exists();
@@ -1049,7 +1042,6 @@ public class MartusApp
 		try
 		{
 			writeKeyPairFileWithBackup(keyPairFile, userName, userPassPhrase);
-			setCurrentAccount(userName);
 		}
 		catch(IOException e)
 		{
@@ -1058,11 +1050,12 @@ public class MartusApp
 		}
 	}
 
-	protected void writeKeyPairFileWithBackup(File keyPairFile, String userName, String userPassPhrase) throws
+	public void writeKeyPairFileWithBackup(File keyPairFile, String userName, String userPassPhrase) throws
 		IOException,
 		CannotCreateAccountFileException
 	{
 		writeKeyPairFileInternal(keyPairFile, userName, userPassPhrase);
+		setCurrentAccount(userName);
 		try
 		{
 			writeKeyPairFileInternal(getBackupFile(keyPairFile), userName, userPassPhrase);
@@ -1071,7 +1064,6 @@ public class MartusApp
 		{
 			System.out.println("MartusApp.writeKeyPairFileWithBackup: " + e);
 		}
-
 	}
 
 	protected void writeKeyPairFileInternal(File keyPairFile, String userName, String userPassPhrase) throws
