@@ -232,6 +232,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		table.selectFirstBulletin();
 	}
 
+	public void selectNewCurrentBulletin(int currentPosition)
+	{
+		if(currentPosition == -1)
+			table.selectLastBulletin();
+		else
+			table.setCurrentBulletinIndex(currentPosition);
+	}
+
 	public boolean confirmDlg(JFrame parent, String baseTag)
 	{
 		String title = getApp().getWindowTitle("confirm" + baseTag);

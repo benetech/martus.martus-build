@@ -44,6 +44,11 @@ public class UiBulletinTablePane extends JScrollPane
 	{
 		setCurrentBulletinIndex(0);
 	}
+
+	public void selectLastBulletin()
+	{
+		setCurrentBulletinIndex(table.getRowCount()-1);
+	}
 	
 	public int getCurrentBulletinIndex()
 	{

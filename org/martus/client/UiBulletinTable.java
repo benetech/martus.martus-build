@@ -439,6 +439,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		folderToDiscardFrom.getStore().saveFolders();
 		mainWindow.folderContentsHaveChanged(folderToDiscardFrom);
 		mainWindow.folderContentsHaveChanged(discardedFolder);
+		mainWindow.selectNewCurrentBulletin(getSelectedRow());
 	}
 
 	private boolean confirmDiscardSingleBulletin(Bulletin b)
