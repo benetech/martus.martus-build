@@ -965,7 +965,7 @@ public class TestBulletin extends TestCaseEnhanced
 		FieldDataPacket fdp = loaded.getFieldDataPacket();
 		fdp.set(Bulletin.TAGPUBLICINFO, "different public!");
 		boolean encryptPublicData = loaded.mustEncryptPublicData();
-		byte[] writePacketToDatabase = fdp.writeXmlToDatabase(db, encryptPublicData, security);
+		fdp.writeXmlToDatabase(db, encryptPublicData, security);
 		
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not invalid?", false, loaded.isValid());
@@ -988,7 +988,7 @@ public class TestBulletin extends TestCaseEnhanced
 		FieldDataPacket fdp = loaded.getPrivateFieldDataPacket();
 		fdp.set(Bulletin.TAGPRIVATEINFO, "different private!");
 		boolean encryptPublicData = loaded.mustEncryptPublicData();
-		byte[] writePacketToDatabase = fdp.writeXmlToDatabase(db, encryptPublicData, security);
+		fdp.writeXmlToDatabase(db, encryptPublicData, security);
 		
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not invalid?", false, loaded.isValid());

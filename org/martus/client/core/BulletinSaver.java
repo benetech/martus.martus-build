@@ -94,7 +94,7 @@ public class BulletinSaver
 			boolean encryptPublicData2 = mustEncryptPublicData;
 			Database db3 = db;
 			MartusCrypto signer3 = signer;
-			byte[] writePacketToDatabase = packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
+			packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
 		}
 	
 		for(int i = 0; i < b.getPendingPrivateAttachments().size(); ++i)
@@ -105,7 +105,7 @@ public class BulletinSaver
 			boolean encryptPublicData2 = mustEncryptPublicData;
 			Database db3 = db;
 			MartusCrypto signer3 = signer;
-			byte[] writePacketToDatabase = packet3.writeXmlToDatabase(db3, encryptPublicData2, signer3);
+			packet3.writeXmlToDatabase(db3, encryptPublicData2, signer3);
 		}
 	
 		bhp.updateLastSavedTime();
@@ -113,7 +113,7 @@ public class BulletinSaver
 		boolean encryptPublicData2 = mustEncryptPublicData;
 		Database db3 = db;
 		MartusCrypto signer3 = signer;
-		byte[] writePacketToDatabase = packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
+		packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
 	
 		if(bulletinAlreadyExisted)
 		{
