@@ -41,7 +41,6 @@ import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.fields.UiField;
 import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.AttachmentProxy;
-import org.martus.common.bulletin.Bulletin;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.swing.ParagraphLayout;
 
@@ -124,7 +123,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		String fieldName = fieldSpec.getTag();
 		UiField field = null;
 
-		switch(Bulletin.getFieldType(fieldName))
+		switch(fieldSpec.getType())
 		{
 			case FieldSpec.TYPE_MULTILINE:
 				field = createMultilineField();

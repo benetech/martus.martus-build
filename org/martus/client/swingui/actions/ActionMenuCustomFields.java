@@ -34,7 +34,6 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.FieldSpec;
-import org.martus.common.bulletin.Bulletin;
 
 public class ActionMenuCustomFields extends UiMenuAction
 {
@@ -81,7 +80,7 @@ public class ActionMenuCustomFields extends UiMenuAction
 			if(newTags.length() == 0)
 			{
 				if(mainWindow.confirmDlg(mainWindow, "UndoCustomFields"))
-					return Bulletin.getDefaultPublicFieldSpecs();
+					return FieldSpec.getDefaultPublicFieldSpecs();
 				continue;
 			}
  

@@ -26,21 +26,26 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.common;
 
+import java.util.Vector;
+
+import org.martus.common.bulletin.BulletinConstants;
+
 public class FieldSpec
 {
 	public FieldSpec(String thisFieldDescription, int typeToUse)
 	{
-		this(thisFieldDescription);
+		tag = extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
+		label = extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
 		type = typeToUse;
+		String unknownStuff = extractFieldSpecElement(thisFieldDescription, UNKNOWN_ELEMENT_NUMBER);
+		if(!unknownStuff.equals(""))
+			hasUnknown = true;
 	}
 
 	public FieldSpec(String thisFieldDescription)
 	{
-		tag = extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
-		label = extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
-		String unknownStuff = extractFieldSpecElement(thisFieldDescription, UNKNOWN_ELEMENT_NUMBER);
-		if(!unknownStuff.equals(""))
-			hasUnknown = true;
+		this(thisFieldDescription, TYPE_UNKNOWN);
+		type = getStandardType(tag);
 	}
 	
 	public String getTag()
@@ -51,6 +56,11 @@ public class FieldSpec
 	public String getLabel()
 	{
 		return label;
+	}
+	
+	public int getType()
+	{
+		return type;
 	}
 	
 	public boolean hasUnknownStuff()
@@ -116,6 +126,80 @@ public class FieldSpec
 		}
 		return fieldList;
 	}
+	
+	public static FieldSpec[] getDefaultPublicFieldSpecs()
+	{
+		if(defaultPublicFieldSpecs == null)
+		{
+			defaultPublicFieldSpecs = new FieldSpec[] 
+			{
+				new FieldSpec(BulletinConstants.TAGLANGUAGE, FieldSpec.TYPE_CHOICE),
+				new FieldSpec(BulletinConstants.TAGAUTHOR, FieldSpec.TYPE_NORMAL),
+				new FieldSpec(BulletinConstants.TAGORGANIZATION, FieldSpec.TYPE_NORMAL),
+				new FieldSpec(BulletinConstants.TAGTITLE, FieldSpec.TYPE_NORMAL),
+				new FieldSpec(BulletinConstants.TAGLOCATION, FieldSpec.TYPE_NORMAL), 
+				new FieldSpec(BulletinConstants.TAGKEYWORDS, FieldSpec.TYPE_NORMAL),
+				new FieldSpec(BulletinConstants.TAGEVENTDATE, FieldSpec.TYPE_DATERANGE),
+				new FieldSpec(BulletinConstants.TAGENTRYDATE, FieldSpec.TYPE_DATE),
+				new FieldSpec(BulletinConstants.TAGSUMMARY, FieldSpec.TYPE_MULTILINE),
+				new FieldSpec(BulletinConstants.TAGPUBLICINFO, FieldSpec.TYPE_MULTILINE),
+			};
+		}
+		
+		return defaultPublicFieldSpecs;
+	}
+
+	public static FieldSpec[] getDefaultPrivateFieldSpecs()
+	{
+		if(defaultPrivateFieldSpecs == null)
+		{
+			defaultPrivateFieldSpecs = new FieldSpec[]
+			{
+				new FieldSpec(BulletinConstants.TAGPRIVATEINFO, FieldSpec.TYPE_MULTILINE),
+			};
+		}
+		
+		return defaultPrivateFieldSpecs;
+	}
+
+	public static Vector getDefaultPublicFieldTags()
+	{
+		Vector tags = new Vector();
+		FieldSpec[] defaultFields = FieldSpec.getDefaultPublicFieldSpecs();
+		for (int i = 0; i < defaultFields.length; i++)
+			tags.add(defaultFields[i].getTag());
+		return tags;
+	}
+
+	public static boolean isCustomFieldTag(String tag)
+	{
+		FieldSpec[] publicSpecs = getDefaultPublicFieldSpecs();
+		for(int i=0; i < publicSpecs.length; ++i)
+			if(publicSpecs[i].getTag().equals(tag))
+				return false;
+				
+		FieldSpec[] privateSpecs = getDefaultPrivateFieldSpecs();
+		for(int i=0; i < privateSpecs.length; ++i)
+			if(privateSpecs[i].getTag().equals(tag))
+				return false;
+				
+		return true;
+	}
+	
+	public static int getStandardType(String tag)
+	{
+		FieldSpec[] publicSpecs = getDefaultPublicFieldSpecs();
+		for(int i=0; i < publicSpecs.length; ++i)
+			if(publicSpecs[i].getTag().equals(tag))
+				return publicSpecs[i].getType();
+				
+		FieldSpec[] privateSpecs = getDefaultPrivateFieldSpecs();
+		for(int i=0; i < privateSpecs.length; ++i)
+			if(privateSpecs[i].getTag().equals(tag))
+				return privateSpecs[i].getType();
+				
+		return TYPE_UNKNOWN;
+	}
 
 	String tag;
 	int type;
@@ -133,6 +217,10 @@ public class FieldSpec
 	public static final int TYPE_DATE = 2;
 	public static final int TYPE_CHOICE = 4;
 	public static final int TYPE_DATERANGE = 5;
-	public static final int TYPE_UNKNOWN = 6;
+	public static final int TYPE_BOOLEAN = 6;
+	public static final int TYPE_UNKNOWN = 99;
+
+	private static FieldSpec[] defaultPublicFieldSpecs;
+	private static FieldSpec[] defaultPrivateFieldSpecs;
 
 }

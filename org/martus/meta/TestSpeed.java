@@ -14,7 +14,7 @@ import java.io.Writer;
 import junit.framework.TestSuite;
 
 import org.martus.client.core.ClientFileDatabase;
-import org.martus.common.bulletin.Bulletin;
+import org.martus.common.FieldSpec;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
@@ -217,7 +217,7 @@ public class TestSpeed extends TestCaseEnhanced
 	public void testXmlPlain() throws Exception
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(security.getPublicKeyString(), "localId");
-		FieldDataPacket fdp = new FieldDataPacket(uid, Bulletin.getDefaultPublicFieldSpecs());
+		FieldDataPacket fdp = new FieldDataPacket(uid, FieldSpec.getDefaultPublicFieldSpecs());
 		
 		Writer writerPlain = new StringWriter();
 		
@@ -239,7 +239,7 @@ public class TestSpeed extends TestCaseEnhanced
 	public void testXmlEncrypted() throws Exception
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(security.getPublicKeyString(), "localId");
-		FieldDataPacket fdp = new FieldDataPacket(uid, Bulletin.getDefaultPublicFieldSpecs());
+		FieldDataPacket fdp = new FieldDataPacket(uid, FieldSpec.getDefaultPublicFieldSpecs());
 		
 		Writer writerEncrypted = new StringWriter();
 		

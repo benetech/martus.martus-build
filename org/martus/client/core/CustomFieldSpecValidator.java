@@ -29,7 +29,6 @@ package org.martus.client.core;
 import java.util.Vector;
 
 import org.martus.common.FieldSpec;
-import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 
 public class CustomFieldSpecValidator
@@ -118,7 +117,7 @@ public class CustomFieldSpecValidator
 		{
 			FieldSpec spec = specsToCheck[i]; 
 			String tag = spec.getTag();
-			if(isCustomFieldTag(tag) && spec.getLabel().equals(""))
+			if(FieldSpec.isCustomFieldTag(tag) && spec.getLabel().equals(""))
 				customTagsWithoutLabels.add(tag);
 		}
 	}
@@ -130,17 +129,9 @@ public class CustomFieldSpecValidator
 		{
 			FieldSpec spec = specsToCheck[i]; 
 			String tag = spec.getTag();
-			if(!isCustomFieldTag(tag) && !spec.getLabel().equals(""))
+			if(!FieldSpec.isCustomFieldTag(tag) && !spec.getLabel().equals(""))
 				standardTagsWithLabels.add(tag);
 		}
-	}
-	
-	private boolean isCustomFieldTag(String tag)
-	{
-		Vector standardTags = Bulletin.getDefaultPublicFieldTags();
-		if(standardTags.contains(tag))
-			return false;
-		return true;
 	}
 	
 	boolean isNull;

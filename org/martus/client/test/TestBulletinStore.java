@@ -108,7 +108,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testGetStandardFieldNames()
 	{
-		FieldSpec[] publicFields = Bulletin.getDefaultPublicFieldSpecs();
+		FieldSpec[] publicFields = FieldSpec.getDefaultPublicFieldSpecs();
 		Set publicTags = new HashSet();
 		for(int i = 0; i < publicFields.length; ++i)
 			publicTags.add(publicFields[i].getTag());
@@ -118,7 +118,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(true, publicTags.contains("language"));
 		assertEquals(true, publicTags.contains("organization"));
 
-		FieldSpec[] privateFields = Bulletin.getDefaultPrivateFieldSpecs();
+		FieldSpec[] privateFields = FieldSpec.getDefaultPrivateFieldSpecs();
 		Set privateTags = new HashSet();
 		for(int i = 0; i < privateFields.length; ++i)
 			privateTags.add(privateFields[i].getTag());

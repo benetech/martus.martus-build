@@ -695,8 +695,8 @@ public class BulletinStore
 
 		createSystemFolders();
 	
-		publicFieldTags = Bulletin.getDefaultPublicFieldSpecs();
-		privateFieldTags = Bulletin.getDefaultPrivateFieldSpecs();
+		publicFieldTags = FieldSpec.getDefaultPublicFieldSpecs();
+		privateFieldTags = FieldSpec.getDefaultPrivateFieldSpecs();
 	}
 	
 	public void setPublicFieldTags(FieldSpec[] newTags)

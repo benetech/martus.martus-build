@@ -205,14 +205,33 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testGetFieldType()
 	{
-		assertEquals(FieldSpec.TYPE_NORMAL, Bulletin.getFieldType("author"));
-		assertEquals(FieldSpec.TYPE_MULTILINE, Bulletin.getFieldType("summary"));
-		assertEquals(FieldSpec.TYPE_MULTILINE, Bulletin.getFieldType("publicinfo"));
-		assertEquals(FieldSpec.TYPE_MULTILINE, Bulletin.getFieldType("privateinfo"));
-		assertEquals(FieldSpec.TYPE_DATERANGE, Bulletin.getFieldType("eventdate"));
-		assertEquals(FieldSpec.TYPE_DATE, Bulletin.getFieldType("entrydate"));
-		assertEquals(FieldSpec.TYPE_CHOICE, Bulletin.getFieldType("language"));
+		FieldSpec[] standardPublicFields = FieldSpec.getDefaultPublicFieldSpecs();
+		for (int i = 0; i < standardPublicFields.length; i++)
+		{
+			FieldSpec spec = standardPublicFields[i];
+			if(spec.getTag().equals("summary"))
+				assertEquals(spec.getTag(), FieldSpec.TYPE_MULTILINE, spec.getType());
+			else if(spec.getTag().equals("publicinfo"))
+				assertEquals(spec.getTag(), FieldSpec.TYPE_MULTILINE, spec.getType());
+			else if(spec.getTag().equals("eventdate"))
+				assertEquals(spec.getTag(), FieldSpec.TYPE_DATERANGE, spec.getType());
+			else if(spec.getTag().equals("entrydate"))
+				assertEquals(spec.getTag(), FieldSpec.TYPE_DATE, spec.getType());
+			else if(spec.getTag().equals("language"))
+				assertEquals(spec.getTag(), FieldSpec.TYPE_CHOICE, spec.getType());
+			else
+				assertEquals(spec.getTag(), FieldSpec.TYPE_NORMAL, spec.getType());
+		}
 
+		FieldSpec[] standardPrivateFields = FieldSpec.getDefaultPrivateFieldSpecs();
+		for (int i = 0; i < standardPrivateFields.length; i++)
+		{
+			FieldSpec spec = standardPrivateFields[i];
+			if(spec.getTag().equals("privateinfo"))
+				assertEquals(spec.getTag(), FieldSpec.TYPE_MULTILINE, spec.getType());
+			else
+				assertEquals(spec.getTag(), FieldSpec.TYPE_NORMAL, spec.getType());
+		}
 	}
 
 	public void testEncryptPublicData() throws Exception

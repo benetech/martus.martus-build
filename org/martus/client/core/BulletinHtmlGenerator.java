@@ -88,13 +88,14 @@ public class BulletinHtmlGenerator
 		String sectionHtml = "";
 		for(int fieldNum = 0; fieldNum < standardFieldTags.length; ++fieldNum)
 		{
-			String tag = standardFieldTags[fieldNum].getTag();
+			FieldSpec spec = standardFieldTags[fieldNum];
+			String tag = spec.getTag();
 			String value = MartusUtilities.getXmlEncoded(b.get(tag));
-			if(Bulletin.getFieldType(tag) == FieldSpec.TYPE_DATE)
+			if(spec.getType() == FieldSpec.TYPE_DATE)
 				value = localization.convertStoredDateToDisplay(value);
-			else if(Bulletin.getFieldType(tag) == FieldSpec.TYPE_CHOICE)
+			else if(spec.getType() == FieldSpec.TYPE_CHOICE)
 				value = localization.getLanguageName(value);
-			else if(Bulletin.getFieldType(tag) == FieldSpec.TYPE_MULTILINE)
+			else if(spec.getType() == FieldSpec.TYPE_MULTILINE)
 				value = insertNewlines(value);
 
 			String fieldHtml = getFieldHtmlString(tag, value);

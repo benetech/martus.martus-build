@@ -34,7 +34,6 @@ import java.io.Serializable;
 import java.util.Vector;
 
 import org.martus.common.FieldSpec;
-import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 
@@ -105,7 +104,7 @@ public class ConfigInfo implements Serializable
 		sendContactInfoToServer = false;
 		mustAskUserToSendToServer = false;
 		serverCompliance = "";
-		customFieldSpecs = FieldSpec.buildFieldListString(Bulletin.getDefaultPublicFieldSpecs());
+		customFieldSpecs = FieldSpec.buildFieldListString(FieldSpec.getDefaultPublicFieldSpecs());
 	}
 
 	public Vector getContactInfo(MartusCrypto signer) throws

@@ -30,7 +30,6 @@ import javax.swing.table.AbstractTableModel;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.packet.UniversalId;
@@ -101,8 +100,8 @@ public class BulletinTableModel extends AbstractTableModel
 		{
 			value = localization.getStatusLabel(value);
 		}
-	 	if(Bulletin.getFieldType(fieldTag) == FieldSpec.TYPE_DATE || 
-				Bulletin.getFieldType(fieldTag) == FieldSpec.TYPE_DATERANGE)
+	 	if(fieldTag.equals(Bulletin.TAGENTRYDATE) || 
+				fieldTag.equals(Bulletin.TAGEVENTDATE))
 		{
 			value = localization.convertStoredDateToDisplay(value);
 		}

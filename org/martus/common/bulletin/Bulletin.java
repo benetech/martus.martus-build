@@ -60,7 +60,7 @@ public class Bulletin implements BulletinConstants
 
 	public Bulletin(MartusCrypto securityToUse)
 	{
-		this(securityToUse, Bulletin.getDefaultPublicFieldSpecs(), Bulletin.getDefaultPrivateFieldSpecs());
+		this(securityToUse, FieldSpec.getDefaultPublicFieldSpecs(), FieldSpec.getDefaultPrivateFieldSpecs());
 	}
 	
 	public Bulletin(MartusCrypto securityToUse, FieldSpec[] publicFieldSpecs, FieldSpec[] privateFieldSpecs)
@@ -323,27 +323,6 @@ public class Bulletin implements BulletinConstants
 		return fieldData.getFieldCount();
 	}
 
-	public static int getFieldType(String fieldName)
-	{
-		String lookFor = fieldName.toLowerCase();
-
-		if(lookFor.equals(TAGSUMMARY) ||
-				lookFor.equals(TAGPUBLICINFO) ||
-				lookFor.equals(TAGPRIVATEINFO) )
-			return FieldSpec.TYPE_MULTILINE;
-
-		if(lookFor.equals(TAGENTRYDATE))
-			return FieldSpec.TYPE_DATE;
-			
-		if(lookFor.equals(TAGEVENTDATE))
-			return FieldSpec.TYPE_DATERANGE;
-					
-		if(lookFor.equals(TAGLANGUAGE))
-			return FieldSpec.TYPE_CHOICE;
-
-		return FieldSpec.TYPE_NORMAL;
-	}
-
 	public boolean isAllPrivate()
 	{
 
@@ -506,40 +485,6 @@ public class Bulletin implements BulletinConstants
 		return pendingPrivateAttachments;
 	}
 	
-	public static Vector getDefaultPublicFieldTags()
-	{
-		Vector tags = new Vector();
-		tags.add(BulletinConstants.TAGLANGUAGE);
-		tags.add(BulletinConstants.TAGAUTHOR);
-		tags.add(BulletinConstants.TAGORGANIZATION);
-		tags.add(BulletinConstants.TAGTITLE);
-		tags.add(BulletinConstants.TAGLOCATION); 
-		tags.add(BulletinConstants.TAGKEYWORDS);
-		tags.add(BulletinConstants.TAGEVENTDATE); 
-		tags.add(BulletinConstants.TAGENTRYDATE);
-		tags.add(BulletinConstants.TAGSUMMARY);
-		tags.add(BulletinConstants.TAGPUBLICINFO);
-		return tags;
-	}
-	
-	public static FieldSpec[] getDefaultPublicFieldSpecs()
-	{
-		Vector tags = getDefaultPublicFieldTags();
-		FieldSpec[] specs = new FieldSpec[tags.size()];
-		for(int i=0; i < tags.size(); ++i)
-			specs[i] = new FieldSpec((String)tags.get(i));
-			
-		return specs;
-	}
-
-	public static FieldSpec[] getDefaultPrivateFieldSpecs()
-	{
-		return new FieldSpec[]
-		{
-			new FieldSpec(BulletinConstants.TAGPRIVATEINFO),
-		};
-	}
-
 	private boolean encryptedFlag;
 	private boolean isFromDatabase;
 	private boolean isValidFlag;
