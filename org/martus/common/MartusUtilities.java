@@ -262,44 +262,21 @@ public class MartusUtilities
 	public static void exportPublicKey(MartusCrypto security, File outputfile)
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
-		ByteArrayInputStream in = null;
-		UnicodeWriter writer = null;
+		String publicKeyString = security.getPublicKeyString();
+		byte[] publicKeyBytes = Base64.decode(publicKeyString);
+
+		ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
+		byte[] sigBytes = security.createSignature(in);
+
+		UnicodeWriter writer = new UnicodeWriter(outputfile);
 		try
 		{
-			String publicKeyString = security.getPublicKeyString();
-			byte[] publicKeyBytes = Base64.decode(publicKeyString);
-			in = new ByteArrayInputStream(publicKeyBytes);
-			byte[] sigBytes = security.createSignature(in);
-
-			writer = new UnicodeWriter(outputfile);
 			writer.writeln(publicKeyString);
 			writer.writeln(Base64.encode(sigBytes));
 		}
 		finally
 		{
-			if( in != null )
-			{
-				try
-				{
-					in.close();
-				}
-				catch (IOException ignored)
-				{
-					;
-				}
-			}
-
-			if(writer != null)
-			{
-				try
-				{
-					writer.close();
-				}
-				catch(IOException ignored)
-				{
-					;
-				}
-			}
+			writer.close();
 		}
 	}
 
