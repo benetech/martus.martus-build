@@ -1423,14 +1423,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public Delay(int sec)
 		{
-			timeInSeconds = sec * 1000;
+			timeInMillis = sec * 1000;
 		}
 
 		public void run()
 		{
 			try
 			{
-				sleep(timeInSeconds);
+				sleep(timeInMillis);
 			}
 			catch(InterruptedException e)
 			{
@@ -1438,7 +1438,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 		}
 		
-		private int timeInSeconds;
+		private int timeInMillis;
 	}
 
 	class ActionCreate extends AbstractAction
