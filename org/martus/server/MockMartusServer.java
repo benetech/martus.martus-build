@@ -251,5 +251,5 @@ public class MockMartusServer extends MartusServer
 		
 		private String authenticateResponse;
 		
-		String dataDirectoryString;
+		public String dataDirectoryString;
 }

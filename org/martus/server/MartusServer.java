@@ -1473,7 +1473,7 @@ public class MartusServer
 	}
 
 
-	void extractPacketsToZipStream(String clientId, DatabaseKey[] packetKeys, OutputStream outputStream) throws 
+	public void extractPacketsToZipStream(String clientId, DatabaseKey[] packetKeys, OutputStream outputStream) throws 
 		IOException, 
 		UnsupportedEncodingException 
 	{
@@ -1735,8 +1735,8 @@ public class MartusServer
 	public Vector clientsThatCanUpload;
 	public MartusCrypto security;
 	File keyPairFile;
-	File allowUploadFile;
-	File magicWordsFile;
+	public File allowUploadFile;
+	public File magicWordsFile;
 	private String magicWord;
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;

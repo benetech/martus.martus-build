@@ -1,5 +1,7 @@
 package org.martus.server;
 
+import org.martus.meta.*;
+
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
