@@ -20,10 +20,11 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 
 	protected void setUp() throws Exception
 	{
+		security = MockMartusSecurity.createServer(); 
 		tempDirectory = createTempFile();
 		tempDirectory.delete();
 		tempDirectory.mkdir(); 
-		fileDatabase = new ServerFileDatabase(tempDirectory, MockMartusSecurity.createServer());
+		fileDatabase = new ServerFileDatabase(tempDirectory, security);
 		fileDatabase.initialize();
 		mockDatabase = new MockServerDatabase();
 	}
@@ -115,8 +116,41 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		db.deleteAllData();
 	}
 	
+	public void testOpenInputStreamHidden() throws Exception
+	{
+		verifyOpenInputStreamHidden(mockDatabase);
+		verifyOpenInputStreamHidden(fileDatabase);
+	}
+	
+	void verifyOpenInputStreamHidden(Database db) throws Exception
+	{
+		UniversalId draftUid = UniversalId.createDummyUniversalId();
+		DatabaseKey draftKey = DatabaseKey.createDraftKey(draftUid);
+		db.writeRecord(draftKey, "test");
+		db.hide(draftUid);
+		assertNull("opened stream for hidden?", db.openInputStream(draftKey, security));
+		db.deleteAllData();
+	}
+	
+	public void testReadRecordHidden() throws Exception
+	{
+		verifyReadRecordHidden(mockDatabase);
+		verifyReadRecordHidden(fileDatabase);
+	}
+	
+	void verifyReadRecordHidden(Database db) throws Exception
+	{
+		UniversalId draftUid = UniversalId.createDummyUniversalId();
+		DatabaseKey draftKey = DatabaseKey.createDraftKey(draftUid);
+		db.writeRecord(draftKey, "test");
+		db.hide(draftUid);
+		assertNull("able to read hidden?", db.readRecord(draftKey, security));
+		db.deleteAllData();
+	}
+	
 	// TODO: need to test BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase
 
+	MockMartusSecurity security;
 	File tempDirectory;	
 	Database fileDatabase;
 	Database mockDatabase;
