@@ -21,7 +21,7 @@ public class ChangeServerPassphrase
 			System.out.println("ChangeServerPassphrase:\nThis program will replace your keypair.dat file."
 				+ "\nWe strongly recommend that you make sure you have a backup copy before running this program. "
 				+ "\nAlso, after successfully changing the password, we strongly recommend that you create a backup of the new keypair.dat file.\n");
-			File dataDirectory = MartusServer.getDataDirectory();
+			File dataDirectory = MartusServer.getDefaultDataDirectory();
 			String keyPairFilename = MartusServer.getKeypairFilename();
 			File keyPairFile = new File(dataDirectory, keyPairFilename);
 			if(!keyPairFile.exists())

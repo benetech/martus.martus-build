@@ -63,7 +63,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		System.out.println("MartusServer");
 
-		File dataDirectory = getDataDirectory();		
+		File dataDirectory = getDefaultDataDirectory();		
 		
 		Database diskDatabase = null;
 		try
@@ -242,6 +242,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(dataDirectory, getKeypairFilename());
+		shutdownFile = new File(dataDirectory, MARTUSSHUTDOWNFILENAME);
 
 		moderateTimer = new Timer(true);
 		TimerTask bannedClientsTaskMonitor = new BannedClientsMonitor();
@@ -1473,7 +1474,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		security.writeKeyPair(out, passphrase);
 	}
 	
-	public static File getDataDirectory()
+	public static File getDefaultDataDirectory()
 	{
 		String dataDirectory = null;
 		if(System.getProperty("os.name").indexOf("Windows") >= 0)
@@ -1692,12 +1693,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public boolean isShutdownRequested()
 	{
-			File shutdownFile = new File(getDataDirectory(), MARTUSSHUTDOWNFILENAME);
-			if( shutdownFile.exists() )
-			{
-				return true;
-			}
-			return false;
+		return(shutdownFile.exists());
 	}
 	
 	public synchronized int getNumberActiveClients()
@@ -1991,7 +1987,6 @@ public class MartusServer implements NetworkInterfaceConstants
 				logging("Shutdown request received.");
 				
 				clientsThatCanUpload.clear();				
-				File shutdownFile = new File(getDataDirectory(), MARTUSSHUTDOWNFILENAME);
 				shutdownFile.delete();
 				logging("Server has exited.");
 				try
@@ -2017,11 +2012,12 @@ public class MartusServer implements NetworkInterfaceConstants
 	public File allowUploadFile;
 	public File magicWordsFile;
 	public File bannedClientsFile;
+	public File shutdownFile;
 	private Timer moderateTimer;
 	private Timer frequentTimer;
 	private Vector magicWords;
 	private long bannedClientsFileLastModified;
-	private static int activeClientsCounter;
+	private int activeClientsCounter;
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;

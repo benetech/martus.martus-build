@@ -12,7 +12,7 @@ public class ShowServerAccountList
 
 	public static void main(String[] args) throws FileDatabase.MissingAccountMapException
 	{
-		File dataDirectory = MartusServer.getDataDirectory();		
+		File dataDirectory = MartusServer.getDefaultDataDirectory();		
 		
 		FileDatabase fileDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"));
 		fileDatabase.visitAllAccounts(new AccountVisitor());

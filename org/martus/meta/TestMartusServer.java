@@ -153,11 +153,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer = new MockMartusServer();
 		testServerInterface = new ServerSideNetworkHandler(testServer);
 		db = (MockServerDatabase)testServer.getDatabase();
-
 	}
 	
 	public void tearDown() throws Exception
 	{
+		assertEquals("isShutdownRequested", false, testServer.isShutdownRequested());
 		testServer.deleteAllFiles();
 	}
 	
@@ -1858,20 +1858,18 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String hqId = hqSecurity.getPublicKeyString();	
 		String bogusStringParameter = "this is never used in this call. right?";
 		
-		result = testServer.isShutdownRequested();
-		assertEquals("isShutdownRequested 1", false, result );
+		assertEquals("isShutdownRequested 1", false, testServer.isShutdownRequested());
 		
 		assertEquals("testServerShutdown: incrementActiveClientsCounter 1", 0, testServer.getNumberActiveClients() );
 		
 		testServer.incrementActiveClientsCounter();
 		assertEquals("testServerShutdown: incrementActiveClientsCounter 2", 1, testServer.getNumberActiveClients() );
-		File exitFile = new File(testServer.getDataDirectory(), "exit");
+		File exitFile = testServer.shutdownFile;
 		exitFile.createNewFile();
 		
 		testServer.allowUploads(clientId);
 
-		result = testServer.isShutdownRequested();
-		assertEquals("isShutdownRequested 2", true, result );
+		assertEquals("isShutdownRequested 2", true, testServer.isShutdownRequested());
 
 		Vector vecResult = testServer.legacyListMySealedBulletinIds(clientId);
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
@@ -1936,8 +1934,10 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		vecResult = testServer.listFieldOfficeAccounts(clientId);
 		verifyErrorResult("listFieldOfficeAccounts", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listFieldOfficeAccounts", 1, testServer.getNumberActiveClients() );
-		
+
 		exitFile.delete();
+
+		assertEquals("isShutdownRequested 3", false, testServer.isShutdownRequested());
 				
 		testServer.decrementActiveClientsCounter();
 		assertEquals("testServerShutdown: clientCount", 0, testServer.getNumberActiveClients() );	
@@ -1961,14 +1961,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Vector reply;
 		
 		testServer.incrementActiveClientsCounter();
-		File exitFile = new File(testServer.getDataDirectory(), "exit");
+		File exitFile = testServer.shutdownFile;
 		exitFile.createNewFile();
 		
 		reply = testServer.getServerInformation();
 		assertEquals("getServerInformation", NetworkInterfaceConstants.SERVER_DOWN, reply.get(0) );
-		
-		testServer.decrementActiveClientsCounter();
+
 		exitFile.delete();
+		testServer.decrementActiveClientsCounter();
 	}
 	
 	void verifyErrorResult(String label, Vector vector, String expected )
