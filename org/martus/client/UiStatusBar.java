@@ -22,17 +22,16 @@ public class UiStatusBar extends JPanel
 		horizontalBox = Box.createHorizontalBox();
 		statusMessage = new JLabel( " ", JLabel.LEFT );
 		statusMessage.setBorder( new BevelBorder( BevelBorder.LOWERED ));
-		statusMessage.setPreferredSize(new Dimension(50,20));
 		horizontalBox.add( statusMessage );
 		
-		progressMeter = new JProgressBar( 0, 10);
-		progressMeter.setMaximumSize(new Dimension(100,20));
+		progressMeter = new JProgressBar(0, 10);
+		progressMeter.setMaximumSize(new Dimension(100, 20));
 		progressMeter.setStringPainted(true);
 		progressMeter.setBorder( new BevelBorder( BevelBorder.LOWERED ));
 		horizontalBox.add( progressMeter );
-		progressMeter.setValue(6);
 	
 		blankStatus();
+		hideProgressMeter();
 		add(horizontalBox);
 	}
 	
@@ -41,9 +40,22 @@ public class UiStatusBar extends JPanel
 		statusMessage.setText(message);
 	}
 	
+	public void updateProgressMeter(String message, int currentValue, int maxValue)
+	{
+		statusMessage.setText(message);
+		progressMeter.setValue(currentValue);
+		progressMeter.setMaximum(maxValue);
+		progressMeter.setVisible(true);
+	}
+	
 	public void blankStatus()
 	{
 		statusMessage.setText("          ");
+	}
+
+	
+	public void hideProgressMeter()
+	{
 		progressMeter.setVisible(false);
 	}
 	

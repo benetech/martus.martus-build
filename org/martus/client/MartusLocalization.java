@@ -488,8 +488,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:ContactInfoRequired=This information identifies your organization.\nCurrently the only required field is Source, which gets displayed in every bulletin you create.");
 		addEnglishTranslation("field:ContactInfoDescriptionOfFields=All other fields currently are stored on disk but are not used.");
 		addEnglishTranslation("field:ContactInfoFutureUseOfFields=In the future this information will be available to anyone who can view your public bulletin information.\nThis allows people to contact you for further information.");
-		
 		addEnglishTranslation("field:ContactInfoUpdateLater=You can change any of this information later, by choosing Options/Contact Info.");
+		addEnglishTranslation("field:UploadingSealedBulletin=Uploading Sealed Bulletin");
+		addEnglishTranslation("field:UploadingDraftBulletin=Uploading Draft Bulletin");
 
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");

@@ -496,6 +496,11 @@ public class MartusApp
 		Date uploaded = getLastUploadedTime();
 		setUploadInfoElements(uploaded, reminded);
 	}
+	
+	public void setProgressMeter(UiStatusBar meter)
+	{
+		progressMeter = meter;	
+	}
 
 	public void resetLastUploadedTime()
 	{
@@ -667,6 +672,15 @@ public class MartusApp
 
 			while(true)
 			{
+				if(progressMeter != null)
+				{	
+					String message;
+					if(b.isDraft())
+						message = getFieldLabel("UploadingDraftBulletin");
+					else
+						message = getFieldLabel("UploadingSealedBulletin");
+					progressMeter.updateProgressMeter(message, offset, totalSize);
+				}
 				int chunkSize = inputStream.read(rawBytes);
 				if(chunkSize <= 0)
 					break;
@@ -1477,5 +1491,6 @@ public class MartusApp
 	public int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 	private String currentLanguage;
 	private String currentDateFormat;
+	private UiStatusBar progressMeter;
 }
 
