@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -292,8 +292,8 @@ public class MartusLocalization
 
 	private static final String ENGLISH = "en";
 	public static final String[] ALL_LANGUAGE_CODES = {
-				"?", "en", "ar", 
-				"az", "bn", "my","zh", "nl", "eo", "fr", "de","gu","ha","he","hi","hu", 
-				"it", "ja","jv","kn","ko","ml","mr","or","pa","pl","pt","ro","ru","sr", 
+				"?", "en", "ar",
+				"az", "bn", "my","zh", "nl", "eo", "fr", "de","gu","ha","he","hi","hu",
+				"it", "ja","jv","kn","ko","ml","mr","or","pa","pl","pt","ro","ru","sr",
 				"sr", "sd","si","es","ta","te", "th","tr","uk","ur","vi"};
 }

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -44,7 +44,7 @@ abstract public class Database
 	{
 		void visit(DatabaseKey key);
 	}
-	
+
 	public interface AccountVisitor
 	{
 		void visit(String accountString);
@@ -68,17 +68,17 @@ abstract public class Database
 	abstract public File getOutgoingInterimFile(DatabaseKey key) throws IOException;
 	abstract public File getContactInfoFile(String accountId) throws IOException;
 	abstract public int getRecordSize(DatabaseKey key) throws IOException;
-	
+
 	abstract public boolean isInQuarantine(DatabaseKey key);
 	abstract public void moveRecordToQuarantine(DatabaseKey key);
-	
+
 	public boolean mustEncryptLocalData()
 	{
 		return false;
 	}
 
-	boolean isEncryptedRecordStream(InputStreamWithSeek in) throws 
-			IOException 
+	boolean isEncryptedRecordStream(InputStreamWithSeek in) throws
+			IOException
 	{
 		int flagByte = in.read();
 		in.seek(0);
@@ -95,12 +95,12 @@ abstract public class Database
 	{
 		if(!isEncryptedRecordStream(in))
 			return in;
-			
+
 		in.read(); //throwAwayFlagByte
 		ByteArrayOutputStream decryptedOut = new ByteArrayOutputStream();
 		decrypter.decrypt(in, decryptedOut);
 		in.close();
-		
+
 		byte[] bytes = decryptedOut.toByteArray();
 		return new ByteArrayInputStreamWithSeek(bytes);
 	}

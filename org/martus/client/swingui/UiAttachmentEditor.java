@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -62,7 +62,7 @@ public class UiAttachmentEditor extends JPanel
 		Box vbox = Box.createVerticalBox();
 
 		vbox.add(new JScrollPane(table));
-		
+
 		MartusApp app = mainWindowToUse.getApp();
 		JButton add = new JButton(app.getButtonLabel("addattachment"));
 		add.addActionListener(new AddHandler());
@@ -85,12 +85,12 @@ public class UiAttachmentEditor extends JPanel
 	{
 		return model.getAttachments();
 	}
-	
+
 	public void addAttachment(AttachmentProxy a)
 	{
 		model.add(a);
 	}
-	
+
 	public void clearAttachments()
 	{
 		model.clear();
@@ -102,14 +102,14 @@ public class UiAttachmentEditor extends JPanel
 		{
 			attachmentList = new Vector();
 		}
-		
+
 		void clear()
 		{
 			attachmentList.clear();
 			remove.setEnabled(false);
 			fireTableDataChanged();
 		}
-		
+
 		public void add(AttachmentProxy a)
 		{
 			attachmentList.add(a);
@@ -130,7 +130,7 @@ public class UiAttachmentEditor extends JPanel
 			AttachmentProxy[] list = new AttachmentProxy[attachmentList.size()];
 			for(int i = 0; i < list.length; ++i)
 				list[i] = (AttachmentProxy)attachmentList.get(i);
-				
+
 			return list;
 		}
 
@@ -163,10 +163,10 @@ public class UiAttachmentEditor extends JPanel
 		{
 			return false;
 		}
-		
+
 		private Vector attachmentList;
 	}
-	
+
 	class AddHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)

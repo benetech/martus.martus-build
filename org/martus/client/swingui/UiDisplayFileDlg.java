@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -63,7 +63,7 @@ public class UiDisplayFileDlg extends JDialog
 		if(message == null)
 		{
 			dispose();
-			return;	
+			return;
 		}
 
 		msgArea = new UiWrappedTextArea(owner, message);
@@ -123,8 +123,8 @@ public class UiDisplayFileDlg extends JDialog
 				message.append('\n');
 			}
 			reader.close();
-		} 
-		catch(IOException e) 
+		}
+		catch(IOException e)
 		{
 			System.out.println("UiDisplayFileDlg: " + e);
 			return null;
@@ -160,7 +160,7 @@ public class UiDisplayFileDlg extends JDialog
 		return message;
 	}
 
-	
+
 	public void findAndScrollToItem()
 	{
 		msgArea.setCaretPosition(message.length());
@@ -171,7 +171,7 @@ public class UiDisplayFileDlg extends JDialog
 		msgArea.setCaretPosition(foundAt);
 	}
 
-	class ListHandler implements ListSelectionListener 
+	class ListHandler implements ListSelectionListener
 	{
 		public void valueChanged(ListSelectionEvent arg0)
 		{
@@ -186,24 +186,24 @@ public class UiDisplayFileDlg extends JDialog
 			dispose();
 		}
 	}
-	class MakeEnterKeyExit extends KeyAdapter 
+	class MakeEnterKeyExit extends KeyAdapter
 	{
-		public void keyPressed(KeyEvent ke) 
+		public void keyPressed(KeyEvent ke)
 		{
 			if (ke.getKeyCode() == KeyEvent.VK_ENTER)
 				dispose();
-		} 
+		}
 	}
 
-	class TabToOkButton extends KeyAdapter 
+	class TabToOkButton extends KeyAdapter
 	{
-		public void keyPressed(KeyEvent ke) 
+		public void keyPressed(KeyEvent ke)
 		{
 			if (ke.getKeyCode() == KeyEvent.VK_TAB)
 			{
-				ok.requestFocus();	
+				ok.requestFocus();
 			}
-		} 
+		}
 	}
 	String message;
 	JButton ok;

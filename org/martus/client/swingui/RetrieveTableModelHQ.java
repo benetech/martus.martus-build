@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ import org.martus.client.core.MartusApp;
 
 public abstract class RetrieveTableModelHQ extends RetrieveTableModel {
 
-	public RetrieveTableModelHQ(MartusApp appToUse) 
+	public RetrieveTableModelHQ(MartusApp appToUse)
 	{
 		super(appToUse);
 	}

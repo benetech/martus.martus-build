@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ abstract public class MockDatabase extends Database
 	{
 		deleteAllData();
 	}
-	
+
 	public int getOpenStreamCount()
 	{
 		return streamsThatAreOpen.size();
@@ -57,10 +57,10 @@ abstract public class MockDatabase extends Database
 	// Database interface
 	public void initialize() throws FileVerificationException, MissingAccountMapException
 	{}
-	
+
 	public void signAccountMap()
 	{}
-	
+
 	synchronized public void deleteAllData()
 	{
 		sealedQuarantine = new TreeMap();
@@ -73,10 +73,10 @@ abstract public class MockDatabase extends Database
 	{
 		if(key == null || record == null)
 			throw new IOException("Null parameter");
-			
+
 		addKeyToMap(key, record);
 	}
-	
+
 	public void importFiles(HashMap fileMapping) throws IOException
 	{
 		Iterator keys = fileMapping.keySet().iterator();
@@ -84,14 +84,14 @@ abstract public class MockDatabase extends Database
 		{
 			DatabaseKey key = (DatabaseKey) keys.next();
 			File file = (File) fileMapping.get(key);
-			
+
 			InputStream in = new FileInputStream(file.getAbsolutePath());
 			writeRecord(key,in);
 			in.close();
 			file.delete();
 		}
 	}
-	
+
 	public int getRecordSize(DatabaseKey key) throws IOException
 	{
 		try
@@ -104,7 +104,7 @@ abstract public class MockDatabase extends Database
 		}
 	}
 
-	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
+	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws
 			IOException
 	{
 		writeRecord(key, record);
@@ -133,20 +133,20 @@ abstract public class MockDatabase extends Database
 		String data = readRecord(key, decrypter);
 		if(data == null)
 			return null;
-			
-		try 
+
+		try
 		{
 			byte[] bytes = data.getBytes("UTF-8");
 			MockRecordInputStream in = new MockRecordInputStream(key, bytes, streamsThatAreOpen);
 			return convertToDecryptingStreamIfNecessary(in, decrypter);
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			System.out.println("MockDatabase.openInputStream: " + e);
 			return null;
 		}
 	}
-	
+
 	public String readRecord(DatabaseKey key, MartusCrypto decrypter)
 	{
 		return readRecord(key);
@@ -204,7 +204,7 @@ abstract public class MockDatabase extends Database
 			}
 		}
 	}
-	
+
 	public void visitAllRecordsForAccount(PacketVisitor visitor, String accountString)
 	{
 		class FilterByAccount implements PacketVisitor
@@ -214,17 +214,17 @@ abstract public class MockDatabase extends Database
 				realVisitor = realVisitorToUse;
 				accountId = accountIdToVisit;
 			}
-			
+
 			public void visit(DatabaseKey key)
 			{
 				if(key.getAccountId().equals(accountId))
 					realVisitor.visit(key);
 			}
-			
+
 			String accountId;
 			PacketVisitor realVisitor;
 		}
-		
+
 		FilterByAccount filter = new FilterByAccount(visitor, accountString);
 		visitAllRecords(filter);
 	}
@@ -235,7 +235,7 @@ abstract public class MockDatabase extends Database
 		DatabaseKey key = DatabaseKey.createSealedKey(uid);
 		File file = getInterimFile(key, incomingInterimMap);
 		file.delete();
-		return file.getPath();		
+		return file.getPath();
 	}
 
 	public File getIncomingInterimFile(DatabaseKey key)
@@ -259,7 +259,7 @@ abstract public class MockDatabase extends Database
 		sigFile.deleteOnExit();
 		return file;
 	}
-	
+
 	public File getContactInfoFile(String accountId)
 	{
 		File dir = new File(getFolderForAccount(accountId));
@@ -275,18 +275,18 @@ abstract public class MockDatabase extends Database
 		Map quarantine = getQuarantineFor(key);
 		return quarantine.containsKey(key);
 	}
-	
+
 	public synchronized void moveRecordToQuarantine(DatabaseKey key)
 	{
 		if(!doesRecordExist(key))
 			return;
-			
+
 		String data = readRecord(key);
 		Map quarantine = getQuarantineFor(key);
 		quarantine.put(key, data);
 		discardRecord(key);
 	}
-	
+
 	Map getQuarantineFor(DatabaseKey key)
 	{
 		Map map = sealedQuarantine;
@@ -299,28 +299,28 @@ abstract public class MockDatabase extends Database
 	{
 		return internalGetAllKeys();
 	}
-	
+
 	public int getRecordCount()
 	{
 		return getAllKeys().size();
 	}
 
 	// end Database interface
-	
-	private synchronized File getInterimFile(DatabaseKey key, Map map) 
+
+	private synchronized File getInterimFile(DatabaseKey key, Map map)
 	{
 		if(map.containsKey(key))
 			return (File)map.get(key);
-			
-		try 
+
+		try
 		{
 			File interimFile = File.createTempFile("$$$MockDbInterim", null);
 			interimFile.deleteOnExit();
 			interimFile.delete();
 			map.put(key, interimFile);
-			return interimFile;	
-		} 
-		catch (IOException e) 
+			return interimFile;
+		}
+		catch (IOException e)
 		{
 			return null;
 		}
@@ -331,12 +331,12 @@ abstract public class MockDatabase extends Database
 	abstract Map getPacketMapFor(DatabaseKey key);
 	abstract Set internalGetAllKeys();
 	abstract void internalDiscardRecord(DatabaseKey key);
-	
+
 	Map sealedQuarantine;
 	Map draftQuarantine;
 	Map incomingInterimMap;
 	Map outgoingInterimMap;
-	
+
 	HashMap streamsThatAreOpen = new HashMap();
 }
 
@@ -347,17 +347,17 @@ class MockRecordInputStream extends ByteArrayInputStreamWithSeek
 		super(inputBytes);
 		streamsThatAreOpen = observer;
 	}
-	
+
 	public synchronized void addAsOpen(DatabaseKey key)
 	{
 		streamsThatAreOpen.put(this, key);
 	}
-	
+
 	public synchronized void close()
 	{
 		streamsThatAreOpen.remove(this);
 	}
-	
+
 	Map streamsThatAreOpen;
 }
-	
+

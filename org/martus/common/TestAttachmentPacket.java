@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 			security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
 		}
 	}
-	
+
 	public void testCreateUniversalId()
 	{
 		String sampleAccount = "an account";
@@ -68,7 +68,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		assertEquals("account", sampleAccount, uid.getAccountId());
 		assertStartsWith("prefix", "A-", uid.getLocalId());
 	}
-	
+
 	public void testCreateXmlFromFile() throws Exception
 	{
 		String account = security.getPublicKeyString();
@@ -85,7 +85,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		assertNotContains("data", Base64.encode(sampleBytes), result);
 		assertContains("tag end", MartusXml.getTagEnd(MartusXml.AttachmentBytesElementName), result);
 	}
-	
+
 	public void testCreateFileFromXml() throws Exception
 	{
 		String account = security.getPublicKeyString();
@@ -95,7 +95,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		ByteArrayOutputStream dest = new ByteArrayOutputStream();
 		ap1.writeXml(dest, security);
 		byte[] resultBytes = dest.toByteArray();
-		
+
 		File destFile = File.createTempFile("$$$MartusTestAttOut", null);
 		destFile.deleteOnExit();
 		destFile.delete();
@@ -111,7 +111,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		inFile.close();
 		assertEquals("bad data?", true, Arrays.equals(sampleBytes, fileBytes));
 	}
-	
+
 	public void testEncrypted() throws Exception
 	{
 		String account = security.getPublicKeyString();
@@ -124,9 +124,9 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		byte[] encryptedBytes = encryptedDest.toByteArray();
 		String encryptedResult = new String(encryptedBytes);
 		assertNotContains("Encrypted data", Base64.encode(sampleBytes), encryptedResult);
-		
+
 		security.clearKeyPair();
-		
+
 		File decryptedFile = File.createTempFile("$$$MartusDecryptedAtt", null);
 		decryptedFile.deleteOnExit();
 		ByteArrayInputStreamWithSeek xmlIn = new ByteArrayInputStreamWithSeek(encryptedBytes);
@@ -137,7 +137,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		inFile.read(fileBytes);
 		inFile.close();
 		assertEquals("bad data?", true, Arrays.equals(sampleBytes, fileBytes));
-		
+
 		int SHORTEST_LEGAL_KEY_SIZE = 512;
 		security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
 	}
@@ -145,7 +145,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 	public void testLargeAttachmentSpeed() throws Exception
 	{
 		long createRawStartedAt = System.currentTimeMillis();
-		
+
 		final int SIZE = 100 * 1024;
 		File largeFile = File.createTempFile("$$$MartusTestLargeAtt", null);
 		largeFile.deleteOnExit();
@@ -158,7 +158,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		out.close();
 		long createRawEndedAt = System.currentTimeMillis();
 		assertTrue("Create file took too long", createRawEndedAt - createRawStartedAt < 2000);
-		
+
 		//long writeXmlStartedAt = System.currentTimeMillis();
 		String account = security.getPublicKeyString();
 		AttachmentProxy a = new AttachmentProxy(largeFile);
@@ -172,7 +172,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		//long writeXmlEndedAt = System.currentTimeMillis();
 		//System.out.println("Write Xml Time = " + (writeXmlEndedAt - writeXmlStartedAt));
 		//assertTrue("Write Xml took too long", writeXmlEndedAt - writeXmlStartedAt < 10000);
-		
+
 		//long verifySigStartedAt = System.currentTimeMillis();
 		FileInputStreamWithSeek verifyIn = new FileInputStreamWithSeek(largeXmlFile);
 		AttachmentPacket.verifyPacketSignature(verifyIn, security);
@@ -190,12 +190,12 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		//long readXmlEndedAt = System.currentTimeMillis();
 		//System.out.println("Read Xml Time = " + (readXmlEndedAt - readXmlStartedAt));
 		//assertTrue("Read Xml took too long", readXmlEndedAt - readXmlStartedAt < 30000);
-		
+
 
 
 	}
-	
-/*	
+
+/*
  * TODO see if any of these tests are still valid
 	public void setUp() throws Exception
 	{
@@ -212,16 +212,16 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 	public void testLoadFromXmlSimple() throws Exception
 	{
 		String id = "1234567";
-		String simplePacket = 
-			"<" + MartusXml.AttachmentPacketElementName + ">\n" + 
-			"<" + MartusXml.PacketIdElementName + ">" + id + 
-			"</" + MartusXml.PacketIdElementName + ">\n" + 
-			"<" + MartusXml.AccountElementName + ">" + security.getPublicKeyString() + 
-			"</" + MartusXml.AccountElementName + ">\n" + 
-			"<" + MartusXml.AttachmentLabelElementName + ">" + sampleLabel + 
-			"</" + MartusXml.AttachmentLabelElementName + ">\n" + 
-			"<" + MartusXml.AttachmentBytesElementName + ">" + Base64.encode(sampleBytes) + 
-			"</" + MartusXml.AttachmentBytesElementName + ">\n" + 
+		String simplePacket =
+			"<" + MartusXml.AttachmentPacketElementName + ">\n" +
+			"<" + MartusXml.PacketIdElementName + ">" + id +
+			"</" + MartusXml.PacketIdElementName + ">\n" +
+			"<" + MartusXml.AccountElementName + ">" + security.getPublicKeyString() +
+			"</" + MartusXml.AccountElementName + ">\n" +
+			"<" + MartusXml.AttachmentLabelElementName + ">" + sampleLabel +
+			"</" + MartusXml.AttachmentLabelElementName + ">\n" +
+			"<" + MartusXml.AttachmentBytesElementName + ">" + Base64.encode(sampleBytes) +
+			"</" + MartusXml.AttachmentBytesElementName + ">\n" +
 			"</" + MartusXml.AttachmentPacketElementName + ">\n";
 		//System.out.println("{" + simplePacket + "}");
 
@@ -233,13 +233,13 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		assertEquals("label", sampleLabel, got.getLabel());
 		assertTrue("bytes", Arrays.equals(sampleBytes, got.getBytes()));
 	}
-	
+
 	public void testWriteXml() throws Exception
 	{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		ap.writeXml(out, security);
 		String result = new String(out.toByteArray(), "UTF-8");
-		
+
 		assertContains(MartusXml.getTagStart(MartusXml.AttachmentPacketElementName), result);
 		assertContains(MartusXml.getTagEnd(MartusXml.AttachmentPacketElementName), result);
 		assertContains(ap.getPacketId(), result);
@@ -247,9 +247,9 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		assertContains("label", sampleLabel, result);
 		assertContains("bytes", Base64.encode(sampleBytes), result);
 	}
-	
+
 */
-	static File tempFile;	
+	static File tempFile;
 	byte[] sampleBytes = {1,1,2,0,3,5,127,7,11};
 	static MartusSecurity security;
 }

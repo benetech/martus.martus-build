@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	// DropTargetListener interface
 	public void dragEnter(DropTargetDragEvent dtde) {}
 	public void dragExit(DropTargetEvent dte) {}
-	
+
 	public void dropActionChanged(DropTargetDragEvent dtde) {}
 
 	public void dragOver(DropTargetDragEvent dtde)
@@ -84,12 +84,12 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	{
 		Cursor originalCursor = observer.getCursor();
 		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		
+
 		if(dtde.isDataFlavorSupported(TransferableBulletinList.getBulletinListDataFlavor()))
 			dropTransferableBulletins(dtde);
 		else if(dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			dropFile(dtde);
-			
+
 		observer.setCursor(originalCursor);
 	}
 
@@ -134,7 +134,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		{
 			BulletinStore store = observer.getStore();
 			Bulletin[] wereDropped = tb.getBulletins();
-			for (int i = 0; i < wereDropped.length; i++) 
+			for (int i = 0; i < wereDropped.length; i++)
 			{
 				Bulletin bulletin = wereDropped[i];
 				UniversalId uId = bulletin.getUniversalId();
@@ -197,12 +197,12 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		System.out.println(file.getPath());
 
 		String resultMessageTag = null;
-		
+
 		try
 		{
 			attemptDropFile(file, toFolder);
-		} 
-		catch (StatusNotAllowedException e) 
+		}
+		catch (StatusNotAllowedException e)
 		{
 			resultMessageTag = "DropErrorNotAllowed";
 		}
@@ -241,7 +241,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		}
 	}
 
-	public void attemptDropFile(File file, BulletinFolder toFolder) throws 
+	public void attemptDropFile(File file, BulletinFolder toFolder) throws
 		IOException,
 		MartusCrypto.CryptoException,
 		Packet.InvalidPacketException,
@@ -250,11 +250,11 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	{
 		Cursor originalCursor = observer.getCursor();
 		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		try 
+		try
 		{
 			toFolder.getStore().importZipFileBulletin(file, toFolder, false);
 			observer.folderContentsHaveChanged(toFolder);
-		} 
+		}
 		finally
 		{
 			observer.setCursor(originalCursor);
@@ -269,7 +269,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 
 		BulletinStore store = toFolder.getStore();
 
-		for (int i = 0; i < bulletins.length; i++) 
+		for (int i = 0; i < bulletins.length; i++)
 		{
 			Bulletin bulletin = bulletins[i];
 System.out.println("UiBulletinDropAdapter.attemptDropBulletins: " + bulletin.get(Bulletin.TAGTITLE));
@@ -277,14 +277,14 @@ System.out.println("UiBulletinDropAdapter.attemptDropBulletins: " + bulletin.get
 				throw new BulletinStore.StatusNotAllowedException();
 		}
 
-		
+
 		for (int i = 0; i < bulletins.length; i++)
 		{
 			Bulletin bulletin = bulletins[i];
 			store.addBulletinToFolder(bulletin.getUniversalId(), toFolder);
 		}
 		store.saveFolders();
-		
+
 		observer.folderContentsHaveChanged(toFolder);
 	}
 

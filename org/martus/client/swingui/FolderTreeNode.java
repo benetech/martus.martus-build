@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -30,12 +30,12 @@ import javax.swing.tree.DefaultMutableTreeNode;
 
 import org.martus.client.core.MartusApp;
 
-public class FolderTreeNode extends DefaultMutableTreeNode 
+public class FolderTreeNode extends DefaultMutableTreeNode
 {
 
 	public FolderTreeNode(Object obj, MartusApp appToUse)
 	{
-		super(obj);	
+		super(obj);
 		app = appToUse;
 	}
 
@@ -44,12 +44,12 @@ public class FolderTreeNode extends DefaultMutableTreeNode
 		return super.toString();
 	}
 
-	public String toString() 
+	public String toString()
 	{
 		String internal = getInternalName();
 		return app.getFolderLabel(internal);
 	}
-	
+
 	public String getLocalizedName()
 	{
 		return toString();

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 
 		setModal(true);
 		setTitle(mainWindow.getApp().getWindowTitle("ExportBulletins"));
-		
+
 		includePrivate = new JCheckBox(mainWindow.getApp().getFieldLabel("ExportPrivateData"));
 
 		ok = new JButton(getApp().getButtonLabel("Continue"));
@@ -68,19 +68,19 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 
 		cancel = new JButton(getApp().getButtonLabel("cancel"));
 		cancel.addActionListener(this);
-		
+
 		Box hBoxButtons = Box.createHorizontalBox();
 		hBoxButtons.add(ok);
 		hBoxButtons.add(cancel);
 		hBoxButtons.add(Box.createHorizontalGlue());
-		
+
 		String[] titles = extractTitles(bulletins);
 		JList bulletinList = new JList(titles);
-		JScrollPane tocMsgAreaScrollPane = new JScrollPane(bulletinList, 
+		JScrollPane tocMsgAreaScrollPane = new JScrollPane(bulletinList,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tocMsgAreaScrollPane.setPreferredSize(new Dimension(580, 100));
-		
+
 		Box upperStuff = Box.createVerticalBox();
 		upperStuff.add(new JLabel(" "));
 		upperStuff.add(new JLabel(getApp().getFieldLabel("ExportDetails")));
@@ -89,7 +89,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		upperStuff.add(new JLabel(" "));
 		upperStuff.add(includePrivate);
 		upperStuff.add(new JLabel(" "));
-		
+
 		Box upperStuffLeftAligned = Box.createHorizontalBox();
 		upperStuffLeftAligned.add(upperStuff);
 		upperStuffLeftAligned.add(Box.createHorizontalGlue());
@@ -117,7 +117,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		}
 		return bulletins;
 	}
-	
+
 	String[] extractTitles(Vector bulletins)
 	{
 		String[] titles = new String[bulletins.size()];
@@ -141,15 +141,15 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		if(destFile.exists())
 			if(!mainWindow.confirmDlg(mainWindow, "OverWriteExistingFile"))
 				return null;
-		
+
 		return destFile;
 	}
-	
+
 	boolean userWantsToExportPrivate()
 	{
 		return includePrivate.isSelected();
 	}
-	
+
 	void doExport(File destFile)
 	{
 		try
@@ -164,7 +164,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 			mainWindow.notifyDlg(mainWindow, "ErrorWritingFile");
 		}
 	}
-	
+
 	public void actionPerformed(ActionEvent ae)
 	{
 		if(ae.getSource().equals(ok))
@@ -174,22 +174,22 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 				if(!mainWindow.confirmDlg(null, "ExportPrivateData"))
 					return;
 			}
-			
+
 			File destFile = askForDestinationFile();
 			if(destFile == null)
 				return;
-	
+
 			doExport(destFile);
 		}
-		
+
 		dispose();
 	}
-	
+
 	MartusApp getApp()
 	{
 		return mainWindow.getApp();
 	}
-	
+
 	UiMainWindow mainWindow;
 	Vector bulletins;
 	JCheckBox includePrivate;

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -50,10 +50,10 @@ public class CurrentUiState implements Serializable
 		currentEditorPosition = new Point();
 		currentOperatingState = OPERATING_STATE_OK;
 	}
-	
+
 	public void setCurrentFolder(String folderName)
 	{
-		currentFolderName = folderName;	
+		currentFolderName = folderName;
 	}
 
 	public String getCurrentFolder()
@@ -70,7 +70,7 @@ public class CurrentUiState implements Serializable
 	{
 		return currentSortTag;
 	}
-	
+
 	public void setCurrentSortDirection(int sortDirection)
 	{
 		currentSortDirection = sortDirection;
@@ -91,122 +91,122 @@ public class CurrentUiState implements Serializable
 		return currentBulletinPosition;
 	}
 
-	public boolean isCurrentDefaultKeyboardVirtual() 
+	public boolean isCurrentDefaultKeyboardVirtual()
 	{
 		return currentDefaultKeyboardIsVirtual;
 	}
-	
+
 	public void setCurrentDefaultKeyboardVirtual(boolean on)
 	{
-		currentDefaultKeyboardIsVirtual = on;	
+		currentDefaultKeyboardIsVirtual = on;
 	}
 
-	public String getCurrentDateFormat() 
+	public String getCurrentDateFormat()
 	{
 		return currentDateFormat;
 	}
 
-	public String getCurrentLanguage() 
+	public String getCurrentLanguage()
 	{
 		return currentLanguage;
 	}
 
-	public void setCurrentDateFormat(String currentDateFormat) 
+	public void setCurrentDateFormat(String currentDateFormat)
 	{
 		this.currentDateFormat = currentDateFormat;
 	}
 
-	public void setCurrentLanguage(String currentLanguage) 
+	public void setCurrentLanguage(String currentLanguage)
 	{
 		this.currentLanguage = currentLanguage;
 	}
 
-	public int getCurrentFolderSplitterPosition() 
+	public int getCurrentFolderSplitterPosition()
 	{
 		return currentFolderSplitterPosition;
 	}
 
-	public void setCurrentFolderSplitterPosition(int currentFolderSplitterPosition) 
+	public void setCurrentFolderSplitterPosition(int currentFolderSplitterPosition)
 	{
 		this.currentFolderSplitterPosition = currentFolderSplitterPosition;
 	}
 
-	public int getCurrentPreviewSplitterPosition() 
+	public int getCurrentPreviewSplitterPosition()
 	{
 		return currentPreviewSplitterPosition;
 	}
 
-	public void setCurrentPreviewSplitterPosition(int currentPreviewSplitterPosition) 
+	public void setCurrentPreviewSplitterPosition(int currentPreviewSplitterPosition)
 	{
 		this.currentPreviewSplitterPosition = currentPreviewSplitterPosition;
 	}
 
-	public Dimension getCurrentAppDimension() 
+	public Dimension getCurrentAppDimension()
 	{
 		return currentAppDimension;
 	}
 
-	public boolean isCurrentAppMaximized() 
+	public boolean isCurrentAppMaximized()
 	{
 		return currentAppMaximized;
 	}
 
-	public Point getCurrentAppPosition() 
+	public Point getCurrentAppPosition()
 	{
 		return currentAppPosition;
 	}
 
-	public Dimension getCurrentEditorDimension() 
+	public Dimension getCurrentEditorDimension()
 	{
 		return currentEditorDimension;
 	}
 
-	public boolean isCurrentEditorMaximized() 
+	public boolean isCurrentEditorMaximized()
 	{
 		return currentEditorMaximized;
 	}
 
-	public Point getCurrentEditorPosition() 
+	public Point getCurrentEditorPosition()
 	{
 		return currentEditorPosition;
 	}
 
-	public String getCurrentOperatingState() 
+	public String getCurrentOperatingState()
 	{
 		return currentOperatingState;
 	}
 
-	public void setCurrentAppDimension(Dimension currentAppDimension) 
+	public void setCurrentAppDimension(Dimension currentAppDimension)
 	{
 		this.currentAppDimension = currentAppDimension;
 	}
 
-	public void setCurrentAppMaximized(boolean currentAppMaximized) 
+	public void setCurrentAppMaximized(boolean currentAppMaximized)
 	{
 		this.currentAppMaximized = currentAppMaximized;
 	}
 
-	public void setCurrentAppPosition(Point currentAppPosition) 
+	public void setCurrentAppPosition(Point currentAppPosition)
 	{
 		this.currentAppPosition = currentAppPosition;
 	}
 
-	public void setCurrentEditorDimension(Dimension currentEditorDimension) 
+	public void setCurrentEditorDimension(Dimension currentEditorDimension)
 	{
 		this.currentEditorDimension = currentEditorDimension;
 	}
 
-	public void setCurrentEditorMaximized(boolean currentEditorMaximized) 
+	public void setCurrentEditorMaximized(boolean currentEditorMaximized)
 	{
 		this.currentEditorMaximized = currentEditorMaximized;
 	}
 
-	public void setCurrentEditorPosition(Point currentEditorPosition) 
+	public void setCurrentEditorPosition(Point currentEditorPosition)
 	{
 		this.currentEditorPosition = currentEditorPosition;
 	}
 
-	public void setCurrentOperatingState(String currentOperatingState) 
+	public void setCurrentOperatingState(String currentOperatingState)
 	{
 		this.currentOperatingState = currentOperatingState;
 	}
@@ -243,7 +243,7 @@ public class CurrentUiState implements Serializable
 			out.writeBoolean(currentEditorMaximized);
 
 			out.writeUTF(currentOperatingState);
-						
+
 			out.flush();
 			out.close();
 		}
@@ -253,7 +253,7 @@ public class CurrentUiState implements Serializable
 		}
 	}
 
-	
+
 	public void load(File file)
 	{
 		try
@@ -272,7 +272,7 @@ public class CurrentUiState implements Serializable
 				currentLanguage = in.readUTF();
 				if(version > 1)
 				{
-					currentPreviewSplitterPosition = in.readInt(); 
+					currentPreviewSplitterPosition = in.readInt();
 					currentFolderSplitterPosition = in.readInt();
 					if(version > 2)
 					{
@@ -281,7 +281,7 @@ public class CurrentUiState implements Serializable
 						currentAppPosition.x = in.readInt();
 						currentAppPosition.y = in.readInt();
 						currentAppMaximized = in.readBoolean();
-	
+
 						currentEditorDimension.height = in.readInt();
 						currentEditorDimension.width = in.readInt();
 						currentEditorPosition.x = in.readInt();
@@ -293,7 +293,7 @@ public class CurrentUiState implements Serializable
 						}
 					}
 				}
-			}		
+			}
 			in.close();
 		}
 		catch (Exception e)
@@ -301,14 +301,14 @@ public class CurrentUiState implements Serializable
 			//System.out.println("CurrentUiState.load " + e);
 		}
 	}
-	
+
 	private boolean isCorrectFileFormat(DataInputStream in) throws IOException
 	{
 		int firstIntegerIn = 0;
 		firstIntegerIn = in.readInt();
-		return (firstIntegerIn == uiStateFirstIntegerInFile);	
+		return (firstIntegerIn == uiStateFirstIntegerInFile);
 	}
-	
+
 	public static final short VERSION = 4;
 	//Version 1
 	protected static int uiStateFirstIntegerInFile = 2002;
@@ -332,7 +332,7 @@ public class CurrentUiState implements Serializable
 	protected Dimension currentEditorDimension;
 	protected Point currentEditorPosition;
 	protected boolean currentEditorMaximized;
-	
+
 	//Version 4
 	protected String currentOperatingState;
 	public static final String OPERATING_STATE_OK = "OK";

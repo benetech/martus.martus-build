@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -30,10 +30,10 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
 
-public class UiBulletinComponentViewSection extends UiBulletinComponentSection 
+public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 {
 
-	public UiBulletinComponentViewSection(UiBulletinComponent bulletinComponentToUse, UiMainWindow ownerToUse, MartusApp appToUse, boolean encrypted) 
+	public UiBulletinComponentViewSection(UiBulletinComponent bulletinComponentToUse, UiMainWindow ownerToUse, MartusApp appToUse, boolean encrypted)
 	{
 		super(appToUse, encrypted);
 		app = appToUse;
@@ -60,18 +60,18 @@ public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 	{
 		return new UiChoiceViewer(choices);
 	}
-	
+
 	public void createAttachmentTable()
 	{
 		attachmentViewer = new UiAttachmentViewer(owner, bulletinComponent);
 		add(attachmentViewer);
 	}
-	
+
 	public void addAttachment(AttachmentProxy a)
 	{
 		attachmentViewer.addAttachment(a);
 	}
-	
+
 	public void clearAttachments()
 	{
 		attachmentViewer.clearAttachments();

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -29,28 +29,28 @@ package org.martus.common;
 import java.io.IOException;
 import java.io.OutputStream;
 
-public class Base64XmlOutputStream extends OutputStream 
+public class Base64XmlOutputStream extends OutputStream
 {
-	public Base64XmlOutputStream(XmlWriterFilter destination) 
+	public Base64XmlOutputStream(XmlWriterFilter destination)
 	{
 		dest = destination;
 		buffer = new byte[Base64.BYTESPERLINE];
 		offset = 0;
 	}
 
-	public void write(int b) throws IOException 
+	public void write(int b) throws IOException
 	{
 		buffer[offset++] = (byte)b;
 		if(offset >= buffer.length)
 			flush();
 	}
-	
+
 	public void flush() throws IOException
 	{
 		flushBuffer();
 	}
 
-	public void close() throws IOException 
+	public void close() throws IOException
 	{
 		flush();
 	}
@@ -67,7 +67,7 @@ public class Base64XmlOutputStream extends OutputStream
 		dest.writeDirect(thisLine);
 		dest.writeDirect("\n");
 	}
-	
+
 	XmlWriterFilter dest;
 	byte[] buffer;
 	int offset;

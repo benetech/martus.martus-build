@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class MockClientDatabase extends MockDatabase 
+public class MockClientDatabase extends MockDatabase
 {
 	public boolean mustEncryptLocalData()
 	{
@@ -43,26 +43,26 @@ public class MockClientDatabase extends MockDatabase
 		packetMap = new TreeMap();
 		super.deleteAllData();
 	}
-	
+
 	synchronized void addKeyToMap(DatabaseKey key, String record)
 	{
 		DatabaseKey newKey = DatabaseKey.createLegacyKey(key.getUniversalId());
 		packetMap.put(newKey, record);
 	}
-	
+
 	synchronized String readRecord(DatabaseKey key)
 	{
 		DatabaseKey newKey = DatabaseKey.createLegacyKey(key.getUniversalId());
 		return (String)packetMap.get(newKey);
 	}
-	
+
 	synchronized void internalDiscardRecord(DatabaseKey key)
 	{
 		DatabaseKey newKey = DatabaseKey.createLegacyKey(key.getUniversalId());
 		packetMap.remove(newKey);
 	}
 
-	Map getPacketMapFor(DatabaseKey key) 
+	Map getPacketMapFor(DatabaseKey key)
 	{
 		return packetMap;
 	}
@@ -73,6 +73,6 @@ public class MockClientDatabase extends MockDatabase
 		keys.addAll(packetMap.keySet());
 		return keys;
 	}
-	
+
 	Map packetMap;
 }

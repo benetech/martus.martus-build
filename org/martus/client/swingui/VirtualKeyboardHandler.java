@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -31,5 +31,5 @@ import javax.swing.JPanel;
 public interface VirtualKeyboardHandler
 {
 	public void setPassword(String password);
-	public void addKeyboard(JPanel keyboard); 
+	public void addKeyboard(JPanel keyboard);
 }

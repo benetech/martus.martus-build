@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -118,12 +118,12 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		int[] selectedRows = getSelectedRows();
 		Bulletin[] bulletins = new Bulletin[selectedRows.length];
-		
-		for (int row = 0; row < selectedRows.length; row++) 
+
+		for (int row = 0; row < selectedRows.length; row++)
 		{
 			bulletins[row] = model.getBulletin(selectedRows[row]);
 		}
-		
+
 		return bulletins;
 	}
 
@@ -132,12 +132,12 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		int[] selectedRows = getSelectedRows();
 		UniversalId[] bulletinUids = new UniversalId[selectedRows.length];
-		
-		for (int row = 0; row < selectedRows.length; row++) 
+
+		for (int row = 0; row < selectedRows.length; row++)
 		{
 			bulletinUids[row] = model.getBulletinUid(selectedRows[row]);
 		}
-		
+
 		return bulletinUids;
 	}
 
@@ -156,7 +156,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		selectRow(model.findBulletin(b.getUniversalId()));
 	}
-	
+
 	public void selectBulletins(UniversalId[] uids)
 	{
 		clearSelection();
@@ -204,12 +204,12 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	public void dropActionChanged(DragSourceDragEvent DragSourceDragEvent)	{}
 	public void dragDropEnd(DragSourceDropEvent dsde)						{}
 
-	public void doModifyBulletin() 
+	public void doModifyBulletin()
 	{
 		Bulletin b = getSingleSelectedBulletin();
 		if(b == null)
 			return;
-			
+
 		boolean createClone = false;
 		String bulletinAccountId = b.getAccount();
 		String myAccountId = mainWindow.getApp().getAccountId();
@@ -233,17 +233,17 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		{
 			BulletinStore store = mainWindow.getApp().getStore();
 			Bulletin clone = store.createEmptyBulletin();
-			try 
+			try
 			{
 				clone.pullDataFrom(b);
 				b = clone;
-			} 
-			catch (Exception e) 
+			}
+			catch (Exception e)
 			{
 				mainWindow.notifyDlg(mainWindow, "UnexpectedError");
 				return;
 			}
-		}	
+		}
 		mainWindow.modifyBulletin(b);
 	}
 
@@ -271,37 +271,37 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		BulletinFolder folder = getFolder();
 		TransferableBulletinList tb = mainWindow.getClipboardTransferableBulletin();
-	
+
 		boolean worked = false;
 		String resultMessageTag = null;
 		if(tb == null)
 		{
 			File file = mainWindow.getClipboardTransferableFile();
-			try 
+			try
 			{
 				if(file != null)
 					dropAdapter.attemptDropFile(file, folder);
 				worked = true;
 				if(confirmDeletionOfFile(file.getPath()))
 					file.delete();
-			} 
-			catch (InvalidPacketException e) 
+			}
+			catch (InvalidPacketException e)
 			{
 				resultMessageTag = "PasteError";
-			} 
-			catch (SignatureVerificationException e) 
+			}
+			catch (SignatureVerificationException e)
 			{
 				resultMessageTag = "PasteError";
-			} 
-			catch (IOException e) 
+			}
+			catch (IOException e)
 			{
 				resultMessageTag = "PasteError";
-			} 
-			catch (CryptoException e) 
+			}
+			catch (CryptoException e)
 			{
 				resultMessageTag = "PasteError";
-			} 
-			catch (StatusNotAllowedException e) 
+			}
+			catch (StatusNotAllowedException e)
 			{
 				resultMessageTag = "PasteErrorNotAllowed";
 			}
@@ -318,7 +318,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				resultMessageTag = "PasteErrorNotAllowed";
 			}
 		}
-		
+
 		if(!worked)
 		{
 			Toolkit.getDefaultToolkit().beep();
@@ -326,18 +326,18 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 	}
 
-	public boolean confirmDeletionOfFile(String filePath) 
+	public boolean confirmDeletionOfFile(String filePath)
 	{
 		MartusApp app = mainWindow.getApp();
 		String title = app.getWindowTitle("DeleteBulletinFile");
 		String msg1 = app.getFieldLabel("DeleteBulletinFileMsg1");
 		String msg2 = app.getFieldLabel("DeleteBulletinFileMsg2");
 		String[] contents = {msg1, filePath, msg2};
-		
+
 		String delete = app.getButtonLabel("Delete");
 		String leave = app.getButtonLabel("Leave");
 		String[] buttons = {delete, leave};
-		
+
 		UiNotifyDlg notify = new UiNotifyDlg(mainWindow, mainWindow, title, contents, buttons);
 		String result = notify.getResult();
 		if(result != null && result.equals(delete))
@@ -471,19 +471,19 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	private void discardAllSelectedBulletins()
 	{
 		Bulletin[] bulletinsToDiscard = getSelectedBulletins();
-		
+
 		MartusApp app = mainWindow.getApp();
 		BulletinFolder draftOutBox = app.getFolderDraftOutbox();
 		BulletinFolder discardedFolder = app.getFolderDiscarded();
 		BulletinFolder folderToDiscardFrom = getFolder();
-		
+
 		for (int i = 0; i < bulletinsToDiscard.length; i++)
 		{
 			Bulletin b = bulletinsToDiscard[i];
 			draftOutBox.getStore().discardBulletin(draftOutBox, b);
 			folderToDiscardFrom.getStore().discardBulletin(folderToDiscardFrom, b);
 		}
-		
+
 		folderToDiscardFrom.getStore().saveFolders();
 		mainWindow.folderContentsHaveChanged(folderToDiscardFrom);
 		mainWindow.folderContentsHaveChanged(discardedFolder);
@@ -531,7 +531,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom);
 			addUniqueEntriesOnly(visibleFoldersContainingAnyBulletin, visibleFoldersContainingThisBulletin);
 		}
-		
+
 		String dialogTag = "";
 		if(visibleFoldersContainingAnyBulletin.size() > 0)
 			dialogTag = "confirmDeleteMultipleDiscardedBulletinsWithCopies";
@@ -540,7 +540,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 		return confirmDeleteBulletins(dialogTag, visibleFoldersContainingAnyBulletin);
 	}
-	
+
 	private void addUniqueEntriesOnly(Vector to, Vector from)
 	{
 		for(int i = 0 ; i < from.size(); ++i)
@@ -548,7 +548,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			Object elementToAdd = from.get(i);
 			if(!to.contains(elementToAdd))
 				to.add(elementToAdd);
-		}	
+		}
 	}
 
 	private boolean confirmDeleteBulletins(String dialogTag, Vector foldersToList)
@@ -562,7 +562,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		String[] contents = {cause, "", effect, folders, "", question};
 		return mainWindow.confirmDlg(mainWindow, title, contents);
 	}
-	
+
 	private String buildFolderNameList(Vector visibleFoldersContainingThisBulletin)
 	{
 		MartusApp app = mainWindow.getApp();

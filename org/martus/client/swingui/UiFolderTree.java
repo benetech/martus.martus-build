@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -74,7 +74,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		TreePath path = getSelectionPath();
 		if(path == null)
 			return "";
-			
+
 		BulletinFolder f = getFolderAt(path);
 		if(f == null)
 			return "";
@@ -167,20 +167,20 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		return rootPath.pathByAddingChild(node);
 	}
 
-	class FolderTreeNodeRenderer extends DefaultTreeCellRenderer 
+	class FolderTreeNodeRenderer extends DefaultTreeCellRenderer
 	{
 		FolderTreeNodeRenderer()
 		{
 			label = new JLabel();
 			label.setOpaque(true);
-			
+
 			closedIcon = getClosedIcon();
 			openIcon = getOpenIcon();
 		}
-		
-		public Component getTreeCellRendererComponent(JTree tree, Object value, 
+
+		public Component getTreeCellRendererComponent(JTree tree, Object value,
 					boolean isSelected, boolean isExpanded, boolean isLeaf,
-					int row, boolean hasFocus) 
+					int row, boolean hasFocus)
 		{
 			if(isSelected)
 				label.setIcon(openIcon);
@@ -205,7 +205,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 
 			return label;
 		}
-		
+
 		JLabel label;
 		Icon closedIcon;
 		Icon openIcon;
@@ -218,7 +218,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			super(tree, renderer);
 			addCellEditorListener(this);
 		}
-		
+
 		// begin CellEditorListener interface
 		public void editingStopped(ChangeEvent e)
 		{
@@ -239,8 +239,8 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			TreePath path = getPathOfNode(node);
 			getModel().valueForPathChanged(path, newFolderName);
 		}
-		
-		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row) 
+
+		public Component getTreeCellEditorComponent(JTree tree, Object value, boolean isSelected, boolean expanded, boolean leaf, int row)
 		{
 			node = (FolderTreeNode)value;
 			oldLocalizedFolderName = node.getLocalizedName();
@@ -250,7 +250,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			return textField;
 		}
 
-		public void editingCanceled(ChangeEvent arg0) 
+		public void editingCanceled(ChangeEvent arg0)
 		{
 		}
 		// end CellEditorListener interface

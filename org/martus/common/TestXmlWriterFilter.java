@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -48,11 +48,11 @@ public class TestXmlWriterFilter extends TestCaseEnhanced
 		filter.writeStartTag(" <&a> ");
 		filter.writeEncoded(" <&b ");
 		stringWriter.close();
-		
+
 		String result = stringWriter.toString();
 		assertEquals("<z></y>\n<&a>< <&a> > &lt;&amp;b ", result);
 	}
-	
+
 	public void testSigningGood() throws Exception
 	{
 		int SHORTEST_LEGAL_KEY_SIZE = 512;
@@ -64,7 +64,7 @@ public class TestXmlWriterFilter extends TestCaseEnhanced
 		ByteArrayInputStream expectedIn = new ByteArrayInputStream(expectedBytes);
 		byte[] expectedSig = security.createSignature(expectedIn);
 		expectedIn.close();
-		
+
 		StringWriter stringWriter = new StringWriter();
 		XmlWriterFilter filter = new XmlWriterFilter(stringWriter);
 		filter.writeDirect("<!--comment-->\n");
@@ -76,7 +76,7 @@ public class TestXmlWriterFilter extends TestCaseEnhanced
 		assertNotNull("null sig?", sig);
 		assertEquals("bad sig?", true, Arrays.equals(expectedSig, sig));
 		filter.writeDirect("more stuff that isn't signed");
-		
+
 		try
 		{
 			filter.getSignature();
@@ -88,7 +88,7 @@ public class TestXmlWriterFilter extends TestCaseEnhanced
 		}
 
 	}
-	
+
 	public void testSigningNotInitialized()
 	{
 		try
@@ -103,5 +103,5 @@ public class TestXmlWriterFilter extends TestCaseEnhanced
 		}
 
 	}
-	
+
 }

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -65,7 +65,7 @@ public class FileDatabase extends Database
 
 			loadAccountMap();
 		}
-	
+
 	public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
 	{
 		accountMap = new TreeMap();
@@ -95,20 +95,20 @@ public class FileDatabase extends Database
 	{
 		writeRecord(key, new StringInputStream(record));
 	}
-	
+
 	public int getRecordSize(DatabaseKey key) throws IOException
 	{
-		try 
+		try
 		{
 			return (int)getFileForRecord(key).length();
-		} 
-		catch (TooManyAccountsException e) 
+		}
+		catch (TooManyAccountsException e)
 		{
 			System.out.println("FileDatabase:getRecordSize" + e);
 		}
 		return 0;
 	}
-	
+
 	public void importFiles(HashMap fileMapping)  throws IOException
 	{
 		Iterator keys = fileMapping.keySet().iterator();
@@ -123,8 +123,8 @@ public class FileDatabase extends Database
 			file.delete();
 		}
 	}
-	
-	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
+
+	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
@@ -139,15 +139,15 @@ public class FileDatabase extends Database
 	{
 		writeRecordUsingCopier(key, in, new StreamCopier());
 	}
-	
-	public String readRecord(DatabaseKey key, MartusCrypto decrypter) throws 
+
+	public String readRecord(DatabaseKey key, MartusCrypto decrypter) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
 		InputStreamWithSeek in = openInputStream(key, decrypter);
 		if(in == null)
 			return null;
-			
+
 		try
 		{
 			byte[] bytes = new byte[in.available()];
@@ -161,19 +161,19 @@ public class FileDatabase extends Database
 		}
 	}
 
-	private String decryptRecord(InputStreamWithSeek in, MartusCrypto decrypter) throws 
+	private String decryptRecord(InputStreamWithSeek in, MartusCrypto decrypter) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
 		in.read(); //throwAwayFlagByte
-		
+
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		decrypter.decrypt(in, out);
 		in.close();
 		return new String(out.toByteArray(), "UTF-8");
 	}
-	
-	public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter) throws 
+
+	public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
@@ -181,7 +181,7 @@ public class FileDatabase extends Database
 		{
 			File file = getFileForRecord(key);
 			InputStreamWithSeek in = new FileInputStreamWithSeek(file);
-			
+
 			return convertToDecryptingStreamIfNecessary(in, decrypter);
 		}
 		catch(IOException e)
@@ -198,11 +198,11 @@ public class FileDatabase extends Database
 
 	public void discardRecord(DatabaseKey key)
 	{
-		try 
+		try
 		{
 			File file = getFileForRecord(key);
 			file.delete();
-		} 
+		}
 		catch(Exception e)
 		{
 			System.out.println("FileDatabase.discardRecord: " + e);
@@ -211,16 +211,16 @@ public class FileDatabase extends Database
 
 	public boolean doesRecordExist(DatabaseKey key)
 	{
-		try 
+		try
 		{
 			File file = getFileForRecord(key);
 			return file.exists();
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			System.out.println("FileDatabase.doesRecordExist: " + e);
 		}
-		
+
 		return false;
 	}
 
@@ -232,32 +232,32 @@ public class FileDatabase extends Database
 			{
 				packetVisitor = visitor;
 			}
-			
+
 			public void visit(String accountString)
 			{
 				visitAllRecordsForAccount(packetVisitor, accountString);
 			}
 			PacketVisitor packetVisitor;
 		}
-		
+
 		AccountVisitorVisitor accountVisitor = new AccountVisitorVisitor(visitor);
 		visitAllAccounts(accountVisitor);
 	}
 
 	public String getFolderForAccount(String accountString)
 	{
-		try 
+		try
 		{
 			File dir = getAccountDirectory(accountString);
 			return convertToRelativePath(dir.getPath());
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			System.out.println("FileDatabase:getFolderForAccount clientId=" + accountString + " : " + e);
 		}
 		return accountString;
 	}
-	
+
 	public File getAbsoluteInterimFolderForAccount(String accountString) throws
 		IOException
 	{
@@ -266,7 +266,7 @@ public class FileDatabase extends Database
 		interimFolder.mkdirs();
 		return interimFolder;
 	}
-	
+
 	public File getAbsoluteContactInfoFolderForAccount(String accountString) throws
 		IOException
 	{
@@ -276,7 +276,7 @@ public class FileDatabase extends Database
 		return ContactFolder;
 	}
 
-	public File getIncomingInterimFile(DatabaseKey key) throws 
+	public File getIncomingInterimFile(DatabaseKey key) throws
 		IOException
 	{
 		File folder = getAbsoluteInterimFolderForAccount(key.getAccountId());
@@ -289,8 +289,8 @@ public class FileDatabase extends Database
 		File folder = getAbsoluteInterimFolderForAccount(key.getAccountId());
 		return new File(folder, key.getLocalId()+".out");
 	}
-	
-	public File getContactInfoFile(String accountId) throws 
+
+	public File getContactInfoFile(String accountId) throws
 		IOException
 	{
 		File folder = getAbsoluteContactInfoFolderForAccount(accountId);
@@ -309,14 +309,14 @@ public class FileDatabase extends Database
 			return false;
 		}
 	}
-	
+
 	public void moveRecordToQuarantine(DatabaseKey key)
 	{
 		try
 		{
 			File moveFrom = getFileForRecord(key);
 			File moveTo = getQuarantineFileForRecord(key);
-			
+
 			moveTo.delete();
 			moveFrom.renameTo(moveTo);
 		}
@@ -325,10 +325,10 @@ public class FileDatabase extends Database
 			System.out.println("FileDatabase.moveRecordToQuarantine: " + nothingWeCanDoAboutIt);
 		}
 	}
-	
+
 	// end Database interface
-	
-	public void visitAllAccounts(AccountVisitor visitor) 
+
+	public void visitAllAccounts(AccountVisitor visitor)
 	{
 		Set accounts = accountMap.keySet();
 		Iterator iterator = accounts.iterator();
@@ -345,20 +345,20 @@ public class FileDatabase extends Database
 			}
 		}
 	}
-	
+
 	public void visitAllRecordsForAccount(PacketVisitor visitor, String accountString)
 	{
 		File accountDir = null;
-		try 
+		try
 		{
 			accountDir = getAccountDirectory(accountString);
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			System.out.println("FileDatabase.visitAllPacketsForAccount: " + e);
 			return;
 		}
-		
+
 		String[] packetBuckets = accountDir.list();
 		if(packetBuckets != null)
 		{
@@ -371,7 +371,7 @@ public class FileDatabase extends Database
 					continue;
 				if(isQuarantineBucketDirectory(bucketDir))
 					continue;
-				
+
 				String[] files = bucketDir.list();
 				if(files != null)
 				{
@@ -398,17 +398,17 @@ public class FileDatabase extends Database
 		}
 	}
 
-	boolean isQuarantineBucketDirectory(File bucketDir) 
+	boolean isQuarantineBucketDirectory(File bucketDir)
 	{
 		if(bucketDir.getName().startsWith(draftQuarantinePrefix))
 			return true;
 		if(bucketDir.getName().startsWith(sealedQuarantinePrefix))
 			return true;
-			
+
 		return false;
 	}
-	
-	public void deleteAllPackets() 
+
+	public void deleteAllPackets()
 	{
 		class AccountDeleter implements AccountVisitor
 		{
@@ -416,7 +416,7 @@ public class FileDatabase extends Database
 			{
 				File accountDir = getAbsoluteAccountDirectory(accountString);
 				File[] subdirectories = accountDir.listFiles();
-				for (int i = 0; i < subdirectories.length; i++) 
+				for (int i = 0; i < subdirectories.length; i++)
 				{
 					deleteAllFilesInDirectory(subdirectories[i]);
 				}
@@ -425,9 +425,9 @@ public class FileDatabase extends Database
 				accountDir.delete();
 				parentDir.delete();
 			}
-			
+
 		}
-		
+
 		AccountDeleter deleter = new AccountDeleter();
 		visitAllAccounts(deleter);
 	}
@@ -436,14 +436,14 @@ public class FileDatabase extends Database
 	{
 		return new File(absoluteBaseDir, (String)accountMap.get(accountString));
 	}
-	
+
 	public File getFileForRecord(DatabaseKey key) throws IOException, TooManyAccountsException
 	{
 		return getFileForRecordWithPrefix(key, getBucketPrefix(key));
 	}
-	
+
 	public File getFileForRecordWithPrefix(DatabaseKey key, String bucketPrefix)
-		throws IOException, TooManyAccountsException 
+		throws IOException, TooManyAccountsException
 	{
 		int hashValue = getHashValue(key.getLocalId()) & 0xFF;
 		String bucketName = bucketPrefix + Integer.toHexString(0xb00 + hashValue);
@@ -452,23 +452,23 @@ public class FileDatabase extends Database
 		path.mkdirs();
 		return new File(path, key.getLocalId());
 	}
-	
+
 	private File getQuarantineFileForRecord(DatabaseKey key)
-		throws IOException, TooManyAccountsException 
+		throws IOException, TooManyAccountsException
 	{
 		return getFileForRecordWithPrefix(key, getQuarantinePrefix(key));
 	}
-	
-	private String getQuarantinePrefix(DatabaseKey key) 
+
+	private String getQuarantinePrefix(DatabaseKey key)
 	{
 		if(key.isDraft())
 			return draftQuarantinePrefix;
 		else
 			return sealedQuarantinePrefix;
 	}
-	
+
 	public class TooManyAccountsException extends Exception {}
-	
+
 	File getAccountDirectory(String accountString) throws IOException, TooManyAccountsException
 	{
 		String accountDir = (String)accountMap.get(accountString);
@@ -476,9 +476,9 @@ public class FileDatabase extends Database
 			return generateAccount(accountString);
 		return new File(absoluteBaseDir, accountDir);
 	}
-	
+
 	synchronized File generateAccount(String accountString)
-		throws IOException, TooManyAccountsException 
+		throws IOException, TooManyAccountsException
 	{
 		int hashValue = getHashValue(accountString) & 0xFF;
 		String bucketName = "/a" + Integer.toHexString(0xb00 + hashValue);
@@ -503,7 +503,7 @@ public class FileDatabase extends Database
 		}
 		throw new TooManyAccountsException();
 	}
-	
+
 	void appendAccountToMapFile(String accountString, String accountDir) throws IOException
 	{
 		FileOutputStream out = new FileOutputStream(accountMapFile.getPath(), true);
@@ -518,7 +518,7 @@ public class FileDatabase extends Database
 			out.flush();
 			out.getFD().sync();
 			writer.close();
-			
+
 			try
 			{
 				signAccountMap();
@@ -553,12 +553,12 @@ public class FileDatabase extends Database
 			return;
 		}
 	}
-	
+
 	void addParsedAccountEntry(Map m, String entry)
 	{
 		if(entry.startsWith("#"))
 			return;
-			
+
 		int splitAt = entry.indexOf("=");
 		if(splitAt <= 0)
 			return;
@@ -567,7 +567,7 @@ public class FileDatabase extends Database
 		String accountDir = entry.substring(0,splitAt);
 		if(startsWithAbsolutePath(accountDir))
 			accountDir = convertToRelativePath(accountDir);
-			
+
 		if(m.containsKey(accountString))
 		{
 			System.out.println("WARNING: Duplicate entries in account map: ");
@@ -575,29 +575,29 @@ public class FileDatabase extends Database
 		}
 		m.put(accountString, accountDir);
 	}
-	
-	boolean startsWithAbsolutePath(String accountDir) 
+
+	boolean startsWithAbsolutePath(String accountDir)
 	{
 		return accountDir.startsWith(File.separator) || accountDir.startsWith(":",1);
 	}
-	
+
 	public String convertToRelativePath(String absoluteAccountPath)
 	{
-		try 
+		try
 		{
 			File dir = new File(absoluteAccountPath);
 			File bucket = dir.getParentFile();
 			return bucket.getName() + File.separator + dir.getName();
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			System.out.println("FileDatabase:getFolderForAccount clientId=" + absoluteAccountPath + " : " + e);
 		}
 		return absoluteAccountPath;
 	}
-	
 
-	void deleteAllPacketsForAccount(File accountDir) 
+
+	void deleteAllPacketsForAccount(File accountDir)
 	{
 		class PacketDeleter implements PacketVisitor
 		{
@@ -606,16 +606,16 @@ public class FileDatabase extends Database
 				discardRecord(key);
 			}
 		}
-		
+
 		PacketDeleter deleter = new PacketDeleter();
 		visitAllRecordsForAccount(deleter, getAccountString(accountDir));
-		
+
 		accountDir.delete();
 	}
 
 	String getAccountString(File accountDir)
 	{
-		try 
+		try
 		{
 			Set accountStrings = accountMap.keySet();
 			Iterator iterator = accountStrings.iterator();
@@ -625,8 +625,8 @@ public class FileDatabase extends Database
 				if(getAccountDirectory(accountString).equals(accountDir))
 					return accountString;
 			}
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			System.out.println("FileDatabase.getAccountString: " + e);
 		}
@@ -634,7 +634,7 @@ public class FileDatabase extends Database
 	}
 
 	private synchronized void writeRecordUsingCopier(DatabaseKey key, InputStream in, StreamFilter copier)
-		throws IOException 
+		throws IOException
 	{
 		if(key == null)
 			throw new IOException("Null key");
@@ -652,12 +652,12 @@ public class FileDatabase extends Database
 			throw new IOException("Too many accounts");
 		}
 	}
-	
+
 	public boolean isDraftPacketBucket(String folderName)
 	{
 		return false;
 	}
-	
+
 	static int getHashValue(String inputString)
 	{
 		//Linux Elf hashing algorithm
@@ -674,36 +674,36 @@ public class FileDatabase extends Database
 		return result;
 	}
 
-	protected String getBucketPrefix(DatabaseKey key) 
+	protected String getBucketPrefix(DatabaseKey key)
 	{
 		return defaultBucketPrefix;
 	}
-	
-	private static void deleteAllFilesInDirectory(File directory) 
+
+	private static void deleteAllFilesInDirectory(File directory)
 	{
 		File[] files = directory.listFiles();
 		if(files != null)
 		{
-			for (int i = 0; i < files.length; i++) 
+			for (int i = 0; i < files.length; i++)
 			{
 				files[i].delete();
 			}
 		}
-		directory.delete();				
+		directory.delete();
 	}
-	
+
 	public void signAccountMap() throws IOException, MartusCrypto.MartusSignatureException
 	{
 		accountMapSignatureFile = MartusUtilities.createSignatureFileFromFile(accountMapFile, security);
 	}
-	
+
 	public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
 	{
 		if( !accountMapSignatureFile.exists() )
 		{
 			throw new MissingAccountMapSignatureException();
 		}
-		
+
 		MartusUtilities.verifyFileAndSignature(accountMapFile, accountMapSignatureFile, security, security.getPublicKeyString());
 	}
 
@@ -713,9 +713,9 @@ public class FileDatabase extends Database
 	protected static final String INTERIM_FOLDER_NAME = "interim";
 	protected static final String CONTACTINFO_FOLDER_NAME = "contactInfo";
 	protected static final String ACCOUNTMAP_FILENAME = "acctmap.txt";
-	
+
 	public MartusCrypto security;
-	
+
 	File absoluteBaseDir;
 	Map accountMap;
 	File accountMapFile;

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -38,7 +38,7 @@ import org.martus.common.ProgressMeterInterface;
 
 public class UiProgressMeter extends JPanel implements ProgressMeterInterface
 {
-	public UiProgressMeter(UiProgressRetrieveDlg dlg) 
+	public UiProgressMeter(UiProgressRetrieveDlg dlg)
 	{
 		super();
 		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
@@ -68,7 +68,7 @@ public class UiProgressMeter extends JPanel implements ProgressMeterInterface
 	{
 		statusMessage.setText(" " + message + " ");
 	}
-	
+
 	public void updateProgressMeter(String message, int currentValue, int maxValue)
 	{
 		setStatusMessage(message);
@@ -76,19 +76,19 @@ public class UiProgressMeter extends JPanel implements ProgressMeterInterface
 		progressMeter.setMaximum(maxValue);
 		progressMeter.setVisible(true);
 	}
-	
+
 	public void hideProgressMeter()
 	{
 		progressMeter.setVisible(false);
 	}
-	
+
 	public boolean shouldExit()
 	{
 		if(parentDlg != null)
 			return parentDlg.shouldExit();
 		return false;
 	}
-	
+
 	private JLabel statusMessage;
 	private JProgressBar progressMeter;
 	private UiProgressRetrieveDlg parentDlg;

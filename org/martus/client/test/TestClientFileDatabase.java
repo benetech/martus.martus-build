@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -38,42 +38,42 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 
-public class TestClientFileDatabase extends TestCaseEnhanced 
+public class TestClientFileDatabase extends TestCaseEnhanced
 {
-	public TestClientFileDatabase(String name) 
+	public TestClientFileDatabase(String name)
 	{
 		super(name);
 	}
-	
-	
+
+
 	public void testFindLegacyRecords() throws Exception
 	{
 		Database mockDatabase = new MockClientDatabase();
 		MartusCrypto security = new MockMartusSecurity();
-		
+
 		File tempDir = createTempFile();
 		tempDir.delete();
 		tempDir.mkdir();
 		Database clientFileDatabase = new ClientFileDatabase(tempDir, security);
 		clientFileDatabase.initialize();
-		
+
 		internalTestFindLegacyRecords(mockDatabase);
 		internalTestFindLegacyRecords(clientFileDatabase);
 
 	}
-	
-	
+
+
 	private void internalTestFindLegacyRecords(Database db) throws Exception
 	{
 		MartusCrypto security = new MockMartusSecurity();
-		
+
 		UniversalId uid = UniversalId.createDummyUniversalId();
 		DatabaseKey legacyKey = DatabaseKey.createLegacyKey(uid);
 		db.writeRecord(legacyKey, smallString);
 		InputStream inLegacy = db.openInputStream(legacyKey, security);
 		assertNotNull("legacy not found?", inLegacy);
 		inLegacy.close();
-		
+
 		InputStream inDraft = db.openInputStream(legacyKey, security);
 		assertNotNull("draft not found?", inDraft);
 		inDraft.close();
@@ -82,7 +82,7 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 		InputStream inSealed = db.openInputStream(sealedKey, security);
 		assertNotNull("sealed not found?", inSealed);
 		inSealed.close();
-		
+
 		db.deleteAllData();
 	}
 

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ public class XmlWriterFilter
 	{
 		writer = writerToUse;
 	}
-	
+
 	public void writeStartTag(String text) throws IOException
 	{
 		writeDirect("<" + text + ">");
@@ -68,20 +68,20 @@ public class XmlWriterFilter
 		}
 		writer.write(s);
 	}
-	
-	public void startSignature(MartusCrypto sigGenToUse) throws 
+
+	public void startSignature(MartusCrypto sigGenToUse) throws
 				MartusCrypto.MartusSignatureException
 	{
 		sigGen = sigGenToUse;
 		sigGen.signatureInitializeSign();
 	}
-	
-	public byte[] getSignature() throws 
+
+	public byte[] getSignature() throws
 				MartusCrypto.MartusSignatureException
 	{
 		if(sigGen == null)
 			throw new MartusCrypto.MartusSignatureException();
-			
+
 		byte[] sig = sigGen.signatureGet();
 		sigGen = null;
 		return sig;

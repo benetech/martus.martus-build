@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -45,7 +45,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 	{
 		super(owner, "", true);
 		serverPublicKey = "";
-		
+
 		info = infoToUse;
 		mainWindow = owner;
 		app = owner.getApp();
@@ -60,24 +60,24 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		serverIPAddress = info.getServerName();
 		serverIP.setText(serverIPAddress);
 		serverIP.requestFocus();
-		
+
 		getContentPane().add(new JLabel(app.getFieldLabel("ServerPublicCodeEntry")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(serverPublicCode);
 		String serverPublicKey = info.getServerPublicKey();
 		String serverCode = "";
-		try 
+		try
 		{
 			if(serverPublicKey.length() > 0)
 			{
 				serverCode = MartusUtilities.computePublicCode(serverPublicKey);
 				serverCode = MartusUtilities.formatPublicCode(serverCode);
 			}
-		} 
-		catch (InvalidBase64Exception e) 
+		}
+		catch (InvalidBase64Exception e)
 		{
 		}
 		serverPublicCode.setText(serverCode);
-		
+
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 
 		ok = new JButton(app.getButtonLabel("ok"));
@@ -98,17 +98,17 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		return result;
 	}
 
-	public String getServerIPAddress() 
+	public String getServerIPAddress()
 	{
 		return serverIPAddress;
 	}
 
-	public String getServerPublicKey() 
+	public String getServerPublicKey()
 	{
 		return serverPublicKey;
 	}
 
-	public void actionPerformed(ActionEvent ae) 
+	public void actionPerformed(ActionEvent ae)
 	{
 		result = false;
 		if(ae.getSource() == ok)
@@ -121,7 +121,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		}
 		dispose();
 	}
-	
+
 	private boolean ValidateInformation(String serverName, String userEnteredPublicCode)
 	{
 		if(serverName.length() == 0)
@@ -137,7 +137,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		String serverKey = null;
 		String serverPublicCode = null;
 		try
-		{		
+		{
 			serverKey = app.getServerPublicKey(serverName);
 			serverPublicCode = MartusUtilities.computePublicCode(serverKey);
 		}
@@ -153,10 +153,10 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		serverPublicKey = serverKey;
 		return true;
 	}
-	
+
 	private boolean errorMessage(String messageTag)
 	{
-		mainWindow.notifyDlg(mainWindow, messageTag);		
+		mainWindow.notifyDlg(mainWindow, messageTag);
 		return false;
 	}
 

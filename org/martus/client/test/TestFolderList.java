@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ public class TestFolderList extends TestCase
 		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(app.getSecurity());
     }
-    
+
     public void tearDown() throws Exception
     {
     	app.deleteAllFiles();
@@ -111,7 +111,7 @@ public class TestFolderList extends TestCase
 		store.deleteFolder(app.getNameOfFolderRetrievedSealed());
 		list.loadFolders(store);
 		assertEquals(baseCount, list.getCount());
-		
+
 	}
 
 	public void testLoadFolders()

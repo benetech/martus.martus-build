@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -188,7 +188,7 @@ public class ConfigInfo implements Serializable
 	private String templateDetails;
 	private String hqKey;
 	//Version 2
-	private boolean sendContactInfoToServer;	
+	private boolean sendContactInfoToServer;
 	//Version 3 flag to indicate AccountMap.txt is signed.
-	
+
 }

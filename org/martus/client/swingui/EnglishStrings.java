@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -28,7 +28,7 @@ package org.martus.client.swingui;
 
 public class EnglishStrings
 {
-	public static String strings[] = {	
+	public static String strings[] = {
 "wintitle:main=Martus Human Rights Bulletin System",
 "wintitle:create=Create Bulletin",
 "wintitle:sending=Sending to Server",
@@ -278,7 +278,7 @@ public class EnglishStrings
 
 "field:aboutDlgVersionInfo=Martus(TM) software version",
 "field:aboutDlgBuildDate=Built on",
-"field:aboutDlgCopyright=Copyright 2002 Beneficent Technology, Inc. (Benetech, at www.benetech.org).",
+"field:aboutDlgCopyright=Copyright 2003 Beneficent Technology, Inc. (Benetech, at www.benetech.org).",
 "field:aboutDlgDisclaimer=Martus comes with ABSOLUTELY NO WARRANTY, and is made available under license terms in the file named license.txt in the Martus directory. This is free software, and you are welcome to redistribute it under certain conditions discussed in license.txt. ",
 "field:aboutDlgCredits=Martus Software is developed by Benetech in partnership with the Information Program of the Open Society Institute, Aspiration and the American Association for the Advancement of Science.",
 "field:allprivate=Keep ALL Information Private",

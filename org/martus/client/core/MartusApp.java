@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -84,7 +84,7 @@ public class MartusApp
 	public class SaveConfigInfoException extends Exception {}
 	public class LoadConfigInfoException extends Exception {}
 
-	public static class MartusAppInitializationException extends Exception 
+	public static class MartusAppInitializationException extends Exception
 	{
 		MartusAppInitializationException(String message)
 		{
@@ -96,14 +96,14 @@ public class MartusApp
 	{
 		this(null, determineDataDirectory());
 	}
-	
+
 	public MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse) throws MartusAppInitializationException
 	{
 		try
 		{
 			if(cryptoToUse == null)
 				cryptoToUse = new MartusSecurity();
-				
+
 			dataDirectory = dataDirectoryToUse.getPath() + "/";
 			security = cryptoToUse;
 			localization = new MartusLocalization();
@@ -147,7 +147,7 @@ public class MartusApp
 	{
 		logUploads = true;
 	}
-	
+
 	public void setServerInfo(String serverName, String serverKey)
 	{
 		configInfo.setServerName(serverName);
@@ -160,23 +160,23 @@ public class MartusApp
 		{
 			System.out.println("MartusApp.setServerInfo: Unable to Save ConfigInfo" + e);
 		}
-		
+
 		invalidateCurrentHandlerAndGateway();
 	}
 
-	public void setHQKey(String hqKey) throws 
+	public void setHQKey(String hqKey) throws
 		SaveConfigInfoException
 	{
 		configInfo.setHQKey(hqKey);
 		saveConfigInfo();
 	}
-	
+
 	public String getHQKey()
 	{
-		return configInfo.getHQKey();	
+		return configInfo.getHQKey();
 	}
-	
-	public void clearHQKey() throws 
+
+	public void clearHQKey() throws
 		SaveConfigInfoException
 	{
 		configInfo.clearHQKey();
@@ -268,7 +268,7 @@ public class MartusApp
 			throw new LoadConfigInfoException();
 		}
 	}
-	
+
 	public void doAfterSigninInitalization() throws MartusAppInitializationException
 	{
 			try
@@ -288,7 +288,7 @@ public class MartusApp
 				throw new MartusAppInitializationException("ErrorMissingAccountMapSignature");
 			}
 	}
-	
+
 	public String getDataDirectory()
 	{
 		return dataDirectory;
@@ -329,7 +329,7 @@ public class MartusApp
 		String helpFile = "MartusHelp-" + getCurrentLanguage() + ".txt";
 		return helpFile;
 	}
-	
+
 	public String getEnglishHelpFilename()
 	{
 		return("MartusHelp-en.txt");
@@ -350,7 +350,7 @@ public class MartusApp
 	{
 		return new File(getDataDirectory() + KEYPAIR_FILENAME);
 	}
-	
+
 	public static File getBackupFile(File original)
 	{
 		return new File(original.getPath() + ".bak");
@@ -403,12 +403,12 @@ public class MartusApp
 	{
 		return store.getFolderOutbox();
 	}
-	
+
 	public BulletinFolder getFolderDraftOutbox()
 	{
 		return store.getFolderDraftOutbox();
 	}
-	
+
 	public BulletinFolder createFolderRetrieved()
 	{
 		String folderName = getNameOfFolderRetrievedSealed();
@@ -425,7 +425,7 @@ public class MartusApp
 	{
 		return store.getNameOfFolderRetrievedSealed();
 	}
-	
+
 	public String getNameOfFolderRetrievedDraft()
 	{
 		return store.getNameOfFolderRetrievedDraft();
@@ -440,7 +440,7 @@ public class MartusApp
 	{
 		return store.getNameOfFolderRetrievedFieldOfficeDraft();
 	}
-	
+
 	public BulletinFolder createOrFindFolder(String name)
 	{
 		return store.createOrFindFolder(name);
@@ -450,8 +450,8 @@ public class MartusApp
 	{
 		maxNewFolders = numFolders;
 	}
-	
-	public BulletinFolder createUniqueFolder() 
+
+	public BulletinFolder createUniqueFolder()
 	{
 		BulletinFolder newFolder = null;
 		String uniqueFolderName = null;
@@ -469,19 +469,19 @@ public class MartusApp
 			store.saveFolders();
 		return newFolder;
 	}
-	
+
 	public int quarantineUnreadableBulletins()
 	{
 		return store.quarantineUnreadableBulletins();
 	}
-	
+
 	public int repairOrphans()
 	{
 		Set orphans = store.getSetOfOrphanedBulletinUniversalIds();
 		int foundOrphanCount = orphans.size();
 		if(foundOrphanCount == 0)
 			return 0;
-		
+
 		String name = store.getOrphanFolderName();
 		BulletinFolder orphanFolder = store.createOrFindFolder(name);
 
@@ -491,11 +491,11 @@ public class MartusApp
 			UniversalId uid = (UniversalId)it.next();
 			store.addBulletinToFolder(uid, orphanFolder);
 		}
-		
+
 		store.saveFolders();
 		return foundOrphanCount;
 	}
-	
+
 
 	public Vector findBulletinInAllVisibleFolders(Bulletin b)
 	{
@@ -508,14 +508,14 @@ public class MartusApp
 			return false;
 		return true;
 	}
-	
+
 	private boolean isSealedFolderOutboxEmpty()
 	{
 		if(getFolderOutbox().getBulletinCount() == 0)
 			return true;
 		return false;
 	}
-	
+
 	public boolean shouldShowSealedUploadReminderOnExit()
 	{
 		if(isSealedFolderOutboxEmpty())
@@ -587,7 +587,7 @@ public class MartusApp
 		Date uploaded = getLastUploadedTime();
 		setUploadInfoElements(uploaded, reminded);
 	}
-	
+
 	public void resetLastUploadedTime()
 	{
 		setLastUploadedTime(new Date());
@@ -626,12 +626,12 @@ public class MartusApp
 		NetworkInterfaceForNonSSL server = new ClientSideNetworkHandlerUsingXmlRpcForNonSSL(serverName, port);
 		return isNonSSLServerAvailable(server);
 	}
-	
+
 	public boolean isSSLServerAvailable()
 	{
 		if(currentNetworkInterfaceHandler == null && getServerName().length() == 0)
 			return false;
-			
+
 		return isSSLServerAvailable(getCurrentNetworkInterfaceGateway());
 	}
 
@@ -642,11 +642,11 @@ public class MartusApp
 
 		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
 		NetworkInterface server;
-		try 
+		try
 		{
 			server = new ClientSideNetworkHandlerUsingXmlRpc(serverName, port);
-		} 
-		catch (SSLSocketSetupException e) 
+		}
+		catch (SSLSocketSetupException e)
 		{
 			//TODO propagate to UI and needs a test.
 			e.printStackTrace();
@@ -654,12 +654,12 @@ public class MartusApp
 		}
 		return isSSLServerAvailable(new ClientSideNetworkGateway(server));
 	}
-	
+
 	public boolean isSignedIn()
 	{
-		return security.hasKeyPair();	
+		return security.hasKeyPair();
 	}
-	
+
 	public String getServerPublicCode(String serverName) throws
 		ServerNotAvailableException,
 		PublicInformationInvalidException
@@ -673,7 +673,7 @@ public class MartusApp
 			throw new PublicInformationInvalidException();
 		}
 	}
-	
+
 	public String getServerPublicKey(String serverName) throws
 		ServerNotAvailableException,
 		PublicInformationInvalidException
@@ -682,39 +682,39 @@ public class MartusApp
 		NetworkInterfaceForNonSSL server = new ClientSideNetworkHandlerUsingXmlRpcForNonSSL(serverName, port);
 		return getServerPublicKey(server);
 	}
-	
+
 	public class ServerNotAvailableException extends Exception {}
 	public class PublicInformationInvalidException extends Exception {}
-	
+
 	public String getServerPublicKey(NetworkInterfaceForNonSSL server) throws
 		ServerNotAvailableException,
 		PublicInformationInvalidException
 	{
 		if(server.ping() == null)
 			throw new ServerNotAvailableException();
-			
+
 		Vector serverInformation = server.getServerInformation();
 		if(serverInformation == null)
 			throw new ServerNotAvailableException();
-			
+
 		if(serverInformation.size() != 3)
 			throw new PublicInformationInvalidException();
-		
+
 		String accountId = (String)serverInformation.get(1);
 		String sig = (String)serverInformation.get(2);
 		validatePublicInfo(accountId, sig);
 		return accountId;
 	}
 
-	public void validatePublicInfo(String accountId, String sig) throws 
-		PublicInformationInvalidException 
+	public void validatePublicInfo(String accountId, String sig) throws
+		PublicInformationInvalidException
 	{
 		try
 		{
 			ByteArrayInputStream in = new ByteArrayInputStream(Base64.decode(accountId));
 			if(!security.isSignatureValid(accountId, in, Base64.decode(sig)))
 				throw new PublicInformationInvalidException();
-		
+
 		}
 		catch(Exception e)
 		{
@@ -735,10 +735,10 @@ public class MartusApp
 		{
 			System.out.println("MartusApp.requestServerUploadRights: " + e);
 		}
-			
+
 		return false;
 	}
-	
+
 	public String uploadBulletin(Bulletin b, UiProgressMeter progressMeter) throws
 			InvalidPacketException
 	{
@@ -774,8 +774,8 @@ public class MartusApp
 				String authorId = getAccountId();
 				String bulletinLocalId = b.getLocalId();
 				String encoded = Base64.encode(chunkBytes);
-				
-				NetworkResponse response = getCurrentNetworkInterfaceGateway().putBulletinChunk(security, 
+
+				NetworkResponse response = getCurrentNetworkInterfaceGateway().putBulletinChunk(security,
 									authorId, bulletinLocalId, offset, chunkSize, totalSize, encoded);
 				result = response.getResultCode();
 				if(!result.equals(NetworkInterfaceConstants.CHUNK_OK) && !result.equals(NetworkInterfaceConstants.OK))
@@ -795,19 +795,19 @@ public class MartusApp
 			System.out.println("MartusApp.uploadBulletin: " + e);
 			throw new InvalidPacketException(e.toString());
 		}
-		
+
 		if(tempFile != null)
 			tempFile.delete();
-			
+
 		return result;
 	}
-	
-	public String backgroundUpload(UiProgressMeter progressMeter) throws 
+
+	public String backgroundUpload(UiProgressMeter progressMeter) throws
 		DamagedBulletinException
 	{
 		if(getFolderOutbox().getBulletinCount() > 0)
 			return backgroundUploadOneSealedBulletin(progressMeter);
-			
+
 		if(getFolderDraftOutbox().getBulletinCount() > 0)
 			return backgroundUploadOneDraftBulletin(progressMeter);
 		if(getConfigInfo().shouldContactInfoBeSentToServer())
@@ -821,7 +821,7 @@ public class MartusApp
 	{
 		if(!isSSLServerAvailable())
 			return new Vector();
-		
+
 		try
 		{
 			NetworkResponse response = getCurrentNetworkInterfaceGateway().getNews(security);
@@ -842,34 +842,34 @@ public class MartusApp
 
 		ConfigInfo info = getConfigInfo();
 		String result = "";
-		try 
+		try
 		{
 			result = putContactInfoOnServer(info.getContactInfo(security));
-		} 
-		catch (MartusSignatureException e) 
+		}
+		catch (MartusSignatureException e)
 		{
 			System.out.println("MartusApp.sendContactInfoToServer :" + e);
 			return;
-		} 
+		}
 		if(!result.equals(NetworkInterfaceConstants.OK))
 		{
 			System.out.println("MartusApp.sendContactInfoToServer failure:" + result);
 			return;
 		}
-		System.out.println("Contact info successfully sent to server");	
+		System.out.println("Contact info successfully sent to server");
 
-		try 
+		try
 		{
 			info.setSendContactInfoToServer(false);
 			saveConfigInfo();
-		} 
-		catch (SaveConfigInfoException e) 
+		}
+		catch (SaveConfigInfoException e)
 		{
 			System.out.println("MartusApp:putContactInfoOnServer Failed to save configinfo locally:" + e);
 		}
-	}		
+	}
 
-	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) throws 
+	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) throws
 		DamagedBulletinException
 	{
 		if(!isSSLServerAvailable())
@@ -878,14 +878,14 @@ public class MartusApp
 				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
 		}
-		
+
 		BulletinFolder outbox = getFolderOutbox();
 		Bulletin b = outbox.getBulletinSorted(0);
 		String exceptionThrown = null;
 		try
 		{
 			String result = uploadBulletin(b, progressMeter);
-			
+
 			if(result != null)
 			{
 				if(result.equals(NetworkInterfaceConstants.OK) || result.equals(NetworkInterfaceConstants.DUPLICATE))
@@ -924,7 +924,7 @@ public class MartusApp
 			store.moveBulletin(b, outbox, damaged);
 			store.saveFolders();
 		}
-		
+
 		if(progressMeter != null)
 			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
 		if(exceptionThrown != null)
@@ -941,14 +941,14 @@ public class MartusApp
 				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
 		}
-		
+
 		BulletinFolder draftOutbox = getFolderDraftOutbox();
 		Bulletin b = draftOutbox.getBulletinSorted(0);
 		String exceptionThrown = null;
 		try
 		{
 			String result = uploadBulletin(b, progressMeter);
-			
+
 			if(result != null)
 			{
 				if(result.equals(NetworkInterfaceConstants.OK))
@@ -976,7 +976,7 @@ public class MartusApp
 		return null;
 	}
 
-	
+
 
 	public static class DamagedBulletinException extends Exception
 	{
@@ -985,42 +985,42 @@ public class MartusApp
 			super(message);
 		}
 	}
-	
+
 	public Vector getMyServerBulletinSummaries() throws ServerErrorException
 	{
 		if(!isSSLServerAvailable())
 			throw new ServerErrorException("No server");
 
 		String resultCode = "?";
-		try 
+		try
 		{
 			NetworkResponse response = getCurrentNetworkInterfaceGateway().getSealedBulletinIds(security, getAccountId(), MartusUtilities.getRetrieveBulletinSummaryTags());
 			resultCode = response.getResultCode();
 			if(resultCode.equals(NetworkInterfaceConstants.OK))
 				return response.getResultVector();
-		} 
-		catch (MartusSignatureException e) 
+		}
+		catch (MartusSignatureException e)
 		{
 			System.out.println("MartusApp.getMyServerBulletinSummaries: " + e);
 			resultCode = NetworkInterfaceConstants.SIG_ERROR;
 		}
 		throw new ServerErrorException(resultCode);
 	}
-	
+
 	public Vector getMyDraftServerBulletinSummaries() throws ServerErrorException
 	{
 		if(!isSSLServerAvailable())
 			throw new ServerErrorException("No server");
 
 		String resultCode = "?";
-		try 
+		try
 		{
 			NetworkResponse response = getCurrentNetworkInterfaceGateway().getDraftBulletinIds(security, getAccountId(), MartusUtilities.getRetrieveBulletinSummaryTags());
 			resultCode = response.getResultCode();
 			if(resultCode.equals(NetworkInterfaceConstants.OK))
 				return response.getResultVector();
 		}
-		catch (MartusSignatureException e) 
+		catch (MartusSignatureException e)
 		{
 			System.out.println("MartusApp.getMyDraftServerBulletinSummaries: " + e);
 			resultCode = NetworkInterfaceConstants.SIG_ERROR;
@@ -1029,7 +1029,7 @@ public class MartusApp
 	}
 
 	public BulletinSummary createSummaryFromString(String accountId, String parameters)
-		throws ServerErrorException 
+		throws ServerErrorException
 	{
 		FieldDataPacket fdp = null;
 		String args[] = parameters.split(MartusConstants.regexEqualsDelimeter, -1);
@@ -1047,12 +1047,12 @@ public class MartusApp
 		if (bulletin != null)
 			fdp = bulletin.getFieldDataPacket();
 
-		try 
+		try
 		{
 			if(fdp == null)
 				fdp = retrieveFieldDataPacketFromServer(accountId, bulletinLocalId, packetlocalId);
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			//System.out.println("MartusApp.createSummaryFromString: " + e);
 			//e.printStackTrace();
@@ -1061,7 +1061,7 @@ public class MartusApp
 		BulletinSummary bulletinSummary = new BulletinSummary(accountId, bulletinLocalId, fdp, size);
 		return bulletinSummary;
 	}
-	
+
 	public Vector getFieldOfficeAccounts() throws ServerErrorException
 	{
 		if(!isSSLServerAvailable())
@@ -1106,21 +1106,21 @@ public class MartusApp
 		FileOutputStream outputStream = new FileOutputStream(tempFile);
 
 		String progressTag = getFieldLabel("ChunkProgressStatusMessage");
-		int masterTotalSize = MartusUtilities.retrieveBulletinZipToStream(uid, outputStream, 
-						serverChunkSize, getCurrentNetworkInterfaceGateway(),  security, 
+		int masterTotalSize = MartusUtilities.retrieveBulletinZipToStream(uid, outputStream,
+						serverChunkSize, getCurrentNetworkInterfaceGateway(),  security,
 						progressMeter, progressTag);
 
 		outputStream.close();
 
 		if(tempFile.length() != masterTotalSize)
 			throw new ServerErrorException("totalSize didn't match data length");
-			
+
 		store.importZipFileBulletin(tempFile, retrievedFolder, true);
 
 		tempFile.delete();
 	}
 
-	public String deleteServerDraftBulletins(Vector uidList) throws 
+	public String deleteServerDraftBulletins(Vector uidList) throws
 		MartusSignatureException,
 		WrongAccountException
 	{
@@ -1130,14 +1130,14 @@ public class MartusApp
 			UniversalId uid = (UniversalId)uidList.get(i);
 			if(!uid.getAccountId().equals(getAccountId()))
 				throw new WrongAccountException();
-				
+
 			localIds[i] = uid.getLocalId();
 		}
 		NetworkResponse response = getCurrentNetworkInterfaceGateway().deleteServerDraftBulletins(getSecurity(), getAccountId(), localIds);
 		return response.getResultCode();
 	}
-	
-	public String putContactInfoOnServer(Vector info)  throws 
+
+	public String putContactInfoOnServer(Vector info)  throws
 			MartusCrypto.MartusSignatureException
 	{
 		NetworkResponse response = getCurrentNetworkInterfaceGateway().putContactInfo(getSecurity(), getAccountId(), info);
@@ -1156,8 +1156,8 @@ public class MartusApp
 		createAccountInternal(getKeyPairFile(), userName, userPassPhrase);
 	}
 
-	public void writeKeyPairFile(String userName, String userPassPhrase) throws 
-		IOException, 
+	public void writeKeyPairFile(String userName, String userPassPhrase) throws
+		IOException,
 		CannotCreateAccountFileException
 	{
 		writeKeyPairFileWithBackup(getKeyPairFile(), userName, userPassPhrase);
@@ -1167,15 +1167,15 @@ public class MartusApp
 	{
 		return getKeyPairFile().exists();
 	}
-	
-	public void exportPublicInfo(File exportFile) throws 
+
+	public void exportPublicInfo(File exportFile) throws
 		IOException,
 		Base64.InvalidBase64Exception,
 		MartusCrypto.MartusSignatureException
 	{
 		MartusUtilities.exportPublicKey(security, exportFile);
 	}
-	
+
 	public String extractPublicInfo(File file) throws
 		IOException,
 		Base64.InvalidBase64Exception,
@@ -1183,10 +1183,10 @@ public class MartusApp
 	{
 		Vector importedPublicKeyInfo = MartusUtilities.importPublicKeyFromFile(file);
 		String publicKey = (String) importedPublicKeyInfo.get(0);
-		String signature = (String) importedPublicKeyInfo.get(1);		
+		String signature = (String) importedPublicKeyInfo.get(1);
 		validatePublicInfo(publicKey, signature);
 		return publicKey;
-	}		
+	}
 
 	public File getPublicInfoFile(String fileName)
 	{
@@ -1199,7 +1199,7 @@ public class MartusApp
 	{
 		return attemptSignInInternal(getKeyPairFile(), userName, userPassPhrase);
 	}
-	
+
 	public String getFieldLabel(String fieldName)
 	{
 		return localization.getLabel(getCurrentLanguage(), "field", fieldName, "");
@@ -1270,7 +1270,7 @@ public class MartusApp
 	{
 		return localization.getUiLanguages(getTranslationsDirectory());
 	}
-	
+
 	public String getCurrentLanguage()
 	{
 		return currentLanguage;
@@ -1299,14 +1299,14 @@ public class MartusApp
 		ChoiceItem[] tempChoicesArray = new ChoiceItem[languageCodes.length];
 		for(int i = 0; i < languageCodes.length; i++)
 		{
-			tempChoicesArray[i] = 
-				new ChoiceItem(languageCodes[i], getLanguageName(languageCodes[i]));	
+			tempChoicesArray[i] =
+				new ChoiceItem(languageCodes[i], getLanguageName(languageCodes[i]));
 		}
 		Arrays.sort(tempChoicesArray);
 		return tempChoicesArray;
 	}
-	
-	
+
+
 	public String convertStoredToDisplay(String storedDate)
 	{
 		DateFormat dfStored = Bulletin.getStoredDateFormat();
@@ -1338,7 +1338,7 @@ public class MartusApp
 	{
 		return store.getAccountId();
 	}
-	
+
 	public void createAccountInternal(File keyPairFile, String userName, String userPassPhrase) throws
 					AccountAlreadyExistsException,
 					CannotCreateAccountFileException,
@@ -1348,37 +1348,37 @@ public class MartusApp
 			throw(new AccountAlreadyExistsException());
 		security.clearKeyPair();
 		security.createKeyPair();
-		try 
+		try
 		{
 			writeKeyPairFileWithBackup(keyPairFile, userName, userPassPhrase);
 			currentUserName = userName;
-		} 
-		catch(IOException e) 
+		}
+		catch(IOException e)
 		{
 			security.clearKeyPair();
 			throw(e);
-		} 
+		}
 	}
 
-	protected void writeKeyPairFileWithBackup(File keyPairFile, String userName, String userPassPhrase) throws 
-		IOException, 
-		CannotCreateAccountFileException 
+	protected void writeKeyPairFileWithBackup(File keyPairFile, String userName, String userPassPhrase) throws
+		IOException,
+		CannotCreateAccountFileException
 	{
 		writeKeyPairFileInternal(keyPairFile, userName, userPassPhrase);
 		try
 		{
-			writeKeyPairFileInternal(getBackupFile(keyPairFile), userName, userPassPhrase);			
+			writeKeyPairFileInternal(getBackupFile(keyPairFile), userName, userPassPhrase);
 		}
 		catch (Exception e)
 		{
 			System.out.println("MartusApp.writeKeyPairFileWithBackup: " + e);
 		}
-		
+
 	}
 
-	protected void writeKeyPairFileInternal(File keyPairFile, String userName, String userPassPhrase) throws 
-		IOException, 
-		CannotCreateAccountFileException 
+	protected void writeKeyPairFileInternal(File keyPairFile, String userName, String userPassPhrase) throws
+		IOException,
+		CannotCreateAccountFileException
 	{
 		try
 		{
@@ -1390,7 +1390,7 @@ public class MartusApp
 		{
 			throw(new CannotCreateAccountFileException());
 		}
-		
+
 	}
 
 	public boolean attemptSignInInternal(File keyPairFile, String userName, String userPassPhrase)
@@ -1429,7 +1429,7 @@ public class MartusApp
 
 		if(worked)
 			currentUserName = userName;
-					
+
 		return worked;
 	}
 
@@ -1442,7 +1442,7 @@ public class MartusApp
 	{
 		return security;
 	}
-	
+
 	public void setSSLNetworkInterfaceHandlerForTesting(NetworkInterface server)
 	{
 		currentNetworkInterfaceHandler = server;
@@ -1459,7 +1459,7 @@ public class MartusApp
 
 		return true;
 	}
-	
+
 	private boolean isSSLServerAvailable(ClientSideNetworkGateway server)
 	{
 		NetworkResponse response = server.getServerInfo();
@@ -1479,17 +1479,17 @@ public class MartusApp
 
 		return false;
 	}
-	
+
 	public ClientSideNetworkGateway getCurrentNetworkInterfaceGateway()
 	{
 		if(currentNetworkInterfaceGateway == null)
 		{
 			currentNetworkInterfaceGateway = new ClientSideNetworkGateway(getCurrentNetworkInterfaceHandler());
 		}
-		
+
 		return currentNetworkInterfaceGateway;
 	}
-	
+
 	private NetworkInterface getCurrentNetworkInterfaceHandler()
 	{
 		if(currentNetworkInterfaceHandler == null)
@@ -1500,30 +1500,30 @@ public class MartusApp
 		return currentNetworkInterfaceHandler;
 	}
 
-	private NetworkInterface createXmlRpcNetworkInterfaceHandler() 
+	private NetworkInterface createXmlRpcNetworkInterfaceHandler()
 	{
 		String ourServer = getServerName();
 		int ourPort = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
-		try 
+		try
 		{
 			ClientSideNetworkHandlerUsingXmlRpc handler = new ClientSideNetworkHandlerUsingXmlRpc(ourServer, ourPort);
 			handler.getSimpleX509TrustManager().setExpectedPublicKey(getConfigInfo().getServerPublicKey());
 			return handler;
-		} 
-		catch (SSLSocketSetupException e) 
+		}
+		catch (SSLSocketSetupException e)
 		{
 			//TODO propagate to UI and needs a test.
 			e.printStackTrace();
 			return null;
 		}
 	}
-	
+
 	private void invalidateCurrentHandlerAndGateway()
 	{
 		currentNetworkInterfaceHandler = null;
 		currentNetworkInterfaceGateway = null;
 	}
-	
+
 	private String getServerName()
 	{
 		return configInfo.getServerName();
@@ -1546,7 +1546,7 @@ public class MartusApp
 		{
 			file.mkdirs();
 		}
-		
+
 		return file;
 	}
 
@@ -1580,7 +1580,7 @@ public class MartusApp
 	}
 
 	private String createSignature(String stringToSign)
-		throws UnsupportedEncodingException, MartusSignatureException 
+		throws UnsupportedEncodingException, MartusSignatureException
 	{
 		MartusCrypto security = getSecurity();
 		return MartusUtilities.createSignature(stringToSign, security);

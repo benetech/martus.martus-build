@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -66,13 +66,13 @@ public class TestMartusUserNameAndPassword extends TestCaseEnhanced
 		catch(PasswordTooShortException ignoreExpectedException)
 		{}
 	}
-	
+
 	public void testIsWeakPassword()
 	{
-		assertTrue("Why was 'test' not a weak password?", MartusUserNameAndPassword.isWeakPassword("test"));	
+		assertTrue("Why was 'test' not a weak password?", MartusUserNameAndPassword.isWeakPassword("test"));
 		assertFalse("Why was '123456789012345%$' not a strong password?", MartusUserNameAndPassword.isWeakPassword("123456789012345%$"));
 	}
-	
+
 
 
 }

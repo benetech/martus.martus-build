@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -52,9 +52,9 @@ import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.CryptoException;
 
-public class MockBulletin extends Bulletin 
+public class MockBulletin extends Bulletin
 {
-	public MockBulletin() 
+	public MockBulletin()
 	{
 		super((BulletinStore) null);
 	}
@@ -73,8 +73,8 @@ public class MockBulletin extends Bulletin
 				tempFile.delete();
 		}
 	}
-	
-	public static String saveToZipString(Bulletin b) throws 
+
+	public static String saveToZipString(Bulletin b) throws
 		IOException,
 		MartusCrypto.CryptoException
 	{
@@ -97,26 +97,26 @@ public class MockBulletin extends Bulletin
 
 	}
 
-	public static void saveToFile(Bulletin b, File destFile) throws 
+	public static void saveToFile(Bulletin b, File destFile) throws
 		IOException,
 		MartusCrypto.CryptoException
 	{
 		BulletinHeaderPacket header = b.getBulletinHeaderPacket();
-		
+
 		FieldDataPacket publicDataPacket = b.getFieldDataPacket();
 		boolean shouldEncryptPublicData = (b.isDraft() || b.isAllPrivate());
 		publicDataPacket.setEncrypted(shouldEncryptPublicData);
-			
+
 		OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(destFile));
 		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
 		try
 		{
 			byte[] dataSig = writePacketToZip(b, zipOut, b.getFieldDataPacket());
 			header.setFieldDataSignature(dataSig);
-			
+
 			byte[] privateDataSig = writePacketToZip(b, zipOut, b.getPrivateFieldDataPacket());
 			header.setPrivateFieldDataSignature(privateDataSig);
-			
+
 			writeAttachmentsToZip(b, zipOut, b.getPublicAttachments());
 			writeAttachmentsToZip(b, zipOut, b.getPrivateAttachments());
 
@@ -128,9 +128,9 @@ public class MockBulletin extends Bulletin
 		}
 	}
 
-	public static void writeAttachmentsToZip(Bulletin b, ZipOutputStream zipOut, AttachmentProxy[] attachments) throws 
-		IOException, 
-		CryptoException 
+	public static void writeAttachmentsToZip(Bulletin b, ZipOutputStream zipOut, AttachmentProxy[] attachments) throws
+		IOException,
+		CryptoException
 	{
 		Database db = b.getDatabase();
 		for(int i = 0 ; i < attachments.length ; ++i)
@@ -147,21 +147,21 @@ public class MockBulletin extends Bulletin
 				zipOut.write(bytes, 0, got);
 			}
 			in.close();
-			zipOut.flush();	
+			zipOut.flush();
 		}
 	}
-	
-	static byte[] writePacketToZip(Bulletin b, ZipOutputStream zipOut, Packet packet) throws 
+
+	static byte[] writePacketToZip(Bulletin b, ZipOutputStream zipOut, Packet packet) throws
 		IOException
 	{
 		ZipEntry entry = new ZipEntry(packet.getLocalId());
 		zipOut.putNextEntry(entry);
-		
+
 		MartusCrypto signer = b.getSignatureGenerator();
 		UnicodeWriter writer = new UnicodeWriter(zipOut);
 		byte[] sig = packet.writeXml(writer, signer);
 		writer.flush();
 		return sig;
 	}
-	
+
 }

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -35,21 +35,21 @@ import javax.net.ssl.X509TrustManager;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 
-public class SimpleX509TrustManager implements X509TrustManager 
+public class SimpleX509TrustManager implements X509TrustManager
 {
 
-	public SimpleX509TrustManager() 
+	public SimpleX509TrustManager()
 	{
 		super();
 	}
 
 	public void checkClientTrusted(X509Certificate[] chain, String authType)
-		throws CertificateException 
+		throws CertificateException
 	{
 	}
 
 	public void checkServerTrusted(X509Certificate[] chain, String authType)
-		throws CertificateException 
+		throws CertificateException
 	{
 		if(!authType.equals("RSA"))
 			throw new CertificateException("Only RSA supported");
@@ -58,7 +58,7 @@ public class SimpleX509TrustManager implements X509TrustManager
 		X509Certificate cert0 = chain[0];
 		X509Certificate cert1 = chain[1];
 		X509Certificate cert2 = chain[2];
-		try 
+		try
 		{
 			cert0.verify(cert0.getPublicKey());
 			cert1.verify(cert2.getPublicKey());
@@ -74,30 +74,30 @@ public class SimpleX509TrustManager implements X509TrustManager
 			}
 			cert1.verify(tryPublicKey);
 			setExpectedPublicKey(MartusSecurity.getKeyString(tryPublicKey));
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			throw new CertificateException(e.toString());
 		}
 	}
 
-	public X509Certificate[] getAcceptedIssuers() 
+	public X509Certificate[] getAcceptedIssuers()
 	{
 		return null;
 	}
 
-	public void setExpectedPublicCode(String expectedPublicCodeToUse) 
+	public void setExpectedPublicCode(String expectedPublicCodeToUse)
 	{
 		expectedPublicCode = expectedPublicCodeToUse;
 		expectedPublicKey = null;
 	}
 
-	public void setExpectedPublicKey(String expectedPublicKeyToUse) 
+	public void setExpectedPublicKey(String expectedPublicKeyToUse)
 	{
 		expectedPublicKey = MartusSecurity.extractPublicKey(expectedPublicKeyToUse);
 		expectedPublicCode = null;
 	}
-	
+
 	private PublicKey expectedPublicKey;
 	private String expectedPublicCode;
 

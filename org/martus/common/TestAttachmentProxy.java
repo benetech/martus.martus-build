@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -45,15 +45,15 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.writeln("This is some text");
 		writer.close();
-		
+
 		MartusCrypto security = new MockMartusSecurity();
 		byte[] sessionKeyBytes = security.createSessionKey();
-		
+
 		AttachmentProxy a = new AttachmentProxy(file);
 		assertEquals(file.getName(), a.getLabel());
 		assertEquals("file", file, a.getFile());
 		assertNull("not null key?", a.getSessionKeyBytes());
-		
+
 		UniversalId uid = UniversalId.createDummyUniversalId();
 		assertNull("already has a uid?", a.getUniversalId());
 		a.setUniversalIdAndSessionKey(uid, sessionKeyBytes);
@@ -61,7 +61,7 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 		assertEquals("wrong key?", true, Arrays.equals(sessionKeyBytes, a.getSessionKeyBytes()));
 		assertNull("still has file?", a.getFile());
 	}
-	
+
 	public void testUidProxy() throws Exception
 	{
 		UniversalId uid = UniversalId.createDummyUniversalId();
@@ -70,9 +70,9 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 		assertEquals("wrong uid?", uid, a.getUniversalId());
 		assertEquals("wrong label?", label, a.getLabel());
 		assertNull("has file?", a.getFile());
-		
+
 	}
-	
+
 	public void testStringProxy() throws Exception
 	{
 		String label = "label";

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -112,7 +112,7 @@ public class TestMartusLocalization extends TestCase
 
 /*TODO: Evaluate whether any of these tests are still useful
  * because they are not already covered elsewhere
- * 
+ *
 	public void testLoadTranslations()
 	{
 		try

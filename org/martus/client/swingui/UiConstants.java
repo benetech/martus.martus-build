@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -30,6 +30,6 @@ public class UiConstants
 {
 	public static final int defaultFontSize = 13;
 	public static final int textFieldColumns = 40;
-	
+
 	public static final String versionLabel = "1.0.1";
 }

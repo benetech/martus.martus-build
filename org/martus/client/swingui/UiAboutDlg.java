@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -48,7 +48,7 @@ import org.martus.common.MartusUtilities;
 public class UiAboutDlg extends JDialog implements ActionListener
 {
 	private MartusApp app;
-	
+
 	public UiAboutDlg(UiMainWindow owner)
 		throws HeadlessException
 	{
@@ -60,10 +60,10 @@ public class UiAboutDlg extends JDialog implements ActionListener
 
 		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
-		
+
 		String buildDate = app.getFieldLabel("aboutDlgBuildDate");
 		buildDate += " " + MartusUtilities.getVersionDate();
-		
+
 		JButton ok = new JButton(app.getButtonLabel("ok"));
 		ok.addActionListener(this);
 		ok.addKeyListener(new MakeEnterKeyExit());
@@ -78,7 +78,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		hBoxVersionAndIcon.add(vBoxVersionInfo);
 		hBoxVersionAndIcon.add(Box.createHorizontalGlue());
 		hBoxVersionAndIcon.add(icon);
-		
+
 		Box hBoxOk = Box.createHorizontalBox();
 		hBoxOk.add(Box.createHorizontalGlue());
 		hBoxOk.add(ok);
@@ -86,16 +86,16 @@ public class UiAboutDlg extends JDialog implements ActionListener
 
 		final String disclaimer = app.getFieldLabel("aboutDlgDisclaimer");
 		final String credits = app.getFieldLabel("aboutDlgCredits");
-		final String notice = "\n" + disclaimer + "\n\n" + credits + "\n\n" + 
+		final String notice = "\n" + disclaimer + "\n\n" + credits + "\n\n" +
 					RSANOTICE + "\n" + IBMNOTICE + "\n" + APACHENOTICE;
 
-		Box vBoxDetails = Box.createVerticalBox();		
+		Box vBoxDetails = Box.createVerticalBox();
 		vBoxDetails.add(new UiWrappedTextArea(this, notice));
 		vBoxDetails.add(hBoxOk);
 
 		Box hBoxDetails = Box.createHorizontalBox();
 		hBoxDetails.add(vBoxDetails);
-		
+
 		Box vBoxAboutDialog = Box.createVerticalBox();
 		vBoxAboutDialog.add(hBoxVersionAndIcon);
 		vBoxAboutDialog.add(hBoxDetails);
@@ -112,14 +112,14 @@ public class UiAboutDlg extends JDialog implements ActionListener
 	{
 		dispose();
 	}
-	
-	public class MakeEnterKeyExit extends KeyAdapter 
+
+	public class MakeEnterKeyExit extends KeyAdapter
 	{
-		public void keyPressed(KeyEvent ke) 
+		public void keyPressed(KeyEvent ke)
 		{
 			if (ke.getKeyCode() == KeyEvent.VK_ENTER)
 				dispose();
-		} 
+		}
 	}
 	final String RSANOTICE = "This product includes code licensed from RSA Security, Inc.";
 	final String IBMNOTICE = "Some portions licensed from IBM are available at http://oss.software.ibm.com/icu4j/.";

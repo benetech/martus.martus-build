@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -60,7 +60,7 @@ public class UiBulletinTablePane extends JScrollPane
 		if(!parent.isMainWindowInitalizing())
 			selectFirstBulletin();
 	}
-	
+
 	public UniversalId[] getSelectedBulletinUids()
 	{
 		return table.getSelectedBulletinUids();
@@ -80,18 +80,18 @@ public class UiBulletinTablePane extends JScrollPane
 	{
 		setCurrentBulletinIndex(table.getRowCount()-1);
 	}
-	
+
 	public int getCurrentBulletinIndex()
 	{
-		return(table.getSelectedRow());	
+		return(table.getSelectedRow());
 	}
-	
+
 	public void setCurrentBulletinIndex(int index)
 	{
-		table.selectRow(index);	
+		table.selectRow(index);
 		parent.bulletinSelectionHasChanged();
 	}
-	
+
 	public void folderContentsHaveChanged(BulletinFolder folder)
 	{
 		if(folder.equals(table.getFolder()))

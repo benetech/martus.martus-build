@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -52,7 +52,7 @@ public class Packet
 			super(message);
 		}
 	}
-	
+
 	public static class WrongPacketTypeException extends SAXException
 	{
 		public WrongPacketTypeException(String message)
@@ -68,8 +68,8 @@ public class Packet
 			super("Signature verification exception");
 		}
 	}
-		
-	
+
+
 	public static class WrongAccountException extends Exception
 	{
 	}
@@ -78,22 +78,22 @@ public class Packet
 	{
 		this(UniversalId.createFromAccountAndLocalId("Packet()", ""));
 	}
-	
+
 	public Packet(UniversalId universalIdToUse)
 	{
 		uid = universalIdToUse;
 	}
-	
+
 	public UniversalId getUniversalId()
 	{
 		return uid;
 	}
-	
+
 	public String getAccountId()
 	{
 		return uid.getAccountId();
 	}
-	
+
 	private void setAccountId(String accountString)
 	{
 		uid.setAccountId(accountString);
@@ -103,7 +103,7 @@ public class Packet
 	{
 		return uid.getLocalId();
 	}
-	
+
 	public void setUniversalId(UniversalId newUid)
 	{
 		uid = newUid;
@@ -113,12 +113,12 @@ public class Packet
 	{
 		uid.setLocalId(newPacketId.replace(':', '-'));
 	}
-	
+
 	public boolean isPublicData()
 	{
-		return false;	
+		return false;
 	}
-	
+
 	public byte[] writeXml(OutputStream out, MartusCrypto signer) throws IOException
 	{
 		UnicodeWriter writer = new UnicodeWriter(out);
@@ -126,10 +126,10 @@ public class Packet
 		writer.flush();
 		return sig;
 	}
-	
+
 	public byte[] writeXml(Writer writer, MartusCrypto signer) throws IOException
 	{
-		try 
+		try
 		{
 			BufferedWriter bufferedWriter = new BufferedWriter(writer);
 			XmlWriterFilter dest = new XmlWriterFilter(bufferedWriter);
@@ -139,16 +139,16 @@ public class Packet
 				String startComment = 	MartusXml.packetStartCommentStart +
 										MartusUtilities.getVersionDate() +
 										MartusXml.packetStartCommentEnd;
-				dest.writeDirect(startComment + MartusXml.newLine);			
+				dest.writeDirect(startComment + MartusXml.newLine);
 				dest.writeStartTag(getPacketRootElementName());
 				internalWriteXml(dest);
 				dest.writeEndTag(getPacketRootElementName());
-				
+
 				byte[] sig = dest.getSignature();
 				dest.writeDirect(MartusXml.packetSignatureStart);
 				dest.writeDirect(Base64.encode(sig));
 				dest.writeDirect(MartusXml.packetSignatureEnd + MartusXml.newLine);
-	
+
 				bufferedWriter.flush();
 				return sig;
 			}
@@ -161,7 +161,7 @@ public class Packet
 	}
 
 
-	public byte[] writeXmlToDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws 
+	public byte[] writeXmlToDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
@@ -175,7 +175,7 @@ public class Packet
 		return sig;
 	}
 
-	public void loadFromXmlInternal(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+	public void loadFromXmlInternal(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -188,8 +188,8 @@ public class Packet
 		if(!handler.gotStartTag)
 			throw new InvalidPacketException("No root tag");
 	}
-	
-	static public void validateXml(InputStreamWithSeek inputStream, String accountId, String localId, byte[] expectedSig, MartusCrypto verifier) throws 
+
+	static public void validateXml(InputStreamWithSeek inputStream, String accountId, String localId, byte[] expectedSig, MartusCrypto verifier) throws
 		IOException,
 		InvalidPacketException,
 		SignatureVerificationException,
@@ -199,7 +199,7 @@ public class Packet
 		verifyPacketSignature(inputStream, expectedSig, verifier);
 		XmlValidateHandler handler = new XmlValidateHandler();
 		BufferedReader reader = new UnicodeReader(inputStream);
-		try 
+		try
 		{
 			MartusXml.loadXmlWithExceptions(reader, handler);
 		}
@@ -220,14 +220,14 @@ public class Packet
 	{
 		return verifyPacketSignature(inputStream, null, verifier);
 	}
-	
+
 	public static byte[] verifyPacketSignature(InputStreamWithSeek in, byte[] expectedSig, MartusCrypto verifier) throws
 			IOException,
 			InvalidPacketException,
 			SignatureVerificationException
 	{
 		UnicodeReader reader = new UnicodeReader(in);
-		
+
 		final String startComment = reader.readLine();
 		if(!isValidStartComment(startComment))
 			throw new InvalidPacketException("No start comment");
@@ -235,17 +235,17 @@ public class Packet
 		final String packetType = reader.readLine();
 		final String accountLine = reader.readLine();
 		final String publicKey = extractPublicKeyFromXmlLine(accountLine);
-		
+
 		try
 		{
 			synchronized(verifier)
 			{
 				verifier.signatureInitializeVerify(publicKey);
-				
+
 				digestOneLine(startComment, verifier);
 				digestOneLine(packetType, verifier);
 				digestOneLine(accountLine, verifier);
-				
+
 				String sigLine = null;
 				String line = null;
 				while( (line=reader.readLine()) != null)
@@ -255,10 +255,10 @@ public class Packet
 						sigLine = line;
 						break;
 					}
-					
+
 					digestOneLine(line, verifier);
 				}
-				
+
 				byte[] sigBytes = extractSigFromXmlLine(sigLine);
 				if(expectedSig != null && !Arrays.equals(expectedSig, sigBytes))
 					throw new SignatureVerificationException();
@@ -307,12 +307,12 @@ public class Packet
 		if(!sigLine.endsWith(MartusXml.packetSignatureEnd))
 			throw new InvalidPacketException("No signature end");
 
-		final int sigOverhead = MartusXml.packetSignatureStart.length() + 
+		final int sigOverhead = MartusXml.packetSignatureStart.length() +
 								MartusXml.packetSignatureEnd.length();
 		final int sigLen = sigLine.length() - sigOverhead;
 		final int actualSigStart = sigLine.indexOf("=") + 1;
 		final int actualSigEnd = actualSigStart + sigLen;
-		
+
 		byte[] sigBytes = null;
 		try
 		{
@@ -328,15 +328,15 @@ public class Packet
 	static String extractPublicKeyFromXmlLine(final String accountLine)
 		throws InvalidPacketException
 	{
-		if(accountLine == null)		
+		if(accountLine == null)
 			throw new InvalidPacketException("No Account Tag");
 
 		final String accountTag = MartusXml.getTagStart(MartusXml.AccountElementName);
 		if(!accountLine.startsWith(accountTag))
 			throw new InvalidPacketException("No Account Tag");
-		
+
 		int startIndex = accountLine.indexOf(">");
-		int endIndex = accountLine.indexOf("</");	
+		int endIndex = accountLine.indexOf("</");
 		if(startIndex < 0 || endIndex < 0)
 			throw new InvalidPacketException("Invalid Account Element");
 		++startIndex;
@@ -348,14 +348,14 @@ public class Packet
 	{
 		return null;
 	}
-	
+
 	protected void internalWriteXml(XmlWriterFilter dest) throws IOException
 	{
 		writeElement(dest, MartusXml.PacketIdElementName, getLocalId());
 		writeElement(dest, MartusXml.AccountElementName, getAccountId());
 	}
-	
-	protected void setFromXml(String elementName, String data) throws 
+
+	protected void setFromXml(String elementName, String data) throws
 			Base64.InvalidBase64Exception
 	{
 		if(elementName.equals(MartusXml.PacketIdElementName))
@@ -367,14 +367,14 @@ public class Packet
 			setAccountId(data);
 		}
 	}
-	
+
 	class XmlHandler extends DefaultHandler
 	{
 		XmlHandler(String expectedRootTag)
 		{
 			rootTag = expectedRootTag;
 		}
-		
+
 		public void startElement(String namespaceURI, String sName, String qName,
 				Attributes attrs) throws SAXException
 		{
@@ -392,15 +392,15 @@ public class Packet
 		{
 			if(!gotStartTag)
 				return;
-			try 
+			try
 			{
 				setFromXml(qName, new String(data));
-			} 
+			}
 			catch(Base64.InvalidBase64Exception e)
 			{
 				System.out.println("Packet.endelement: " + e);
 			}
-			currentElementName = "";				
+			currentElementName = "";
 			data = new StringBuffer();
 		}
 
@@ -417,13 +417,13 @@ public class Packet
 		String currentElementName;
 		StringBuffer data;
 	}
-	
+
 	static class XmlValidateHandler extends DefaultHandler
 	{
 		XmlValidateHandler()
 		{
 		}
-		
+
 		public void startElement(String namespaceURI, String sName, String qName,
 				Attributes attrs) throws SAXException
 		{
@@ -435,18 +435,18 @@ public class Packet
 		{
 			String raw = new String(data);
 			byte[] bytes = raw.getBytes();
-			try 
+			try
 			{
 				if(currentElementName.equals(MartusXml.AccountElementName))
 					accountId = new String(bytes,"UTF-8");
 				if(currentElementName.equals(MartusXml.PacketIdElementName))
 					localId = new String(bytes,"UTF-8");
-			} 
-			catch(UnsupportedEncodingException e) 
+			}
+			catch(UnsupportedEncodingException e)
 			{
 				System.out.println("PacketValidate.endelement: " + e);
 			}
-			currentElementName = "";				
+			currentElementName = "";
 			data = new StringBuffer();
 		}
 
@@ -467,12 +467,12 @@ public class Packet
 
 	protected void writeElement(XmlWriterFilter dest, String tag, String data) throws IOException
 	{
-		dest.writeStartTag(tag);		
+		dest.writeStartTag(tag);
 		dest.writeEncoded(data);
-		dest.writeEndTag(tag);		
+		dest.writeEndTag(tag);
 	}
-	
-	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+
+	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -482,8 +482,8 @@ public class Packet
 	{
 		throw new WrongPacketTypeException("Can't call loadFromXml directly on a Packet object!");
 	}
-	
-	protected void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier, DefaultHandler handler) throws 
+
+	protected void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier, DefaultHandler handler) throws
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -492,7 +492,7 @@ public class Packet
 		if(verifier != null)
 			verifyPacketSignature(inputStream, expectedSig, verifier);
 		BufferedReader reader = new UnicodeReader(inputStream);
-		try 
+		try
 		{
 			MartusXml.loadXmlWithExceptions(reader, handler);
 		}

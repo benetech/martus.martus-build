@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -38,12 +38,12 @@ public class MockMartusSecurity extends MartusSecurity
 	{
 		loadSampleAccount();
 	}
-	
+
 	public void speedWarning(String message)
 	{
 		//System.out.println("MockMartusSecurity.speedWarning: " + message);
 	}
-	
+
 	public void readKeyPair(InputStream inputStream, String passPhrase) throws
 		IOException,
 		InvalidKeyPairFileVersionException,
@@ -54,26 +54,26 @@ public class MockMartusSecurity extends MartusSecurity
 
 		if(fakeAuthorizationFailure)
 			throw new AuthorizationFailedException();
-			
+
 		super.readKeyPair(inputStream, passPhrase);
 	}
-	
+
 	public void createKeyPair()
 	{
 		createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 	}
-	
+
 	public void createKeyPair(int publicKeyBits)
 	{
 		speedWarning("Calling MockMartusSecurity.createKeyPair " + publicKeyBits);
 		super.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 	}
-	
+
 	public boolean signatureIsValid(byte[] sig) throws MartusSignatureException
 	{
 		if(fakeSigVerifyFailure)
 			return false;
-			
+
 		return super.signatureIsValid(sig);
 	}
 
@@ -102,15 +102,15 @@ public class MockMartusSecurity extends MartusSecurity
 		}
 	}
 
-	public byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws 
+	public byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws
 		EncryptionException
 	{
 			byte[] encryptedKeyBytes = new byte[sessionKeyBytes.length];
 			System.arraycopy(sessionKeyBytes, 0, encryptedKeyBytes, 0, sessionKeyBytes.length);
-			encryptedKeyBytes[0] ^= 0xFF; 	
+			encryptedKeyBytes[0] ^= 0xFF;
 			return encryptedKeyBytes;
 	}
-	
+
 
 	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream) throws
 			NoKeyPairException,
@@ -119,7 +119,7 @@ public class MockMartusSecurity extends MartusSecurity
 		decrypt(cipherStream, plainStream, null);
 	}
 
-	private byte[] readSessionKey(InputStreamWithSeek cipherStream) throws DecryptionException 
+	private byte[] readSessionKey(InputStreamWithSeek cipherStream) throws DecryptionException
 	{
 		byte[] sessionKey = new byte[1];
 		try
@@ -132,7 +132,7 @@ public class MockMartusSecurity extends MartusSecurity
 		}
 		return sessionKey;
 	}
-	
+
 	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKey) throws
 			DecryptionException
 	{
@@ -141,7 +141,7 @@ public class MockMartusSecurity extends MartusSecurity
 			byte[] storedSessionKey = readSessionKey(cipherStream);
 			if(sessionKey == null)
 				sessionKey = storedSessionKey;
-				
+
 			int sessionKeyByte = sessionKey[0];
 			int theByte = 0;
 			while( (theByte = cipherStream.read()) != -1)
@@ -153,22 +153,22 @@ public class MockMartusSecurity extends MartusSecurity
 		}
 	}
 
-	public byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws 
+	public byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws
 		DecryptionException
 	{
 			byte[] sessionKeyBytes = new byte[encryptedSessionKeyBytes.length];
 			System.arraycopy(encryptedSessionKeyBytes, 0, sessionKeyBytes, 0, encryptedSessionKeyBytes.length);
-			sessionKeyBytes[0] ^= 0xFF; 	
+			sessionKeyBytes[0] ^= 0xFF;
 			return sessionKeyBytes;
 	}
 	// end MartusCrypto interface
 
-	KeyPair createSunKeyPair(int bitsInKey) throws Exception 
+	KeyPair createSunKeyPair(int bitsInKey) throws Exception
 	{
 		int smallKeySizeForTesting = 1024;
 		return super.createSunKeyPair(smallKeySizeForTesting);
 	}
-	
+
 	public void loadSampleAccount() throws Exception
 	{
 		ByteArrayInputStream in = new ByteArrayInputStream(Base64.decode(sampleKeyPair));
@@ -181,11 +181,11 @@ public class MockMartusSecurity extends MartusSecurity
 	public boolean fakeSigVerifyFailure;
 	public boolean fakeAuthorizationFailure;
 	public boolean fakeKeyPairVersionFailure;
-	
+
 	private static int checksum;
 
 	final static String samplePassphrase = "test";
-	final static String sampleKeyPair = 
+	final static String sampleKeyPair =
 		"AOfo8lBxtmZAo0c2D9bffO1z97+VK0z8nJ+uOL6RoFA9z6VnFdxq4azR8w5Kkz" +
 		"x/twX1NcSuKg7BJRpWLzQgZR+FR4MITQLRKDUA85L5Z7QP5+plPQ26R43rmRXz" +
 		"14Qom/QXheNEpZ96IWRt4hWPlZrmAfCwqDRUQEeewdM/0Q7GYj57nuAee3vBJl" +

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ import org.martus.common.FieldDataPacket;
 
 public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 {
-	
+
 	public UiBulletinPreviewDlg(UiMainWindow owner, FieldDataPacket fdp)
 	{
 		super(owner, owner.getApp().getWindowTitle("BulletinPreview"), true);
@@ -67,20 +67,20 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 		Dimension okSize = ok.getPreferredSize();
 		okSize.width += 40;
 		ok.setPreferredSize(okSize);
-		
+
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(scrollPane, ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(ok, ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-		
+
 		getRootPane().setDefaultButton(ok);
 		owner.centerDlg(this);
 		setResizable(true);
 		show();
 	}
 
-	public void actionPerformed(ActionEvent ae) 
+	public void actionPerformed(ActionEvent ae)
 	{
 		dispose();
 	}

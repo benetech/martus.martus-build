@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -67,18 +67,18 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		String sampleLanguage = "It";
 		int samplePreviewSplitterPosition = 420;
 		int sampleFolderSplitterPosition = 820;
-		Dimension sampleAppDimension = new Dimension(323,444);	
+		Dimension sampleAppDimension = new Dimension(323,444);
 		Point sampleAppPosition = new Point(3, 8);
 		boolean sampleAppMaximized = false;
-		
-		Dimension sampleEditorDimension = new Dimension(123, 43);	
+
+		Dimension sampleEditorDimension = new Dimension(123, 43);
 		Point sampleEditorPosition = new Point(2, 99);
 		boolean sampleEditorMaximized = true;
 		String sampleOperationState = CurrentUiState.OPERATING_STATE_UNKNOWN;
 
 		CurrentUiState state = new CurrentUiState();
 
-		state.setCurrentFolder(sampleFolder);	
+		state.setCurrentFolder(sampleFolder);
 		assertEquals("Not the same folder name?", sampleFolder, state.getCurrentFolder());
 		state.setCurrentSortTag(sampleTag);
 		state.setCurrentSortDirection(sampleDir);
@@ -96,7 +96,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		state.setCurrentEditorDimension(sampleEditorDimension);
 		state.setCurrentEditorPosition(sampleEditorPosition);
 		state.setCurrentEditorMaximized(sampleEditorMaximized);
-		
+
 		state.setCurrentOperatingState(sampleOperationState);
 
 		File file = File.createTempFile("$$$TestCurrentFolder",null);
@@ -121,7 +121,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		assertEquals("Wrong Editor Dimension?", sampleEditorDimension, loaded.getCurrentEditorDimension());
 		assertEquals("Wrong Editor Position?", sampleEditorPosition, loaded.getCurrentEditorPosition());
 		assertEquals("Wrong Editor Maximized?", sampleEditorMaximized, loaded.isCurrentEditorMaximized());
-		
+
 		assertEquals("Wrong Operating State?", sampleOperationState, loaded.getCurrentOperatingState());
 	}
 
@@ -134,17 +134,17 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		loaded.load(file);
 		assertNotNull("State was null?", loaded);
 		assertEquals("Wrong default folder", "", loaded.getCurrentFolder());
-		
-		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));		
+
+		ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(file));
 		out.writeObject(new Integer(6));
 		out.close();
 		loaded.load(file);
 		assertNotNull("State was null2?", loaded);
 	}
-	
+
 	public class OldVersionUiState extends CurrentUiState
 	{
-		public void save(File file) 
+		public void save(File file)
 		{
 			try
 			{
@@ -166,7 +166,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 				System.out.println("CurrentUiState.save error: " + e);
 			}
 		}
-	}	
+	}
 
 	public void testOldUiStateFile() throws Exception
 	{
@@ -177,11 +177,11 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		boolean sampleDefaultKeyboardVirtual = false;
 		String sampleDateFormat = "dd/mm/yyyy";
 		String sampleLanguage = "en";
-		
+
 		File file = createTempFile();
 		OldVersionUiState oldStateFile = new OldVersionUiState();
 
-		oldStateFile.setCurrentFolder(sampleFolder);	
+		oldStateFile.setCurrentFolder(sampleFolder);
 		oldStateFile.setCurrentSortTag(sampleTag);
 		oldStateFile.setCurrentSortDirection(sampleDir);
 		oldStateFile.setCurrentBulletinPosition(sampleBulletinPosition);
@@ -192,7 +192,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		oldStateFile.save(file);
 		CurrentUiState loaded = new CurrentUiState();
 		loaded.load(file);
-		
+
 		assertEquals("Wrong folder name?", sampleFolder, loaded.getCurrentFolder());
 		assertEquals("Wrong sort tag?", sampleTag, loaded.getCurrentSortTag());
 		assertEquals("Wrong sort dir?", sampleDir, loaded.getCurrentSortDirection());
@@ -206,7 +206,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 
 	public class BadVersionUiState extends CurrentUiState
 	{
-		public void save(File file) 
+		public void save(File file)
 		{
 			try
 			{
@@ -221,7 +221,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 				System.out.println("CurrentUiState.save error: " + e);
 			}
 		}
-	}	
+	}
 
 	public void testBadUiStateFile() throws Exception
 	{
@@ -243,7 +243,7 @@ public class TestCurrentUiState extends TestCaseEnhanced
 		badStateFile.save(file);
 		CurrentUiState loaded = new CurrentUiState();
 		loaded.load(file);
-		
+
 		assertEquals("Didn't get Default Keyboard?", true, loaded.isCurrentDefaultKeyboardVirtual());
 		assertEquals("Didn't get Default PreviewSplitterPosition?", 100, loaded.getCurrentPreviewSplitterPosition());
 		assertEquals("Didn't get Default FolderSplitterPosition?", 180, loaded.getCurrentFolderSplitterPosition());

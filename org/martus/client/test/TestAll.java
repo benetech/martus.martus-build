@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -31,19 +31,19 @@ import org.martus.common.TestCommon;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class TestAll 
+public class TestAll
 {
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 		runTests();
 	}
 
-	public static void runTests () 
+	public static void runTests ()
 	{
 		junit.textui.TestRunner.run (suite());
 	}
 
-	public static Test suite ( ) 
+	public static Test suite ( )
 	{
 		TestSuite suite= new TestSuite("All Client Martus Tests");
 

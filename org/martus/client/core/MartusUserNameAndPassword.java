@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -31,14 +31,14 @@ import org.martus.client.core.Exceptions.PasswordMatchedUserNameException;
 import org.martus.client.core.Exceptions.PasswordTooShortException;
 
 /**
- * 
+ *
  * MartusUserNameAndPassword
- * 
+ *
  * @author dchu
  *
  * Encapsulates the business logic behind validating usernames and passwords
  * Supports the UiCreateNewUserNameAndPassword UI dialog
- * 
+ *
  */
 public class MartusUserNameAndPassword
 {
@@ -55,7 +55,7 @@ public class MartusUserNameAndPassword
 		if (password.equals(username))
 			throw new PasswordMatchedUserNameException();
 	}
-		
+
 	public static final boolean isWeakPassword(String password)
 	{
 		if ((password.length() >= STRONG_PASSWORD_LENGTH)

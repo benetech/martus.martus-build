@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -30,9 +30,9 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.io.Writer;
 
-public class TestBase64XmlOutputStream extends TestCaseEnhanced 
+public class TestBase64XmlOutputStream extends TestCaseEnhanced
 {
-	public TestBase64XmlOutputStream(String name) 
+	public TestBase64XmlOutputStream(String name)
 	{
 		super(name);
 	}
@@ -82,7 +82,7 @@ public class TestBase64XmlOutputStream extends TestCaseEnhanced
 		String expected = getExpectedResult(data);
 		assertEquals("wrong result?", expected, result);
 	}
-	
+
 	public void testBigChunkThenBytes() throws Exception
 	{
 		int length = 50;
@@ -98,7 +98,7 @@ public class TestBase64XmlOutputStream extends TestCaseEnhanced
 		String expected = getExpectedResult(data);
 		assertEquals("wrong result?", expected, result);
 	}
-	
+
 	public void testBytesThenBigChunk() throws Exception
 	{
 		int length = 50;
@@ -114,7 +114,7 @@ public class TestBase64XmlOutputStream extends TestCaseEnhanced
 		String expected = getExpectedResult(data);
 		assertEquals("wrong result?", expected, result);
 	}
-	
+
 	String getExpectedResult(byte[] data)
 	{
 		String expected = "";
@@ -138,8 +138,8 @@ public class TestBase64XmlOutputStream extends TestCaseEnhanced
 			data[i] = (byte)i;
 		return data;
 	}
-	
-	String convertToBase64BySingleBytes(byte[] data) throws IOException 
+
+	String convertToBase64BySingleBytes(byte[] data) throws IOException
 	{
 		Writer writer = new StringWriter();
 		XmlWriterFilter wf = new XmlWriterFilter(writer);

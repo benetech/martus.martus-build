@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -39,7 +39,7 @@ public class TestCaseEnhanced extends TestCase
 	{
 		super(name);
 	}
-	
+
 	public File createTempFile() throws IOException
 	{
 		final String tempFileName = "$$$" + getName();
@@ -47,7 +47,7 @@ public class TestCaseEnhanced extends TestCase
 		file.deleteOnExit();
 		return file;
 	}
-	
+
 	public File createTempFile(String contents) throws IOException
 	{
 		File file = createTempFile();
@@ -63,7 +63,7 @@ public class TestCaseEnhanced extends TestCase
 		if(actual)
 			throw new AssertionFailedError(message + " expected false ");
 	}
-	
+
 	public static void assertNotEquals(long expected, long actual)
 	{
 		if(actual == expected)
@@ -191,7 +191,7 @@ public class TestCaseEnhanced extends TestCase
 			System.out.println(System.currentTimeMillis() - methodStartedAt);
 	}
 
-	
+
 	public final static String BAD_FILENAME = "<>//\\..??**::||";
 
 	private long methodStartedAt;

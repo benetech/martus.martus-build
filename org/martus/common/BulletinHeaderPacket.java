@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -40,23 +40,23 @@ public class BulletinHeaderPacket extends Packet
 		super(createUniversalId(accountString));
 		initialize();
 	}
-	
+
 	public BulletinHeaderPacket(UniversalId universalIdToUse)
 	{
 		super(universalIdToUse);
 		initialize();
 	}
-	
+
 	public static UniversalId createUniversalId(String accountId)
 	{
 		return UniversalId.createFromAccountAndPrefix(accountId, prefix);
 	}
-	
+
 	public static boolean isValidLocalId(String localId)
 	{
 		return localId.startsWith(prefix);
 	}
-	
+
 	public void clearAttachments()
 	{
 		publicAttachments.clear();
@@ -67,27 +67,27 @@ public class BulletinHeaderPacket extends Packet
 	{
 		return knowsWhetherAllPrivate;
 	}
-	
+
 	public void setStatus(String newStatus)
 	{
 		status = newStatus;
 	}
-	
+
 	public String getStatus()
 	{
 		return status;
 	}
-	
+
 	public long getLastSavedTime()
 	{
 		return lastSavedTime;
 	}
-	
+
 	public void updateLastSavedTime()
 	{
 		lastSavedTime = System.currentTimeMillis();
 	}
-	
+
 	public void setFieldDataPacketId(String id)
 	{
 		fieldDataPacketId = id;
@@ -97,7 +97,7 @@ public class BulletinHeaderPacket extends Packet
 	{
 		return fieldDataPacketId;
 	}
-	
+
 	public void setPrivateFieldDataPacketId(String id)
 	{
 		privateFieldDataPacketId = id;
@@ -110,30 +110,30 @@ public class BulletinHeaderPacket extends Packet
 
 	public String getHQPublicKey()
 	{
-		return hqPublicKey;	
+		return hqPublicKey;
 	}
 
 	public void setHQPublicKey(String key)
 	{
-		hqPublicKey = key;	
+		hqPublicKey = key;
 	}
-	
+
 	public void setAllPrivate(boolean newValue)
 	{
 		allPrivate = newValue;
 		knowsWhetherAllPrivate = true;
 	}
-	
+
 	public boolean isAllPrivate()
 	{
 		return allPrivate;
 	}
-	
+
 	public void setFieldDataSignature(byte[] sig)
 	{
 		fieldDataPacketSig = sig;
 	}
-	
+
 	public byte[] getFieldDataSignature()
 	{
 		return fieldDataPacketSig;
@@ -154,7 +154,7 @@ public class BulletinHeaderPacket extends Packet
 		String[] result = new String[publicAttachments.size()];
 		for(int i = 0; i < result.length; ++i)
 			result[i] = (String)publicAttachments.get(i);
-		
+
 		Arrays.sort(result);
 		return result;
 	}
@@ -164,25 +164,25 @@ public class BulletinHeaderPacket extends Packet
 		String[] result = new String[privateAttachments.size()];
 		for(int i = 0; i < result.length; ++i)
 			result[i] = (String)privateAttachments.get(i);
-		
+
 		Arrays.sort(result);
 		return result;
 	}
-	
+
 	public void addPublicAttachmentLocalId(String id)
 	{
 		if(publicAttachments.contains(id))
 			return;
 		publicAttachments.add(id);
 	}
-	
+
 	public void addPrivateAttachmentLocalId(String id)
 	{
 		if(privateAttachments.contains(id))
 			return;
 		privateAttachments.add(id);
 	}
-	
+
 	public void removeAllPublicAttachments()
 	{
 		publicAttachments.clear();
@@ -192,8 +192,8 @@ public class BulletinHeaderPacket extends Packet
 	{
 		privateAttachments.clear();
 	}
-	
-	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+
+	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -205,7 +205,7 @@ public class BulletinHeaderPacket extends Packet
 		super.loadFromXmlInternal(inputStream, expectedSig, verifier);
 	}
 
-	public void loadFromXml(InputStreamWithSeek inputStream, MartusCrypto verifier) throws 
+	public void loadFromXml(InputStreamWithSeek inputStream, MartusCrypto verifier) throws
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -218,7 +218,7 @@ public class BulletinHeaderPacket extends Packet
 
 	public static BulletinHeaderPacket loadFromZipFile(ZipFile zip, MartusCrypto verifier)
 		throws IOException,
-		SignatureVerificationException 
+		SignatureVerificationException
 	{
 		BulletinHeaderPacket header = new BulletinHeaderPacket("Unknown");
 		ZipEntry headerZipEntry = getBulletinHeaderEntry(zip);
@@ -254,22 +254,22 @@ public class BulletinHeaderPacket extends Packet
 			if(isValidLocalId(headerEntry.getName()))
 				return headerEntry;
 		}
-		
+
 		throw new IOException("Missing header entry");
 	}
-	
+
 	protected String getPacketRootElementName()
 	{
 		return MartusXml.BulletinHeaderPacketElementName;
 	}
-	
+
 	protected void internalWriteXml(XmlWriterFilter dest) throws IOException
 	{
 		super.internalWriteXml(dest);
 
 		writeElement(dest, MartusXml.BulletinStatusElementName, getStatus());
 		writeElement(dest, MartusXml.LastSavedTimeElementName, Long.toString(getLastSavedTime()));
-		
+
 		String allPrivateValue = ALL_PRIVATE;
 		if(!isAllPrivate())
 			allPrivateValue = NOT_ALL_PRIVATE;
@@ -277,8 +277,8 @@ public class BulletinHeaderPacket extends Packet
 
 		String hqPublicKey = getHQPublicKey();
 		if(hqPublicKey.length() > 0)
-			writeElement(dest, MartusXml.HQPublicKeyElementName, hqPublicKey);		
-		
+			writeElement(dest, MartusXml.HQPublicKeyElementName, hqPublicKey);
+
 		String dataId = getFieldDataPacketId();
 		if(dataId != null)
 		{
@@ -292,7 +292,7 @@ public class BulletinHeaderPacket extends Packet
 			writeElement(dest, MartusXml.PrivateDataPacketIdElementName, privateId);
 			writeElement(dest, MartusXml.PrivateDataPacketSigElementName, Base64.encode(privateFieldDataPacketSig));
 		}
-		
+
 		String[] publicAttachmentIds = getPublicAttachmentIds();
 		for(int i = 0; i < publicAttachmentIds.length; ++i)
 		{
@@ -305,8 +305,8 @@ public class BulletinHeaderPacket extends Packet
 			writeElement(dest, MartusXml.PrivateAttachmentIdElementName, privateAttachmentIds[i]);
 		}
 	}
-	
-	protected void setFromXml(String elementName, String data) throws 
+
+	protected void setFromXml(String elementName, String data) throws
 			Base64.InvalidBase64Exception
 	{
 		if(elementName.equals(MartusXml.BulletinStatusElementName))
@@ -357,7 +357,7 @@ public class BulletinHeaderPacket extends Packet
 			super.setFromXml(elementName, data);
 		}
 	}
-	
+
 	protected void initialize()
 	{
 		status = "";
@@ -369,14 +369,14 @@ public class BulletinHeaderPacket extends Packet
 		hqPublicKey = "";
 		lastSavedTime = TIME_UNKNOWN;
 	}
-	
+
 	private final static String ALL_PRIVATE = "1";
 	private final static String NOT_ALL_PRIVATE = "0";
-	
+
 	public static final long TIME_UNKNOWN = 0;
 
 	boolean knowsWhetherAllPrivate;
-	boolean allPrivate;	
+	boolean allPrivate;
 	String fieldDataPacketId;
 	String privateFieldDataPacketId;
 	String status;

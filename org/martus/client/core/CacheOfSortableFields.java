@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -42,14 +42,14 @@ import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.EncryptionException;
 
-public class CacheOfSortableFields 
+public class CacheOfSortableFields
 {
-	
+
 	public CacheOfSortableFields()
 	{
 		bulletinIdsHashMap = new HashMap(1000);
 	}
-	
+
 	public String getFieldData(UniversalId uid, String fieldTag)
 	{
 		HashMap dataHash = (HashMap)bulletinIdsHashMap.get(uid);
@@ -68,43 +68,43 @@ public class CacheOfSortableFields
 		}
 		bulletinIdsHashMap.put(b.getUniversalId(), dataHash);
 	}
-	
+
 	public void removeFieldData(UniversalId uid)
 	{
 		bulletinIdsHashMap.remove(uid);
 	}
-	
+
 	public void save(OutputStream out, MartusCrypto security) throws IOException
 	{
-		try 
+		try
 		{
 			byte[] sessionKeyBytes = security.createSessionKey();
 			CipherOutputStream cipherOut = security.createCipherOutputStream(out, sessionKeyBytes);
 			ObjectOutputStream dataOut = new ObjectOutputStream(cipherOut);
 			dataOut.writeObject(bulletinIdsHashMap);
 			dataOut.close();
-		} 
-		catch (EncryptionException e) 
+		}
+		catch (EncryptionException e)
 		{
 			throw new IOException("encryption exception");
 		}
 	}
-	
+
 	public void load(InputStreamWithSeek in, MartusCrypto security) throws IOException
 	{
-		try 
+		try
 		{
 			CipherInputStream cipherIn = security.createCipherInputStream(in, null);
 			ObjectInputStream dataIn = new ObjectInputStream(cipherIn);
 			bulletinIdsHashMap = (HashMap)dataIn.readObject();
 			dataIn.close();
-		} 
-		catch (DecryptionException e) 
+		}
+		catch (DecryptionException e)
 		{
 			bulletinIdsHashMap.clear();
 			throw new IOException("decryption exception");
-		} 
-		catch (ClassNotFoundException e) 
+		}
+		catch (ClassNotFoundException e)
 		{
 			bulletinIdsHashMap.clear();
 			throw new IOException(e.getMessage());

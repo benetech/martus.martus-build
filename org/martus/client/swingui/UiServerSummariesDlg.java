@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ import org.martus.common.FieldDataPacket;
 
 public class UiServerSummariesDlg extends JDialog
 {
-	public UiServerSummariesDlg(UiMainWindow owner, RetrieveTableModel tableModel, 
+	public UiServerSummariesDlg(UiMainWindow owner, RetrieveTableModel tableModel,
 			String windowTitleTag, String topMessageTag, String okButtonTag, String noneSelectedTag)
 	{
 		super(owner, owner.getApp().getWindowTitle(windowTitleTag), true);
@@ -77,14 +77,14 @@ public class UiServerSummariesDlg extends JDialog
 		table.setDefaultRenderer(Boolean.class, new BooleanRenderer());
 		table.setDefaultRenderer(Integer.class, new IntegerRenderer());
 		table.setDefaultRenderer(String.class, new StringRenderer());
-		
+
 		table.createDefaultColumnsFromModel();
 		tableBox.add(table.getTableHeader());
 		tableBox.add(new JScrollPane(table));
 		Dimension tableBoxSize = tableBox.getPreferredSize();
-		tableBoxSize.height = 350; //To fit in 800x600 
+		tableBoxSize.height = 350; //To fit in 800x600
 		tableBox.setPreferredSize(tableBoxSize);
-		
+
 		JRadioButton downloadableSummaries = new JRadioButton(getApp().getButtonLabel("DownloadableSummaries"), true);
 		downloadableSummaries.addActionListener(new ChangeDownloadableSummariesHandler());
 		JRadioButton allSummaries = new JRadioButton(getApp().getButtonLabel("AllSummaries"), false);
@@ -95,20 +95,20 @@ public class UiServerSummariesDlg extends JDialog
 		JPanel radioPanel = new JPanel();
 		radioPanel.setLayout(new GridLayout(0, 1));
 		radioPanel.add(downloadableSummaries);
-		radioPanel.add(allSummaries);		
-		
+		radioPanel.add(allSummaries);
+
 		JButton ok = new JButton(getApp().getButtonLabel(okButtonTag));
 		ok.addActionListener(new OkHandler());
 		JButton cancel = new JButton(getApp().getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
 		JButton preview = new JButton(getApp().getButtonLabel("Preview"));
 		preview.addActionListener(new PreviewHandler());
-		
+
 		JButton checkAll = new JButton(getApp().getButtonLabel("checkall"));
 		checkAll.addActionListener(new CheckAllHandler());
 		JButton unCheckAll = new JButton(getApp().getButtonLabel("uncheckall"));
 		unCheckAll.addActionListener(new UnCheckAllHandler());
-		
+
 		getContentPane().setLayout(new ParagraphLayout());
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(retrieveMessage);
@@ -125,8 +125,8 @@ public class UiServerSummariesDlg extends JDialog
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(ok);
 		getContentPane().add(cancel);
-		
-		
+
+
 		getRootPane().setDefaultButton(ok);
 		mainWindow.centerDlg(this);
 		setResizable(true);
@@ -142,7 +142,7 @@ public class UiServerSummariesDlg extends JDialog
 	{
 		return model.getUniversalIdList();
 	}
-	
+
 	MartusApp getApp()
 	{
 		return mainWindow.getApp();
@@ -152,10 +152,10 @@ public class UiServerSummariesDlg extends JDialog
 	{
 		public RetrieveJTable(TableModel model)
 		{
-			super(model);	
+			super(model);
 		}
-		
-		public void doLayout() 
+
+		public void doLayout()
 		{
 			Dimension tableBoxSize = tableBox.getPreferredSize();
 			TableColumn firstColumn = getColumnModel().getColumn(0);
@@ -176,7 +176,7 @@ public class UiServerSummariesDlg extends JDialog
 		public Component getTableCellRendererComponent(
 				JTable table, Object value,
 				boolean isSelected, boolean hasFocus,
-				int row, int column) 
+				int row, int column)
 		{
 			Component cell = oldBooleanRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			if(enabledBackgroundColor == null)
@@ -203,7 +203,7 @@ public class UiServerSummariesDlg extends JDialog
 		public Component getTableCellRendererComponent(
 				JTable table, Object value,
 				boolean isSelected, boolean hasFocus,
-				int row, int column) 
+				int row, int column)
 		{
 			Component cell = oldIntegerRenderer.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
 			if(enabledBackgroundColor == null)
@@ -230,7 +230,7 @@ public class UiServerSummariesDlg extends JDialog
 		public Component getTableCellRendererComponent(
 				JTable table, Object value,
 				boolean isSelected, boolean hasFocus,
-				int row, int column) 
+				int row, int column)
 		{
 			if(normalBackgroundColor == null)
 			{
@@ -258,7 +258,7 @@ public class UiServerSummariesDlg extends JDialog
 				mainWindow.notifyDlg(mainWindow, noneSelectedTag);
 				return;
 			}
-		
+
 			result = true;
 			dispose();
 		}
@@ -276,7 +276,7 @@ public class UiServerSummariesDlg extends JDialog
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			
+
 			int[] row = table.getSelectedRows();
 			if(row.length <= 0)
 			{
@@ -337,5 +337,5 @@ public class UiServerSummariesDlg extends JDialog
 	TableCellRenderer oldIntegerRenderer;
 	Color disabledBackgroundColor;
 	Box tableBox;
-	String noneSelectedTag;	
+	String noneSelectedTag;
 }

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		Vector params = new Vector();
 		return (Vector)callServer(server, CMD_SERVER_INFO, params);
 	}
-	
+
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
 		logging("MartusServerProxyViaXmlRpc:requestUploadRights clientId=" + clientId + "tryMagicWord=" + tryMagicWord);
@@ -63,7 +63,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		params.add(tryMagicWord);
 		return (String)callServer(server, CMD_UPLOAD_RIGHTS, params);
 	}
-	
+
 	public String uploadBulletin(String clientId, String bulletinId, String text)
 	{
 		logging("MartusServerProxyViaXmlRpc:uploadBulletin clientId=" + clientId + "bulletinId=" + bulletinId);
@@ -73,7 +73,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		params.add(text);
 		return (String)callServer(server, CMD_UPLOAD, params);
 	}
-	
+
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
 		logging("MartusServerProxyViaXmlRpc:uploadBulletinChunk clientId=" + authorAccountId + "bulletinId=" + bulletinLocalId);
@@ -87,7 +87,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		params.add(data);
 		params.add(signature);
 		return (String)callServer(server, CMD_UPLOAD_CHUNK, params);
-	}	
+	}
 
 
 	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
@@ -145,7 +145,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		params.add(packetId);
 		return (Vector)callServer(server, CMD_DOWNLOAD_PACKET, params);
 	}
-	
+
 	public String authenticateServer(String tokenToSign)
 	{
 		logging("MartusServerProxyViaXmlRpc:authenticateServer");
@@ -153,7 +153,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		params.add(tokenToSign);
 		return (String)callServer(server, CMD_AUTHENTICATE_SERVER, params);
 	}
-	
+
 	// end MartusXmlRpc interface
 
 	public Object callServer(String serverName, String method, Vector params)

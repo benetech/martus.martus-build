@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ import org.martus.common.Packet.WrongPacketTypeException;
 
 public class Bulletin implements BulletinConstants
 {
-	
+
 	public static class DamagedBulletinException extends Exception
 	{
 	}
@@ -77,25 +77,25 @@ public class Bulletin implements BulletinConstants
 		UniversalId privateDataUid = FieldDataPacket.createUniversalId(accountId);
 
 		createMemberVariables(headerUid, dataUid, privateDataUid);
-		
+
 		clear();
 	}
 
-	public Bulletin(Bulletin other) throws 
+	public Bulletin(Bulletin other) throws
 		IOException,
 		MartusCrypto.EncryptionException
 	{
 		BulletinHeaderPacket otherHeader = other.getBulletinHeaderPacket();
 		FieldDataPacket otherData = other.getFieldDataPacket();
 		FieldDataPacket otherPrivateData = other.getPrivateFieldDataPacket();
-		
+
 		store = other.getStore();
 		UniversalId headerUid = otherHeader.getUniversalId();
 		UniversalId dataUid = otherData.getUniversalId();
 		UniversalId privateDataUid = otherPrivateData.getUniversalId();
 
 		createMemberVariables(headerUid, dataUid, privateDataUid);
-		
+
 		pullDataFrom(other);
 	}
 
@@ -108,32 +108,32 @@ public class Bulletin implements BulletinConstants
 	{
 		store = newStore;
 	}
-	
+
 	public MartusCrypto getSignatureGenerator()
 	{
 		return getStore().getSignatureGenerator();
 	}
-	
+
 	public MartusCrypto getSignatureVerifier()
 	{
 		return getStore().getSignatureVerifier();
 	}
-	
+
 	public Database getDatabase()
 	{
 		return getStore().getDatabase();
 	}
-	
+
 	public UniversalId getUniversalId()
 	{
 		return getBulletinHeaderPacket().getUniversalId();
 	}
-	
+
 	public String getUniversalIdString()
 	{
 		return getUniversalId().toString();
 	}
-	
+
 	public String getAccount()
 	{
 		return getBulletinHeaderPacket().getAccountId();
@@ -143,7 +143,7 @@ public class Bulletin implements BulletinConstants
 	{
 		return getBulletinHeaderPacket().getLocalId();
 	}
-	
+
 	public boolean isValid()
 	{
 		return isValidFlag;
@@ -156,7 +156,7 @@ public class Bulletin implements BulletinConstants
 
 	public boolean mustEncryptPublicData()
 	{
-		return store.mustEncryptPublicData();	
+		return store.mustEncryptPublicData();
 	}
 
 	public boolean isDraft()
@@ -211,7 +211,7 @@ public class Bulletin implements BulletinConstants
 			return privateFieldData.get(fieldName);
 	}
 
-	public void addPublicAttachment(AttachmentProxy a) throws 
+	public void addPublicAttachment(AttachmentProxy a) throws
 		IOException,
 		MartusCrypto.EncryptionException
 	{
@@ -229,11 +229,11 @@ public class Bulletin implements BulletinConstants
 		{
 			bhp.addPublicAttachmentLocalId(a.getUniversalId().getLocalId());
 		}
-				
+
 		getFieldDataPacket().addAttachment(a);
 	}
-	
-	public void addPrivateAttachment(AttachmentProxy a) throws 
+
+	public void addPrivateAttachment(AttachmentProxy a) throws
 		IOException,
 		MartusCrypto.EncryptionException
 	{
@@ -251,7 +251,7 @@ public class Bulletin implements BulletinConstants
 		{
 			bhp.addPrivateAttachmentLocalId(a.getUniversalId().getLocalId());
 		}
-				
+
 		getPrivateFieldDataPacket().addAttachment(a);
 	}
 
@@ -264,10 +264,10 @@ public class Bulletin implements BulletinConstants
 	{
 		return getPrivateFieldDataPacket().getAttachments();
 	}
-	
+
 	public void extractAttachmentToFile(AttachmentProxy a, MartusCrypto verifier, File destFile) throws
-		IOException, 
-		Base64.InvalidBase64Exception, 
+		IOException,
+		Base64.InvalidBase64Exception,
 		InvalidPacketException,
 		SignatureVerificationException,
 		WrongPacketTypeException,
@@ -292,7 +292,7 @@ public class Bulletin implements BulletinConstants
 		set(TAGEVENTDATE, getFirstOfThisYear());
 		setDraft();
 	}
-	
+
 	public void clearPublicAttachments()
 	{
 		getBulletinHeaderPacket().removeAllPublicAttachments();
@@ -311,7 +311,7 @@ public class Bulletin implements BulletinConstants
 		{
 			if(contains(node.getValue()))
 			{
-				return withinDates(beginDate, endDate);	
+				return withinDates(beginDate, endDate);
 			}
 			return false;
 		}
@@ -337,7 +337,7 @@ public class Bulletin implements BulletinConstants
 		}
 		return false;
 	}
-	
+
 	private boolean withinDates(String beginDate, String endDate)
 	{
 		String eventDate = fieldData.get(Bulletin.TAGEVENTDATE);
@@ -346,28 +346,28 @@ public class Bulletin implements BulletinConstants
 			return true;
 		if(entryDate.compareTo(beginDate) >= 0 && entryDate.compareTo(endDate) <= 0)
 			return true;
-			
-		return false;	
+
+		return false;
 	}
 
 	public void save()
 	{
 		store.saveBulletin(this);
 	}
-	
+
 	public String getHQPublicKey()
 	{
-		return getBulletinHeaderPacket().getHQPublicKey();	
+		return getBulletinHeaderPacket().getHQPublicKey();
 	}
 
 	public void setHQPublicKey(String key)
 	{
-		getBulletinHeaderPacket().setHQPublicKey(key);	
+		getBulletinHeaderPacket().setHQPublicKey(key);
 		getFieldDataPacket().setHQPublicKey(key);
 		getPrivateFieldDataPacket().setHQPublicKey(key);
 	}
-	
-	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key) throws 
+
+	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key) throws
 		IOException,
 		DamagedBulletinException,
 		MartusCrypto.NoKeyPairException
@@ -375,15 +375,15 @@ public class Bulletin implements BulletinConstants
 		return loadFromDatabase(store, key, store.getSignatureVerifier());
 	}
 
-	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key, MartusCrypto verifier) throws 
+	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key, MartusCrypto verifier) throws
 			IOException,
 			DamagedBulletinException,
-			NoKeyPairException 
+			NoKeyPairException
 	{
 		Bulletin b = new Bulletin(store);
 		b.clear();
 		b.isValidFlag = true;
-		
+
 		boolean isHeaderValid = true;
 
 		BulletinHeaderPacket headerPacket = b.getBulletinHeaderPacket();
@@ -391,17 +391,17 @@ public class Bulletin implements BulletinConstants
 		b.loadAnotherPacket(headerPacket, headerKey, null, verifier);
 		if(!b.isValid())
 			isHeaderValid = false;
-		
+
 		if(isHeaderValid)
 		{
 			FieldDataPacket dataPacket = b.getFieldDataPacket();
 			FieldDataPacket privateDataPacket = b.getPrivateFieldDataPacket();
-		
+
 			DatabaseKey dataKey = b.getDatabaseKeyForLocalId(headerPacket.getFieldDataPacketId());
-	
+
 			byte[] dataSig = headerPacket.getFieldDataSignature();
 			b.loadAnotherPacket(dataPacket, dataKey, dataSig, verifier);
-		
+
 			DatabaseKey privateDataKey = b.getDatabaseKeyForLocalId(headerPacket.getPrivateFieldDataPacketId());
 			byte[] privateDataSig = headerPacket.getPrivateFieldDataSignature();
 			b.loadAnotherPacket(privateDataPacket, privateDataKey, privateDataSig, verifier);
@@ -425,9 +425,9 @@ public class Bulletin implements BulletinConstants
 		return b;
 	}
 
-	void loadAnotherPacket(Packet packet, DatabaseKey key, byte[] expectedSig, MartusCrypto verifier) throws 
-			IOException, 
-			NoKeyPairException 
+	void loadAnotherPacket(Packet packet, DatabaseKey key, byte[] expectedSig, MartusCrypto verifier) throws
+			IOException,
+			NoKeyPairException
 	{
 		packet.setUniversalId(key.getUniversalId());
 		try
@@ -460,16 +460,16 @@ public class Bulletin implements BulletinConstants
 		}
 	}
 
-	DatabaseKey getDatabaseKeyForLocalId(String localId) 
+	DatabaseKey getDatabaseKeyForLocalId(String localId)
 	{
 		UniversalId uidFdp = UniversalId.createFromAccountAndLocalId(getAccount(), localId);
 		return new DatabaseKey(uidFdp);
 	}
 
-	static UniversalId importZipFileToStoreWithNewUids(File inputFile, BulletinStore store) throws 
-		IOException, 
-		EncryptionException, 
-		CryptoException 
+	static UniversalId importZipFileToStoreWithNewUids(File inputFile, BulletinStore store) throws
+		IOException,
+		EncryptionException,
+		CryptoException
 	{
 		Database db = store.getDatabase();
 		MartusCrypto verifier = store.getSignatureVerifier();
@@ -488,9 +488,9 @@ public class Bulletin implements BulletinConstants
 		ZipFile zip = new ZipFile(inputFile);
 		try
 		{
-	
+
 			BulletinHeaderPacket header = getBulletinHeaderPacket();
-	
+
 			ZipEntry headerEntry = null;
 			Enumeration entries = zip.entries();
 			while(entries.hasMoreElements())
@@ -510,9 +510,9 @@ public class Bulletin implements BulletinConstants
 			{
 				headerIn.close();
 			}
-			
+
 			FieldDataPacket data = getFieldDataPacket();
-	
+
 			entries = zip.entries();
 			ZipEntry dataEntry = zip.getEntry(header.getFieldDataPacketId());
 			if(dataEntry == null)
@@ -524,7 +524,7 @@ public class Bulletin implements BulletinConstants
 			}
 			catch(DecryptionException e)
 			{
-				//TODO mark bulletin as not complete	
+				//TODO mark bulletin as not complete
 			}
 			catch(Exception e)
 			{
@@ -534,9 +534,9 @@ public class Bulletin implements BulletinConstants
 			{
 				dataIn.close();
 			}
-			
+
 			FieldDataPacket privateData = getPrivateFieldDataPacket();
-	
+
 			entries = zip.entries();
 			ZipEntry privateDataEntry = zip.getEntry(header.getPrivateFieldDataPacketId());
 			if(privateDataEntry == null)
@@ -560,7 +560,7 @@ public class Bulletin implements BulletinConstants
 			{
 				privateDataIn.close();
 			}
-			
+
 			AttachmentProxy[] attachments = getPublicAttachments();
 			clearPublicAttachments();
 			for(int i=0; i < attachments.length; ++i)
@@ -582,8 +582,8 @@ public class Bulletin implements BulletinConstants
 		setHQPublicKey(header.getHQPublicKey());
 	}
 
-	public AttachmentProxy extractZipAttachmentToFileProxy(MartusCrypto verifier, ZipFile zip, AttachmentProxy attachment) throws 
-	IOException 
+	public AttachmentProxy extractZipAttachmentToFileProxy(MartusCrypto verifier, ZipFile zip, AttachmentProxy attachment) throws
+	IOException
 	{
 		String localId = attachment.getUniversalId().getLocalId();
 		byte[] sessionKeyBytes = attachment.getSessionKeyBytes();
@@ -635,7 +635,7 @@ public class Bulletin implements BulletinConstants
 				attachmentIn.close();
 			}
 		}
-		
+
 	}
 
 	public boolean isStandardField(String fieldName)
@@ -657,12 +657,12 @@ public class Bulletin implements BulletinConstants
 	{
 		return new String[]
 		{
-			TAGLANGUAGE, 
-			
-			TAGAUTHOR, TAGORGANIZATION, 
+			TAGLANGUAGE,
+
+			TAGAUTHOR, TAGORGANIZATION,
 			TAGTITLE, TAGLOCATION, TAGKEYWORDS,
-			TAGEVENTDATE, TAGENTRYDATE, 
-			TAGSUMMARY, TAGPUBLICINFO, 
+			TAGEVENTDATE, TAGENTRYDATE,
+			TAGSUMMARY, TAGPUBLICINFO,
 		};
 	}
 
@@ -705,7 +705,7 @@ public class Bulletin implements BulletinConstants
 
 	public boolean isAllPrivate()
 	{
-		
+
 		BulletinHeaderPacket bhp = getBulletinHeaderPacket();
 		if(!bhp.hasAllPrivateFlag())
 		{
@@ -714,21 +714,21 @@ public class Bulletin implements BulletinConstants
 		}
 		return bhp.isAllPrivate();
 	}
-	
+
 	public void setAllPrivate(boolean newValue)
 	{
 		getBulletinHeaderPacket().setAllPrivate(newValue);
 	}
 
-	public void pullDataFrom(Bulletin other) throws 
+	public void pullDataFrom(Bulletin other) throws
 		IOException,
 		MartusCrypto.EncryptionException
 	{
 		this.clear();
-		
+
 		setStatus(other.getStatus());
 		setAllPrivate(other.isAllPrivate());
-		
+
 		{
 			String fields[] = fieldData.getFieldTags();
 			for(int f = 0; f < fields.length; ++f)
@@ -736,7 +736,7 @@ public class Bulletin implements BulletinConstants
 				set(fields[f], other.get(fields[f]));
 			}
 		}
-		
+
 		{
 			String privateFields[] = privateFieldData.getFieldTags();
 			for(int f = 0; f < privateFields.length; ++f)
@@ -791,12 +791,12 @@ public class Bulletin implements BulletinConstants
 		df.setLenient(false);
 		return df;
 	}
-	
+
 	public BulletinHeaderPacket getBulletinHeaderPacket()
 	{
 		return header;
 	}
-	
+
 	public FieldDataPacket getFieldDataPacket()
 	{
 		return fieldData;
@@ -807,7 +807,7 @@ public class Bulletin implements BulletinConstants
 		return privateFieldData;
 	}
 
-	private void createMemberVariables(UniversalId headerUid, UniversalId dataUid, UniversalId privateDataUid) 
+	private void createMemberVariables(UniversalId headerUid, UniversalId dataUid, UniversalId privateDataUid)
 	{
 		isValidFlag = true;
 		fieldData = new FieldDataPacket(dataUid, getStandardFieldNames());
@@ -840,7 +840,7 @@ public class Bulletin implements BulletinConstants
 	{
 		return pendingPrivateAttachments;
 	}
-	
+
 	private boolean encryptedFlag;
 	private boolean isFromDatabase;
 	private boolean isValidFlag;

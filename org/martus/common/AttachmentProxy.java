@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -35,45 +35,45 @@ public class AttachmentProxy
 		file = fileToAttach;
 		label = file.getName();
 	}
-	
+
 	public AttachmentProxy(UniversalId universalIdToUse, String labelToUse, byte[] sessionKeyBytes)
 	{
 		setUniversalIdAndSessionKey(universalIdToUse, sessionKeyBytes);
 		label = labelToUse;
 	}
-	
+
 	public AttachmentProxy(String labelToUse)
 	{
 		label = labelToUse;
 	}
-	
+
 	public String getLabel()
 	{
 		return label;
 	}
-	
+
 	public File getFile()
 	{
 		return file;
 	}
-	
+
 	public byte[] getSessionKeyBytes()
 	{
 		return keyBytes;
 	}
-	
+
 	public void setUniversalIdAndSessionKey(UniversalId universalId, byte[] sessionKeyString)
 	{
 		uid = universalId;
 		keyBytes = sessionKeyString;
 		file = null;
 	}
-	
+
 	public UniversalId getUniversalId()
 	{
 		return uid;
 	}
-	
+
 	String label;
 	File file;
 	byte[] keyBytes;

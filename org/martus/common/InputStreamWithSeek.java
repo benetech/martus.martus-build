@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ public abstract class InputStreamWithSeek extends InputStream
 	{
 		return inputStream.available();
 	}
-	
+
 	public void close() throws IOException
 	{
 		inputStream.close();
@@ -46,21 +46,21 @@ public abstract class InputStreamWithSeek extends InputStream
 		int got = inputStream.read();
 		return got;
 	}
-	
+
 	public long skip(long n) throws IOException
 	{
 		return inputStream.skip(n);
 	}
-	
+
 	public void seek(long offset) throws IOException
 	{
 		inputStream.close();
 		inputStream = openStream();
 		inputStream.skip(offset);
 	}
-	
+
 	abstract InputStream openStream() throws IOException;
-	
+
 	InputStream inputStream;
 
 }

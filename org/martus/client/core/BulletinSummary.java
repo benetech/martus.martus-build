@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -40,19 +40,19 @@ public class BulletinSummary
 		author = fdpToUse.get(Bulletin.TAGAUTHOR);
 		fdp = fdpToUse;
 	}
-	
+
 	public void setChecked(boolean newValue)
 	{
 		if(downloadable)
 			checkedFlag = newValue;
 	}
-	
+
 	public boolean isChecked()
 	{
 		return checkedFlag;
 	}
-	
-	public String getAccountId() 
+
+	public String getAccountId()
 	{
 		return accountId;
 	}
@@ -61,7 +61,7 @@ public class BulletinSummary
 	{
 		return localId;
 	}
-	
+
 	public String getTitle()
 	{
 		return title;
@@ -71,27 +71,27 @@ public class BulletinSummary
 	{
 		return author;
 	}
-	
-	public boolean isDownloadable() 
-	{ 
+
+	public boolean isDownloadable()
+	{
 		return downloadable;
 	}
 
-	public void setDownloadable(boolean downloadable) 
+	public void setDownloadable(boolean downloadable)
 	{
 		this.downloadable = downloadable;
 	}
-	
+
 	public int getSize()
 	{
-		return size;	
+		return size;
 	}
-	
+
 	public FieldDataPacket getFieldDataPacket()
 	{
-		return fdp;	
+		return fdp;
 	}
-	
+
 	private FieldDataPacket fdp;
 	private String accountId;
 	String localId;

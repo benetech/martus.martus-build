@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -38,18 +38,18 @@ import org.martus.common.MartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 
-public class TestCacheOfSortableFields extends TestCaseEnhanced 
+public class TestCacheOfSortableFields extends TestCaseEnhanced
 {
 
-	public TestCacheOfSortableFields(String name) 
+	public TestCacheOfSortableFields(String name)
 	{
 		super(name);
 	}
-	
+
 	public void testGetAndSet()
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
-		
+
 		String title1 = "1 Title";
 		String author1 = "1 Author";
 		String eventdate1 = "1 11-20-2002";
@@ -64,7 +64,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		assertEquals("event date not correct?",eventdate1, cache.getFieldData(uid1, Bulletin.TAGEVENTDATE));
 		assertEquals("Title not correct?",title1, cache.getFieldData(uid1, Bulletin.TAGTITLE));
 		assertEquals("author not correct?",author1, cache.getFieldData(uid1, Bulletin.TAGAUTHOR));
-		
+
 		String title2 = "2 Title";
 		String author2 = "2 Author";
 		String eventdate2 = "2 11-20-2002";
@@ -81,7 +81,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		assertEquals("2 author not correct?",author2, cache.getFieldData(uid2, Bulletin.TAGAUTHOR));
 	}
 
-	public void testGetBadTag() 
+	public void testGetBadTag()
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
 		Bulletin b2 = new Bulletin((BulletinStore)null);
@@ -90,13 +90,13 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		assertNull("an invalid tag found in cache?", cache.getFieldData(uid2, "tag"));
 	}
 
-	public void testEmptyCache() 
+	public void testEmptyCache()
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
 		assertNull("found tag with no cache?", cache.getFieldData(null, "tag"));
 	}
 
-	public void testRemoveFieldData() 
+	public void testRemoveFieldData()
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
 		Bulletin b2 = new Bulletin((BulletinStore)null);
@@ -107,12 +107,12 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		cache.removeFieldData(uid2);
 		assertNull("Date still in cache?", cache.getFieldData(uid2, Bulletin.TAGEVENTDATE));
 	}
-	
+
 	public void testSaveAndLoadCache() throws Exception
 	{
 		MartusSecurity security = new MartusSecurity();
 		security.createKeyPair(512);
-		
+
 		CacheOfSortableFields cache = new CacheOfSortableFields();
 		Bulletin b = new Bulletin((BulletinStore)null);
 		b.set(Bulletin.TAGEVENTDATE, "1020");
@@ -126,15 +126,15 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(savedBytes);
 		cache2.load(in, security);
 		assertEquals("Data not saved?", "1020", cache2.getFieldData(uid, Bulletin.TAGEVENTDATE));
-		
+
 		ByteArrayInputStream nonCipherIn = new ByteArrayInputStream(savedBytes);
-		try 
+		try
 		{
 			ObjectInputStream dataIn = new ObjectInputStream(nonCipherIn);
 			dataIn.readObject();
 			fail("This should have thrown, should be encrypted");
-		} 
-		catch (Exception expectedException) 
+		}
+		catch (Exception expectedException)
 		{
 		}
 	}

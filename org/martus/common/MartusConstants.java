@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -26,9 +26,9 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.common;
 
-public interface MartusConstants 
+public interface MartusConstants
 {
-	// Somewhat surprisingly, a 32k buffer didn't seem to be any 
+	// Somewhat surprisingly, a 32k buffer didn't seem to be any
 	// faster than a 1k buffer.
 	public final static int streamBufferCopySize = 1024;
 	public final static String regexEqualsDelimeter = "=";

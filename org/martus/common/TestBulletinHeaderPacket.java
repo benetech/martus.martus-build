@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 	{
 		super(name);
 	}
-	
+
 	public void setUp() throws Exception
 	{
 		if(security == null)
@@ -47,7 +47,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		if(bhp == null)
 			bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 	}
-	
+
 	public void testCreateUniversalId()
 	{
 		String sampleAccount = "an account";
@@ -55,13 +55,13 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		assertEquals("account", sampleAccount, uid.getAccountId());
 		assertStartsWith("prefix", "B-", uid.getLocalId());
 	}
-	
+
 	public void testPrefix()
 	{
 		assertEquals("not legal?", true, BulletinHeaderPacket.isValidLocalId("B-12345"));
 		assertEquals("was legal?", false, BulletinHeaderPacket.isValidLocalId("F-12345"));
 	}
-	
+
 	public void testConstructorWithId()
 	{
 		final String accountId = "some account id";
@@ -71,20 +71,20 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		assertEquals("accountId?", accountId, p.getAccountId());
 		assertEquals("packetId?", packetId, p.getLocalId());
 	}
-	
+
 	public void testGetFieldDataPacketId()
 	{
 		String sampleId = "this is a valid id. really.";
 		assertNull("data not null?", bhp.getFieldDataPacketId());
 		bhp.setFieldDataPacketId(sampleId);
 		assertEquals(sampleId, bhp.getFieldDataPacketId());
-		
+
 		String privateId = "private data id";
 		assertNull("private data not null?", bhp.getPrivateFieldDataPacketId());
 		bhp.setPrivateFieldDataPacketId(privateId);
 		assertEquals(privateId, bhp.getPrivateFieldDataPacketId());
 	}
-	
+
 	public void testAddAndGetAttachments()
 	{
 		assertEquals("count before adding public", 0, bhp.getPublicAttachmentIds().length);
@@ -119,11 +119,11 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		assertEquals("public list3 a2 in wrong position?", 0, Arrays.binarySearch(list3, attachmentId2));
 		assertEquals("private list4 a3 in wrong position?", 1, Arrays.binarySearch(list4, attachmentId3));
 		assertEquals("private list4 a4 in wrong position?", 0, Arrays.binarySearch(list4, attachmentId4));
-		
+
 		bhp.clearAttachments();
 		assertEquals("private count after clear", 0, bhp.getPrivateAttachmentIds().length);
 		assertEquals("public count after clear", 0, bhp.getPublicAttachmentIds().length);
-		
+
 	}
 
 	public void testStatus()
@@ -132,14 +132,14 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		bhp.setStatus("abc");
 		assertEquals("not set right?", "abc", bhp.getStatus());
 	}
-	
+
 	public void testAllPrivate() throws Exception
 	{
 		UniversalId dummyUid = UniversalId.createDummyUniversalId();
 		BulletinHeaderPacket unknownPrivacy = new BulletinHeaderPacket(dummyUid);
 		assertEquals("knows privacy?", false, unknownPrivacy.hasAllPrivateFlag());
 		unknownPrivacy.setAllPrivate(true);
-		
+
 		bhp.setAllPrivate(false);
 		assertEquals("doesn't know privacy after set false?", true, bhp.hasAllPrivateFlag());
 		assertEquals("private?", false, bhp.isAllPrivate());
@@ -163,7 +163,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		loadedBhp2.loadFromXml(in2, security);
 		assertEquals("doesn't know privacy after loaded true?", true, loadedBhp2.hasAllPrivateFlag());
 		assertEquals("not private after load?", true, loadedBhp2.isAllPrivate());
-		
+
 		String result2 = new String(out2.toByteArray(), "UTF-8");
 		int startTagStart = result2.indexOf(MartusXml.AllPrivateElementName) - 1;
 		int endTagEnd = result2.indexOf("/" + MartusXml.AllPrivateElementName) + MartusXml.AllPrivateElementName.length() + 1;
@@ -189,10 +189,10 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		bhp.addPublicAttachmentLocalId(attachmentId2);
 		bhp.addPrivateAttachmentLocalId(attachmentId3);
 		bhp.addPrivateAttachmentLocalId(attachmentId4);
-		
+
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		String result = new String(out.toByteArray(), "UTF-8");
 		assertContains(MartusXml.getTagStart(MartusXml.BulletinHeaderPacketElementName), result);
 		assertContains(MartusXml.getTagEnd(MartusXml.BulletinHeaderPacketElementName), result);
@@ -219,13 +219,13 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		assertContains(MartusXml.getTagEnd(MartusXml.PublicAttachmentIdElementName), result);
 
 		assertContains(attachmentId2, result);
-		
+
 		assertContains(MartusXml.getTagStart(MartusXml.PrivateAttachmentIdElementName), result);
 		assertContains(attachmentId3, result);
 		assertContains(MartusXml.getTagEnd(MartusXml.PrivateAttachmentIdElementName), result);
 
 		assertContains(attachmentId4, result);
-		
+
 		assertContains(Long.toString(bhp.getLastSavedTime()), result);
 
 		assertNotContains(MartusXml.getTagStart(MartusXml.HQPublicKeyElementName), result);
@@ -241,14 +241,14 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		bhp.setPrivateFieldDataPacketId(privateId);
 		bhp.setFieldDataSignature(sampleSig1);
 		bhp.setPrivateFieldDataSignature(sampleSig2);
-		
+
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		String result = new String(out.toByteArray(), "UTF-8");
 		assertContains(MartusXml.getTagStart(MartusXml.HQPublicKeyElementName), result);
 	}
-	
+
 	public void testWriteXmlWithNoFieldData() throws Exception
 	{
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -259,7 +259,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		assertContains(MartusXml.getTagEnd(MartusXml.BulletinHeaderPacketElementName), result);
 		assertContains(bhp.getLocalId(), result);
 	}
-	
+
 	public void testLoadXml() throws Exception
 	{
 		String dataId = "some id";
@@ -280,12 +280,12 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
 		String result = new String(out.toByteArray(), "UTF-8");
-		
+
 		BulletinHeaderPacket loaded = new BulletinHeaderPacket("");
 		byte[] bytes = result.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		loaded.loadFromXml(in, security);
-		
+
 		assertEquals("time", bhp.getLastSavedTime(), loaded.getLastSavedTime());
 		assertEquals("id", bhp.getLocalId(), loaded.getLocalId());
 		assertEquals("data id", bhp.getFieldDataPacketId(), loaded.getFieldDataPacketId());
@@ -302,7 +302,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		assertEquals("private count", 2, list2.length);
 		assertEquals("private attachments wrong?", true, Arrays.equals(bhp.getPrivateAttachmentIds(), list2));
 	}
-	
+
 	public void testLoadXmlWithHQKey() throws Exception
 	{
 		String hqKey = "sdjflksj";
@@ -310,12 +310,12 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
 		String result = new String(out.toByteArray(), "UTF-8");
-		
+
 		BulletinHeaderPacket loaded = new BulletinHeaderPacket("");
 		byte[] bytes = result.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		loaded.loadFromXml(in, security);
-		
+
 		assertEquals("hqKey", bhp.getHQPublicKey(), loaded.getHQPublicKey());
 	}
 

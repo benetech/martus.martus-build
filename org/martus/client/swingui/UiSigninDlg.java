@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -67,7 +67,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 
 		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
-		String title = window.getApp().getWindowTitle("MartusSignIn") + 
+		String title = window.getApp().getWindowTitle("MartusSignIn") +
 				" (" + versionInfo + ")";
 		setTitle(title);
 
@@ -105,22 +105,22 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 			JLabel createNewUserNamePassword = new JLabel(app.getFieldLabel("CreateNewUserNamePassword"));
 			getContentPane().add(createNewUserNamePassword);
-			
+
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(window, app.getFieldLabel("HelpOnCreatingNewPassword"));
 			getContentPane().add(helpOnCreatingPassword);
-			
+
 		}
 
 		userNameDescription = new JLabel("");
 		passwordDescription = new JLabel("");
-		
+
 		getContentPane().add(new JLabel(app.getFieldLabel("username")), ParagraphLayout.NEW_PARAGRAPH);
 		nameField = new JTextField(20);
 		nameField.setText(username);
 		getContentPane().add(userNameDescription);
 		getContentPane().add(nameField);
-		
+
 		getContentPane().add(new JLabel(app.getFieldLabel("password")), ParagraphLayout.NEW_PARAGRAPH);
 		passwordField = new JPasswordField(20);
 
@@ -158,7 +158,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		return password;
 	}
 
-	public class switchKeyboardHandler extends AbstractAction 
+	public class switchKeyboardHandler extends AbstractAction
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -171,7 +171,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		passwordField.updateUI();
 		ok.requestFocus();
 	}
-	
+
 	public void SwitchKeyboards()
 	{
 		boolean viewingVirtualKeyboard = mainWindow.isCurrentDefaultKeyboardVirtual();
@@ -181,15 +181,15 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 				return;
 		}
 		mainWindow.setCurrentDefaultKeyboardVirtual(!viewingVirtualKeyboard);
-		try 
+		try
 		{
 			mainWindow.saveCurrentUiState();
-		} 
-		catch(IOException e) 
+		}
+		catch(IOException e)
 		{
 			System.out.println("UiSigninDialog SwitchKeyboards :" + e);
-		}		
-		
+		}
+
 		UpdatePasswordArea();
 	}
 
@@ -200,7 +200,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 			displayPasswordAreaUsingVirtualKeyboard();
 		else
 			displayPasswordAreaUsingNormalKeyboard();
-	}	
+	}
 
 	public void addKeyboard(JPanel keyboard)
 	{
@@ -212,7 +212,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		passwordArea.removeAll();
 		userNameDescription.setText(app.getFieldLabel("VirtualUserNameDescription"));
 		passwordDescription.setText(app.getFieldLabel("VirtualPasswordDescription"));
-		
+
 		passwordArea.setLayout(new ParagraphLayout());
 		passwordArea.setBorder(new LineBorder(Color.black, 2));
 		passwordArea.add(new JLabel(""));
@@ -229,7 +229,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		updateUI();
 		mainWindow.centerDlg((JDialog)this);
 	}
-	
+
 	public void displayPasswordAreaUsingNormalKeyboard()
 	{
 		passwordArea.removeAll();
@@ -256,7 +256,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		updateUI();
 		mainWindow.centerDlg(this);
 	}
-	public void updateUI() 
+	public void updateUI()
 	{
 		passwordArea.updateUI();
 		userNameDescription.updateUI();

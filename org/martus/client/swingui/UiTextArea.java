@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -40,7 +40,7 @@ public class UiTextArea extends JTextArea
 		super(rows, cols);
 		SetTabKeyForFocusEvents();
 	}
-	
+
 	public UiTextArea(String text)
 	{
 		super(text);
@@ -50,10 +50,10 @@ public class UiTextArea extends JTextArea
 	private void SetTabKeyForFocusEvents()
 	{
 		Set set = new HashSet(getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
-	    set.clear(); 
+	    set.clear();
 	    set.add(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_TAB, 0));
 	    setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, set);
-	    set.clear(); 
+	    set.clear();
 	    set.add(KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_TAB,
 	    		 java.awt.event.InputEvent.SHIFT_MASK));
 	    setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, set);

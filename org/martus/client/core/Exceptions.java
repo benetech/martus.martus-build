@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -31,11 +31,11 @@ public class Exceptions
 	public static class MartusClientApplicationException extends Exception
 	{
 	}
-	
+
 	public static class InvalidUserNameOrPassword extends MartusClientApplicationException
 	{
 	}
-	
+
 	public static class BlankUserNameException extends InvalidUserNameOrPassword
 	{
 	}
@@ -43,7 +43,7 @@ public class Exceptions
 	public static class PasswordMatchedUserNameException extends InvalidUserNameOrPassword
 	{
 	}
-	
+
 	public static class PasswordTooShortException extends InvalidUserNameOrPassword
 	{
 	}

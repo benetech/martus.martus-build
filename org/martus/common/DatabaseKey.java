@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -36,21 +36,21 @@ public class DatabaseKey implements Comparable
 		key.setDraft();
 		return key;
 	}
-	
+
 	public static DatabaseKey createSealedKey(UniversalId uidToUse)
 	{
 		DatabaseKey key = new DatabaseKey(uidToUse);
 		key.setSealed();
 		return key;
 	}
-	
+
 	public static DatabaseKey createLegacyKey(UniversalId uidToUse)
 	{
 		DatabaseKey key = new DatabaseKey(uidToUse);
 		key.setSealed();
 		return key;
 	}
-	
+
 	public static DatabaseKey createKey(UniversalId uidToUse, String status)
 	{
 		if(status.equals(BulletinConstants.STATUSDRAFT))
@@ -58,7 +58,7 @@ public class DatabaseKey implements Comparable
 		else
 			return createSealedKey(uidToUse);
 	}
-	
+
 	public DatabaseKey(UniversalId uidToUse)
 	{
 		uid = uidToUse;
@@ -69,7 +69,7 @@ public class DatabaseKey implements Comparable
 	{
 		return uid;
 	}
-	
+
 	public String getAccountId()
 	{
 		return getUniversalId().getAccountId();
@@ -79,12 +79,12 @@ public class DatabaseKey implements Comparable
 	{
 		return getUniversalId().getLocalId();
 	}
-	
+
 	public boolean isSealed()
 	{
 		return (status == statusSealed);
 	}
-	
+
 	public boolean isDraft()
 	{
 		return (status == statusDraft);
@@ -94,7 +94,7 @@ public class DatabaseKey implements Comparable
 	{
 		status = statusDraft;
 	}
-	
+
 	public void setSealed()
 	{
 		status = statusSealed;
@@ -118,7 +118,7 @@ public class DatabaseKey implements Comparable
 	{
 		return getString().hashCode();
 	}
-	
+
 	public int compareTo(Object other)
 	{
 		return getString().compareTo(((DatabaseKey)other).getString());
@@ -133,11 +133,11 @@ public class DatabaseKey implements Comparable
 			statusCode = "S";
 		return statusCode + "-" + uid.toString();
 	}
-	
+
 	private static final int statusUnknown = 0;
 	private static final int statusSealed = 1;
 	private static final int statusDraft = 2;
-	
+
 	UniversalId uid;
 	int status;
 }

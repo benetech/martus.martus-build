@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -103,12 +103,12 @@ public class BulletinFolder
 	{
 		return sortTag;
 	}
-	
+
 	public int getSortDirection()
 	{
-		return sortDir;	
+		return sortDir;
 	}
-	
+
 	public boolean isVisible()
 	{
 		return isNameVisible(getName());
@@ -127,12 +127,12 @@ public class BulletinFolder
 		return (getStatusAllowed().indexOf(bulletinStatus) != -1);
 	}
 
-	public synchronized void add(Bulletin b) 
+	public synchronized void add(Bulletin b)
 	{
-		add(b.getUniversalId());		
+		add(b.getUniversalId());
 	}
-	
-	synchronized void add(UniversalId id) 
+
+	synchronized void add(UniversalId id)
 	{
 		if(rawIdList.contains(id))
 		{
@@ -140,7 +140,7 @@ public class BulletinFolder
 			sortExisting();
 			return;
 		}
-		
+
 		DatabaseKey key = new DatabaseKey(id);
 		Database db = store.getDatabase();
 		if(!db.doesRecordExist(key))
@@ -148,7 +148,7 @@ public class BulletinFolder
 			//System.out.println("not in store: " + id);
 			return;
 		}
-		
+
 		rawIdList.add(id);
 		insertIntoSortedList(id);
 	}
@@ -175,7 +175,7 @@ public class BulletinFolder
 			return null;
 		return store.findBulletinByUniversalId(uid);
 	}
-	
+
 	public UniversalId getBulletinUniversalIdSorted(int index)
 	{
 		needSortedIdList();
@@ -216,7 +216,7 @@ public class BulletinFolder
 		needSortedIdList();
 		return sortedIdList.indexOf(id);
 	}
-	
+
 	public static boolean isNameVisible(String folderName)
 	{
 		return !folderName.startsWith("*");
@@ -227,11 +227,11 @@ public class BulletinFolder
 		return folderName.startsWith("%");
 	}
 
-	private void insertIntoSortedList(UniversalId uid) 
+	private void insertIntoSortedList(UniversalId uid)
 	{
 		if(sortedIdList == null)
 			return;
-			
+
 		String thisValue = store.getFieldData(uid, sortTag);
 		int index;
 		for(index = 0; index < sortedIdList.size(); ++index)
@@ -253,7 +253,7 @@ public class BulletinFolder
 			insertIntoSortedList(id);
 		}
 	}
-	
+
 	private void needSortedIdList()
 	{
 		if(sortedIdList == null)

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -84,10 +84,10 @@ public class ParagraphLayout extends ConstraintLayout {
 		return maxWidth;
 	}
 
-	public void measureLayout(Container target, Dimension dimension, int type)  
+	public void measureLayout(Container target, Dimension dimension, int type)
 	{
 		int count = target.getComponentCount();
-		if (count > 0) 
+		if (count > 0)
 		{
 			int y = 0;
 			int rowHeight = 0;

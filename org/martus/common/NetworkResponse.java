@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -30,7 +30,7 @@ import java.util.Vector;
 
 import org.martus.common.*;
 
-public class NetworkResponse 
+public class NetworkResponse
 {
 	public NetworkResponse(Vector rawServerReturnData)
 	{
@@ -45,17 +45,17 @@ public class NetworkResponse
 				resultVector = (Vector)rawServerReturnData.get(1);
 		}
 	}
-	
+
 	public String getResultCode()
 	{
 		return resultCode;
 	}
-	
+
 	public Vector getResultVector()
 	{
 		return resultVector;
 	}
-	
+
 	String resultCode;
 	Vector resultVector;
 }

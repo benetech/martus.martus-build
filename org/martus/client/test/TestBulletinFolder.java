@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -54,7 +54,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 			b = store.createEmptyBulletin();
 			b.save();
 			testFolder.add(b);
-	
+
 			b2 = store.createEmptyBulletin();
 			b2.save();
 			testFolder.add(b2);
@@ -105,7 +105,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		folder.preventDelete();
 		assertEquals(false, folder.canDelete());
 	}
-	
+
 	public void testIsVisible() throws Exception
 	{
 		BulletinStore store = new MockBulletinStore();
@@ -266,7 +266,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals("Not Decending?", folder.DESCENDING, folder.getSortDirection());
 		b = folder.getBulletinSorted(0);
 		assertEquals("20010401", b.get("eventdate"));
-		
+
 		// and back to ascending
 		folder.sortBy("eventdate");
 		assertEquals("new field count", 4, folder.getBulletinCount());

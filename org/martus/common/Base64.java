@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -78,7 +78,7 @@ public class Base64
 
 		return encoded.toString();
 	}
-	
+
 	public static byte[] decode(String base64) throws InvalidBase64Exception
 	{
 		try
@@ -97,13 +97,13 @@ public class Base64
 					(getValue(base64.charAt(i+1)) << 12) +
 					(getValue(base64.charAt(i+2)) << 6) +
 					getValue(base64.charAt(i+3));
-	
+
 				for(int j = 0; j < 3 && rawIndex + j < raw.length; ++j)
 					raw[rawIndex+j] = (byte)((block >> (8 * (2-j))) & 0xff);
-	
+
 				rawIndex += 3;
 			}
-	
+
 			return raw;
 		}
 		catch (Exception e)
@@ -143,16 +143,16 @@ public class Base64
 		}
 		return decodedBytes;
 	}
-	
+
 	public static File decodeToTempFile(String base64) throws IOException, InvalidBase64Exception
 	{
 		File tempFile = File.createTempFile("$$$Martus-base64decode", null);
 		tempFile.deleteOnExit();
-	
+
 		OutputStream outputStream = new FileOutputStream(tempFile);
 		outputStream.write(decode(base64));
 		outputStream.close();
-		
+
 		return tempFile;
 	}
 
@@ -168,14 +168,14 @@ public class Base64
 			int got = in.read(data);
 			if(got < 1)
 				break;
-				
+
 			String encoded = encode(data, 0, got);
 			writer.write(encoded);
 		}
 		writer.flush();
 	}
-	
-	public static void decode(Reader encodedIn, OutputStream rawOut) throws 
+
+	public static void decode(Reader encodedIn, OutputStream rawOut) throws
 		IOException,
 		InvalidBase64Exception
 	{
@@ -188,7 +188,7 @@ public class Base64
 			int got = bufferedIn.read(data);
 			if(got < 1)
 				break;
-				
+
 			if(got != data.length)
 				throw new InvalidBase64Exception();
 

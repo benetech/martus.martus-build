@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -41,7 +41,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class AttachmentPacket extends Packet
 {
-	public AttachmentPacket(String account, byte[] sessionKeyBytes, File fileToAttach, MartusCrypto crypto) throws 
+	public AttachmentPacket(String account, byte[] sessionKeyBytes, File fileToAttach, MartusCrypto crypto) throws
 		IOException
 
 	{
@@ -56,18 +56,18 @@ public class AttachmentPacket extends Packet
 		super(UniversalId.createDummyUniversalId());
 		security = crypto;
 	}
-	
+
 	public static UniversalId createUniversalId(String accountId)
 	{
 		return UniversalId.createFromAccountAndPrefix(accountId, prefix);
 	}
-	
+
 	public static boolean isValidLocalId(String localId)
 	{
 		return localId.startsWith(prefix);
 	}
-	
-	public byte[] writeXmlToDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws 
+
+	public byte[] writeXmlToDatabase(Database db, boolean mustEncrypt, MartusCrypto signer) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
@@ -76,7 +76,7 @@ public class AttachmentPacket extends Packet
 		UnicodeWriter writer = new UnicodeWriter(temp);
 		byte[] sig = writeXml(writer, signer);
 		writer.close();
-		
+
 		DatabaseKey headerKey = new DatabaseKey(getUniversalId());
 		BufferedInputStream in = new BufferedInputStream(new FileInputStream(temp));
 		db.writeRecord(headerKey, in);
@@ -93,7 +93,7 @@ public class AttachmentPacket extends Packet
 		Base64.InvalidBase64Exception
 	{
 		AttachmentPacket ap = new AttachmentPacket(verifier);
-		
+
 		File base64File = File.createTempFile("MartusAttachExtract", null);
 		base64File.deleteOnExit();
 
@@ -101,12 +101,12 @@ public class AttachmentPacket extends Packet
 		AttachmentExtractionHandler handler = new AttachmentExtractionHandler(base64Out);
 		ap.loadFromXml(xmlIn, null, verifier, handler);
 		base64Out.close();
-		
+
 		UnicodeReader base64Reader = new UnicodeReader(base64File);
-		
+
 		File encryptedFile = File.createTempFile("MartusEncryptedAtt", null);
 		encryptedFile.deleteOnExit();
-				
+
 		FileOutputStream outEncrypted = new FileOutputStream(encryptedFile);
 		Base64.decode(base64Reader, outEncrypted);
 		outEncrypted.close();
@@ -115,30 +115,30 @@ public class AttachmentPacket extends Packet
 
 		InputStreamWithSeek inEncrypted = new FileInputStreamWithSeek(encryptedFile);
 		FileOutputStream outRaw = new FileOutputStream(destFile);
-		try 
+		try
 		{
 			verifier.decrypt(inEncrypted, outRaw, sessionKeyBytes);
-		} 
-		catch(Exception e) 
+		}
+		catch(Exception e)
 		{
 			throw new IOException(e.toString());
-		} 
+		}
 		outRaw.close();
 		inEncrypted.close();
 		encryptedFile.delete();
 	}
-	
+
 	protected String getPacketRootElementName()
 	{
 		return MartusXml.AttachmentPacketElementName;
 	}
-	
+
 	protected void internalWriteXml(XmlWriterFilter dest) throws IOException
 	{
 		super.internalWriteXml(dest);
 
 		dest.writeStartTag(MartusXml.AttachmentBytesElementName);
-		
+
 		InputStream inRaw = new BufferedInputStream(new FileInputStream(rawFile));
 		OutputStream outXml = new Base64XmlOutputStream(dest);
 		try
@@ -151,11 +151,11 @@ public class AttachmentPacket extends Packet
 		}
 		outXml.close();
 		inRaw.close();
-		
+
 		dest.writeEndTag(MartusXml.AttachmentBytesElementName);
 	}
-	
-	static final String NEWLINE = "\n";	
+
+	static final String NEWLINE = "\n";
 	byte[] sessionKey;
 	File rawFile;
 	MartusCrypto security;
@@ -169,7 +169,7 @@ class AttachmentExtractionHandler extends DefaultHandler
 	{
 		out = dest;
 	}
-	
+
 	public void startElement(String namespaceURI, String sName, String qName,
 			Attributes attrs) throws SAXException
 	{
@@ -177,7 +177,7 @@ class AttachmentExtractionHandler extends DefaultHandler
 		{
 			writing = true;
 		}
-		
+
 	}
 
 	public void endElement(String namespaceURI, String sName, String qName) throws SAXException
@@ -201,14 +201,14 @@ class AttachmentExtractionHandler extends DefaultHandler
 			if(curChar >= ' ')
 				bufWithoutNewlines[dest++] = curChar;
 		}
-		
+
 		String data = new String(bufWithoutNewlines, 0, dest);
 		byte[] bytes = data.getBytes();
-		try 
+		try
 		{
 			out.write(bytes);
-		} 
-		catch(IOException e) 
+		}
+		catch(IOException e)
 		{
 			throw new SAXException("IO Exception: " + e.getMessage());
 		}

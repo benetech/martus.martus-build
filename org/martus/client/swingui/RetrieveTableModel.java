@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -58,24 +58,24 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	{
 		retrieverDlg = progressDlg;
 	}
-	
+
 	protected void setCurrentSummaries()
 	{
 		downloadableSummaries = getSummariesForBulletinsNotInStore(allSummaries);
 		changeToDownloadableSummaries();
 	}
-	
+
 	public void changeToDownloadableSummaries()
 	{
-		currentSummaries = downloadableSummaries;	
-	}
-	
-	public void changeToAllSummaries()
-	{
-		currentSummaries = allSummaries;	
+		currentSummaries = downloadableSummaries;
 	}
 
-	public Vector getSummariesForBulletinsNotInStore(Vector allSummaries) 
+	public void changeToAllSummaries()
+	{
+		currentSummaries = allSummaries;
+	}
+
+	public Vector getSummariesForBulletinsNotInStore(Vector allSummaries)
 	{
 		Vector result = new Vector();
 		Iterator iterator = allSummaries.iterator();
@@ -100,7 +100,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 
 	public boolean isDownloadable(int row)
 	{
-		return((BulletinSummary)currentSummaries.get(row)).isDownloadable();		
+		return((BulletinSummary)currentSummaries.get(row)).isDownloadable();
 	}
 
 	public Vector getUniversalIdList()
@@ -147,7 +147,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 
 	public void getFieldOfficeSealedSummaries(String fieldOfficeAccountId) throws ServerErrorException
 	{
-		try 
+		try
 		{
 			NetworkResponse response = app.getCurrentNetworkInterfaceGateway().getSealedBulletinIds(app.security, fieldOfficeAccountId, MartusUtilities.getRetrieveBulletinSummaryTags());
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
@@ -155,7 +155,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 				createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
 				return;
 			}
-		} 
+		}
 		catch (MartusSignatureException e)
 		{
 			System.out.println("RetrieveTableModle.getFieldOfficeSealedSummaries: " + e);
@@ -165,7 +165,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 
 	public void getFieldOfficeDraftSummaries(String fieldOfficeAccountId) throws ServerErrorException
 	{
-		try 
+		try
 		{
 			NetworkResponse response = app.getCurrentNetworkInterfaceGateway().getDraftBulletinIds(app.security, fieldOfficeAccountId, MartusUtilities.getRetrieveBulletinSummaryTags());
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
@@ -173,7 +173,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 				createSummariesFromStrings(fieldOfficeAccountId, response.getResultVector());
 				return;
 			}
-		} 
+		}
 		catch (MartusSignatureException e)
 		{
 			System.out.println("MartusApp.getFieldOfficeDraftSummaries: " + e);
@@ -192,13 +192,13 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 			retrieverDlg.beginRetrieve();
 	}
 
-	public void waitForThreadToTerminate(RetrieveThread worker) 
+	public void waitForThreadToTerminate(RetrieveThread worker)
 	{
-		try 
+		try
 		{
 			worker.join();
-		} 
-		catch (InterruptedException e) 
+		}
+		catch (InterruptedException e)
 		{
 		}
 	}
@@ -210,7 +210,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 			accountId = account;
 			summaryStrings = summarys;
 		}
-		
+
 		public void run()
 		{
 			retrieveAllSummaries();
@@ -229,12 +229,12 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 				{
 					BulletinSummary bulletinSummary = app.createSummaryFromString(accountId, pair);
 					allSummaries.add(bulletinSummary);
-				} 
+				}
 				catch (ServerErrorException e)
 				{
 					errorThrown = e;
 				}
-					
+
 				if(retrieverDlg != null)
 				{
 					if(retrieverDlg.shouldExit())
@@ -251,32 +251,32 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		}
 
 		private String accountId;
-		private Vector summaryStrings;	
+		private Vector summaryStrings;
 	}
 
-	public void checkIfErrorOccurred() throws ServerErrorException 
+	public void checkIfErrorOccurred() throws ServerErrorException
 	{
 		if(errorThrown != null)
 			throw (errorThrown);
 	}
-	
+
 	public Vector getDownloadableSummaries()
 	{
-		return downloadableSummaries;	
+		return downloadableSummaries;
 	}
 
 	public Vector getAllSummaries()
 	{
-		return allSummaries;	
+		return allSummaries;
 	}
-	
+
 	public BulletinSummary getBulletinSummary(int row)
 	{
-		return (BulletinSummary)currentSummaries.get(row);	
+		return (BulletinSummary)currentSummaries.get(row);
 	}
-	
 
-	Object getSizeInKbytes(int sizeKb) 
+
+	Object getSizeInKbytes(int sizeKb)
 	{
 		sizeKb /= 1000;
 		Integer sizeInK = new Integer(sizeKb);

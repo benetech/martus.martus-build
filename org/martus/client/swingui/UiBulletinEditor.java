@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -48,16 +48,16 @@ public class UiBulletinEditor extends UiBulletinComponent
 		return new UiBulletinComponentEditorSection(this, owner, app, encrypted);
 	}
 
-	public void copyDataToBulletin(Bulletin bulletin) throws 
+	public void copyDataToBulletin(Bulletin bulletin) throws
 		IOException,
 		MartusCrypto.EncryptionException
 	{
 		bulletin.clear();
-		
+
 		boolean isAllPrivate = false;
 		if(allPrivateField.getText().equals(UiField.TRUESTRING))
 			isAllPrivate = true;
-			
+
 		bulletin.setAllPrivate(isAllPrivate);
 		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
 		{
@@ -79,7 +79,7 @@ public class UiBulletinEditor extends UiBulletinComponent
 			AttachmentProxy a = privateAttachments[aIndex];
 			bulletin.addPrivateAttachment(a);
 		}
-		
+
 	}
 
 	public UiField createBoolField()

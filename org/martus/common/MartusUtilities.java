@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -56,32 +56,32 @@ import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
-public class MartusUtilities 
+public class MartusUtilities
 {
 	public static class FileTooLargeException extends Exception {}
 	public static class FileVerificationException extends Exception {}
 	public static class FileSigningException extends Exception {}
 
-	public static class ServerErrorException extends Exception 
+	public static class ServerErrorException extends Exception
 	{
 		public ServerErrorException(String message)
 		{
 			super(message);
 		}
-		
+
 		public ServerErrorException()
 		{
 			this("");
 		}
 	}
 
-	
+
 	public static int getCappedFileLength(File file) throws FileTooLargeException
 	{
 		long rawLength = file.length();
 		if(rawLength >= Integer.MAX_VALUE || rawLength < 0)
 			throw new FileTooLargeException();
-			
+
 		return (int)rawLength;
 	}
 
@@ -95,12 +95,12 @@ public class MartusUtilities
 		if(versionStream != null)
 		{
 			BufferedReader reader = new BufferedReader(new InputStreamReader(versionStream));
-			try 
+			try
 			{
 				versionDate = reader.readLine();
 				reader.close();
-			} 
-			catch(IOException ifNoDateAvailableLeaveItBlank) 
+			}
+			catch(IOException ifNoDateAvailableLeaveItBlank)
 			{
 			}
 		}
@@ -108,7 +108,7 @@ public class MartusUtilities
 	}
 
 	public static synchronized String createSignature(String stringToSign, MartusCrypto security)
-		throws UnsupportedEncodingException, MartusSignatureException 
+		throws UnsupportedEncodingException, MartusSignatureException
 	{
 		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
 		byte[] sigBytes = security.createSignature(new ByteArrayInputStream(bytesToSign));
@@ -142,7 +142,7 @@ public class MartusUtilities
 		}
 	}
 
-	public static String sign(Vector dataToSign, MartusCrypto signer) throws 
+	public static String sign(Vector dataToSign, MartusCrypto signer) throws
 			MartusCrypto.MartusSignatureException
 	{
 		try
@@ -168,7 +168,7 @@ public class MartusUtilities
 			throw new MartusCrypto.MartusSignatureException();
 		}
 	}
-	
+
 	public static byte[] createSignatureFromFile(File fileToSign, MartusCrypto signer)
 		throws IOException, MartusSignatureException
 	{
@@ -185,31 +185,31 @@ public class MartusUtilities
 				in.close();
 		}
 	}
-	
+
 	public static File getSignatureFileFromFile(File originalFile)
 	{
-		return new File(originalFile.getAbsolutePath() + ".sig");	
+		return new File(originalFile.getAbsolutePath() + ".sig");
 	}
-	
-	public static void deleteInterimFileAndSignature(File tempFile) 
+
+	public static void deleteInterimFileAndSignature(File tempFile)
 	{
 		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
 		tempFile.delete();
 		tempFileSignature.delete();
 	}
-	
+
 	public static File createSignatureFileFromFile(File fileToSign, MartusCrypto signer)
 		throws IOException, MartusSignatureException
-	{		
+	{
 		File newSigFile = new File(fileToSign.getAbsolutePath() + ".sig.new");
 		File existingSig = getSignatureFileFromFile(fileToSign);
-		
+
 		if( newSigFile.exists() )
 			newSigFile.delete();
 
 		byte[] signature = createSignatureFromFile(fileToSign, signer);
 		String sigString = Base64.encode(signature);
-		
+
 		UnicodeWriter writer = new UnicodeWriter(newSigFile);
 		writer.writeln(signer.getPublicKeyString());
 		writer.writeln(sigString);
@@ -220,12 +220,12 @@ public class MartusUtilities
 		{
 			existingSig.delete();
 		}
-		
+
 		newSigFile.renameTo(existingSig);
-		
+
 		return existingSig;
 	}
-	
+
 	public static void verifyFileAndSignature(File fileToVerify, File signatureFile, MartusCrypto verifier, String accountId)
 		throws FileVerificationException
 	{
@@ -236,10 +236,10 @@ public class MartusUtilities
 			String key = reader.readLine();
 			String signature = reader.readLine();
 			reader.close();
-			
+
 			if(!key.equals(accountId))
-				throw new FileVerificationException();				
-			
+				throw new FileVerificationException();
+
 			inData = new FileInputStream(fileToVerify);
 			if( !verifier.isSignatureValid(key, inData, Base64.decode(signature)) )
 				throw new FileVerificationException();
@@ -260,34 +260,34 @@ public class MartusUtilities
 			}
 		}
 	}
-	
+
 	public static Vector importPublicKeyFromFile(File file) throws IOException
 	{
 		Vector result = new Vector();
-		
+
 		UnicodeReader reader = new UnicodeReader(file);
 		String publicKey = reader.readLine();
 		String signature = reader.readLine();
 		reader.close();
-		
+
 		result.add(publicKey);
 		result.add(signature);
-		
+
 		return result;
 	}
-	
+
 	public static void exportPublicKey(MartusCrypto security, File outputfile)
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
 		ByteArrayInputStream in = null;
-		UnicodeWriter writer = null;		
+		UnicodeWriter writer = null;
 		try
 		{
 			String publicKeyString = security.getPublicKeyString();
 			byte[] publicKeyBytes = Base64.decode(publicKeyString);
 			in = new ByteArrayInputStream(publicKeyBytes);
 			byte[] sigBytes = security.createSignature(in);
-			
+
 			writer = new UnicodeWriter(outputfile);
 			writer.writeln(publicKeyString);
 			writer.writeln(Base64.encode(sigBytes));
@@ -305,7 +305,7 @@ public class MartusUtilities
 					;
 				}
 			}
-			
+
 			if(writer != null)
 			{
 				try
@@ -320,7 +320,7 @@ public class MartusUtilities
 		}
 	}
 
-	public static String formatPublicCode(String publicCode) 
+	public static String formatPublicCode(String publicCode)
 	{
 		String formatted = "";
 		while(publicCode.length() > 0)
@@ -333,8 +333,8 @@ public class MartusUtilities
 			formatted = formatted.substring(0,formatted.length()-1);
 		return formatted;
 	}
-	
-	public static String computePublicCode(String publicKeyString) throws 
+
+	public static String computePublicCode(String publicKeyString) throws
 		Base64.InvalidBase64Exception
 	{
 		String digest = null;
@@ -347,7 +347,7 @@ public class MartusUtilities
 			System.out.println("MartusApp.computePublicCode: " + e);
 			return "";
 		}
-		
+
 		final int codeSizeChars = 20;
 		char[] buf = new char[codeSizeChars];
 		int dest = 0;
@@ -356,13 +356,13 @@ public class MartusUtilities
 			int value = Base64.getValue(digest.charAt(i));
 			int high = value >> 3;
 			int low = value & 0x07;
-			
+
 			buf[dest++] = (char)('1' + high);
 			buf[dest++] = (char)('1' + low);
 		}
 		return new String(buf);
 	}
-	
+
 	public static void exportPublicBulletinPacketsFromDatabaseToZipFile(Database db, DatabaseKey headerKey, File destZipFile, MartusCrypto security) throws
 			IOException,
 			CryptoException,
@@ -372,24 +372,24 @@ public class MartusUtilities
 			SignatureVerificationException,
 			DecryptionException,
 			NoKeyPairException,
-			FileNotFoundException 
+			FileNotFoundException
 	{
 		BulletinHeaderPacket bhp;
 		String headerXml = "";
-		
+
 		bhp = new BulletinHeaderPacket("");
 		try
 		{
 			headerXml = db.readRecord(headerKey, security);
-			
+
 			byte[] headerBytes = headerXml.getBytes("UTF-8");
-			
+
 			ByteArrayInputStreamWithSeek headerIn = new ByteArrayInputStreamWithSeek(headerBytes);
-			
+
 			MartusCrypto doNotCheckSigDuringDownload = null;
 			bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
 			DatabaseKey[] packetKeys = getPublicPacketKeys(bhp);
-			
+
 			FileOutputStream outputStream = new FileOutputStream(destZipFile);
 			extractPacketsToZipStream(headerKey.getAccountId(), db, packetKeys, outputStream, security);
 		}
@@ -398,8 +398,8 @@ public class MartusUtilities
 			e.printStackTrace();
 		}
 
-		// TODO: REMOVE THIS! IT IS ONLY FOR DEBUGGING! SLOW SLOW SLOW!		
-		try 
+		// TODO: REMOVE THIS! IT IS ONLY FOR DEBUGGING! SLOW SLOW SLOW!
+		try
 		{
 			ZipFile zip = new ZipFile(destZipFile);
 			validateIntegrityOfZipFilePublicPackets(headerKey.getAccountId(), zip, security);
@@ -411,7 +411,7 @@ public class MartusUtilities
 			System.out.println("  InvalidPacket in bulletin: " + bhp.getLocalId());
 			throw e;
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile: validation failed!");
@@ -428,14 +428,14 @@ public class MartusUtilities
 			SignatureVerificationException,
 			DecryptionException,
 			NoKeyPairException,
-			FileNotFoundException 
+			FileNotFoundException
 	{
 		String headerXml = db.readRecord(headerKey, security);
 		byte[] headerBytes = headerXml.getBytes("UTF-8");
-		
+
 		ByteArrayInputStreamWithSeek headerIn = new ByteArrayInputStreamWithSeek(headerBytes);
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket("");
-		
+
 		MartusCrypto doNotCheckSigDuringDownload = null;
 		bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
 		DatabaseKey[] packetKeys = getAllPacketKeys(bhp);
@@ -443,8 +443,8 @@ public class MartusUtilities
 		FileOutputStream outputStream = new FileOutputStream(destZipFile);
 		extractPacketsToZipStream(headerKey.getAccountId(), db, packetKeys, outputStream, security);
 
-		// TODO: REMOVE THIS! IT IS ONLY FOR DEBUGGING! SLOW SLOW SLOW!		
-		try 
+		// TODO: REMOVE THIS! IT IS ONLY FOR DEBUGGING! SLOW SLOW SLOW!
+		try
 		{
 			ZipFile zip = new ZipFile(destZipFile);
 			validateIntegrityOfZipFilePackets(headerKey.getAccountId(), zip, security);
@@ -456,42 +456,42 @@ public class MartusUtilities
 			System.out.println("  InvalidPacket in bulletin: " + bhp.getLocalId());
 			throw e;
 		}
-		catch (Exception e) 
+		catch (Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile: validation failed!");
 			throw new IOException("Zip validation exception: " + e.getMessage());
 		}
 	}
-	
+
 	public static Vector getRetrieveBulletinSummaryTags()
 	{
 		Vector tags = new Vector();
 		tags.add(NetworkInterfaceConstants.TAG_BULLETIN_SIZE);
-		return tags;	
+		return tags;
 	}
-	
+
 	public static DatabaseKey[] getPublicPacketKeys(BulletinHeaderPacket bhp)
 	{
 		String accountId = bhp.getAccountId();
 		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
-		
+
 		int corePacketCount = 2;
 		int publicAttachmentCount = publicAttachmentIds.length;
 		int totalPacketCount = corePacketCount + publicAttachmentCount;
 		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
-		
+
 		int next = 0;
 		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
 		keys[next++] = createKeyWithHeaderStatus(bhp, dataUid);
-		
+
 		for(int i=0; i < publicAttachmentIds.length; ++i)
 		{
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
 			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
 		}
 		keys[next++] = createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
-		
+
 		return keys;
 	}
 
@@ -500,14 +500,14 @@ public class MartusUtilities
 		String accountId = bhp.getAccountId();
 		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
 		String[] privateAttachmentIds = bhp.getPrivateAttachmentIds();
-		
+
 		int corePacketCount = 3;
 		int publicAttachmentCount = publicAttachmentIds.length;
 		int privateAttachmentCount = privateAttachmentIds.length;
 		int totalPacketCount = corePacketCount + publicAttachmentCount + privateAttachmentCount;
 		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
 		int next = 0;
-		
+
 		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
 		UniversalId privateDataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getPrivateFieldDataPacketId());
 
@@ -524,21 +524,21 @@ public class MartusUtilities
 			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
 		}
 		keys[next++] = createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
-		
+
 		return keys;
 	}
-	
+
 	public static int getBulletinSize(Database db, BulletinHeaderPacket bhp)
 	{
 		int size = 0;
 		DatabaseKey[] bulletinPacketKeys  = getAllPacketKeys(bhp);
 		for(int i = 0 ; i < bulletinPacketKeys.length ; ++i)
 		{
-			try 
+			try
 			{
 				size += db.getRecordSize(bulletinPacketKeys[i]);
-			} 
-			catch (IOException e) 
+			}
+			catch (IOException e)
 			{
 				System.out.println("MartusUtilities:bulletinPacketKeys error= " + e);
 				return 0;
@@ -546,18 +546,18 @@ public class MartusUtilities
 		}
 		return size;
 	}
-	
-	public static void extractPacketsToZipStream(String clientId, Database db, DatabaseKey[] packetKeys, OutputStream outputStream, MartusCrypto security) throws 
-		IOException, 
-		UnsupportedEncodingException 
+
+	public static void extractPacketsToZipStream(String clientId, Database db, DatabaseKey[] packetKeys, OutputStream outputStream, MartusCrypto security) throws
+		IOException,
+		UnsupportedEncodingException
 	{
 		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
-// TODO: Setting the method to STORED seems like it should dramatically 
+// TODO: Setting the method to STORED seems like it should dramatically
 // speed up writing and reading zip files. The javadocs say it is supported.
 // But every time I try it, the zip file ends up empty. kbs.
 //		zipOut.setMethod(zipOut.STORED);
-		
-		try 
+
+		try
 		{
 			for(int i = 0; i < packetKeys.length; ++i)
 			{
@@ -571,12 +571,12 @@ public class MartusUtilities
 				byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 				while( (got=in.read(bytes)) >= 0)
 					zipOut.write(bytes, 0, got);
-					
+
 				in.close();
 				zipOut.flush();
 			}
-		} 
-		catch(CryptoException e) 
+		}
+		catch(CryptoException e)
 		{
 			throw new IOException("CryptoException " + e);
 		}
@@ -585,9 +585,9 @@ public class MartusUtilities
 			zipOut.close();
 		}
 	}
-	
+
 	public static void importBulletinPacketsFromZipFileToDatabase(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
-		throws IOException, 
+		throws IOException,
 		Packet.InvalidPacketException,
 		Packet.SignatureVerificationException,
 		Packet.WrongAccountException,
@@ -596,10 +596,10 @@ public class MartusUtilities
 		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
 		if(authorAccountId == null)
 			authorAccountId = header.getAccountId();
-			
+
 		validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
 		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
-		
+
 		HashMap zipEntries = new HashMap();
 		StreamCopier copier = new StreamCopier();
 		StreamEncryptor encryptor = new StreamEncryptor(security);
@@ -609,7 +609,7 @@ public class MartusUtilities
 		{
 			String localId = keys[i].getLocalId();
 			ZipEntry entry = zip.getEntry(localId);
-			
+
 			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 
 			final String tempFileName = "$$$importZip";
@@ -619,12 +619,12 @@ public class MartusUtilities
 			StreamFilter filter = copier;
 			if(db.mustEncryptLocalData() && doesPacketNeedLocalEncryption(header, in))
 				filter = encryptor;
-				
+
 			copyStreamWithFilter(in, rawOut, filter);
 
 			rawOut.close();
 			in.close();
-		
+
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, keys[i].getLocalId());
 			DatabaseKey key = MartusUtilities.createKeyWithHeaderStatus(header, uid);
 
@@ -640,21 +640,21 @@ public class MartusUtilities
 		if(!db.doesRecordExist(headerKey))
 			return;
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(bulletinUid);
-		try 
+		try
 		{
 			InputStreamWithSeek in = db.openInputStream(headerKey, security);
 			bhp.loadFromXml(in, security);
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			throw new IOException(e.toString());
 		}
-		
+
 		String accountId = bhp.getAccountId();
 		deleteDraftPacket(db, accountId, bhp.getLocalId());
 		deleteDraftPacket(db, accountId, bhp.getFieldDataPacketId());
 		deleteDraftPacket(db, accountId, bhp.getPrivateFieldDataPacketId());
-		
+
 		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
 		for(int i = 0; i < publicAttachmentIds.length; ++i)
 		{
@@ -681,7 +681,7 @@ public class MartusUtilities
 			IOException,
 			SignatureVerificationException,
 			WrongAccountException,
-			DecryptionException 
+			DecryptionException
 	{
 		BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
 		DatabaseKey[] keys = getPublicPacketKeys(bhp);
@@ -699,7 +699,7 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
-			
+
 			if(entry.isDirectory())
 			{
 				throw new Packet.InvalidPacketException("Directory entry");
@@ -715,7 +715,7 @@ public class MartusUtilities
 			{
 				throw new Packet.InvalidPacketException("Path in name");
 			}
-			
+
 			String thisLocalId = entry.getName();
 			if(!localIds.contains(thisLocalId))
 				throw new IOException("Extra packet");
@@ -723,7 +723,7 @@ public class MartusUtilities
 			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}
-		
+
 		if(localIds.size() > 0)
 			throw new IOException("Missing packets");
 	}
@@ -734,7 +734,7 @@ public class MartusUtilities
 			IOException,
 			SignatureVerificationException,
 			WrongAccountException,
-			DecryptionException 
+			DecryptionException
 	{
 		BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
 		DatabaseKey[] keys = getAllPacketKeys(bhp);
@@ -752,7 +752,7 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
-			
+
 			if(entry.isDirectory())
 			{
 				throw new Packet.InvalidPacketException("Directory entry");
@@ -768,7 +768,7 @@ public class MartusUtilities
 			{
 				throw new Packet.InvalidPacketException("Path in name");
 			}
-			
+
 			String thisLocalId = entry.getName();
 			if(!localIds.contains(thisLocalId))
 				throw new IOException("Extra packet");
@@ -776,12 +776,12 @@ public class MartusUtilities
 			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}
-		
+
 		if(localIds.size() > 0)
 			throw new IOException("Missing packets");
 	}
 
-	public static DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid) 
+	public static DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid)
 	{
 		if(header.getStatus().equals(BulletinConstants.STATUSDRAFT))
 			return DatabaseKey.createDraftKey(uid);
@@ -807,8 +807,8 @@ public class MartusUtilities
 		}
 	}
 
-	public static int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream, 
-			int chunkSize, BulletinRetrieverGatewayInterface gateway, MartusCrypto security, 
+	public static int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream,
+			int chunkSize, BulletinRetrieverGatewayInterface gateway, MartusCrypto security,
 			ProgressMeterInterface progressMeter, String progressTag)
 		throws
 			MartusCrypto.MartusSignatureException,
@@ -821,12 +821,12 @@ public class MartusUtilities
 		int chunkOffset = 0;
 		String lastResponse = "";
 		if(progressMeter != null)
-			progressMeter.updateProgressMeter(progressTag, 0, 1);	
+			progressMeter.updateProgressMeter(progressTag, 0, 1);
 		while(!lastResponse.equals(NetworkInterfaceConstants.OK))
 		{
-			NetworkResponse response = gateway.getBulletinChunk(security, 
+			NetworkResponse response = gateway.getBulletinChunk(security,
 								uid.getAccountId(), uid.getLocalId(), chunkOffset, chunkSize);
-								
+
 			lastResponse = response.getResultCode();
 			if(!lastResponse.equals(NetworkInterfaceConstants.OK) &&
 				!lastResponse.equals(NetworkInterfaceConstants.CHUNK_OK))
@@ -834,36 +834,36 @@ public class MartusUtilities
 				//System.out.println((String)result.get(0));
 				throw new ServerErrorException("result=" + lastResponse);
 			}
-			
+
 			Vector result = response.getResultVector();
 			totalSize = ((Integer)result.get(0)).intValue();
 			if(masterTotalSize == 0)
 				masterTotalSize = totalSize;
-				
+
 			if(totalSize != masterTotalSize)
 				throw new ServerErrorException("totalSize not consistent");
 			if(totalSize < 0)
 				throw new ServerErrorException("totalSize negative");
-				
+
 			int thisChunkSize = ((Integer)result.get(1)).intValue();
 			if(thisChunkSize < 0 || thisChunkSize > totalSize - chunkOffset)
 				throw new ServerErrorException("chunkSize out of range");
-			
+
 			// TODO: validate that length of data == chunkSize that was returned
 			String data = (String)result.get(2);
 			StringReader reader = new StringReader(data);
-		
+
 			Base64.decode(reader, outputStream);
 			chunkOffset += thisChunkSize;
 			if(progressMeter != null)
 			{
 				if(progressMeter.shouldExit())
-					break;					
-				progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);	
+					break;
+				progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);
 			}
 		}
 		if(progressMeter != null)
-			progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);	
+			progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);
 		return masterTotalSize;
 	}
 
@@ -889,7 +889,7 @@ public class MartusUtilities
 		return new String(buf);
 	}
 
-	public static void copyStreamWithFilter(InputStream in, OutputStream rawOut, 
+	public static void copyStreamWithFilter(InputStream in, OutputStream rawOut,
 									StreamFilter filter) throws IOException
 	{
 		BufferedOutputStream out = (new BufferedOutputStream(rawOut));
@@ -901,10 +901,10 @@ public class MartusUtilities
 		{
 			out.flush();
 			rawOut.flush();
-			
-			// TODO: We really want to do a sync here, so the server does not 
-			// have to journal all written data. But under Windows, the unit 
-			// tests pass, but the actual app throws an exception here. We 
+
+			// TODO: We really want to do a sync here, so the server does not
+			// have to journal all written data. But under Windows, the unit
+			// tests pass, but the actual app throws an exception here. We
 			// can't figure out why.
 			//rawOut.getFD().sync();
 			out.close();
@@ -932,19 +932,19 @@ public class MartusUtilities
 				return false;
 			}
 		}
-		
+
 		fdpInputStream.seek(0);
 		return true;
 	}
 
-	public static boolean isStringInArray(String[] array, String lookFor) 
+	public static boolean isStringInArray(String[] array, String lookFor)
 	{
 		for(int newIndex = 0; newIndex < array.length; ++newIndex)
 		{
 			if(lookFor.equals(array[newIndex]))
 				return true;
 		}
-		
+
 		return false;
 	}
 }

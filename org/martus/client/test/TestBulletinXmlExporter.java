@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 	{
 		super(name);
 	}
-	
+
 	public void setUp() throws Exception
 	{
 		if(store==null)
@@ -61,11 +61,11 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 	{
 		Bulletin b = new Bulletin(store);
 		b.setAllPrivate(false);
-		
+
 		final String sampleAuthor = "someone special";
 
 		b.set(BulletinConstants.TAGAUTHOR, sampleAuthor);
-		
+
 		Vector list = new Vector();
 		list.add(b);
 		String result = doExport(list, false);
@@ -77,7 +77,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		assertContains(sampleAuthor, result);
 		assertNotContains("<PrivateData>", result);
 		assertNotContains("<AttachmentList>", result);
-		
+
 		//System.out.println(result);
 	}
 
@@ -102,7 +102,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		b1.setAllPrivate(false);
 		Bulletin b2 = new Bulletin(store);
 		b2.setAllPrivate(false);
-		
+
 		final String sampleTitle1 = "a big event took place!";
 		final String sampleTitle2 = "watch this space";
 		b1.set(BulletinConstants.TAGTITLE, sampleTitle1);
@@ -118,7 +118,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		assertContains(sampleTitle1, result);
 		assertContains(sampleTitle2, result);
 	}
-	
+
 	public void testExportPrivateData() throws Exception
 	{
 		Bulletin b = new Bulletin(store);
@@ -136,13 +136,13 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		assertContains("<PublicDataOnly></PublicDataOnly>", publicOnly);
 		assertContains(samplePublic, publicOnly);
 		assertNotContains(samplePrivate, publicOnly);
-		
+
 		String publicAndPrivate = doExport(list, true);
 		assertContains("<PublicAndPrivateData></PublicAndPrivateData>", publicAndPrivate);
 		assertContains(samplePublic, publicAndPrivate);
 		assertContains(samplePrivate, publicAndPrivate);
 	}
-	
+
 	public void testExportWithPrivateAttachment() throws Exception
 	{
 		Bulletin b = new Bulletin(store);

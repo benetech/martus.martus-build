@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -48,6 +48,6 @@ public interface NetworkInterfaceConstants
 
 	public static final String UNKNOWN_COMMAND = "unknown command";
 	public static final String NOT_AUTHORIZED = "not authorized";
-	
+
 	public static final int MAX_CHUNK_SIZE = 100 * 1024;
 }

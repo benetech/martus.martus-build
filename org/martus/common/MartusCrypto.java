@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ public interface MartusCrypto
 		IOException,
 		InvalidKeyPairFileVersionException,
 		AuthorizationFailedException;
-		
+
 	public String getPublicKeyString();
 
 	public byte[] createSignature(InputStream inputStream) throws
@@ -56,47 +56,47 @@ public interface MartusCrypto
 	public boolean isSignatureValid(String publicKeyString, InputStream inputStream, byte[] signature) throws
 		MartusSignatureException;
 
-	public void signatureInitializeSign() throws 
+	public void signatureInitializeSign() throws
 		MartusSignatureException;
 
-	public void signatureDigestByte(byte b) throws 
+	public void signatureDigestByte(byte b) throws
 		MartusSignatureException;
 
 	public void signatureDigestBytes(byte[] bytes) throws
 			MartusSignatureException;
 
-	public byte[] signatureGet() throws 
+	public byte[] signatureGet() throws
 		MartusSignatureException;
-		
+
 	public void signatureInitializeVerify(String publicKey) throws
 		MartusSignatureException;
-	
-	public boolean signatureIsValid(byte[] sig) throws 
+
+	public boolean signatureIsValid(byte[] sig) throws
 		MartusSignatureException;
-	
+
 
 	public byte[] createSessionKey() throws
 			EncryptionException;
-			
-	public void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws 
+
+	public void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws
 			EncryptionException,
 			NoKeyPairException;
-			
+
 	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws
 			NoKeyPairException,
 			EncryptionException;
 
-	public byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws 
+	public byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws
 		EncryptionException;
-		
-	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
-			DecryptionException; 
+
+	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws
+			DecryptionException;
 
 	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream) throws
 			NoKeyPairException,
 			DecryptionException;
 
-	public byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws 
+	public byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws
 		DecryptionException;
 
 	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
@@ -106,7 +106,7 @@ public interface MartusCrypto
 		throws	DecryptionException;
 
 	public String createRandomToken();
-	
+
 	public KeyManager [] createKeyManagers() throws Exception;
 
 	public static class CryptoException extends Exception{}

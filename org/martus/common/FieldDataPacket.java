@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -50,63 +50,63 @@ public class FieldDataPacket extends Packet
 			fieldTags[f] = fieldTags[f].toLowerCase();
 		clearAll();
 	}
-	
+
 	public static UniversalId createUniversalId(String accountId)
 	{
 		return UniversalId.createFromAccountAndPrefix(accountId, prefix);
 	}
-	
+
 	public static boolean isValidLocalId(String localId)
 	{
 		return localId.startsWith(prefix);
 	}
-	
+
 	public boolean isEncrypted()
 	{
 		return encryptedFlag;
 	}
-	
+
 	public void setEncrypted(boolean newValue)
 	{
 		encryptedFlag = newValue;
 	}
-	
+
 	public void setHQPublicKey(String hqKey)
 	{
-		hqPublicKey = hqKey;	
+		hqPublicKey = hqKey;
 	}
 
 	public String getHQPublicKey()
 	{
-		return hqPublicKey;	
+		return hqPublicKey;
 	}
 
 	public boolean isPublicData()
 	{
 		return !isEncrypted();
-	}	
-	
+	}
+
 	public boolean isEmpty()
 	{
 		if(fieldData.size() > 0)
 			return false;
-		
+
 		if(attachments.size() > 0)
 			return false;
-			
+
 		return true;
 	}
-	
+
 	public int getFieldCount()
 	{
 		return fieldTags.length;
 	}
-	
+
 	public String[] getFieldTags()
 	{
 		return fieldTags;
 	}
-	
+
 	public boolean fieldExists(String fieldTag)
 	{
 		String lookFor = fieldTag.toLowerCase();
@@ -117,7 +117,7 @@ public class FieldDataPacket extends Packet
 		}
 		return false;
 	}
-	
+
 	public String get(String fieldTag)
 	{
 		Object value = fieldData.get(fieldTag.toLowerCase());
@@ -126,7 +126,7 @@ public class FieldDataPacket extends Packet
 
 		return (String)value;
 	}
-	
+
 	public void set(String fieldTag, String data)
 	{
 		if(!fieldExists(fieldTag))
@@ -134,34 +134,34 @@ public class FieldDataPacket extends Packet
 
 		fieldData.put(fieldTag.toLowerCase(), data);
 	}
-	
+
 	public void clearAll()
 	{
 		fieldData = new TreeMap();
 		clearAttachments();
 		hqPublicKey="";
 	}
-	
+
 	public void clearAttachments()
 	{
 		attachments = new Vector();
 	}
-	
+
 	public AttachmentProxy[] getAttachments()
 	{
 		AttachmentProxy[] list = new AttachmentProxy[attachments.size()];
 		for(int i = 0; i < list.length; ++i)
 			list[i] = (AttachmentProxy)attachments.get(i);
-			
+
 		return list;
 	}
-	
+
 	public void addAttachment(AttachmentProxy a)
 	{
 		attachments.add(a);
 	}
-	
-	
+
+
 	public byte[] writeXml(Writer writer, MartusCrypto signer) throws IOException
 	{
 		byte[] result = null;
@@ -171,8 +171,8 @@ public class FieldDataPacket extends Packet
 			result = writeXmlPlainText(writer, signer);
 		return result;
 	}
-	
-	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws 
+
+	public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -186,7 +186,7 @@ public class FieldDataPacket extends Packet
 		{
 			if(verifier == null)
 				throw new MartusCrypto.DecryptionException();
-				
+
 			String encryptedData = encryptedDataDuringLoad;
 			encryptedDataDuringLoad = null;
 			try
@@ -201,12 +201,12 @@ public class FieldDataPacket extends Packet
 					byte[] encryptedHQSessionKey = Base64.decode(encryptedHQSessionKeyDuringLoad);
 					byte[] hqSessionKey = verifier.decryptSessionKey(encryptedHQSessionKey);
 					verifier.decrypt(inEncrypted, outPlain, hqSessionKey);
-				}	
+				}
 				else
 				{
 					throw new MartusCrypto.DecryptionException();
 				}
-				
+
 				byte[] plainXmlBytes = outPlain.toByteArray();
 				ByteArrayInputStreamWithSeek inPlainXml = new ByteArrayInputStreamWithSeek(plainXmlBytes);
 				UniversalId outerId = getUniversalId();
@@ -221,10 +221,10 @@ public class FieldDataPacket extends Packet
 			{
 				throw new InvalidPacketException("Base64Exception");
 			}
-		}	
+		}
 	}
-	
-	public void loadFromXml(InputStreamWithSeek inputStream, MartusCrypto verifier) throws 
+
+	public void loadFromXml(InputStreamWithSeek inputStream, MartusCrypto verifier) throws
 		IOException,
 		InvalidPacketException,
 		WrongPacketTypeException,
@@ -234,41 +234,41 @@ public class FieldDataPacket extends Packet
 	{
 		loadFromXml(inputStream, null, verifier);
 	}
-	
+
 	public byte[] writeXmlPlainText(Writer writer, MartusCrypto signer) throws IOException
 	{
 		return super.writeXml(writer, signer);
 	}
-	
+
 	public byte[] writeXmlEncrypted(Writer writer, MartusCrypto signer) throws IOException
 	{
 		StringWriter plainTextWriter = new StringWriter();
 		writeXmlPlainText(plainTextWriter, signer);
 		String payload = plainTextWriter.toString();
-		
+
 		EncryptedFieldDataPacket efdp = new EncryptedFieldDataPacket(getUniversalId(), payload, signer);
 		efdp.setHQPublicKey(getHQPublicKey());
 		return efdp.writeXml(writer, signer);
 	}
-	
+
 	protected String getPacketRootElementName()
 	{
 		return MartusXml.FieldDataPacketElementName;
 	}
-	
+
 	protected void internalWriteXml(XmlWriterFilter dest) throws IOException
 	{
 		super.internalWriteXml(dest);
 		if(isEncrypted() && !isEmpty())
 			writeElement(dest, MartusXml.EncryptedFlagElementName, "");
-			
+
 		Iterator iterator = fieldData.keySet().iterator();
 		while(iterator.hasNext())
 		{
 			String key = (String)(iterator.next());
 			writeElement(dest, MartusXml.FieldElementPrefix + key, (String)(fieldData.get(key)));
 		}
-		
+
 		for(int i = 0 ; i <attachments.size(); ++i)
 		{
 			AttachmentProxy a = (AttachmentProxy)attachments.get(i);
@@ -276,10 +276,10 @@ public class FieldDataPacket extends Packet
 			writeElement(dest, MartusXml.AttachmentLocalIdElementName, a.getUniversalId().getLocalId());
 			writeElement(dest, MartusXml.AttachmentKeyElementName, Base64.encode(a.getSessionKeyBytes()));
 			writeElement(dest, MartusXml.AttachmentLabelElementName, a.getLabel());
-			dest.writeEndTag(MartusXml.AttachmentElementName);		
+			dest.writeEndTag(MartusXml.AttachmentElementName);
 		}
 	}
-	
+
 	protected void setFromXml(String elementName, String data) throws
 			Base64.InvalidBase64Exception
 	{
@@ -304,7 +304,7 @@ public class FieldDataPacket extends Packet
 		else if(elementName.equals(MartusXml.AttachmentLabelElementName))
 		{
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(getAccountId(), pendingAttachmentLocalId);
-			addAttachment(new AttachmentProxy(uid, data, pendingAttachmentKeyBytes));	
+			addAttachment(new AttachmentProxy(uid, data, pendingAttachmentKeyBytes));
 		}
 		else if(elementName.equals(MartusXml.HQSessionKeyElementName))
 		{
@@ -319,15 +319,15 @@ public class FieldDataPacket extends Packet
 			super.setFromXml(elementName, data);
 		}
 	}
-	
+
 	final String packetHeaderTag = "packet";
 
 	private boolean encryptedFlag;
 	private String[] fieldTags;
 	private Map fieldData;
 	private Vector attachments;
-	
-	private String encryptedDataDuringLoad;	
+
+	private String encryptedDataDuringLoad;
 	private String encryptedHQSessionKeyDuringLoad;
 	private String pendingAttachmentLocalId;
 	private byte[] pendingAttachmentKeyBytes;
@@ -369,31 +369,31 @@ class EncryptedFieldDataPacket extends Packet
 	{
 		return MartusXml.FieldDataPacketElementName;
 	}
-	
+
 	void setHQPublicKey(String hqKey)
 	{
 		hqPublicKey = hqKey;
 	}
-	
+
 	protected void internalWriteXml(XmlWriterFilter dest) throws IOException
 	{
 		super.internalWriteXml(dest);
 		writeElement(dest, MartusXml.EncryptedFlagElementName, "");
 		if(hqPublicKey.length() > 0)
 		{
-			try 
+			try
 			{
 				byte[] encryptedSessionKey = security.encryptSessionKey(sessionKeyBytes, hqPublicKey);
 				writeElement(dest, MartusXml.HQSessionKeyElementName, Base64.encode(encryptedSessionKey));
-			} 
-			catch(EncryptionException e) 
+			}
+			catch(EncryptionException e)
 			{
 				throw new IOException("FieldDataPacket.internalWriteXml Encryption Exception");
 			}
 		}
 		writeElement(dest, MartusXml.EncryptedDataElementName, encryptedData);
 	}
-	
+
 	MartusCrypto security;
 	String encryptedData;
 	private String hqPublicKey = "";

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -35,7 +35,7 @@ public class UiProgressRetrieveBulletinsDlg extends UiProgressRetrieveDlg
 	{
 		super(window, tag);
 		chunkCountMeter = new UiProgressMeter(this);
-		chunkCountMeter.updateProgressMeter(window.getApp().getFieldLabel("ChunkProgressStatusMessage"), 0, 1);			
+		chunkCountMeter.updateProgressMeter(window.getApp().getFieldLabel("ChunkProgressStatusMessage"), 0, 1);
 		Box vBox = Box.createVerticalBox();
 		vBox.add(new JLabel("    "));
 		vBox.add(bulletinCountMeter);
@@ -46,10 +46,10 @@ public class UiProgressRetrieveBulletinsDlg extends UiProgressRetrieveDlg
 		getContentPane().add(vBox);
 		window.centerDlg(this);
 	}
-	
+
 	public UiProgressMeter getChunkCountMeter()
 	{
-		return chunkCountMeter;	
+		return chunkCountMeter;
 	}
 
 	private UiProgressMeter chunkCountMeter;

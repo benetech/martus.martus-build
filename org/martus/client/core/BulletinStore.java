@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -80,7 +80,7 @@ public class BulletinStore
 		Database db = new ClientFileDatabase(dbDirectory, signer);
 		setUpStore(baseDirectory, db);
 	}
-	
+
 	public BulletinStore(Database db)
 	{
 		try
@@ -89,39 +89,39 @@ public class BulletinStore
 			File baseDirectory = tempFile.getParentFile();
 			tempFile.delete();
 			setUpStore(baseDirectory, db);
-		} 
-		catch(IOException e) 
+		}
+		catch(IOException e)
 		{
 			System.out.println("BulletinStore: " + e);
 		}
 	}
-	
+
 	public void doAfterSigninInitalization() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
 	{
 		database.initialize();
 		loadCacheOfSortableFields();
 	}
-	
+
 	public void prepareToExit()
 	{
-		try 
+		try
 		{
 			FileOutputStream out = new FileOutputStream(cacheOfSortableFieldsFile);
 			cacheOfSortableFields.save(out, getSignatureGenerator());
 			out.close();
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			e.printStackTrace();
-			cacheOfSortableFieldsFile.delete();	
+			cacheOfSortableFieldsFile.delete();
 		}
 	}
-	
+
 	public String getAccountId()
 	{
 		return signer.getPublicKeyString();
 	}
-	
+
 	public void setSignatureGenerator(MartusCrypto signerToUse)
 	{
 		signer = signerToUse;
@@ -131,17 +131,17 @@ public class BulletinStore
 	{
 		return signer;
 	}
-	
+
 	public MartusCrypto getSignatureVerifier()
 	{
 		return signer;
 	}
-	
+
 	public boolean mustEncryptPublicData()
 	{
 		return getDatabase().mustEncryptLocalData();
 	}
-	
+
 	public int getBulletinCount()
 	{
 		class BulletinCounter implements Database.PacketVisitor
@@ -150,22 +150,22 @@ public class BulletinStore
 			{
 				++count;
 			}
-			
+
 			int count = 0;
 		}
-		
+
 		BulletinCounter counter = new BulletinCounter();
 		visitAllBulletins(counter);
 		return counter.count;
 	}
-	
+
 	public Vector getAllBulletinUids()
 	{
 		class UidCollector implements Database.PacketVisitor
 		{
 			public void visit(DatabaseKey key)
 			{
-				uidList.add(key.getUniversalId());	
+				uidList.add(key.getUniversalId());
 			}
 			Vector uidList = new Vector();
 		}
@@ -174,7 +174,7 @@ public class BulletinStore
 		visitAllBulletins(uidCollector);
 		return uidCollector.uidList;
 	}
-	
+
 	public void visitAllBulletins(Database.PacketVisitor visitor)
 	{
 		class BulletinKeyFilter implements Database.PacketVisitor
@@ -184,7 +184,7 @@ public class BulletinStore
 				visitor = visitorToUse;
 				db.visitAllRecords(this);
 			}
-			
+
 			public void visit(DatabaseKey key)
 			{
 				if(BulletinHeaderPacket.isValidLocalId(key.getLocalId()))
@@ -196,10 +196,10 @@ public class BulletinStore
 			Database.PacketVisitor visitor;
 			int count;
 		}
-		
+
 		new BulletinKeyFilter(getDatabase(), visitor);
 	}
-	
+
 	public Set getSetOfAllBulletinUniversalIds()
 	{
 		class Visitor implements Database.PacketVisitor
@@ -208,24 +208,24 @@ public class BulletinStore
 			{
 				setOfUniversalIds = new HashSet();
 			}
-			
+
 			public void visit(DatabaseKey key)
 			{
 				setOfUniversalIds.add(key.getUniversalId());
 			}
-		
-			Set setOfUniversalIds;	
+
+			Set setOfUniversalIds;
 		}
-		
+
 		Visitor visitor = new Visitor();
 		visitAllBulletins(visitor);
 		return visitor.setOfUniversalIds;
 	}
-	
+
 	public synchronized Set getSetOfBulletinUniversalIdsInFolders()
 	{
 		Set setOfUniversalIds = new HashSet();
-		
+
 		for(int f = 0; f < getFolderCount(); ++f)
 		{
 			BulletinFolder folder = getFolder(f);
@@ -235,10 +235,10 @@ public class BulletinStore
 				setOfUniversalIds.add(uid);
 			}
 		}
-		
+
 		return setOfUniversalIds;
 	}
-	
+
 	public Set getSetOfOrphanedBulletinUniversalIds()
 	{
 		Set possibleOrphans = getSetOfAllBulletinUniversalIds();
@@ -258,7 +258,7 @@ public class BulletinStore
 
 		removeBulletinFromStore(id);
 	}
-	
+
 	public synchronized void removeBulletinFromStore(UniversalId uid)
 	{
 		Bulletin foundBulletin = findBulletinByUniversalId(uid);
@@ -275,22 +275,22 @@ public class BulletinStore
 		bulletinCache.remove(uid);
 		cacheOfSortableFields.removeFieldData(uid);
 	}
-	
+
 	public Bulletin findBulletinByUniversalId(UniversalId uid)
 	{
-	
+
 		if(bulletinCache.containsKey(uid))
 			return (Bulletin)bulletinCache.get(uid);
 
 		Database db = getDatabase();
-				
+
 		DatabaseKey key = new DatabaseKey(uid);
 		if(!db.doesRecordExist(key))
 		{
 			//System.out.println("BulletinStore.findBulletinByUniversalId: !doesRecordExist");
 			return null;
 		}
-			
+
 		try
 		{
 			Bulletin b = Bulletin.loadFromDatabase(this, key);
@@ -328,9 +328,9 @@ public class BulletinStore
 			b.setStore(this);
 			BulletinSaver.saveToDatabase(b, database);
 			//We don't call addToCaches here because we are not sure
-			//that this bulletin object is still usable -- maybe 
+			//that this bulletin object is still usable -- maybe
 			//attachment proxies still point to disk files?
-			cacheOfSortableFields.setFieldData(b); 
+			cacheOfSortableFields.setFieldData(b);
 		}
 		catch(Exception e)
 		{
@@ -443,7 +443,7 @@ public class BulletinStore
 		}
 		return names;
 	}
-	
+
 	public synchronized Vector getVisibleFolderNames()
 	{
 		Vector names = new Vector();
@@ -456,12 +456,12 @@ public class BulletinStore
 		}
 		return names;
 	}
-	
+
 	public String getSearchFolderName()
 	{
 		return SEARCH_RESULTS_BULLETIN_FOLDER;
 	}
-	
+
 	public String getOrphanFolderName()
 	{
 		return RECOVERED_BULLETIN_FOLDER;
@@ -471,7 +471,7 @@ public class BulletinStore
 	{
 		return RETRIEVE_SEALED_BULLETIN_FOLDER;
 	}
-	
+
 	public String getNameOfFolderRetrievedDraft()
 	{
 		return RETRIEVE_DRAFT_BULLETIN_FOLDER;
@@ -481,7 +481,7 @@ public class BulletinStore
 	{
 		return RETRIEVE_SEALED_FIELD_OFFICE_BULLETIN_FOLDER;
 	}
-	
+
 	public String getNameOfFolderRetrievedFieldOfficeDraft()
 	{
 		return RETRIEVE_DRAFT_FIELD_OFFICE_BULLETIN_FOLDER;
@@ -517,7 +517,7 @@ public class BulletinStore
 	{
 		return folderDraftOutbox;
 	}
-	
+
 	public void createSystemFolders()
 	{
 		folderOutbox = createSystemFolder(OUTBOX_FOLDER);
@@ -565,7 +565,7 @@ public class BulletinStore
 		}
 		return foldersContainingBulletin;
 	}
-	
+
 	public void deleteAllData() throws Exception
 	{
 		database.deleteAllData();
@@ -577,10 +577,10 @@ public class BulletinStore
 	{
 		return database;
 	}
-	
+
 	public void setDatabase(Database toUse)
 	{
-		database = toUse;	
+		database = toUse;
 	}
 
 	public synchronized void loadFolders()
@@ -590,20 +590,20 @@ public class BulletinStore
 			InputStreamWithSeek in = new FileInputStreamWithSeek(getFoldersFile());
 			getSignatureVerifier().decrypt(in, out);
 			in.close();
-			
+
 			String folderXml = new String(out.toByteArray(), "UTF-8");
 			if(folderXml != null)
 				if(loadFolders(new StringReader(folderXml)))
 					saveFolders();
-		} 
-		catch(UnsupportedEncodingException e) 
+		}
+		catch(UnsupportedEncodingException e)
 		{
 			System.out.println("BulletinStore.loadFolders: " + e);
 		}
 		catch(FileNotFoundException expectedIfFoldersDontExistYet)
 		{
 		}
-		catch(Exception e) 
+		catch(Exception e)
 		{
 			// TODO: Improve error handling!!!
 			System.out.println("BulletinStore.loadFolders: " + e);
@@ -612,19 +612,19 @@ public class BulletinStore
 
 	public synchronized void saveFolders()
 	{
-		try 
+		try
 		{
 			String xml = foldersToXml();
 			byte[] bytes = xml.getBytes("UTF-8");
 			ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-	
+
 			FileOutputStream out = new FileOutputStream(getFoldersFile());
 			if(getSignatureGenerator() == null)
 				return;
 			getSignatureGenerator().encrypt(in, out);
 			out.close();
-		} 
-		catch(UnsupportedEncodingException e) 
+		}
+		catch(UnsupportedEncodingException e)
 		{
 			System.out.println("BulletinStore.saveFolders: " + e);
 		}
@@ -634,7 +634,7 @@ public class BulletinStore
 			System.out.println("BulletinStore.saveFolders: " + e);
 		}
 	}
-	
+
 	public File getFoldersFile()
 	{
 		return new File(dir, "MartusFolders.dat");
@@ -676,30 +676,30 @@ public class BulletinStore
 
 		createSystemFolders();
 	}
-	
+
 	private void loadCacheOfSortableFields()
 	{
 		if(!cacheOfSortableFieldsFile.exists())
 			return;
-			
+
 		FileInputStreamWithSeek in = null;
-		try 
+		try
 		{
 			in = new FileInputStreamWithSeek(cacheOfSortableFieldsFile);
 			cacheOfSortableFields.load(in, getSignatureGenerator());
-		} 
-		catch (IOException e) 
+		}
+		catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 		finally
 		{
-			try 
+			try
 			{
 				if(in != null)
-					in.close();	
-			} 
-			catch (IOException nothingWeCanDo) 
+					in.close();
+			}
+			catch (IOException nothingWeCanDo)
 			{
 			}
 		}
@@ -729,15 +729,15 @@ public class BulletinStore
 					database.moveRecordToQuarantine(key);
 				}
 			}
-		
+
 			int quarantinedCount;
 		}
-		
+
 		Quarantiner visitor = new Quarantiner();
 		visitAllBulletins(visitor);
 		return visitor.quarantinedCount;
 	}
-	
+
 	public synchronized boolean isOrphan(Bulletin b)
 	{
 		Vector allFolders= getVisibleFolderNames();
@@ -814,12 +814,12 @@ public class BulletinStore
 			}
 			else if(qName.equals(MartusClientXml.tagId))
 			{
-				try 
+				try
 				{
 					UniversalId bId = UniversalId.createFromString(buffer);
 					currentFolder.add(bId);
-				} 
-				catch(NotUniversalIdException e) 
+				}
+				catch(NotUniversalIdException e)
 				{
 					System.out.println("BulletinStore::endElement : " + e);
 				}
@@ -838,7 +838,7 @@ public class BulletinStore
 			String name = attrs.getValue(MartusClientXml.attrFolder);
 			if(startLoadingFolders)
 			{
-				startLoadingFolders = false;	
+				startLoadingFolders = false;
 				if(name.equals("Outbox"))
 					legacyFolders = true;
 			}
@@ -859,7 +859,7 @@ public class BulletinStore
 		BulletinStore store;
 		BulletinFolder currentFolder;
 		String buffer = "";
-		
+
 		boolean startLoadingFolders;
 		public boolean legacyFolders;
 	}
@@ -877,9 +877,9 @@ public class BulletinStore
 	{
 		return new UID().toString();
 	}
-	
+
 	public static class StatusNotAllowedException extends Exception {}
-	
+
 	public void importZipFileBulletin(File zipFile, BulletinFolder toFolder, boolean forceSameUids) throws
 			IOException,
 			StatusNotAllowedException,
@@ -912,10 +912,10 @@ public class BulletinStore
 		{
 			zip.close();
 		}
-		
+
 		saveFolders();
 	}
-	
+
 	public void importZipFileToStoreWithSameUids(File inputFile) throws
 		IOException,
 		MartusCrypto.CryptoException,
@@ -952,20 +952,20 @@ public class BulletinStore
 			return false;
 		if(folder.equals(getFolderOutbox()) && !bulletinAuthorAccount.equals(getAccountId()))
 			return false;
-		return true;	
+		return true;
 	}
 
-	synchronized void addToCaches(Bulletin b) 
+	synchronized void addToCaches(Bulletin b)
 	{
 		if(bulletinCache.size() >= maxCachedBulletinCount)
 			bulletinCache.clear();
-			
+
 		bulletinCache.put(b.getUniversalId(), b);
 		cacheOfSortableFields.setFieldData(b);
 	}
 
 	public static int maxCachedBulletinCount = 100;
-	
+
 	public static final String OUTBOX_FOLDER = "%OutBox";
 	public static final String SENT_FOLDER = "%Sent";
 	public static final String DRAFT_FOLDER = "%Draft";
@@ -979,7 +979,7 @@ public class BulletinStore
 	public static final String DAMAGED_BULLETIN_FOLDER = "%DamagedBulletins";
 	private static final String DRAFT_OUTBOX = "*DraftOutbox";
 
-	private static final String CACHE_FILE_NAME = "sfcache.dat";	
+	private static final String CACHE_FILE_NAME = "sfcache.dat";
 	private MartusCrypto signer;
 	private String account;
 	private File dir;

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -67,7 +67,7 @@ public class UiAttachmentViewer extends JPanel
 		attachmentPane = new JScrollPane(attachmentTable);
 		attachmentPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		attachmentPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_NEVER);
-	
+
 		vbox.add(attachmentPane);
 
 		saveButton = new JButton(app.getButtonLabel("saveattachment"));
@@ -83,7 +83,7 @@ public class UiAttachmentViewer extends JPanel
 		attachmentTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 	}
 
-	public void resizeTable() 
+	public void resizeTable()
 	{
 		Dimension d = attachmentTable.getPreferredScrollableViewportSize();
 		int rowHeight = attachmentTable.getRowHeight() + attachmentTable.getRowMargin() ;
@@ -91,13 +91,13 @@ public class UiAttachmentViewer extends JPanel
 		attachmentTable.setPreferredScrollableViewportSize(d);
 		saveButton.setEnabled(model.getRowCount() > 0);
 	}
-	
+
 	public void addAttachment(AttachmentProxy a)
 	{
 		model.add(a);
 		resizeTable();
 	}
-	
+
 	public void clearAttachments()
 	{
 		model.clear();
@@ -110,7 +110,7 @@ public class UiAttachmentViewer extends JPanel
 		{
 			attachmentList = new Vector();
 		}
-		
+
 		void clear()
 		{
 			attachmentList.clear();
@@ -182,7 +182,7 @@ public class UiAttachmentViewer extends JPanel
 				}
 			}
 			String fileName = (String)model.getValueAt(selection,1);
-				
+
 			chooser.setSelectedFile(new File(fileName));
 			File last = mainWindow.getLastAttachmentSaveDirectory();
 			if(last != null)
@@ -195,19 +195,19 @@ public class UiAttachmentViewer extends JPanel
 				if(outputFile.exists())
 				{
 					if(!mainWindow.confirmDlg(mainWindow,"OverWriteExistingFile"))
-						return;						
+						return;
 				}
 				AttachmentProxy proxy = model.getAttachmentProxyAt(selection,1);
-				try 
+				try
 				{
 					Bulletin b = bulletinComponent.getCurrentBulletin();
 					b.extractAttachmentToFile(proxy, app.getSecurity(), outputFile);
-				} 
-				catch(Exception e) 
+				}
+				catch(Exception e)
 				{
 					mainWindow.notifyDlg(mainWindow, "UnableToSaveAttachment");
 					System.out.println("Unable to save file :" + e);
-				} 
+				}
 			}
 		}
 	}

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -33,13 +33,13 @@ import org.martus.client.core.Exceptions.PasswordTooShortException;
 
 /**
  * UiCreateNewUserNameAndPasswordDlg
- * 
+ *
  * Class encapusulates all aspects of creating a new username and password combo
  * - Displays the username and password entry dialog
  * - Checks the username and password to make sure they meet our requirements
  * - Confirms the username and password
  * - Reminds the user to remember his/her password
- * 
+ *
  * @author dchu
  *
  */
@@ -61,7 +61,7 @@ public class UiCreateNewUserNameAndPasswordDlg
 			String defaultUserName = userName1;
 			if (originalUserName == null || originalUserName.length() == 0)
 				defaultUserName = "";
-			
+
 			UiSigninDlg signinDlg2 =
 				new UiSigninDlg(window, window, UiSigninDlg.RETYPE_USERNAME_PASSWORD, defaultUserName);
 			if (!signinDlg2.getResult())
@@ -101,25 +101,25 @@ public class UiCreateNewUserNameAndPasswordDlg
 				window.notifyDlg(window, "PasswordMatchesUserName");
 				continue;
 			}
-			
+
 			// finally warn them if its a weak password
 			if(MartusUserNameAndPassword.isWeakPassword(userPassword1))
 			{
 				if(!window.confirmDlg(window, "RedoWeakPassword"))
 					continue;
 			}
-			
+
 			remindUsersToRememberPassword();
 			result = true;
 			break;
 		}
 	}
-	
+
 	private void remindUsersToRememberPassword()
 	{
 		mainWindow.notifyDlg(mainWindow, "RememberPassword");
 	}
-	
+
 	public boolean isDataValid()
 	{
 		return result;

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -36,7 +36,7 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-public class UiProgressRetrieveDlg extends JDialog 
+public class UiProgressRetrieveDlg extends JDialog
 {
 	public UiProgressRetrieveDlg(UiMainWindow window, String tag)
 	{
@@ -48,7 +48,7 @@ public class UiProgressRetrieveDlg extends JDialog
 		cancel.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		bulletinCountMeter = new UiProgressMeter(this);
 		statusMessage = window.getApp().getFieldLabel(tag);
-		updateBulletinCountMeter(0, 1);	
+		updateBulletinCountMeter(0, 1);
 		getContentPane().add(new JLabel("    "), BorderLayout.EAST);
 		getContentPane().add(new JLabel("    "), BorderLayout.WEST);
 	}
@@ -68,7 +68,7 @@ public class UiProgressRetrieveDlg extends JDialog
 				requestExit();
 		}
 	}
-	
+
 	private void requestExit()
 	{
 		isExitRequested = true;
@@ -79,22 +79,22 @@ public class UiProgressRetrieveDlg extends JDialog
 	{
 		show();
 	}
-	
+
 	public void finishedRetrieve()
 	{
-		dispose();	
+		dispose();
 	}
-	
+
 	public boolean shouldExit()
 	{
-		return isExitRequested;	
+		return isExitRequested;
 	}
 
 	public void updateBulletinCountMeter(int currentValue, int maxValue)
 	{
-		bulletinCountMeter.updateProgressMeter(statusMessage, currentValue, maxValue);	
+		bulletinCountMeter.updateProgressMeter(statusMessage, currentValue, maxValue);
 	}
-	
+
 	public UiProgressMeter bulletinCountMeter;
 	public JButton cancel;
 

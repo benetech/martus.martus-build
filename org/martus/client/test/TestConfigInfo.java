@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -81,7 +81,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		info.setAuthor("");
 		info.setOrganization("whatever");
 		assertEquals("organization isn't enough contact info?", true, info.hasContactInfo());
-		
+
 	}
 
 	public void testSaveAndLoadFullFile() throws Exception
@@ -105,18 +105,18 @@ public class TestConfigInfo extends TestCaseEnhanced
 		FileOutputStream outputStream = new FileOutputStream(configFile);
 		info.save(outputStream);
 		outputStream.close();
-		
+
 		info.clear();
 		verifyEmptyInfo(info, "clear");
 
 		FileInputStream inputStream = new FileInputStream(configFile);
 		info = ConfigInfo.load(inputStream);
 		inputStream.close();
-		
+
 		verifySampleInfo(info, "afterLoad");
 	}
 
-	public void verifySampleInfo(ConfigInfo info, String label) 
+	public void verifySampleInfo(ConfigInfo info, String label)
 	{
 		assertEquals(label + ": Full has contact info", true, info.hasContactInfo());
 		assertEquals(label + ": sampleSource", sampleAuthor, info.getAuthor());
@@ -130,10 +130,10 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleTemplateDetails", sampleTemplateDetails, info.getTemplateDetails());
 		assertEquals(label + ": sampleHQKey", sampleHQKey, info.getHQKey());
 		assertEquals(label + ": sampleSendContactInfoToServer", sampleSendContactInfoToServer, info.shouldContactInfoBeSentToServer());
-	
+
 	}
 
-	public void verifyEmptyInfo(ConfigInfo info, String label) 
+	public void verifyEmptyInfo(ConfigInfo info, String label)
 	{
 		assertEquals(label + ": Full has contact info", false, info.hasContactInfo());
 		assertEquals(label + ": sampleSource", "", info.getAuthor());
@@ -148,7 +148,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleHQKey", "", info.getHQKey());
 		assertEquals(label + ": sampleSendContactInfoToServer", false, info.shouldContactInfoBeSentToServer());
 	}
-	
+
 	public void testGetContactInfo() throws Exception
 	{
 		ConfigInfo newInfo = new ConfigInfo();
@@ -196,7 +196,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		info = ConfigInfo.load(inputStream);
 		assertEquals("should have reverted", server, info.getServerName());
 	}
-	
+
 	public void testRemoveHQKey() throws Exception
 	{
 		ConfigInfo info = new ConfigInfo();

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 	{
 		super(owner, "", true);
 		MartusApp app = owner.getApp();
-		
+
 		setTitle(app.getWindowTitle("search"));
 		search = new JButton(app.getButtonLabel("search"));
 		search.addActionListener(this);
@@ -66,25 +66,25 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 		startDateEditor.setText(startDate);
 		getContentPane().add(new JLabel(app.getFieldLabel("SearchStartDate")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(startDateEditor.getComponent());
-		
+
 		endDateEditor = new UiDateEditor(app);
 		if(endDate.length() == 0)
 			endDate = Bulletin.getLastDayOfThisYear();
 		endDateEditor.setText(endDate);
-		getContentPane().add(new JLabel(app.getFieldLabel("SearchEndDate")), ParagraphLayout.NEW_PARAGRAPH);		
+		getContentPane().add(new JLabel(app.getFieldLabel("SearchEndDate")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(endDateEditor.getComponent());
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(search);
 		getContentPane().add(cancel);
-		
+
 		owner.centerDlg(this);
 		setResizable(true);
 		show();
 
 	}
 
-	public void actionPerformed(ActionEvent ae) 
+	public void actionPerformed(ActionEvent ae)
 	{
 		if(ae.getSource() == search)
 		{
@@ -99,29 +99,29 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 
 	public boolean getResults()
 	{
-		return result;	
+		return result;
 	}
-	
+
 	public String getSearchString()
 	{
-		return searchString;	
+		return searchString;
 	}
-	
+
 	public String getStartDate()
 	{
-		return startDate;	
+		return startDate;
 	}
-	
+
 	public String getEndDate()
 	{
-		return endDate;	
+		return endDate;
 	}
-	
+
 	boolean result;
 	static String searchString = "";
 	static String startDate = "";
 	static String endDate = "";
-	
+
 	JButton search;
 	JTextField searchField;
 	UiDateEditor startDateEditor;

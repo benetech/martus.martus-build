@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -68,17 +68,17 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		int numFields = standardFieldTags.length + privateFieldTags.length;
 		fields = new UiField[numFields];
 		fieldTags = new String[numFields];
-		
+
 		createLabelsAndFields(publicStuff, standardFieldTags, 0);
 		createLabelsAndFields(privateStuff, privateFieldTags, standardFieldTags.length);
-		
+
 		publicStuff.matchFirstColumnWidth(privateStuff);
 		privateStuff.matchFirstColumnWidth(publicStuff);
 
 		add(publicStuff, BorderLayout.NORTH);
 		add(privateStuff, BorderLayout.SOUTH);
 	}
-	
+
 	public UiMainWindow getMainWindow()
 	{
 		return mainWindow;
@@ -94,7 +94,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		return currentBulletin;
 	}
 
-	public void copyDataToBulletin(Bulletin bulletin) throws 
+	public void copyDataToBulletin(Bulletin bulletin) throws
 			IOException,
 			MartusCrypto.EncryptionException
 	{
@@ -103,7 +103,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	public void copyDataFromBulletin(Bulletin bulletin) throws IOException
 	{
 		currentBulletin = bulletin;
-		
+
 		String isAllPrivate = UiField.FALSESTRING;
 		if(bulletin != null && bulletin.isAllPrivate())
 			isAllPrivate = UiField.TRUESTRING;
@@ -111,7 +111,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		publicStuff.clearAttachments();
 		privateStuff.clearAttachments();
-		
+
 		FieldDataPacket publicData = null;
 		FieldDataPacket privateData = null;
 		if(bulletin != null)

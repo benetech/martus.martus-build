@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -31,7 +31,7 @@ import java.io.File;
 import org.martus.common.FileDatabase;
 import org.martus.common.MartusCrypto;
 
-public class ClientFileDatabase extends FileDatabase 
+public class ClientFileDatabase extends FileDatabase
 {
 	public ClientFileDatabase(File directory, MartusCrypto security)
 	{

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -26,14 +26,14 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.common;
 
-public class Version 
+public class Version
 {
-	public static void main(String[] args) 
+	public static void main(String[] args)
 	{
 		String date = MartusUtilities.getVersionDate();
 		System.out.println(formatDateVersion(date));
 	}
-	
+
 	static String formatDateVersion(String dateVersion)
 	{
 		if(dateVersion.length() != 8)

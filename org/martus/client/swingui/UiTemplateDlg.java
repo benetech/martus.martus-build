@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -101,11 +101,11 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 			String ok = app.getButtonLabel("ok");
 			String[] contents = {helpMsg, "", "",helpMsgExample, helpMsgExample1, "", helpMsgExample2, "", helpMsgExampleEtc};
 			String[] buttons = {ok};
-			
+
 			new UiNotifyDlg(mainWindow, mainWindow, title, contents, buttons);
 		}
 	}
-	
+
 	class loadFileHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
@@ -123,7 +123,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 					RetrieveTextData(importFile);
 			}
 		}
-		
+
 	}
 
 	public void RetrieveTextData(File importFile)
@@ -165,7 +165,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 			return app.getFieldLabel("DefaultDetailFiles");
 		}
 	}
-	
+
 
 	public boolean getResult()
 	{

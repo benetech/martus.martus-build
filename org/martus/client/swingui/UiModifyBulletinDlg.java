@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -86,7 +86,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 
 			getContentPane().add(scroller);
 			getContentPane().add(box, BorderLayout.SOUTH);
-			
+
 			setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 			addWindowListener(this);
 
@@ -124,23 +124,23 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			closeWindowUponConfirmation();
 			return;
 		}
-		
-		try 
+
+		try
 		{
 			view.copyDataToBulletin(bulletin);
-		} 
-		catch(IOException e) 
+		}
+		catch(IOException e)
 		{
 			System.out.println("UiModifyBulletinDlg.actionPerformed: " + e);
 			return;
 		}
-		catch(MartusCrypto.EncryptionException e) 
+		catch(MartusCrypto.EncryptionException e)
 		{
 			System.out.println("UiModifyBulletinDlg.actionPerformed: " + e);
 			return;
 		}
-		
-		
+
+
 		BulletinStore store = getApp().getStore();
 
 		Cursor originalCursor = getCursor();
@@ -171,14 +171,14 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		weAreDoneSoClose();
 		setCursor(originalCursor);
 	}
-	
+
 	// WindowListener interface
 	public void windowActivated(WindowEvent event) {}
 	public void windowClosed(WindowEvent event) {}
 	public void windowDeactivated(WindowEvent event) {}
 	public void windowDeiconified(WindowEvent event) {}
 	public void windowIconified(WindowEvent event) {}
-	public void windowOpened(WindowEvent event) {} 
+	public void windowOpened(WindowEvent event) {}
 
 	public void windowClosing(WindowEvent event)
 	{
@@ -203,20 +203,20 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		cleanupAndExit();
 	}
 
-	public void cleanupAndExit() 
+	public void cleanupAndExit()
 	{
 		observer.doneModifyingBulletin();
 		saveEditorState(getSize(), getLocation());
 		dispose();
 	}
 
-	public void saveEditorState(Dimension size, Point location) 
+	public void saveEditorState(Dimension size, Point location)
 	{
 		boolean maximized = getExtendedState() == MAXIMIZED_BOTH;
 		observer.setBulletinEditorDimension(size);
 		observer.setBulletinEditorPosition(location);
 		observer.setBulletinEditorMaximized(maximized);
-		observer.saveState();		
+		observer.saveState();
 	}
 
 	public boolean confirmSend()

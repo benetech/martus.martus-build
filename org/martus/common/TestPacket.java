@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ public class TestPacket extends TestCaseEnhanced
 			security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
     	}
     }
-    
+
 	public void testIsValidVersion()
 	{
 		assertFalse("Valid null comment?", Packet.isValidStartComment(null));
@@ -57,7 +57,7 @@ public class TestPacket extends TestCaseEnhanced
 		String noVersion = MartusXml.packetStartCommentStart + MartusXml.packetStartCommentEnd;
 		assertTrue("no version # is valid for backward compatability.", Packet.isValidStartComment(noVersion));
 	}
-	
+
 	public void testWriteXmlToStream() throws Exception
 	{
 		Packet packet = new Packet();
@@ -68,7 +68,7 @@ public class TestPacket extends TestCaseEnhanced
 		}
 		catch(Exception e)
 		{
-			//Expected Exception	
+			//Expected Exception
 		}
 
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -78,19 +78,19 @@ public class TestPacket extends TestCaseEnhanced
 
 		String result = new String(bytes, "UTF-8");
 		assertStartsWith(MartusXml.packetStartCommentStart, result);
-		
+
 		int startCommentLength = MartusXml.packetStartCommentStart.length();
 		int endCommentPosition = result.indexOf(MartusXml.packetStartCommentEnd);
 		assertTrue("No end startComment?", endCommentPosition >= startCommentLength);
 		String version = result.substring(startCommentLength, endCommentPosition);
 		assertEquals("Invalid Version", MartusUtilities.getVersionDate() , version);
-		
+
 		assertContains(packet.getLocalId(), result);
 		assertContains(packet.getAccountId(), result);
 		assertContains(MartusXml.packetSignatureStart, result);
 		assertContains(MartusXml.packetSignatureEnd, result);
 		//System.out.println(result);
-		
+
 		String newLine = "\n";
 		int sigCommentIndex = result.indexOf(MartusXml.packetSignatureStart);
 		int sigCommentEndLen = MartusXml.packetSignatureEnd.length();
@@ -105,7 +105,7 @@ public class TestPacket extends TestCaseEnhanced
 		int sigEndIndex = sigComment.length() - MartusXml.packetSignatureEnd.length();
 		sigComment.substring(sigIndex, sigEndIndex);
 	}
-	
+
 	public void testWriteXmlToWriter() throws Exception
 	{
 		Packet packet = new Packet();
@@ -116,7 +116,7 @@ public class TestPacket extends TestCaseEnhanced
 		}
 		catch(Exception e)
 		{
-			//Expected Exception	
+			//Expected Exception
 		}
 		StringWriter writer = new StringWriter();
 		packet.writeXml(writer, security);
@@ -125,7 +125,7 @@ public class TestPacket extends TestCaseEnhanced
 		assertContains(packet.getLocalId(), result);
 		assertContains(packet.getAccountId(), result);
 	}
-	
+
 	public void testWriteAndLoadUtf8() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
@@ -133,22 +133,22 @@ public class TestPacket extends TestCaseEnhanced
 		bhp.setFieldDataPacketId(utf8Data);
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		bhp.setFieldDataPacketId("");
 		byte[] bytes = out.toByteArray();
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		bhp.loadFromXml(in, null, security);
-		
+
 		assertEquals("utf-8 damaged?", utf8Data, bhp.getFieldDataPacketId());
 	}
-	
+
 	public void testLoadMoreSpecificPacketType() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		bhp.setFieldDataPacketId("none");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		byte[] sig = bhp.writeXml(out, security);
-		
+
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(out.toByteArray());
 		Packet.validateXml(in, security.getPublicKeyString(), bhp.getLocalId(), sig, security);
 		try
@@ -188,7 +188,7 @@ public class TestPacket extends TestCaseEnhanced
 				super.internalWriteXml(dest);
 			}
 		}
-		
+
 		CorruptedBhp bhp = new CorruptedBhp(security.getPublicKeyString());
 		bhp.setFieldDataPacketId("none");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
@@ -203,7 +203,7 @@ public class TestPacket extends TestCaseEnhanced
 		{
 		}
 	}
-		
+
 	public void testVerifyPacketWithNonPacketData() throws Exception
 	{
 		byte[] invalidBytes = {1,2,3};
@@ -218,38 +218,38 @@ public class TestPacket extends TestCaseEnhanced
 			// expected exception
 		}
 	}
-			
+
 	public void testVerifyGoodPacket() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		bhp.setPrivateFieldDataPacketId("Josée");
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] bytes = out.toByteArray();
 		ByteArrayInputStreamWithSeek in0 = new ByteArrayInputStreamWithSeek(bytes);
 		Packet.verifyPacketSignature(in0, security);
 		assertEquals("UTF", "Josée",bhp.getPrivateFieldDataPacketId());
 	}
-	
+
 	public void testVerifyGoodPacketWithAnotherAccount() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] bytes = out.toByteArray();
 		ByteArrayInputStreamWithSeek in0 = new ByteArrayInputStreamWithSeek(bytes);
 		security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
 		Packet.verifyPacketSignature(in0, security);
-	}	
+	}
 
 	public void testVerifyPacketWithCorruptedStartComment() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] bytes = out.toByteArray();
 		bytes[5] ^= 0xFF;
 
@@ -263,13 +263,13 @@ public class TestPacket extends TestCaseEnhanced
 		{
 		}
 	}
-	
+
 	public void testVerifyPacketWithCorruptedSignatureComment() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] bytes = out.toByteArray();
 		String xml = new String(bytes, "UTF-8");
 		assertEquals("unicode in the sample?", bytes.length, xml.length());
@@ -287,7 +287,7 @@ public class TestPacket extends TestCaseEnhanced
 		{
 			bytes[corruptSigStartAt] ^= 0xFF;
 		}
-		
+
 		int corruptSigEndAt = bytes.length - 2;
 		try
 		{
@@ -300,13 +300,13 @@ public class TestPacket extends TestCaseEnhanced
 		{
 		}
 	}
-	
+
 	public void testVerifyPacketWithCorruptedData() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] bytes = out.toByteArray();
 
 		int corruptDataAt = MartusXml.packetStartCommentStart.length() + MartusXml.packetStartCommentEnd.length() + 15;
@@ -321,13 +321,13 @@ public class TestPacket extends TestCaseEnhanced
 		{
 		}
 	}
-	
+
 	public void testVerifyPacketWithCorruptedSignature() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] bytes = out.toByteArray();
 
 		int corruptSigAt = bytes.length - MartusXml.packetSignatureEnd.length() - 10;
@@ -342,16 +342,16 @@ public class TestPacket extends TestCaseEnhanced
 		{
 		}
 	}
-	
+
 	public void testVerifyPacketWithNoAccountTag() throws Exception
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] oldBytes = out.toByteArray();
 		String oldXml = new String(oldBytes,"UTF-8");
-		
+
 		//String newXml =	oldXml.replaceFirst(MartusXml.AccountElementName,"xxy");
 		// rewrite above line in java 1.3 compatible form:
 		String newXml = oldXml; // first assume no match found
@@ -377,7 +377,7 @@ public class TestPacket extends TestCaseEnhanced
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(security.getPublicKeyString());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		bhp.writeXml(out, security);
-		
+
 		byte[] oldBytes = out.toByteArray();
 		String tagEnd = MartusXml.getTagEnd(MartusXml.AccountElementName);
 		String oldXml = new String(oldBytes,"UTF-8");
@@ -401,7 +401,7 @@ public class TestPacket extends TestCaseEnhanced
 		Class expected = new Packet.InvalidPacketException("a").getClass();
 		verifyLoadException(new byte[0], expected);
 	}
-		
+
 	public void testLoadFromWrongPacketType() throws Exception
 	{
 		SimplePacketSubtype packet = new SimplePacketSubtype();
@@ -421,18 +421,18 @@ public class TestPacket extends TestCaseEnhanced
 			// expected exception
 		}
 	}
-		
+
 	public void testLoadFromInvalidPacket() throws Exception
 	{
 		Class expected = new Packet.InvalidPacketException("a").getClass();
 		verifyLoadException(new byte[] {1,2,3}, expected);
-		
-		String xmlError = "<" + MartusXml.PacketElementName + ">" + 
+
+		String xmlError = "<" + MartusXml.PacketElementName + ">" +
 					"</a></" + MartusXml.PacketElementName + ">";
 		byte[] xmlErrorBytes = xmlError.getBytes();
 		verifyLoadException(xmlErrorBytes, expected);
 	}
-	
+
 	void verifyLoadException(byte[] input, Class expectedExceptionClass)
 	{
 		ByteArrayInputStreamWithSeek inputStream = new ByteArrayInputStreamWithSeek(input);
@@ -453,28 +453,28 @@ public class TestPacket extends TestCaseEnhanced
 		{
 			super(UniversalId.createFromAccountAndPrefix(security.getPublicKeyString(), ""));
 		}
-		
+
 		protected String getPacketRootElementName()
 		{
 			return "BogusPacket";
 		}
-		
+
 	}
-	
+
 	class AnotherSimplePacketSubtype extends Packet
 	{
 		AnotherSimplePacketSubtype()
 		{
 			super(UniversalId.createFromAccountAndPrefix(security.getPublicKeyString(), ""));
 		}
-		
+
 		protected String getPacketRootElementName()
 		{
 			return "AnotherBogusPacket";
 		}
-		
+
 	}
-	
+
 	static MartusSecurity security;
 	int SHORTEST_LEGAL_KEY_SIZE = 512;
 

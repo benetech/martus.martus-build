@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -61,7 +61,7 @@ public class UiVirtualKeyboard
 		if(mainWindow.isMacintosh())
 			columns = 10;
 		int rows = keys.length() / columns;
-		vKeyboard.setLayout(new GridLayout(rows, columns));		
+		vKeyboard.setLayout(new GridLayout(rows, columns));
 		for(int i = 0; i < keys.length(); ++i)
 		{
 			JButton key = new JButton(keys.substring(i,i+1));
@@ -92,7 +92,7 @@ public class UiVirtualKeyboard
 		handler.addKeyboard(virtualKeyboard);
 	}
 
-	public class UpdateHandler extends AbstractAction 
+	public class UpdateHandler extends AbstractAction
 	{
 		public void actionPerformed(ActionEvent e)
 		{
@@ -108,10 +108,10 @@ public class UiVirtualKeyboard
 			else
 				password += passChar;
 			handler.setPassword(password);
-		} 
+		}
 	}
 	private VirtualKeyboardHandler handler;
-	private String password;	
+	private String password;
 	private String space;
 	private String delete;
 }

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -32,18 +32,18 @@ import java.rmi.server.UID;
 public class UniversalId implements Comparable, Serializable
 {
 	public static class NotUniversalIdException extends Exception {}
-	
+
 	public static UniversalId createFromAccountAndLocalId(String accountId, String localId)
 	{
 		return new UniversalId(accountId, localId);
 	}
-	
+
 	public static UniversalId createFromAccountAndPrefix(String accountId, String prefix)
 	{
 		String localId = prefix + new UID().toString();
 		return new UniversalId(accountId, localId);
 	}
-	
+
 	public static UniversalId createDummyUniversalId()
 	{
 		return createFromAccountAndPrefix("DummyAccount", "Dummy");
@@ -55,14 +55,14 @@ public class UniversalId implements Comparable, Serializable
 		String localId = uidAsString.substring(2);
 		return createFromAccountAndLocalId(accountId, localId);
 	}
-	
-	public static UniversalId createFromString(String uidAsString) throws 
+
+	public static UniversalId createFromString(String uidAsString) throws
 			NotUniversalIdException
 	{
 		int dashAt = uidAsString.indexOf("-");
 		if(dashAt < 0)
 			throw new NotUniversalIdException();
-			
+
 		String accountId = uidAsString.substring(0, dashAt);
 		String localId = uidAsString.substring(dashAt + 1);
 		return createFromAccountAndLocalId(accountId, localId);
@@ -73,22 +73,22 @@ public class UniversalId implements Comparable, Serializable
 		setAccountId(accountIdToUse);
 		setLocalId(localIdToUse);
 	}
-	
+
 	public String getAccountId()
 	{
 		return accountId;
 	}
-	
+
 	public String getLocalId()
 	{
 		return localId;
 	}
-	
+
 	public String toString()
 	{
 		return getAccountId() + "-" + getLocalId();
 	}
-	
+
 	public boolean equals(Object otherObject)
 	{
 		if(otherObject == this)
@@ -103,15 +103,15 @@ public class UniversalId implements Comparable, Serializable
 			return false;
 		if(!otherId.getLocalId().equals(getLocalId()))
 			return false;
-			
+
 		return true;
 	}
-	
+
 	public int hashCode()
 	{
 		return toString().hashCode();
 	}
-	
+
 	public int compareTo(Object other)
 	{
 		return toString().compareTo(((UniversalId)other).toString());
@@ -121,12 +121,12 @@ public class UniversalId implements Comparable, Serializable
 	{
 		accountId = newAccountId;
 	}
-	
+
 	public void setLocalId(String newLocalId)
 	{
 		localId = newLocalId.replace(':', '-');
 	}
-	
+
 	private String accountId;
 	private String localId;
 }

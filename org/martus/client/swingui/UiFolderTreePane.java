@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ class UiFolderTreePane extends JScrollPane
 	{
 		parent = mainWindow;
 		store = parent.getStore();
-		
+
 		model = new FolderList(parent.getApp());
 		model.loadFolders(store);
 
@@ -67,18 +67,18 @@ class UiFolderTreePane extends JScrollPane
 		tree.addSelectionPath(path);
 		return true;
 	}
-	
+
 	public String getSelectedFolderName()
 	{
-		return tree.getSelectedFolderName();	
+		return tree.getSelectedFolderName();
 	}
-	
+
 	public BulletinFolder getSelectedFolder()
 	{
 		return store.findFolder(getSelectedFolderName());
 	}
-	
-	public void createNewFolder() 
+
+	public void createNewFolder()
 	{
 		tree.stopEditing();
 
@@ -93,15 +93,15 @@ class UiFolderTreePane extends JScrollPane
 		tree.startEditingAtPath(getPathOfNode(node));
 		return;
 	}
-	
+
 	public void renameCurrentFolder()
 	{
 		FolderTreeNode node = getCurrentFolderNode();
 		ActionRename rename = new ActionRename(node);
 		rename.actionPerformed(null);
 	}
-	
-	
+
+
 	public void deleteCurrentFolder()
 	{
 		FolderTreeNode node = getCurrentFolderNode();
@@ -109,7 +109,7 @@ class UiFolderTreePane extends JScrollPane
 		delete.actionPerformed(null);
 	}
 
-	public FolderTreeNode getCurrentFolderNode() 
+	public FolderTreeNode getCurrentFolderNode()
 	{
 		FolderTreeNode node = null;
 		TreePath path = tree.getSelectionPath();
@@ -125,7 +125,7 @@ class UiFolderTreePane extends JScrollPane
 		if(!selectFolder(selectedName))
 			parent.selectSentFolder();
 	}
-	
+
 	public void folderContentsHaveChanged(BulletinFolder f)
 	{
 		FolderTreeNode node = model.findFolderByInternalName(f.getName());
@@ -191,7 +191,7 @@ class UiFolderTreePane extends JScrollPane
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			if(store.findFolder(nodeToDelete.getInternalName()).getBulletinCount() == 0 
+			if(store.findFolder(nodeToDelete.getInternalName()).getBulletinCount() == 0
 				|| parent.confirmDlg(parent, "deletefolder"))
 			{
 				store.deleteFolder(nodeToDelete.getInternalName());

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -127,19 +127,19 @@ public class MartusSecurity implements MartusCrypto
 	{
 		return (jceKeyPair != null);
 	}
-	
+
 	public void clearKeyPair()
 	{
 		jceKeyPair = null;
 	}
-	
+
 	public void createKeyPair()
 	{
 		if(bitsInPublicKey != 2048)
 			System.out.println("Creating full size public key: " + bitsInPublicKey);
 		createKeyPair(bitsInPublicKey);
 	}
-	
+
 	public void writeKeyPair(OutputStream outputStream, String passPhrase) throws
 			IOException
 	{
@@ -177,13 +177,13 @@ public class MartusSecurity implements MartusCrypto
 	{
 		return createSignature(getPrivateKey(), inputStream);
 	}
-	
+
 	public boolean verifySignature(InputStream inputStream, byte[] signature) throws
 			MartusSignatureException
 	{
 		return isSignatureValid(getPublicKey(), inputStream, signature);
 	}
-	
+
 	public boolean isSignatureValid(String publicKeyString, InputStream inputStream, byte[] signature) throws
 			MartusSignatureException
 	{
@@ -197,32 +197,32 @@ public class MartusSecurity implements MartusCrypto
 		encrypt(plainStream, cipherStream, createSessionKey());
 	}
 
-	public synchronized void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws 
+	public synchronized void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws
 			EncryptionException,
 			NoKeyPairException
 	{
 		encrypt(plainStream, cipherStream, sessionKeyBytes, getPublicKey());
 	}
-	
-	public synchronized void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes, PublicKey publicKey) throws 
+
+	public synchronized void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes, PublicKey publicKey) throws
 			EncryptionException,
 			NoKeyPairException
 	{
 		if(publicKey == null)
 			throw new NoKeyPairException();
-			
+
 		CipherOutputStream cos = createCipherOutputStream(cipherStream, sessionKeyBytes, getKeyString(publicKey));
 		try
 		{
 			InputStream bufferedPlainStream = new BufferedInputStream(plainStream);
-			
+
 			byte[] buffer = new byte[MartusConstants.streamBufferCopySize];
 			int count = 0;
 			while( (count = bufferedPlainStream.read(buffer)) >= 0)
 			{
 				cos.write(buffer, 0, count);
 			}
-			
+
 			cos.close();
 		}
 		catch(Exception e)
@@ -230,14 +230,14 @@ public class MartusSecurity implements MartusCrypto
 			//System.out.println("MartusSecurity.encrypt: " + e);
 			throw new EncryptionException();
 		}
-	}	
+	}
 
 	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
 		throws EncryptionException
 	{
 		return createCipherOutputStream(cipherStream, sessionKeyBytes, getPublicKeyString());
 	}
-	
+
 	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes, String publicKeyString)
 		throws EncryptionException
 	{
@@ -245,20 +245,20 @@ public class MartusSecurity implements MartusCrypto
 		{
 			byte[] ivBytes = new byte[IV_BYTE_COUNT];
 			rand.nextBytes(ivBytes);
-			
+
 			byte[] encryptedKeyBytes = encryptSessionKey(sessionKeyBytes, publicKeyString);
-			
+
 			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
 			IvParameterSpec spec = new IvParameterSpec(ivBytes);
 			sessionCipherEngine.init(Cipher.ENCRYPT_MODE, sessionKey, spec, rand);
-			
+
 			OutputStream bufferedCipherStream = new BufferedOutputStream(cipherStream);
 			DataOutputStream output = new DataOutputStream(bufferedCipherStream);
 			output.writeInt(encryptedKeyBytes.length);
 			output.write(encryptedKeyBytes);
 			output.writeInt(ivBytes.length);
 			output.write(ivBytes);
-			
+
 			CipherOutputStream cos = new CipherOutputStream(output, sessionCipherEngine);
 			return cos;
 		}
@@ -269,7 +269,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public synchronized byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws 
+	public synchronized byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws
 		EncryptionException
 	{
 		try
@@ -295,10 +295,10 @@ public class MartusSecurity implements MartusCrypto
 		decrypt(cipherStream, plainStream, null);
 	}
 
-	byte[] readSessionKey(DataInputStream dis) throws DecryptionException 
+	byte[] readSessionKey(DataInputStream dis) throws DecryptionException
 	{
 		byte[] encryptedKeyBytes = null;
-		
+
 		try
 		{
 			int keyByteCount = dis.readInt();
@@ -314,7 +314,7 @@ public class MartusSecurity implements MartusCrypto
 		return encryptedKeyBytes;
 	}
 
-	public synchronized byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws 
+	public synchronized byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws
 		DecryptionException
 	{
 		try
@@ -332,8 +332,8 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public synchronized void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws 
-			DecryptionException 
+	public synchronized void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws
+			DecryptionException
 	{
 		CipherInputStream cis = createCipherInputStream(cipherStream, sessionKeyBytes);		BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
 		try
@@ -366,17 +366,17 @@ public class MartusSecurity implements MartusCrypto
 			{
 				sessionKeyBytes = decryptSessionKey(storedSessionKey);
 			}
-			
+
 			int ivByteCount = dis.readInt();
 			byte[] iv = new byte[ivByteCount];
 			dis.readFully(iv);
-			
+
 			SecretKey sessionKey = new SecretKeySpec(sessionKeyBytes, SESSION_ALGORITHM_NAME);
 			IvParameterSpec spec = new IvParameterSpec(iv);
-			
+
 			sessionCipherEngine.init(Cipher.DECRYPT_MODE, sessionKey, spec, rand);
 			CipherInputStream cis = new CipherInputStream(dis, sessionCipherEngine);
-			
+
 			return cis;
 		}
 		catch(Exception e)
@@ -392,7 +392,7 @@ public class MartusSecurity implements MartusCrypto
 		sessionKeyGenerator.init(bitsInSessionKey, rand);
 		return sessionKeyGenerator.generateKey().getEncoded();
 	}
-			
+
 	public synchronized void signatureInitializeSign() throws
 			MartusSignatureException
 	{
@@ -406,7 +406,7 @@ public class MartusSecurity implements MartusCrypto
 			throw(new MartusSignatureException());
 		}
 	}
-	
+
 	public synchronized void signatureInitializeVerify(String publicKeyString) throws
 			MartusSignatureException
 	{
@@ -423,7 +423,7 @@ public class MartusSecurity implements MartusCrypto
 			throw(new MartusSignatureException());
 		}
 	}
-	
+
 	public static PublicKey extractPublicKey(String base64PublicKey)
 	{
 		//System.out.println("key=" + base64PublicKey);
@@ -447,9 +447,9 @@ public class MartusSecurity implements MartusCrypto
 			//System.out.println("MartusSecurity.extractPublicKey: " + e);
 		}
 
-		return null;		
+		return null;
 	}
-	
+
 	public synchronized byte[] signatureGet() throws
 			MartusSignatureException
 	{
@@ -463,8 +463,8 @@ public class MartusSecurity implements MartusCrypto
 			throw(new MartusSignatureException());
 		}
 	}
-	
-	public synchronized boolean signatureIsValid(byte[] sig) throws 
+
+	public synchronized boolean signatureIsValid(byte[] sig) throws
 		MartusSignatureException
 	{
 		try
@@ -491,7 +491,7 @@ public class MartusSecurity implements MartusCrypto
 			throw(new MartusSignatureException());
 		}
 	}
-	
+
 	public synchronized void signatureDigestBytes(byte[] bytes) throws
 			MartusSignatureException
 	{
@@ -505,19 +505,19 @@ public class MartusSecurity implements MartusCrypto
 			throw(new MartusSignatureException());
 		}
 	}
-	
+
 	public String createRandomToken()
 	{
 		byte[] token = new byte[TOKEN_BYTE_COUNT];
 		rand.nextBytes(token);
-		
+
 		return Base64.encode(token);
 	}
 
 	public KeyManager [] createKeyManagers() throws Exception
 	{
 		String passphrase = "this passphrase is never saved to disk";
-		
+
 		KeyStore keyStore = KeyStore.getInstance("BKS", "BC");
 		keyStore.load(null, null );
 		KeyPair sunKeyPair = createSunKeyPair(bitsInPublicKey);
@@ -531,18 +531,18 @@ public class MartusSecurity implements MartusCrypto
 		X509Certificate cert0 = createCertificate(sslPublicKey, sslPrivateKey );
 		X509Certificate cert1 = createCertificate(sslPublicKey, serverPrivateKey);
 		X509Certificate cert2 = createCertificate(serverPublicKey, serverPrivateKey);
-	
-	
+
+
 		Certificate[] chain = {cert0, cert1, cert2};
 		keyStore.setKeyEntry( "cert", sslPrivateKey, passphrase.toCharArray(), chain );
-		
+
 		KeyManagerFactory kmf = KeyManagerFactory.getInstance( "SunX509" );
 		kmf.init( keyStore, passphrase.toCharArray() );
 		return kmf.getKeyManagers();
 	}
-	
+
 	// end interface
-	
+
 	public PrivateKey getPrivateKey()
 	{
 		KeyPair pair = getKeyPair();
@@ -681,7 +681,7 @@ public class MartusSecurity implements MartusCrypto
 
 		return null;
 	}
-	
+
 	public synchronized void createKeyPair(int publicKeyBits)
 	{
 		try
@@ -733,7 +733,7 @@ public class MartusSecurity implements MartusCrypto
 			throw(new MartusSignatureException());
 		}
 	}
-	
+
 	synchronized KeyPair createSunKeyPair(int bitsInKey) throws Exception
 	{
 		KeyPairGenerator sunKeyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -741,28 +741,28 @@ public class MartusSecurity implements MartusCrypto
 		KeyPair sunKeyPair = sunKeyPairGenerator.genKeyPair();
 		return sunKeyPair;
 	}
-	
+
 	public X509Certificate createCertificate(RSAPublicKey publicKey, RSAPrivateCrtKey privateKey)
 			throws SecurityException, SignatureException, InvalidKeyException
 	{
 		Hashtable attrs = new Hashtable();
-		
+
 		Vector ord = new Vector();
 		Vector values = new Vector();
-		
+
 		ord.addElement(X509Principal.C);
 		ord.addElement(X509Principal.O);
 		ord.addElement(X509Principal.L);
 		ord.addElement(X509Principal.ST);
 		ord.addElement(X509Principal.EmailAddress);
-		
+
 		//TODO: change these from Benetech to Martus?
 		values.addElement("US");
 		values.addElement("Benetech");
 		values.addElement("Palo Alto");
 		values.addElement("CA");
 		values.addElement("martus@benetech.org");
-		
+
 		attrs.put(X509Principal.C, "US");
 		attrs.put(X509Principal.O, "Benetech");
 		attrs.put(X509Principal.L, "Palo Alto");
@@ -771,15 +771,15 @@ public class MartusSecurity implements MartusCrypto
 
 		// create a certificate
 		X509V1CertificateGenerator  certGen1 = new X509V1CertificateGenerator();
-		
+
 		certGen1.setSerialNumber(createCertificateSerialNumber());
 		certGen1.setIssuerDN(new X509Principal(ord, attrs));
 		certGen1.setNotBefore(new Date(System.currentTimeMillis() - 50000));
 		certGen1.setNotAfter(new Date(System.currentTimeMillis() + 50000));
 		certGen1.setSubjectDN(new X509Principal(ord, values));
-		certGen1.setPublicKey( publicKey ); 
+		certGen1.setPublicKey( publicKey );
 		certGen1.setSignatureAlgorithm("MD5WithRSAEncryption");
-		
+
 		// self-sign it
 		X509Certificate cert = certGen1.generateX509Certificate( privateKey );
 		return cert;
@@ -790,17 +790,17 @@ public class MartusSecurity implements MartusCrypto
 		MessageDigest digester = MessageDigest.getInstance(DIGEST_ALGORITHM);
 		digester.reset();
 		byte[] result = digester.digest(inputText.getBytes("UTF-8"));
-		
+
 		return Base64.encode(result);
 	}
 
-	static public String getKeyString(Key key) 
+	static public String getKeyString(Key key)
 	{
 		return Base64.encode(key.getEncoded());
 	}
 
-	protected synchronized void accumulateForSignOrVerify(InputStream in) throws 
-					IOException, 
+	protected synchronized void accumulateForSignOrVerify(InputStream in) throws
+					IOException,
 					MartusSignatureException
 	{
 		try
@@ -832,7 +832,7 @@ public class MartusSecurity implements MartusCrypto
 	private static final int TOKEN_BYTE_COUNT = 16; //128 bits
 	private static SecureRandom rand;
 	private KeyPair jceKeyPair;
-	
+
 	private Signature sigEngine;
 	private Cipher rsaCipherEngine;
 	private Cipher pbeCipherEngine;

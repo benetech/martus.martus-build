@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -191,7 +191,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		assertNotNull("get/set null", tempSecurity);
 		assertEquals("get/set public", keyPair.getPublic(), gotKeyPair.getPublic());
 		assertEquals("get/set private", keyPair.getPrivate(), gotKeyPair.getPrivate());
-		
+
 		String publicKeyString = security.getPublicKeyString();
 		PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
 		assertEquals("get/extract failed?", publicKey, security.getPublicKey());
@@ -298,14 +298,14 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		{
 			//expected exception
 		}
-		
+
 		String publicKeyString = security.getPublicKeyString();
 		assertNotNull("no key string?", security.getPublicKeyString());
 		PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
 		assertNotNull("extract failed?", publicKey);
 		TRACE_END();
 	}
-	
+
 	public void testExtractPublicKey() throws Exception
 	{
 		assertNull("not base64", MartusSecurity.extractPublicKey("not Base64"));
@@ -333,7 +333,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		TRACE_END();
 	}
 
-	private byte[] createSampleData(int size) 
+	private byte[] createSampleData(int size)
 	{
 		byte[] data = new byte[size];
 		for(int i = 0 ; i < data.length; ++i)
@@ -342,7 +342,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		}
 		return data;
 	}
-	
+
 //	public void testBouncySignatureSpeed() throws Exception
 //	{
 //		SecureRandom rand = new SecureRandom();
@@ -353,7 +353,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 //		{
 //			keyPairGenerator.initialize(keySizes[i], rand);
 //			KeyPair keyPair = keyPairGenerator.genKeyPair();
-//	
+//
 //			Signature sigEngine;
 //			sigEngine = Signature.getInstance("SHA1WithRSA", "BC");
 //			sigEngine.initSign(keyPair.getPrivate(), rand);
@@ -382,7 +382,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		assertEquals("Verify passed on corrupt data", false, security.verifySignature(corruptStream, signature));
 		TRACE_END();
 	}
-	
+
 	public void testSignatureInitializeVerify()
 	{
 		TRACE_BEGIN("testVerifySignature");
@@ -536,7 +536,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 
 		String digest2 = MartusSecurity.createDigestString(textToDigest);
 		assertEquals("different?", digest, digest2);
-		
+
 		//String otherText = textToDigest.replaceFirst("i", "j");
 		// rewrite above line in java 1.3 compatible form:
 		String otherText = textToDigest; // first assume no match found

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -46,7 +46,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 	{
 		super(name);
 	}
-	
+
 	public void setUp() throws Exception
 	{
 		security = new MockMartusSecurity();
@@ -56,22 +56,22 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db = new FileDatabase(dir, security);
 		db.initialize();
 	}
-	
+
 	public void tearDown() throws Exception
 	{
 		db.deleteAllData();
 		assertTrue("Either a test failed or a file was left open.", dir.delete());
 	}
-	
+
 	public void testBasics() throws Exception
 	{
 		assertEquals("count not 0?", 0, getRecordCount());
 	}
 
 /*
- * This test was an attempt to figure out why the sync() call was working in the 
- * unit tests, but failing in the app itself (under Win2K, anyway). Unfortunately, 
- * the test passed, so it didn't really tell us anything. At some point, when the 
+ * This test was an attempt to figure out why the sync() call was working in the
+ * unit tests, but failing in the app itself (under Win2K, anyway). Unfortunately,
+ * the test passed, so it didn't really tell us anything. At some point, when the
  * sync() stuff has been fixed, this should be deleted. kbs. 2002-09-03
 	public void testStupidSyncProblem() throws Exception
 	{
@@ -80,7 +80,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		dir.mkdirs();
 		File file = new File(dir, "$$$MartusTest.tmp");
 		file.deleteOnExit();
-		
+
 		FileOutputStream rawOut = new FileOutputStream(file);
 		BufferedOutputStream out = (new BufferedOutputStream(rawOut));
 		for(int i=0;i<800;++i)
@@ -92,12 +92,12 @@ public class TestFileDatabase extends TestCaseEnhanced
 		file.delete();
 	}
 */
-	
+
 	public void testInitializerWhenNoMapExists() throws Exception
 	{
 		db.getAccountDirectory("some stupid account");
 		db.accountMapFile.delete();
-		
+
 		FileDatabase fdb = new FileDatabase(dir, security);
 		try
 		{
@@ -114,7 +114,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 	{
 		db.writeRecord(shortKey, sampleString1);
 		assertEquals("count not one?", 1, getRecordCount());
-		
+
 		assertEquals("read1", sampleString1, db.readRecord(shortKey, security));
 
 		db.writeRecord(shortKey, sampleString2);
@@ -122,14 +122,14 @@ public class TestFileDatabase extends TestCaseEnhanced
 
 		assertEquals("read2", sampleString2, db.readRecord(shortKey, security));
 	}
-	
+
 	public void testWriteAndReadStreams() throws Exception
 	{
 		ByteArrayInputStream streamToWrite1 = new ByteArrayInputStream(sampleBytes1);
 		db.writeRecord(shortKey, streamToWrite1);
 		streamToWrite1.close();
 		assertEquals("count not one?", 1, getRecordCount());
-		
+
 		InputStream in1 = db.openInputStream(shortKey, security);
 		assertNotNull("null stream?", in1);
 		byte[] bytes1 = new byte[in1.available()];
@@ -149,7 +149,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		in2.close();
 		assertTrue("wrong bytes?", Arrays.equals(sampleBytes2, bytes2));
 	}
-	
+
 	public void testReadEncryptedStream() throws Exception
 	{
 		db.writeRecordEncrypted(shortKey, sampleString1, security);
@@ -161,7 +161,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		String got = new String(bytes1, "UTF-8");
 		assertEquals("wrong data?", sampleString1, got);
 	}
-	
+
 	public void testDiscardRecord() throws Exception
 	{
 		assertEquals("count not 0?", 0, getRecordCount());
@@ -170,12 +170,12 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db.writeRecord(shortKey, sampleString1);
 		assertEquals("count not one?", 1, getRecordCount());
 		assertEquals("wasn't created?", true, db.doesRecordExist(shortKey));
-		
+
 		db.discardRecord(shortKey);
 		assertEquals("count not back to 0?", 0, getRecordCount());
 		assertEquals("wasn't discarded?", false, db.doesRecordExist(shortKey));
 	}
-	
+
 	public void testDeleteAllData() throws Exception
 	{
 		db.writeRecord(shortKey, sampleString1);
@@ -183,7 +183,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertEquals("count not 0?", 0, getRecordCount());
 		assertEquals("not zero files?", 0, db.absoluteBaseDir.list().length);
 	}
-	
+
 	public void testInterimFileNames() throws Exception
 	{
 		File interimIn = db.getIncomingInterimFile(shortKey);
@@ -191,7 +191,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		File interimOut = db.getOutgoingInterimFile(shortKey);
 		assertEndsWith(".out", interimOut.getName());
 	}
-	
+
 	public void testPersistence() throws Exception
 	{
 		db.writeRecord(shortKey, sampleString1);
@@ -205,39 +205,39 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db = new FileDatabase(dir, security);
 		db.initialize();
 		assertEquals("count not back to one?", 1, getRecordCount());
-		
+
 		assertTrue("missing short?", db.doesRecordExist(shortKey));
 	}
-	
+
 	public void testWriteAndReadRecordEncrypted() throws Exception
 	{
-		try 
+		try
 		{
 			db.writeRecordEncrypted(null, sampleString1, security);
 			fail("should have thrown for null key");
-		} 
-		catch(IOException ignoreExpectedException) 
+		}
+		catch(IOException ignoreExpectedException)
 		{
 		}
-		
-		try 
+
+		try
 		{
 			db.writeRecordEncrypted(shortKey, null, security);
 			fail("should have thrown for null string");
-		} 
-		catch(NullPointerException nullPointerExpectedException) 
+		}
+		catch(NullPointerException nullPointerExpectedException)
 		{
 		}
-		
-		try 
+
+		try
 		{
 			db.writeRecordEncrypted(shortKey, sampleString1, null);
 			fail("should have thrown for null crypto");
-		} 
-		catch(IOException ignoreExpectedException) 
+		}
+		catch(IOException ignoreExpectedException)
 		{
 		}
-		
+
 		db.writeRecordEncrypted(shortKey, sampleString1, security);
 		File file = db.getFileForRecord(shortKey);
 
@@ -247,11 +247,11 @@ public class TestFileDatabase extends TestCaseEnhanced
 		in1.read(bytes1);
 		in1.close();
 		assertEquals("Not Encrypted?", false, Arrays.equals(sampleString1.getBytes(), bytes1));
-		
+
 		String result = db.readRecord(shortKey, security);
 		assertEquals("got wrong data?", sampleString1, result);
 	}
-	
+
 	public void testHashFunction()
 	{
 		String s1 = "abcdefg";
@@ -261,7 +261,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		int hash3 = FileDatabase.getHashValue(s1);
 		assertNotEquals("same?", new Integer(hash1), new Integer(hash2));
 		assertEquals("not same?", new Integer(hash1), new Integer(hash3));
-		
+
 		Random rand = new Random(12345);
 		StringBuffer buffer = new StringBuffer();
 		for(int x = 0; x < 24; ++x)
@@ -282,26 +282,26 @@ public class TestFileDatabase extends TestCaseEnhanced
 		{
 			assertTrue("too many in bucket?", count[bucket] < 250);
 		}
-		
+
 	}
-	
+
 	public void testGetFileForRecord() throws Exception
 	{
 		File file = db.getFileForRecord(shortKey);
 		assertEquals("filename", shortKey.getLocalId(), file.getName());
 		String path = file.getPath();
 		assertStartsWith("no dir?", dir.getPath(), path);
-		
+
 		int hash = FileDatabase.getHashValue(shortKey.getLocalId()) & 0xFF;
 		String hashString = Integer.toHexString(hash + 0xb00);
 		assertContains("no hash stuff?", "p" + hashString, path);
 
 	}
-	
+
 	public void testGetAccountDirectory() throws Exception
 	{
 		Vector accountDirs = new Vector();
-		
+
 		String baseDir = dir.getPath().replace('\\', '/');
 		for(int i = 0; i < 20; ++i)
 		{
@@ -314,21 +314,21 @@ public class TestFileDatabase extends TestCaseEnhanced
 			String gotDir1 = db.getAccountDirectory(key1.getAccountId()).getPath().replace('\\', '/');
 			assertContains("wrong base?", baseDir, gotDir1);
 			assertContains("wrong full path?", expectedAccountBucket, gotDir1);
-			
+
 			String gotDirString = db.getFolderForAccount(key1.getAccountId());
 			assertStartsWith("bad folder?", "a" + accountHashString1 + File.separator, gotDirString);
-			
+
 			assertEquals("bad reverse lookup?", key1.getAccountId(), db.getAccountString(new File(gotDir1)));
 			assertNotContains("already used this accountdir?", gotDir1, accountDirs);
 			accountDirs.add(gotDir1);
 		}
 	}
-	
+
 	public void testGetFolderForAccountUpdateAccountMapWhenNeeded() throws Exception
 	{
 		db.deleteAllData();
 		File mapFile = db.accountMapFile;
-		
+
 		assertEquals("account file already exists?", 0, mapFile.length());
 
 		String accountId = "some silly account";
@@ -347,7 +347,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertNotEquals("account file not updated again?", lastLength, mapFile.length());
 		assertNotEquals("account file not touched again?", lastModified, mapFile.lastModified());
 	}
-	
+
 	public void testAddParsedAccountEntry()
 	{
 		HashMap map = new HashMap();
@@ -367,7 +367,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db.addParsedAccountEntry(map,absoluteDir3+relativeDir3+"="+account3);
 		assertEquals("absoluteDir2 Failed to be added to map?", relativeDir3, map.get(account3));
 	}
-	
+
 	public void testWriteUpdatesAccountMapWhenNeeded() throws Exception
 	{
 		db.deleteAllData();
@@ -385,7 +385,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertEquals("account file grew?", lastLength, mapFile.length());
 		assertEquals("account file touched?", lastModified, mapFile.lastModified());
 	}
-	
+
 	public void testAccountMapSigning()  throws Exception
 	{
 		security = new MockMartusSecurity();
@@ -395,25 +395,25 @@ public class TestFileDatabase extends TestCaseEnhanced
 		tmpDataDir.mkdir();
 		FileDatabase fileDb = new FileDatabase(tmpDataDir, security);
 		fileDb.initialize();
-		
+
 		String bogusAccountId = "A false account id";
 		fileDb.getFolderForAccount(bogusAccountId);
-		
+
 		File acctMapFile = fileDb.accountMapFile;
 		assertTrue("missing acctmap?", acctMapFile.exists());
-		
+
 		File mapSigFile = fileDb.accountMapSignatureFile;
 		assertTrue("missing acctmap signature?", mapSigFile.exists());
-		
+
 		MartusUtilities.verifyFileAndSignature(acctMapFile, mapSigFile, security, security.getPublicKeyString());
-		
+
 		FileOutputStream out = new FileOutputStream(acctMapFile.getPath(), true);
 		UnicodeWriter writer = new UnicodeWriter(out);
 		writer.writeln("noacct=123456789");
 		writer.flush();
 		out.flush();
 		writer.close();
-				
+
 		try
 		{
 			MartusUtilities.verifyFileAndSignature(acctMapFile, mapSigFile, security, security.getPublicKeyString());
@@ -423,7 +423,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		{
 			;
 		}
-		
+
 		mapSigFile.delete();
 		try
 		{
@@ -434,10 +434,10 @@ public class TestFileDatabase extends TestCaseEnhanced
 		{
 			;
 		}
-		
+
 		fileDb.deleteAllData();
 	}
-	
+
 	public void testVisitAllAccounts() throws Exception
 	{
 		class AccountCollector implements Database.AccountVisitor
@@ -448,18 +448,18 @@ public class TestFileDatabase extends TestCaseEnhanced
 			}
 			Vector list = new Vector();
 		}
-		
+
 		db.writeRecord(shortKey, sampleString1);
 		db.writeRecord(otherKey, sampleString2);
-		
+
 		AccountCollector ac = new AccountCollector();
 		db.visitAllAccounts(ac);
 		assertEquals("count?", 2, ac.list.size());
 		assertContains("missing 1?", shortKey.getAccountId(), ac.list);
 		assertContains("missing 2?", otherKey.getAccountId(), ac.list);
-		
+
 	}
-	
+
 	public void testVisitAllPacketsForAccount() throws Exception
 	{
 		class PacketCollector implements Database.PacketVisitor
@@ -470,18 +470,18 @@ public class TestFileDatabase extends TestCaseEnhanced
 			}
 			Vector list = new Vector();
 		}
-		
+
 		db.writeRecord(shortKey, sampleString1);
 		db.writeRecord(shortKey2, sampleString2);
-		
+
 		PacketCollector ac = new PacketCollector();
 		db.visitAllRecordsForAccount(ac, accountString1);
 		assertEquals("count?", 2, ac.list.size());
 		assertContains("missing 1?", shortKey, ac.list);
 		assertContains("missing 2?", shortKey2, ac.list);
-		
+
 	}
-	
+
 	int getRecordCount()
 	{
 		class PacketCounter implements Database.PacketVisitor
@@ -490,10 +490,10 @@ public class TestFileDatabase extends TestCaseEnhanced
 			{
 				++count;
 			}
-			
+
 			int count;
 		}
-		
+
 		PacketCounter counter = new PacketCounter();
 		db.visitAllRecords(counter);
 		return counter.count;

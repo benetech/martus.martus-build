@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -106,10 +106,10 @@ public class MartusXml
 
         return error;
 	}
-	
-	static public void loadXmlWithExceptions(Reader xmlReader, DefaultHandler handler) throws 
+
+	static public void loadXmlWithExceptions(Reader xmlReader, DefaultHandler handler) throws
 			ParserConfigurationException,
-			SAXParseException, 
+			SAXParseException,
 			SAXException,
 			IOException
 	{
@@ -131,7 +131,7 @@ public class MartusXml
 	public final static String packetStartCommentStart = "<!--MartusPacket;";
 	public final static String packetStartCommentSigLen = "siglen=";
 	public final static String packetStartCommentEnd = ";-->";
-											
+
 	public final static String PacketElementName = "Packet";
 	public final static String FieldDataPacketElementName = "FieldDataPacket";
 	public final static String AttachmentPacketElementName = "AttachmentPacket";
@@ -157,6 +157,6 @@ public class MartusXml
 	public final static String AttachmentElementName = "Attachment";
 	public final static String AttachmentBytesElementName = "AttachmentData";
 	public final static String AttachmentKeyElementName = "AttachmentSessionKey";
-	
+
 	private static SAXParserFactory factory = SAXParserFactory.newInstance();
 }

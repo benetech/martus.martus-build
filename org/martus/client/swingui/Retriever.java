@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -33,18 +33,18 @@ import org.martus.client.core.MartusApp;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.UniversalId;
 
-public class Retriever 
+public class Retriever
 {
 
-	public Retriever(MartusApp appToUse, UiProgressRetrieveBulletinsDlg retrieve) 
+	public Retriever(MartusApp appToUse, UiProgressRetrieveBulletinsDlg retrieve)
 	{
 		super();
 		app = appToUse;
 		progressDlg = retrieve;
 		result = NetworkInterfaceConstants.INCOMPLETE;
 	}
-	
-	public void retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder) 
+
+	public void retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder)
 	{
 		if(!app.isSSLServerAvailable())
 		{
@@ -59,17 +59,17 @@ public class Retriever
 			waitForThreadToTerminate(worker);
 	}
 
-	public void waitForThreadToTerminate(RetrieveThread worker) 
+	public void waitForThreadToTerminate(RetrieveThread worker)
 	{
-		try 
+		try
 		{
 			worker.join();
-		} 
-		catch (InterruptedException e) 
+		}
+		catch (InterruptedException e)
 		{
 		}
 	}
-	
+
 	public void finishedRetrieve()
 	{
 		if(progressDlg != null)
@@ -80,8 +80,8 @@ public class Retriever
 	{
 		return result;
 	}
-	
-	
+
+
 	class RetrieveThread extends Thread
 	{
 		public RetrieveThread(Vector list, BulletinFolder folder)
@@ -89,7 +89,7 @@ public class Retriever
 			uidList = list;
 			retrievedFolder = folder;
 		}
-		
+
 		public void run()
 		{
 			boolean gotAllBulletins = true;
@@ -119,7 +119,7 @@ public class Retriever
 					gotAllBulletins = false;
 				}
 			}
-		
+
 			if(progressDlg != null)
 				progressDlg.updateBulletinCountMeter(i, size);
 
@@ -134,7 +134,7 @@ public class Retriever
 		private Vector uidList;
 		private BulletinFolder retrievedFolder;
 	}
-		
+
 	private String result;
 	private MartusApp app;
 	public UiProgressRetrieveBulletinsDlg progressDlg;

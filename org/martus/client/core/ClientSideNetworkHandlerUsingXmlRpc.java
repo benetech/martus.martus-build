@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -51,12 +51,12 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	{
 		server = serverName;
 		port = portToUse;
-		try 
+		try
 		{
 			HttpsURLConnection.setDefaultSSLSocketFactory(createSocketFactory());
 			HttpsURLConnection.setDefaultHostnameVerifier(new SimpleHostnameVerifier());
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			throw new SSLSocketSetupException();
 		}
@@ -69,7 +69,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(reservedForFuture);
 		return (Vector)callServer(server, cmdGetServerInfo, params);
 	}
-	
+
 	public Vector getUploadRights(String myAccountId, Vector parameters, String signature)
 	{
 		Vector params = new Vector();
@@ -87,7 +87,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, cmdGetSealedBulletinIds, params);
 	}
-					
+
 	public Vector getDraftBulletinIds(String myAccountId, Vector parameters, String signature)
 	{
 		Vector params = new Vector();
@@ -96,7 +96,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, cmdGetDraftBulletinIds, params);
 	}
-					
+
 	public Vector getFieldOfficeAccountIds(String myAccountId, Vector parameters, String signature)
 	{
 		Vector params = new Vector();
@@ -114,7 +114,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, cmdPutBulletinChunk, params);
 	}
-					
+
 	public Vector getBulletinChunk(String myAccountId, Vector parameters, String signature)
 	{
 		Vector params = new Vector();
@@ -123,7 +123,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, cmdGetBulletinChunk, params);
 	}
-					
+
 	public Vector getPacket(String myAccountId, Vector parameters, String signature)
 	{
 		Vector params = new Vector();
@@ -141,8 +141,8 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, cmdDeleteDrafts, params);
 	}
-	
-	public Vector putContactInfo(String myAccountId, Vector parameters, String signature) 
+
+	public Vector putContactInfo(String myAccountId, Vector parameters, String signature)
 	{
 		Vector params = new Vector();
 		params.add(myAccountId);
@@ -188,8 +188,8 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(data);
 		params.add(signature);
 		return (String)callServer(server, CMD_UPLOAD_CHUNK, params);
-	}	
-	
+	}
+
 	public Vector downloadMyBulletinChunk(String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize, String signature)
 	{
 		logging("ServerInterfaceXmlRpcHandler:downloadMyBulletinChunk clientId=" + authorAccountId + "bulletinId=" + bulletinLocalId);
@@ -214,7 +214,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, CMD_DOWNLOAD_FIELD_OFFICE_CHUNK, params);
 	}
-	
+
 	public Vector downloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
 	{
 		logging("ServerInterfaceXmlRpcHandler:downloadAuthorizedPacket authorAccountId=" + authorAccountId + "packetLocalId=" + packetLocalId);
@@ -246,7 +246,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, CMD_DOWNLOAD_FIELD_DATA_PACKET, params);
 	}
-	
+
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
 		logging("ServerInterfaceXmlRpcHandler:listFieldOfficeBulletinSummaries hqAccountId=" + hqAccountId);
@@ -300,8 +300,8 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		return sslContext.getSocketFactory();
 
 	}
-	
-	public SimpleX509TrustManager getSimpleX509TrustManager() 
+
+	public SimpleX509TrustManager getSimpleX509TrustManager()
 	{
 		return tm;
 	}

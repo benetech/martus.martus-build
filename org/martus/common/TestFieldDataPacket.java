@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -36,23 +36,23 @@ import org.martus.common.Packet.SignatureVerificationException;
 
 public class TestFieldDataPacket extends TestCaseEnhanced
 {
-	public TestFieldDataPacket(String name) 
+	public TestFieldDataPacket(String name)
 	{
 		super(name);
 	}
-	
+
 	public void setUp() throws Exception
 	{
 		if(security == null)
 		{
 			security = new MartusSecurity();
 			security.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
-		}	
+		}
 		if(securityHQ == null)
 		{
 			securityHQ = new MartusSecurity();
 			securityHQ.createKeyPair(SHORTEST_LEGAL_KEY_SIZE);
-		}	
+		}
 		UniversalId uid = FieldDataPacket.createUniversalId(security.getPublicKeyString());
 		fdp = new FieldDataPacket(uid, fieldTags);
 	}
@@ -64,7 +64,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("plain tag", true, fdp.fieldExists(bTag));
 		assertEquals("lower", true, fdp.fieldExists(bTag.toLowerCase()));
 		assertEquals("upper", true, fdp.fieldExists(bTag.toUpperCase()));
-		
+
 		assertEquals("tag list", true, Arrays.equals(fieldTags, fdp.getFieldTags()));
 		assertEquals("HQ Key not ''?", "", fdp.getHQPublicKey());
 		String hqKey = "12345";
@@ -73,7 +73,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.clearAll();
 		assertEquals("HQ Key not cleared?", "", fdp.getHQPublicKey());
 	}
-	
+
 	public void testIsEmpty()
 	{
 		assertEquals("didn't start out empty?", true, fdp.isEmpty());
@@ -89,7 +89,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.clearAll();
 		assertEquals("didn't return to empty after attachment?", true, fdp.isEmpty());
 	}
-	
+
 	public void testCreateUniversalId()
 	{
 		String sampleAccount = "an account";
@@ -97,7 +97,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("account", sampleAccount, uid.getAccountId());
 		assertStartsWith("prefix", "F-", uid.getLocalId());
 	}
-	
+
 	public void testIsEncrypted()
 	{
 		assertEquals("already encrypted?", false, fdp.isEncrypted());
@@ -106,7 +106,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.setEncrypted(false);
 		assertEquals("still encrypted?", false, fdp.isEncrypted());
 	}
-	
+
 	public void testIsPublicData()
 	{
 		assertEquals("already not Public?", true, fdp.isPublicData());
@@ -115,8 +115,8 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.setEncrypted(false);
 		assertEquals("not Back to Public?", true, fdp.isPublicData());
 	}
-		
-	
+
+
 	public void testConstructorWithUniversalId()
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(fdp.getAccountId(), fdp.getLocalId());
@@ -147,7 +147,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.set(aTag, "goodbye");
 		assertEquals("goodbye", fdp.get(aTag));
 	}
-	
+
 	public void testClear()
 	{
 		fdp.set(aTag, "hello");
@@ -155,7 +155,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.clearAll();
 		assertEquals("",fdp.get(aTag));
 	}
-	
+
 	public void testAttachments()
 	{
 		String label1 = "Label 1";
@@ -164,23 +164,23 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		AttachmentProxy[] v = fdp.getAttachments();
 		assertEquals("not one?", 1, v.length);
 		assertEquals("wrong label", label1, v[0].getLabel());
-		
+
 	}
-	
+
 	public void testLoadFromXmlSimple() throws Exception
 	{
 		String account = "asbid";
 		String id = "1234567";
 		String data1 = "data 1í";
-		String simpleFieldDataPacket = 
-			"<FieldDataPacket>\n" + 
-			"<" + MartusXml.PacketIdElementName + ">" + id + 
-			"</" + MartusXml.PacketIdElementName + ">\n" + 
-			"<" + MartusXml.AccountElementName + ">" + account + 
-			"</" + MartusXml.AccountElementName + ">\n" + 
+		String simpleFieldDataPacket =
+			"<FieldDataPacket>\n" +
+			"<" + MartusXml.PacketIdElementName + ">" + id +
+			"</" + MartusXml.PacketIdElementName + ">\n" +
+			"<" + MartusXml.AccountElementName + ">" + account +
+			"</" + MartusXml.AccountElementName + ">\n" +
 			"<" + MartusXml.EncryptedFlagElementName + ">" +
 			"</" + MartusXml.EncryptedFlagElementName + ">" +
-			"<" + MartusXml.FieldElementPrefix + aTag + ">" + data1 + 
+			"<" + MartusXml.FieldElementPrefix + aTag + ">" + data1 +
 			"</" + MartusXml.FieldElementPrefix + aTag + ">\n" +
 			"</FieldDataPacket>\n";
 		//System.out.println("{" + simpleFieldDataPacket + "}");
@@ -193,25 +193,25 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("aTag", data1, fdp.get(aTag));
 		assertEquals("encrypted", true, fdp.isEncrypted());
 	}
-	
+
 	public void testLoadFromXmlWithSpaces() throws Exception
 	{
 		String id = "1234567";
 		String data1 = "  simple  ";
 		String data2 = "This has  \nsome";
 		String data3 = "plain\n  spaces";
-		String simpleFieldDataPacket = 
-			"<FieldDataPacket>\n" + 
-			"<" + MartusXml.PacketIdElementName + ">" + id + 
-			"</" + MartusXml.PacketIdElementName + ">\n" + 
-			"<" + MartusXml.FieldElementPrefix + aTag + ">" + 
-			data1 + 
+		String simpleFieldDataPacket =
+			"<FieldDataPacket>\n" +
+			"<" + MartusXml.PacketIdElementName + ">" + id +
+			"</" + MartusXml.PacketIdElementName + ">\n" +
+			"<" + MartusXml.FieldElementPrefix + aTag + ">" +
+			data1 +
 			"</" + MartusXml.FieldElementPrefix + aTag + ">\n" +
-			"<" + MartusXml.FieldElementPrefix + bTag + ">" + 
-			data2 + 
+			"<" + MartusXml.FieldElementPrefix + bTag + ">" +
+			data2 +
 			"</" + MartusXml.FieldElementPrefix + bTag + ">\n" +
-			"<" + MartusXml.FieldElementPrefix + cTag + ">" + 
-			data3 + 
+			"<" + MartusXml.FieldElementPrefix + cTag + ">" +
+			data3 +
 			"</" + MartusXml.FieldElementPrefix + cTag + ">\n" +
 			"</FieldDataPacket>\n";
 		//System.out.println("{" + simpleFieldDataPacket + "}");
@@ -224,7 +224,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("bTag", data2, fdp.get(bTag));
 		assertEquals("cTag", data3, fdp.get(cTag));
 	}
-	
+
 	public void testLoadFromXmlWithNewlines() throws Exception
 	{
 		String id = "1234567";
@@ -232,18 +232,18 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		String data2 = "trailing newlines\n\n\n\n";
 		String data3cr = "crlf\r\npairs\r\n";
 		String data3 = "crlf\npairs\n";
-		String simpleFieldDataPacket = 
-			"<FieldDataPacket>\n" + 
-			"<" + MartusXml.PacketIdElementName + ">" + id + 
-			"</" + MartusXml.PacketIdElementName + ">\n" + 
-			"<" + MartusXml.FieldElementPrefix + aTag + ">" + 
-			data1 + 
+		String simpleFieldDataPacket =
+			"<FieldDataPacket>\n" +
+			"<" + MartusXml.PacketIdElementName + ">" + id +
+			"</" + MartusXml.PacketIdElementName + ">\n" +
+			"<" + MartusXml.FieldElementPrefix + aTag + ">" +
+			data1 +
 			"</" + MartusXml.FieldElementPrefix + aTag + ">\n" +
-			"<" + MartusXml.FieldElementPrefix + bTag + ">" + 
+			"<" + MartusXml.FieldElementPrefix + bTag + ">" +
 			data2 +
 			"</" + MartusXml.FieldElementPrefix + bTag + ">\n" +
-			"<" + MartusXml.FieldElementPrefix + cTag + ">" + 
-			data3cr + 
+			"<" + MartusXml.FieldElementPrefix + cTag + ">" +
+			data3cr +
 			"</" + MartusXml.FieldElementPrefix + cTag + ">\n" +
 			"</FieldDataPacket>\n";
 		//System.out.println("{" + simpleFieldDataPacket + "}");
@@ -265,18 +265,18 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		String data2amp = "&amp;&amp;";
 		String data2 = "&&";
 		String data3 = "'\"'\"\\";
-		String simpleFieldDataPacket = 
-			"<FieldDataPacket>\n" + 
-			"<" + MartusXml.PacketIdElementName + ">" + id + 
-			"</" + MartusXml.PacketIdElementName + ">\n" + 
-			"<" + MartusXml.FieldElementPrefix + aTag + ">" + 
-			data1amp + 
+		String simpleFieldDataPacket =
+			"<FieldDataPacket>\n" +
+			"<" + MartusXml.PacketIdElementName + ">" + id +
+			"</" + MartusXml.PacketIdElementName + ">\n" +
+			"<" + MartusXml.FieldElementPrefix + aTag + ">" +
+			data1amp +
 			"</" + MartusXml.FieldElementPrefix + aTag + ">\n" +
-			"<" + MartusXml.FieldElementPrefix + bTag + ">" + 
-			data2amp + 
+			"<" + MartusXml.FieldElementPrefix + bTag + ">" +
+			data2amp +
 			"</" + MartusXml.FieldElementPrefix + bTag + ">\n" +
-			"<" + MartusXml.FieldElementPrefix + cTag + ">" + 
-			data3 + 
+			"<" + MartusXml.FieldElementPrefix + cTag + ">" +
+			data3 +
 			"</" + MartusXml.FieldElementPrefix + cTag + ">\n" +
 			"</FieldDataPacket>\n";
 		//System.out.println("{" + simpleFieldDataPacket + "}");
@@ -296,7 +296,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		String data2base = "data 2";
 		fdp.set(aTag, data1);
 		fdp.set(bTag, data2base + "&<>");
-		
+
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		fdp.writeXml(out, security);
 		String result = new String(out.toByteArray(), "UTF-8");
@@ -311,9 +311,9 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertContains(bTag.toLowerCase(), result);
 		assertContains(data1, result);
 		assertContains(data2base + xmlAmp + xmlLt + xmlGt, result);
-			
+
 	}
-	
+
 	public void testWriteAndLoadXml() throws Exception
 	{
 		String account = fdp.getAccountId();
@@ -336,12 +336,12 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.writeXml(out, security);
 		String result = new String(out.toByteArray(), "UTF-8");
 		out.close();
-		
+
 		int attachmentUidAt = result.indexOf(MartusXml.AttachmentLocalIdElementName);
 		int attachmentKeyAt = result.indexOf(MartusXml.AttachmentKeyElementName);
 		int attachmentLabelAt = result.indexOf(MartusXml.AttachmentLabelElementName);
 		assertNotContains(MartusXml.getTagStart(MartusXml.HQSessionKeyElementName), result);
-		
+
 		assertTrue("uid after label?", attachmentUidAt < attachmentLabelAt);
 		assertTrue("key after label?", attachmentKeyAt < attachmentLabelAt);
 
@@ -351,7 +351,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		byte[] bytes = result.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in, security);
-		
+
 		assertEquals("id", fdp.getLocalId(), got.getLocalId());
 		assertEquals("a", fdp.get(aTag), got.get(aTag));
 		assertEquals("b", fdp.get(bTag), got.get(bTag));
@@ -369,18 +369,18 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertNotNull("A2 key null?", got2.getSessionKeyBytes());
 		assertEquals("A1 key incorrect?", true, Arrays.equals(attach1.getSessionKeyBytes(), got1.getSessionKeyBytes()));
 		assertEquals("A2 key incorrect?", true, Arrays.equals(attach2.getSessionKeyBytes(), got2.getSessionKeyBytes()));
-		
+
 	}
 
 	public void testWriteAndLoadXmlEncrypted() throws Exception
 	{
 		fdp.setEncrypted(true);
-		
+
 		String data1 = "data 1";
 		String data2base = "data 2";
 		fdp.set(aTag, data1);
 		fdp.set(bTag, data2base + "&<>");
-		
+
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		fdp.writeXml(out, security);
 		String result = new String(out.toByteArray(), "UTF-8");
@@ -396,7 +396,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertNotContains("encrypted data visible2?", bTag.toLowerCase(), result);
 		assertNotContains("encrypted data visible3?", data1, result);
 		assertNotContains("encrypted data visible4?", data2base + xmlAmp + xmlLt + xmlGt, result);
-		
+
 		UniversalId uid = UniversalId.createFromAccountAndPrefix("other acct", "");
 		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldTags());
 		byte[] bytes = result.getBytes("UTF-8");
@@ -408,27 +408,27 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("a", fdp.get(aTag), got.get(aTag));
 		assertEquals("b", fdp.get(bTag), got.get(bTag));
 		assertEquals("encrypted", fdp.isEncrypted(), got.isEncrypted());
-			
+
 	}
-	
+
 
 	public void testWriteAndLoadXmlEncryptedWithHQ() throws Exception
 	{
 		fdp.setEncrypted(true);
 		fdp.setHQPublicKey(securityHQ.getPublicKeyString());
-		
+
 		String data1 = "data 1";
 		String data2base = "data 2";
 		fdp.set(aTag, data1);
 		fdp.set(bTag, data2base + "&<>");
-		
+
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		fdp.writeXml(out, security);
 		String result = new String(out.toByteArray(), "UTF-8");
 		out.close();
 
 		assertContains(MartusXml.getTagStart(MartusXml.HQSessionKeyElementName), result);
-		
+
 		UniversalId uid = UniversalId.createFromAccountAndPrefix("other acct", "");
 		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldTags());
 		byte[] bytes = result.getBytes("UTF-8");
@@ -440,7 +440,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("a", fdp.get(aTag), got.get(aTag));
 		assertEquals("b", fdp.get(bTag), got.get(bTag));
 		assertEquals("encrypted", fdp.isEncrypted(), got.isEncrypted());
-		
+
 		ByteArrayInputStreamWithSeek in2 = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in2, security);
 		assertEquals("account", fdp.getAccountId(), got.getAccountId());
@@ -464,10 +464,10 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 //		String id2 = "29836982";
 //		String label1 = "This is a test";
 //		String label2 = "Why not do something?";
-//		
+//
 //		AttachmentInfo a1 = new AttachmentInfo(id1, label1);
 //		AttachmentInfo a2 = new AttachmentInfo(id2, label2);
-//		
+//
 //	}
 
 	public void testLoadDamaged() throws Exception
@@ -476,21 +476,21 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		fdp.writeXml(out, security);
 		byte[] bytes = out.toByteArray();
 		bytes[50] ^= 255;
-		
+
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		UniversalId newUid = UniversalId.createDummyUniversalId();
 		FieldDataPacket loadedBad = new FieldDataPacket(newUid, fieldTags);
-		try 
+		try
 		{
 			loadedBad.loadFromXml(in, security);
 			fail("Should have thrown!");
-		} 
-		catch (SignatureVerificationException ignoreExpectedException) 
+		}
+		catch (SignatureVerificationException ignoreExpectedException)
 		{
 		}
 		assertNotEquals("Set the uid?", fdp.getUniversalId(), loadedBad.getUniversalId());
 	}
-		
+
 	void verifyLoadException(byte[] input, Class expectedExceptionClass)
 	{
 		ByteArrayInputStreamWithSeek inputStream = new ByteArrayInputStreamWithSeek(input);
@@ -506,12 +506,12 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 			assertEquals("Wrong exception type?", expectedExceptionClass, e.getClass());
 		}
 	}
-	
+
 	String line1 = "This";
 	String line2 = "is";
 	String line3 = "data";
 	String line4 = "for b";
-	
+
 	FieldDataPacket fdp;
 	String xmlAmp = "&amp;";
 	String xmlLt = "&lt;";

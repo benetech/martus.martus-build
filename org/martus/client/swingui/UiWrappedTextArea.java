@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -34,7 +34,7 @@ public class UiWrappedTextArea extends JTextArea
 {
 	public UiWrappedTextArea(Window mainWindow, String message)
 	{
-		this(mainWindow, message, 80);	
+		this(mainWindow, message, 80);
 	}
 
 
@@ -49,10 +49,10 @@ public class UiWrappedTextArea extends JTextArea
 
 		int startOfParagraph = 0;
 		int endOfParagraph = message.indexOf("\n");
-		
+
 		if(endOfParagraph == -1 && messageLength > maxChars)
 			rows = messageLength / maxChars;
-		
+
 		while(endOfParagraph >= 0 )
 		{
 			int paragraphLength = endOfParagraph - startOfParagraph;
@@ -61,7 +61,7 @@ public class UiWrappedTextArea extends JTextArea
 			startOfParagraph = endOfParagraph + 1;
 			endOfParagraph = message.indexOf("\n", startOfParagraph);
 		}
-		
+
 		// cushion for safety
 		if(messageLength > maxChars)
 			++rows;

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -43,7 +43,7 @@ public class TestDatabaseKey extends TestCaseEnhanced
 	{
 		//System.out.println(text);
 	}
-	
+
 	public void testConstructors() throws Exception
 	{
 		UniversalId uid1 = UniversalId.createDummyUniversalId();
@@ -59,7 +59,7 @@ public class TestDatabaseKey extends TestCaseEnhanced
 		assertEquals("bad uid3?", uid1, key3.getUniversalId());
 		assertEquals("draft?", false, key3.isDraft());
 		assertEquals("not sealed?", true, key3.isSealed());
-		
+
 		DatabaseKey keySealed = DatabaseKey.createKey(uid1, BulletinConstants.STATUSSEALED);
 		assertEquals("bad keySealed?", uid1, keySealed.getUniversalId());
 		assertEquals("draft?", false, keySealed.isDraft());
@@ -133,6 +133,6 @@ public class TestDatabaseKey extends TestCaseEnhanced
 		key.setSealed();
 		assertEquals("Sealed not set?", true, key.isSealed());
 		assertEquals("Draft still set?", false, key.isDraft());
-		
+
 	}
 }

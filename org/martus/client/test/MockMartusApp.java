@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -37,7 +37,7 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
 
-public class MockMartusApp extends MartusApp 
+public class MockMartusApp extends MartusApp
 {
 	public static MockMartusApp create(MartusCrypto crypto) throws IOException, MartusAppInitializationException
 	{
@@ -51,10 +51,10 @@ public class MockMartusApp extends MartusApp
 
 		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(crypto);
-		
+
 		return app;
 	}
-	
+
 	public static MockMartusApp create() throws Exception
 	{
 		return create(new MockMartusSecurity());
@@ -64,15 +64,15 @@ public class MockMartusApp extends MartusApp
 	{
 		super(crypto, dataDirectoryToUse);
 	}
-	
+
 	public void deleteAllFiles() throws Exception
 	{
 		getStore().deleteAllData();
-		
+
 		getUploadInfoFile().delete();
 		if(getUploadInfoFile().exists())
 			throw new IOException("uploadInfoFile");
-			
+
 		getKeyPairFile().delete();
 		if(getKeyPairFile().exists())
 			throw new IOException("getKeyPairFile");
@@ -85,24 +85,24 @@ public class MockMartusApp extends MartusApp
 		configInfo.delete();
 		if(configInfo.exists())
 			throw new IOException("configInfo");
-			
+
 		File sigFile = new File(getConfigInfoSignatureFilename());
 		sigFile.delete();
 		if(sigFile.exists())
 			throw new IOException("sigFile");
-		
+
 		File logFile = new File(getUploadLogFilename());
 		logFile.delete();
 		if(logFile.exists())
 			throw new IOException("logFile");
-		
+
 		File dir = new File(getDataDirectory());
 		dir.delete();
 		if(dir.exists())
 			throw new IOException("dataDirectory");
-		
+
 	}
-	
+
 	public void loadSampleData()
 	{
 		BulletinFolder f = this.getFolderSent();
@@ -191,8 +191,8 @@ public class MockMartusApp extends MartusApp
 			b.set("summary", "A small business owner in the town of Siem Reap had " +
 							"his shop taken from him when developers claimed they " +
 							"purchased the land.");
-			b.set("publicinfo", "The small business owner has been using the land " + 
-							"for over ten years.  It has been in his family for as " + 
+			b.set("publicinfo", "The small business owner has been using the land " +
+							"for over ten years.  It has been in his family for as " +
 							"long as he can remember.  He is not sure who the " +
 							"developers purchased the land from and does not know " +
 							"who in the government to seek assistance from.  His " +
@@ -201,7 +201,7 @@ public class MockMartusApp extends MartusApp
 			b.save();
 			f.add(b);
 		}
-		
+
 		{
 			Bulletin b = createBulletin();
 			b.set("author", "Sri Lanka Peace Institute");
@@ -210,7 +210,7 @@ public class MockMartusApp extends MartusApp
 			b.set("eventdate", "2001-02-03");
 			b.set("entrydate", "2001-02-05");
 			b.set("keywords", "firebomb, explosion, NGO");
-			b.set("summary", "The Oxfam NGO office in downtown Colombo was attacked by " + 
+			b.set("summary", "The Oxfam NGO office in downtown Colombo was attacked by " +
 								"men who threw a firebomb in the front windows.");
 			b.set("publicinfo", "The Oxfam NGO office in downtown Colombo was attacked " +
 								"by men who threw a firebomb in the front windows.  The " +
@@ -220,7 +220,7 @@ public class MockMartusApp extends MartusApp
 			b.save();
 			f.add(b);
 		}
-			
+
 		{
 			Bulletin b = createBulletin();
 			b.set("author", "Guatemala Legal Defense");
@@ -235,7 +235,7 @@ public class MockMartusApp extends MartusApp
 			b.save();
 			f.add(b);
 		}
-			
+
 		{
 			Bulletin b = createBulletin();
 			b.set("author", "Environmental Watch Group");
@@ -250,7 +250,7 @@ public class MockMartusApp extends MartusApp
 			b.save();
 			f.add(b);
 		}
-			
+
 		{
 			Bulletin b = createBulletin();
 			b.setAllPrivate(true);
@@ -267,7 +267,7 @@ public class MockMartusApp extends MartusApp
 			f.add(b);
 		}
 	}
-		
+
 	String testDataDirectory;
 
 }

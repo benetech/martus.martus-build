@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -74,12 +74,12 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		JLabel space = new JLabel(" ");
 		getContentPane().add(space, ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(new JLabel());
-		
+
 		UiWrappedTextArea infoRequired = new UiWrappedTextArea(mainWindow, app.getFieldLabel("ContactInfoRequiredFields"), 60);
 		infoRequired.setFont(space.getFont());
 		infoRequired.setRows(2);
 		getContentPane().add(infoRequired);
-		
+
 		String authorPrompt = app.getFieldLabel("AuthorRequired");
 		getContentPane().add(new JLabel(authorPrompt), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(source);

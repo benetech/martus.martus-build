@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -53,7 +53,7 @@ public class FolderList extends DefaultTreeModel
 			FolderTreeNode item = (FolderTreeNode)getChild(root, 0);
 			removeNodeFromParent(item);
 		}
-		
+
 		Vector visibleFolderNames = store.getVisibleFolderNames();
 
 		for(int f = 0; f < visibleFolderNames.size(); ++f)

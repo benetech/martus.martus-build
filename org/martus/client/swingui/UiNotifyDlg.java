@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -68,7 +68,7 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 		}
 		vbox.add(hbox);
 		vbox.add(new JLabel(" "));
-		
+
 		getContentPane().add(vbox, BorderLayout.CENTER);
 		main.centerDlg(this);
 		setResizable(true);
@@ -76,30 +76,30 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 		ok.requestFocus(true);
 		show();
 	}
-	
-	private JTextArea createWrappedTextArea(String message) 
+
+	private JTextArea createWrappedTextArea(String message)
 	{
 		UiWrappedTextArea msgArea = new UiWrappedTextArea(mainWindow, message);
 		msgArea.addKeyListener(new TabToOkButton());
-		return msgArea;		
+		return msgArea;
 	}
 
-	public class TabToOkButton extends KeyAdapter 
+	public class TabToOkButton extends KeyAdapter
 	{
-		public void keyPressed(KeyEvent ke) 
+		public void keyPressed(KeyEvent ke)
 		{
 			if (ke.getKeyCode() == KeyEvent.VK_TAB)
 			{
-				ok.requestFocus();	
+				ok.requestFocus();
 			}
-		} 
+		}
 	}
-	
+
 	public void actionPerformed(ActionEvent ae)
 	{
 		exit();
 	}
-	
+
 	public void exit()
 	{
 		if(ok.hasFocus())
@@ -111,7 +111,7 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 
 	public String getResult()
 	{
-		return result;	
+		return result;
 	}
 
 	String result;

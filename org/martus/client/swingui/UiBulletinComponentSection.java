@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2002, Beneficent
+monitoring software. Copyright (C) 2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	UiBulletinComponentSection(MartusApp appToUse, boolean encrypted)
 	{
 		app = appToUse;
-		
+
 		ParagraphLayout layout = new ParagraphLayout();
 		layout.outdentFirstField();
 		setLayout(layout);
@@ -57,7 +57,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		encryptedIndicator = new JLabel("", null, JLabel.LEFT);
 		encryptedIndicator.setVerticalTextPosition(JLabel.TOP);
 		encryptedIndicator.setFont(encryptedIndicator.getFont().deriveFont(Font.BOLD));
-		
+
 		damagedIndicator = new JLabel("", null, JLabel.LEFT);
 		damagedIndicator.setVerticalTextPosition(JLabel.TOP);
 		damagedIndicator.setText(app.getFieldLabel("MayBeDamaged"));
@@ -89,7 +89,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		target.add(attachments, ParagraphLayout.NEW_PARAGRAPH);
 		return fields;
 	}
-	
+
 	public void copyDataFromPacket(FieldDataPacket fdp)
 	{
 		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
@@ -105,9 +105,9 @@ abstract public class UiBulletinComponentSection extends JPanel
 
 		AttachmentProxy[] attachments = fdp.getAttachments();
 		for(int i = 0 ; i < attachments.length ; ++i)
-			addAttachment(attachments[i]);	
+			addAttachment(attachments[i]);
 	}
-	
+
  	public JLabel createLabel(String fieldTag)
 	{
 		return new JLabel(app.getFieldLabel(fieldTag));
@@ -125,8 +125,8 @@ abstract public class UiBulletinComponentSection extends JPanel
 			case Bulletin.DATE:
 				field = createDateField();
 				break;
-			case Bulletin.CHOICE: 
-				ChoiceItem[] languages = 
+			case Bulletin.CHOICE:
+				ChoiceItem[] languages =
 					app.getLanguageNameChoices(MartusLocalization.ALL_LANGUAGE_CODES);
 				field = createChoiceField(languages);
 				break;
@@ -138,7 +138,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		field.getComponent().setBorder(new LineBorder(Color.black));
 		return field;
 	}
-	
+
 
 	public void updateEncryptedIndicator(boolean isEncrypted)
 	{
@@ -149,20 +149,20 @@ abstract public class UiBulletinComponentSection extends JPanel
 			iconFileName = "locked.jpg";
 			title = app.getFieldLabel("privatesection");
 		}
-		
+
 		Icon icon = new ImageIcon(UiBulletinComponentSection.class.getResource(iconFileName));
 		encryptedIndicator.setIcon(icon);
 		encryptedIndicator.setText(title);
 	}
 
-	public void updateSectionBorder(boolean isEncrypted) 
+	public void updateSectionBorder(boolean isEncrypted)
 	{
 		if(isEncrypted)
 			setBorder(new LineBorder(Color.red, 5));
 		else
 			setBorder(new LineBorder(Color.lightGray, 5));
 	}
-	
+
 	public void disableEdits()
 	{
 		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
@@ -175,7 +175,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	{
 		damagedIndicator.setVisible(isDamaged);
 	}
-	
+
 	ParagraphLayout getParagraphLayout()
 	{
 		return (ParagraphLayout)getLayout();
@@ -198,7 +198,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	JLabel damagedIndicator;
 	UiField[] fields;
 	String[] fieldTags;
-	
+
 	public final static boolean ENCRYPTED = true;
 	public final static boolean NOT_ENCRYPTED = false;
 
