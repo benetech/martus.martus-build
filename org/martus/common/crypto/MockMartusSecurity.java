@@ -238,8 +238,6 @@ public class MockMartusSecurity extends MartusSecurity
 	public boolean fakeAuthorizationFailure;
 	public boolean fakeKeyPairVersionFailure;
 
-	private static int checksum;
-
 	final static String nonEncryptedSampleKeyPair = 
 		"rO0ABXNyABVqYXZhLnNlY3VyaXR5LktleVBhaXKXAww60s0SkwIAAkwACnByaX" + 
 		"ZhdGVLZXl0ABpMamF2YS9zZWN1cml0eS9Qcml2YXRlS2V5O0wACXB1YmxpY0tl" +

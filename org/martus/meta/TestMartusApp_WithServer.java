@@ -1151,27 +1151,6 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		boolean nullGetFieldOfficeAccountIds;
 	}
 
-	private Bulletin createSealedBulletin(MartusApp app) throws Exception
-	{
-		Bulletin b = app.createBulletin();
-		b.setSealed();
-		b.set(Bulletin.TAGTITLE, "test title");
-		app.getStore().saveBulletin(b);
-		app.getFolderOutbox().add(b);
-		return b;
-	}
-
-	private Bulletin createDraftBulletin(MartusApp app) throws Exception
-	{
-		Bulletin b = app.createBulletin();
-		b.setDraft();
-		b.set(Bulletin.TAGTITLE, "test title");
-		app.getStore().saveBulletin(b);
-		app.getFolderDraftOutbox().add(b);
-		return b;
-	}
-
-
 	Bulletin createAndUploadSampleBulletin() throws Exception
 	{
 		BulletinStore store = appWithServer.getStore();

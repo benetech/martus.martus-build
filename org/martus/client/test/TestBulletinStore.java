@@ -1244,11 +1244,6 @@ public class TestBulletinStore extends TestCaseEnhanced
 		return tempStore;
 	}
 
-	private String getFieldEntity(Bulletin b, String fieldName)
-	{
-		return MartusXml.getFieldTagStart(fieldName) + b.get(fieldName) + MartusXml.getFieldTagEnd();
-	}
-
 	final int sampleRecordCount = 5;
 
 	static BulletinStore store;

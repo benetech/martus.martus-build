@@ -45,11 +45,6 @@ public class MartusFlexidate
 		setDateRange(beginDate, endDate);
 	}
 		
-	private void setDate(Date date, int range)
-	{
-		flexiDate = new Flexidate(date, range);		
-	}
-	
 	private void setDateRange(Date beginDate, Date endDate)
 	{	
 		flexiDate = new Flexidate(beginDate, endDate);	

@@ -1775,14 +1775,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return new File(dataDirectory,ADMINSTARTUPCONFIGDIRECTORY);
 	}
 
-	private class BannedClientsMonitor extends TimerTask
-	{
-		public void run()
-		{
-			serverForClients.loadBannedClients();
-		}
-	}
-	
 	private File getHiddenPacketsFile()
 	{
 		return new File(getStartupConfigDirectory(), HIDDENPACKETSFILENAME);
@@ -1902,6 +1894,5 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	private final int MAX_FAILED_UPLOAD_ATTEMPTS = 100;
 	private static final long magicWordsGuessIntervalMillis = 60 * 1000;
-	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
 }

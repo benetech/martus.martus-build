@@ -72,11 +72,6 @@ public class SearchTreeNode
 		return nodeRight;
 	}
 
-	private boolean isValueNode()
-	{
-		return (getOperation() == VALUE);
-	}
-
 	private void createChildNodes(String left, String right)
 	{
 		nodeLeft = new SearchTreeNode(left);

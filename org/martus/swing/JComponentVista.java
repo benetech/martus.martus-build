@@ -39,8 +39,6 @@ import java.awt.print.PrinterException;
 import javax.swing.JComponent;
 public class JComponentVista extends Vista implements Printable
 {
-	private static final boolean SYMMETRIC_SCALING = true;
-	private static final boolean ASYMMETRIC_SCALING = false;
 	private double mScaleX;
 	private double mScaleY;
 

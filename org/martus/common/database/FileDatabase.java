@@ -26,7 +26,6 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.common.database;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -44,6 +43,8 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.StreamEncryptor;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.database.Database.AccountVisitor;
+import org.martus.common.database.Database.PacketVisitor;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.FileInputStreamWithSeek;
 import org.martus.util.InputStreamWithSeek;
@@ -193,18 +194,6 @@ abstract public class FileDatabase extends Database
 		{
 			return null;
 		}
-	}
-
-	private String decryptRecord(InputStreamWithSeek in, MartusCrypto decrypter) throws
-			IOException,
-			MartusCrypto.CryptoException
-	{
-		in.read(); //throwAwayFlagByte
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		decrypter.decrypt(in, out);
-		in.close();
-		return new String(out.toByteArray(), "UTF-8");
 	}
 
 	public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter) throws

@@ -28,7 +28,6 @@ package org.martus.client.core;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
-import java.sql.Timestamp;
 import java.util.Vector;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -231,12 +230,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	public SimpleX509TrustManager getSimpleX509TrustManager()
 	{
 		return tm;
-	}
-
-	private void logging(String message)
-	{
-		Timestamp stamp = new Timestamp(System.currentTimeMillis());
-		System.out.println(stamp + " " + message);
 	}
 
 	static int indexOfPortThatWorkedLast = 0;

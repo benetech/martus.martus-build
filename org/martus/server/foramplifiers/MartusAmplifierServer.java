@@ -581,20 +581,6 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		return false;	
 	}
 	
-	private boolean isSignatureCorrect(String signedString, String signature, String signerPublicKey)
-	{
-		try
-		{
-			ByteArrayInputStream in = new ByteArrayInputStream(signedString.getBytes("UTF-8"));
-			return security.isValidSignatureOfStream(signerPublicKey, in, Base64.decode(signature));
-		}
-		catch(Exception e)
-		{
-			logging("  isSigCorrect exception: " + e);
-			return false;
-		}
-	}
-	
 	private String getClientAliasForLogging(String clientId)
 	{
 		return getDatabase().getFolderForAccount(clientId);

@@ -35,7 +35,6 @@ import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
-import java.rmi.server.UID;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -696,7 +695,6 @@ public class BulletinStore
 		cacheOfSortableFieldsFile = new File(dir, CACHE_FILE_NAME);
 
 		database = db;
-		account = "";
 		bulletinCache = new TreeMap();
 		cacheOfSortableFields = new CacheOfSortableFields();
 		folders = new Vector();
@@ -915,11 +913,6 @@ public class BulletinStore
 		return handler.legacyFolders;
 	}
 
-	private String createUniqueId()
-	{
-		return new UID().toString();
-	}
-
 	public static class StatusNotAllowedException extends Exception {}
 
 	public void importZipFileBulletin(File zipFile, BulletinFolder toFolder, boolean forceSameUids) throws
@@ -1035,7 +1028,6 @@ public class BulletinStore
 
 	private static final String CACHE_FILE_NAME = "sfcache.dat";
 	private MartusCrypto signer;
-	private String account;
 	private File dir;
 	Database database;
 	private Vector folders;
@@ -1047,7 +1039,6 @@ public class BulletinStore
 	public Map bulletinCache;
 	CacheOfSortableFields cacheOfSortableFields;
 	File cacheOfSortableFieldsFile;
-	private boolean encryptPublicDataFlag;
 
 	FieldSpec[] publicFieldTags;
 	FieldSpec[] privateFieldTags;
