@@ -314,7 +314,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedDraftBulletinWithOutboxCopy=Confirm Delete Draft Bulletin");
 		addEnglishTranslation("wintitle:confirmPrinterWarning=Print Configuration Warning");
 
-		addEnglishTranslation("wintitle:notifyillegaldrop=Cannot Move Bulletin");
+		addEnglishTranslation("wintitle:notifyDropNotAllowed=Cannot Move Bulletin");
+		addEnglishTranslation("wintitle:notifyDropError=Error Moving Bulletin");
 		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenothing=Retrieve Bulletins");
@@ -556,7 +557,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmPrinterWarningcause=Since you have changed from the default print tray your print out may be incorrect, if you also changed the size of paper used.  You must first select the paper tray and then select the paper size in that order, for both to get set correctly.  If you only wanted to change the paper tray then disregard this message and select 'No'.");
 		addEnglishTranslation("field:confirmPrinterWarningeffect=Clicking on Yes will bring back the Printer Dialog so you can reselect your default paper tray and size.  Clicking on 'No' will print the document.");
 
-		addEnglishTranslation("field:notifyillegaldropcause=This bulletin cannot be moved to that folder, probably because of its status");
+		addEnglishTranslation("field:notifyDropNotAllowedcause=This bulletin cannot be moved to that folder. This may be because of its Draft/Sealed status, or its author.");
+		addEnglishTranslation("field:notifyDropErrorcause=An unexpected error occured while moving this bulletin. The file may be damaged.");
 		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
 		addEnglishTranslation("field:notifyretrievenothingcause=No bulletins were selected");

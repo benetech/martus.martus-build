@@ -11,10 +11,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import org.martus.client.BulletinStore.StatusNotAllowedException;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusUtilities.DuplicatePacketException;
+import org.martus.common.MartusUtilities.SealedPacketExistsException;
 
 abstract class UiBulletinDropAdapter implements DropTargetListener
 {
@@ -151,67 +154,65 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		File file = (File)list.get(0);
 		System.out.println(file.getPath());
 
-		boolean worked = false;
+		String resultMessageTag = null;
 		
 		try
 		{
-			worked = attemptDropFile(file, toFolder);
+			attemptDropFile(file, toFolder);
+		} 
+		catch (SealedPacketExistsException shouldBeImpossible) 
+		{
+			System.out.println("Tried to drop draft when sealed already exists");
+			resultMessageTag = "DropError";
+		} 
+		catch (StatusNotAllowedException e) 
+		{
+			resultMessageTag = "DropNotAllowed";
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
+			resultMessageTag = "DropError";
 		}
 		catch(MartusCrypto.CryptoException e)
 		{
+			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
+			resultMessageTag = "DropError";
 		}
 		catch(Packet.InvalidPacketException e)
 		{
+			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
+			resultMessageTag = "DropError";
 		}
 		catch(Packet.SignatureVerificationException e)
 		{
 			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
+			resultMessageTag = "DropError";
 		}
-		
+
+		boolean worked = (resultMessageTag == null);
 		dtde.dropComplete(worked);
+
 		if(!worked)
 		{
-			observer.notifyDlg(observer, "illegaldrop");
+			observer.notifyDlg(observer, resultMessageTag);
 		}
 	}
 
-	public boolean attemptDropFile(File file, BulletinFolder toFolder) throws 
+	public void attemptDropFile(File file, BulletinFolder toFolder) throws 
 		IOException,
 		MartusCrypto.CryptoException,
 		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException
-	
+		Packet.SignatureVerificationException,
+		MartusUtilities.SealedPacketExistsException,
+		BulletinStore.StatusNotAllowedException
 	{
-		try
-		{
-			toFolder.getStore().importZipFileBulletin(file, toFolder, false);
-		}
-		catch(BulletinStore.StatusNotAllowedException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-		catch(MartusUtilities.DuplicatePacketException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-		catch(MartusUtilities.SealedPacketExistsException e)
-		{
-			e.printStackTrace();
-			return false;
-		}
-		
+		toFolder.getStore().importZipFileBulletin(file, toFolder, false);
 		observer.folderContentsHaveChanged(toFolder);
-		return true;
 	}
 
 

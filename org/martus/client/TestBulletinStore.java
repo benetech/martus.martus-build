@@ -797,9 +797,14 @@ public class TestBulletinStore extends TestCaseEnhanced
 		MockBulletin.saveToFile(b, tempFile);
 		store.importZipFileBulletin(tempFile, folder, false);
 		assertEquals("not imported to store?", 1, store.getBulletinCount());
-		assertEquals("not imported to folder?", 1, folder.getBulletinCount());
+		assertEquals("not imported to folder count?", 1, folder.getBulletinCount());
+		assertEquals("not imported to folder uid?", 0, folder.find(b.getUniversalId()));
 		assertNotNull("not saved with sealed id?", store.findBulletinByUniversalId(b.getUniversalId()));
 		
+		BulletinFolder folder2 = store.createFolder("another");
+		store.importZipFileBulletin(tempFile, folder2, false);
+		assertEquals("imported to store again?", 1, store.getBulletinCount());
+		assertEquals("not imported to another folder uid?", 0, folder2.find(b.getUniversalId()));
 	}
 	
 	public void testImportZipFileBulletinNotMine() throws Exception

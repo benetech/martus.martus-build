@@ -29,6 +29,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusUtilities.DuplicatePacketException;
 import org.martus.common.Packet.WrongAccountException;
 import org.martus.common.UniversalId.NotUniversalIdException;
 import org.xml.sax.Attributes;
@@ -692,7 +693,6 @@ public class BulletinStore
 			MartusCrypto.CryptoException,
 			Packet.InvalidPacketException,
 			Packet.SignatureVerificationException,
-			MartusUtilities.DuplicatePacketException,
 			MartusUtilities.SealedPacketExistsException
 	{
 		ZipFile zip = new ZipFile(zipFile);
@@ -708,7 +708,16 @@ public class BulletinStore
 			boolean isSealed = bhp.getStatus().equals(Bulletin.STATUSSEALED);
 			boolean isMine = getAccountId().equals(bhp.getAccountId());
 			if(forceSameUids || !isMine || isSealed)
-				importZipFileToStoreWithSameUids(zipFile);
+			{
+				try
+				{
+					importZipFileToStoreWithSameUids(zipFile);
+				}
+				catch (DuplicatePacketException notAProblem) 
+				{
+					System.out.println("imported sealed that already existed");
+				} 
+			}
 			else
 				uid = importZipFileToStoreWithNewUids(zipFile);
 
