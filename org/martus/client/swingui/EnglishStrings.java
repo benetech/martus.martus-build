@@ -549,9 +549,6 @@ public class EnglishStrings
 "month:nov=Nov",
 "month:dec=Dec",
 
-"message:connected=Successfully connected to server",
-"message:noconnect=ERROR: Unable to connect to server",
-
 "status:draft=Draft",
 "status:sealed=Sealed",
 

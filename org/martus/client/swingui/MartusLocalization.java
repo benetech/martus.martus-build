@@ -328,11 +328,6 @@ public class MartusLocalization
 		return getLabel(getCurrentLanguageCode(), "menu", code, "???");
 	}
 
-	public String getMessageLabel(String code)
-	{
-		return getLabel(getCurrentLanguageCode(), "message", code, "???");
-	}
-
 	public String getStatusLabel(String code)
 	{
 		return getLabel(getCurrentLanguageCode(), "status", code, "???");

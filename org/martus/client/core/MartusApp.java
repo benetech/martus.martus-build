@@ -1248,11 +1248,6 @@ public class MartusApp
 		return localization.getMenuLabel(code);
 	}
 
-	public String getMessageLabel(String code)
-	{
-		return localization.getMessageLabel(code);
-	}
-
 	public String getStatusLabel(String code)
 	{
 		return localization.getStatusLabel(code);
