@@ -1,7 +1,5 @@
 package org.martus.server;
 
-import org.martus.meta.*;
-
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
@@ -21,7 +19,6 @@ public class TestAll
 	{
 		TestSuite suite= new TestSuite("All Server Martus Tests");
 
-		suite.addTest(new TestSuite(TestMartusServer.class));
 		suite.addTest(new TestSuite(TestServerFileDatabase.class));
 		suite.addTest(new TestSuite(TestServerSideNetworkHandler.class));
 
