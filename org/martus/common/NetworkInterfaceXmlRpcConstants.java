@@ -30,6 +30,8 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final int MARTUS_PORT_FOR_NON_SSL = 988;
 	public static final int MARTUS_PORT_FOR_SSL = 987;
 
+	public static final int MARTUS_PORT_FOR_AMPLIFIER = 985;
+
 	public static final String cmdGetServerInfo = "getServerInfo";
 	public static final String cmdGetUploadRights = "getUploadRights";
 	public static final String cmdGetSealedBulletinIds = "getSealedBulletinIds";
@@ -41,6 +43,11 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final String cmdDeleteDrafts = "deleteDraftBulletins";
 	public static final String cmdPutContactInfo = "putContactInfo";
 	public static final String cmdGetNews = "getNews";
+
+	// Amplifier commands
+	public static final String cmdGetAccountIds = "getAccountIds";
+	public static final String cmdGetAccountUniversalIds = "getAccountUniversalIds";
+	public static final String cmdGetAmplifierBulletinChunk = "getAmplifierBulletinChunk";
 
 	// legacy!
 	public static final String CMD_PING = "ping";
