@@ -11,7 +11,6 @@ public class UiDateViewer extends UiField
 	{
 		app = appToUse;
 		label = new JLabel();
-		label.setPreferredSize(new Dimension(80,20)); //Set for printing correctly
 	}
 
 	public JComponent getComponent()
@@ -27,7 +26,7 @@ public class UiDateViewer extends UiField
 	public void setText(String newText)
 	{
 		value = app.convertStoredToDisplay(newText);
-		label.setText(" "+value);
+		label.setText("  " + value + "  ");
 	}
 
 	public void disableEdits()

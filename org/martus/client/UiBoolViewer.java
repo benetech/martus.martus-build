@@ -1,11 +1,11 @@
-/* $Id: UiBoolViewer.java,v 1.3 2002/04/05 21:34:34 kevins Exp $ */
 package org.martus.client;
+
+import java.awt.Color;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.event.*;
-
-import org.martus.client.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 
 public class UiBoolViewer extends UiField
 {
@@ -13,6 +13,7 @@ public class UiBoolViewer extends UiField
 	{
 		app = appToUse;
 		widget = new JLabel();
+		widget.setBorder(new LineBorder(Color.black));
 	}
 
 	public JComponent getComponent()
@@ -33,7 +34,7 @@ public class UiBoolViewer extends UiField
 		else
 			text = app.getButtonLabel("no");
 
-		widget.setText(text);
+		widget.setText(" " + text + " ");
 	}
 
 	public void disableEdits()
