@@ -80,6 +80,13 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	public void tearDown()
 	{
 	}
+	
+	public void testGetDigestOfPartOfPrivateKey() throws Exception
+	{
+		MartusCrypto knownKey = MockMartusSecurity.createClient();
+		String digest = Base64.encode(knownKey.getDigestOfPartOfPrivateKey());
+		assertEquals("PY7HmxJgqLy76WNx3mKfaNnxFc8=", digest);
+	}
 
 	public void testPbe()
 	{
