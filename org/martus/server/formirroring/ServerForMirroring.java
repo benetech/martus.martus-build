@@ -53,14 +53,6 @@ public class ServerForMirroring implements ServerSupplierInterface
 	{
 		coreServer = coreServerToUse;
 		logger = loggerToUse;
-		log("Initializing ServerForMirroring");
-		
-		authorizedCallers = new Vector();
-		loadServersWhoAreAuthorizedToCallUs();
-		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
-
-		retrieversWeWillCall = new Vector();
-		log("Configured to call " + retrieversWeWillCall.size() + " Mirrors");
 	}
 
 	public void log(String message)
@@ -98,7 +90,15 @@ public class ServerForMirroring implements ServerSupplierInterface
 
 	public void addListeners() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
 	{
+		log("Initializing ServerForMirroring");
+		
+		authorizedCallers = new Vector();
+		loadServersWhoAreAuthorizedToCallUs();
+		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
+
+		retrieversWeWillCall = new Vector();
 		createGatewaysForServersWhoWeCall();
+		log("Configured to call " + retrieversWeWillCall.size() + " Mirrors");
 
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 		log("Opening port " + port + " for mirroring...");
@@ -233,9 +233,15 @@ public class ServerForMirroring implements ServerSupplierInterface
 		{
 			File callerFile = callersFiles[i];
 			Vector publicInfo = MartusUtilities.importServerPublicKeyFromFile(callerFile, getSecurity());
-			addAuthorizedCaller((String)publicInfo.get(0));
+			String accountId = (String)publicInfo.get(0);
+			addAuthorizedCaller(accountId);
 			if(isSecureMode())
+			{
 				callerFile.delete();
+				if(callerFile.exists())
+					throw new IOException("delete failed: " + callerFile);
+			}
+			log("Authorized to call us: " + callerFile.getName());
 		}
 	}
 
@@ -268,7 +274,12 @@ public class ServerForMirroring implements ServerSupplierInterface
 			File toCallFile = toCallFiles[i];
 			retrieversWeWillCall.add(createRetrieverToCall(toCallFile));
 			if(isSecureMode())
+			{
 				toCallFile.delete();
+				if(toCallFile.exists())
+					throw new IOException("delete failed: " + toCallFile);
+			}
+			log("We will call: " + toCallFile.getName());
 		}
 	}
 	
