@@ -199,17 +199,6 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			addCellEditorListener(this);
 		}
 		
-		protected void prepareForEditing() 
-		{
-			super.prepareForEditing();
-			System.out.println("prepareForEditing: " + getCellEditorValue());
-			oldLocalizedFolderName = getCellEditorValue().toString();
-			FolderList model = (FolderList)getModel();
-			node = model.findFolderByLocalizedName(oldLocalizedFolderName);
-			if(node != null)
-				oldInternalFolderName = node.getInternalName();
-		}
-
 		// begin CellEditorListener interface
 		public void editingStopped(ChangeEvent e)
 		{
@@ -231,6 +220,15 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			getModel().valueForPathChanged(path, newFolderName);
 		}
 		
+		public Component getTreeCellEditorComponent(JTree arg0, Object arg1, boolean arg2, boolean arg3, boolean arg4, int arg5) 
+		{
+			System.out.println("getTreeCellEditorComponent: " + arg1);
+			node = (FolderTreeNode)arg1;
+			oldLocalizedFolderName = node.getLocalizedName();
+			oldInternalFolderName = node.getInternalName();
+			return super.getTreeCellEditorComponent(arg0, arg1, arg2, arg3, arg4, arg5);
+		}
+
 		public void editingCanceled(ChangeEvent e)
 		{
 		}

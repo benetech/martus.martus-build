@@ -33,7 +33,7 @@ public class TestFolderList extends TestCase
 		int baseCount = getVisibleFolderCount(store);
 		assertEquals("Initial count", baseCount, list.getCount());
 
-		FolderTreeNode node = list.findFolderByLocalizedName("lisjf;lisjef");
+		FolderTreeNode node = list.findFolderByInternalName("lisjf;lisjef");
 		assertNull("Find folder that isn't there", node);
 
 		BulletinFolder folder = store.createFolder("test");
@@ -44,16 +44,16 @@ public class TestFolderList extends TestCase
 
 		node = list.getNode(baseCount);
 		assertEquals("test", node.toString());
-		node = list.findFolderByLocalizedName("test");
+		node = list.findFolderByInternalName("test");
 		assertEquals("test", node.toString());
 
 		store.renameFolder("test", "new");
 		list.loadFolders(store);
 		assertEquals(getVisibleFolderCount(store), list.getCount());
 		assertEquals("new", list.getName(list.getCount()-1));
-		node = list.findFolderByLocalizedName("test");
+		node = list.findFolderByInternalName("test");
 		assertNull("Find deleted folder", node);
-		node = list.findFolderByLocalizedName("new");
+		node = list.findFolderByInternalName("new");
 		assertEquals("new", node.toString());
 
 		store.deleteFolder("new");
