@@ -37,21 +37,21 @@ import java.util.Vector;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusClientXml;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.BulletinSaver;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusXml;
-import org.martus.common.MockBulletin;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.MockDatabase;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.Stopwatch;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinSaver;
+import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.database.MockDatabase;
+import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.common.packet.FieldDataPacket;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.Stopwatch;
 
 
 public class TestBulletinStore extends TestCaseEnhanced

@@ -30,20 +30,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Vector;
 
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Base64;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinLoader;
-import org.martus.common.BulletinSaver;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MockBulletin;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.MockServerDatabase;
-import org.martus.common.NetworkInterface;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UnicodeWriter;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinLoader;
+import org.martus.common.bulletin.BulletinSaver;
+import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.database.MockServerDatabase;
+import org.martus.common.network.NetworkInterface;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.Base64;
+import org.martus.util.UnicodeWriter;
 
 public class TestServerForClients extends TestCaseEnhanced
 {

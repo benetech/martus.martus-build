@@ -30,11 +30,11 @@ import java.util.Vector;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
-import org.martus.common.Bulletin;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestBulletinFolder extends TestCaseEnhanced
 {

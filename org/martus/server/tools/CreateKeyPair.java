@@ -31,8 +31,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusSecurity;
 
 public class CreateKeyPair
 {

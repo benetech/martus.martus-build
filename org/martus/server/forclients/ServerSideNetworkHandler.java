@@ -28,9 +28,9 @@ package org.martus.server.forclients;
 
 import java.util.Vector;
 
-import org.martus.common.MartusCrypto;
-import org.martus.common.NetworkInterface;
-import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.network.NetworkInterface;
+import org.martus.common.network.NetworkInterfaceConstants;
 
 
 public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterfaceConstants

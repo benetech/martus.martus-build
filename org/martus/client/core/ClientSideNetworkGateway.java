@@ -29,11 +29,11 @@ package org.martus.client.core;
 import java.util.Vector;
 
 import org.martus.client.swingui.UiConstants;
-import org.martus.common.BulletinRetrieverGatewayInterface;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
-import org.martus.common.NetworkInterface;
-import org.martus.common.NetworkResponse;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.network.BulletinRetrieverGatewayInterface;
+import org.martus.common.network.NetworkInterface;
+import org.martus.common.network.NetworkResponse;
 
 public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterface
 {

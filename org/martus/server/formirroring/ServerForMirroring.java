@@ -31,21 +31,21 @@ import java.io.IOException;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import org.martus.common.Base64;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
-import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.common.packet.UniversalId;
 import org.martus.server.core.LoggerInterface;
 import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
 
 public class ServerForMirroring implements ServerSupplierInterface
 {

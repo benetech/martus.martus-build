@@ -37,8 +37,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.martus.common.Bulletin;
-import org.martus.common.UnicodeReader;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.util.UnicodeReader;
 
 public class Localization
 {

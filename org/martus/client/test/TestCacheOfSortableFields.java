@@ -32,13 +32,13 @@ import java.io.ObjectInputStream;
 
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.CacheOfSortableFields;
-import org.martus.common.Bulletin;
-import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.ByteArrayInputStreamWithSeek;
 
 public class TestCacheOfSortableFields extends TestCaseEnhanced
 {

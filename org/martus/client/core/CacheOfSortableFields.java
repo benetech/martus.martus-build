@@ -33,13 +33,13 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinConstants;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusCrypto;
-import org.martus.common.UniversalId;
-import org.martus.common.MartusCrypto.DecryptionException;
-import org.martus.common.MartusCrypto.EncryptionException;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinConstants;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.DecryptionException;
+import org.martus.common.crypto.MartusCrypto.EncryptionException;
+import org.martus.common.packet.UniversalId;
+import org.martus.util.InputStreamWithSeek;
 
 public class CacheOfSortableFields
 {

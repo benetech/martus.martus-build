@@ -27,8 +27,8 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.core;
 
-import org.martus.common.Bulletin;
-import org.martus.common.FieldDataPacket;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.FieldDataPacket;
 
 public class BulletinSummary
 {

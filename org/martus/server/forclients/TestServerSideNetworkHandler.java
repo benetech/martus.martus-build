@@ -28,9 +28,9 @@ package org.martus.server.forclients;
 
 import java.util.Vector;
 
-import org.martus.common.MartusSecurity;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.TestCaseEnhanced;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.test.TestCaseEnhanced;
 
 
 public class TestServerSideNetworkHandler extends TestCaseEnhanced 

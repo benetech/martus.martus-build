@@ -71,9 +71,9 @@ import org.martus.client.swingui.dialogs.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.dialogs.UiModifyBulletinDlg.DeleteBulletinOnCancel;
 import org.martus.client.swingui.dialogs.UiModifyBulletinDlg.DoNothingOnCancel;
 import org.martus.client.swingui.foldertree.FolderNode;
-import org.martus.common.Bulletin;
-import org.martus.common.DatabaseKey;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.packet.UniversalId;
 import org.martus.swing.UiNotifyDlg;
 
 

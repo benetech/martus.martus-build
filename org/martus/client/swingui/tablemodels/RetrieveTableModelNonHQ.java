@@ -29,7 +29,7 @@ package org.martus.client.swingui.tablemodels;
 import org.martus.client.core.BulletinSummary;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.common.Bulletin;
+import org.martus.common.bulletin.Bulletin;
 
 
 

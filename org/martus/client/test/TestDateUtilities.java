@@ -28,7 +28,7 @@ package org.martus.client.test;
 
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.DateUtilities;
-import org.martus.common.TestCaseEnhanced;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestDateUtilities extends TestCaseEnhanced
 {

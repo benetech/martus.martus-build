@@ -39,9 +39,9 @@ import javax.swing.event.ChangeListener;
 import org.martus.client.core.EncryptionChangeListener;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiField;
-import org.martus.common.Bulletin;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.MartusCrypto;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.packet.FieldDataPacket;
 import org.martus.swing.ParagraphLayout;
 
 abstract public class UiBulletinComponent extends JPanel implements Scrollable, ChangeListener

@@ -51,8 +51,8 @@ import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.UiUtilities;
 import org.martus.client.swingui.bulletincomponent.UiBulletinComponent;
 import org.martus.client.swingui.bulletincomponent.UiBulletinEditor;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusCrypto;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.swing.Utilities;
 
 public class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListener, EncryptionChangeListener

@@ -37,7 +37,7 @@ import javax.swing.JTextField;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiDateEditor;
-import org.martus.common.Bulletin;
+import org.martus.common.bulletin.Bulletin;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;

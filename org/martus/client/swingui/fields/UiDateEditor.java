@@ -39,7 +39,7 @@ import javax.swing.JPanel;
 
 import org.martus.client.core.DateUtilities;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.common.Bulletin;
+import org.martus.common.bulletin.Bulletin;
 
 public class UiDateEditor extends UiField
 {

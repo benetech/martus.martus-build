@@ -33,15 +33,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 
-import org.martus.common.Base64;
-import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.MartusSecurity;
-import org.martus.common.UnicodeReader;
-import org.martus.common.Base64.InvalidBase64Exception;
-import org.martus.common.MartusCrypto.AuthorizationFailedException;
-import org.martus.common.MartusCrypto.DecryptionException;
-import org.martus.common.MartusCrypto.NoKeyPairException;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.MartusCrypto.AuthorizationFailedException;
+import org.martus.common.crypto.MartusCrypto.DecryptionException;
+import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.util.Base64;
+import org.martus.util.ByteArrayInputStreamWithSeek;
+import org.martus.util.UnicodeReader;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public class DecryptFile
 {

@@ -31,7 +31,7 @@ import org.martus.client.core.Exceptions.BlankUserNameException;
 import org.martus.client.core.Exceptions.MartusClientApplicationException;
 import org.martus.client.core.Exceptions.PasswordMatchedUserNameException;
 import org.martus.client.core.Exceptions.PasswordTooShortException;
-import org.martus.common.TestCaseEnhanced;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestMartusUserNameAndPassword extends TestCaseEnhanced
 {

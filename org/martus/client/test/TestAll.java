@@ -26,7 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.test;
 
-import org.martus.common.TestCommon;
+import org.martus.common.test.TestCommon;
 
 import junit.framework.Test;
 import junit.framework.TestSuite;

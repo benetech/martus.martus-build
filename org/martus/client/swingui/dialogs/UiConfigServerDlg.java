@@ -38,10 +38,10 @@ import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.MartusCrypto;
-import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.Utilities;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public class UiConfigServerDlg extends JDialog implements ActionListener
 {

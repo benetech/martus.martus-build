@@ -35,9 +35,9 @@ import java.util.Vector;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcClientLite;
 import org.apache.xmlrpc.XmlRpcException;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceForNonSSL;
-import org.martus.common.NetworkInterfaceXmlRpcConstants;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.NetworkInterfaceForNonSSL;
+import org.martus.common.network.NetworkInterfaceXmlRpcConstants;
 
 public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInterfaceConstants, NetworkInterfaceXmlRpcConstants, NetworkInterfaceForNonSSL
 {

@@ -35,11 +35,11 @@ import javax.net.ssl.HttpsURLConnection;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 import org.martus.common.MartusUtilities;
-import org.martus.common.NetworkInterface;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceXmlRpcConstants;
-import org.martus.common.SimpleHostnameVerifier;
-import org.martus.common.SimpleX509TrustManager;
+import org.martus.common.network.NetworkInterface;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.NetworkInterfaceXmlRpcConstants;
+import org.martus.common.network.SimpleHostnameVerifier;
+import org.martus.common.network.SimpleX509TrustManager;
 
 public class ClientSideNetworkHandlerUsingXmlRpc
 	implements NetworkInterfaceConstants, NetworkInterfaceXmlRpcConstants, NetworkInterface

@@ -32,9 +32,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.ParseException;
 
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.forclients.MartusServerUtilities.MartusSignatureFileAlreadyExistsException;
 import org.martus.server.forclients.MartusServerUtilities.MartusSignatureFileDoesntExistsException;

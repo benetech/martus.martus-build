@@ -34,7 +34,7 @@ import org.martus.client.swingui.fields.UiDateViewer;
 import org.martus.client.swingui.fields.UiField;
 import org.martus.client.swingui.fields.UiMultilineViewer;
 import org.martus.client.swingui.fields.UiNormalTextViewer;
-import org.martus.common.AttachmentProxy;
+import org.martus.common.bulletin.AttachmentProxy;
 
 public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 {

@@ -14,22 +14,22 @@ import java.io.Writer;
 import junit.framework.TestSuite;
 
 import org.martus.client.core.ClientFileDatabase;
-import org.martus.common.AttachmentPacket;
-import org.martus.common.Base64;
-import org.martus.common.Bulletin;
-import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusSecurity;
-import org.martus.common.Packet;
-import org.martus.common.Stopwatch;
-import org.martus.common.StringInputStream;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UnicodeReader;
-import org.martus.common.UnicodeWriter;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.packet.AttachmentPacket;
+import org.martus.common.packet.FieldDataPacket;
+import org.martus.common.packet.Packet;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.Base64;
+import org.martus.util.ByteArrayInputStreamWithSeek;
+import org.martus.util.InputStreamWithSeek;
+import org.martus.util.Stopwatch;
+import org.martus.util.StringInputStream;
+import org.martus.util.UnicodeReader;
+import org.martus.util.UnicodeWriter;
 
 public class TestSpeed extends TestCaseEnhanced 
 {

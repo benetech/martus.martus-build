@@ -31,9 +31,9 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MartusCrypto.AuthorizationFailedException;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.MartusCrypto.AuthorizationFailedException;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class IsPassphraseValid

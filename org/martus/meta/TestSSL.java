@@ -3,10 +3,10 @@ package org.martus.meta;
 import java.util.Vector;
 
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkResponse;
-import org.martus.common.TestCaseEnhanced;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.NetworkResponse;
+import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerForClients;
 import org.martus.server.forclients.ServerSideNetworkHandler;

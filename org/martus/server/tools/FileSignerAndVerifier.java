@@ -30,9 +30,9 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.InputStreamReader;
 
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class FileSignerAndVerifier

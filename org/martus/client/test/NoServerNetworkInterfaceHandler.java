@@ -28,7 +28,7 @@ package org.martus.client.test;
 
 import java.util.Vector;
 
-import org.martus.common.NetworkInterface;
+import org.martus.common.network.NetworkInterface;
 
 public class NoServerNetworkInterfaceHandler implements NetworkInterface
 {

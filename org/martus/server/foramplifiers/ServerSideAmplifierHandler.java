@@ -3,12 +3,12 @@ package org.martus.server.foramplifiers;
 import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
-import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.util.ByteArrayInputStreamWithSeek;
 
 public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 {

@@ -33,8 +33,8 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.client.core.ConfigInfo;
-import org.martus.common.MartusSecurity;
-import org.martus.common.TestCaseEnhanced;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestConfigInfo extends TestCaseEnhanced
 {

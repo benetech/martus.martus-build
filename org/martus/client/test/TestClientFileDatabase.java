@@ -30,13 +30,13 @@ import java.io.File;
 import java.io.InputStream;
 
 import org.martus.client.core.ClientFileDatabase;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestClientFileDatabase extends TestCaseEnhanced
 {

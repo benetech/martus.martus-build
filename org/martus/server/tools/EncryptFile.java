@@ -34,11 +34,11 @@ import java.io.InputStream;
 import java.security.PublicKey;
 import java.util.Vector;
 
-import org.martus.common.Base64;
-import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.UnicodeWriter;
+import org.martus.common.crypto.MartusSecurity;
 import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.util.Base64;
+import org.martus.util.UnicodeWriter;
 
 public class EncryptFile
 {

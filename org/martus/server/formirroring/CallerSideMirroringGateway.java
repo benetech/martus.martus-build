@@ -28,10 +28,10 @@ package org.martus.server.formirroring;
 
 import java.util.Vector;
 
-import org.martus.common.MartusCrypto;
-import org.martus.common.NetworkResponse;
-import org.martus.common.UniversalId;
-import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.network.NetworkResponse;
+import org.martus.common.packet.UniversalId;
 
 public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInterface
 {

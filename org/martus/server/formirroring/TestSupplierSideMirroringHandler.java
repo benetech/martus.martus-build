@@ -29,17 +29,17 @@ package org.martus.server.formirroring;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.common.Base64;
-import org.martus.common.BulletinConstants;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.BulletinConstants;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
+import org.martus.util.Base64;
 
 public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 {

@@ -28,10 +28,10 @@ package org.martus.client.core;
 
 import java.util.Vector;
 
-import org.martus.common.Bulletin;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.packet.UniversalId;
 
 public class BulletinFolder
 {

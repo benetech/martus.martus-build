@@ -3,7 +3,7 @@ package org.martus.meta;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.martus.common.TestCaseEnhanced;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestMeta extends TestCaseEnhanced
 {

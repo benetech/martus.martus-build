@@ -35,11 +35,11 @@ import java.util.List;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.TransferableBulletinList;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.TestCaseEnhanced;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestTransferableBulletin extends TestCaseEnhanced
 {

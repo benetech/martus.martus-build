@@ -40,17 +40,17 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.common.Bulletin;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UnicodeReader;
-import org.martus.common.UnicodeWriter;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
 import org.martus.swing.Utilities;
+import org.martus.util.UnicodeReader;
+import org.martus.util.UnicodeWriter;
 
 public class TestMartusApp_NoServer extends TestCaseEnhanced
 {

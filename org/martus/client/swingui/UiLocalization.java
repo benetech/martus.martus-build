@@ -43,7 +43,7 @@ import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.DateUtilities;
 import org.martus.client.core.Localization;
 import org.martus.client.core.MartusApp;
-import org.martus.common.UnicodeWriter;
+import org.martus.util.UnicodeWriter;
 
 
 public class UiLocalization extends Localization

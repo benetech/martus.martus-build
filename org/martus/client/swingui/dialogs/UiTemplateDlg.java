@@ -42,11 +42,11 @@ import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.UnicodeReader;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.UiTextArea;
 import org.martus.swing.Utilities;
+import org.martus.util.UnicodeReader;
 
 
 

@@ -31,18 +31,18 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.martus.common.Base64;
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkResponse;
-import org.martus.common.UnicodeWriter;
-import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.NetworkResponse;
 import org.martus.server.formirroring.CallerSideMirroringGateway;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc;
 import org.martus.server.formirroring.MirroringInterface;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException;
+import org.martus.util.Base64;
+import org.martus.util.UnicodeWriter;
 
 public class RetrievePublicKey
 {

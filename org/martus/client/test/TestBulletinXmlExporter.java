@@ -33,13 +33,13 @@ import java.util.Vector;
 
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinXmlExporter;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinConstants;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.MartusCrypto.EncryptionException;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinConstants;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MartusCrypto.EncryptionException;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.test.TestCaseEnhanced;
 
 public class TestBulletinXmlExporter extends TestCaseEnhanced
 {

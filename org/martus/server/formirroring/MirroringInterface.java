@@ -28,7 +28,7 @@ package org.martus.server.formirroring;
 
 import java.util.Vector;
 
-import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.network.NetworkInterfaceConstants;
 
 public interface MirroringInterface
 {

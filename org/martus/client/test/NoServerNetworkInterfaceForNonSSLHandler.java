@@ -28,7 +28,7 @@ package org.martus.client.test;
 
 import java.util.Vector;
 
-import org.martus.common.NetworkInterfaceForNonSSL;
+import org.martus.common.network.NetworkInterfaceForNonSSL;
 
 public class NoServerNetworkInterfaceForNonSSLHandler
 	implements NetworkInterfaceForNonSSL

@@ -39,9 +39,9 @@ import javax.swing.border.LineBorder;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.fields.UiField;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.FieldDataPacket;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.FieldDataPacket;
 import org.martus.swing.ParagraphLayout;
 
 abstract public class UiBulletinComponentSection extends JPanel

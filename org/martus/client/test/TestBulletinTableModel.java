@@ -31,9 +31,9 @@ import junit.framework.TestCase;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.bulletintable.BulletinTableModel;
-import org.martus.common.Bulletin;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.database.MockClientDatabase;
+import org.martus.common.packet.UniversalId;
 
 public class TestBulletinTableModel extends TestCase
 {

@@ -26,11 +26,11 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.server.formirroring;
 
-import org.martus.common.BulletinRetrieverGatewayInterface;
-import org.martus.common.MartusCrypto;
-import org.martus.common.NetworkResponse;
-import org.martus.common.UniversalId;
-import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.network.BulletinRetrieverGatewayInterface;
+import org.martus.common.network.NetworkResponse;
+import org.martus.common.packet.UniversalId;
 
 public interface CallerSideMirroringGatewayInterface extends BulletinRetrieverGatewayInterface
 {

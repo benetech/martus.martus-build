@@ -4,7 +4,7 @@ import junit.framework.Test;
 import junit.framework.TestSuite;
 
 import org.martus.client.test.TestClient;
-import org.martus.common.TestCommon;
+import org.martus.common.test.TestCommon;
 import org.martus.server.core.TestServer;
 
 public class TestAll extends java.lang.Object 

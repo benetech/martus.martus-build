@@ -29,6 +29,8 @@ package org.martus.common;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.martus.common.crypto.*;
+
 public class XmlWriterFilter
 {
 	public XmlWriterFilter(Writer writerToUse)

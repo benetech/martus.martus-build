@@ -34,8 +34,8 @@ import javax.net.ssl.HttpsURLConnection;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcException;
 import org.martus.common.MartusUtilities;
-import org.martus.common.SimpleHostnameVerifier;
-import org.martus.common.SimpleX509TrustManager;
+import org.martus.common.network.SimpleHostnameVerifier;
+import org.martus.common.network.SimpleX509TrustManager;
 
 public class CallerSideMirroringGatewayForXmlRpc implements MirroringInterface
 {

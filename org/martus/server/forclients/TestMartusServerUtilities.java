@@ -31,16 +31,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.martus.common.Base64;
-import org.martus.common.Bulletin;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UnicodeWriter;
-import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
+import org.martus.util.Base64;
+import org.martus.util.UnicodeWriter;
 
 
 public class TestMartusServerUtilities extends TestCaseEnhanced

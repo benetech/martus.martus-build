@@ -46,9 +46,9 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.bulletincomponent.UiBulletinComponent;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.BulletinSaver;
-import org.martus.common.Database;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.BulletinSaver;
+import org.martus.common.database.Database;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.Utilities;
 

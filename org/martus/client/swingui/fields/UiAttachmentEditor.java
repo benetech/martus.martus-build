@@ -42,7 +42,7 @@ import javax.swing.table.AbstractTableModel;
 
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.AttachmentProxy;
+import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.swing.ParagraphLayout;
 
 

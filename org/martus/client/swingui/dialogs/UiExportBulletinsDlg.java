@@ -47,11 +47,11 @@ import javax.swing.JScrollPane;
 import org.martus.client.core.BulletinXmlExporter;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinConstants;
-import org.martus.common.UnicodeWriter;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinConstants;
+import org.martus.common.packet.UniversalId;
 import org.martus.swing.Utilities;
+import org.martus.util.UnicodeWriter;
 
 public class UiExportBulletinsDlg extends JDialog implements ActionListener
 {

@@ -31,20 +31,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.BulletinZipUtilities;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkResponse;
 import org.martus.common.ProgressMeterInterface;
-import org.martus.common.UniversalId;
-import org.martus.common.Base64.InvalidBase64Exception;
-import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.common.bulletin.BulletinZipUtilities;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.NetworkResponse;
+import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.common.packet.UniversalId;
 import org.martus.server.core.LoggerInterface;
 import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public class MirroringRetriever
 {

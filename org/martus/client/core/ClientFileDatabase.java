@@ -28,8 +28,8 @@ package org.martus.client.core;
 
 import java.io.File;
 
-import org.martus.common.FileDatabase;
-import org.martus.common.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.database.FileDatabase;
 
 public class ClientFileDatabase extends FileDatabase
 {

@@ -30,9 +30,9 @@ import javax.swing.table.AbstractTableModel;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.swingui.UiLocalization;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinConstants;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinConstants;
+import org.martus.common.packet.UniversalId;
 
 public class BulletinTableModel extends AbstractTableModel
 {

@@ -50,7 +50,7 @@ class Martus
 		{
 			if(args.length == 1 && args[0].compareToIgnoreCase("-testall")==0)
 			{
-				org.martus.common.TestCommon.runTests();
+				org.martus.common.test.TestCommon.runTests();
 				org.martus.client.test.TestAll.runTests();
 				System.exit(0);
 			}

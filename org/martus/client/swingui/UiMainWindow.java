@@ -102,18 +102,18 @@ import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusCrypto;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.Packet;
-import org.martus.common.UniversalId;
-import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.packet.Packet;
+import org.martus.common.packet.UniversalId;
 import org.martus.swing.JComponentVista;
 import org.martus.swing.PrintPageFormat;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.Utilities;
 import org.martus.swing.Utilities.Delay;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
 {

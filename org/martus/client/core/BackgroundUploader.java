@@ -35,27 +35,21 @@ import java.util.Vector;
 
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.common.*;
-import org.martus.common.Base64;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinConstants;
-import org.martus.common.BulletinZipUtilities;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkResponse;
-import org.martus.common.Packet;
-import org.martus.common.UnicodeWriter;
-import org.martus.common.UniversalId;
-import org.martus.common.MartusCrypto.CryptoException;
-import org.martus.common.MartusCrypto.DecryptionException;
-import org.martus.common.MartusCrypto.MartusSignatureException;
-import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.MartusUtilities.FileTooLargeException;
-import org.martus.common.Packet.InvalidPacketException;
-import org.martus.common.Packet.SignatureVerificationException;
-import org.martus.common.Packet.WrongPacketTypeException;
+import org.martus.common.bulletin.*;
+import org.martus.common.crypto.*;
+import org.martus.common.crypto.MartusCrypto.CryptoException;
+import org.martus.common.crypto.MartusCrypto.DecryptionException;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
+import org.martus.common.database.*;
+import org.martus.common.network.*;
+import org.martus.common.packet.*;
+import org.martus.common.packet.Packet.InvalidPacketException;
+import org.martus.common.packet.Packet.SignatureVerificationException;
+import org.martus.common.packet.Packet.WrongPacketTypeException;
+import org.martus.util.*;
 
 public class BackgroundUploader
 {

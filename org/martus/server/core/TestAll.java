@@ -29,7 +29,7 @@ package org.martus.server.core;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-import org.martus.common.TestCommon;
+import org.martus.common.test.TestCommon;
 
 public class TestAll
 {

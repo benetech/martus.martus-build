@@ -33,12 +33,12 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.martus.common.MartusCrypto;
-import org.martus.common.UnicodeReader;
-import org.martus.common.UnicodeWriter;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.server.core.MartusSecureWebServer;
 import org.martus.server.core.MartusXmlRpcServer;
+import org.martus.util.UnicodeReader;
+import org.martus.util.UnicodeWriter;
 
 public class ServerForClients implements ServerForNonSSLClientsInterface, ServerForClientsInterface
 {

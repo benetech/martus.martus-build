@@ -38,8 +38,8 @@ import javax.swing.JViewport;
 
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.bulletincomponent.UiBulletinComponentViewSection;
-import org.martus.common.Bulletin;
-import org.martus.common.FieldDataPacket;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.FieldDataPacket;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.Utilities;
 

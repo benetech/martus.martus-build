@@ -36,8 +36,8 @@ import javax.swing.JViewport;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.Bulletin;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.UniversalId;
 
 public class UiBulletinTablePane extends JScrollPane
 {

@@ -36,12 +36,12 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.Vector;
 
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinZipUtilities;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinZipUtilities;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
 
 
 public class TransferableBulletinList implements Transferable

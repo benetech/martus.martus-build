@@ -28,7 +28,7 @@ package org.martus.server.forclients;
 
 import java.util.Vector;
 
-import org.martus.common.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto;
 
 public interface ServerForClientsInterface
 {

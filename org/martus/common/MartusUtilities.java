@@ -45,9 +45,15 @@ import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
-import org.martus.common.Base64.InvalidBase64Exception;
-import org.martus.common.Database.RecordHiddenException;
-import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.bulletin.*;
+import org.martus.common.crypto.*;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.database.*;
+import org.martus.common.database.Database.RecordHiddenException;
+import org.martus.common.network.*;
+import org.martus.common.packet.*;
+import org.martus.util.*;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public class MartusUtilities
 {
@@ -298,7 +304,7 @@ public class MartusUtilities
 		return size;
 	}
 
-	static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws
+	public static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws
 		IOException
 	{
 		DatabaseKey headerKey = DatabaseKey.createDraftKey(bulletinUid);

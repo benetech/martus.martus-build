@@ -31,10 +31,10 @@ import java.io.IOException;
 import java.io.StringReader;
 
 import org.martus.client.swingui.UiLocalization;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusUtilities;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.packet.FieldDataPacket;
 
 public class BulletinHtmlGenerator
 {

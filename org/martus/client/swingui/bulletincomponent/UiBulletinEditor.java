@@ -31,9 +31,9 @@ import java.io.IOException;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiBoolEditor;
 import org.martus.client.swingui.fields.UiField;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.MartusCrypto;
+import org.martus.common.bulletin.AttachmentProxy;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusCrypto;
 
 public class UiBulletinEditor extends UiBulletinComponent
 {

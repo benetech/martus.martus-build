@@ -29,12 +29,12 @@ package org.martus.server.formirroring;
 import java.util.Iterator;
 import java.util.Vector;
 
-import org.martus.common.Base64;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.UniversalId;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.packet.UniversalId;
+import org.martus.util.Base64;
 
 class FakeServerSupplier implements ServerSupplierInterface
 {

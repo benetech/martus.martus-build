@@ -33,8 +33,8 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Vector;
 
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 
 public class ConfigInfo implements Serializable
 {

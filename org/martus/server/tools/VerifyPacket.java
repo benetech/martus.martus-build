@@ -28,11 +28,11 @@ package org.martus.server.tools;
 
 import java.io.File;
 
-import org.martus.common.FileInputStreamWithSeek;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
-import org.martus.common.Packet;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.packet.Packet;
+import org.martus.util.FileInputStreamWithSeek;
+import org.martus.util.InputStreamWithSeek;
 
 public class VerifyPacket
 {

@@ -43,13 +43,13 @@ import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
-import org.martus.common.Bulletin;
-import org.martus.common.UniversalId;
-import org.martus.common.Base64.InvalidBase64Exception;
-import org.martus.common.MartusCrypto.CryptoException;
-import org.martus.common.Packet.InvalidPacketException;
-import org.martus.common.Packet.SignatureVerificationException;
-import org.martus.common.Packet.WrongPacketTypeException;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MartusCrypto.CryptoException;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.packet.Packet.InvalidPacketException;
+import org.martus.common.packet.Packet.SignatureVerificationException;
+import org.martus.common.packet.Packet.WrongPacketTypeException;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public abstract class UiBulletinDropAdapter implements DropTargetListener
 {

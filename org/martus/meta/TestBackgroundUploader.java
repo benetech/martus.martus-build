@@ -36,19 +36,19 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
 import org.martus.client.test.NullProgressMeter;
-import org.martus.common.Base64;
-import org.martus.common.Bulletin;
-import org.martus.common.MockBulletin;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.NetworkInterface;
-import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.NetworkInterfaceForNonSSL;
 import org.martus.common.ProgressMeterInterface;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UnicodeReader;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.MockBulletin;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.network.NetworkInterface;
+import org.martus.common.network.NetworkInterfaceConstants;
+import org.martus.common.network.NetworkInterfaceForNonSSL;
+import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MockMartusServer;
 import org.martus.server.forclients.ServerSideNetworkHandler;
 import org.martus.server.forclients.ServerSideNetworkHandlerForNonSSL;
+import org.martus.util.Base64;
+import org.martus.util.UnicodeReader;
 
 public class TestBackgroundUploader extends TestCaseEnhanced
 {

@@ -29,8 +29,8 @@ package org.martus.client.swingui.tablemodels;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
-import org.martus.common.Bulletin;
 import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.common.bulletin.Bulletin;
 
 public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
 {

@@ -29,13 +29,13 @@ package org.martus.server.core;
 import java.io.File;
 import java.util.Vector;
 
-import org.martus.common.Bulletin;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.MockServerDatabase;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.MockServerDatabase;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class TestServerFileDatabase extends TestCaseEnhanced 

@@ -33,7 +33,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
 import org.martus.client.swingui.UiMainWindow;
-import org.martus.common.Bulletin;
+import org.martus.common.bulletin.Bulletin;
 
 public class UiBulletinPreview extends JScrollPane
 {

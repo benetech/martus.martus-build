@@ -30,22 +30,22 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Vector;
 
-import org.martus.common.Base64;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.BulletinSaver;
-import org.martus.common.BulletinZipUtilities;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.InputStreamWithSeek;
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MockMartusSecurity;
-import org.martus.common.MockServerDatabase;
-import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinSaver;
+import org.martus.common.bulletin.BulletinZipUtilities;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
+import org.martus.common.database.MockServerDatabase;
+import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.common.packet.UniversalId;
+import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.core.LoggerForTesting;
 import org.martus.server.forclients.MartusServerUtilities;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
 
 public class TestMirroringRetriever extends TestCaseEnhanced
 {
