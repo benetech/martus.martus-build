@@ -102,6 +102,7 @@ import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
@@ -1595,7 +1596,8 @@ if(result == NEW_ACCOUNT)
 		{
 			bulletins.add(selectedFolder.getBulletinSorted(i));
 		}
-		new UiExportBulletinsDlg(this, bulletins, selectedFolder.getName());
+		String defaultFileName = MartusUtilities.createValidFileName(selectedFolder.getName());
+		new UiExportBulletinsDlg(this, bulletins, defaultFileName);
 	}
 
 	public void doExportBulletins()

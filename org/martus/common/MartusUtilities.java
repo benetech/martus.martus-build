@@ -499,19 +499,32 @@ public class MartusUtilities
 		if(text.length() > maxLength)
 			text = text.substring(0, maxLength);
 	
+		text = createValidFileName(text);
+		if(text.length() < minLength)
+			text = "Martus-" + text;
+	
+		return text;
+	}
+
+	public static String createValidFileName(String text) 
+	{
 		char[] chars = text.toCharArray();
 		for(int i = 0; i < chars.length; ++i)
 		{
 			if(!MartusUtilities.isCharOkInFileName(chars[i]))
 				chars[i] = ' ';
 		}
-	
+		
 		text = new String(chars).trim();
-		if(text.length() < minLength)
-			text = "Martus-" + text;
-	
 		return text;
 	}
+
+	public static boolean isFileNameValid(String originalFileName)
+	{
+		String newFileName = createValidFileName(originalFileName);
+		return newFileName.equals(originalFileName);
+	}
+	
 
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
 	static final String PUBLIC_KEY_TYPE_SERVER = "Server";

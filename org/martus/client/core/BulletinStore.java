@@ -372,6 +372,9 @@ public class BulletinStore
 
 		if(newName.length() == 0 || newName.charAt(0) < '0')
 			return false;
+		
+		if(!MartusUtilities.isFileNameValid(newName))
+			return false;
 
 		if(findFolder(newName) != null)
 			return false;
