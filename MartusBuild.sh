@@ -158,7 +158,7 @@ downloadMartusVerifyFromCvsAndSetup()
 {
 	cd $CVS_HOME || error "unable to cd: err $?"
 	
-	SRC_VERIFY=$MARTUSSOURCES/verify
+	SRC_VERIFY=$MARTUSSOURCES/verify/source/org/martus/jarverifier
 	export SRC_VERIFY
 	
 	cvs -q checkout martus-jar-verifier || error "cvs martus-jar-verifier returned $?"
@@ -612,7 +612,7 @@ buildClientJarVerifier()
 {
 	echo
 	echo "Building JarVerifier...";
-	cd $MARTUSBUILDFILES/Verify || error "cannot cd to $MARTUSBUILDFILES/Verify"
+	cd $MARTUSBUILDFILES/Verify/source/org/martus/jarverifier || error "cannot cd to $MARTUSBUILDFILES/Verify/source/org/martus/jarverifier"
 	if [ -f "JarVerifier.class" ]; then
 		rm -f JarVerifier.class
 	fi
@@ -690,7 +690,7 @@ createInstallerCdImage()
 	mkdir -p $CD_IMAGE_DIR/Win95
 	cp -v $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
 	
-	mkdir -p $CD_IMAGE_DIR/verify
+	mkdir -p $CD_IMAGE_DIR/verify/
 	cp -v $MARTUSBUILDFILES/Verify/* $CD_IMAGE_DIR/verify/
 	rm $CD_IMAGE_DIR/verify/*_th.txt
 	
