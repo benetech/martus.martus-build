@@ -16,7 +16,6 @@ import javax.swing.table.AbstractTableModel;
 
 import org.martus.common.AttachmentProxy;
 
-import MartusJava.UiMainWindow;
 
 
 public class UiAttachmentEditor extends JPanel

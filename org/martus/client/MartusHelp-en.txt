@@ -1,0 +1,321 @@
+Installing Martus
+
+To install Martus on your computer:
+1. Insert the Martus CD into your CD-ROM drive.
+2. Choose Run from the Start menu in Windows.
+3. Type M:\Setup.exe, where M is the letter of your CD-ROM drive. 
+4. Click Next in the InstallShield wizard dialog box to install Martus.
+5. Read the license agreement, and then click Yes to accept it. If you do not accept the license agreement, the installer will not install Martus.
+The installer reports its progress as it installs Java Runtime, Java plug-ins, and the Martus application. When prompted, click Finish to complete the installation.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Uninstalling Martus
+To uninstall Martus, use the Add/Remove Programs control panel in Windows:
+1. Choose Settings > Control Panel from the Start menu.
+2. Double-click the Add/Remove Programs icon.
+3. Select Martus from the list of applications.
+4. Click Add/Remove, and then follow the on-screen instructions.
+
+The Martus uninstaller does not remove the Java 2 Runtime environment. If you are not using other applications that require the Java 2 Runtime environment, you can use the Add/Remove Programs control panel to uninstall it. 
+
+If you need to remove Martus bulletins and configuration data, as well as the Martus application, delete the Martus folder (c:\Martus), and then empty the recycling bin.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Creating a username and password
+When you set up your account, you create a username and password. Use a password you can remember. If you forget your username and password, you will not have access to any of your bulletins in Martus. Additionally, take precautions to keep your password secret. Your password provides access to all of the bulletins you create in Martus, and allows you to create new bulletins. Never send your password through e-mail, or tell it to someone over the phone, as these communication methods may not be secure.
+ 
+1. Double-click on the Martus icon on the desktop. You may have to wait a few seconds for the Martus Sign-in dialog box to open.
+2. Type a username that has between 6 and 50 characters; it can contain letters, numbers, punctuation, and spaces. Choose a username that will be easy for you to remember, and remember how you capitalize it, as Martus usernames are case-sensitive.
+3. Click in the Password field. An on-screen keyboard appears.
+4. Click characters on the on-screen keyboard to type a password that has between 6 and 50 characters. Choose a password that you can remember, but that would be difficult for someone else to guess. If you forget your password, there is no way for you to access the private bulletins you've created or any of the data on your computer. Use a combination of letters and numbers to make the password more secure; Martus passwords are case-sensitive. 
+
+Note: If you prefer to type your password using the computer's keyboard, click Switch To Using Regular Keyboard. Your password is less secure if you type it with the computer's keyboard than if you use the on-screen keyboard, as an unauthorized person could "sniff" your keyboard to record your keystrokes.
+
+5. Click OK. A second sign-in screen appears.
+6. Enter the same username and password to verify them, and then click OK.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Contact information 
+In the future, public bulletin data (that is, data that has not specifically been labeled private) will be available to researchers, the press, and others. This contact information provides a way for someone to follow up with you or your organization for more information about your bulletins. 
+
+Enter contact information as you create your account. Or choose Optiosn > Contact Information to enter or change the information later.
+
+For Source, enter your name or your organization's name as the source of the information in the bulletins you submit.
+
+Type your organization's name, and the e-mail address, Web page, phone number, and mailing address people should use to contact you or your organization.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Setting up a server connection
+Draft bulletins are available only on your computer. To ensure you'll have access to your bulletins in case of computer loss or theft, send them to a server. (When you send bulletins, they are sealed so that they can never be edited again.) Sending bulletins to a server also lets you share them with others who have access, such as your organization's headquarters, or, in the future, the press and other members of the public. 
+
+Before you can send bulletins to or retrieve them from a server, you need to identify the server in Martus:
+
+1. Choose Options > Server Configuration.
+2. Enter the IP address for the server, and click OK.
+3. Enter the server's public identification code, and click OK.
+4. Type the magic word to gain permission to send bulletins to the server, and then click OK.
+
+Martus stores the server information, so you don't need to enter it again unless you reinstall the application, or need to configure Martus to send bulletins to a different server. To change the server settings, choose Options > Server Configuration, and then enter the information for the new server.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Changing the user interface language
+To change the language used in the Martus user interface, choose Options > Language. Then choose a language from the pop-up menu and click OK. Currently, the user interface is available in English and Spanish.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Changing the date format
+To change the date format used in lists of bulletins and in bulletins you create, choose Options > Date Format. Then choose the format you prefer from the Date Format pop-up menu and click OK. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Creating a bulletin
+To create a new bulletin, click Create. The Create Bulletin dialog box opens. Enter information in the bulletin fields. You can type data directly into the fields, or you can copy and paste information from existing bulletins or other documents into the fields. (To copy and paste, use the standard Windows keyboard shortcuts: Ctrl+C to copy and Ctrl+V to paste. Or, right-click the field and choose Copy or Paste from the context menu.)
+
+------------------------------------------------------------------------------------------------------------------------
+
+About the fields in a bulletin
+Each bulletin contains these options and fields.
+
+Keep ALL Information Private - Select this option to make the entire bulletin private. Deselect the option to make most of the information public (information in the Private section remains private regardless). When the entire bulletin is private, the padlock icon is closed; when the bulletin is public, the padlock icon is open. Private areas have a red border.
+
+Note: Once you send a bulletin to the server, any public information in the bulletin may be made available to anyone who requests it in the future, including researchers or the press. 
+
+Language - Choose the language you're using to describe the event.
+
+Source - The Source name in your contact information automatically appears here, but you can change it.
+
+Title - Type a title for the bulletin. The title should make it easy for people browsing the list of bulletins to identify the nature of the event. 
+
+Location - Type the location of the event. Depending on the scope of the event, you may enter a country, region, city, or other location. If it doesn't make sense to enter a location, leave the field blank. 
+
+Keywords - Type words that are synonyms for acts you described in the summary, other related words, and alternative location names, if appropriate.
+
+Date of Event - Enter the date of the event you're reporting.
+
+Date Entered - Verify that this is set to the current date.
+
+Summary - Type a summary of the event.
+
+Details - Type any additional details related to the event.
+
+Attachments - To attach a photo or other file to the bulletin, click Add Attachment, and then select the file you want to attach. 
+
+Tip:  If you want to attach a file that will only be seen by those who have access to private information, click Add Attachment in the Private area. 
+
+Private - Type any additional information that you want to include in the report, but which should not be made public. Private areas have a red border.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Editing a draft
+You can make changes to draft bulletins until you send them to the server. To edit a draft bulletin, double-click the bulletin, and then make changes or add information. You can save it as a draft again or send it to the server. If you click Cancel, new information will be lost and the bulletin will revert to the way it was when you last saved it. 
+
+------------------------------------------------------------------------------------------------------------------------
+Using a template in the Details field
+If you frequently enter the same type of information in the Details field (such as number of victims or government response), set up a template to appear in each bulletin you create:
+
+1. Choose Options > Bulletin Details.
+2. Type the text that should appear in the Details field by default.
+3. Click OK.
+
+When you create a new bulletin, the text you entered in the Bulletin Details dialog box appears in the Details section of the new bulletin. If you do not need the text in the bulletin you are creating, you can delete it, as you would any other text.
+ 
+------------------------------------------------------------------------------------------------------------------------
+
+Saving a draft
+Save a draft of the bulletin if you want to continue to add information to it, or need to verify information. When the bulletin is in the Drafts folder, it exists only on your computer; there is no back-up version on the server. 
+
+To save a draft of the bulletin, click Save Draft. The bulletin moves to your Draft Bulletins folder. To edit the bulletin later, open the Draft Bulletins folder and double-click the bulletin you want to revise.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Sending a bulletin
+If the bulletin is complete and you do not want to edit it further, send the bulletin to the server. Once you've clicked Send, the bulletin is sealed and no one-not even you-can make any changes to it.
+
+To submit the bulletin, click Send. The Confirm Send Bulletin dialog box appears, warning you that the bulletin will be permanently sealed. Click Yes to send the bulletin. 
+
+The bulletin appears in the Outbox folder with the status of Sealed. When it has been successfully sent to the server, it moves to the Sent Bulletins folder. 
+
+If you do not have an Internet connection, or if your computer cannot connect to your designated server, the bulletin remains in your Outbox folder. If there are bulletins in your Outbox folder when you start a session in Martus, Martus will alert you to their status and remind you that they have not been uploaded to a server. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Discarding the draft
+To discard the information you've entered, click Cancel. Martus alerts you that you'll be deleting any unsaved  information in the bulletin, which has not been sent yet. Click Yes to discard the unsaved information permanently. (If you click Cancel when you're editing a draft bulletin, the bulletin will revert to the state it was in when you opened it.)
+
+------------------------------------------------------------------------------------------------------------------------
+
+About using folders in Martus
+Folders help you manage the bulletins you've created or retrieved from the server. Martus includes four default folders and automatically creates others for specific purposes. You can create additional folders to organize bulletins further. When you select a folder, its contents are listed to the right; Martus displays the selected bulletin.
+
+------------------------------------------------------------------------------------------------------------------------
+
+About the default folders
+Martus automatically includes four permanent folders: Outbox, Sent, Draft, and Discarded. 
+
+Outbox	 
+This folder contains any sealed bulletins that haven't been uploaded to the server. All bulletins in this folder are sealed and cannot be modified.  If you are working offline when you click Send, the bulletin will remain in the Outbox until you have an Internet connection. Additionally, a bulletin that includes one or more attachments may remain in the Outbox for several minutes or an hour while Martus sends it to the server. 
+
+If there are bulletins in the Outbox when you start the application, Martus will remind you that you have sealed bulletins that have not been uploaded.  
+
+Sent Bulletins 	
+This folder contains sealed bulletins that have been uploaded to the server. When a bulletin is sent to the server, it moves from the Outbox folder to the Sent Bulletins folder. These bulletins cannot be modified, but you can move them to other folders. You can also discard the copy of the bulletin that resides on your computer; you cannot remove sealed bulletins from the server.
+
+Draft Bulletins	
+When you click Save Draft, the bulletin moves to this folder. You can edit draft bulletins, move them to other folders (except the Outbox or Sent Bulletins folders), or discard them. Draft bulletins exist only on your computer; they are not backed up on a server.
+
+Discarded Bulletins 	
+When you discard a bulletin from another folder, it is moved to the Discarded Bulletins folder. You can still work with the bulletin when it is in the Discarded Bulletins folder; if it has Draft status, you can modify it; if it has Sealed status,  you can move it to the Sent Bulletins folder. To completely remove a discarded bulletin from your computer, right-click its title in the Discarded Bulletins folder and choose Discard Bulletin. If the bulletin has Draft status, you'll remove all information about it; if it has Sealed status and was sent to the server, you'll remove it from your computer but it will remain on the server. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+About special folders Martus creates
+Martus creates the Search Results, Retrieved Bulletins, and Recovered Bulletins folders as needed. You can rename or delete each of these folders. 
+
+Search Results	
+When you search the bulletins on your computer, Martus displays the results in the Search Results folder. The contents of this folder are overwritten the next time you search. If you want to save your search results, rename this folder; Martus will create a new Search Results folder the next time you search. 
+
+Retrieved Bulletins	
+This folder contains bulletins you've retrieved bulletins from the server. These bulletins are included in searches and you can copy or move them into different folders. Retrieved bulletins are sealed, so you can not modify them. 
+
+Recovered Bulletins
+Under normal circumstances, all bulletins are associated with folders, but power failures, hardware failures, or obscure software issues might cause bulletins to lose their association with a folder. When you start Martus, it checks for such bulletins. If Martus finds any, it alerts you and then creates a Recovered Bulletins folder for them. You can leave the bulletins there, move them into a different folder, or discard them.  
+
+------------------------------------------------------------------------------------------------------------------------
+
+Adding folders
+Create additional folders to categorize bulletins according to your interests or current projects. You can rename the Search Results folder to save your search results for later use; Martus will create a new Search Results folder the next time you search. 
+
+To create an empty folder, choose File > Add New Folder, or right-click in the folders area and choose Add New Folder.  Then, type a name for the folder. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Moving a bulletin from one folder to another
+To move a bulletin from one folder to another, drag it. Or select the bulletin and choose Edit > Cut Bulletin, and then select the new folder and choose Edit > Paste Bulletin. You can also right-click the bulletin or folder and choose Cut Bulletin or Paste Bulletin from the context menu. (When you use the Cut Bulletin command, the bulletin appears in the Discarded Bulletin folder.)
+
+------------------------------------------------------------------------------------------------------------------------
+
+Copying a bulletin to another folder
+If you want a bulletin to appear in multiple folders, select the bulletin and choose Edit > Copy Bulletin; then select the new folder and choose Edit > Paste Bulletin. (Or right-click the bulletin and choose Copy Bulletin from the context menu; then right-click the folder and choose Paste Bulletin from the context menu.) 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Sorting bulletins within a folder
+You can rearrange bulletins within a folder, to list them by status, date of event, title, or source. Just click the column heading to sort by that field. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Retrieving bulletins
+You can download bulletins that you have sent to the server, as long as they are not currently on your computer. (Martus does not permit you to retrieve bulletins that you already have.)
+
+1. Choose Tools > Retrieve Bulletins. 
+2. In the Retrieve Bulletins dialog box, check the boxes next to the bulletins you want to retrieve. To select all the bulletins, click Check All; to deselect all the bulletins, click Uncheck All. 
+3. Click Retrieve. 
+4. The bulletins appear in the Retrieved Bulletins folder. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Opening attachments
+When you open a bulletin that includes an attachment, click Save Attachment to save the attached file to any location on your hard drive. Then open the file in an appropriate application, such as a word-processing or image-editing application.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Discarding bulletins
+You can discard a bulletin from a folder, which moves it to the Discarded Bulletins folder. To delete a bulletin from the hard drive, discard it from the Discarded Bulletins folder. When you delete a draft bulletin, it's gone forever. However, because you cannot remove a bulletin from the server, if a sealed bulletin has been sent to the server, you can always retrieve it again. 
+
+To remove a bulletin from a folder, right-click the bulletin and choose Discard Bulletin or Cut Bulletin. The bulletin appears in the Discarded Bulletins folder. (You can also drag the bulletin to the Discarded Bulletins folder.)
+
+To delete a bulletin from your hard drive, right-click it in the Discarded Bulletins folder, and then choose Cut Bulletin or Discard Bulletin. Martus will alert you that you are permanently deleting the bulletin from your computer. Click Yes to delete the bulletin. 
+
+Note: If the bulletin is also listed in another folder, it will remain on your hard drive, even when you discard it from the Discarded Bulletins folder.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Searching for specific bulletins
+You can search for bulletins on your computer that contain specific words or phrases. Martus searches every folder, including the Discarded Bulletins folder.
+
+1. Click Search.
+2. In the Search dialog box, enter the word or words you're searching for. To search for a phrase, type it without quotation marks. Martus will find the text you enter whether it's a complete word or part of a larger word. For example, if you search for "prison," you'll see bulletins that include the words "prison," "imprison," and "imprisonment." The search is not case-sensitive, so it doesn't matter whether a word is capitalized or not. 
+
+Tip: Use the word "or" to broaden your search, or the word "and" to narrow it. For example, if you search for "prison or jail," you'll see a list of bulletins that contain either word. If you search for "prison and assault," you'll see a list of bulletins that contain both words. 
+
+3. Click Search.
+4. When the search is complete, the Search Results dialog box reports how many bulletins were found that matched your criteria. Click OK.
+5. The Search Results folder lists the bulletins found in your search. (The folder contains copies of the bulletins; the originals remain in their original folders.)
+
+To save your search results, right-click the Search Results folder and choose Rename; then enter a new name for the folder. The next time you search, Martus will create a new Search Results folder. If you do not rename the Search Results folder, the contents will be overwritten the next time you search.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Printing bulletins
+To print a bulletin, select it and click Print. Alternatively, you can choose File > Print Bulletin. The standard Windows Print dialog box opens, with the options available for your printer. 
+
+All the data that appears on the screen will print; if private data is shown on the screen, it will print. Martus prints a list of attachments, but not the contents of the attachments. To print an attached file, click Save Attachment , save it to a folder on your hard drive, and then open it and print it in an appropriate application, such as an image-editing or word-processing application. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+
+About Martus security
+Every Martus account has two keys (very long strings of characters): one public key, which anyone can see; and one private key, which can only be accessed using the password for that account. When you sign in to Martus, your password enables the application to open the key pair (the set of private and public keys), so that you can see the bulletins you've created and stored. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Backing up your key pair file
+Your key pair is yours alone; if you lose it due to hard drive failure or accidental erasure, no one will be able to open your private bulletins, the private data in the public bulletins you've sent to the server, or any of the bulletins on your hard drive, whether they are in draft or sealed status. However, if you've set up a Headquarters (HQ) account, the HQ accountholder (typically, your organization's main office) will still be able to see the private data that you sent to the server.
+
+To ensure that you'll have your key pair, back up the key pair file onto a floppy disk:
+
+1. Insert a blank disk into your floppy disk drive.
+2. Double-click on My Computer.
+3. Open the C drive and navigate to the Martus folder (that is, c:\Martus).
+4. Right-click the MartusKeyPair.dat file. (If file extensions are not visible on your computer, right-click the MartusKeyPair file.)
+5. Choose Copy from the context menu.
+6. In the My Computer window, navigate to your floppy disk drive.
+7. Right-click the drive and choose Paste from the context menu.
+
+Store your back-up floppy disk in a secure place where it is unlikely to be damaged by weather, insects, or other factors. Do not write your password on the disk or store it on the disk electronically. No one can use your key pair without your password. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Restoring your key pair file
+If you have lost your computer, had a hard drive failure, or lost your key pair for some other reason, restore your key pair using your back-up copy. 
+
+To restore your key pair:
+1. Install Martus, if it isn't currently installed.
+2. Before running the application, copy the MartusKeyPair.dat file into the Martus folder.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Keeping your password safe
+It is critical that your password remain secret. Do not share your password with anyone, and do not use a password that someone could easily guess. Each time you change your password, back up your key pair file and delete all previous back-ups. Your key pair file is encoded using your new password.
+
+When Martus is running, it will prompt you to re-enter your user name and password after ten minutes of inactivity. 
+
+------------------------------------------------------------------------------------------------------------------------
+
+Sharing your private data with your organization
+Your organization's headquarters may want to access the bulletins you create, and the bulletins created by other members of your organization. Your organization's headquarters can create an HQ account, which permits them to view your bulletins, including the private data in them; they will not be able to create bulletins using your account. This access can provide several advantages: it gives the organization's leaders more information, and it ensures that someone will be able to access your private bulletin data even if you lose your key pair file or forget your password. 
+
+To access your bulletins, your organization's headquarters must first export their public information and give it to you, along with their public code. Then, you import the public information and enter their public code.
+
+Headquarters shares the HQ account information with people in the field:
+1. Create a Martus account. (See "Setting up your account" on page 3.)
+2. In Martus, choose Tool > Export Public Information, and name the file. Martus saves the file with an .mpi extension.
+3. Give the .mpi file to people whose bulletins you want to access.
+4. Through a different, secure communications channel, give the same people the public code from the HQ account. To see your public code, choose Help > Account Details.
+
+And then each person in the field imports the HQ account information:
+1. In Martus, choose Tools > Import Public Information.
+2. Select the .mpi file your headquarters office gave you.
+3. Enter the public identification code your headquarters office gave you.
+4. Click Import.
+5. Martus warns you that you are giving the owner of the HQ account the ability to see your private data. Click Yes to confirm that you want to do this.
+
+------------------------------------------------------------------------------------------------------------------------
+
+Choosing to make data public or private
+In the future, public bulletin data might be available to researchers, the press, and other members of the public. If information in your bulletin could endanger or otherwise jeopardize an individual or a relief organization, put that information in the private section of the bulletin, or make the entire bulletin private. Make public the information that can help human-rights organizations and the press track trends, but protect the people or organizations who help you document the abuse.  

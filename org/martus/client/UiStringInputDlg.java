@@ -5,9 +5,7 @@ import java.awt.event.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
-import org.martus.client.*;
 
-import MartusJava.UiMainWindow;
 
 public class UiStringInputDlg extends JDialog
 {
