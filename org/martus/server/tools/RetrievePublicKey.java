@@ -27,8 +27,7 @@ public class RetrievePublicKey
 		createGateway();
 		Vector publicInfo = retrievePublicInfo();
 		writePublicInfo(publicInfo);
-		if(prompt)
-			System.out.println("Success");
+		System.out.println("Success");
 		System.exit(0);
 	}
 
@@ -96,8 +95,6 @@ public class RetrievePublicKey
 		for (int i = 0; i < args.length; i++)
 		{
 			String value = args[i].substring(args[i].indexOf("=")+1);
-			if(args[i].startsWith("--no-prompt"))
-				prompt = false;
 			
 			if(args[i].startsWith("--ip"))
 				ip = value;
@@ -115,7 +112,7 @@ public class RetrievePublicKey
 
 		if(ip == null || publicCode == null || outputFileName == null)
 		{
-			System.err.println("Incorrect arguments: RetrievePublicKey [--no-prompt] --ip=1.2.3.4 [--port=5] --public-code=6.7.8.1.2 --output-file=pubkey.txt --keypair-file=keypair.dat\n");
+			System.err.println("Incorrect arguments: RetrievePublicKey --ip=1.2.3.4 [--port=5] --public-code=6.7.8.1.2 --output-file=pubkey.txt --keypair-file=keypair.dat\n");
 			System.exit(2);
 		}
 		
@@ -128,7 +125,6 @@ public class RetrievePublicKey
 		return new CallerSideMirroringGateway(xmlRpcGateway);
 	}
 
-	boolean prompt = true;
 	String ip;
 	int port;
 	String publicCode;
