@@ -247,6 +247,55 @@ public class MartusSecurity extends MartusCryptoImplementation
 		}
 	}
 
+	private static class KeyShareBundle
+	{
+		public KeyShareBundle(String publicKeyToUse, byte[] payloadToUse)
+		{
+			id = MartusConstants.martusSecretShareFileID;
+			timeStamp = (new Timestamp(new Date().getTime())).toString();		
+			publicKey = publicKeyToUse;
+			payload = Base64.encode(payloadToUse);
+		}
+				
+		public KeyShareBundle(String bundleString) throws IOException, KeyShareException
+		{
+			InputStream in = new StringInputStream(bundleString);
+			UnicodeReader reader = new UnicodeReader(in);
+
+			id = reader.readLine();
+			if(!id.equals(MartusConstants.martusSecretShareFileID))
+				throw new KeyShareException();
+
+			timeStamp = reader.readLine();
+			publicKey = reader.readLine();
+			sharePiece = reader.readLine();
+			payload = reader.readLine();
+
+			in.close();
+			reader.close();
+		}
+		
+		public String createBundleString(String sharePieceToWrite) throws IOException
+		{
+			sharePiece = sharePieceToWrite;
+			
+			UnicodeStringWriter writer = UnicodeStringWriter.create();
+			writer.writeln(id);
+			writer.writeln(timeStamp);
+			writer.writeln(publicKey);
+			writer.writeln(sharePiece);
+			writer.writeln(payload);
+			writer.close();
+			return writer.toString();
+		}
+
+		public String id;
+		public String timeStamp;
+		public String publicKey;
+		public String sharePiece;
+		public String payload;
+	}
+
 	public Vector getKeyShareBundles() 
 	{
 		Vector shareBundles = new Vector();
@@ -254,22 +303,17 @@ public class MartusSecurity extends MartusCryptoImplementation
 		{
 			byte[] sessionKey = createSessionKey();
 			Vector sessionKeyShares = buildShares(sessionKey);
+			
 			ByteArrayInputStream in = new ByteArrayInputStream(getKeyPairData(getKeyPair()));
 			ByteArrayOutputStream encryptedKeypair = new ByteArrayOutputStream();
 			encrypt(in,encryptedKeypair,sessionKey);	
 			encryptedKeypair.close();
-			Timestamp timeStamp = new Timestamp(new Date().getTime());		
+			
+			KeyShareBundle bundle = new KeyShareBundle(getPublicKeyString(), encryptedKeypair.toByteArray());
 			for(int i = 0; i < sessionKeyShares.size(); ++i)
 			{
-				UnicodeStringWriter writer = UnicodeStringWriter.create();
-				writer.writeln(MartusConstants.martusSecretShareFileID);
-				writer.writeln(timeStamp.toString());
-				writer.writeln(getPublicKeyString());
-				String aPartOfSessionKeyShare = (String)(sessionKeyShares.get(i));
-				writer.writeln(aPartOfSessionKeyShare);
-				writer.writeln(Base64.encode(encryptedKeypair.toByteArray()));
-				writer.close();
-				shareBundles.add(writer.toString());
+				String thisSharePiece = (String)(sessionKeyShares.get(i));
+				shareBundles.add(bundle.createBundleString(thisSharePiece));
 			}			
 		} 
 		catch (Exception e) 
@@ -307,7 +351,7 @@ public class MartusSecurity extends MartusCryptoImplementation
 			throw new KeyShareException();
 		}
 	}
-
+	
 	private Vector getSharesFromBundles(Vector bundles)
 		throws  UnsupportedEncodingException, 
 				IOException, 
@@ -316,17 +360,8 @@ public class MartusSecurity extends MartusCryptoImplementation
 			Vector shares = new Vector();
 			for(int i = 0; i < bundles.size(); ++i)
 			{
-				InputStream in = new StringInputStream((String) bundles.get(i));
-				UnicodeReader reader = new UnicodeReader(in);
-				String shareId = reader.readLine();
-				if(!shareId.equals(MartusConstants.martusSecretShareFileID))
-					throw new KeyShareException();
-				reader.readLine();//time stamp
-				reader.readLine();//public key
-				String sharePiece = reader.readLine();
-				in.close();
-				reader.close();
-				shares.add(sharePiece);
+				KeyShareBundle bundle = new KeyShareBundle((String) bundles.get(i));
+				shares.add(bundle.sharePiece);
 			}
 			return shares;
 	}
@@ -334,26 +369,17 @@ public class MartusSecurity extends MartusCryptoImplementation
 	private byte[] getEncryptedKeyPairFromBundles(Vector bundles)
 		throws KeyShareException
 	{
-		byte[] encryptedKeyPair = null;
 		InputStream in;
 		try 
 		{
-			in = new StringInputStream((String) bundles.get(0));
-			UnicodeReader reader = new UnicodeReader(in);
-			reader.readLine();//ID
-			reader.readLine();//TimeStamp
-			reader.readLine();//Public Key
-			reader.readLine();//Share
-			encryptedKeyPair = Base64.decode(reader.readLine());
-			in.close();
-			reader.close();
+			KeyShareBundle bundle = new KeyShareBundle((String) bundles.get(0));
+			return Base64.decode(bundle.payload);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 			throw new KeyShareException();
 		}
-		return 	encryptedKeyPair;	
 	}
 
 	private void decryptAndSetKeyPair(Vector shares, byte[] keyPairEncrypted) throws 
