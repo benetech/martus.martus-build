@@ -46,6 +46,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.Database.RecordHiddenException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 
 public class MartusUtilities
@@ -286,6 +287,11 @@ public class MartusUtilities
 			catch (IOException e)
 			{
 				System.out.println("MartusUtilities:bulletinPacketKeys error= " + e);
+				return 0;
+			} 
+			catch (RecordHiddenException e)
+			{
+				e.printStackTrace();
 				return 0;
 			}
 		}

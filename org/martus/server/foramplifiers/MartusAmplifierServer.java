@@ -4,12 +4,10 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
@@ -30,6 +28,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.Database.RecordHiddenException;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.DecryptionException;
@@ -491,17 +490,16 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	}
 	
 	private Vector buildBulletinChunkResponse(DatabaseKey headerKey, int chunkOffset, int maxChunkSize) throws
-			IOException,
-			CryptoException,
-			UnsupportedEncodingException,
-			InvalidPacketException,
-			WrongPacketTypeException,
-			SignatureVerificationException,
-			DecryptionException,
-			NoKeyPairException,
-			FileNotFoundException,
 			FileTooLargeException,
-			MartusUtilities.FileVerificationException 
+			InvalidPacketException, 
+			WrongPacketTypeException, 
+			SignatureVerificationException, 
+			DecryptionException, 
+			NoKeyPairException, 
+			CryptoException, 
+			FileVerificationException, 
+			IOException, 
+			RecordHiddenException 
 	{
 		Vector result = new Vector();
 		if(serverMaxLogging)
@@ -543,16 +541,13 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	}
 
 	public File createInterimBulletinFile(DatabaseKey headerKey) throws
-			IOException,
 			CryptoException,
-			UnsupportedEncodingException,
 			InvalidPacketException,
 			WrongPacketTypeException,
 			SignatureVerificationException,
 			DecryptionException,
 			NoKeyPairException,
-			FileNotFoundException,
-			MartusUtilities.FileVerificationException
+			MartusUtilities.FileVerificationException, IOException, RecordHiddenException
 	{
 		File tempFile = getDatabase().getOutgoingInterimFile(headerKey);
 		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);

@@ -98,8 +98,9 @@ abstract public class MockDatabase extends Database
 		}
 	}
 
-	public int getRecordSize(DatabaseKey key) throws IOException
+	public int getRecordSize(DatabaseKey key) throws IOException, RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		try
 		{
 			return readRecord(key).getBytes("UTF-8").length;
@@ -248,8 +249,9 @@ abstract public class MockDatabase extends Database
 		return file.getPath();
 	}
 
-	public File getIncomingInterimFile(DatabaseKey key)
+	public File getIncomingInterimFile(DatabaseKey key) throws RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		File dir = getInterimFile(key, incomingInterimMap);
 		dir.deleteOnExit();
 		dir.mkdirs();
@@ -258,8 +260,9 @@ abstract public class MockDatabase extends Database
 		return file;
 	}
 
-	public File getOutgoingInterimFile(DatabaseKey key)
+	public File getOutgoingInterimFile(DatabaseKey key) throws RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		File dir = getInterimFile(key, outgoingInterimMap);
 		dir.deleteOnExit();
 		dir.mkdirs();
@@ -280,14 +283,16 @@ abstract public class MockDatabase extends Database
 		return file;
 	}
 
-	public synchronized boolean isInQuarantine(DatabaseKey key)
+	public synchronized boolean isInQuarantine(DatabaseKey key) throws RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		Map quarantine = getQuarantineFor(key);
 		return quarantine.containsKey(key);
 	}
 
-	public synchronized void moveRecordToQuarantine(DatabaseKey key)
+	public synchronized void moveRecordToQuarantine(DatabaseKey key) throws RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		if(!doesRecordExist(key))
 			return;
 

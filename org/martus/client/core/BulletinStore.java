@@ -59,6 +59,7 @@ import org.martus.common.MartusXml;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.Database.RecordHiddenException;
 import org.martus.common.FileDatabase.MissingAccountMapException;
 import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.MartusCrypto.CryptoException;
@@ -744,7 +745,14 @@ public class BulletinStore
 					{
 						try { in.close(); } catch(Exception ignore) {}
 					}
-					database.moveRecordToQuarantine(key);
+					try
+					{
+						database.moveRecordToQuarantine(key);
+					}
+					catch (RecordHiddenException shouldNeverHappen)
+					{
+						shouldNeverHappen.printStackTrace();
+					}
 				}
 			}
 

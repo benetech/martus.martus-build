@@ -47,57 +47,115 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 
 	public void testBasics() throws Exception
 	{
-		verifyBasics(mockDatabase);
-		verifyBasics(fileDatabase);
+		verifyBasics(mockDatabase, draftUid);
+		verifyBasics(mockDatabase, sealedUid);
+		verifyBasics(fileDatabase, draftUid);
+		verifyBasics(fileDatabase, sealedUid);
 	}
 
-	private void verifyBasics(Database db) throws Exception
+	private void verifyBasics(Database db, UniversalId uid) throws Exception
 	{
-		assertFalse("draft already hidden?", db.isHidden(draftUid));
-		assertFalse("sealed already hidden?", db.isHidden(sealedUid));
-		db.hide(draftUid);
-		db.hide(sealedUid);
-		assertTrue("draft not hidden?", db.isHidden(draftUid));
-		assertTrue("sealed not hidden?", db.isHidden(sealedUid));
-		db.hide(draftUid);
-		db.hide(sealedUid);
-		assertTrue("draft not hidden after two hides?", db.isHidden(draftUid));
-		assertTrue("sealed not hidden after two hides?", db.isHidden(sealedUid));
+		assertFalse("already hidden?", db.isHidden(uid));
+		db.hide(uid);
+		assertTrue("not hidden?", db.isHidden(uid));
+		db.hide(uid);
+		assertTrue("not hidden after two hides?", db.isHidden(uid));
 		db.deleteAllData();
-		assertTrue("draft not hidden after deleteAllData?", db.isHidden(draftUid));
-		assertTrue("sealed not hidden after deleteAllData?", db.isHidden(sealedUid));
+		assertTrue("not hidden after deleteAllData?", db.isHidden(uid));
 	}
 	
-	public void testWriteHiddenRecordToServerDatabase() throws Exception
+	public void testHiddenFromReading() throws Exception
 	{
-		verifyWriteHiddenRecord(mockDatabase);
-		verifyWriteHiddenRecord(fileDatabase);
+		verifyHiddenFromReading(mockDatabase, draftKey);
+		verifyHiddenFromReading(mockDatabase, sealedKey);
+		verifyHiddenFromReading(fileDatabase, draftKey);
+		verifyHiddenFromReading(fileDatabase, sealedKey);
+	}
+	
+	void verifyHiddenFromReading(Database db, DatabaseKey key) throws Exception
+	{
+		writeAndHideRecord(db, key);
+		assertNull("opened stream for hidden?", db.openInputStream(key, security));
+		assertNull("able to read hidden?", db.readRecord(key, security));
+		assertFalse("hidden exists?", db.doesRecordExist(key));
+		try
+		{
+			db.getRecordSize(key);
+			fail("Should have thrown for getRecordSize");
+		}
+		catch(RecordHiddenException ignoreExpectedException)
+		{
+		}
+		try
+		{
+			db.isInQuarantine(key);
+			fail("Should have thrown for isInQuarantine");
+		}
+		catch(RecordHiddenException ignoreExpectedException)
+		{
+		}
+		try
+		{
+			db.getOutgoingInterimFile(key);
+			fail("Should have thrown for getOutgoingInterimFile");
+		}
+		catch(RecordHiddenException ignoreExpectedException)
+		{
+		}
+		db.deleteAllData();
 	}
 
-	private void verifyWriteHiddenRecord(Database db) throws Exception
+	public void testHiddenFromWriting() throws Exception
 	{
-		db.hide(draftUid);
-		DatabaseKey draftKey = DatabaseKey.createDraftKey(draftUid);
+		verifyHiddenFromWriting(mockDatabase, draftKey);
+		verifyHiddenFromWriting(mockDatabase, sealedKey);
+		verifyHiddenFromWriting(fileDatabase, draftKey);
+		verifyHiddenFromWriting(fileDatabase, sealedKey);
+	}
+
+	public void testHiddenFromOverwriting() throws Exception
+	{
+		verifyHiddenFromOverwriting(mockDatabase, draftKey);
+		verifyHiddenFromOverwriting(mockDatabase, sealedKey);
+		verifyHiddenFromOverwriting(fileDatabase, draftKey);
+		verifyHiddenFromOverwriting(fileDatabase, sealedKey);
+	}
+	
+	private void verifyHiddenFromOverwriting(Database db, DatabaseKey key)  throws Exception
+	{
+		db.writeRecord(key, "some sample data");
+		verifyHiddenFromWriting(db, key);
+	}
+
+	private void verifyHiddenFromWriting(Database db, DatabaseKey key) throws Exception
+	{
+		db.hide(key.getUniversalId());
 		try
 		{
-			db.writeRecord(draftKey, "draft");
-			fail("Should have thrown for draft!");
+			db.writeRecord(key, "sample data");
+			fail("Should have thrown for writeRecord!");
 		}
 		catch(Database.RecordHiddenException ignoreExpectedException)
 		{
 		}
-		
-		db.hide(sealedUid);
-		DatabaseKey sealedKey = DatabaseKey.createSealedKey(sealedUid);
 		try
 		{
-			db.writeRecord(sealedKey, "sealed");
-			fail("Should have thrown for sealed!");
+			db.moveRecordToQuarantine(key);
+			fail("Should have thrown for moveRecordToQuarantine!");
 		}
 		catch(Database.RecordHiddenException ignoreExpectedException)
 		{
 		}
-		
+		try
+		{
+			db.getIncomingInterimFile(key);
+			fail("Should have thrown for getIncomingInterimFile");
+		}
+		catch(RecordHiddenException ignoreExpectedException)
+		{
+		}
+		db.discardRecord(key);
+		db.discardRecord(key);
 		db.deleteAllData();
 	}
 	
@@ -133,51 +191,7 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		db.deleteAllData();
 	}
 	
-	public void testOpenInputStreamHidden() throws Exception
-	{
-		verifyOpenInputStreamHidden(mockDatabase, draftKey);
-		verifyOpenInputStreamHidden(mockDatabase, sealedKey);
-		verifyOpenInputStreamHidden(fileDatabase, draftKey);
-		verifyOpenInputStreamHidden(fileDatabase, sealedKey);
-	}
 	
-	void verifyOpenInputStreamHidden(Database db, DatabaseKey key) throws Exception
-	{
-		writeAndHideRecord(db, key);
-		assertNull("opened stream for hidden?", db.openInputStream(key, security));
-		db.deleteAllData();
-	}
-
-	public void testReadRecordHidden() throws Exception
-	{
-		verifyReadRecordHidden(mockDatabase, draftKey);
-		verifyReadRecordHidden(mockDatabase, sealedKey);
-		verifyReadRecordHidden(fileDatabase, draftKey);
-		verifyReadRecordHidden(fileDatabase, sealedKey);
-	}
-	
-	void verifyReadRecordHidden(Database db, DatabaseKey key) throws Exception
-	{
-		writeAndHideRecord(db, key);
-		assertNull("able to read hidden?", db.readRecord(key, security));
-		db.deleteAllData();
-	}
-	
-	public void testDiscardRecordHidden() throws Exception
-	{
-		verifyDiscardRecordHidden(mockDatabase, draftKey);
-		verifyDiscardRecordHidden(mockDatabase, sealedKey);
-		verifyDiscardRecordHidden(fileDatabase, draftKey);
-		verifyDiscardRecordHidden(fileDatabase, sealedKey);
-	}
-	
-	void verifyDiscardRecordHidden(Database db, DatabaseKey key) throws Exception
-	{
-		writeAndHideRecord(db, key);
-		db.discardRecord(key);
-		db.discardRecord(key);
-		db.deleteAllData();
-	}
 	
 	// TODO: need to test BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase
 

@@ -105,8 +105,11 @@ public class FileDatabase extends Database
 		writeRecord(key, new StringInputStream(record));
 	}
 
-	public int getRecordSize(DatabaseKey key) throws IOException
+	public int getRecordSize(DatabaseKey key) 
+		throws IOException, RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
+
 		try
 		{
 			return (int)getFileForRecord(key).length();
@@ -228,6 +231,9 @@ public class FileDatabase extends Database
 
 	public boolean doesRecordExist(DatabaseKey key)
 	{
+		if(isHidden(key))
+			return false;
+
 		try
 		{
 			File file = getFileForRecord(key);
@@ -294,15 +300,17 @@ public class FileDatabase extends Database
 	}
 
 	public File getIncomingInterimFile(DatabaseKey key) throws
-		IOException
+		IOException, RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		File folder = getAbsoluteInterimFolderForAccount(key.getAccountId());
 		return new File(folder, key.getLocalId()+".in");
 	}
 
 	public File getOutgoingInterimFile(DatabaseKey key) throws
-		IOException
+		IOException, RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		File folder = getAbsoluteInterimFolderForAccount(key.getAccountId());
 		return new File(folder, key.getLocalId()+".out");
 	}
@@ -314,8 +322,9 @@ public class FileDatabase extends Database
 		return new File(folder, "contactInfo.dat");
 	}
 
-	public boolean isInQuarantine(DatabaseKey key)
+	public boolean isInQuarantine(DatabaseKey key) throws RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		try
 		{
 			return getQuarantineFileForRecord(key).exists();
@@ -327,8 +336,9 @@ public class FileDatabase extends Database
 		}
 	}
 
-	public void moveRecordToQuarantine(DatabaseKey key)
+	public void moveRecordToQuarantine(DatabaseKey key) throws RecordHiddenException
 	{
+		throwIfRecordIsHidden(key);
 		try
 		{
 			File moveFrom = getFileForRecord(key);

@@ -31,14 +31,12 @@ import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
 import java.util.Iterator;
 import java.util.TimerTask;
@@ -61,6 +59,7 @@ import org.martus.common.Packet;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.Database.RecordHiddenException;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
@@ -388,6 +387,12 @@ public class MartusServer implements NetworkInterfaceConstants
 		{
 			log("putBulletinChunk Error creating interim file." + e.getMessage());
 			return NetworkInterfaceConstants.SERVER_ERROR;
+		} 
+		catch (RecordHiddenException e)
+		{
+			// TODO: Should return a more specific error code
+			log("putBulletinChunk for hidden file " + uid.getLocalId());
+			return NetworkInterfaceConstants.INVALID_DATA;
 		}
 		
 		if(chunkSize > NetworkInterfaceConstants.MAX_CHUNK_SIZE)
@@ -1050,6 +1055,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		{
 			return buildBulletinChunkResponse(headerKey, chunkOffset, maxChunkSize);
 		}
+		catch(RecordHiddenException e)
+		{
+			// TODO: Should return more specific error code
+			return returnSingleResponseAndLog("getBulletinChunkWithoutVerifyingCaller:  SERVER_ERROR " + e, NetworkInterfaceConstants.SERVER_ERROR);
+		}
 		catch(Exception e)
 		{
 			return returnSingleResponseAndLog("getBulletinChunkWithoutVerifyingCaller:  SERVER_ERROR " + e, NetworkInterfaceConstants.SERVER_ERROR);
@@ -1138,17 +1148,16 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 	
 	private Vector buildBulletinChunkResponse(DatabaseKey headerKey, int chunkOffset, int maxChunkSize) throws
-			IOException,
-			CryptoException,
-			UnsupportedEncodingException,
-			InvalidPacketException,
-			WrongPacketTypeException,
-			SignatureVerificationException,
-			DecryptionException,
-			NoKeyPairException,
-			FileNotFoundException,
 			FileTooLargeException,
-			MartusUtilities.FileVerificationException 
+			InvalidPacketException, 
+			WrongPacketTypeException, 
+			SignatureVerificationException, 
+			DecryptionException, 
+			NoKeyPairException, 
+			CryptoException, 
+			FileVerificationException, 
+			IOException, 
+			RecordHiddenException 
 	{
 		Vector result = new Vector();
 		log("entering createInterimBulletinFile");
@@ -1187,16 +1196,13 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 
 	public File createInterimBulletinFile(DatabaseKey headerKey) throws
-			IOException,
 			CryptoException,
-			UnsupportedEncodingException,
 			InvalidPacketException,
 			WrongPacketTypeException,
 			SignatureVerificationException,
 			DecryptionException,
 			NoKeyPairException,
-			FileNotFoundException,
-			MartusUtilities.FileVerificationException
+			MartusUtilities.FileVerificationException, IOException, RecordHiddenException
 	{
 		File tempFile = getDatabase().getOutgoingInterimFile(headerKey);
 		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);

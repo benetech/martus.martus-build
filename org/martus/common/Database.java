@@ -72,17 +72,18 @@ abstract public class Database
 	abstract public String readRecord(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
 	abstract public void discardRecord(DatabaseKey key);
 	abstract public boolean doesRecordExist(DatabaseKey key);
+	abstract public int getRecordSize(DatabaseKey key) throws IOException, RecordHiddenException;
 	abstract public void visitAllRecords(PacketVisitor visitor);
 	abstract public void visitAllAccounts(AccountVisitor visitor);
 	abstract public void visitAllRecordsForAccount(PacketVisitor visitor, String accountString);
-	abstract public String getFolderForAccount(String accountString);
-	abstract public File getIncomingInterimFile(DatabaseKey key) throws IOException;
-	abstract public File getOutgoingInterimFile(DatabaseKey key) throws IOException;
-	abstract public File getContactInfoFile(String accountId) throws IOException;
-	abstract public int getRecordSize(DatabaseKey key) throws IOException;
+	abstract public File getIncomingInterimFile(DatabaseKey key) throws IOException, RecordHiddenException;
+	abstract public File getOutgoingInterimFile(DatabaseKey key) throws IOException, RecordHiddenException;
 
-	abstract public boolean isInQuarantine(DatabaseKey key);
-	abstract public void moveRecordToQuarantine(DatabaseKey key);
+	abstract public String getFolderForAccount(String accountString);
+	abstract public File getContactInfoFile(String accountId) throws IOException;
+
+	abstract public boolean isInQuarantine(DatabaseKey key) throws RecordHiddenException;
+	abstract public void moveRecordToQuarantine(DatabaseKey key) throws RecordHiddenException;
 
 	public void hide(UniversalId uid)
 	{
