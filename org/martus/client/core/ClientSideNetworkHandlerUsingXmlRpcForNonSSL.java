@@ -86,7 +86,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		return null;
 	}
 	
-	private Object callServerAtPort(String serverName, String method, Vector params, int port)
+	Object callServerAtPort(String serverName, String method, Vector params, int port)
 		throws MalformedURLException, XmlRpcException, IOException
 	{
 		final String serverUrl = "http://" + serverName + ":" + port + "/RPC2";

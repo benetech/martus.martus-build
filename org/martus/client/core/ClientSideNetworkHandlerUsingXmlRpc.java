@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.core;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.sql.Timestamp;
 import java.util.Vector;
 
@@ -179,14 +180,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 
 			try
 			{
-				final String serverUrl = "https://" + serverName + ":" + port + "/RPC2";
-				//System.out.println("ServerInterfaceXmlRpcHandler:callServer serverUrl=" + serverUrl);
-
-				// NOTE: We **MUST** create a new XmlRpcClient for each call, because
-				// there is a memory leak in apache xmlrpc 1.1 that will cause out of 
-				// memory exceptions if we reuse an XmlRpcClient object
-				XmlRpcClient client = new XmlRpcClient(serverUrl);
-				return client.execute("MartusServer." + method, params);
+				return callServerAtPort(serverName, method, params, port);
 			}
 			catch (IOException e)
 			{
@@ -215,6 +209,20 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 			}
 		}
 		return null;
+	}
+	
+	Object callServerAtPort(String serverName, String method,
+									Vector params, int port)
+		throws MalformedURLException, XmlRpcException, IOException 
+	{
+		final String serverUrl = "https://" + serverName + ":" + port + "/RPC2";
+		//System.out.println("ServerInterfaceXmlRpcHandler:callServer serverUrl=" + serverUrl);
+		
+		// NOTE: We **MUST** create a new XmlRpcClient for each call, because
+		// there is a memory leak in apache xmlrpc 1.1 that will cause out of 
+		// memory exceptions if we reuse an XmlRpcClient object
+		XmlRpcClient client = new XmlRpcClient(serverUrl);
+		return client.execute("MartusServer." + method, params);
 	}
 
 	public SimpleX509TrustManager getSimpleX509TrustManager()
