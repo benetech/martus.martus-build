@@ -7,5 +7,6 @@
     <classpathentry kind="var" path="junit"/>
     <classpathentry kind="var" path="xmlrpc"/>
     <classpathentry kind="var" path="InfiniteMonkeys"/>
+    <classpathentry kind="var" path="jsse"/>
     <classpathentry kind="output" path=""/>
 </classpath>
