@@ -295,10 +295,10 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		// Note: These strings are legacy and can NEVER change
 		assertContains("ping", names);
 		assertContains("getServerInformation", names);
-		assertContains("requestUploadRights", names);
-		assertContains("uploadBulletin", names);
-		assertContains("downloadBulletin", names);
-		assertContains("listMyBulletinSummaries", names);
+		assertNotContains("requestUploadRights", names);
+		assertNotContains("uploadBulletin", names);
+		assertNotContains("downloadBulletin", names);
+		assertNotContains("listMyBulletinSummaries", names);
 
 		TRACE_END();
 	}
