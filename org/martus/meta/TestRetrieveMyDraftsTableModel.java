@@ -126,7 +126,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 			super();
 		}
 		
-		public Vector listMyDraftBulletinIds(String authorAccountId) 
+		public Vector listMyDraftBulletinIds(String authorAccountId, Vector retrieveTags) 
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);

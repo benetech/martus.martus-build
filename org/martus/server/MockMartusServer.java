@@ -117,46 +117,46 @@ public class MockMartusServer extends MartusServer
 				chunkOffset, maxChunkSize);
 		}
 
-		public Vector listMySealedBulletinIds(String clientId)
+		public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
 		{
 			lastClientId = clientId;
 			if(listMyResponseNull)	
 				return null;
 			if(listMyResponse != null)
 				return new Vector(listMyResponse);
-			return (Vector)(super.listMySealedBulletinIds(clientId)).clone();
+			return (Vector)(super.listMySealedBulletinIds(clientId, retrieveTags)).clone();
 			
 		}
 		
-		public Vector listMyDraftBulletinIds(String clientId)
+		public Vector listMyDraftBulletinIds(String clientId, Vector retrieveTags)
 		{
 			lastClientId = clientId;
 			if(listMyResponseNull)	
 				return null;
 			if(listMyResponse != null)
 				return new Vector(listMyResponse);
-			return (Vector)(super.listMyDraftBulletinIds(clientId)).clone();
+			return (Vector)(super.listMyDraftBulletinIds(clientId, retrieveTags)).clone();
 			
 		}
 		
-		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
+		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 		{
 			lastClientId = hqAccountId;
 			if(listFieldOfficeSummariesResponseNull)	
 				return null;
 			if(listFieldOfficeSummariesResponse != null)
 				return new Vector(listFieldOfficeSummariesResponse);
-			return (Vector)(super.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId)).clone();
+			return (Vector)(super.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId, retrieveTags)).clone();
 		}
 
-		public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId)
+		public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 		{
 			lastClientId = hqAccountId;
 			if(listFieldOfficeSummariesResponseNull)	
 				return null;
 			if(listFieldOfficeSummariesResponse != null)
 				return new Vector(listFieldOfficeSummariesResponse);
-			return (Vector)(super.listFieldOfficeDraftBulletinIds(hqAccountId, authorAccountId)).clone();
+			return (Vector)(super.listFieldOfficeDraftBulletinIds(hqAccountId, authorAccountId, retrieveTags)).clone();
 		}
 
 		public Vector listFieldOfficeAccounts(String hqAccountId)

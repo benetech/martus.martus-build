@@ -99,7 +99,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 			super();
 		}
 		
-		public Vector listMyDraftBulletinIds(String clientId)
+		public Vector listMyDraftBulletinIds(String clientId, Vector retrieveTags)
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);

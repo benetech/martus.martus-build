@@ -907,7 +907,7 @@ public class MartusApp
 		String resultCode = "?";
 		try 
 		{
-			NetworkResponse response = getCurrentNetworkInterfaceGateway().getSealedBulletinIds(security, getAccountId());
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getSealedBulletinIds(security, getAccountId(), getRetrieveTags());
 			resultCode = response.getResultCode();
 			if(resultCode.equals(NetworkInterfaceConstants.OK))
 				return response.getResultVector();
@@ -925,7 +925,7 @@ public class MartusApp
 		String resultCode = "?";
 		try 
 		{
-			NetworkResponse response = getCurrentNetworkInterfaceGateway().getDraftBulletinIds(security, getAccountId());
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getDraftBulletinIds(security, getAccountId(), getRetrieveTags());
 			resultCode = response.getResultCode();
 			if(resultCode.equals(NetworkInterfaceConstants.OK))
 				return response.getResultVector();
@@ -1298,6 +1298,13 @@ public class MartusApp
 	public String getAccountId()
 	{
 		return store.getAccountId();
+	}
+	
+	public Vector getRetrieveTags()
+	{
+		Vector tags = new Vector();
+		tags.add(NetworkInterfaceConstants.TAG_BULLETIN_SIZE);
+		return tags;	
 	}
 
 	public void createAccountInternal(File keyPairFile, String userName, String userPassPhrase) throws

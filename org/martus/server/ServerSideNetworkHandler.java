@@ -79,11 +79,12 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			
 		int index = 0;
 		String authorAccountId = (String)parameters.get(index++);
-
+		Vector retrieveTags = (Vector)parameters.get(index++);
+		
 		if(myAccountId.equals(authorAccountId))
-			result = server.listMySealedBulletinIds(authorAccountId);
+			result = server.listMySealedBulletinIds(authorAccountId, retrieveTags);
 		else
-			result = server.listFieldOfficeSealedBulletinIds(myAccountId, authorAccountId);
+			result = server.listFieldOfficeSealedBulletinIds(myAccountId, authorAccountId, retrieveTags);
 
 		server.decrementActiveClientsCounter();
 		return result;
@@ -106,11 +107,12 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			
 		int index = 0;
 		String authorAccountId = (String)parameters.get(index++);
+		Vector retrieveTags = (Vector)parameters.get(index++);
 
 		if(myAccountId.equals(authorAccountId))
-			result = server.listMyDraftBulletinIds(authorAccountId);
+			result = server.listMyDraftBulletinIds(authorAccountId, retrieveTags);
 		else
-			result = server.listFieldOfficeDraftBulletinIds(myAccountId, authorAccountId);
+			result = server.listFieldOfficeDraftBulletinIds(myAccountId, authorAccountId, retrieveTags);
 		server.decrementActiveClientsCounter();
 		
 		return result;

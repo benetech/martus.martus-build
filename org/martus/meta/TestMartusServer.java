@@ -1072,7 +1072,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 
-		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
+		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString(), new Vector());
 		assertNotNull("testListFieldOfficeBulletinSummaries returned null", list1);
 		assertEquals("wrong length list 1", 2, list1.size());
 		assertNotNull("null id1 [0] list1", list1.get(0));
@@ -1091,7 +1091,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		bulletinDraft.save();
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), MockBulletin.saveToZipString(bulletinDraft));
 
-		Vector list2 = testServer.listFieldOfficeDraftBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
+		Vector list2 = testServer.listFieldOfficeDraftBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString(), new Vector());
 		assertEquals("wrong length list2", 2, list2.size());
 		assertNotNull("null id1 [0] list2", list2.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
@@ -1194,7 +1194,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.security = serverSecurity;
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 
-		Vector list1 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
+		Vector list1 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), new Vector());
 		assertNotNull("listMyBulletinSummaries returned null", list1);
 		assertEquals("wrong length", 2, list1.size());
 		assertNotNull("null id1 [0]", list1.get(0));
@@ -1203,7 +1203,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(privateBulletin));
 
-		Vector list2 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
+		Vector list2 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), new Vector());
 		assertNotNull("listMyBulletinSummaries returned null", list2);
 		assertEquals("wrong length", 2, list2.size());
 		assertNotNull("null id1 [0]", list2.get(0));

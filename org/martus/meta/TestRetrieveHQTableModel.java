@@ -183,7 +183,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 			setSecurity(new MockMartusSecurity());
 		}
 		
-		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
+		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);

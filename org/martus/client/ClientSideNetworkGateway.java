@@ -26,20 +26,22 @@ public class ClientSideNetworkGateway
 		return new NetworkResponse(server.getUploadRights(signer.getPublicKeyString(), parameters, signature));
 	}
 
-	public NetworkResponse getSealedBulletinIds(MartusCrypto signer, String authorAccountId) throws 
+	public NetworkResponse getSealedBulletinIds(MartusCrypto signer, String authorAccountId, Vector retrieveTags) throws 
 			MartusCrypto.MartusSignatureException
 	{
 		Vector parameters = new Vector();
 		parameters.add(authorAccountId);
+		parameters.add(retrieveTags);
 		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getSealedBulletinIds(signer.getPublicKeyString(), parameters, signature));
 	}
 					
-	public NetworkResponse getDraftBulletinIds(MartusCrypto signer, String authorAccountId) throws 
+	public NetworkResponse getDraftBulletinIds(MartusCrypto signer, String authorAccountId, Vector retrieveTags) throws 
 			MartusCrypto.MartusSignatureException
 	{
 		Vector parameters = new Vector();
 		parameters.add(authorAccountId);
+		parameters.add(retrieveTags);
 		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getDraftBulletinIds(signer.getPublicKeyString(), parameters, signature));
 	}

@@ -851,7 +851,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return summaries;
 	}
 	
-	public Vector listMySealedBulletinIds(String clientId)
+	public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
 	{
 		if(serverMaxLogging)
 			logging("listMySealedBulletinIds " + getClientAliasForLogging(clientId));
@@ -895,7 +895,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return summaries;
 	}
 
-	public Vector listMyDraftBulletinIds(String authorAccountId)
+	public Vector listMyDraftBulletinIds(String authorAccountId, Vector retrieveTags)
 	{
 		if(serverMaxLogging)
 			logging("listMyDraftBulletinIds " + getClientAliasForLogging(authorAccountId));
@@ -938,7 +938,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return summaries;	
 	}
 
-	public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
+	public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 	{
 		if(serverMaxLogging)
 			logging("listFieldOfficeSealedBulletinIds " + getClientAliasForLogging(hqAccountId));
@@ -982,7 +982,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return summaries;
 	}
 
-	public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId)
+	public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 	{
 		if(serverMaxLogging)
 			logging("listFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));

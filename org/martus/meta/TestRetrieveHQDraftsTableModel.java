@@ -191,7 +191,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 			setSecurity(new MockMartusSecurity());
 		}
 		
-		public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId) 
+		public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags) 
 		{			
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);

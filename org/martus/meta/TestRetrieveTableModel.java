@@ -498,7 +498,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			super();
 		}
 		
-		public Vector listMySealedBulletinIds(String clientId)
+		public Vector listMySealedBulletinIds(String clientId, Vector retrieveTags)
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);

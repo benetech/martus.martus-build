@@ -19,6 +19,7 @@ public interface NetworkInterfaceConstants
 	public static final String SIG_ERROR = "signature error";
 	public static final String INCOMPLETE = "incomplete result";
 	public static final String VERSION = "MartusServer v0.20";
+	public static final String TAG_BULLETIN_SIZE = "bulletin size";
 	
 	public static final int MAX_CHUNK_SIZE = 100 * 1024;
 }
