@@ -75,7 +75,7 @@ public class MockBulletin extends Bulletin
 		BulletinHeaderPacket header = b.getBulletinHeaderPacket();
 		
 		FieldDataPacket publicDataPacket = b.getFieldDataPacket();
-		boolean shouldEncryptPublicData = (b.isDraft() || header.isAllPrivate());
+		boolean shouldEncryptPublicData = (b.isDraft() || b.isAllPrivate());
 		publicDataPacket.setEncrypted(shouldEncryptPublicData);
 			
 		OutputStream outputStream = new BufferedOutputStream(new FileOutputStream(destFile));

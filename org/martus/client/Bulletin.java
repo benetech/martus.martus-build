@@ -350,7 +350,7 @@ public class Bulletin implements BulletinConstants
 		BulletinHeaderPacket bhp = getBulletinHeaderPacket();
 
 		FieldDataPacket publicDataPacket = getFieldDataPacket();
-		boolean shouldEncryptPublicData = (isDraft() || bhp.isAllPrivate());
+		boolean shouldEncryptPublicData = (isDraft() || isAllPrivate());
 		publicDataPacket.setEncrypted(shouldEncryptPublicData);
 			
 		byte[] dataSig = writePacketToDatabase(publicDataPacket, db, signer);
