@@ -42,6 +42,7 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
+import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
@@ -82,6 +83,7 @@ public class UiDisplayFileDlg extends JDialog
 		if(messageTOC != null)
 		{
 			tocList = new JList(messageTOC);
+			tocList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 			tocList.addListSelectionListener(new ListHandler());
 			JScrollPane tocMsgAreaScrollPane = new JScrollPane(tocList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
