@@ -81,6 +81,11 @@ public class Packet
 		return uid.getLocalId();
 	}
 	
+	public void setUniversalId(UniversalId newUid)
+	{
+		uid = newUid;
+	}
+
 	private void setPacketId(String newPacketId)
 	{
 		uid.setLocalId(newPacketId.replace(':', '-'));
@@ -457,6 +462,6 @@ public class Packet
 		}
 	}
 
-	private UniversalId uid;
+	UniversalId uid;
 	final static int infiniteMarkResetLength = 999999999;
 }
