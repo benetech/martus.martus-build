@@ -1756,7 +1756,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 			uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
 			if(uploadResult != null)
 			{
-				System.out.println(uploadResult);
+				System.out.println("UiMainWindow.Tick.run: " + uploadResult);
 				folderContentsHaveChanged(getStore().getFolderSent());
 				folderContentsHaveChanged(getStore().getFolderOutbox());
 				folderContentsHaveChanged(getStore().getFolderDraftOutbox());
