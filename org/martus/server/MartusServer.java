@@ -237,6 +237,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		clientsThatCanUpload = new Vector();
 		clientsBanned = new Vector();
 		magicWords = new Vector();
+		failedUploadRequestCounter = 0;
 		
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(startupConfigDirectory, MAGICWORDSFILENAME);
@@ -256,6 +257,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		Timer mirroringTimer = new Timer(true);
  		TimerTask mirroringTask = new MirroringTask();
  		mirroringTimer.schedule(mirroringTask, IMMEDIATELY, mirroringIntervalMillis);
+ 		
+ 		Timer failedUploadRequestsTimer = new Timer(true);
+ 		TimerTask uploadRequestTask = new UploadRequestsMonitor();
+ 		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, getUploadRequestTimerInterval());
 	}
 	
 	public void initialize()
@@ -453,6 +458,14 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
+		if(!areUploadRequestAllowed())
+		{
+			if(!magicWords.contains(tryMagicWord))
+				incrementFailedUploadRequests();
+
+			return NetworkInterfaceConstants.SERVER_ERROR;
+		}
+
 		if( isClientBanned(clientId) )
 			return NetworkInterfaceConstants.REJECTED;
 			
@@ -465,6 +478,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(!magicWords.contains(tryMagicWord))
 		{
 			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + "magicWords=" + magicWords.toString() + " tryMagicWord=" +tryMagicWord);
+			incrementFailedUploadRequests();
 			return NetworkInterfaceConstants.REJECTED;
 		}
 		if(serverMaxLogging)
@@ -1801,6 +1815,37 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		activeClientsCounter--;
 	}
+	
+	void incrementFailedUploadRequests()
+	{
+		failedUploadRequestCounter++;
+	}
+	
+	void subtractMaxFailedUploadAttemptsFromCounter()
+	{
+		failedUploadRequestCounter -= getMaxFailedUploadAllowedAttempts();
+		if(failedUploadRequestCounter < 0) failedUploadRequestCounter = 0;
+	}
+	
+	public int getNumFailedUploadRequest()
+	{
+		return failedUploadRequestCounter;
+	}
+	
+	public int getMaxFailedUploadAllowedAttempts()
+	{
+		return MAX_FAILED_UPLOAD_ATTEMPTS;
+	}
+	
+	public long getUploadRequestTimerInterval()
+	{
+		return magicWordsGuessIntervalMillis;
+	}
+	
+	boolean areUploadRequestAllowed()
+	{
+		return (failedUploadRequestCounter < getMaxFailedUploadAllowedAttempts());
+	}
 
 	public synchronized void logging(String message)
 	{
@@ -2074,6 +2119,14 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 	}
 	
+	private class UploadRequestsMonitor extends TimerTask
+	{
+		public void run()
+		{
+			subtractMaxFailedUploadAttemptsFromCounter();
+		}
+	}
+	
 	private class ShutdownRequestMonitor extends TimerTask
 	{
 		public void run()
@@ -2130,6 +2183,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
+	static int failedUploadRequestCounter;
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
@@ -2141,6 +2195,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String ADMINSTARTUPCONFIGDIRECTORY = "deleteOnStartup";
 	
 	private final long IMMEDIATELY = 0;
+	private final int MAX_FAILED_UPLOAD_ATTEMPTS = 100;
+	private static final long magicWordsGuessIntervalMillis = 60 * 1000;
 	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
 	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds

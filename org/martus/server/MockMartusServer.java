@@ -223,6 +223,16 @@ public class MockMartusServer extends MartusServer
 	{
 		throw new Exception("MockServer serverExit called");
 	}
+	
+	public int getMaxFailedUploadAllowedAttempts()
+	{
+		return 2;
+	}
+	
+	public long getUploadRequestTimerInterval()
+	{
+		return 10 * 1000;
+	}
 
 	static class TempDirectory extends File
 	{
