@@ -12,14 +12,14 @@
   </target>
 
   <target name="clean">
-     <delete file="${common-dir}/*.class"/>
+    <delete file="${common-dir}/*.class"/>
     <delete file="${common-jar}"/>
-    <delete file="version.txt"/>
+    <delete file="${common-jar}/version.txt"/>
   </target>
 
   <target name="build" depends="init">
     <javac srcdir="${common-dir}" destdir="${common-dir}" failonerror="true" excludes="obsolete/*"/>
-    <echo message="${DSTAMP}" file="version.txt"/>
+    <echo message="${DSTAMP}" file="${common-dir}/version.txt"/>
     <mkdir dir="${dist}"/>
     <jar jarfile="${common-jar}" basedir="." includes="${common-dir}/*.class"/>
   </target>
