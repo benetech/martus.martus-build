@@ -29,6 +29,7 @@ package org.martus.client.swingui.fields;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
+import org.martus.client.core.DateUtilities;
 import org.martus.client.swingui.UiLocalization;
 
 
@@ -53,13 +54,13 @@ public class UiFlexiDateViewer extends UiField
 	public void setText(String newText)
 	{
 		value = localization.convertStoredDateToDisplay(newText);
-		int dateBreak = newText.indexOf(COMMA_SEPARATED);
+		int dateBreak = newText.indexOf(DateUtilities.DATE_RANGE_SEPARATER);
 		if (dateBreak > 0)			
 		{
 			String beginDate = newText.substring(0,dateBreak);
 			String endDate = newText.substring(dateBreak+1);			
-			label.setText("  "+localization.getFieldLabel("between")+" "+ beginDate+ 
-					" "+localization.getFieldLabel("and")+" "+ endDate+"  ");				
+			label.setText("  "+localization.getFieldLabel("DateRangeFrom")+" "+ beginDate+ 
+					" "+localization.getFieldLabel("DateRangeTo")+" "+ endDate+"  ");				
 		}
 		else
 			label.setText("  " + value + "  ");
@@ -71,6 +72,5 @@ public class UiFlexiDateViewer extends UiField
 
 	UiLocalization localization;
 	JLabel label;
-	String value;
-	private final String COMMA_SEPARATED = ",";
+	String value;	
 }

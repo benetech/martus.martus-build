@@ -44,35 +44,40 @@ import org.martus.common.bulletin.Bulletin;
 public class UiDateEditor extends UiField
 {
 	public UiDateEditor(UiLocalization localizationToUse)
-	{
+	{				
 		component = new JPanel();
 		Box box = Box.createHorizontalBox();
-
 		dayCombo = new JComboBox();
-		for(int day=1; day <= 31; ++day)
-			dayCombo.addItem(new Integer(day).toString());
-
 		monthCombo = new JComboBox(localizationToUse.getMonthLabels());
-
 		yearCombo = new JComboBox();
+		
+		buildDate(box, localizationToUse, yearCombo, monthCombo, dayCombo);
+		
+		component.add(box);
+	}
+	
+	public static void buildDate(Box box, UiLocalization localizationToUse,
+			JComboBox yCombo, JComboBox mCombo, JComboBox dCombo)
+	{						
+		for(int day=1; day <= 31; ++day)
+			dCombo.addItem(new Integer(day).toString());
+	
 		Calendar cal = new GregorianCalendar();
 		int thisYear = cal.get(Calendar.YEAR);
 		for(int year = 1900; year <= thisYear; ++year)
-			yearCombo.addItem(new Integer(year).toString());
+			yCombo.addItem(new Integer(year).toString());
 
 		String mdyOrder = DateUtilities.getMdyOrder(localizationToUse.getCurrentDateFormatCode());
 		for(int i = 0; i < mdyOrder.length(); ++i)
 		{
 			switch(mdyOrder.charAt(i))
 			{
-				case 'd': box.add(dayCombo);	break;
-				case 'm': box.add(monthCombo);	break;
-				case 'y': box.add(yearCombo);	break;
+				case 'd': box.add(dCombo);	break;
+				case 'm': box.add(mCombo);	break;
+				case 'y': box.add(yCombo);	break;
 			}
-		}
-
-		component.add(box);
-	}
+		}			
+	}			
 
 	public JComponent getComponent()
 	{
@@ -98,7 +103,7 @@ public class UiDateEditor extends UiField
 	
 	public void validate() throws UiField.DataInvalidException 
 	{
-		Date value = getDate();
+		Date value = getDate(yearCombo, monthCombo, dayCombo);
 		Date today = new Date();
 		if (value.after(today))
 		{
@@ -109,17 +114,17 @@ public class UiDateEditor extends UiField
 
 	public String getText()
 	{
-		Date date = getDate();
+		Date date = getDate(yearCombo, monthCombo, dayCombo);
 		DateFormat df = Bulletin.getStoredDateFormat();
 		return df.format(date);
 	}
 
-	private Date getDate() 
+	public static Date getDate(JComboBox yCombo, JComboBox mCombo, JComboBox dCombo) 
 	{
 		Calendar cal = new GregorianCalendar();
-		cal.set(yearCombo.getSelectedIndex()+1900,
-				monthCombo.getSelectedIndex(),
-				dayCombo.getSelectedIndex()+1);
+		cal.set(yCombo.getSelectedIndex()+1900,
+				mCombo.getSelectedIndex(),
+				dCombo.getSelectedIndex()+1);
 		
 		Date d = cal.getTime();
 		return d;
@@ -127,16 +132,23 @@ public class UiDateEditor extends UiField
 
 	public void setText(String newText)
 	{
+		setDate(newText, yearCombo, monthCombo, dayCombo);			
+	}
+	
+	public static void setDate(String dateText, JComboBox yCombo, JComboBox mCombo, JComboBox dCombo)
+	{
 		DateFormat df = Bulletin.getStoredDateFormat();
 		Date d;
 		try
 		{
-			d = df.parse(newText);
+			d = df.parse(dateText);
 			Calendar cal = new GregorianCalendar();
 			cal.setTime(d);
-			yearCombo.setSelectedItem( (new Integer(cal.get(Calendar.YEAR))).toString());
-			monthCombo.setSelectedIndex(cal.get(Calendar.MONTH));
-			dayCombo.setSelectedItem( (new Integer(cal.get(Calendar.DATE))).toString());
+		
+		yCombo.setSelectedItem( (new Integer(cal.get(Calendar.YEAR))).toString());
+		mCombo.setSelectedIndex(cal.get(Calendar.MONTH));
+		dCombo.setSelectedItem( (new Integer(cal.get(Calendar.DATE))).toString());
+
 		}
 		catch(ParseException e)
 		{
@@ -158,6 +170,6 @@ public class UiDateEditor extends UiField
 	JComponent component;
 	JComboBox monthCombo;
 	JComboBox dayCombo;
-	JComboBox yearCombo;
+	JComboBox yearCombo;	
 }
 

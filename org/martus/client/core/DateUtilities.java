@@ -62,4 +62,5 @@ public class DateUtilities
 	public static ChoiceItem DMY_SLASH = new ChoiceItem("dd/MM/yyyy", "dd/mm/yyyy");
 	public static ChoiceItem MDY_SLASH = new ChoiceItem("MM/dd/yyyy", "mm/dd/yyyy");
 	public static ChoiceItem DMY_DOT = new ChoiceItem("dd.MM.yyyy", "dd.mm.yyyy");
+	public static String	DATE_RANGE_SEPARATER = ",";
 }
