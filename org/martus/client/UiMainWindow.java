@@ -556,9 +556,16 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		edit.addSeparator();
 		edit.add(actionMenuDiscardBulletin);
 
-
 		JMenu folders = new JMenu(app.getMenuLabel("folders"));
+		actionMenuRenameFolder = new ActionMenuRenameFolder();
+		actionMenuDeleteFolder = new ActionMenuDeleteFolder();
+		FoldersMenuListener menuFolderListener = new FoldersMenuListener();
+		folders.addMenuListener(menuFolderListener);
+		menuFolderListener.initalize();
+
 		folders.add(new ActionMenuCreateFolder());
+		folders.add(actionMenuRenameFolder);
+		folders.add(actionMenuDeleteFolder);
 
 
 		JMenu server = new JMenu(app.getMenuLabel("server"));
@@ -1617,6 +1624,48 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 	
+	class ActionMenuRenameFolder extends AbstractAction
+	{
+		public ActionMenuRenameFolder()
+		{
+			super(app.getMenuLabel("RenameFolder"), null);
+		}
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			folders.renameCurrentFolder();
+		}
+
+		public boolean isEnabled()
+		{
+			BulletinFolder folder = folders.getSelectedFolder();
+			if(folder != null && folder.canRename())
+				return true;
+			return false;
+		}
+	}
+
+	class ActionMenuDeleteFolder extends AbstractAction
+	{
+		public ActionMenuDeleteFolder()
+		{
+			super(app.getMenuLabel("DeleteFolder"), null);
+		}
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			folders.deleteCurrentFolder();
+		}
+
+		public boolean isEnabled()
+		{
+			BulletinFolder folder = folders.getSelectedFolder();
+			if(folder != null && folder.canRename())
+				return true;
+			return false;
+		}
+	}
+
 	class ActionMenuCreateNewBulletin extends AbstractAction
 	{
 		public ActionMenuCreateNewBulletin()
@@ -1819,6 +1868,25 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			actionMenuCopyBulletin.setEnabled(false);
 			actionMenuPasteBulletin.setEnabled(false);
 			actionMenuDiscardBulletin.setEnabled(false);
+		}
+
+		public void menuDeselected(MenuEvent e) {}
+		public void menuCanceled(MenuEvent e) {}
+	}
+
+	class FoldersMenuListener implements MenuListener
+	{
+		public void menuSelected(MenuEvent e)
+		{
+			actionMenuRenameFolder.setEnabled(actionMenuRenameFolder.isEnabled());
+			actionMenuDeleteFolder.setEnabled(actionMenuDeleteFolder.isEnabled());
+		}
+		
+		public void initalize()
+		{
+			//Java Bug, menu items need to be disabled before correct behavior occures.
+			actionMenuRenameFolder.setEnabled(false);
+			actionMenuDeleteFolder.setEnabled(false);
 		}
 
 		public void menuDeselected(MenuEvent e) {}
@@ -2212,6 +2280,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private ActionMenuCopyBulletin actionMenuCopyBulletin;
 	private ActionMenuPasteBulletin actionMenuPasteBulletin;
 	private ActionMenuDiscardBulletin actionMenuDiscardBulletin;
+	private ActionMenuRenameFolder actionMenuRenameFolder;
+	private ActionMenuDeleteFolder actionMenuDeleteFolder;
+
+
 	private UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;	

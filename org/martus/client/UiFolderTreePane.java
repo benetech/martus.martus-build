@@ -44,6 +44,11 @@ class UiFolderTreePane extends JScrollPane
 		return tree.getSelectedFolderName();	
 	}
 	
+	public BulletinFolder getSelectedFolder()
+	{
+		return store.findFolder(getSelectedFolderName());
+	}
+	
 	public void createNewFolder() 
 	{
 		tree.stopEditing();
@@ -58,6 +63,30 @@ class UiFolderTreePane extends JScrollPane
 		tree.stopEditing();
 		tree.startEditingAtPath(getPathOfNode(node));
 		return;
+	}
+	
+	public void renameCurrentFolder()
+	{
+		FolderTreeNode node = getCurrentFolderNode();
+		ActionRename rename = new ActionRename(node);
+		rename.actionPerformed(null);
+	}
+	
+	
+	public void deleteCurrentFolder()
+	{
+		FolderTreeNode node = getCurrentFolderNode();
+		ActionDelete delete = new ActionDelete(node);
+		delete.actionPerformed(null);
+	}
+
+	public FolderTreeNode getCurrentFolderNode() 
+	{
+		FolderTreeNode node = null;
+		TreePath path = tree.getSelectionPath();
+		if(path != null)
+			node = (FolderTreeNode)path.getLastPathComponent();
+		return node;
 	}
 
 	public void folderTreeContentsHaveChanged()
