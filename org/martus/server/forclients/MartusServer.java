@@ -340,7 +340,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			UnicodeReader reader = new UnicodeReader(magicWordsFile);
 			String line = null;
 			while( (line = reader.readLine()) != null)
-				setMagicWord(line.toLowerCase().trim().replaceAll(" ", ""));
+				setMagicWord(line.toLowerCase().trim().replaceAll("\\s", ""));
 			reader.close();
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
@@ -490,7 +490,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		boolean uploadGranted = false;
 
-		if(magicWords.contains(tryMagicWord.toLowerCase().trim().replaceAll(" ", "")))
+		if(magicWords.contains(tryMagicWord.toLowerCase().trim().replaceAll("\\s", "")))
 			uploadGranted = true;
 			
 		if(!areUploadRequestsAllowedForCurrentIp())

@@ -2112,6 +2112,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String sampleMagicWord1 = "kef7873n2";
 		String sampleMagicWord2 = "fjk5dlkg8";
 		String sampleMagicWord3 = sampleMagicWord1 + " " + sampleMagicWord2;
+		String sampleMagicWord4 = sampleMagicWord1 + "\t" + sampleMagicWord2;
 		String nonExistentMagicWord = "ThisIsNotAMagicWord";
 		
 		File file = testServer.magicWordsFile;
@@ -2138,6 +2139,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
 		
 		worked = other.requestUploadRights("whatever", sampleMagicWord3);
+		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+		
+		worked = other.requestUploadRights("whatever", sampleMagicWord4);
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
 		
 		other.deleteAllFiles();
