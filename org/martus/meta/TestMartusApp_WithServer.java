@@ -9,11 +9,11 @@ import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
 import org.martus.client.core.MartusApp;
+import org.martus.client.core.ProgressMeterInterface;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.swingui.Retriever;
 import org.martus.client.swingui.UiConstants;
-import org.martus.client.swingui.UiProgressMeter;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
@@ -80,7 +80,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		new File(appWithServer.getConfigInfoFilename()).delete();
 		new File(appWithServer.getConfigInfoSignatureFilename()).delete();
 
-		UiProgressMeter nullProgressMeter = null;
+		ProgressMeterInterface nullProgressMeter = null;
 		uploaderWithServer = new BackgroundUploader(appWithServer, nullProgressMeter);		
 		uploaderWithoutServer = new BackgroundUploader(appWithoutServer, nullProgressMeter);		
 		mockServer.deleteAllData();
@@ -840,7 +840,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockResponse.add(NetworkInterfaceConstants.OK);
 		gateway.response = mockResponse;
 
-		UiProgressMeter nullProgressMeter = null;
+		ProgressMeterInterface nullProgressMeter = null;
 		BackgroundUploader uploader = new BackgroundUploader(app, nullProgressMeter);
 		String result = uploader.putContactInfoOnServer(contact);
 		assertEquals("wrong result?", mockResponse.get(0), result);
@@ -870,7 +870,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_BEGIN("testGetFieldOfficeAccountsNoServer");
 		try
 		{
-			appWithoutServer.getFieldOfficeAccounts();
+			appWithoutServer.downloadFieldOfficeAccountIds();
 			fail("Got valid accounts?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -891,7 +891,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockSSLServerHandler.nullGetFieldOfficeAccountIds(true);
 		try
 		{
-			appWithServer.getFieldOfficeAccounts();
+			appWithServer.downloadFieldOfficeAccountIds();
 			fail("null response didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -905,7 +905,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockServer.listFieldOfficeAccountsResponse = desiredResult;
 		try
 		{
-			appWithServer.getFieldOfficeAccounts();
+			appWithServer.downloadFieldOfficeAccountIds();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -990,7 +990,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		desiredResult.add("Account2");
 		
 		mockServer.listFieldOfficeAccountsResponse = desiredResult;
-		Vector result = appWithServer.getFieldOfficeAccounts();
+		Vector result = appWithServer.downloadFieldOfficeAccountIds();
 		mockServer.listFieldOfficeAccountsResponse = null;
 		assertNotNull("Got back null?", result);
 		assertEquals("Wrong size?", 2, result.size());

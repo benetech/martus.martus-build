@@ -44,7 +44,7 @@ public class RetrieveHQDraftsTableModel extends RetrieveTableModelHQ
 	{
 		setProgressDialog(progressDlg);
 
-		Vector accounts = app.getFieldOfficeAccounts();
+		Vector accounts = app.downloadFieldOfficeAccountIds();
 		for(int a = 0; a < accounts.size(); ++a)
 		{
 			String accountId = (String)accounts.get(a);

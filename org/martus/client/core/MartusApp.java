@@ -45,7 +45,6 @@ import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.swingui.DateUtilities;
 import org.martus.client.swingui.MartusLocalization;
-import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinSearcher;
@@ -853,7 +852,7 @@ public class MartusApp
 		throw new ServerErrorException(resultCode);
 	}
 
-	public BulletinSummary createSummaryFromString(String accountId, String parameters)
+	public BulletinSummary retrieveSummaryFromString(String accountId, String parameters)
 		throws ServerErrorException
 	{
 		FieldDataPacket fdp = null;
@@ -887,7 +886,7 @@ public class MartusApp
 		return bulletinSummary;
 	}
 
-	public Vector getFieldOfficeAccounts() throws ServerErrorException
+	public Vector downloadFieldOfficeAccountIds() throws ServerErrorException
 	{
 		if(!isSSLServerAvailable())
 			throw new ServerErrorException();
@@ -923,7 +922,7 @@ public class MartusApp
 		return fdp;
 	}
 
-	public void retrieveOneBulletinToFolder(UniversalId uid, BulletinFolder retrievedFolder, UiProgressMeter progressMeter) throws
+	public void retrieveOneBulletinToFolder(UniversalId uid, BulletinFolder retrievedFolder, ProgressMeterInterface progressMeter) throws
 		Exception
 	{
 		File tempFile = File.createTempFile("$$$MartusApp", null);
@@ -1007,7 +1006,7 @@ public class MartusApp
 
 	public File getPublicInfoFile(String fileName)
 	{
-		fileName = toFileName(fileName);
+		fileName = MartusUtilities.toFileName(fileName);
 		String completeFileName = fileName + PUBLIC_INFO_EXTENSION;
 		return(new File(getDataDirectory(), completeFileName));
 	}
@@ -1232,35 +1231,6 @@ public class MartusApp
 		}
 
 		return file;
-	}
-
-	static public String toFileName(String text)
-	{
-		final int maxLength = 20;
-		final int minLength = 3;
-
-		if(text.length() > maxLength)
-			text = text.substring(0, maxLength);
-
-		char[] chars = text.toCharArray();
-		for(int i = 0; i < chars.length; ++i)
-		{
-			if(!isCharOkInFileName(chars[i]))
-				chars[i] = ' ';
-		}
-
-		text = new String(chars).trim();
-		if(text.length() < minLength)
-			text = "Martus-" + text;
-
-		return text;
-	}
-
-	static private boolean isCharOkInFileName(char c)
-	{
-		if(Character.isLetterOrDigit(c))
-			return true;
-		return false;
 	}
 
 	protected String dataDirectory;

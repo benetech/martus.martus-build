@@ -5,11 +5,11 @@ import java.util.Vector;
 import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinSummary;
+import org.martus.client.core.ProgressMeterInterface;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.swingui.RetrieveHQTableModel;
 import org.martus.client.swingui.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.RetrieveMyTableModel;
-import org.martus.client.swingui.UiProgressMeter;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusUtilities;
@@ -53,7 +53,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		
-		UiProgressMeter nullProgressMeter = null;
+		ProgressMeterInterface nullProgressMeter = null;
 		uploader = new BackgroundUploader(appWithAccount, nullProgressMeter);
 
 		mockServer.deleteAllData();

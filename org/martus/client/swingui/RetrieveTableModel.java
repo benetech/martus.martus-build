@@ -231,7 +231,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 				String pair = (String)iterator.next();
 				try
 				{
-					BulletinSummary bulletinSummary = app.createSummaryFromString(accountId, pair);
+					BulletinSummary bulletinSummary = app.retrieveSummaryFromString(accountId, pair);
 					allSummaries.add(bulletinSummary);
 				}
 				catch (ServerErrorException e)

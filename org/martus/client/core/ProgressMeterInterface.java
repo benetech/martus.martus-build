@@ -24,12 +24,13 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.common;
+package org.martus.client.core;
+
 public interface ProgressMeterInterface
 {
-	public void setStatusMessageAndHideMeter(String message);
-	public void setStatusMessage(String message);
-	public void updateProgressMeter(String message, int currentValue, int maxValue);
-	public void hideProgressMeter();
-	public boolean shouldExit();
+	public abstract void setStatusMessageAndHideMeter(String message);
+	public abstract void setStatusMessage(String message);
+	public abstract void updateProgressMeter(String message, int currentValue, int maxValue);
+	public abstract void hideProgressMeter();
+	public abstract boolean shouldExit();
 }

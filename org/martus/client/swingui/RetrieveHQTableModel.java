@@ -43,7 +43,7 @@ public class RetrieveHQTableModel extends RetrieveTableModelHQ
 	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
 	{
 		setProgressDialog(progressDlg);
-		Vector accounts = app.getFieldOfficeAccounts();
+		Vector accounts = app.downloadFieldOfficeAccountIds();
 		for(int a = 0; a < accounts.size(); ++a)
 		{
 			String accountId = (String)accounts.get(a);

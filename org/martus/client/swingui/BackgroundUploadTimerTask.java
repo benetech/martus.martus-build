@@ -33,6 +33,7 @@ import java.util.Vector;
 
 import javax.swing.SwingUtilities;
 
+import org.martus.client.core.*;
 import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
@@ -45,7 +46,7 @@ class BackgroundUploadTimerTask extends TimerTask
 	public BackgroundUploadTimerTask(UiMainWindow mainWindowToUse)
 	{
 		mainWindow = mainWindowToUse;
-		UiProgressMeter progressMeter = mainWindow.statusBar.getBackgroundProgressMeter();
+		ProgressMeterInterface progressMeter = mainWindow.statusBar.getBackgroundProgressMeter();
 		uploader = new BackgroundUploader(mainWindow.getApp(), progressMeter);
 	}
 

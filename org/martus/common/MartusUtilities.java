@@ -472,6 +472,35 @@ public class MartusUtilities
 		timer.schedule(task, IMMEDIATELY, interval);
 	}
 
+	static private boolean isCharOkInFileName(char c)
+	{
+		if(Character.isLetterOrDigit(c))
+			return true;
+		return false;
+	}
+
+	static public String toFileName(String text)
+	{
+		final int maxLength = 20;
+		final int minLength = 3;
+	
+		if(text.length() > maxLength)
+			text = text.substring(0, maxLength);
+	
+		char[] chars = text.toCharArray();
+		for(int i = 0; i < chars.length; ++i)
+		{
+			if(!MartusUtilities.isCharOkInFileName(chars[i]))
+				chars[i] = ' ';
+		}
+	
+		text = new String(chars).trim();
+		if(text.length() < minLength)
+			text = "Martus-" + text;
+	
+		return text;
+	}
+
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
 	static final String PUBLIC_KEY_TYPE_SERVER = "Server";
 }

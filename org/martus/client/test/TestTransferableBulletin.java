@@ -34,10 +34,10 @@ import java.util.List;
 
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
-import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusSecurity;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.TestCaseEnhanced;
 
@@ -161,18 +161,18 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		String tooLong			= "abcdefghijklmnopqrstuvwxyz";
 		String tooShort			= "ab";
 		String minimumLength	= "abc";
-		assertEquals(alphaNumeric, MartusApp.toFileName(alphaNumeric));
-		assertEquals(alphaSpaces, MartusApp.toFileName(alphaSpaces));
-		assertEquals(alphaPunctOut, MartusApp.toFileName(alphaPunctIn));
-		assertEquals(trailingPunctOut, MartusApp.toFileName(trailingPunctIn));
-		assertEquals(leadingPunctOut, MartusApp.toFileName(leadingPunctIn));
-		assertEquals("Martus-", MartusApp.toFileName(punctuation1));
-		assertEquals("Martus-", MartusApp.toFileName(punctuation2));
-		assertEquals("Martus-", MartusApp.toFileName(punctuation3));
-		assertEquals(tooLong.substring(0, 20), MartusApp.toFileName(tooLong));
-		assertEquals(TITLE, MartusApp.toFileName(TITLE));
-		assertEquals("Martus-" + tooShort, MartusApp.toFileName(tooShort));
-		assertEquals(minimumLength, MartusApp.toFileName(minimumLength));
+		assertEquals(alphaNumeric, MartusUtilities.toFileName(alphaNumeric));
+		assertEquals(alphaSpaces, MartusUtilities.toFileName(alphaSpaces));
+		assertEquals(alphaPunctOut, MartusUtilities.toFileName(alphaPunctIn));
+		assertEquals(trailingPunctOut, MartusUtilities.toFileName(trailingPunctIn));
+		assertEquals(leadingPunctOut, MartusUtilities.toFileName(leadingPunctIn));
+		assertEquals("Martus-", MartusUtilities.toFileName(punctuation1));
+		assertEquals("Martus-", MartusUtilities.toFileName(punctuation2));
+		assertEquals("Martus-", MartusUtilities.toFileName(punctuation3));
+		assertEquals(tooLong.substring(0, 20), MartusUtilities.toFileName(tooLong));
+		assertEquals(TITLE, MartusUtilities.toFileName(TITLE));
+		assertEquals("Martus-" + tooShort, MartusUtilities.toFileName(tooShort));
+		assertEquals(minimumLength, MartusUtilities.toFileName(minimumLength));
 	}
 
 	private TransferableBulletinList createTransferableBulletin(String title)

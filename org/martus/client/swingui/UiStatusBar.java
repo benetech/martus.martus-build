@@ -30,6 +30,8 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
+import org.martus.client.core.*;
+
 public class UiStatusBar extends JPanel
 {
 
@@ -45,7 +47,7 @@ public class UiStatusBar extends JPanel
 		add(statusBarBox);
 	}
 
-	public UiProgressMeter getBackgroundProgressMeter()
+	public ProgressMeterInterface getBackgroundProgressMeter()
 	{
 		return backgroundProgressMeter;
 	}

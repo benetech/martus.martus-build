@@ -41,6 +41,7 @@ import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 
 
 public class TransferableBulletinList implements Transferable
@@ -62,7 +63,7 @@ public class TransferableBulletinList implements Transferable
 			for(int i = 0 ; i < bulletins.length ; ++i)
 			{
 				Bulletin bulletin = bulletins[i];
-				String summary = MartusApp.toFileName(bulletin.get(Bulletin.TAGTITLE));
+				String summary = MartusUtilities.toFileName(bulletin.get(Bulletin.TAGTITLE));
 				File file = File.createTempFile(summary, BULLETIN_FILE_EXTENSION);
 				file.deleteOnExit();
 				files.add(file);

@@ -35,7 +35,6 @@ import java.util.Vector;
 
 import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.swingui.MartusLocalization;
-import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
@@ -60,7 +59,7 @@ import org.martus.common.Packet.WrongPacketTypeException;
 
 public class BackgroundUploader
 {
-	public BackgroundUploader(MartusApp appToUse, UiProgressMeter progressMeterToUse)
+	public BackgroundUploader(MartusApp appToUse, ProgressMeterInterface progressMeterToUse)
 	{
 		app = appToUse;
 		progressMeter = progressMeterToUse;
@@ -72,10 +71,12 @@ public class BackgroundUploader
 	{
 		String result = null;
 	
-		if(app.getFolderOutbox().getBulletinCount() > 0)
-			result = backgroundUploadOneSealedBulletin();
-		else if(app.getFolderDraftOutbox().getBulletinCount() > 0)
-			result = backgroundUploadOneDraftBulletin();
+		BulletinFolder folderOutbox = app.getFolderOutbox();
+		BulletinFolder folderDraftOutbox = app.getFolderDraftOutbox();
+		if(folderOutbox.getBulletinCount() > 0)
+			result = backgroundUploadOneSealedBulletin(folderOutbox);
+		else if(folderDraftOutbox.getBulletinCount() > 0)
+			result = backgroundUploadOneDraftBulletin(folderDraftOutbox);
 		else if(app.getConfigInfo().shouldContactInfoBeSentToServer())
 			sendContactInfoToServer();
 	
@@ -224,11 +225,9 @@ public class BackgroundUploader
 		return uploadResult;
 	}
 
-	String backgroundUploadOneSealedBulletin() throws
+	String backgroundUploadOneSealedBulletin(BulletinFolder uploadFromFolder) throws
 		MartusApp.DamagedBulletinException
 	{
-		BulletinFolder uploadFromFolder = app.getFolderOutbox();
-	
 		BackgroundUploader.UploadResult uploadResult = uploadOneBulletin(uploadFromFolder);
 		
 		if(uploadResult.result != null)
@@ -271,11 +270,9 @@ public class BackgroundUploader
 		return null;
 	}
 
-	String backgroundUploadOneDraftBulletin() throws
+	String backgroundUploadOneDraftBulletin(BulletinFolder uploadFromFolder) throws
 		MartusApp.DamagedBulletinException
 	{
-		BulletinFolder uploadFromFolder = app.getFolderDraftOutbox();
-	
 		BackgroundUploader.UploadResult uploadResult = uploadOneBulletin(uploadFromFolder);
 		
 		if(uploadResult.result != null)
@@ -348,6 +345,6 @@ public class BackgroundUploader
 	}
 
 	MartusApp app;
-	UiProgressMeter progressMeter;
+	ProgressMeterInterface progressMeter;
 	private MartusLocalization localization;
 }
