@@ -21,6 +21,7 @@ import java.util.zip.ZipOutputStream;
 import org.martus.client.Bulletin.DamagedBulletinException;
 import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -1016,6 +1017,17 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("fdp id", b.getFieldDataPacket().getLocalId(), copy.getFieldDataPacket().getLocalId());
 		assertEquals("fdp account", b.getFieldDataPacket().getAccountId(), copy.getFieldDataPacket().getAccountId());
 		assertEquals("header fdp id", b.getBulletinHeaderPacket().getFieldDataPacketId(),copy.getBulletinHeaderPacket().getFieldDataPacketId());
+	}
+
+	public void testGetStatus() throws Exception
+	{
+		Bulletin b1 = store.createEmptyBulletin();
+		b1.set(b1.TAGPUBLICINFO, "public info");
+		b1.set(b1.TAGPRIVATEINFO, "private info");
+		b1.setSealed();
+		assertEquals("Not Sealed Status?", BulletinConstants.STATUSSEALED, b1.get(BulletinsList.STATUS_TAG));
+		b1.setDraft();
+		assertEquals("Not Draft Status?", BulletinConstants.STATUSDRAFT, b1.get(BulletinsList.STATUS_TAG));
 	}
 
 	public void testPullFrom() throws Exception
