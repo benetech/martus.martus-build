@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import junit.framework.Assert;
 import org.martus.client.exception.BlankUserNameException;
 import org.martus.client.exception.InvalidUserNameOrPassword;
+import org.martus.client.exception.MartusClientApplicationException;
 import org.martus.client.exception.PasswordMatchedUserNameException;
 import org.martus.client.exception.PasswordTooShortException;
 import org.martus.common.TestCaseEnhanced;
@@ -15,62 +16,39 @@ public class TestMartusUserNameAndPassword extends TestCaseEnhanced
 		super(name);
 	}
 
-	public void testValidateUserNameAndPassword()
+	public void testValidateUserNameAndPassword() throws MartusClientApplicationException
 	{
 		boolean threwRightException = false;
 		
 		try
 		{
 			MartusUserNameAndPassword.validateUserNameAndPassword("", "validPassword");
+			fail("Why wasn't a BlankUserNameException thrown?");
 		}
-		catch(BlankUserNameException bune)
-		{
-			threwRightException = true;
-		}
-		catch(Exception e)
-		{
-			Assert.fail("Why was a different exception (not BlankUserNameException) thrown?");
-		}
-
-		Assert.assertTrue("Why wasn't BlankUserNameException thrown?", threwRightException);
-		threwRightException = false;
+		catch(BlankUserNameException ignoreExpectedException)
+		{}
 
 		try
 		{
 			MartusUserNameAndPassword.validateUserNameAndPassword("validUserName","validUserName");
+			fail("Why was another exception (not PasswordMatchedUserNameException) thrown?");
 		}
-		catch(PasswordMatchedUserNameException pmune)
-		{
-			threwRightException = true;
-		}
-		catch(Exception e)
-		{
-			Assert.fail("Why was another exception (not PasswordMatchedUserNameException) thrown?");
-		}
-		Assert.assertTrue("Why wasn't PasswordMatchedUserNameException thrown?", threwRightException);
-		threwRightException = false;
-
+		catch(PasswordMatchedUserNameException ignoreExpectedException)
+		{}
 
 		try
 		{
 			MartusUserNameAndPassword.validateUserNameAndPassword("validUserName","short");
+			fail("Why was another exception (not PasswordTooShortException) thrown?");
 		}
-		catch(PasswordTooShortException ptse)
-		{
-			threwRightException = true;
-		}
-		catch(Exception e)
-		{
-			Assert.fail("Why was another exception (not PasswordTooShortException) thrown?");
-		}			
-		Assert.assertTrue("Why wasn't PasswordTooShortException thrown?", threwRightException);
-		threwRightException = false;				
+		catch(PasswordTooShortException ignoreExpectedException)
+		{}
 	}
 	
 	public void testIsWeakPassword()
 	{
-		Assert.assertTrue("Why was 'test' not a weak password?", MartusUserNameAndPassword.isWeakPassword("test"));	
-		Assert.assertFalse("Why was '123456789012345%$' not a strong password?", MartusUserNameAndPassword.isWeakPassword("123456789012345%$"));
+		assertTrue("Why was 'test' not a weak password?", MartusUserNameAndPassword.isWeakPassword("test"));	
+		assertFalse("Why was '123456789012345%$' not a strong password?", MartusUserNameAndPassword.isWeakPassword("123456789012345%$"));
 	}
 	
 
