@@ -38,47 +38,45 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	}
 	
 	public void testCreateSignatureFromFile()
-		throws IOException, CryptoInitializationException, MartusSignatureException, FileSigningException
+		throws IOException, CryptoInitializationException, MartusSignatureException, 
+				FileSigningException, FileVerificationException
 	{
-		MartusSecurity bogusSecurity = new MartusSecurity();
-		bogusSecurity.createKeyPair(512);
+		MartusSecurity otherSecurity = new MartusSecurity();
+		otherSecurity.createKeyPair(512);
 		
 		String string1 = "The string to write into the file to sign.";
 		String string2 = "The other string to write to another file to sign.";
 		
-		File tempFile = createTempFile(string1);
-		File bogusTempFile = createTempFile(string2);
+		File normalFile = createTempFile(string1);
+		File anotherFile = createTempFile(string2);
 
-		File sigFile = MartusUtilities.createSignatureFromFile(tempFile, security);
+		File normalFileSigBySecurity = MartusUtilities.createSignatureFromFile(normalFile, security);
+
+		MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security );
 		
 		try
 		{
-			MartusUtilities.verifyFileAndSignature(tempFile, sigFile, security );
-		}
-		catch (FileVerificationException e)
-		{
-			fail("testCreateSignatureFromFile: Should not have thrown this exception");
-		}
-		
-		try
-		{
-			MartusUtilities.verifyFileAndSignature(bogusTempFile, sigFile, security );
-			fail("testCreateSignatureFromFile: Should have thrown FileVerificationException.");
+			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security );
+			fail("testCreateSignatureFromFile 2: Should have thrown FileVerificationException.");
 		}
 		catch (FileVerificationException ignoreExpectedException)
 		{
 			;
 		}
 		
-		bogusTempFile = createTempFile(string1);
-		File bogusSigFile = MartusUtilities.createSignatureFromFile(bogusTempFile, security);
+		anotherFile = createTempFile(string1);
+
+		MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security );
+		
+		File normalFileSigByOtherSecurity = MartusUtilities.createSignatureFromFile(normalFile, otherSecurity);
 		try
 		{
-			MartusUtilities.verifyFileAndSignature(bogusTempFile, sigFile, security );
+			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigByOtherSecurity, security );
+			fail("testCreateSignatureFromFile 4: Should have thrown FileVerificationException.");
 		}
-		catch (FileVerificationException e)
+		catch(FileVerificationException e)
 		{
-			fail("testCreateSignatureFromFile2: Should not have thrown this exception");
+			;
 		}
 	}
 	
