@@ -109,7 +109,7 @@ public class MartusServerUtilities
 
 	public static File getSignatureDirectoryForFile(File originalFile)
 	{
-		return new File(originalFile.getParent() + File.separatorChar + "signature");
+		return new File(originalFile.getParent() + File.separatorChar + MARTUS_SIGNATURE_FILE_DIRECTORY_NAME);
 	}
 	
 	public static Date getDateOfSignatureFile(File signatureFile)
@@ -462,6 +462,7 @@ public class MartusServerUtilities
 	
 	private static final String MARTUS_SIGNATURE_FILE_DATE_FORMAT = "yyyyMMdd-HHmmss";
 	private static final String MARTUS_SIGNATURE_FILE_IDENTIFIER = "Martus Signature File";
+	private static final String MARTUS_SIGNATURE_FILE_DIRECTORY_NAME = "signatures";
 	private static final int MAX_ALLOWED_ENCRYPTED_FILESIZE = 1000*1000;
 
 	private static final String BULLETIN_UPLOAD_RECORD_IDENTIFIER = "Martus Bulletin Upload Record 1.0";
