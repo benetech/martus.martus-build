@@ -199,7 +199,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		System.out.println();
 
 		System.out.println(server.clientsThatCanUpload.size() + " clients currently allowed to upload");
+		System.out.println(server.magicWords.size() + " active magic word(s)");
 
+		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
 		server.createNonSSLXmlRpcServer();
 		server.createSSLXmlRpcServer();
 		server.createMirroringSupplierXmlRpcServer();
