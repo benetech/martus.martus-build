@@ -143,7 +143,8 @@ public class MirroringRetriever
 			{
 				Vector infos = response.getResultVector();
 				uidsToRetrieve = listOnlyPacketsThatWeWant(nextAccountId, infos);
-				log("listBulletins: " + publicCode + 
+				if(infos.size()>0 || uidsToRetrieve.size()>0)
+					log("listBulletins: " + publicCode + 
 						" -> " + infos.size() + " -> " + uidsToRetrieve.size());
 			}
 		}
@@ -182,7 +183,7 @@ public class MirroringRetriever
 
 		if(shouldSleepNextCycle)
 		{
-			log("Sleeping for " + ServerForMirroring.inactiveSleepMillis / 1000 / 60 + " minutes");
+			//log("Sleeping for " + ServerForMirroring.inactiveSleepMillis / 1000 / 60 + " minutes");
 			sleepUntil = System.currentTimeMillis() + ServerForMirroring.inactiveSleepMillis;
 			shouldSleepNextCycle = false;
 			return null;

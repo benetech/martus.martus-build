@@ -116,7 +116,9 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 					return result;
 				}
 				Vector infos = supplier.listBulletinsForMirroring(authorAccountId);
-				log("listBulletins: " + publicCode + " -> " + infos.size());
+
+				if(infos.size()>0)
+					log("listBulletins: " + publicCode + " -> " + infos.size());
 				
 				result.add(OK);
 				result.add(infos);

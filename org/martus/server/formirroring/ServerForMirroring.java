@@ -80,8 +80,8 @@ public class ServerForMirroring implements ServerSupplierInterface
 			mirroringIntervalMillis = oneSecondOfMillis;
 			inactiveSleepMillis = oneMinuteOfMillis;
 		}
-		log("MirroringInterval (millis): " + mirroringIntervalMillis);
-		log("InactiveSleep (millis): " + inactiveSleepMillis);
+		log("MirroringInterval (seconds): " + mirroringIntervalMillis/1000);
+		log("InactiveSleep (minutes): " + inactiveSleepMillis/1000/60);
 
 		File authorizedCallersDir = getAuthorizedCallersDirectory();
 		authorizedCallers = coreServer.loadServerPublicKeys(authorizedCallersDir, "Mirror");
@@ -315,5 +315,5 @@ public class ServerForMirroring implements ServerSupplierInterface
 
 	static final String MIRRORCONFIGFILENAME = "mirrorConfig.txt";	
 	static long mirroringIntervalMillis = 10 * 1000;	// TODO: Probably 60 seconds
-	static long inactiveSleepMillis = 60 * 60 * 1000;
+	static long inactiveSleepMillis = 15 * 60 * 1000;
 }

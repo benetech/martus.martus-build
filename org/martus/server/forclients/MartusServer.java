@@ -290,7 +290,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			result.add(NetworkInterfaceConstants.OK);
 			result.add(publicKeyString);
 			result.add(Base64.encode(sigBytes));
-			log("getServerInformation : Exit OK");
+			log("getServerInformation: Exit OK");
 		}
 		catch(Exception e)
 		{
@@ -330,7 +330,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			incrementFailedUploadRequestsForCurrentClientIp();
 			return NetworkInterfaceConstants.REJECTED;
 		}
-		log("requestUploadRights granted to :" + clientId + " with magicword=" + tryMagicWord);
+		log("requestUploadRights granted to: " + clientId + " with magicword=" + tryMagicWord);
 			
 		serverForClients.allowUploads(clientId);
 		return NetworkInterfaceConstants.OK;
@@ -416,7 +416,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		if(chunkOffset == 0)
 		{
-			log("putBulletinChunk : restarting at zero");
+			//this log made no sence. log("putBulletinChunk: restarting at zero");
 			interimZipFile.delete();
 		}
 		
@@ -473,7 +473,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		if(newFileLength >= totalSize)
 		{
-			log("entering saveUploadedBulletinZipFile");
+			//log("entering saveUploadedBulletinZipFile");
 			try 
 			{
 				result = saveUploadedBulletinZipFile(authorAccountId, bulletinLocalId, interimZipFile);
@@ -482,11 +482,11 @@ public class MartusServer implements NetworkInterfaceConstants
 				log("Exception =" + e);
 				e.printStackTrace();
 			}
-			log("returned from saveUploadedBulletinZipFile result =" + result);
+			//log("returned from saveUploadedBulletinZipFile result =" + result);
 			interimZipFile.delete();
 		}
 		
-		log("putBulletinChunk : Exit " + result);
+		log("putBulletinChunk: Exit " + result);
 		return result;
 	}
 
@@ -526,7 +526,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			} 
 			catch (Exception e) 
 			{
-				return returnSingleResponseAndLog( " returning SERVER_ERROR :" + e, NetworkInterfaceConstants.SERVER_ERROR );
+				return returnSingleResponseAndLog( " returning SERVER_ERROR: " + e, NetworkInterfaceConstants.SERVER_ERROR );
 			} 
 		}
 
@@ -534,7 +534,8 @@ public class MartusServer implements NetworkInterfaceConstants
 					authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize);
 		
-		log("  exit: " + result.get(0));
+		
+		log("getBulletinChunk exit: " + result.get(0));
 		return result;
 	}
 
@@ -557,7 +558,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		Vector result = new Vector();
 		result.add(resultCode);
 		result.add(summaries);
-		log("listMySealedBulletinIds : Exit");
+		log("listMySealedBulletinIds: Exit");
 		return result;
 	}
 
@@ -580,7 +581,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(resultCode);
 		result.add(summaries);
 
-		log("listMyDraftBulletinIds : Exit");
+		log("listMyDraftBulletinIds: Exit");
 		return result;
 	}
 
@@ -604,7 +605,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(resultCode);
 		result.add(summaries);
 
-		log("listFieldOfficeSealedBulletinIds : Exit");
+		log("listFieldOfficeSealedBulletinIds: Exit");
 		return result;	
 	}
 
@@ -627,7 +628,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(resultCode);
 		result.add(summaries);
 
-		log("listFieldOfficeDraftBulletinIds : Exit");
+		log("listFieldOfficeDraftBulletinIds: Exit");
 		return result;
 	}
 
@@ -683,7 +684,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		FieldOfficeAccountCollector visitor = new FieldOfficeAccountCollector(hqAccountIdToUse);
 		getDatabase().visitAllRecords(visitor);
 	
-		log("listFieldOfficeAccounts : Exit");
+		log("listFieldOfficeAccounts: Exit");
 		return visitor.getAccounts();	
 	}
 	
@@ -783,7 +784,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			Vector contactInfo = MartusServerUtilities.getContactInfo(contactFile);
 			if(!security.verifySignatureOfVectorOfStrings(contactInfo, accountId))
 			{
-				log("getContactInfo:"+accountId +" : Signature failed");
+				log("getContactInfo: "+accountId +": Signature failed");
 				results.add(NetworkInterfaceConstants.SIG_ERROR);
 				return results;
 			}
@@ -1176,9 +1177,9 @@ public class MartusServer implements NetworkInterfaceConstants
 			RecordHiddenException 
 	{
 		Vector result = new Vector();
-		log("entering createInterimBulletinFile");
+		//log("entering createInterimBulletinFile");
 		File tempFile = createInterimBulletinFile(headerKey);
-		log("createInterimBulletinFile done");
+		//log("createInterimBulletinFile done");
 		int totalLength = MartusUtilities.getCappedFileLength(tempFile);
 		
 		int chunkSize = totalLength - chunkOffset;
@@ -1207,7 +1208,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		result.add(new Integer(totalLength));
 		result.add(new Integer(chunkSize));
 		result.add(zipString);
-		log("downloadBulletinChunk : Exit " + result.get(0));
+		log("downloadBulletinChunk: Exit " + result.get(0));
 		return result;
 	}
 
@@ -1232,7 +1233,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();
-		log("    Total file size =" + tempFile.length());
+//		log("    Total file size =" + tempFile.length());
 		
 		return tempFile;
 	}

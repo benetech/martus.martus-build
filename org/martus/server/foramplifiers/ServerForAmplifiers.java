@@ -311,7 +311,7 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 					authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize);
 		
-		log("  exit: " + result.get(0));
+		log("getBulletinChunk exit: " + result.get(0));
 		return result;
 	}
 
@@ -489,7 +489,7 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, getSecurity());
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, getSecurity().getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();
-		log("    Total file size =" + tempFile.length());
+//		log("    Total file size =" + tempFile.length());
 		
 		return tempFile;
 	}
