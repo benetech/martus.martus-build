@@ -165,33 +165,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return getApp().getStore();
 	}
 	
-	public void bulletinContentsHaveChanged(Bulletin b)
-	{
-		table.bulletinContentsHaveChanged(b);
-		preview.bulletinContentsHaveChanged(b);
-	}
-
-	public void folderHasChanged(BulletinFolder f)
-	{
-		folders.folderHasChanged(f);
-		if(f == null)
-			selectSentFolder();
-	}
-
-	public void folderContentsHaveChanged(BulletinFolder f)
-	{
-		folders.folderContentsHaveChanged(f);
-		table.folderContentsHaveChanged(f);
-	}
-
-	public void folderSelectionHasChanged(BulletinFolder f)
-	{
-		Cursor originalCursor = getCursor();
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		table.setFolder(f);
-		setCursor(originalCursor);
-	}
-
 	public void bulletinSelectionHasChanged(Bulletin[] selectedBulletins)
 	{
 System.out.println("UiMainWindow.bulletinSelectionHasChanged: " + selectedBulletins.length);
@@ -202,6 +175,31 @@ System.out.println("UiMainWindow.bulletinSelectionHasChanged: " + selectedBullet
 System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITLE));
 		}
 		preview.setCurrentBulletin(b);
+	}
+
+	public void bulletinContentsHaveChanged(Bulletin b)
+	{
+		table.bulletinContentsHaveChanged(b);
+		preview.bulletinContentsHaveChanged(b);
+	}
+
+	public void folderSelectionHasChanged(BulletinFolder f)
+	{
+		Cursor originalCursor = getCursor();
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		table.setFolder(f);
+		setCursor(originalCursor);
+	}
+
+	public void folderContentsHaveChanged(BulletinFolder f)
+	{
+		folders.folderContentsHaveChanged(f);
+		table.folderContentsHaveChanged(f);
+	}
+
+	public void folderTreeContentsHaveChanged()
+	{
+		folders.folderTreeContentsHaveChanged();
 	}
 
 	public boolean isDiscardedFolderSelected()
@@ -538,7 +536,7 @@ System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITL
 		app.search(searchDlg.getSearchString(), searchDlg.getStartDate(), searchDlg.getEndDate());
 		BulletinStore store = getStore();
 		BulletinFolder searchFolder = store.findFolder(store.getSearchFolderName());
-		folders.folderHasChanged(searchFolder);
+		folders.folderContentsHaveChanged(searchFolder);
 		int bulletinsFound = searchFolder.getBulletinCount();
 		setCursor(originalCursor);
 		if(bulletinsFound > 0)
@@ -937,8 +935,9 @@ System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITL
 				else
 					notifyDlg(this, "retrieveworked");
 			}
-				
-			folders.folderHasChanged(retrievedFolder);
+
+			folderTreeContentsHaveChanged();
+			folders.folderContentsHaveChanged(retrievedFolder);
 			folders.selectFolder(folderName);
 		} 
 		catch(ServerErrorException e) 

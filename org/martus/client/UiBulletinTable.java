@@ -493,7 +493,7 @@ System.out.println("UiBulletinTable.valueChanged");
 		}
 		f.getStore().discardBulletin(f, b);
 		f.getStore().saveFolders();
-		mainWindow.folderHasChanged(f);
+		mainWindow.folderContentsHaveChanged(f);
 	}
 
 	void selectRow(int rowIndex)

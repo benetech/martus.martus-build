@@ -51,7 +51,7 @@ class UiFolderTreePane extends JScrollPane
 		BulletinFolder newFolder = parent.getApp().createUniqueFolder();
 		if(newFolder == null)
 			return;
-		parent.folderHasChanged(newFolder);
+		parent.folderTreeContentsHaveChanged();
 		FolderTreeNode node = model.findFolderByInternalName(newFolder.getName());
 		if(node == null)
 			return;
@@ -60,7 +60,7 @@ class UiFolderTreePane extends JScrollPane
 		return;
 	}
 
-	public void folderHasChanged(BulletinFolder f)
+	public void folderTreeContentsHaveChanged()
 	{
 		String selectedName = tree.getSelectedFolderName();
 		model.loadFolders(store);
@@ -137,7 +137,7 @@ class UiFolderTreePane extends JScrollPane
 				|| parent.confirmDlg(parent, "deletefolder"))
 			{
 				store.deleteFolder(nodeToDelete.getInternalName());
-				parent.folderHasChanged(null);
+				parent.folderTreeContentsHaveChanged();
 			}
 		}
 
