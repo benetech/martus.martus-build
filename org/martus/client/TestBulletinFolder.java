@@ -15,7 +15,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
     {
     	if(store == null)
     	{
-			store = new BulletinStore(new MockDatabase());
+			store = new BulletinStore(new MockClientDatabase());
 			store.setSignatureGenerator(new MockMartusSecurity());
 			testFolder = store.createFolder("something");
 
@@ -281,7 +281,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 	{
 		MockBulletinStore() throws Exception
 		{
-			super(new MockDatabase());
+			super(new MockClientDatabase());
 			setSignatureGenerator(new MockMartusSecurity());
 		}
 	}

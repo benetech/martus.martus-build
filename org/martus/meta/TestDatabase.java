@@ -13,10 +13,10 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FileDatabase;
 import org.martus.common.MockDatabase;
 import org.martus.common.MockMartusSecurity;
+import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
-import org.martus.common.Database.PacketVisitor;
 import org.martus.server.ServerFileDatabase;
 
 
@@ -30,7 +30,7 @@ public class TestDatabase extends TestCaseEnhanced
 
 	public void setUp() throws Exception
 	{
-		mockDb = new MockDatabase();
+		mockDb = new MockServerDatabase();
 
 		goodDir1 = createTempFile();
 		goodDir1.delete();

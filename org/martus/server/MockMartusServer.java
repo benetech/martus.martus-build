@@ -4,7 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.martus.common.*;
+import org.martus.common.Database;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MockServerDatabase;
+import org.martus.common.NetworkInterfaceConstants;
 
 public class MockMartusServer extends MartusServer
 {
@@ -15,7 +18,7 @@ public class MockMartusServer extends MartusServer
 		
 		public MockMartusServer(File dataDir) throws Exception
 		{
-			super(new MockDatabase(), dataDir);
+			super(new MockServerDatabase(), dataDir);
 			dataDirectoryString = dataDir.getPath();
 		}
 		

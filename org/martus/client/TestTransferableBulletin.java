@@ -6,9 +6,8 @@ import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.util.List;
 
-import org.martus.client.*;
 import org.martus.common.MartusSecurity;
-import org.martus.common.MockDatabase;
+import org.martus.common.MockClientDatabase;
 import org.martus.common.TestCaseEnhanced;
 
 public class TestTransferableBulletin extends TestCaseEnhanced
@@ -29,7 +28,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 			security = new MartusSecurity();
 			security.createKeyPair(512);
 		}
-		store = new BulletinStore(new MockDatabase());
+		store = new BulletinStore(new MockClientDatabase());
 		store.setSignatureGenerator(security);
 		folder = store.createFolder("Wow");
 		drag = createTransferableBulletin(TITLE);

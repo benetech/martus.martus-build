@@ -31,8 +31,8 @@ import org.martus.common.FileDatabase;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MockDatabase;
 import org.martus.common.MockMartusSecurity;
+import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
@@ -93,7 +93,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		}
 		if(store == null)
 		{
-			store = new BulletinStore(new MockDatabase());
+			store = new BulletinStore(new MockServerDatabase());
 			store.setSignatureGenerator(clientSecurity);
 		}
 		if(b1 == null)
@@ -410,7 +410,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		//Should return SERVER_ERROR not INVALID_DATA;
 	}
 
-	class MockDraftDatabase extends MockDatabase
+	class MockDraftDatabase extends MockServerDatabase
 	{
 		
 		public void writeRecord(DatabaseKey key, InputStream record)
@@ -422,7 +422,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		}
 	}
 
-	class MockSealedDatabase extends MockDatabase
+	class MockSealedDatabase extends MockServerDatabase
 	{
 		
 		public void writeRecord(DatabaseKey key, InputStream record)
@@ -909,7 +909,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		nonFieldSecurity.createKeyPair();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
-		BulletinStore nonFieldStore = new BulletinStore(new MockDatabase());
+		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 
 		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
@@ -956,7 +956,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		nonFieldSecurity.createKeyPair();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
-		BulletinStore nonFieldStore = new BulletinStore(new MockDatabase());
+		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 
 		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
@@ -1044,7 +1044,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		nonFieldSecurity.createKeyPair();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
-		BulletinStore nonFieldStore = new BulletinStore(new MockDatabase());
+		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 		Bulletin b = nonFieldStore.createEmptyBulletin();
 		b.set(b.TAGTITLE, "Tifdfssftle3");

@@ -15,7 +15,7 @@ import java.util.TreeMap;
 import org.martus.common.Database.PacketVisitor;
 
 
-public class MockDatabase implements Database
+abstract public class MockDatabase implements Database
 {
 	public MockDatabase()
 	{
@@ -30,12 +30,10 @@ public class MockDatabase implements Database
 	// Database interface
 	public void deleteAllData()
 	{
-		sealedPacketMap = new TreeMap();
-		draftPacketMap = new TreeMap();
+		sealedQuarantine = new TreeMap();
+		draftQuarantine = new TreeMap();
 		incomingInterimMap = new TreeMap();
 		outgoingInterimMap = new TreeMap();
-		draftQuarantine = new TreeMap();
-		sealedQuarantine = new TreeMap();
 	}
 
 	public void writeRecord(DatabaseKey key, String record) throws IOException
@@ -43,7 +41,7 @@ public class MockDatabase implements Database
 		if(key == null || record == null)
 			throw new IOException("Null parameter");
 			
-		Map map = getCorrectMap(key);
+		Map map = getPacketMapFor(key);
 		map.put(key, record);
 	}
 	
@@ -96,7 +94,7 @@ public class MockDatabase implements Database
 
 	public void discardRecord(DatabaseKey key)
 	{
-		Map map = getCorrectMap(key);
+		Map map = getPacketMapFor(key);
 		map.remove(key);
 	}
 
@@ -107,10 +105,7 @@ public class MockDatabase implements Database
 
 	public void visitAllRecords(PacketVisitor visitor)
 	{
-		Set keys = new HashSet();
-		keys.addAll(getAllSealedKeys());
-		keys.addAll(getAllDraftKeys());
-
+		Set keys = getAllKeys();
 		Iterator iterator = keys.iterator();
 		while(iterator.hasNext())
 		{
@@ -179,51 +174,34 @@ public class MockDatabase implements Database
 		discardRecord(key);
 	}
 	
-	// end Database interface
-	
-	private Map getQuarantineFor(DatabaseKey key)
+	Map getQuarantineFor(DatabaseKey key)
 	{
+		Map map = sealedQuarantine;
 		if(key.isDraft())
-			return draftQuarantine;
-		else
-			return sealedQuarantine;
-	}
-
-	private String readRecord(DatabaseKey key)
-	{
-		Map map = getCorrectMap(key);
-		return (String)map.get(key);
-	}
-
-	public int getSealedRecordCount()
-	{
-		return getAllSealedKeys().size();
-	}
-	
-	public Set getAllSealedKeys()
-	{
-		return sealedPacketMap.keySet();
-	}
-	
-	public Set getAllDraftKeys()
-	{
-		return draftPacketMap.keySet();
-	}
-	
-	private Map getCorrectMap(DatabaseKey key) 
-	{
-		Map map = sealedPacketMap;
-		if(key.isDraft())
-			map = draftPacketMap;
+			map = draftQuarantine;
 		return map;
 	}
 
-	Map sealedPacketMap;
-	Map draftPacketMap;
+	abstract public Set getAllKeys();
+	
+	public int getRecordCount()
+	{
+		return getAllKeys().size();
+	}
+	// end Database interface
+	
+	private String readRecord(DatabaseKey key)
+	{
+		Map map = getPacketMapFor(key);
+		return (String)map.get(key);
+	}
+
+	abstract Map getPacketMapFor(DatabaseKey key);
+	
+	Map sealedQuarantine;
+	Map draftQuarantine;
 	Map incomingInterimMap;
 	Map outgoingInterimMap;
-	Map draftQuarantine;
-	Map sealedQuarantine;
 	
 	HashMap streamsThatAreOpen = new HashMap();
 }

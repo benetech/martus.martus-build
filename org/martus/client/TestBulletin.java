@@ -28,12 +28,11 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
+import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
-import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 import org.martus.common.ZipEntryInputStream;
-import org.martus.common.MartusCrypto.NoKeyPairException;
 
 
 public class TestBulletin extends TestCaseEnhanced
@@ -69,7 +68,7 @@ public class TestBulletin extends TestCaseEnhanced
 		app = MockMartusApp.create(security);
 		if(store == null)
 		{
-			db = new MockDatabase();
+			db = new MockClientDatabase();
 			store = new BulletinStore(db);
 			store.setSignatureGenerator(app.getSecurity());
 			app.store = store;
@@ -265,7 +264,7 @@ public class TestBulletin extends TestCaseEnhanced
 	public void testEncryptPublicData()
 	{
 
-		class MyMockDatabase extends MockDatabase
+		class MyMockDatabase extends MockClientDatabase
 		{
 			public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter)
 			{
@@ -333,8 +332,8 @@ public class TestBulletin extends TestCaseEnhanced
 	
 	public void testRemoveBulletinFromDatabase() throws Exception
 	{
-		MockDatabase db = new MockDatabase();
-		assertEquals(0, db.getAllSealedKeys().size());
+		MockDatabase db = new MockClientDatabase();
+		assertEquals(0, db.getAllKeys().size());
 		Bulletin b = store.createEmptyBulletin();
 		b.addPublicAttachment(new AttachmentProxy(tempFile1));
 		b.set(b.TAGPUBLICINFO, "public info");
@@ -342,28 +341,28 @@ public class TestBulletin extends TestCaseEnhanced
 		b.setSealed();
 		b.save();
 		b.saveToDatabase(db);
-		assertTrue("didn't write?", db.getAllSealedKeys().size() > 0);
+		assertTrue("didn't write?", db.getAllKeys().size() > 0);
 		
 		b.removeBulletinFromDatabase(db, security);
-		assertEquals(0, db.getAllSealedKeys().size());
+		assertEquals(0, db.getAllKeys().size());
 	}
 
 	public void testSaveToDatabase() throws Exception
 	{
-		assertEquals(0, db.getAllSealedKeys().size());
+		assertEquals(0, db.getAllKeys().size());
 
 		Bulletin b = store.createEmptyBulletin();
 		b.set("summary", "New bulletin");
 		b.saveToDatabase(db);
 		DatabaseKey headerKey1 = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
 		DatabaseKey dataKey1 = new DatabaseKey(b.getFieldDataPacket().getUniversalId());
-		assertEquals("saved 1", 3, db.getAllSealedKeys().size());
+		assertEquals("saved 1", 3, db.getAllKeys().size());
 		assertEquals("saved 1 header key", true,db.doesRecordExist(headerKey1));
 		assertEquals("saved 1 data key", true,db.doesRecordExist(dataKey1));
 
 		// re-saving the same bulletin replaces the old one
 		b.saveToDatabase(db);
-		assertEquals("resaved 1", 3, db.getAllSealedKeys().size());
+		assertEquals("resaved 1", 3, db.getAllKeys().size());
 		assertEquals("resaved 1 header key", true,db.doesRecordExist(headerKey1));
 		assertEquals("resaved 1 data key", true,db.doesRecordExist(dataKey1));
 
@@ -371,7 +370,7 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin b2 = new Bulletin(b);
 		b2.set("summary", "Replaced bulletin");
 		b2.saveToDatabase(db);
-		assertEquals("resaved 2", 3, db.getAllSealedKeys().size());
+		assertEquals("resaved 2", 3, db.getAllKeys().size());
 		DatabaseKey headerKey2 = new DatabaseKey(b2.getBulletinHeaderPacket().getUniversalId());
 		DatabaseKey dataKey2 = new DatabaseKey(b2.getFieldDataPacket().getUniversalId());
 		assertEquals("resaved 2 header key", true,db.doesRecordExist(headerKey2));
@@ -390,7 +389,7 @@ public class TestBulletin extends TestCaseEnhanced
 		// saving a new bulletin with a non-empty id should retain that id
 		b = store.createEmptyBulletin();
 		b.saveToDatabase(db);
-		assertEquals("saved another", 6, db.getAllSealedKeys().size());
+		assertEquals("saved another", 6, db.getAllKeys().size());
 		assertEquals("old header key", true, db.doesRecordExist(headerKey2));
 		assertEquals("old data key", true, db.doesRecordExist(dataKey2));
 		DatabaseKey newHeaderKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
@@ -407,7 +406,7 @@ public class TestBulletin extends TestCaseEnhanced
 		String[] attachmentIds = b.getBulletinHeaderPacket().getPublicAttachmentIds();
 		assertEquals("one attachment", 1, attachmentIds.length);
 		b.saveToDatabase(db);
-		assertEquals("saved", 4, db.getAllSealedKeys().size());
+		assertEquals("saved", 4, db.getAllKeys().size());
 
 		Bulletin got = Bulletin.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		assertEquals("id", b.getLocalId(), got.getLocalId());
@@ -421,7 +420,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b.addPublicAttachment(proxy1);
 		b.addPublicAttachment(proxy2);
 		b.saveToDatabase(db);
-		assertEquals("saved", 5, db.getAllSealedKeys().size());
+		assertEquals("saved", 5, db.getAllKeys().size());
 
 		Bulletin got1 = Bulletin.loadFromDatabase(store, key);
 		verifyLoadedBulletin("First load", b, got1);
@@ -462,10 +461,10 @@ public class TestBulletin extends TestCaseEnhanced
 		b.addPublicAttachment(proxy1);
 		b.addPublicAttachment(proxy2);
 		b.saveToDatabase(db);
-		assertEquals("saved", 5, db.getAllSealedKeys().size());
+		assertEquals("saved", 5, db.getAllKeys().size());
 		Bulletin got1 = Bulletin.loadFromDatabase(store, key);
 		got1.saveToDatabase(db);
-		assertEquals("resaved", 5, db.getAllSealedKeys().size());
+		assertEquals("resaved", 5, db.getAllKeys().size());
 		
 		Bulletin got2 = Bulletin.loadFromDatabase(store, key);
 		verifyLoadedBulletin("Reload after save", got1, got2);
@@ -490,7 +489,7 @@ public class TestBulletin extends TestCaseEnhanced
 		got1.addPrivateAttachment(proxy5);
 		got1.addPrivateAttachment(proxy6);
 		got1.saveToDatabase(db);
-		assertEquals("resaved", 9, db.getAllSealedKeys().size());
+		assertEquals("resaved", 9, db.getAllKeys().size());
 
 		Bulletin got3 = Bulletin.loadFromDatabase(store, key);
 		verifyLoadedBulletin("Reload after save", got1, got3);
@@ -510,7 +509,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b.addPrivateAttachment(proxy3);
 		b.addPrivateAttachment(proxy4);
 		b.saveToDatabase(db);
-		assertEquals("saved key count", 7, db.getAllSealedKeys().size());
+		assertEquals("saved key count", 7, db.getAllKeys().size());
 		Bulletin got1 = Bulletin.loadFromDatabase(store, key);
 		AttachmentProxy keep = got1.getPublicAttachments()[1];
 		AttachmentProxy keepPrivate = got1.getPrivateAttachments()[1];
@@ -519,7 +518,7 @@ public class TestBulletin extends TestCaseEnhanced
 		got1.addPublicAttachment(keep);
 		got1.addPrivateAttachment(keepPrivate);
 		got1.saveToDatabase(db);
-		assertEquals("resaved modified", 5, db.getAllSealedKeys().size());
+		assertEquals("resaved modified", 5, db.getAllKeys().size());
 
 		Bulletin got3 = Bulletin.loadFromDatabase(store, key);
 		verifyLoadedBulletin("Reload after save", got1, got3);
@@ -657,14 +656,14 @@ public class TestBulletin extends TestCaseEnhanced
 	
 	public void testLoadFromDatabase() throws Exception
 	{
-		assertEquals(0, db.getAllSealedKeys().size());
+		assertEquals(0, db.getAllKeys().size());
 
 		Bulletin b = store.createEmptyBulletin();
 		b.set(b.TAGPUBLICINFO, "public info");
 		b.set(b.TAGPRIVATEINFO, "private info");
 		b.setSealed();
 		b.saveToDatabase(db);
-		assertEquals("saved 1", 3, db.getAllSealedKeys().size());
+		assertEquals("saved 1", 3, db.getAllKeys().size());
 		
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
 		Bulletin loaded = store.createEmptyBulletin();
@@ -681,12 +680,12 @@ public class TestBulletin extends TestCaseEnhanced
 	
 	public void testLoadFromDatabaseEncrypted() throws Exception
 	{
-		assertEquals(0, db.getAllSealedKeys().size());
+		assertEquals(0, db.getAllKeys().size());
 
 		Bulletin b = store.createEmptyBulletin();
 		b.setAllPrivate(true);
 		b.saveToDatabase(db);
-		assertEquals("saved 1", 3, db.getAllSealedKeys().size());
+		assertEquals("saved 1", 3, db.getAllKeys().size());
 		
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
 		Bulletin loaded = store.createEmptyBulletin();
@@ -1098,7 +1097,7 @@ public class TestBulletin extends TestCaseEnhanced
 		original.addPublicAttachment(a1);
 		original.addPublicAttachment(a2);
 		original.save();
-		assertEquals("wrong record count", 5, db.getSealedRecordCount());
+		assertEquals("wrong record count", 5, db.getRecordCount());
 		
 		Bulletin loaded = store.findBulletinByUniversalId(original.getUniversalId());
 		assertNotNull("not saved?", loaded);

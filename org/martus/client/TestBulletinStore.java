@@ -16,6 +16,7 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusXml;
+import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
@@ -558,7 +559,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		b.save();
 		store.saveFolders();
 		assertEquals("saving", 1, store.getBulletinCount());
-		assertEquals("keys", 3*store.getBulletinCount(), db.getSealedRecordCount());
+		assertEquals("keys", 3*store.getBulletinCount(), db.getRecordCount());
 
 		BulletinStore newStoreSameDatabase = new BulletinStore(db);
 		newStoreSameDatabase.setSignatureGenerator(store.getSignatureGenerator());
@@ -583,7 +584,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		f.add(b.getUniversalId());
 		store.saveFolders();
 
-		assertEquals("keys", 3*store.getBulletinCount(), db.getSealedRecordCount());
+		assertEquals("keys", 3*store.getBulletinCount(), db.getRecordCount());
 
 		store = new BulletinStore(db);
 		store.setSignatureGenerator(new MockMartusSecurity());
@@ -605,7 +606,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		DatabaseKey headerKey = new DatabaseKey(b.getUniversalId());
 		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(b.getAccount(), fdp.getLocalId());
 		DatabaseKey dataKey = new DatabaseKey(dataUid);
-		int packetCount = db.getSealedRecordCount();
+		int packetCount = db.getRecordCount();
 
 		security.fakeSigVerifyFailure = true;
 		store.loadFolders();
@@ -722,10 +723,10 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin loaded = Bulletin.loadFromDatabase(store, originalKey);
 		loaded.saveToFile(zipFile);
 		store.deleteAllData();
-		assertEquals("still a record?", 0, db.getSealedRecordCount());
+		assertEquals("still a record?", 0, db.getRecordCount());
 		
 		store.importZipFileToStoreWithSameUids(zipFile);
-		assertEquals("Packet count incorrect", 5, db.getSealedRecordCount());		
+		assertEquals("Packet count incorrect", 5, db.getRecordCount());		
 		
 		DatabaseKey headerKey = new DatabaseKey(loaded.getBulletinHeaderPacket().getUniversalId());
 		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());;
@@ -896,10 +897,10 @@ public class TestBulletinStore extends TestCaseEnhanced
 		loaded.saveToFile(zipFile);
 		
 		store.deleteAllData();
-		assertEquals("still a record?", 0, db.getSealedRecordCount());
+		assertEquals("still a record?", 0, db.getRecordCount());
 		
 		UniversalId savedAsId = store.importZipFileToStoreWithNewUids(zipFile);
-		assertEquals("record count not 5?", 5, db.getSealedRecordCount());		
+		assertEquals("record count not 5?", 5, db.getRecordCount());		
 		
 		DatabaseKey headerKey = new DatabaseKey(loaded.getBulletinHeaderPacket().getUniversalId());
 		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());;
@@ -1087,7 +1088,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	{
 		MartusSecurity tempSecurity = new MockMartusSecurity();
 		tempSecurity.createKeyPair();
-		BulletinStore tempStore = new BulletinStore(new MockDatabase());
+		BulletinStore tempStore = new BulletinStore(new MockClientDatabase());
 		tempStore.setSignatureGenerator(tempSecurity);
 		return tempStore;
 	}

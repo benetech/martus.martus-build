@@ -1,12 +1,9 @@
 package org.martus.client;
 
-import junit.framework.*;
-import java.util.*;
-import java.text.*;
+import javax.swing.tree.DefaultMutableTreeNode;
+import junit.framework.TestCase;
 
-import javax.swing.tree.*;
-
-import org.martus.common.*;
+import org.martus.common.MockClientDatabase;
 
 public class TestFolderList extends TestCase
 {
@@ -18,7 +15,7 @@ public class TestFolderList extends TestCase
     public void setUp() throws Exception
     {
 		app = MockMartusApp.create();
-		app.store = new BulletinStore(new MockDatabase());
+		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(app.getSecurity());
     }
     

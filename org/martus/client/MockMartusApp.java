@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MockDatabase;
+import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
 
 public class MockMartusApp extends MartusApp 
@@ -20,7 +20,7 @@ public class MockMartusApp extends MartusApp
 		app.dataDirectory = fakeDataDirectory.getPath() + "/";
 
 		boolean encryptPublic = app.store.mustEncryptPublicData();
-		app.store = new BulletinStore(new MockDatabase());
+		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(crypto);
 		app.store.setEncryptPublicData(encryptPublic);
 		
