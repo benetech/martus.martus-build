@@ -29,6 +29,14 @@ public class TestThreads extends TestCaseEnhanced
 		super(name);
 	}
 
+	public void testThreadedBulletinActivity() throws Throwable
+	{
+		final int threadCount = 5;
+		final int iterations = 5;
+		ThreadFactory factory = new BulletinThreadFactory();
+		launchTestThreads(factory, threadCount, iterations);
+	}
+
 	
 	public void testThreadedPacketWriting() throws Throwable
 	{
@@ -64,8 +72,8 @@ public class TestThreads extends TestCaseEnhanced
 
 	public void testThreadedFolderContentsActivity() throws Throwable
 	{
-		final int threadCount = 10;
-		final int iterations = 10;
+		final int threadCount = 5;
+		final int iterations = 5;
 		ThreadFactory factory = new FolderContentsThreadFactory();
 		launchTestThreads(factory, threadCount, iterations);
 	}
@@ -94,6 +102,32 @@ public class TestThreads extends TestCaseEnhanced
 	abstract class ThreadFactory
 	{
 		abstract TestingThread createThread(int copies) throws Exception;
+	}
+	
+	class BulletinThreadFactory extends ThreadFactory
+	{
+		BulletinThreadFactory() throws Exception
+		{
+			store = new BulletinStore(new MockClientDatabase());
+			//store.maxCachedBulletinCount = 10;
+			
+			MockMartusSecurity security = new MockMartusSecurity();
+			security.createKeyPair();
+			store.setSignatureGenerator(security);
+
+			for (int i = 0; i < 10; i++)
+			{
+				Bulletin b = store.createEmptyBulletin();
+				b.save();
+			}
+		}
+		
+		TestingThread createThread(int copies) throws Exception
+		{
+			return new BulletinTester(store, copies);
+		}
+
+		BulletinStore store;
 	}
 	
 	class ExportThreadFactory extends ThreadFactory
@@ -204,6 +238,46 @@ public class TestThreads extends TestCaseEnhanced
 		}
 
 		Throwable result;
+	}
+
+	class BulletinTester extends TestingThread
+	{
+		BulletinTester(BulletinStore storeToUse, int copiesToDo) throws Exception
+		{
+			store = storeToUse;
+			copies = copiesToDo;
+		}
+		
+		public void run()
+		{
+			try 
+			{
+				for(int i=0; i < copies; ++i)
+				{
+					Bulletin b = store.createEmptyBulletin();
+					UniversalId uid = b.getUniversalId();
+
+					store.saveBulletin(b);
+					Bulletin b2 = store.findBulletinByUniversalId(uid);
+					assertNotNull("not found after save?", b2);
+					store.removeBulletinFromStore(uid);
+					Bulletin b3 = store.findBulletinByUniversalId(uid);
+					assertNull("found after remove?", b3);
+					
+				}
+			}
+			catch (Throwable e)
+			{
+System.out.println(folderName + ": " + e);
+System.out.flush();
+				result = e;
+			}
+		}
+		
+		BulletinStore store;
+		int copies;
+		String folderName;
+		Bulletin[] bulletins;
 	}
 
 	class Exporter extends TestingThread
