@@ -61,6 +61,7 @@ import java.security.interfaces.RSAPublicKey;
 import java.security.spec.EncodedKeySpec;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
+import java.sql.Timestamp;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.Hashtable;
@@ -256,11 +257,13 @@ public class MartusSecurity extends MartusCryptoImplementation
 			ByteArrayInputStream in = new ByteArrayInputStream(getKeyPairData(getKeyPair()));
 			ByteArrayOutputStream encryptedKeypair = new ByteArrayOutputStream();
 			encrypt(in,encryptedKeypair,sessionKey);	
-			encryptedKeypair.close();		
+			encryptedKeypair.close();
+			Timestamp timeStamp = new Timestamp(new Date().getTime());		
 			for(int i = 0; i < sessionKeyShares.size(); ++i)
 			{
 				UnicodeStringWriter writer = UnicodeStringWriter.create();
 				writer.writeln(MartusConstants.martusSecretShareFileID);
+				writer.writeln(timeStamp.toString());
 				writer.writeln(getPublicKeyString());
 				String aPartOfSessionKeyShare = (String)(sessionKeyShares.get(i));
 				writer.writeln(aPartOfSessionKeyShare);
@@ -318,7 +321,8 @@ public class MartusSecurity extends MartusCryptoImplementation
 				String shareId = reader.readLine();
 				if(!shareId.equals(MartusConstants.martusSecretShareFileID))
 					throw new KeyShareException();
-				String publicCode = reader.readLine();
+				reader.readLine();//time stamp
+				reader.readLine();//public key
 				String sharePiece = reader.readLine();
 				in.close();
 				reader.close();
@@ -336,9 +340,10 @@ public class MartusSecurity extends MartusCryptoImplementation
 		{
 			in = new StringInputStream((String) bundles.get(0));
 			UnicodeReader reader = new UnicodeReader(in);
-			reader.readLine();
-			reader.readLine();
-			reader.readLine();
+			reader.readLine();//ID
+			reader.readLine();//TimeStamp
+			reader.readLine();//Public Key
+			reader.readLine();//Share
 			encryptedKeyPair = Base64.decode(reader.readLine());
 			in.close();
 			reader.close();

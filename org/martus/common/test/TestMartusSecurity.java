@@ -28,7 +28,6 @@ package org.martus.common.test;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.math.BigInteger;
 import java.security.KeyPair;
@@ -36,20 +35,13 @@ import java.security.PublicKey;
 import java.security.interfaces.RSAPrivateKey;
 import java.security.interfaces.RSAPublicKey;
 import java.util.Arrays;
-import java.util.Vector;
 
-import org.logi.crypto.secretshare.SecretSharingException;
-import org.martus.common.MartusConstants;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
-import org.martus.common.crypto.MartusCrypto.KeyShareException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.util.Base64;
 import org.martus.util.ByteArrayInputStreamWithSeek;
-import org.martus.util.StringInputStream;
-import org.martus.util.UnicodeReader;
-import org.martus.util.UnicodeStringWriter;
 
 
 public class TestMartusSecurity extends TestCaseEnhanced
@@ -92,189 +84,6 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	public void tearDown()
 	{
 	}
-	
-	public void testSecretShare() throws Exception
-	{
-		MartusSecurity tempSecurity = new MartusSecurity();
-		byte[] secret = {1,2,3,4,0,8,5,6,7,0};
-		Vector allShares = tempSecurity.buildShares(secret);
-		assertNotNull("Shares null?",allShares);
-		assertEquals("Incorrect number of Shares",  MartusConstants.numberOfFilesInShare, allShares.size());
-
-		byte[] recoveredSecret = tempSecurity.recoverShares(allShares);
-		assertNotNull("Recovered Secret Null?", recoveredSecret);
-		assertTrue("Secret didn't match with allparts?", Arrays.equals(secret,recoveredSecret));
-		
-		Vector firstTwoShares = new Vector();
-		firstTwoShares.add(allShares.get(0));
-		firstTwoShares.add(allShares.get(1));
-		recoveredSecret = tempSecurity.recoverShares(firstTwoShares);
-		assertTrue("Secret didn't match with first and second share?", Arrays.equals(secret,recoveredSecret));
-
-		Vector lastTwoShares = new Vector();
-		lastTwoShares.add(allShares.get(3));
-		lastTwoShares.add(allShares.get(4));
-		recoveredSecret = tempSecurity.recoverShares(lastTwoShares);
-		assertTrue("Secret didn't match with last two shares?", Arrays.equals(secret,recoveredSecret));
-
-		Vector OneShareOnly = new Vector();
-		OneShareOnly.add(allShares.get(1));
-		try 
-		{
-			recoveredSecret = tempSecurity.recoverShares(OneShareOnly);
-			fail("Secret returned with only one share?");
-		} 
-		catch (SecretSharingException expectedException) 
-		{
-		}
-
-		Vector sameTwoShares = new Vector();
-		sameTwoShares.add(allShares.get(2));
-		sameTwoShares.add(allShares.get(2));
-		try 
-		{
-			recoveredSecret = tempSecurity.recoverShares(sameTwoShares);
-			fail("Secrets matched with only 1 share used twice?");
-		} 
-		catch (SecretSharingException expectedException) 
-		{
-		}
-
-		byte[] allZeroSecret = {0,0,0,0,0,0,0};
-		allShares = tempSecurity.buildShares(allZeroSecret);
-		assertNotNull("Shares null for zeroSecret?",allShares);
-		assertEquals("Incorrect number of Shares for zeroSecret",  MartusConstants.numberOfFilesInShare, allShares.size());
-		byte[] recoveredZeroSecret = tempSecurity.recoverShares(allShares);
-		assertNotNull("Recovered Zero Secret Null?", recoveredZeroSecret);
-		assertTrue("Zero Secret didn't match with allparts?", Arrays.equals(allZeroSecret,recoveredZeroSecret));
-
-		byte[] all255Secret = {(byte)255,(byte)255,(byte)255,(byte)255,(byte)255,(byte)255,(byte)255};
-		allShares = tempSecurity.buildShares(all255Secret);
-		assertNotNull("Shares null for zeroSecret?",allShares);
-		assertEquals("Incorrect number of Shares for zeroSecret",  MartusConstants.numberOfFilesInShare, allShares.size());
-		byte[] recovered255Secret = tempSecurity.recoverShares(allShares);
-		assertNotNull("Recovered 255 Secret Null?", recovered255Secret);
-		assertTrue("255 Secret didn't match with allparts?", Arrays.equals(all255Secret,recovered255Secret));
-	}
-	
-	public void testGetKeyShareBundles() throws Exception
-	{
-		MartusSecurity originalSecurity = new MartusSecurity();
-		originalSecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
-		
-		Vector bundles = originalSecurity.getKeyShareBundles();
-		assertNotNull("Got a null vector?", bundles);
-		assertEquals("Size of vector incorrect?", MartusConstants.numberOfFilesInShare, bundles.size());
-		InputStream in = new StringInputStream((String)bundles.get(0));
-		
-		UnicodeReader reader = new UnicodeReader(in);
-		String item1 = reader.readLine();
-		assertTrue("First part of file not a MartusShare ID?",item1.equals(MartusConstants.martusSecretShareFileID));		
-
-		String item2 = reader.readLine();
-		assertTrue("Second part of file not our public key?",item2.equals(originalSecurity.getPublicKeyString()));		
-		
-		String share1 = reader.readLine();
-
-		in.close();
-		reader.close();
-		in = new StringInputStream((String)bundles.get(2));
-		reader = new UnicodeReader(in);
-
-		item1 = reader.readLine();
-		assertTrue("First part of 3rd file not a MartusShare ID?",item1.equals(MartusConstants.martusSecretShareFileID));		
-
-		item2 = reader.readLine();
-		assertTrue("Second part of 3rd file not our public key?",item2.equals(originalSecurity.getPublicKeyString()));		
-		
-		String share2 = reader.readLine();
-		
-		Vector twoShares = new Vector();
-		twoShares.add(share1);
-		twoShares.add(share2);
-		byte[] recoveredSessionKey = originalSecurity.recoverShares(twoShares);
-		String item4Encoded = reader.readLine();
-		byte[] encryptedKeyPair = Base64.decode(item4Encoded);
-		in.close();
-		reader.close();
-		
-		MartusSecurity recoveredSecurity = new MartusSecurity();
-		ByteArrayInputStreamWithSeek inEncryptedKeyPair = new ByteArrayInputStreamWithSeek(encryptedKeyPair);
-		ByteArrayOutputStream outDecryptedKeyPair = new ByteArrayOutputStream();
-		recoveredSecurity.decrypt( inEncryptedKeyPair, outDecryptedKeyPair, recoveredSessionKey);
-		outDecryptedKeyPair.close();
-		inEncryptedKeyPair.close();
-
-		recoveredSecurity.clearKeyPair();
-		recoveredSecurity.setKeyPairFromData(outDecryptedKeyPair.toByteArray());
-		
-		assertEquals("Public Keys don't match?",item2,recoveredSecurity.getPublicKeyString());		
-		assertEquals("Security Public Keys don't match?",originalSecurity.getPublicKeyString(),recoveredSecurity.getPublicKeyString());		
-		assertEquals("Security Private Keys don't match?",originalSecurity.getPrivateKeyString(),recoveredSecurity.getPrivateKeyString());		
-	}
-	
-	public void testRecoverFromKeyShareBundles() throws Exception
-	{
-		MartusSecurity recoveredSecurity = new MartusSecurity();
-		try 
-		{
-			recoveredSecurity.recoverFromKeyShareBundles(null);
-			fail("Did not throw with null vector of bundles?");
-		} 
-		catch (KeyShareException expectedException) 
-		{
-		}
-
-		try 
-		{
-			Vector emptyBundles = new Vector();
-			recoveredSecurity.recoverFromKeyShareBundles(emptyBundles);
-			fail("Did not throw with an empty vector of bundles?");
-		} 
-		catch (KeyShareException expectedException) 
-		{
-		}
-
-		try 
-		{
-			Vector fakeBundle = new Vector();
-			fakeBundle.add(new String("fake bundle 1"));
-			fakeBundle.add(new String("fake bundle 2"));
-			recoveredSecurity.recoverFromKeyShareBundles(fakeBundle);
-			fail("Did not throw with a fake vector of single element bundles?");
-		} 
-		catch (KeyShareException expectedException) 
-		{
-		}
-
-		try 
-		{
-			Vector fakeBundle = new Vector();
-			for(int i = 0; i < MartusConstants.minNumberOfFilesNeededToRecreateSecret; ++i)
-			{
-				UnicodeStringWriter writer = UnicodeStringWriter.create();
-				writer.writeln(MartusConstants.martusSecretShareFileID+"corrupt");
-				writer.writeln("corrupted Public code");
-				writer.writeln("corrupted Share");
-				writer.writeln(Base64.encode(new String("Corrupted KeyPair").getBytes()));
-				writer.close();
-				fakeBundle.add(writer.toString());
-			}			
-			recoveredSecurity.recoverFromKeyShareBundles(fakeBundle);
-			fail("Did not throw with a fake vector of corrupted 4 element bundles?");
-		} 
-		catch (KeyShareException expectedException) 
-		{
-		}
-
-		MartusSecurity originalSecurity = new MartusSecurity();
-		originalSecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
-		Vector bundles = originalSecurity.getKeyShareBundles();
-		recoveredSecurity.recoverFromKeyShareBundles(bundles);
-		assertEquals("Public Keys don't Match?",originalSecurity.getPublicKeyString(), recoveredSecurity.getPublicKeyString());
-		assertEquals("Private Keys don't Match?",originalSecurity.getPrivateKeyString(), recoveredSecurity.getPrivateKeyString());
-	}
-
 
 	public void testGetDigestOfPartOfPrivateKey() throws Exception
 	{

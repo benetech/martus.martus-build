@@ -74,6 +74,7 @@ public class TestCommon
 		suite.addTest(new TestSuite(TestBulletinZipImporter.class));
 		suite.addTest(new TestSuite(TestSearchParser.class));
 		suite.addTest(new TestSuite(TestBulletinSearcher.class));
+		suite.addTest(new TestSuite(TestKeyShareSaveRestore.class));
 
 		return suite;
 	}
