@@ -899,7 +899,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testBadlySignedBulletinUpload");
 
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		MockMartusSecurity mockServerSecurity = new MockMartusSecurity();
+		MockMartusSecurity mockServerSecurity = MockMartusSecurity.createClient();
 		mockServerSecurity.fakeSigVerifyFailure = true;
 		testServer.security = mockServerSecurity;
 
@@ -1366,7 +1366,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		MartusSecurity fieldSecurity1 = clientSecurity;
 		testServer.allowUploads(fieldSecurity1.getPublicKeyString());
 
-		MartusSecurity nonFieldSecurity = new MockMartusSecurity();
+		MartusSecurity nonFieldSecurity = MockMartusSecurity.createClient();
 		nonFieldSecurity.createKeyPair();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
@@ -1414,7 +1414,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		MartusSecurity fieldSecurity1 = clientSecurity;
 		testServer.allowUploads(fieldSecurity1.getPublicKeyString());
 
-		MartusSecurity nonFieldSecurity = new MockMartusSecurity();
+		MartusSecurity nonFieldSecurity = MockMartusSecurity.createClient();
 		nonFieldSecurity.createKeyPair();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
@@ -1508,7 +1508,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.security = serverSecurity;
 
 		Database nonFieldDatabase = new MockClientDatabase();
-		MartusSecurity nonFieldSecurity = new MockMartusSecurity();
+		MartusSecurity nonFieldSecurity = MockMartusSecurity.createClient();
 		nonFieldSecurity.createKeyPair();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 

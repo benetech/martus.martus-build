@@ -33,9 +33,29 @@ import java.security.KeyPair;
 
 public class MockMartusSecurity extends MartusSecurity
 {
-	public MockMartusSecurity() throws Exception
+	public static MockMartusSecurity createClient() throws Exception
 	{
-		loadSampleAccount();
+		MockMartusSecurity security = new MockMartusSecurity();
+		security.loadSampleAccount();
+		return security;
+	}
+	
+	public static MockMartusSecurity createOtherClient() throws Exception
+	{
+		MockMartusSecurity security = new MockMartusSecurity();
+		security.createKeyPairForOtherClient();
+		return security;
+	}
+	
+	public static MockMartusSecurity createServer() throws Exception
+	{
+		MockMartusSecurity security = new MockMartusSecurity();
+		security.createKeyPairForServer();
+		return security;
+	}
+	
+	private MockMartusSecurity() throws Exception
+	{
 	}
 
 	public void speedWarning(String message)
@@ -55,6 +75,18 @@ public class MockMartusSecurity extends MartusSecurity
 			throw new AuthorizationFailedException();
 
 		super.readKeyPair(inputStream, passPhrase);
+	}
+	
+	public void createKeyPairForOtherClient() throws Exception
+	{
+//		createKeyPair();
+//		System.out.println(Base64.encode(getKeyPairData(getKeyPair())));
+		setKeyPairFromData(Base64.decode(nonEncryptedSampleOtherClientKeyPair));
+	}
+
+	public void createKeyPairForServer() throws Exception
+	{
+		setKeyPairFromData(Base64.decode(nonEncryptedSampleServerKeyPair));
 	}
 
 	public void createKeyPair()
@@ -223,7 +255,81 @@ public class MockMartusSecurity extends MartusSecurity
 		"AAABdXEAfgAOAAAAARF4c3IALW9yZy5ib3VuY3ljYXN0bGUuamNlLnByb3ZpZG" +
 		"VyLkpDRVJTQVB1YmxpY0tleSUiag5b+myEAgACTAAHbW9kdWx1c3EAfgAFTAAO" +
 		"cHVibGljRXhwb25lbnRxAH4ABXhwcQB+AA1xAH4AIw==";
-	
+
+	final static String nonEncryptedSampleOtherClientKeyPair = 
+		"rO0ABXNyABVqYXZhLnNlY3VyaXR5LktleVBhaXKXAww60s0SkwIAAkwACnByaX" +
+		"ZhdGVLZXl0ABpMamF2YS9zZWN1cml0eS9Qcml2YXRlS2V5O0wACXB1YmxpY0tl" +
+		"eXQAGUxqYXZhL3NlY3VyaXR5L1B1YmxpY0tleTt4cHNyADFvcmcuYm91bmN5Y2" +
+		"FzdGxlLmpjZS5wcm92aWRlci5KQ0VSU0FQcml2YXRlQ3J0S2V5bLqHzgJzVS4C" +
+		"AAZMAA5jcnRDb2VmZmljaWVudHQAFkxqYXZhL21hdGgvQmlnSW50ZWdlcjtMAA" +
+		"5wcmltZUV4cG9uZW50UHEAfgAFTAAOcHJpbWVFeHBvbmVudFFxAH4ABUwABnBy" +
+		"aW1lUHEAfgAFTAAGcHJpbWVRcQB+AAVMAA5wdWJsaWNFeHBvbmVudHEAfgAFeH" +
+		"IALm9yZy5ib3VuY3ljYXN0bGUuamNlLnByb3ZpZGVyLkpDRVJTQVByaXZhdGVL" +
+		"ZXmyNYtAHTGFVgIABEwAB21vZHVsdXNxAH4ABUwAEHBrY3MxMkF0dHJpYnV0ZX" +
+		"N0ABVMamF2YS91dGlsL0hhc2h0YWJsZTtMAA5wa2NzMTJPcmRlcmluZ3QAEkxq" +
+		"YXZhL3V0aWwvVmVjdG9yO0wAD3ByaXZhdGVFeHBvbmVudHEAfgAFeHBzcgAUam" +
+		"F2YS5tYXRoLkJpZ0ludGVnZXKM/J8fqTv7HQMABkkACGJpdENvdW50SQAJYml0" +
+		"TGVuZ3RoSQATZmlyc3ROb256ZXJvQnl0ZU51bUkADGxvd2VzdFNldEJpdEkABn" +
+		"NpZ251bVsACW1hZ25pdHVkZXQAAltCeHIAEGphdmEubGFuZy5OdW1iZXKGrJUd" +
+		"C5TgiwIAAHhw///////////////+/////gAAAAF1cgACW0Ks8xf4BghU4AIAAH" +
+		"hwAAAAQLLWOqfG3T8IVINL2n1EmTLvxnqsIsmz7YfF5dxlwhYsQZLvFv8U7GjY" +
+		"525AibDt3jhaBMv7iOK04fIL48zaqRN4c3IAE2phdmEudXRpbC5IYXNodGFibG" +
+		"UTuw8lIUrkuAMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAI" +
+		"dwgAAAALAAAAAHhzcgAQamF2YS51dGlsLlZlY3RvctmXfVuAO68BAgADSQARY2" +
+		"FwYWNpdHlJbmNyZW1lbnRJAAxlbGVtZW50Q291bnRbAAtlbGVtZW50RGF0YXQA" +
+		"E1tMamF2YS9sYW5nL09iamVjdDt4cAAAAAAAAAAAdXIAE1tMamF2YS5sYW5nLk" +
+		"9iamVjdDuQzlifEHMpbAIAAHhwAAAACnBwcHBwcHBwcHBzcQB+AAr/////////" +
+		"//////7////+AAAAAXVxAH4ADgAAAEBpMrkXZeuOfV7j0kRJr+GlffxIKQVnlw" +
+		"Qxv7Rjhybf3NB+MK/v1MWrO+hCeh8zZWQdEvNyA23ZrMKgO+CXfGZBeHNxAH4A" +
+		"Cv///////////////v////4AAAABdXEAfgAOAAAAILYP9OqCCQ7/N8z04Xdinx" +
+		"Qr6zKM2AEb0esy/TtxAbGqeHNxAH4ACv///////////////v////4AAAABdXEA" +
+		"fgAOAAAAIDJohYy4qRthJ/CF2V3lgBC+9GVCYmRzweSoChbgZxcpeHNxAH4ACv" +
+		"///////////////v////4AAAABdXEAfgAOAAAAIEtsfegVhAmadbxpc+DX7Bpf" +
+		"fqeMbs0u1PfwMYMwYeAZeHNxAH4ACv///////////////v////4AAAABdXEAfg" +
+		"AOAAAAINY8N5YQzrRc6b44288PYEcrjq5aIirr+AvKKuE5tiJveHNxAH4ACv//" +
+		"/////////////v////4AAAABdXEAfgAOAAAAINWzZLw89hs1ousqyFJjx6AOkY" +
+		"VjOfAEsL594Z5eaqWdeHNxAH4ACv///////////////v////4AAAABdXEAfgAO" +
+		"AAAAARF4c3IALW9yZy5ib3VuY3ljYXN0bGUuamNlLnByb3ZpZGVyLkpDRVJTQV" +
+		"B1YmxpY0tleSUiag5b+myEAgACTAAHbW9kdWx1c3EAfgAFTAAOcHVibGljRXhw" +
+		"b25lbnRxAH4ABXhwcQB+AA1xAH4AIw==";
+			
+	final static String nonEncryptedSampleServerKeyPair = 
+		"rO0ABXNyABVqYXZhLnNlY3VyaXR5LktleVBhaXKXAww60s0SkwIAAkwACnByaX" +
+		"ZhdGVLZXl0ABpMamF2YS9zZWN1cml0eS9Qcml2YXRlS2V5O0wACXB1YmxpY0tl" +
+		"eXQAGUxqYXZhL3NlY3VyaXR5L1B1YmxpY0tleTt4cHNyADFvcmcuYm91bmN5Y2" +
+		"FzdGxlLmpjZS5wcm92aWRlci5KQ0VSU0FQcml2YXRlQ3J0S2V5bLqHzgJzVS4C" +
+		"AAZMAA5jcnRDb2VmZmljaWVudHQAFkxqYXZhL21hdGgvQmlnSW50ZWdlcjtMAA" +
+		"5wcmltZUV4cG9uZW50UHEAfgAFTAAOcHJpbWVFeHBvbmVudFFxAH4ABUwABnBy" +
+		"aW1lUHEAfgAFTAAGcHJpbWVRcQB+AAVMAA5wdWJsaWNFeHBvbmVudHEAfgAFeH" +
+		"IALm9yZy5ib3VuY3ljYXN0bGUuamNlLnByb3ZpZGVyLkpDRVJTQVByaXZhdGVL" +
+		"ZXmyNYtAHTGFVgIABEwAB21vZHVsdXNxAH4ABUwAEHBrY3MxMkF0dHJpYnV0ZX" +
+		"N0ABVMamF2YS91dGlsL0hhc2h0YWJsZTtMAA5wa2NzMTJPcmRlcmluZ3QAEkxq" +
+		"YXZhL3V0aWwvVmVjdG9yO0wAD3ByaXZhdGVFeHBvbmVudHEAfgAFeHBzcgAUam" +
+		"F2YS5tYXRoLkJpZ0ludGVnZXKM/J8fqTv7HQMABkkACGJpdENvdW50SQAJYml0" +
+		"TGVuZ3RoSQATZmlyc3ROb256ZXJvQnl0ZU51bUkADGxvd2VzdFNldEJpdEkABn" +
+		"NpZ251bVsACW1hZ25pdHVkZXQAAltCeHIAEGphdmEubGFuZy5OdW1iZXKGrJUd" +
+		"C5TgiwIAAHhw///////////////+/////gAAAAF1cgACW0Ks8xf4BghU4AIAAH" +
+		"hwAAAAQI72k2MOk5pqKoiXgWADfbe+SdHPoJww3nvImFTaKMUFnuuILAJ6at9C" +
+		"XXjLnbiOFzMfnhsJQJDkc92D1bWN+1N4c3IAE2phdmEudXRpbC5IYXNodGFibG" +
+		"UTuw8lIUrkuAMAAkYACmxvYWRGYWN0b3JJAAl0aHJlc2hvbGR4cD9AAAAAAAAI" +
+		"dwgAAAALAAAAAHhzcgAQamF2YS51dGlsLlZlY3RvctmXfVuAO68BAgADSQARY2" +
+		"FwYWNpdHlJbmNyZW1lbnRJAAxlbGVtZW50Q291bnRbAAtlbGVtZW50RGF0YXQA" +
+		"E1tMamF2YS9sYW5nL09iamVjdDt4cAAAAAAAAAAAdXIAE1tMamF2YS5sYW5nLk" +
+		"9iamVjdDuQzlifEHMpbAIAAHhwAAAACnBwcHBwcHBwcHBzcQB+AAr/////////" +
+		"//////7////+AAAAAXVxAH4ADgAAAEA63gB0FQ+Z73rs8xcniPeH5PE4Rm9PX2" +
+		"qrcLcx/3ozAbJ/8Gmqt3dsVCvhP6cUSpnPITyK4coxwBoPKN2DY6E5eHNxAH4A" +
+		"Cv///////////////v////4AAAABdXEAfgAOAAAAIKuCz9V1BAo/fF3o2pGQkg" +
+		"4d5LtBO1jBeqIUZlWRzQEqeHNxAH4ACv///////////////v////4AAAABdXEA" +
+		"fgAOAAAAIJIW3SbfqRjyv7//ghwAjYURLpDNgKlniedqhVzI7yEFeHNxAH4ACv" +
+		"///////////////v////4AAAABdXEAfgAOAAAAIGEWjIfi06zDWhGA13tFzBE/" +
+		"o0KZ6kQ3bC9lV5EL682ReHNxAH4ACv///////////////v////4AAAABdXEAfg" +
+		"AOAAAAILFk5/hYuwwCMfttHf1uYrPeAa/U96kiTAa4NDnPa4OHeHNxAH4ACv//" +
+		"/////////////v////4AAAABdXEAfgAOAAAAIM5P6qDCAc8fH2UxyeX0UaSnOu" +
+		"2HEdD1xeS3WhQ5VRTVeHNxAH4ACv///////////////v////4AAAABdXEAfgAO" +
+		"AAAAARF4c3IALW9yZy5ib3VuY3ljYXN0bGUuamNlLnByb3ZpZGVyLkpDRVJTQV" +
+		"B1YmxpY0tleSUiag5b+myEAgACTAAHbW9kdWx1c3EAfgAFTAAOcHVibGljRXhw" +
+		"b25lbnRxAH4ABXhwcQB+AA1xAH4AIw==";
+		
 	public byte[] signatureGet() throws MartusSignatureException
 	{
 		speedWarning("signatureGet");

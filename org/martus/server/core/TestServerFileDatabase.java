@@ -19,7 +19,7 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
-		security = new MockMartusSecurity();
+		security = MockMartusSecurity.createClient();
 
 		mockDb = new MockServerDatabase();
 

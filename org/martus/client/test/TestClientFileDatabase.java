@@ -49,7 +49,7 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 	public void testFindLegacyRecords() throws Exception
 	{
 		Database mockDatabase = new MockClientDatabase();
-		MartusCrypto security = new MockMartusSecurity();
+		MartusCrypto security = MockMartusSecurity.createClient();
 
 		File tempDir = createTempFile();
 		tempDir.delete();
@@ -65,7 +65,7 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 
 	private void internalTestFindLegacyRecords(Database db) throws Exception
 	{
-		MartusCrypto security = new MockMartusSecurity();
+		MartusCrypto security = MockMartusSecurity.createClient();
 
 		UniversalId uid = UniversalId.createDummyUniversalId();
 		DatabaseKey legacyKey = DatabaseKey.createLegacyKey(uid);

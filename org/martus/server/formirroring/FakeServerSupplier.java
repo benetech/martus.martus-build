@@ -14,7 +14,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 	FakeServerSupplier() throws Exception
 	{
 		db = new MockServerDatabase();
-		security = new MockMartusSecurity();
+		security = MockMartusSecurity.createClient();
 		
 		returnZipData = Base64.encode("zip data".getBytes("UTF-8"));
 	}

@@ -51,10 +51,10 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		TRACE_BEGIN("setUp");
 		
 		if(mockSecurityForApp == null)
-			mockSecurityForApp = new MockMartusSecurity();
+			mockSecurityForApp = MockMartusSecurity.createClient();
 		
 		if(mockSecurityForServer == null)
-			mockSecurityForServer = new MockMartusSecurity();
+			mockSecurityForServer = MockMartusSecurity.createClient();
 
 		mockServer = new MockMartusServer();
 		mockServer.initialize();
@@ -305,7 +305,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	
 	public void testGetServerPublicKey() throws Exception
 	{
-		MockMartusSecurity securityWithAccount = new MockMartusSecurity();
+		MockMartusSecurity securityWithAccount = MockMartusSecurity.createClient();
 		mockServer.setSecurity(securityWithAccount);
 		String publicKey = appWithServer.getServerPublicKey(mockNonSSLServerHandler);
 		assertEquals("wrong key?", securityWithAccount.getPublicKeyString(), publicKey);
@@ -1133,7 +1133,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testDownloadFieldOfficeBulletins");
 
-		MockMartusSecurity hqSecurity = new MockMartusSecurity();	
+		MockMartusSecurity hqSecurity = MockMartusSecurity.createClient();	
 		hqSecurity.createKeyPair();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");

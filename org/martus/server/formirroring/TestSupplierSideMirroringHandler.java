@@ -30,11 +30,11 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplierSecurity = supplier.getSecurity();
 		handler = new SupplierSideMirroringHandler(supplier);
 		
-		callerSecurity = new MockMartusSecurity();
+		callerSecurity = MockMartusSecurity.createClient();
 		callerSecurity.createKeyPair();
 		callerAccountId = callerSecurity.getPublicKeyString();
 		
-		authorSecurity = new MockMartusSecurity();
+		authorSecurity = MockMartusSecurity.createClient();
 		authorSecurity.createKeyPair();
 	}
 

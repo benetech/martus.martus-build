@@ -25,7 +25,7 @@ public class TestSSL extends TestCaseEnhanced
 		{
 			int testport = 1987;
 			int testPort2 = 1986;
-			mockSecurityForServer = new MockMartusSecurity();
+			mockSecurityForServer = MockMartusSecurity.createClient();
 			mockServer = new MockMartusServer();
 			mockServer.initialize();
 			mockServer.setSecurity(mockSecurityForServer);

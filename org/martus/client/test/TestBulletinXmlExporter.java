@@ -53,7 +53,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		if(store==null)
 		{
 			store = new BulletinStore(new MockClientDatabase());
-			store.setSignatureGenerator(new MockMartusSecurity());
+			store.setSignatureGenerator(MockMartusSecurity.createClient());
 		}
 	}
 

@@ -28,7 +28,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
-		MartusCrypto appSecurity = new MockMartusSecurity();
+		MartusCrypto appSecurity = MockMartusSecurity.createClient();
 		appSecurity.createKeyPair();
 		app = MockMartusApp.create(appSecurity);
 
@@ -47,7 +47,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 
 		testServer = new MockServer();
 		testServer.initialize();
-		testServer.setSecurity(new MockMartusSecurity());
+		testServer.setSecurity(MockMartusSecurity.createClient());
 		
 		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);

@@ -34,7 +34,7 @@ public class TestDatabase extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		mockDb = new MockServerDatabase();
-		security = new MockMartusSecurity();
+		security = MockMartusSecurity.createClient();
 
 		goodDir1 = createTempFile();
 		goodDir1.delete();

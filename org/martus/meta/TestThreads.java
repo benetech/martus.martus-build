@@ -110,7 +110,7 @@ public class TestThreads extends TestCaseEnhanced
 			store = new BulletinStore(new MockClientDatabase());
 			//store.maxCachedBulletinCount = 10;
 			
-			MockMartusSecurity security = new MockMartusSecurity();
+			MockMartusSecurity security = MockMartusSecurity.createClient();
 			security.createKeyPair();
 			store.setSignatureGenerator(security);
 
@@ -134,7 +134,7 @@ public class TestThreads extends TestCaseEnhanced
 		ExportThreadFactory() throws Exception
 		{
 			store = new BulletinStore(new MockClientDatabase());
-			MockMartusSecurity security = new MockMartusSecurity();
+			MockMartusSecurity security = MockMartusSecurity.createClient();
 			security.createKeyPair();
 			
 			store.setSignatureGenerator(security);
@@ -156,7 +156,7 @@ public class TestThreads extends TestCaseEnhanced
 		ImportThreadFactory() throws Exception
 		{
 			store = new BulletinStore(new MockClientDatabase());
-			MockMartusSecurity security = new MockMartusSecurity();
+			MockMartusSecurity security = MockMartusSecurity.createClient();
 			security.createKeyPair();
 			store.setSignatureGenerator(security);
 		}
@@ -175,7 +175,7 @@ public class TestThreads extends TestCaseEnhanced
 		{
 			store = new BulletinStore(new MockClientDatabase());
 
-			MockMartusSecurity security = new MockMartusSecurity();
+			MockMartusSecurity security = MockMartusSecurity.createClient();
 			security.createKeyPair();
 			store.setSignatureGenerator(security);
 
@@ -195,7 +195,7 @@ public class TestThreads extends TestCaseEnhanced
 		{
 			store = new BulletinStore(new MockClientDatabase());
 
-			MockMartusSecurity security = new MockMartusSecurity();
+			MockMartusSecurity security = MockMartusSecurity.createClient();
 			security.createKeyPair();
 			store.setSignatureGenerator(security);
 
@@ -216,7 +216,7 @@ public class TestThreads extends TestCaseEnhanced
 		{
 			store = new BulletinStore(new MockClientDatabase());
 
-			MockMartusSecurity security = new MockMartusSecurity();
+			MockMartusSecurity security = MockMartusSecurity.createClient();
 			security.createKeyPair();
 			store.setSignatureGenerator(security);
 

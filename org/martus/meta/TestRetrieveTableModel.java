@@ -30,10 +30,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		if(mockSecurityForApp == null)
-			mockSecurityForApp = new MockMartusSecurity();
+			mockSecurityForApp = MockMartusSecurity.createClient();
 		
 		if(mockSecurityForServer == null)
-			mockSecurityForServer = new MockMartusSecurity();
+			mockSecurityForServer = MockMartusSecurity.createClient();
 
 		mockServer = new MockMartusServer();
 		mockServer.initialize();
@@ -483,7 +483,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 	public void testGetFieldOfficeSummaries() throws Exception
 	{
-		MockMartusSecurity hqSecurity = new MockMartusSecurity();	
+		MockMartusSecurity hqSecurity = MockMartusSecurity.createClient();	
 		hqSecurity.createKeyPair();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");

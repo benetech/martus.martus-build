@@ -37,7 +37,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 
 	public void testDoesMatch() throws Exception
 	{
-		MartusCrypto security = new MockMartusSecurity();
+		MartusCrypto security = MockMartusSecurity.createClient();
 		Bulletin b = new Bulletin(security);
 		b.set("author", "hello");
 		b.set("summary", "summary");
@@ -90,7 +90,7 @@ public class TestBulletinSearcher extends TestCaseEnhanced
 
 	public void testDateMatches() throws Exception
 	{
-		Bulletin b = new Bulletin(new MockMartusSecurity());
+		Bulletin b = new Bulletin(MockMartusSecurity.createClient());
 		b.set("author", "Dave");
 		b.set("summary", "summary");
 		b.set("title", "cool day");

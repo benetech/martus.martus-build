@@ -44,7 +44,6 @@ import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
-import org.martus.common.MartusSecurity;
 import org.martus.common.MartusXml;
 import org.martus.common.MockBulletin;
 import org.martus.common.MockClientDatabase;
@@ -655,7 +654,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("keys", 3*store.getBulletinCount(), db.getRecordCount());
 
 		store = new BulletinStore(db);
-		store.setSignatureGenerator(new MockMartusSecurity());
+		store.setSignatureGenerator(MockMartusSecurity.createClient());
 		assertEquals("before load", systemFolderCount, store.getFolderCount());
 		store.loadFolders();
 		assertEquals("loaded", 1+systemFolderCount, store.getFolderCount());
@@ -1204,8 +1203,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	private BulletinStore createTempStore() throws Exception
 	{
-		MartusSecurity tempSecurity = new MockMartusSecurity();
-		tempSecurity.createKeyPair();
+		MockMartusSecurity tempSecurity = MockMartusSecurity.createClient();
+		tempSecurity.createKeyPairForOtherClient();
 		BulletinStore tempStore = new BulletinStore(new MockClientDatabase());
 		tempStore.setSignatureGenerator(tempSecurity);
 		return tempStore;

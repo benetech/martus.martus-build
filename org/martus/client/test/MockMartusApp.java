@@ -57,7 +57,7 @@ public class MockMartusApp extends MartusApp
 
 	public static MockMartusApp create() throws Exception
 	{
-		return create(new MockMartusSecurity());
+		return create(MockMartusSecurity.createClient());
 	}
 
 	MockMartusApp(MartusCrypto crypto, File dataDirectoryToUse) throws MartusAppInitializationException

@@ -44,7 +44,7 @@ public class TestAttachmentProxy extends TestCaseEnhanced
 		writer.writeln("This is some text");
 		writer.close();
 
-		MartusCrypto security = new MockMartusSecurity();
+		MartusCrypto security = MockMartusSecurity.createClient();
 		byte[] sessionKeyBytes = security.createSessionKey();
 
 		AttachmentProxy a = new AttachmentProxy(file);

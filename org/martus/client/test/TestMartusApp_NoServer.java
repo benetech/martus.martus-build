@@ -64,7 +64,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		TRACE_BEGIN("setUp");
 
 		if(mockSecurityForApp == null)
-			mockSecurityForApp = new MockMartusSecurity();
+			mockSecurityForApp = MockMartusSecurity.createClient();
 
 		appWithAccount = MockMartusApp.create(mockSecurityForApp);
 		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandlerNotAvailable());
@@ -639,7 +639,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 	public void testGetPublicCodeFromAccount() throws Exception
 	{
-		MockMartusSecurity security = new MockMartusSecurity();
+		MockMartusSecurity security = MockMartusSecurity.createClient();
 		String publicKeyString = security.getPublicKeyString();
 		String publicCode = MartusUtilities.computePublicCode(publicKeyString);
 		assertEquals("wrong code?", "71887634433124687372", publicCode);

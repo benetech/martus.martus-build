@@ -49,7 +49,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 
 	public void setUp() throws Exception
 	{
-		security = new MockMartusSecurity();
+		security = MockMartusSecurity.createClient();
 		dir = File.createTempFile("$$$MartusTestFileDatabaseSetup", null);
 		dir.delete();
 		dir.mkdir();
@@ -388,7 +388,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 
 	public void testAccountMapSigning()  throws Exception
 	{
-		security = new MockMartusSecurity();
+		security = MockMartusSecurity.createClient();
 
 		File tmpDataDir = createTempFile();
 		if( tmpDataDir.exists() ) tmpDataDir.delete();

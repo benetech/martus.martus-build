@@ -51,7 +51,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		store = new BulletinStore(new MockClientDatabase());
-		store.setSignatureGenerator(new MockMartusSecurity());
+		store.setSignatureGenerator(MockMartusSecurity.createClient());
 	}
 
 	public void testGetAndSet()

@@ -26,8 +26,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 
 	public void setUp() throws Exception
 	{
-		MartusCrypto appSecurity = new MockMartusSecurity();
-		appSecurity.createKeyPair();
+		MartusCrypto appSecurity = MockMartusSecurity.createClient();
 		app = MockMartusApp.create(appSecurity);
 
 		b0 = app.createBulletin();
@@ -39,7 +38,9 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		
 		testServer = new MockServer();
 		testServer.initialize();
-		testServer.setSecurity(new MockMartusSecurity());
+		MockMartusSecurity serverSecurity = MockMartusSecurity.createClient();
+		serverSecurity.createKeyPairForServer(); 
+		testServer.setSecurity(serverSecurity);
 		ServerSideNetworkHandler testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		
 		app.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
