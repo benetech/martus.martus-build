@@ -310,10 +310,21 @@
 	<!-- Sign all jars -->
 	<target name="jarsigner" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta, testall"/>
 	
+	<!-- Sign all jars, skip the tests -->
+	<target name="jarsigner-no-tests" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta"/>
+	
 <!-- ================================================================== -->
 <!-- M D 5                                                              -->
 <!-- ================================================================== -->
 	<target name="md5" depends="jarsigner">
+		<checksum>
+			<fileset dir="${dist}">
+				<include name="*.jar"/>
+			</fileset>
+		</checksum>
+	</target>
+	
+	<target name="md5-no-tests" depends="jarsigner-no-tests">
 		<checksum>
 			<fileset dir="${dist}">
 				<include name="*.jar"/>
