@@ -215,13 +215,13 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		mainWindow.editBulletin(b);
 	}
 
-	public void doCutBulletin()
+	public void doCutBulletins()
 	{
-		doCopyBulletin();
-		doDiscardBulletin();
+		doCopyBulletins();
+		doDiscardBulletins();
 	}
 
-	public void doCopyBulletin()
+	public void doCopyBulletins()
 	{
 		Bulletin[] selected = getSelectedBulletins();
 		BulletinFolder folder = getFolder();
@@ -346,7 +346,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		{
 			if(e.getKeyCode() == e.VK_DELETE)
 			{
-				doDiscardBulletin();
+				doDiscardBulletins();
 			}
 		}
 	}
@@ -390,7 +390,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 
 
-	public void doDiscardBulletin()
+	public void doDiscardBulletins()
 	{
 		boolean okToDiscard = true;
 		Bulletin[] bulletins = getSelectedBulletins();

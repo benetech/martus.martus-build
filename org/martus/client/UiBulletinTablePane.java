@@ -87,14 +87,14 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 		table.doEditBulletin();
 	}
 
-	public void doCutBulletin()
+	public void doCutBulletins()
 	{
-		table.doCutBulletin();
+		table.doCutBulletins();
 	}
 
-	public void doCopyBulletin()
+	public void doCopyBulletins()
 	{
-		table.doCopyBulletin();
+		table.doCopyBulletins();
 	}
 
 	public void doPasteBulletin()
@@ -102,9 +102,9 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 		table.doPasteBulletin();
 	}
 
-	public void doDiscardBulletin()
+	public void doDiscardBulletins()
 	{
-		table.doDiscardBulletin();
+		table.doDiscardBulletins();
 	}
 
 	class TablePaneMouseAdapter extends MouseAdapter

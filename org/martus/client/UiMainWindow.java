@@ -567,14 +567,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		table.doEditBulletin();
 	}
 	
-	private void doCutBulletin()
+	private void doCutBulletins()
 	{
-		table.doCutBulletin();
+		table.doCutBulletins();
 	}
 
-	private void doCopyBulletin()
+	private void doCopyBulletins()
 	{
-		table.doCopyBulletin();
+		table.doCopyBulletins();
 	}
 
 	private void doPasteBulletin()
@@ -582,9 +582,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		table.doPasteBulletin();
 	}
 
-	private void doDiscardBulletin()
+	private void doDiscardBulletins()
 	{
-		table.doDiscardBulletin();
+		table.doDiscardBulletins();
 	}
 
 	private void doSearch()
@@ -1685,7 +1685,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doCutBulletin();
+			doCutBulletins();
 		}
 
 		public boolean isEnabled()
@@ -1703,7 +1703,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doCopyBulletin();
+			doCopyBulletins();
 		}
 
 		public boolean isEnabled()
@@ -1721,7 +1721,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doDiscardBulletin();
+			doDiscardBulletins();
 		}
 		
 		public boolean isEnabled()
