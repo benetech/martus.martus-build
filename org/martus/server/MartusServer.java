@@ -142,6 +142,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				System.exit(2);
 			}
 			
+			System.out.println("Passphrase correct.");			
 			server.initialize();
 
 			String accountId = server.getAccountId();
@@ -219,7 +220,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				
 		System.out.println();
 
-		System.out.println(server.clientsThatCanUpload.size() + " clients currently allowed to upload");
+		System.out.println(server.clientsThatCanUpload.size() + " client(s) currently allowed to upload");
+		System.out.println(server.clientsBanned.size() + " client(s) are currently banned");
 		System.out.println(server.magicWords.size() + " active magic word(s)");
 
 		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
@@ -264,11 +266,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		keyPairFile = new File(startupConfigDirectory, getKeypairFilename());
 		bannedClientsFile = new File(startupConfigDirectory, BANNEDCLIENTSFILENAME);
 		
-		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);		
-
-		Timer bannedClientRefreshTimer = new Timer(true);
-		TimerTask bannedClientsTaskMonitor = new BannedClientsMonitor();
-		bannedClientRefreshTimer.schedule(bannedClientsTaskMonitor, IMMEDIATELY, bannedCheckIntervalMillis);
+		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);
+		
+		loadBannedClients();
 		
 		Timer shutdownRequestTimer = new Timer(true);
  		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
