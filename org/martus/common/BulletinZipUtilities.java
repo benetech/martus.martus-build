@@ -69,7 +69,7 @@ public class BulletinZipUtilities
 	
 			MartusCrypto doNotCheckSigDuringDownload = null;
 			bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
-			DatabaseKey[] packetKeys = MartusUtilities.getPublicPacketKeys(bhp);
+			DatabaseKey[] packetKeys = bhp.getPublicPacketKeys();
 	
 			FileOutputStream outputStream = new FileOutputStream(destZipFile);
 			BulletinZipUtilities.extractPacketsToZipStream(headerKey.getAccountId(), db, packetKeys, outputStream, security);
@@ -165,19 +165,19 @@ public class BulletinZipUtilities
 		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
 		UniversalId privateDataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getPrivateFieldDataPacketId());
 	
-		keys[next++] = MartusUtilities.createKeyWithHeaderStatus(bhp, dataUid);
-		keys[next++] = MartusUtilities.createKeyWithHeaderStatus(bhp, privateDataUid);
+		keys[next++] = bhp.createKeyWithHeaderStatus(dataUid);
+		keys[next++] = bhp.createKeyWithHeaderStatus(privateDataUid);
 		for(int i=0; i < publicAttachmentIds.length; ++i)
 		{
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
-			keys[next++] = MartusUtilities.createKeyWithHeaderStatus(bhp, uid);
+			keys[next++] = bhp.createKeyWithHeaderStatus(uid);
 		}
 		for(int i=0; i < privateAttachmentIds.length; ++i)
 		{
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, privateAttachmentIds[i]);
-			keys[next++] = MartusUtilities.createKeyWithHeaderStatus(bhp, uid);
+			keys[next++] = bhp.createKeyWithHeaderStatus(uid);
 		}
-		keys[next++] = MartusUtilities.createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
+		keys[next++] = bhp.createKeyWithHeaderStatus(bhp.getUniversalId());
 	
 		return keys;
 	}
@@ -261,7 +261,7 @@ public class BulletinZipUtilities
 				in.close();
 		
 				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, keys[i].getLocalId());
-				DatabaseKey key = MartusUtilities.createKeyWithHeaderStatus(header, uid);
+				DatabaseKey key = header.createKeyWithHeaderStatus(uid);
 		
 				zipEntries.put(key,file);
 			}
@@ -277,7 +277,7 @@ public class BulletinZipUtilities
 				MartusCrypto.DecryptionException
 		{
 			BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
-			DatabaseKey[] keys = MartusUtilities.getPublicPacketKeys(bhp);
+			DatabaseKey[] keys = bhp.getPublicPacketKeys();
 			Vector localIds = new Vector();
 			for (int i = 0; i < keys.length; i++)
 				localIds.add(keys[i].getLocalId());

@@ -428,7 +428,7 @@ public class Bulletin implements BulletinConstants
 
 		try
 		{
-			return MartusUtilities.createFileProxyFromAttachmentPacket(packetIn, ap, security);
+			return AttachmentProxy.createFileProxyFromAttachmentPacket(packetIn, ap, security);
 		}
 		finally
 		{

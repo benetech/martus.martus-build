@@ -174,7 +174,7 @@ public class BulletinZipImporter
 		InputStreamWithSeek attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
 		try
 		{
-			return MartusUtilities.createFileProxyFromAttachmentPacket(attachmentIn, attachment, verifier);
+			return AttachmentProxy.createFileProxyFromAttachmentPacket(attachmentIn, attachment, verifier);
 		}
 		catch(Exception e)
 		{

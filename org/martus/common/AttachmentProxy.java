@@ -27,6 +27,8 @@ Boston, MA 02111-1307, USA.
 package org.martus.common;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class AttachmentProxy
 {
@@ -45,6 +47,25 @@ public class AttachmentProxy
 	public AttachmentProxy(String labelToUse)
 	{
 		setLabel(labelToUse);
+	}
+
+	public static AttachmentProxy createFileProxyFromAttachmentPacket(InputStreamWithSeek attachmentIn, AttachmentProxy oldProxy, MartusCrypto verifier)
+		throws
+			IOException,
+			Packet.InvalidPacketException,
+			Packet.SignatureVerificationException,
+			Packet.WrongPacketTypeException,
+			Base64.InvalidBase64Exception
+	{
+		byte[] sessionKeyBytes = oldProxy.getSessionKeyBytes();
+		File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
+		tempFile.deleteOnExit();
+		FileOutputStream out = new FileOutputStream(tempFile);
+		AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, out);
+		out.close();
+		AttachmentProxy ap = new AttachmentProxy(tempFile);
+		ap.setLabel(oldProxy.getLabel());
+		return ap;
 	}
 
 	public String getLabel()

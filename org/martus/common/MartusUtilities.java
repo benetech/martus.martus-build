@@ -31,7 +31,6 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -274,30 +273,6 @@ public class MartusUtilities
 		return tags;
 	}
 
-	public static DatabaseKey[] getPublicPacketKeys(BulletinHeaderPacket bhp)
-	{
-		String accountId = bhp.getAccountId();
-		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
-
-		int corePacketCount = 2;
-		int publicAttachmentCount = publicAttachmentIds.length;
-		int totalPacketCount = corePacketCount + publicAttachmentCount;
-		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
-
-		int next = 0;
-		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
-		keys[next++] = createKeyWithHeaderStatus(bhp, dataUid);
-
-		for(int i=0; i < publicAttachmentIds.length; ++i)
-		{
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
-			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
-		}
-		keys[next++] = createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
-
-		return keys;
-	}
-
 	public static int getBulletinSize(Database db, BulletinHeaderPacket bhp)
 	{
 		int size = 0;
@@ -357,14 +332,6 @@ public class MartusUtilities
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localId);
 		DatabaseKey key = DatabaseKey.createDraftKey(uid);
 		db.discardRecord(key);
-	}
-
-	public static DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid)
-	{
-		if(header.getStatus().equals(BulletinConstants.STATUSDRAFT))
-			return DatabaseKey.createDraftKey(uid);
-		else
-			return DatabaseKey.createSealedKey(uid);
 	}
 
 	public static void deleteBulletinFromDatabase(BulletinHeaderPacket bhp, Database db, MartusCrypto crypto)
@@ -464,25 +431,6 @@ public class MartusUtilities
 		}
 
 		return false;
-	}
-
-	public static AttachmentProxy createFileProxyFromAttachmentPacket(InputStreamWithSeek attachmentIn, AttachmentProxy oldProxy, MartusCrypto verifier)
-		throws
-			IOException,
-			Packet.InvalidPacketException,
-			Packet.SignatureVerificationException,
-			Packet.WrongPacketTypeException,
-			Base64.InvalidBase64Exception
-	{
-		byte[] sessionKeyBytes = oldProxy.getSessionKeyBytes();
-		File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
-		tempFile.deleteOnExit();
-		FileOutputStream out = new FileOutputStream(tempFile);
-		AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, out);
-		out.close();
-		AttachmentProxy ap = new AttachmentProxy(tempFile);
-		ap.setLabel(oldProxy.getLabel());
-		return ap;
 	}
 
 	public static class PublicInformationInvalidException extends Exception {}

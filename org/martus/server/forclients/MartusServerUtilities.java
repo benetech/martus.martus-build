@@ -113,7 +113,7 @@ public class MartusServerUtilities
 			trySealedKey.setSealed();
 			if(db.doesRecordExist(trySealedKey))
 			{
-				DatabaseKey newKey = MartusUtilities.createKeyWithHeaderStatus(header, uid);
+				DatabaseKey newKey = header.createKeyWithHeaderStatus(uid);
 				if(newKey.isDraft())
 					throw new MartusServer.SealedPacketExistsException(entry.getName());
 				else
@@ -478,7 +478,7 @@ public class MartusServerUtilities
 	public static void writeSpecificBurToDatabase(Database db, BulletinHeaderPacket bhp, String bur)
 		throws IOException
 	{
-		DatabaseKey headerKey = MartusUtilities.createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
+		DatabaseKey headerKey = bhp.createKeyWithHeaderStatus(bhp.getUniversalId());
 		DatabaseKey burKey = MartusServerUtilities.getBurKey(headerKey);
 		db.writeRecord(burKey, bur);
 	}

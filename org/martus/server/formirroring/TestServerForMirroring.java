@@ -68,22 +68,22 @@ public class TestServerForMirroring extends TestCaseEnhanced
 
 		bhp1 = new BulletinHeaderPacket(clientSecurity1.getPublicKeyString());
 		bhp1.setStatus(BulletinConstants.STATUSSEALED);
-		DatabaseKey key1 = MartusUtilities.createKeyWithHeaderStatus(bhp1, bhp1.getUniversalId());
+		DatabaseKey key1 = bhp1.createKeyWithHeaderStatus(bhp1.getUniversalId());
 		bhp1.writeXmlToDatabase(db, key1, false, clientSecurity1);
 
 		bhp2 = new BulletinHeaderPacket(clientSecurity1.getPublicKeyString());
 		bhp2.setStatus(BulletinConstants.STATUSSEALED);
-		DatabaseKey key2 = MartusUtilities.createKeyWithHeaderStatus(bhp2, bhp2.getUniversalId());
+		DatabaseKey key2 = bhp2.createKeyWithHeaderStatus(bhp2.getUniversalId());
 		bhp2.writeXmlToDatabase(db, key2, false, clientSecurity1);
 
 		bhp3 = new BulletinHeaderPacket(clientSecurity2.getPublicKeyString());
 		bhp3.setStatus(BulletinConstants.STATUSSEALED);
-		DatabaseKey key3 = MartusUtilities.createKeyWithHeaderStatus(bhp3, bhp3.getUniversalId());
+		DatabaseKey key3 = bhp3.createKeyWithHeaderStatus(bhp3.getUniversalId());
 		bhp3.writeXmlToDatabase(db, key3, false, clientSecurity2);
 
 		bhp4 = new BulletinHeaderPacket(clientSecurity2.getPublicKeyString());
 		bhp4.setStatus(BulletinConstants.STATUSDRAFT);
-		DatabaseKey key4 = MartusUtilities.createKeyWithHeaderStatus(bhp4, bhp4.getUniversalId());
+		DatabaseKey key4 = bhp4.createKeyWithHeaderStatus(bhp4.getUniversalId());
 		bhp4.writeXmlToDatabase(db, key4, false, clientSecurity2);
 		
 		UniversalId fdpUid = FieldDataPacket.createUniversalId(clientSecurity1.getPublicKeyString());
@@ -207,7 +207,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		assertNull("found bur?", burNotFound);
 
 		String expectedBur = MartusServerUtilities.createBulletinUploadRecord(bhp1.getLocalId(), server.getSecurity());
-		DatabaseKey headerKey = MartusUtilities.createKeyWithHeaderStatus(bhp1, bhp1.getUniversalId());
+		DatabaseKey headerKey = bhp1.createKeyWithHeaderStatus(bhp1.getUniversalId());
 		String bulletinLocalId = headerKey.getLocalId();
 		MartusServerUtilities.writeSpecificBurToDatabase(coreServer.getDatabase(), bhp1, expectedBur);
 		String bur1 = server.getBulletinUploadRecord(bhp1.getAccountId(), bhp1.getLocalId());

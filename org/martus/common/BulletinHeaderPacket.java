@@ -245,6 +245,38 @@ public class BulletinHeaderPacket extends Packet
 		return header;
 	}
 
+	public DatabaseKey[] getPublicPacketKeys()
+	{
+		String accountId = getAccountId();
+		String[] publicAttachmentIds = getPublicAttachmentIds();
+	
+		int corePacketCount = 2;
+		int publicAttachmentCount = publicAttachmentIds.length;
+		int totalPacketCount = corePacketCount + publicAttachmentCount;
+		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
+	
+		int next = 0;
+		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, getFieldDataPacketId());
+		keys[next++] = createKeyWithHeaderStatus(dataUid);
+	
+		for(int i=0; i < publicAttachmentIds.length; ++i)
+		{
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
+			keys[next++] = createKeyWithHeaderStatus(uid);
+		}
+		keys[next++] = createKeyWithHeaderStatus(getUniversalId());
+	
+		return keys;
+	}
+
+	public DatabaseKey createKeyWithHeaderStatus(UniversalId uid)
+	{
+		if(getStatus().equals(BulletinConstants.STATUSDRAFT))
+			return DatabaseKey.createDraftKey(uid);
+		else
+			return DatabaseKey.createSealedKey(uid);
+	}
+
 	static ZipEntry getBulletinHeaderEntry(ZipFile zip) throws IOException
 	{
 		Enumeration entries = zip.entries();
