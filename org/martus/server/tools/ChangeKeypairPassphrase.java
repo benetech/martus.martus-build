@@ -14,7 +14,7 @@ import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
 
-public class ChangeServerPassphrase
+public class ChangeKeypairPassphrase
 {
 	public static void main(String[] args) throws Exception
 	{
