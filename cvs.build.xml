@@ -65,7 +65,7 @@
     <!-- run build and check in results -->
     <target name="release.and.checkin" depends="make.release,create.client.cvs.dirs,create.server.cvs.dirs" description="Tag CVS projects and check-in results">
         <!-- check in build number -->
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="false">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
@@ -75,7 +75,7 @@
         </cvs>
 
         <!-- tag results -->
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="false">
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
@@ -94,7 +94,7 @@
         </cvs>
 
         <!-- tag results: these might fail -->
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false" noexec="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false" noexec="false">
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
@@ -113,7 +113,7 @@
         <!-- check in Client results -->
         <exec dir="${client.binary.cvs.dir}/${cvs.year}/${cvs.month.day}" executable="cvs.exe" failonerror="true">
             <arg line="-d${cvs.cvsroot}"/>
-            <arg line="-n"/>
+            <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="martus-client-${DSTAMP}.${build.number}.jar"/>
             <arg line="martus-client-${DSTAMP}.${build.number}.jar.md5"/>
@@ -134,7 +134,7 @@
         <!-- check in Server results -->
         <exec dir="${server.binary.cvs.dir}/${cvs.year}/${cvs.month.day}" executable="cvs.exe" failonerror="true">
             <arg line="-d${cvs.cvsroot}"/>
-            <arg line="-n"/>
+            <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="martus-server-${DSTAMP}.${build.number}.jar"/>
             <arg line="martus-server-${DSTAMP}.${build.number}.jar.md5"/>
@@ -144,7 +144,7 @@
             <arg line="martus-mspa-client-${DSTAMP}.${build.number}.jar.md5"/>
         </exec>
 
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="false">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
@@ -225,7 +225,7 @@
         <mkdir dir="${client.binary.cvs.dir}/${cvs.year}"/>
         <exec dir="${client.binary.cvs.dir}" executable="cvs.exe" failonerror="true">
             <arg line="-d${cvs.cvsroot}"/>
-            <arg line="-n"/>
+            <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="${cvs.year}"/>
         </exec>
@@ -235,7 +235,7 @@
         <mkdir dir="${client.binary.cvs.dir}/${cvs.year}/${cvs.month.day}"/>
         <exec dir="${client.binary.cvs.dir}/${cvs.year}" executable="cvs.exe" failonerror="true">
             <arg line="-d${cvs.cvsroot}"/>
-            <arg line="-n"/>
+            <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="${cvs.month.day}"/>
         </exec>
@@ -256,7 +256,7 @@
         <mkdir dir="${server.binary.cvs.dir}/${cvs.year}"/>
         <exec dir="${server.binary.cvs.dir}" executable="cvs.exe" failonerror="true">
             <arg line="-d${cvs.cvsroot}"/>
-            <arg line="-n"/>
+            <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="${cvs.year}"/>
         </exec>
@@ -266,7 +266,7 @@
         <mkdir dir="${server.binary.cvs.dir}/${cvs.year}/${cvs.month.day}"/>
         <exec dir="${server.binary.cvs.dir}/${cvs.year}" executable="cvs.exe" failonerror="true">
             <arg line="-d${cvs.cvsroot}"/>
-            <arg line="-n"/>
+            <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="${cvs.month.day}"/>
         </exec>
