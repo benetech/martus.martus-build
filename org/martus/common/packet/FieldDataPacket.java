@@ -26,11 +26,9 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.common.packet;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
 import java.util.Iterator;
 import java.util.Map;
@@ -42,7 +40,6 @@ import org.martus.common.XmlWriterFilter;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.DecryptionException;
-import org.martus.common.crypto.MartusCrypto.EncryptionException;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.util.Base64;
 import org.martus.util.ByteArrayInputStreamWithSeek;
@@ -417,67 +414,3 @@ public class FieldDataPacket extends Packet
 	private String hqPublicKey;
 }
 
-class EncryptedFieldDataPacket extends Packet
-{
-	EncryptedFieldDataPacket(UniversalId uid, String plainTextData, MartusCrypto crypto) throws IOException
-	{
-		super(uid);
-		security = crypto;
-		try
-		{
-			sessionKeyBytes = security.createSessionKey();
-			byte[] plainTextBytes = plainTextData.getBytes("UTF-8");
-			ByteArrayInputStream inPlain = new ByteArrayInputStream(plainTextBytes);
-			ByteArrayOutputStream outEncrypted = new ByteArrayOutputStream();
-			security.encrypt(inPlain, outEncrypted, sessionKeyBytes);
-			byte[] encryptedBytes = outEncrypted.toByteArray();
-			encryptedData = Base64.encode(encryptedBytes);
-		}
-		catch(UnsupportedEncodingException e)
-		{
-			throw new IOException("UnsupportedEncodingException");
-		}
-		catch(MartusCrypto.NoKeyPairException e)
-		{
-			throw new IOException("NoKeyPairException");
-		}
-		catch(MartusCrypto.EncryptionException e)
-		{
-			throw new IOException("EncryptionException");
-		}
-	}
-
-	protected String getPacketRootElementName()
-	{
-		return MartusXml.FieldDataPacketElementName;
-	}
-
-	void setHQPublicKey(String hqKey)
-	{
-		hqPublicKey = hqKey;
-	}
-
-	protected void internalWriteXml(XmlWriterFilter dest) throws IOException
-	{
-		super.internalWriteXml(dest);
-		writeElement(dest, MartusXml.EncryptedFlagElementName, "");
-		if(hqPublicKey.length() > 0)
-		{
-			try
-			{
-				byte[] encryptedSessionKey = security.encryptSessionKey(sessionKeyBytes, hqPublicKey);
-				writeElement(dest, MartusXml.HQSessionKeyElementName, Base64.encode(encryptedSessionKey));
-			}
-			catch(EncryptionException e)
-			{
-				throw new IOException("FieldDataPacket.internalWriteXml Encryption Exception");
-			}
-		}
-		writeElement(dest, MartusXml.EncryptedDataElementName, encryptedData);
-	}
-
-	MartusCrypto security;
-	String encryptedData;
-	private String hqPublicKey = "";
-	private byte[] sessionKeyBytes;
-}
