@@ -151,7 +151,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		inactivityDetector = new InactivityDetector();
 
 		uploader = new java.util.Timer(true);
-		uploader.schedule(new Tick(), 0, 5*1000);
+		uploader.schedule(new TickBackgroundUpload(), 0, BACKGROUND_UPLOAD_CHECK_SECONDS);
+
+		timeoutChecker = new java.util.Timer(true);
+		timeoutChecker.schedule(new TickTimeout(), 0, BACKGROUND_TIMEOUT_CHECK_EVERY_X_SECONDS);
 
 		errorChecker = new javax.swing.Timer(10*1000, new UploadErrorChecker());
 		errorChecker.start();
@@ -1885,9 +1888,39 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		long lastActivityAt = now();
 	}
 	
-	class Tick extends TimerTask
+	class TickBackgroundUpload extends TimerTask
 	{
-		public Tick()
+		public TickBackgroundUpload()
+		{
+		}
+
+		public void run()
+		{
+			try
+			{
+				if(!inConfigServer)
+				{
+					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
+					if(uploadResult != null)
+					{
+						System.out.println("UiMainWindow.Tick.run: " + uploadResult);
+						folderContentsHaveChanged(getStore().getFolderSent());
+						folderContentsHaveChanged(getStore().getFolderOutbox());
+						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+						folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
+					}
+				}
+			}
+			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+
+	class TickTimeout extends TimerTask
+	{
+		public TickTimeout()
 		{
 		}
 
@@ -1900,19 +1933,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 					System.out.println("Inactive");
 					ThreadedSignin signin = new ThreadedSignin();
 					SwingUtilities.invokeAndWait(signin);
-				}
-
-				if(!inConfigServer)
-				{
-					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
-					if(uploadResult != null)
-					{
-						System.out.println("UiMainWindow.Tick.run: " + uploadResult);
-						folderContentsHaveChanged(getStore().getFolderSent());
-						folderContentsHaveChanged(getStore().getFolderOutbox());
-						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
-						folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
-					}
 				}
 			}
 			catch(Exception e)
@@ -1944,7 +1964,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 			
 		}
-
 	}
 
 	class UploadErrorChecker extends AbstractAction
@@ -1981,6 +2000,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private UiBulletinTablePane table;
 	private UiFolderTreePane folders;
 	private java.util.Timer uploader;
+	private java.util.Timer timeoutChecker;
 	private javax.swing.Timer errorChecker;
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
@@ -1992,6 +2012,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private static final int MAX_KEYPAIRFILE_SIZE = 32000;
 	private static final int TIMEOUT_SECONDS = (10 * 60);
+	private static final int BACKGROUND_UPLOAD_CHECK_SECONDS = 5*1000;
+	private static final int BACKGROUND_TIMEOUT_CHECK_EVERY_X_SECONDS = 5*1000;
 	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;
