@@ -170,6 +170,16 @@ cp -r martus-logi/source/* $HOMEDRIVE/$HOMEPATH/MartusBuild || error "copy retur
 echo
 
 cvs.exe -q checkout martus-thirdparty || error "cvs returned $?"
+mkdir MartusBuild/ThirdPartyJars
+echo "copying martus-thirdparty...";
+echo
+cp martus-thirdparty/common/ant/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
+cp martus-thirdparty/common/InfiniteMonkey/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
+cp martus-thirdparty/common/XMLRPC/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
+
+cp martus-thirdparty/server/Jetty/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
+cp martus-thirdparty/server/Lucene/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
+cp martus-thirdparty/server/Velocity/bin/*.jar MartusBuild/ThirdPartyJars/ || error "copy returned $?"
 
 cvs.exe -q checkout martus-jar-verifier || error "cvs returned $?"
 mkdir MartusBuild/verify
@@ -384,7 +394,7 @@ if [ $cvs_tag = 'Y' ]; then
 	echo
 	echo "Labeling CVS with tag: v${cvs_date}_build-$BUILD_NUMBER"
 	cd $HOMEDRIVE/$HOMEPATH
-	RESULT=`cvs.exe tag v${cvs_date}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi`
+	RESULT=`cvs.exe tag v${cvs_date}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi martus-thirdparty`
 	status=$?
 	if [ $status != 0 ]; then
 		echo "Unable to add tag to CVS. You must do it manually"
@@ -662,8 +672,12 @@ cp $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR/Martus/
 cp $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR/Martus/
 
 mkdir -p $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/martus_user_guide*.pdf $CD_IMAGE_DIR/Martus/Docs
-cp $MARTUSBUILDFILES/Documents/quickstartguide*.pdf $CD_IMAGE_DIR/Martus/Docs
+cp $MARTUSBUILDFILES/Documents/martus_user_guide.pdf $CD_IMAGE_DIR/Martus/Docs
+cp $MARTUSBUILDFILES/Documents/quickstartguide.pdf $CD_IMAGE_DIR/Martus/Docs
+cp $MARTUSBUILDFILES/Documents/*_fr.pdf $CD_IMAGE_DIR/Martus/Docs
+cp $MARTUSBUILDFILES/Documents/*_es.pdf $CD_IMAGE_DIR/Martus/Docs
+cp $MARTUSBUILDFILES/Documents/*_ru.pdf $CD_IMAGE_DIR/Martus/Docs
+
 cp -r $MARTUSBUILDFILES/Documents/Licenses $CD_IMAGE_DIR/Martus/Docs/
 
 mkdir -p $CD_IMAGE_DIR/LibExt
@@ -673,6 +687,9 @@ if [ $include_sources = 'Y' ]; then
 	mkdir -p $CD_IMAGE_DIR/Sources/
 	cp $MARTUSSOURCES/$MARTUS_ZIP_NAME $CD_IMAGE_DIR/Sources/
 fi
+
+mkdir -p $CD_IMAGE_DIR/Java/Linux/i586
+cp "$MARTUSBUILDFILES/Java redist/Linux/i586/*.bin" $CD_IMAGE_DIR/Java/Linux/i586/
 
 cd $CD_IMAGE_DIR
 find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
