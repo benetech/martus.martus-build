@@ -43,6 +43,7 @@ public class ConfigInfo implements Serializable
 	public void clearHQKey()						{ hqKey = ""; }
 	public void clearPromptUserRequestSendToServer() { mustAskUserToSendToServer = false; }
 
+	public short getVersion()			{ return version; }
 	public String getAuthor()			{ return author; }
 	public String getOrganization()	{ return organization; }
 	public String getEmail()			{ return email; }
@@ -58,6 +59,7 @@ public class ConfigInfo implements Serializable
 
 	public void clear()
 	{
+		version = 0;
 		author = "";
 		organization = "";
 		email = "";
@@ -95,7 +97,7 @@ public class ConfigInfo implements Serializable
 		try
 		{
 			DataInputStream in = new DataInputStream(inputStream);
-			short version = in.readShort();
+			loaded.version = in.readShort();
 			loaded.author = in.readUTF();
 			loaded.organization = in.readUTF();
 			loaded.email = in.readUTF();
@@ -106,7 +108,7 @@ public class ConfigInfo implements Serializable
 			loaded.templateDetails = in.readUTF();
 			loaded.hqKey = in.readUTF();
 			loaded.serverPublicKey = in.readUTF();
-			if(version > 1)
+			if(loaded.version > 1)
 				loaded.sendContactInfoToServer = in.readBoolean();
 			else
 				loaded.mustAskUserToSendToServer = true;
@@ -148,6 +150,7 @@ public class ConfigInfo implements Serializable
 
 	final short VERSION = 2;
 	//Version 1
+	private short version;
 	private String author;
 	private String organization;
 	private String email;
