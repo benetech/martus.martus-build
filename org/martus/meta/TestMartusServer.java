@@ -1196,7 +1196,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector list1 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), MartusUtilities.getRetrieveBulletinSummaryTags());
 		assertNotNull("listMyBulletinSummaries returned null", list1);
-		assertEquals("wrong length", 3, list1.size());
+		assertEquals("wrong length", 2, list1.size());
 		assertNotNull("null id1 [0]", list1.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
 
@@ -1205,14 +1205,12 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector list2 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), MartusUtilities.getRetrieveBulletinSummaryTags());
 		assertNotNull("listMyBulletinSummaries returned null", list2);
-		assertEquals("wrong length", 3, list2.size());
+		assertEquals("wrong length", 2, list2.size());
 		assertNotNull("null id1 [0]", list2.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
 
 		Vector ids = (Vector)list2.get(1);
 		assertEquals("Wrong # of ids", 2, ids.size());
-		Vector sizes = (Vector)list2.get(2);
-//		assertEquals("Wrong # of sizes", 2, sizes.size());
 		
 		String gotSummary1 = (String)ids.get(0);
 		assertNotNull("1 was null", gotSummary1);
@@ -1220,20 +1218,28 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String gotSummary2 = (String)ids.get(1);
 		assertNotNull("2 was null", gotSummary2);
 		
-//		Integer size1 = (Integer)sizes.get(0);
-//		assertNotNull("Size of 1 was null", size1);
-//		Integer size2 = (Integer)sizes.get(1);
-//		assertNotNull("Size of 2 was null", size1);
-
 		int at1 = gotSummary1.indexOf("=");
 		assertTrue("no = in at1?", at1 >= 0);
+		int sizePos1 = gotSummary1.lastIndexOf("=");
+		assertTrue("no 2nd = in at1?", sizePos1 >= 0);
+		assertNotEquals("only 1 separator in summary1?", at1, sizePos1);
+		
 		String id1 = gotSummary1.substring(0, at1);
-		String summary1 = gotSummary1.substring(at1+1);
+		String summary1 = gotSummary1.substring(at1+1, sizePos1);
+		String bulletinSize1 = gotSummary1.substring(sizePos1+1);
 
 		int at2 = gotSummary2.indexOf("=");
 		assertTrue("no = in at2?", at2 >= 0);
+		int sizePos2 = gotSummary2.lastIndexOf("=");
+		assertTrue("no 2nd = in at2?", sizePos2 >= 0);
+		assertNotEquals("only 1 separator in summary2?", at2, sizePos2);
+
 		String id2 = gotSummary2.substring(0, at2);
-		String summary2 = gotSummary2.substring(at2+1);
+		String summary2 = gotSummary2.substring(at2+1, sizePos2);
+		String bulletinSize2 = gotSummary2.substring(sizePos2+1);
+
+		String b1RealSize = Integer.toString(MartusUtilities.getBulletinSize(store.getDatabase(), b1.getBulletinHeaderPacket()));
+		String b2RealSize = Integer.toString(MartusUtilities.getBulletinSize(store.getDatabase(), privateBulletin.getBulletinHeaderPacket()));
 
 		if(!id1.equals(b1.getLocalId()))
 		{
@@ -1244,12 +1250,19 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			String tempSummary = summary1;
 			summary1 = summary2;
 			summary2 = tempSummary;
+			
+			String tempSize = bulletinSize1;
+			bulletinSize1 = bulletinSize2;
+			bulletinSize2 = tempSize;
 		}
 
 		assertEquals("id1", b1.getLocalId(), id1);
 		assertEquals("summary1", b1.getFieldDataPacket().getLocalId(), summary1);
+		assertEquals("Wrong size of Bulletin 1",b1RealSize , bulletinSize1);
+
 		assertEquals("id2", privateBulletin.getLocalId(), id2);
 		assertEquals("summary2", privateBulletin.getFieldDataPacket().getLocalId(), summary2);
+		assertEquals("Wrong size of Bulletin 2", b2RealSize , bulletinSize2);
 	}
 	
 	public void testDownloadFieldDataPacketWrongSig() throws Exception

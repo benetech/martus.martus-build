@@ -864,14 +864,12 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId, retrieveTags);
 		Vector summaries = summaryCollector.getSummaries();
-		Vector retrieveTagInfo = summaryCollector.getRetrievedTagInfo();
 		String resultCode = (String)summaries.get(0);
 		summaries.remove(0);
 
 		Vector result = new Vector();
 		result.add(resultCode);
 		result.add(summaries);
-		result.add(retrieveTagInfo);
 		if(serverMaxLogging)
 			logging("listMySealedBulletinIds : Exit");
 		return result;
@@ -1831,23 +1829,21 @@ public class MartusServer implements NetworkInterfaceConstants
 			if(summaries == null)
 			{
 				summaries = new Vector();
-				retrievedTagInfo = new Vector();
 				summaries.add(NetworkInterfaceConstants.OK);
 				db.visitAllRecords(this);
 			}
 			return summaries;	
 		}
 		
-		public Vector getRetrievedTagInfo()
-		{
-			return retrievedTagInfo;	
-		}
-
 		void addToSummary(BulletinHeaderPacket bhp) 
 		{
 			String summary = bhp.getLocalId() + "=";
 			summary  += bhp.getFieldDataPacketId();
-		
+			if(retrieveTags.contains(NetworkInterfaceConstants.TAG_BULLETIN_SIZE))
+			{
+				int size = MartusUtilities.getBulletinSize(database, bhp);
+				summary += "=" + size;
+			}
 			summaries.add(summary);
 		}
 
@@ -1855,7 +1851,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		String authorAccountId;
 		Vector summaries;
 		Vector retrieveTags;
-		Vector retrievedTagInfo;
 	}
 	
 	class MySealedSummaryCollector extends SummaryCollector
