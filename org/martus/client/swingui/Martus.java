@@ -36,7 +36,7 @@ class Martus
     public static void main (String args[])
 	{
 		final String javaVersion = System.getProperty("java.version");
-		final String minimumJavaVersion = "1.4.1_02";
+		final String minimumJavaVersion = "1.4.1";
 		if(javaVersion.compareTo(minimumJavaVersion) < 0)
 		{
 			final String errorMessage = "Requires Java version " + minimumJavaVersion + " or later!";

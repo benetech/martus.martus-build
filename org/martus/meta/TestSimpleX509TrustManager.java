@@ -117,6 +117,22 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		catch (CertificateException expectedException) 
 		{
 		}
+		
+		verifyCheckClientTrustedThrowsForSunBugIn141_01(chain, authType);
+	}
+
+	void verifyCheckClientTrustedThrowsForSunBugIn141_01(X509Certificate[] chain, String authType)
+	{
+		SimpleX509TrustManager tm = new SimpleX509TrustManager();
+		tm.setExpectedPublicKey(martusServerSecurity.getPublicKeyString());
+		try
+		{
+			tm.checkClientTrusted(chain, authType);
+			fail("Didn't throw?");
+		}
+		catch (CertificateException expectedException)
+		{
+		}
 	}
 
 	static MockMartusSecurity securityForSSL;

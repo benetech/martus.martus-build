@@ -46,7 +46,9 @@ public class SimpleX509TrustManager implements X509TrustManager
 	public void checkClientTrusted(X509Certificate[] chain, String authType)
 		throws CertificateException
 	{
-		throw new CertificateException("checkClientTrusted: Client certificates are NEVER valid!");
+		// WORKAROUND for a bug in Sun JSSE that shipped with 1.4.1_01 and earlier
+		// where it would invoke this method instead of checkServerTrusted!
+		checkServerTrusted(chain, authType);
 	}
 
 	public void checkServerTrusted(X509Certificate[] chain, String authType)
