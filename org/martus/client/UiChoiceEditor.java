@@ -1,11 +1,8 @@
 /* $Id: UiChoiceEditor.java,v 1.4 2002/09/25 22:07:14 kevins Exp $ */
 package org.martus.client;
 
-import javax.swing.JComponent;
 import javax.swing.JComboBox;
-import javax.swing.event.*;
-
-import org.martus.client.*;
+import javax.swing.JComponent;
 
 public class UiChoiceEditor extends UiField
 {

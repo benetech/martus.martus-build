@@ -20,7 +20,6 @@ import java.util.zip.ZipFile;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
-import org.martus.common.FileDatabase;
 import org.martus.common.FileInputStreamWithSeek;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;

@@ -8,7 +8,6 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.Base64.InvalidBase64Exception;
 
 class FakeServerSupplier implements ServerSupplierInterface
 {

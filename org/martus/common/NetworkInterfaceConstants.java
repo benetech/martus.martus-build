@@ -1,6 +1,5 @@
 package org.martus.common;
 
-import java.util.Vector;
 
 public interface NetworkInterfaceConstants
 {

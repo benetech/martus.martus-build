@@ -4,7 +4,6 @@ import java.awt.Color;
 
 import javax.swing.JComponent;
 import javax.swing.JLabel;
-import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 
 public class UiBoolViewer extends UiField

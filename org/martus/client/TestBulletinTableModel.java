@@ -1,9 +1,11 @@
 package org.martus.client;
 
-import junit.framework.*;
-import java.io.File;
+import junit.framework.TestCase;
 
-import org.martus.common.*;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MockClientDatabase;
+import org.martus.common.MockMartusSecurity;
+import org.martus.common.UniversalId;
 
 public class TestBulletinTableModel extends TestCase
 {

@@ -1,11 +1,6 @@
-/* $Id: TestChoiceItem.java,v 1.4 2002/09/25 22:07:14 kevins Exp $ */
 package org.martus.client;
 
-import junit.framework.*;
-import java.util.*;
-import java.text.*;
-
-import org.martus.client.*;
+import junit.framework.TestCase;
 
 public class TestChoiceItem extends TestCase
 {

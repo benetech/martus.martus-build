@@ -1,15 +1,15 @@
 package org.martus.client;
 
-import java.io.*;
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.dnd.*;
-import java.awt.datatransfer.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.tree.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import org.martus.client.*;
+import javax.swing.AbstractAction;
+import javax.swing.JMenuItem;
+import javax.swing.JPopupMenu;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
+import javax.swing.tree.TreePath;
 
 class UiFolderTreePane extends JScrollPane
 {

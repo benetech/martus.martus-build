@@ -21,13 +21,16 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
+import org
+	.martus
+	.client
+	.ClientSideNetworkHandlerUsingXmlRpc
+	.SSLSocketSetupException;
 import org.martus.common.Base64;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
-import org.martus.common.FileDatabase;
 import org.martus.common.FileInputStreamWithSeek;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusConstants;

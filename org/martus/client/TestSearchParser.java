@@ -1,10 +1,6 @@
 package org.martus.client;
 
-import java.util.*;
-import java.text.*;
-
-import org.martus.client.*;
-import org.martus.common.*;
+import org.martus.common.TestCaseEnhanced;
 
 public class TestSearchParser extends TestCaseEnhanced
 {

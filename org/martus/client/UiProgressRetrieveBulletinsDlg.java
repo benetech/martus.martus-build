@@ -1,7 +1,5 @@
 package org.martus.client;
 
-import java.awt.BorderLayout;
-
 import javax.swing.Box;
 import javax.swing.JLabel;
 

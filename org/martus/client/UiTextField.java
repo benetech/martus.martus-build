@@ -1,13 +1,13 @@
-/* $Id: UiTextField.java,v 1.3 2002/04/18 20:42:55 charles Exp $ */
 package org.martus.client;
 
-import java.awt.Point;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
-import javax.swing.text.JTextComponent;
+import java.awt.event.ActionEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import org.martus.client.*;
+import javax.swing.AbstractAction;
+import javax.swing.Action;
+import javax.swing.JPopupMenu;
+import javax.swing.text.JTextComponent;
 
 public abstract class UiTextField extends UiField
 {

@@ -2,13 +2,9 @@ package org.martus.client;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.util.HashMap;
 
 import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;

@@ -1,10 +1,6 @@
-/* $Id: TestSearchTreeNode.java,v 1.4 2002/09/25 18:29:14 charles Exp $ */
 package org.martus.client;
 
-import java.util.*;
-import java.text.*;
-
-import org.martus.common.*;
+import org.martus.common.TestCaseEnhanced;
 
 public class TestSearchTreeNode extends TestCaseEnhanced
 {

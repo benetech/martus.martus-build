@@ -2,8 +2,6 @@ package org.martus.client;
 
 import java.io.IOException;
 
-import javax.swing.JComponent;
-
 import org.martus.common.AttachmentProxy;
 import org.martus.common.MartusCrypto;
 

@@ -1,7 +1,5 @@
 package org.martus.client;
 
-import javax.swing.JComponent;
-
 import org.martus.common.AttachmentProxy;
 
 public class UiBulletinComponentEditorSection extends UiBulletinComponentSection 

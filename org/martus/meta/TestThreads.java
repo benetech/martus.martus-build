@@ -3,7 +3,6 @@ package org.martus.meta;
 import java.io.File;
 import java.io.StringWriter;
 import java.io.Writer;
-import java.util.Random;
 import java.util.zip.ZipFile;
 
 import org.martus.client.Bulletin;

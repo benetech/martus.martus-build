@@ -1,16 +1,13 @@
 package org.martus.client;
 
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
-import java.security.NoSuchProviderException;
 import java.security.PublicKey;
-import java.security.SignatureException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
 
 import javax.net.ssl.X509TrustManager;
 
-import org.martus.common.*;
+import org.martus.common.MartusSecurity;
+import org.martus.common.MartusUtilities;
 
 public class SimpleX509TrustManager implements X509TrustManager 
 {

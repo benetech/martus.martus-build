@@ -1,15 +1,15 @@
 package org.martus.client;
 
-import javax.swing.*;
-import javax.swing.event.*;
-
-import org.martus.client.*;
-
 import java.text.DateFormat;
 import java.text.ParseException;
-import java.util.Date;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.GregorianCalendar;
+
+import javax.swing.Box;
+import javax.swing.JComboBox;
+import javax.swing.JComponent;
+import javax.swing.JPanel;
 
 public class UiDateEditor extends UiField
 {

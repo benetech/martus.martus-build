@@ -1,7 +1,5 @@
 package org.martus.server;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Vector;
 
 import org.martus.common.Base64;
@@ -12,9 +10,6 @@ import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.MartusCrypto.CryptoException;
-import org.martus.common.Packet.InvalidPacketException;
-import org.martus.common.Packet.SignatureVerificationException;
 
 public class SupplierSideMirroringHandler implements MirroringInterface, NetworkInterfaceConstants
 {

@@ -1,8 +1,6 @@
 package org.martus.server;
 
-import java.io.IOException;
 import java.io.StringWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.Vector;
 
 import org.martus.common.Base64;
@@ -13,7 +11,6 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
-import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;

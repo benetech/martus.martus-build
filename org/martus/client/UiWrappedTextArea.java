@@ -2,11 +2,6 @@ package org.martus.client;
 
 import javax.swing.JTextArea;
 
-
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.event.KeyListener;
-
 public class UiWrappedTextArea extends JTextArea
 {
 	public UiWrappedTextArea(UiMainWindow mainWindow, String message)

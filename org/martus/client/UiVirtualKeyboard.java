@@ -3,11 +3,8 @@ package org.martus.client;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
-import java.util.Iterator;
-import java.util.Vector;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;

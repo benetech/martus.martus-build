@@ -14,8 +14,6 @@ import java.util.zip.ZipOutputStream;
 
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinStore;
-import org.martus.client.ClientFileDatabase;
-import org.martus.client.MartusUserNameAndPassword;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
@@ -23,7 +21,6 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
-import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.DecryptionException;
@@ -31,7 +28,6 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
-import org.martus.server.ServerFileDatabase;
 
 public class TestMartusUtilities extends TestCaseEnhanced 
 {

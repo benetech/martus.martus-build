@@ -1,13 +1,7 @@
 package org.martus.client;
 
-import java.util.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.text.*;
-
-import org.martus.client.*;
-import org.martus.common.*;
+import java.awt.Color;
+import java.util.Vector;
 
 public class UiBulletinView extends UiBulletinComponent
 {

@@ -1,11 +1,8 @@
 package org.martus.common;
 
-import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.StringWriter;
 import java.util.Arrays;
-
-import org.martus.common.*;
 
 public class TestBulletinHeaderPacket extends TestCaseEnhanced
 {

@@ -1,12 +1,9 @@
 package org.martus.common;
 
-import junit.framework.*;
-import java.util.*;
-import java.text.*;
-import java.io.*;
+import java.io.ByteArrayInputStream;
 import java.io.File;
-
-import org.martus.common.*;
+import java.io.IOException;
+import java.io.InputStream;
 
 public class TestUnicodeFileReader extends TestCaseEnhanced
 {

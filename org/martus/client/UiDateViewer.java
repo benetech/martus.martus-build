@@ -1,7 +1,5 @@
 package org.martus.client;
 
-import java.awt.Dimension;
-
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 

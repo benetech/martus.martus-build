@@ -1,6 +1,5 @@
 package org.martus.client;
 
-import org.martus.common.BulletinConstants;
 import org.martus.common.MartusXml;
 
 public class MartusClientXml 

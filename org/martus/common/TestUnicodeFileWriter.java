@@ -1,11 +1,9 @@
 package org.martus.common;
 
-import junit.framework.*;
-import java.util.*;
-import java.text.*;
-import java.io.*;
-
-import org.martus.common.*;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.OutputStream;
 
 public class TestUnicodeFileWriter extends TestCaseEnhanced
 {

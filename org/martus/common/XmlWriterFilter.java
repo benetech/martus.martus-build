@@ -1,11 +1,7 @@
-/* $Id: $ */
 package org.martus.common;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.io.Writer;
-
-import org.martus.common.*;
 
 public class XmlWriterFilter
 {

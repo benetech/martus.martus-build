@@ -2,14 +2,11 @@ package org.martus.server;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MartusCrypto.CryptoInitializationException;
 
 public class CreateKeyPair
 {

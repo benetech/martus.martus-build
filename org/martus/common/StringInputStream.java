@@ -1,6 +1,5 @@
 package org.martus.common;
 
-import java.io.ByteArrayInputStream;
 import java.io.UnsupportedEncodingException;
 
 public class StringInputStream extends ByteArrayInputStreamWithSeek 

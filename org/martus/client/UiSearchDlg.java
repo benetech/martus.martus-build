@@ -2,8 +2,6 @@ package org.martus.client;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DateFormat;
-import java.util.GregorianCalendar;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;

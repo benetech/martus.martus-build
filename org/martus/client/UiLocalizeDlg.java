@@ -1,10 +1,13 @@
-/* $Id: UiLocalizeDlg.java,v 1.8 2002/09/25 22:07:14 kevins Exp $ */
 package org.martus.client;
 
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JLabel;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
 

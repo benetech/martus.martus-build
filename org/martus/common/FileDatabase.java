@@ -15,8 +15,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import org.martus.common.Database.AccountVisitor;
-import org.martus.common.Database.PacketVisitor;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 
