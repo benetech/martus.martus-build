@@ -331,9 +331,9 @@ public class TestFileDatabase extends TestCaseEnhanced
 		HashMap map = new HashMap();
 		String dirSeparator = File.separator;
 		String relativeDir1 = "bucket1"+ dirSeparator +"a1";
-		String absoluteDir2 = "C:\\Martus\\";
+		String absoluteDir2 = "C:" + dirSeparator + "Martus" + dirSeparator;
 		String relativeDir2 = "bucket2"+ dirSeparator +"a1";
-		String absoluteDir3 = File.separator + "home" + File.separator;
+		String absoluteDir3 = dirSeparator + "home" + dirSeparator;
 		String relativeDir3 = "bucket3"+ dirSeparator +"a1";
 		String account1 = "account1";
 		String account2 = "account2";
