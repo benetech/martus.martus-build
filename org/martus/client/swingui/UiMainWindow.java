@@ -436,6 +436,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return (UIManager.getSystemLookAndFeelClassName().indexOf("MacLookAndFeel") >= 0);
 	}
 
+	public boolean isMSWindows()
+	{
+		return (UIManager.getSystemLookAndFeelClassName().indexOf("WindowsLookAndFeel") >= 0);
+	}
+
+
 	public void setCurrentDefaultKeyboardVirtual(boolean keyboard)
 	{
 		uiState.setCurrentDefaultKeyboardVirtual(keyboard);

@@ -79,6 +79,8 @@ public class UiAttachmentViewer extends JPanel
 		viewButton = new JButton(app.getButtonLabel("viewattachment"));
 		viewButton.addActionListener(new ViewHandler());
 		viewButton.setEnabled(false);
+		if(!mainWindowToUse.isMSWindows())
+			viewButton.setVisible(false);
 		buttonBox.add(viewButton);
 
 		buttonBox.add(Box.createHorizontalGlue());
