@@ -1103,11 +1103,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			setLocation(appPosition);
 			setSize(appDimension);
 			if(uiState.isCurrentAppMaximized())
+			{
+				setSize(750, 550);
 				setExtendedState(MAXIMIZED_BOTH);
+			}
 		}
 		else
 		{
-			setSize(screenSize.width, screenSize.height - 50);
+			setSize(screenSize.width -50 , screenSize.height - 50);
 			setExtendedState(MAXIMIZED_BOTH);	
 		}
 	}
