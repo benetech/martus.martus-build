@@ -31,10 +31,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
-import org.martus.util.UnicodeWriter;
-
 import junit.framework.AssertionFailedError;
 import junit.framework.TestCase;
+
+import org.martus.util.UnicodeWriter;
 
 public class TestCaseEnhanced extends TestCase
 {

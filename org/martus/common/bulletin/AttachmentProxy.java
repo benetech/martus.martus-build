@@ -30,9 +30,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import org.martus.common.crypto.*;
-import org.martus.common.packet.*;
-import org.martus.util.*;
+import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.packet.AttachmentPacket;
+import org.martus.common.packet.Packet;
+import org.martus.common.packet.UniversalId;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
 
 public class AttachmentProxy
 {

@@ -9,5 +9,7 @@
     <classpathentry kind="var" path="jsse"/>
     <classpathentry kind="var" path="JRE_LIB"/>
     <classpathentry kind="src" path="/martus-hrdag"/>
+    <classpathentry kind="src" path="/martus-swing"/>
+    <classpathentry kind="src" path="/martus-utils"/>
     <classpathentry kind="output" path=""/>
 </classpath>

@@ -43,8 +43,8 @@ import javax.swing.JRadioButton;
 
 import org.martus.client.swingui.UiLocalization;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.utilities.MartusFlexidate;
 import org.martus.swing.ParagraphLayout;
-import org.martus.util.MartusFlexidate;
 
 public class UiFlexiDateEditor extends UiField
 {

@@ -4,6 +4,8 @@
 	<comment></comment>
 	<projects>
 		<project>martus-hrdag</project>
+		<project>martus-swing</project>
+		<project>martus-utils</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

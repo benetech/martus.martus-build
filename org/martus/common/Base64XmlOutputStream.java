@@ -24,23 +24,53 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.test;
+package org.martus.common;
 
-import junit.framework.TestCase;
+import java.io.IOException;
+import java.io.OutputStream;
 
-import org.martus.client.core.ChoiceItem;
+import org.martus.util.Base64;
 
-public class TestChoiceItem extends TestCase
+public class Base64XmlOutputStream extends OutputStream
 {
-    public TestChoiceItem(String name)
+	public Base64XmlOutputStream(XmlWriterFilter destination)
 	{
-		super(name);
+		dest = destination;
+		buffer = new byte[Base64.BYTESPERLINE];
+		offset = 0;
 	}
 
-	public void testBasics()
+	public void write(int b) throws IOException
 	{
-		ChoiceItem item = new ChoiceItem("a", "b");
-		assertEquals("a", item.getCode());
-		assertEquals("b", item.toString());
+		buffer[offset++] = (byte)b;
+		if(offset >= buffer.length)
+			flush();
 	}
+
+	public void flush() throws IOException
+	{
+		flushBuffer();
+	}
+
+	public void close() throws IOException
+	{
+		flush();
+	}
+
+	private void flushBuffer() throws IOException
+	{
+		String thisLine = Base64.encode(buffer, 0, offset);
+		writeLine(thisLine);
+		offset = 0;
+	}
+
+	private void writeLine(String thisLine) throws IOException
+	{
+		dest.writeDirect(thisLine);
+		dest.writeDirect("\n");
+	}
+
+	XmlWriterFilter dest;
+	byte[] buffer;
+	int offset;
 }

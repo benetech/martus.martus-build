@@ -29,7 +29,7 @@ package org.martus.common;
 import java.io.IOException;
 import java.io.Writer;
 
-import org.martus.common.crypto.*;
+import org.martus.common.crypto.MartusCrypto;
 
 public class XmlWriterFilter
 {

@@ -30,10 +30,10 @@ import java.io.File;
 
 import org.martus.common.MartusXml;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.BulletinLoader;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinZipImporter;
-import org.martus.common.bulletin.BulletinForTesting;
 import org.martus.common.bulletin.Bulletin.DamagedBulletinException;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.database.DatabaseKey;

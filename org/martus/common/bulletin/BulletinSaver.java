@@ -32,9 +32,10 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 import org.martus.common.MartusUtilities;
-import org.martus.common.crypto.*;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
-import org.martus.common.database.*;
+import org.martus.common.database.Database;
+import org.martus.common.database.DatabaseKey;
 import org.martus.common.packet.AttachmentPacket;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
@@ -43,7 +44,8 @@ import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
-import org.martus.util.*;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
 import org.martus.util.Base64.InvalidBase64Exception;
 
 public class BulletinSaver

@@ -30,7 +30,7 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.martus.client.swingui.UiLocalization;
-import org.martus.util.MartusFlexidate;
+import org.martus.common.utilities.MartusFlexidate;
 
 
 public class UiFlexiDateViewer extends UiField

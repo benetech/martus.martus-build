@@ -46,11 +46,9 @@ import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
+import org.martus.common.utilities.MartusFlexidate;
 import org.martus.util.InputStreamWithSeek;
-import org.martus.util.MartusFlexidate;
 import org.martus.util.Base64.InvalidBase64Exception;
-
-
 
 public class Bulletin implements BulletinConstants
 {
@@ -348,6 +346,13 @@ public class Bulletin implements BulletinConstants
 		getPrivateFieldDataPacket().setHQPublicKey(key);
 	}
 
+	public static DateFormat getStoredDateFormat()
+	{
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		df.setLenient(false);
+		return df;
+	}
+
 	public DatabaseKey getDatabaseKeyForLocalId(String localId)
 	{
 		UniversalId uidFdp = UniversalId.createFromAccountAndLocalId(getAccount(), localId);
@@ -487,13 +492,6 @@ public class Bulletin implements BulletinConstants
 	{
 		DateFormat df = getStoredDateFormat();
 		return df.format(new Date());
-	}
-
-	public static DateFormat getStoredDateFormat()
-	{
-		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
-		df.setLenient(false);
-		return df;
 	}
 
 	public BulletinHeaderPacket getBulletinHeaderPacket()
