@@ -55,8 +55,8 @@ public class UiFlexiDateEditor extends UiField
 		component = new JPanel();		
 		component.setLayout(new ParagraphLayout());		
 		Box boxDateSelection = Box.createHorizontalBox();				
-		exactDateRB = new JRadioButton("Exact Date", true);			
-		flexiDateRB = new JRadioButton("Date Range");
+		exactDateRB = new JRadioButton(localizationToUse.getFieldLabel("exactDate"), true);			
+		flexiDateRB = new JRadioButton(localizationToUse.getFieldLabel("dateRange"));		
 		
 		ButtonGroup radioGroup = new ButtonGroup();
 		radioGroup.add(exactDateRB);

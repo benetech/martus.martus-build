@@ -583,6 +583,11 @@ public class EnglishStrings
 "field:UntitledBulletin=Untitled Bulletin",
 "field:GetShareFileNameDescription=This file name should be unique and identifiable to you but we recommend not using your user name.  Each file will be generated with this name and its number sequence.",
 
+"field:between=Between",
+"field:and=and",
+"field:exactDate=Exact Date",
+"field:dateRange=Date Range",
+
 "folder:%OutBox=Outbox",
 "folder:%Sent=Sent Bulletins",
 "folder:%Draft=Draft Bulletins",

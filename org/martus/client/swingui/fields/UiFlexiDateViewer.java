@@ -58,7 +58,8 @@ public class UiFlexiDateViewer extends UiField
 		{
 			String beginDate = newText.substring(0,dateBreak);
 			String endDate = newText.substring(dateBreak+1);			
-			label.setText("  Between "+ beginDate+ " and "+ endDate+"  ");				
+			label.setText("  "+localization.getFieldLabel("between")+" "+ beginDate+ 
+					" "+localization.getFieldLabel("and")+" "+ endDate+"  ");				
 		}
 		else
 			label.setText("  " + value + "  ");
