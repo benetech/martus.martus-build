@@ -52,4 +52,8 @@ public class Exceptions
 	{
 	}
 	
+	public static class ServerNotAvailableException extends Exception
+	{
+	}
+
 }

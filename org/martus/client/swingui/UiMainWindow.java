@@ -49,6 +49,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -77,6 +78,7 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
+import org.martus.client.core.MartusApp.ServerNotAvailableException;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
 import org.martus.client.swingui.UiUtilities.Delay;
@@ -787,11 +789,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			ClientSideNetworkGateway gateway = app.buildGateway(serverIPAddress, serverPublicKey);
 
 			String newServerCompliance = getServerCompliance(gateway);
-			if(!confirmServerCompliance(newServerCompliance))
+			if(!confirmServerCompliance("ServerComplianceDescription", newServerCompliance))
 			{
 				//TODO:The following line shouldn't be necessary but without it, the trustmanager 
 				//will reject the old server, we don't know why.
 				app.buildGateway(info.getServerName(), info.getServerPublicKey()); 
+				notifyDlg(this, "UserRejectedServerCompliance");
 				inConfigServer = false;
 				return;
 			}
@@ -840,23 +843,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			return app.getServerCompliance(gateway);
 		}
-		catch (ServerCallFailedException e)
+		catch (Exception e)
 		{
 			return "";
 		}
 	}
 
-	boolean confirmServerCompliance(String newServerCompliance)
+	boolean confirmServerCompliance(String descriptionTag, String newServerCompliance)
 	{
-
 		if(newServerCompliance.equals(""))
 			return confirmDlg(this,"ServerComplianceFailed");
 			
-		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", "ServerComplianceDescription", newServerCompliance);
-		if(dlg.getResult())
-			return true;
-		notifyDlg(this, "UserRejectedServerCompliance");
-		return false;
+		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", descriptionTag, newServerCompliance);
+		return dlg.getResult();
 	}
 
 	private void requestToUpdateContactInfoOnServerAndSaveInfo()
@@ -1561,8 +1560,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			if(inConfigServer)
 				return;
+			if(inComplianceDialog)
+				return;
 			try
 			{
+				checkComplianceStatement();
 				checkForNewsFromServer();
 				try
 				{
@@ -1587,6 +1589,39 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				}
 			}
 			catch(Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+		
+		public void checkComplianceStatement()
+		{
+			if(alreadyCheckedCompliance)
+				return;
+			try
+			{
+				ClientSideNetworkGateway gateway = app.getCurrentNetworkInterfaceGateway();
+				String compliance = app.getServerCompliance(gateway);
+				alreadyCheckedCompliance = true;
+				if(!compliance.equals(app.getConfigInfo().getServerCompliance()))
+				{
+					ThreadedServerComplianceDlg dlg = new ThreadedServerComplianceDlg(compliance);
+					SwingUtilities.invokeAndWait(dlg);
+				}
+			}
+			catch (ServerCallFailedException weWillTryAgainLater)
+			{
+				return;
+			}
+			catch (ServerNotAvailableException weWillTryAgainLater)
+			{
+				return;
+			} 
+			catch (InterruptedException e)
+			{
+				e.printStackTrace();
+			} 
+			catch (InvocationTargetException e)
 			{
 				e.printStackTrace();
 			}
@@ -1626,7 +1661,34 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 			String notifyTag;
 		}
-
+		
+		class ThreadedServerComplianceDlg implements Runnable
+		{
+			public ThreadedServerComplianceDlg(String newComplianceToUse)
+			{
+				newCompliance = newComplianceToUse;
+			}
+			
+			public void run()
+			{
+				inComplianceDialog = true;
+				if(confirmServerCompliance("ServerComplianceChangedDescription", newCompliance))
+				{
+					String serverAddress = app.getConfigInfo().getServerName();
+					String serverKey = app.getConfigInfo().getServerPublicKey();
+					app.setServerInfo(serverAddress, serverKey, newCompliance);
+				}
+				else
+				{
+					app.setServerInfo("", "", "");
+					notifyDlg(UiMainWindow.this, "ExistingServerRemoved");
+				}
+				inComplianceDialog = false;
+			}
+			
+			String newCompliance;
+		}
+		
 		class ThreadedMessageDlg implements Runnable
 		{
 			public ThreadedMessageDlg(String tag, String message)
@@ -1642,6 +1704,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String titleTag;
 			String messageContents;
 		}
+
+		boolean alreadyCheckedCompliance;
+		boolean inComplianceDialog;
 		boolean alreadyGotNews;
 	}
 

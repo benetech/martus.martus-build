@@ -127,7 +127,8 @@ public class EnglishStrings
 "wintitle:notifyQuickEraseWorked=Quick Erase",
 "wintitle:notifyQuickEraseFailed=Quick Erase Error",
 "wintitle:notifyUserRejectedServerCompliance=Server Compliance Statement",
-		
+"wintitle:notifyExistingServerRemoved=Server Removed",
+				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
 "wintitle:inputservermagicword=Request Upload Permission",
@@ -366,7 +367,8 @@ public class EnglishStrings
 "field:OnlineHelpTOCMessage=Topics:",
 "field:OnlineHelpTOCMessageDescription=Click on topic to display details.",
 "field:DefaultDetailFiles=Default Details",
-"field:ServerComplianceDescription=This server has provided the following statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  You can accept or reject this server based on its compliance.",
+"field:ServerComplianceDescription=This server has provided the following statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  You can accept or reject this server based on its compliance statement.",
+"field:ServerComplianceChangedDescription=The current server has updated its statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  The new statement appears below. You can accept or reject this server based on its compliance statement.",
 
 "field:VirtualUserNameDescription=(Enter using regular keyboard)",
 "field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below",
@@ -493,7 +495,8 @@ public class EnglishStrings
 "field:notifyQuickEraseWorkedcause=All bulletins and folders were successfully deleted.",
 "field:notifyQuickEraseFailedcause=Errors prevented some bulletins or folders from being deleted.",
 "field:notifyUserRejectedServerCompliancecause=You have chosen not to use this server",
-
+"field:notifyExistingServerRemovedcause=You will have to select a server for any bulletins to be backed up to that server, or to retrieve bulletins from that server.",
+		
 	
 "field:messageServerNewscause=The current server has sent this message:",
 

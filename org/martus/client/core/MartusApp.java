@@ -866,10 +866,11 @@ public class MartusApp
 		return new Vector();
 	}
 
-	public String getServerCompliance(ClientSideNetworkGateway gateway) throws ServerCallFailedException
+	public String getServerCompliance(ClientSideNetworkGateway gateway) 
+		throws ServerCallFailedException, ServerNotAvailableException
 	{
 		if(!isSSLServerAvailable(gateway))
-			throw new ServerCallFailedException();
+			throw new ServerNotAvailableException();
 		try
 		{
 			NetworkResponse response = gateway.getServerCompliance(security);
@@ -1389,17 +1390,17 @@ public class MartusApp
 
 	public boolean isSSLServerAvailable(ClientSideNetworkGateway server)
 	{
-		NetworkResponse response = server.getServerInfo();
-		if(!response.getResultCode().equals(NetworkInterfaceConstants.OK))
-			return false;
-
 		try
 		{
+			NetworkResponse response = server.getServerInfo();
+			if(!response.getResultCode().equals(NetworkInterfaceConstants.OK))
+				return false;
+
 			String version = (String)response.getResultVector().get(0);
 			if(version.indexOf("MartusServer") == 0)
 				return true;
 		}
-		catch(Exception e)
+		catch(Exception notInterestingBecauseTheServerMightJustBeDown)
 		{
 			//System.out.println("MartusApp.isSSLServerAvailable: " + e);
 		}
