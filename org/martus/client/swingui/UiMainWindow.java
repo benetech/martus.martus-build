@@ -259,10 +259,21 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void folderSelectionHasChanged(BulletinFolder f)
 	{
+		Cursor originalCursor = setWaitingCursor();
+		table.setFolder(f);
+		resetCursor(originalCursor);
+	}
+
+	public void resetCursor(Cursor originalCursor)
+	{
+		setCursor(originalCursor);
+	}
+
+	public Cursor setWaitingCursor()
+	{
 		Cursor originalCursor = getCursor();
 		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-		table.setFolder(f);
-		setCursor(originalCursor);
+		return originalCursor;
 	}
 
 	public void folderContentsHaveChanged(BulletinFolder f)
@@ -717,8 +728,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		UiSearchDlg searchDlg = new UiSearchDlg(this);
 		if(!searchDlg.getResults())
 			return;
-		Cursor originalCursor = getCursor();
-		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		Cursor originalCursor = setWaitingCursor();
 
 		app.search(searchDlg.getSearchString(), searchDlg.getStartDate(), searchDlg.getEndDate());
 		BulletinStore store = getStore();
@@ -726,7 +736,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		folders.folderTreeContentsHaveChanged();
 		folders.folderContentsHaveChanged(searchFolder);
 		int bulletinsFound = searchFolder.getBulletinCount();
-		setCursor(originalCursor);
+		resetCursor(originalCursor);
 		if(bulletinsFound > 0)
 		{
 			selectSearchFolder();
@@ -1180,8 +1190,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 
-			Cursor originalCursor = getCursor();
-			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			Cursor originalCursor = setWaitingCursor();
 			try
 			{
 				String result = app.deleteServerDraftBulletins(uidList);
@@ -1195,7 +1204,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 			finally
 			{
-				setCursor(originalCursor);
+				resetCursor(originalCursor);
 			}
 		}
 		catch (MartusCrypto.MartusSignatureException e)

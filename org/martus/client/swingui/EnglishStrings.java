@@ -60,7 +60,8 @@ public class EnglishStrings
 "wintitle:confirmOverWriteWithBackupKeyPair=Confirm Replace Existing File",
 "wintitle:confirmExportPrivateData=Confirm Export Private Data",
 "wintitle:confirmResetDefaultDetails=Reset Contents",
-
+"wintitle:confirmNotYourBulletinViewAttachmentAnyways=View Attachment",
+		
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
 "wintitle:notifyPasteErrorNotAllowed=Cannot Paste Bulletin(s)",
@@ -410,7 +411,9 @@ public class EnglishStrings
 "field:confirmExportPrivateDataeffect=Anyone who gets a copy of this file will be able to read all the private data.",
 "field:confirmResetDefaultDetailscause=This will reset the current Default Details contents to the original contents. After resetting the contents, you should review them to be sure they are correct.",
 "field:confirmResetDefaultDetailseffect=After you review the contents, you can accept them, modify them, or press cancel to keep the existing default details.",
-
+"field:confirmNotYourBulletinViewAttachmentAnywayscause=Warning the bulletin you are currently viewing is not yours.  Attachments can contain viruses, or malicious programs harmful to your computer.",
+"field:confirmNotYourBulletinViewAttachmentAnywayseffect=Clicking on Yes will display the attachment, clicking on No will not try to display the attachment.",
+		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
 "field:notifyPasteErrorNotAllowedcause=One or more bulletins cannot be pasted in that folder. This may be because of their Draft/Sealed status, or their author.",

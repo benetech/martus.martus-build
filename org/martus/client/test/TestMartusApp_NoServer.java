@@ -258,6 +258,19 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		assertEquals("client id wrong?", b.getAccount(), appWithAccount.getAccountId());
 		TRACE_END();
 	}
+	
+	public void testIsOurBulletin() throws Exception
+	{
+		TRACE_BEGIN("testIsOurBulletin");
+		Bulletin b = appWithAccount.createBulletin();
+		assertTrue("not our bulletin?", appWithAccount.isOurBulletin(b));
+
+		MockMartusApp appWithDifferentAccount;
+		appWithDifferentAccount = MockMartusApp.create(mockSecurityForApp);
+		appWithDifferentAccount.createAccount("bogusName","bogusPassword");
+		assertFalse("This is our bulletin?", appWithDifferentAccount.isOurBulletin(b));
+		TRACE_END();
+	}
 
 	public void testConfigInfo() throws Exception
 	{

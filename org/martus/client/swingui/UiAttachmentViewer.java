@@ -26,6 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -219,7 +220,14 @@ public class UiAttachmentViewer extends JPanel
 			int selection = GetSelection();
 			if(selection == -1)
 				return;
+			if(!mainWindow.getApp().isOurBulletin(bulletinComponent.getCurrentBulletin()))
+			{
+				if(!mainWindow.confirmDlg(mainWindow, "NotYourBulletinViewAttachmentAnyways"))
+					return;
+			}
+
 			String fileName = (String)model.getValueAt(selection,1);
+			Cursor originalCursor = mainWindow.setWaitingCursor();
 			try
 			{
 				File temp = File.createTempFile(extractFileNameOnly(fileName), extractExtentionOnly(fileName));
@@ -239,7 +247,7 @@ public class UiAttachmentViewer extends JPanel
 				mainWindow.notifyDlg(mainWindow, "UnableToViewAttachment");
 				System.out.println("Unable to view file :" + e);
 			}
-
+			mainWindow.resetCursor(originalCursor);
 		}
 	}
 	
@@ -267,6 +275,7 @@ public class UiAttachmentViewer extends JPanel
 					if(!mainWindow.confirmDlg(mainWindow,"OverWriteExistingFile"))
 						return;
 				}
+				Cursor originalCursor = mainWindow.setWaitingCursor();
 				AttachmentProxy proxy = model.getAttachmentProxyAt(selection,1);
 				try
 				{
@@ -278,6 +287,7 @@ public class UiAttachmentViewer extends JPanel
 					mainWindow.notifyDlg(mainWindow, "UnableToSaveAttachment");
 					System.out.println("Unable to save file :" + e);
 				}
+				mainWindow.resetCursor(originalCursor);
 			}
 		}
 	}

@@ -85,15 +85,13 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 
 	public void drop(DropTargetDropEvent dtde)
 	{
-		Cursor originalCursor = observer.getCursor();
-		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-
+		Cursor originalCursor = observer.setWaitingCursor();
 		if(dtde.isDataFlavorSupported(TransferableBulletinList.getBulletinListDataFlavor()))
 			dropTransferableBulletins(dtde);
 		else if(dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			dropFile(dtde);
 
-		observer.setCursor(originalCursor);
+		observer.resetCursor(originalCursor);
 	}
 
 	// private methods
@@ -235,8 +233,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		IOException,
 		InvalidBase64Exception
 	{
-		Cursor originalCursor = observer.getCursor();
-		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+		Cursor originalCursor = observer.setWaitingCursor();
 		try
 		{
 			toFolder.getStore().importZipFileBulletin(file, toFolder, false);
@@ -244,7 +241,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		}
 		finally
 		{
-			observer.setCursor(originalCursor);
+			observer.resetCursor(originalCursor);
 		}
 	}
 

@@ -1350,6 +1350,11 @@ public class MartusApp
 	{
 		return store.getAccountId();
 	}
+	
+	public boolean isOurBulletin(Bulletin b)
+	{
+		return getAccountId().equals(b.getAccount());	
+	}
 
 	public void createAccountInternal(File keyPairFile, String userName, String userPassPhrase) throws
 					AccountAlreadyExistsException,
