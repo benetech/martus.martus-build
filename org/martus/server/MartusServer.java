@@ -321,6 +321,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		return supplierHandler;
 	}
+
+	public boolean isAuthorizedForMirroring(String callerAccountId)
+	{
+		return false;
+	}
+
 	
 	boolean hasAccount()
 	{

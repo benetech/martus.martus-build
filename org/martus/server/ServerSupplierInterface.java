@@ -9,6 +9,8 @@ public interface ServerSupplierInterface
 {
 	public Database getDatabase();
 	public MartusCrypto getSecurity();
+	public boolean isAuthorizedForMirroring(String callerAccountId);
 	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 			int chunkOffset, int maxChunkSize);
+
 }

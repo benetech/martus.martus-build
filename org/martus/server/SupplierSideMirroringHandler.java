@@ -193,7 +193,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 	
 	boolean isAuthorizedForMirroring(String callerAccountId)
 	{
-		return authorizedCallers.contains(callerAccountId);
+		return supplier.isAuthorizedForMirroring(callerAccountId);
 	}
 
 	public static class UnknownCommandException extends Exception {}

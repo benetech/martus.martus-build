@@ -52,7 +52,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 	public void testNonStringCommand() throws Exception
 	{
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
 		parameters.add(new Integer(3));
@@ -64,7 +64,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testUnknownCommand() throws Exception
 	{
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
@@ -78,7 +78,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testPing() throws Exception
 	{
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
@@ -91,8 +91,6 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testGetAllAccountsNotAuthorized() throws Exception
 	{
-		handler.clearAllAuthorizedCallers();
-		
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
@@ -103,8 +101,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 	public void testGetAllAccountsNoneAvailable() throws Exception
 	{
-		handler.clearAllAuthorizedCallers();
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 		
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
@@ -118,7 +115,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 	public void testGetAllAccounts() throws Exception
 	{
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		String accountId1 = "first sample account";
 		writeSealedRecord(db, accountId1);
@@ -149,7 +146,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testListBulletinsBadAuthorAccountId() throws Exception
 	{
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_LIST_BULLETINS_FOR_MIRRORING);
@@ -176,7 +173,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		bhp2.setStatus(BulletinConstants.STATUSDRAFT);
 		Vector result3 = writeSampleHeaderPacket(bhpDraft);
 		
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_LIST_BULLETINS_FOR_MIRRORING);
@@ -204,7 +201,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testGetBulletinChunkBadAuthorAccountId() throws Exception
 	{
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
@@ -217,7 +214,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	public void testGetBulletinChunkBadParameter() throws Exception
 	{
-		handler.addAuthorizedCaller(callerAccountId);
+		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
@@ -237,7 +234,8 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		final String bulletinLocalId = "b";
 		final int offset = 123;
 		final int maxChunkSize = 456;
-		handler.addAuthorizedCaller(callerAccountId);
+		
+		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
@@ -312,6 +310,11 @@ class FakeServerSupplier implements ServerSupplierInterface
 		return security;
 	}
 	
+	public boolean isAuthorizedForMirroring(String callerAccountId)
+	{
+		return callerAccountId.equals(authorizedCaller);
+	}
+
 	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 			int chunkOffset, int maxChunkSize)
 	{
@@ -327,7 +330,8 @@ class FakeServerSupplier implements ServerSupplierInterface
 		result.add(returnZipData);
 		return result;
 	}
-	
+
+	String authorizedCaller;
 	int returnTotalLen = 234;
 	int returnChunkSize = 345;
 	String returnZipData = "zip data";
