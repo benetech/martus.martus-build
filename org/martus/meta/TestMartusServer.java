@@ -720,9 +720,9 @@ public class TestMartusServer extends TestCaseEnhanced
 	public void testExtractPacketsToZipStream() throws Exception
 	{
 		uploadSampleBulletin();
-		DatabaseKey[] packetKeys = MartusServer.getAllPacketKeys(b1.getBulletinHeaderPacket());
+		DatabaseKey[] packetKeys = MartusUtilities.getAllPacketKeys(b1.getBulletinHeaderPacket());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		testServer.extractPacketsToZipStream(b1.getAccount(), packetKeys, out);
+		MartusUtilities.extractPacketsToZipStream(b1.getAccount(), testServer.getDatabase(), packetKeys, out, serverSecurity);
 		assertEquals("wrong length?", b1ZipBytes.length, out.toByteArray().length);
 		
 		String zipString = Base64.encode(out.toByteArray());
@@ -1478,7 +1478,7 @@ public class TestMartusServer extends TestCaseEnhanced
 	public void testGetAllPacketKeysSealed() throws Exception
 	{
 		BulletinHeaderPacket bhp = b1.getBulletinHeaderPacket();
-		DatabaseKey[] keys = testServer.getAllPacketKeys(bhp);
+		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
 		
 		assertNotNull("null ids?", keys);
 		assertEquals("count?", 5, keys.length);
@@ -1513,7 +1513,7 @@ public class TestMartusServer extends TestCaseEnhanced
 	public void testGetAllPacketKeysDraft() throws Exception
 	{
 		BulletinHeaderPacket bhp = draft.getBulletinHeaderPacket();
-		DatabaseKey[] keys = testServer.getAllPacketKeys(bhp);
+		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
 		
 		assertNotNull("null ids?", keys);
 		assertEquals("count?", 3, keys.length);
@@ -1556,6 +1556,39 @@ public class TestMartusServer extends TestCaseEnhanced
 		
 	}
 	
+	public void testBannedClients()
+		throws Exception
+	{
+		String clientId = clientSecurity.getPublicKeyString();
+		String hqId = hqSecurity.getPublicKeyString();
+		File tempBanned = createTempFile();		
+		
+		UnicodeWriter writer = new UnicodeWriter(tempBanned);
+		writer.writeln(clientId);
+		writer.close();
+
+		testServer.loadBannedClients(tempBanned);
+		
+		Vector result;
+		
+		result = testServer.listMySealedBulletinIds(clientId);
+		verifyErrorResult("listMySealedBulletinIds", result, NetworkInterfaceConstants.REJECTED );
+		
+		result = testServer.listMyDraftBulletinIds(clientId);
+		verifyErrorResult("listMyDraftBulletinIds", result, NetworkInterfaceConstants.REJECTED );
+		
+		result = testServer.listFieldOfficeSealedBulletinIds(hqId, clientId);
+		assertEquals("listFieldOfficeSealedBulletinIds", NetworkInterfaceConstants.OK, result.get(0) );
+		
+		result = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId);
+		assertEquals("listFieldOfficeDraftBulletinIds", NetworkInterfaceConstants.OK, result.get(0) );
+	}
+	
+	void verifyErrorResult(String label, Vector vector, String expected )
+	{
+		assertEquals( label + " error size not 1?", 1, vector.size());
+		assertEquals( label + " error wrong result code", expected, vector.get(0));
+	}
 	void uploadSampleBulletin() 
 	{
 		testServer.security = serverSecurity;

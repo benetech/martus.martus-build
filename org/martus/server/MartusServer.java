@@ -23,11 +23,9 @@ import java.util.TimerTask;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import org.martus.common.AttachmentPacket;
 import org.martus.common.Base64;
-import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -44,17 +42,19 @@ import org.martus.common.Packet;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
-import org.martus.common.ZipEntryInputStream;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
+import org.martus.common.MartusUtilities.DuplicatePacketException;
 import org.martus.common.MartusUtilities.FileTooLargeException;
+import org.martus.common.MartusUtilities.SealedPacketExistsException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
+import sun.security.krb5.internal.crypto.e;
 
 public class MartusServer
 {
@@ -803,6 +803,10 @@ public class MartusServer
 	{
 		if(serverMaxLogging)
 			logging("listFieldOfficeSealedBulletinIds " + getFolderFromClientId(hqAccountId));
+			
+//		if( !isClientAuthorized(hqAccountId) )
+//			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+		
 		SummaryCollector summaryCollector = new FieldOfficeSealedSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
@@ -865,8 +869,8 @@ public class MartusServer
 		if(serverMaxLogging)
 			logging("listFieldOfficeAccounts " + getFolderFromClientId(hqAccountId));
 			
-		if( !isClientAuthorized(hqAccountId) )
-			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+//		if( !isClientAuthorized(hqAccountId) )
+//			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 
 		FieldOfficeAccountCollector visitor = new FieldOfficeAccountCollector(hqAccountId);
 		getDatabase().visitAllRecords(visitor);
@@ -882,10 +886,10 @@ public class MartusServer
 		if(serverMaxLogging)
 			logging("downloadAuthorizedPacket: " + getFolderFromClientId(myAccountId));
 			
-		if( !isClientAuthorized(myAccountId) )
-		{
-			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
-		}
+//		if( !isClientAuthorized(myAccountId) )
+//		{
+//			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+//		}
 	
 		String signedString = authorAccountId + "," + packetLocalId + "," + myAccountId;
 		if(!isSignatureCorrect(signedString, signature, myAccountId))
@@ -1141,6 +1145,14 @@ public class MartusServer
 		if(serverMaxLogging)
 			logging("loadNotAuthorizedClients");
 
+		loadBannedClients(bannedClientsFile);
+		
+		if(serverMaxLogging)
+				logging("loadNotAuthorizedClients : Exit OK");
+	}
+
+	public void loadBannedClients(File bannedClientsFile)
+	{
 		try
 		{
 			long lastModified = bannedClientsFile.lastModified();
@@ -1161,9 +1173,6 @@ public class MartusServer
 		{
 			logging("loadNotAuthorizedClients -- Error loading can-upload list: " + e);
 		}
-		
-		if(serverMaxLogging)
-				logging("loadNotAuthorizedClients : Exit OK");
 	}
 
 	public static boolean keyBelongsToClient(DatabaseKey key, String clientId)
@@ -1171,47 +1180,6 @@ public class MartusServer
 		return clientId.equals(key.getAccountId());
 	}
 
-	public static DatabaseKey[] getAllPacketKeys(BulletinHeaderPacket bhp)
-	{
-		String accountId = bhp.getAccountId();
-		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
-		String[] privateAttachmentIds = bhp.getPrivateAttachmentIds();
-		
-		int corePacketCount = 3;
-		int publicAttachmentCount = publicAttachmentIds.length;
-		int privateAttachmentCount = privateAttachmentIds.length;
-		int totalPacketCount = corePacketCount + publicAttachmentCount + privateAttachmentCount;
-		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
-		int next = 0;
-		
-		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
-		UniversalId privateDataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getPrivateFieldDataPacketId());
-
-		keys[next++] = new DatabaseKey(dataUid);
-		keys[next++] = new DatabaseKey(privateDataUid);
-		for(int i=0; i < publicAttachmentIds.length; ++i)
-		{
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
-			keys[next++] = new DatabaseKey(uid);
-		}
-		for(int i=0; i < privateAttachmentIds.length; ++i)
-		{
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, privateAttachmentIds[i]);
-			keys[next++] = new DatabaseKey(uid);
-		}
-		keys[next++] = new DatabaseKey(bhp.getUniversalId());
-		
-		boolean isDraft = (bhp.getStatus().equals(BulletinConstants.STATUSDRAFT));
-		for(int i=0; i < keys.length; ++i)
-		{
-			if(isDraft)
-				keys[i].setDraft();
-			else
-				keys[i].setSealed();
-		}
-		return keys;
-	}
-	
 	void readKeyPair(InputStream in, String passphrase) throws 
 		IOException,
 		MartusCrypto.AuthorizationFailedException,
@@ -1264,22 +1232,6 @@ public class MartusServer
 		
 	}
 	
-	class DuplicatePacketException extends Exception
-	{
-		DuplicatePacketException(String message)
-		{
-			super(message);
-		}
-	}
-	
-	class SealedPacketExistsException extends Exception
-	{
-		SealedPacketExistsException(String message)
-		{
-			super(message);
-		}
-	}
-
 	private String saveUploadedBulletinZipFile(String authorAccountId, File zipFile) 
 	{
 		String result = NetworkInterfaceConstants.OK;
@@ -1288,7 +1240,7 @@ public class MartusServer
 		try
 		{
 			zip = new ZipFile(zipFile);
-			saveZipPacketsInDatabase(authorAccountId, zip);
+			MartusUtilities.importBulletinPacketsFromZipFileToDatabase(getDatabase(), authorAccountId, zip, security);
 		}
 		catch (DuplicatePacketException e)
 		{
@@ -1329,125 +1281,6 @@ public class MartusServer
 		}
 
 		return result;
-	}
-
-	private void saveZipPacketsInDatabase(String authorAccountId, ZipFile zip)
-		throws IOException, 
-		DuplicatePacketException,
-		SealedPacketExistsException,
-		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException,
-		Packet.WrongAccountException,
-		MartusCrypto.DecryptionException
-	{
-		validateZipFilePackets(authorAccountId, zip);
-		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
-		deleteDraftBulletinPackets(header.getUniversalId());
-		
-		Database db = getDatabase();
-		Enumeration entries = zip.entries();
-		while(entries.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
-		
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
-			DatabaseKey key = createKeyWithHeaderStatus(header, uid);
-			db.writeRecord(key, in);
-		}
-	}
-
-	private void validateZipFilePackets(String authorAccountId, ZipFile zip) throws 
-		IOException, 
-		DuplicatePacketException,
-		SealedPacketExistsException,
-		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException,
-		Packet.WrongAccountException,
-		MartusCrypto.DecryptionException
-	{
-		//TODO validate Header Packet matches other packets
-		Database db = getDatabase();
-		Enumeration entries = zip.entries();
-		if(!entries.hasMoreElements())
-		{
-			throw new Packet.InvalidPacketException("Empty zip file");
-		}
-
-		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
-		while(entries.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
-			DatabaseKey trySealedKey = new DatabaseKey(uid);
-			trySealedKey.setSealed();
-			if(db.doesRecordExist(trySealedKey))
-			{
-				DatabaseKey newKey = createKeyWithHeaderStatus(header, uid);
-				if(newKey.isDraft())
-					throw new SealedPacketExistsException(entry.getName());
-				else
-					throw new DuplicatePacketException(entry.getName());
-			}
-		
-			InputStream in = new ZipEntryInputStream(zip, entry);
-			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
-		}
-	}
-
-	private void deleteDraftBulletinPackets(UniversalId uid) throws
-		IOException
-	{
-		DatabaseKey headerKey = new DatabaseKey(uid);
-		headerKey.setDraft();
-		Database db = getDatabase();
-		if(!db.doesRecordExist(headerKey))
-			return;
-		BulletinHeaderPacket bhp = new BulletinHeaderPacket(uid);
-		try 
-		{
-			InputStream in = db.openInputStream(headerKey, security);
-			bhp.loadFromXml(in, security);
-		} 
-		catch (Exception e) 
-		{
-			throw new IOException(e.toString());
-		}
-		
-		String accountId = bhp.getAccountId();
-		deleteDraftPacket(accountId, bhp.getLocalId());
-		deleteDraftPacket(accountId, bhp.getFieldDataPacketId());
-		deleteDraftPacket(accountId, bhp.getPrivateFieldDataPacketId());
-		
-		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
-		for(int i = 0; i < publicAttachmentIds.length; ++i)
-		{
-			deleteDraftPacket(accountId, publicAttachmentIds[i]);
-		}
-
-		String[] privateAttachmentIds = bhp.getPrivateAttachmentIds();
-		for(int i = 0; i < privateAttachmentIds.length; ++i)
-		{
-			deleteDraftPacket(accountId, privateAttachmentIds[i]);
-		}
-	}
-
-	private void deleteDraftPacket(String accountId, String localId)
-	{
-		UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localId);
-		DatabaseKey key = new DatabaseKey(uid);
-		key.setDraft();
-		getDatabase().discardRecord(key);
-	}
-
-	private DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid) 
-	{
-		DatabaseKey key = new DatabaseKey(uid);
-		if(header.getStatus().equals(BulletinConstants.STATUSDRAFT))
-			key.setDraft();
-		else
-			key.setSealed();
-		return key;
 	}
 
 	private String getBulletinHQAccountId(DatabaseKey headerKey) throws
@@ -1529,68 +1362,11 @@ public class MartusServer
 		if(tempFile.exists())
 			return tempFile;
 
-		String headerXml = getDatabase().readRecord(headerKey, security);
-		byte[] headerBytes = headerXml.getBytes("UTF-8");
-		
-		ByteArrayInputStream headerIn = new ByteArrayInputStream(headerBytes);
-		BulletinHeaderPacket bhp = new BulletinHeaderPacket("");
-		
-		MartusCrypto doNotCheckSigDuringDownload = null;
-		bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
-		
-		DatabaseKey[] packetKeys = getAllPacketKeys(bhp);
-		
-		exportPacketsToZipFile(headerKey.getAccountId(), packetKeys, tempFile);
+		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
 		return tempFile;
 	}
 
 
-	private void exportPacketsToZipFile(String clientId, DatabaseKey[] packetKeys, File tempFile) throws 
-			FileNotFoundException, 
-			IOException, 
-			UnsupportedEncodingException 
-	{
-		Database db = getDatabase();
-		FileOutputStream outputStream = new FileOutputStream(tempFile);
-		extractPacketsToZipStream(clientId, packetKeys, outputStream);
-	}
-
-
-	public void extractPacketsToZipStream(String clientId, DatabaseKey[] packetKeys, OutputStream outputStream) throws 
-		IOException, 
-		UnsupportedEncodingException 
-	{
-		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
-		
-		Database db = getDatabase();
-		try 
-		{
-			for(int i = 0; i < packetKeys.length; ++i)
-			{
-				DatabaseKey key = packetKeys[i];
-				ZipEntry entry = new ZipEntry(key.getLocalId());
-				zipOut.putNextEntry(entry);
-
-				InputStream in = db.openInputStream(key, security);
-
-				int got;
-				byte[] bytes = new byte[1024];
-				while( (got=in.read(bytes)) >= 0)
-					zipOut.write(bytes, 0, got);
-					
-				in.close();
-			}
-		} 
-		catch(CryptoException e) 
-		{
-			throw new IOException("CryptoException " + e);
-		}
-		finally
-		{
-			zipOut.close();
-		}
-	}
-	
 	private boolean isSignatureCorrect(String signedString, String signature, String signerPublicKey)
 	{
 		try

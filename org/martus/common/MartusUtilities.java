@@ -1,19 +1,49 @@
 package org.martus.common;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Enumeration;
 import java.util.Vector;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipFile;
+import java.util.zip.ZipOutputStream;
 
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.MartusCrypto.NoKeyPairException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongPacketTypeException;
 
 public class MartusUtilities 
 {
 	public static class FileTooLargeException extends Exception {}
+	public static class DuplicatePacketException extends Exception
+	{
+		DuplicatePacketException(String message)
+		{
+			super(message);
+		}
+	}
+	
+	public static class SealedPacketExistsException extends Exception
+	{
+		SealedPacketExistsException(String message)
+		{
+			super(message);
+		}
+	}
+
 	
 	public static int getCappedFileLength(File file) throws FileTooLargeException
 	{
@@ -144,4 +174,222 @@ public class MartusUtilities
 		}
 		return new String(buf);
 	}
+
+	public static void exportBulletinPacketsFromDatabaseToZipFile(Database db, DatabaseKey headerKey, File destZipFile, MartusCrypto security) throws
+			IOException,
+			CryptoException,
+			UnsupportedEncodingException,
+			InvalidPacketException,
+			WrongPacketTypeException,
+			SignatureVerificationException,
+			DecryptionException,
+			NoKeyPairException,
+			FileNotFoundException 
+	{
+		String headerXml = db.readRecord(headerKey, security);
+		byte[] headerBytes = headerXml.getBytes("UTF-8");
+		
+		ByteArrayInputStream headerIn = new ByteArrayInputStream(headerBytes);
+		BulletinHeaderPacket bhp = new BulletinHeaderPacket("");
+		
+		MartusCrypto doNotCheckSigDuringDownload = null;
+		bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
+		
+		DatabaseKey[] packetKeys = getAllPacketKeys(bhp);
+		
+		FileOutputStream outputStream = new FileOutputStream(destZipFile);
+		extractPacketsToZipStream(headerKey.getAccountId(), db, packetKeys, outputStream, security);
+	}
+
+	public static DatabaseKey[] getAllPacketKeys(BulletinHeaderPacket bhp)
+	{
+		String accountId = bhp.getAccountId();
+		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
+		String[] privateAttachmentIds = bhp.getPrivateAttachmentIds();
+		
+		int corePacketCount = 3;
+		int publicAttachmentCount = publicAttachmentIds.length;
+		int privateAttachmentCount = privateAttachmentIds.length;
+		int totalPacketCount = corePacketCount + publicAttachmentCount + privateAttachmentCount;
+		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
+		int next = 0;
+		
+		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
+		UniversalId privateDataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getPrivateFieldDataPacketId());
+
+		keys[next++] = new DatabaseKey(dataUid);
+		keys[next++] = new DatabaseKey(privateDataUid);
+		for(int i=0; i < publicAttachmentIds.length; ++i)
+		{
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
+			keys[next++] = new DatabaseKey(uid);
+		}
+		for(int i=0; i < privateAttachmentIds.length; ++i)
+		{
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, privateAttachmentIds[i]);
+			keys[next++] = new DatabaseKey(uid);
+		}
+		keys[next++] = new DatabaseKey(bhp.getUniversalId());
+		
+		boolean isDraft = (bhp.getStatus().equals(BulletinConstants.STATUSDRAFT));
+		for(int i=0; i < keys.length; ++i)
+		{
+			if(isDraft)
+				keys[i].setDraft();
+			else
+				keys[i].setSealed();
+		}
+		return keys;
+	}
+	
+	public static void extractPacketsToZipStream(String clientId, Database db, DatabaseKey[] packetKeys, OutputStream outputStream, MartusCrypto security) throws 
+		IOException, 
+		UnsupportedEncodingException 
+	{
+		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
+		
+		try 
+		{
+			for(int i = 0; i < packetKeys.length; ++i)
+			{
+				DatabaseKey key = packetKeys[i];
+				ZipEntry entry = new ZipEntry(key.getLocalId());
+				zipOut.putNextEntry(entry);
+
+				InputStream in = db.openInputStream(key, security);
+
+				int got;
+				byte[] bytes = new byte[1024];
+				while( (got=in.read(bytes)) >= 0)
+					zipOut.write(bytes, 0, got);
+					
+				in.close();
+			}
+		} 
+		catch(CryptoException e) 
+		{
+			throw new IOException("CryptoException " + e);
+		}
+		finally
+		{
+			zipOut.close();
+		}
+	}
+	
+	public static void importBulletinPacketsFromZipFileToDatabase(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+		throws IOException, 
+		DuplicatePacketException,
+		SealedPacketExistsException,
+		Packet.InvalidPacketException,
+		Packet.SignatureVerificationException,
+		Packet.WrongAccountException,
+		MartusCrypto.DecryptionException
+	{
+		validateZipFilePacketsForImport(db, authorAccountId, zip, security);
+		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
+		
+		Enumeration entries = zip.entries();
+		while(entries.hasMoreElements())
+		{
+			ZipEntry entry = (ZipEntry)entries.nextElement();
+			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
+		
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
+			DatabaseKey key = MartusUtilities.createKeyWithHeaderStatus(header, uid);
+			db.writeRecord(key, in);
+		}
+	}
+
+	private static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws
+		IOException
+	{
+		DatabaseKey headerKey = new DatabaseKey(bulletinUid);
+		headerKey.setDraft();
+		if(!db.doesRecordExist(headerKey))
+			return;
+		BulletinHeaderPacket bhp = new BulletinHeaderPacket(bulletinUid);
+		try 
+		{
+			InputStream in = db.openInputStream(headerKey, security);
+			bhp.loadFromXml(in, security);
+		} 
+		catch (Exception e) 
+		{
+			throw new IOException(e.toString());
+		}
+		
+		String accountId = bhp.getAccountId();
+		deleteDraftPacket(db, accountId, bhp.getLocalId());
+		deleteDraftPacket(db, accountId, bhp.getFieldDataPacketId());
+		deleteDraftPacket(db, accountId, bhp.getPrivateFieldDataPacketId());
+		
+		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
+		for(int i = 0; i < publicAttachmentIds.length; ++i)
+		{
+			deleteDraftPacket(db, accountId, publicAttachmentIds[i]);
+		}
+
+		String[] privateAttachmentIds = bhp.getPrivateAttachmentIds();
+		for(int i = 0; i < privateAttachmentIds.length; ++i)
+		{
+			deleteDraftPacket(db, accountId, privateAttachmentIds[i]);
+		}
+	}
+
+	private static void deleteDraftPacket(Database db, String accountId, String localId)
+	{
+		UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localId);
+		DatabaseKey key = new DatabaseKey(uid);
+		key.setDraft();
+		db.discardRecord(key);
+	}
+
+	private static void validateZipFilePacketsForImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security) throws 
+		IOException, 
+		DuplicatePacketException,
+		SealedPacketExistsException,
+		Packet.InvalidPacketException,
+		Packet.SignatureVerificationException,
+		Packet.WrongAccountException,
+		MartusCrypto.DecryptionException
+	{
+		//TODO validate Header Packet matches other packets
+		Enumeration entries = zip.entries();
+		if(!entries.hasMoreElements())
+		{
+			throw new Packet.InvalidPacketException("Empty zip file");
+		}
+
+		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		while(entries.hasMoreElements())
+		{
+			ZipEntry entry = (ZipEntry)entries.nextElement();
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
+			DatabaseKey trySealedKey = new DatabaseKey(uid);
+			trySealedKey.setSealed();
+			if(db.doesRecordExist(trySealedKey))
+			{
+				DatabaseKey newKey = MartusUtilities.createKeyWithHeaderStatus(header, uid);
+				if(newKey.isDraft())
+					throw new SealedPacketExistsException(entry.getName());
+				else
+					throw new DuplicatePacketException(entry.getName());
+			}
+		
+			InputStream in = new ZipEntryInputStream(zip, entry);
+			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
+		}
+	}
+
+	public static DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid) 
+	{
+		DatabaseKey key = new DatabaseKey(uid);
+		if(header.getStatus().equals(BulletinConstants.STATUSDRAFT))
+			key.setDraft();
+		else
+			key.setSealed();
+		return key;
+	}
+
 }
