@@ -312,6 +312,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmCloneMySealedAsDraft=Confirm Create Copy of Sealed Bulletin");
 		addEnglishTranslation("wintitle:confirmCloneBulletinAsMine=Confirm Create Copy of Someone Else's Bulletin");
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedDraftBulletinWithOutboxCopy=Confirm Delete Draft Bulletin");
+		addEnglishTranslation("wintitle:confirmPrinterWarning=Print Configuration Warning");
 
 		addEnglishTranslation("wintitle:notifyillegaldrop=Cannot Move Bulletin");
 		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
@@ -552,6 +553,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmCloneMySealedAsDrafteffect=Clicking on Yes will create a new bulletin that contains all the same information, and the original sealed bulletin will remain unchanged.");
 		addEnglishTranslation("field:confirmCloneBulletinAsMinecause=You have chosen to edit a bulletin that was created by someone else.");
 		addEnglishTranslation("field:confirmCloneBulletinAsMineeffect=Clicking on Yes will create a new bulletin that contains a copy of all the same information. You will be the official author of this new bulletin, and any private data in it will only be visible by you (and your headquarters, if you have one). The original bulletin will remain unchanged.");
+		addEnglishTranslation("field:confirmPrinterWarningcause=Since you have changed from the default print tray your print out may be incorrect, if you also changed the size of paper used.  You must first select the paper tray and then select the paper size in that order, for both to get set correctly.  If you only wanted to change the paper tray then disregard this message and select 'No'.");
+		addEnglishTranslation("field:confirmPrinterWarningeffect=Clicking on Yes will bring back the Printer Dialog so you can reselect your default paper tray and size.  Clicking on 'No' will print the document.");
 
 		addEnglishTranslation("field:notifyillegaldropcause=This bulletin cannot be moved to that folder, probably because of its status");
 		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");

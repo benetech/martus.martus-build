@@ -17,6 +17,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.awt.print.PageFormat;
+import java.awt.print.Paper;
 import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
@@ -27,6 +28,13 @@ import java.sql.Timestamp;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import javax.print.attribute.Attribute;
+import javax.print.attribute.HashPrintRequestAttributeSet;
+import javax.print.attribute.standard.Media;
+import javax.print.attribute.standard.MediaPrintableArea;
+import javax.print.attribute.standard.MediaSize;
+import javax.print.attribute.standard.MediaSizeName;
+import javax.print.attribute.standard.OrientationRequested;
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
@@ -44,7 +52,6 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.MartusApp.ServerErrorException;
-import org.martus.common.*;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.Base64.InvalidBase64Exception;
@@ -566,34 +573,111 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
+	class PrintPageFormat extends PageFormat
+	{
+		
+		private void setFromAttributes(HashPrintRequestAttributeSet attributes)
+		{
+			boolean otherMediaSet = false;
+			boolean paperSizeSet = false;
+			final int FRACTIONS_INCH = 72;
+			Paper paper = new Paper();
+			Attribute all[] = attributes.toArray();
+			for(int i=0; i < all.length; ++i)
+			{
+				if(all[i].getCategory().equals(MediaPrintableArea.class))
+				{
+					MediaPrintableArea area = (MediaPrintableArea)(all[i]);
+					paper.setImageableArea(	area.getX(area.INCH) * FRACTIONS_INCH,
+											area.getY(area.INCH) * FRACTIONS_INCH,
+											area.getWidth(area.INCH) * FRACTIONS_INCH,
+											area.getHeight(area.INCH) * FRACTIONS_INCH);
+				}
+				if(all[i].getCategory().equals(Media.class))
+				{
+					try 
+					{
+						MediaSizeName mediaSizeName = (MediaSizeName)(all[i]);
+						MediaSize size = MediaSize.getMediaSizeForName(mediaSizeName);
+						paper.setSize(	size.getX(size.INCH) * FRACTIONS_INCH,
+										size.getY(size.INCH) * FRACTIONS_INCH);
+						paperSizeSet = true;
+					} catch (RuntimeException e) 
+					{
+						otherMediaSet = true;
+						//Not a MediaSizeName
+					}
+				}
+				if(all[i].getCategory().equals(OrientationRequested.class))
+				{
+					OrientationRequested orientation = (OrientationRequested)(all[i]);
+					if(orientation.equals(orientation.LANDSCAPE))
+						setOrientation(LANDSCAPE);
+					if(orientation.equals(orientation.PORTRAIT))
+						setOrientation(PORTRAIT);
+					if(orientation.equals(orientation.REVERSE_LANDSCAPE))
+						setOrientation(REVERSE_LANDSCAPE);
+				}
+			}
+			setPaper(paper);
+			if(otherMediaSet && !paperSizeSet)
+				mustWarnUser = true;
+			else
+				mustWarnUser = false;
+		}
+		private boolean mustWarnUser;
+	}
+
 	private void doPrint()
 	{
+		boolean printCancelled = false;
 		//System.out.println("Print");
 		if(preview.getBulletin() == null)
 			return;
-
+		
 		preview.startPrintMode();
-		JComponent view = preview.getView();
-		JComponentVista vista = new JComponentVista(view, new PageFormat());
-
+		PrintPageFormat format = new PrintPageFormat();
 		PrinterJob job = PrinterJob.getPrinterJob();
-		job.setPageable(vista);
-		vista.scaleToFitX();
-		try 
+		JComponent view = preview.getView();
+		JComponentVista vista = new JComponentVista(view, format);
+		job.setPageable(vista);	
+		HashPrintRequestAttributeSet attributes = new HashPrintRequestAttributeSet();
+		while(true) 
 		{
-			if (job.printDialog())
+			if (job.printDialog(attributes))
 			{
+				format.setFromAttributes(attributes);
+				if(format.mustWarnUser)
+				{
+					if(confirmDlg(this, "PrinterWarning"))
+						continue;
+				}
+				vista.scaleToFitX();
+				job.setPageable(vista);
 				requestFocus(true);
-				job.print();
+				break;
+			}
+			else
+			{
+				printCancelled = true;
+				break;
 			}
 		}
-		catch (PrinterException e)
+		if(!printCancelled)
 		{
-			System.out.println(e);
+			try
+			{
+				job.print(attributes);
+			}
+			catch (PrinterException e)
+			{
+				System.out.println(e);
+			}
 		}
 		preview.endPrintMode();
 		requestFocus(true);
 	}
+
 
 	private void doLocalize()
 	{
