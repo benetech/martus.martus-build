@@ -1,12 +1,20 @@
 package org.martus.client;
 
-import java.awt.*;
-import java.awt.event.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
-import javax.swing.*;
+import javax.swing.AbstractAction;
+import javax.swing.JButton;
+import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JPasswordField;
+import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
-import javax.swing.event.*;
 
 
 
@@ -14,8 +22,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 {
 	public UiSigninDlg(UiMainWindow window, JFrame owner, int mode)
 	{
-		super(owner, window.getApp().getWindowTitle("MartusSignIn"), true);
-		Initalize(window, owner, mode, "");
+		this(window, owner, mode, "");
 	}
 
 	public UiSigninDlg(UiMainWindow window, JFrame owner, int mode, String username)
