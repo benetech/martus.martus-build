@@ -2,6 +2,7 @@ package org.martus.client;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
@@ -50,6 +51,7 @@ import javax.swing.JSplitPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
@@ -256,6 +258,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		UiStringInputDlg inputDlg = new UiStringInputDlg(this, baseTag, description, defaultText);
 		inputDlg.show();
 		return inputDlg.getResult();
+	}
+
+	public void updateSectionBorder(UiBulletinComponentSection section, boolean isEncrypted) 
+	{
+		if(isEncrypted)
+			section.setBorder(new LineBorder(Color.red, 5));
+		else
+			section.setBorder(new LineBorder(Color.lightGray, 5));
 	}
 
 	public TransferableBulletinList getClipboardTransferableBulletin()
