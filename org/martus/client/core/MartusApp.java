@@ -43,6 +43,7 @@ import java.util.Vector;
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.ProgressMeterInterface;
@@ -250,7 +251,7 @@ public class MartusApp
 			plainTextConfigOutputStream.close();
 			encryptedConfigFileInputStream.close();
 			
-			store.setPublicFieldTags(FieldDataPacket.parseFieldSpecsFromString(configInfo.getCustomFieldSpecs()));
+			store.setPublicFieldTags(FieldSpec.parseFieldSpecsFromString(configInfo.getCustomFieldSpecs()));
 		}
 		catch (Exception e)
 		{

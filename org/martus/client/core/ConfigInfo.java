@@ -33,10 +33,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Vector;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.packet.FieldDataPacket;
 
 public class ConfigInfo implements Serializable
 {
@@ -105,7 +105,7 @@ public class ConfigInfo implements Serializable
 		sendContactInfoToServer = false;
 		mustAskUserToSendToServer = false;
 		serverCompliance = "";
-		customFieldSpecs = FieldDataPacket.buildFieldListString(Bulletin.getDefaultPublicFieldSpecs());
+		customFieldSpecs = FieldSpec.buildFieldListString(Bulletin.getDefaultPublicFieldSpecs());
 	}
 
 	public Vector getContactInfo(MartusCrypto signer) throws

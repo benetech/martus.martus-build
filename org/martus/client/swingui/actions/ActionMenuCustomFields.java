@@ -35,7 +35,6 @@ import org.martus.client.core.MartusApp.SaveConfigInfoException;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.packet.FieldDataPacket;
 
 public class ActionMenuCustomFields extends UiMenuAction
 {
@@ -57,7 +56,7 @@ public class ActionMenuCustomFields extends UiMenuAction
 			return;
 			
 		store.setPublicFieldTags(newSpecs);
-		String fieldSpecString = FieldDataPacket.buildFieldListString(newSpecs);
+		String fieldSpecString = FieldSpec.buildFieldListString(newSpecs);
 		app.getConfigInfo().setCustomFieldSpecs(fieldSpecString);
 
 		try
@@ -72,7 +71,7 @@ public class ActionMenuCustomFields extends UiMenuAction
 
 	private FieldSpec[] getCustomizedFieldsFromUser(FieldSpec[] existingSpecs)
 	{
-		String existingTags = FieldDataPacket.buildFieldListString(existingSpecs);
+		String existingTags = FieldSpec.buildFieldListString(existingSpecs);
 		while(true)
 		{
 			String newTags = mainWindow.getStringInput("CustomFields", "", existingTags);
@@ -86,7 +85,7 @@ public class ActionMenuCustomFields extends UiMenuAction
 				continue;
 			}
  
-			FieldSpec[] newSpecs = FieldDataPacket.parseFieldSpecsFromString(newTags);
+			FieldSpec[] newSpecs = FieldSpec.parseFieldSpecsFromString(newTags);
 			CustomFieldSpecValidator checker = new CustomFieldSpecValidator(newSpecs);
 			if(checker.isValid())
 				return newSpecs;

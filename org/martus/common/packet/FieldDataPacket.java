@@ -63,70 +63,9 @@ public class FieldDataPacket extends Packet
 	
 	void setFieldSpecsFromString(String delimitedFieldSpecs)
 	{
-		setFieldSpecs(parseFieldSpecsFromString(delimitedFieldSpecs));
+		setFieldSpecs(FieldSpec.parseFieldSpecsFromString(delimitedFieldSpecs));
 	}
 
-	static public String buildFieldListString(FieldSpec[] fieldSpecs)
-	{
-		String fieldList = "";
-		for(int i = 0; i < fieldSpecs.length; ++i)
-		{
-			if(i > 0)
-				fieldList += FIELD_SPEC_DELIMITER;
-			FieldSpec spec = fieldSpecs[i];
-			fieldList += spec.getTag();
-			if(spec.getLabel() != null)
-				fieldList += FIELD_SPEC_ELEMENT_DELIMITER + spec.getLabel();
-		}
-		return fieldList;
-	}
-
-	static public FieldSpec[] parseFieldSpecsFromString(String delimitedTags)
-	{
-		FieldSpec[] newFieldSpecs = new FieldSpec[0];
-		int tagStart = 0;
-		while(tagStart >= 0 && tagStart < delimitedTags.length())
-		{
-			int delimiter = delimitedTags.indexOf(FIELD_SPEC_DELIMITER, tagStart);
-			if(delimiter < 0)
-				delimiter = delimitedTags.length();
-			String thisFieldDescription = delimitedTags.substring(tagStart, delimiter);
-			String newTag = extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
-			String newLabel = extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
-			FieldSpec newFieldSpec = new FieldSpec(newTag, newLabel);
-
-			newFieldSpecs = addFieldSpec(newFieldSpecs, newFieldSpec);
-			tagStart = delimiter + 1;
-		}
-		return newFieldSpecs;
-	}
-	
-	private static String extractFieldSpecElement(String fieldDescription, int elementNumber)
-	{
-		int elementStart = 0;
-		for(int i = 0; i < elementNumber; ++i)
-		{
-			int comma = fieldDescription.indexOf(FIELD_SPEC_ELEMENT_DELIMITER, elementStart);
-			if(comma < 0)
-				return null;
-			elementStart = comma + 1;
-		}
-		
-		int trailingComma = fieldDescription.indexOf(FIELD_SPEC_ELEMENT_DELIMITER, elementStart);
-		if(trailingComma < 0)
-			trailingComma = fieldDescription.length();
-		return fieldDescription.substring(elementStart, trailingComma);
-	}
-
-	static public FieldSpec[] addFieldSpec(FieldSpec[] existingFieldSpecs, FieldSpec newFieldSpec)
-	{
-		int oldCount = existingFieldSpecs.length;
-		FieldSpec[] tempFieldTags = new FieldSpec[oldCount + 1];
-		System.arraycopy(existingFieldSpecs, 0, tempFieldTags, 0, oldCount);
-		tempFieldTags[oldCount] = newFieldSpec;
-		return tempFieldTags;
-	}
-	
 	public static UniversalId createUniversalId(String accountId)
 	{
 		return UniversalId.createFromAccountAndPrefix(accountId, prefix);
@@ -350,7 +289,7 @@ public class FieldDataPacket extends Packet
 		if(isEncrypted() && !isEmpty())
 			writeElement(dest, MartusXml.EncryptedFlagElementName, "");
 
-		String fieldList = buildFieldListString(getFieldSpecs());
+		String fieldList = FieldSpec.buildFieldListString(getFieldSpecs());
 		writeElement(dest, MartusXml.FieldListElementName, fieldList);
 		Iterator iterator = fieldData.keySet().iterator();
 		while(iterator.hasNext())
@@ -428,10 +367,5 @@ public class FieldDataPacket extends Packet
 	private static final String prefix = "F-";
 	private String hqPublicKey;
 
-	private static final char FIELD_SPEC_DELIMITER = ';';
-	private static final char FIELD_SPEC_ELEMENT_DELIMITER = ',';
-	
-	private static final int TAG_ELEMENT_NUMBER = 0;
-	private static final int LABEL_ELEMENT_NUMBER = 1;
 }
 

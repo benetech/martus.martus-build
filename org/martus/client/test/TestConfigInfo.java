@@ -33,9 +33,9 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.client.core.ConfigInfo;
+import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.test.TestCaseEnhanced;
 
 public class TestConfigInfo extends TestCaseEnhanced
@@ -271,7 +271,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		return outputStream.toByteArray();
 	}
 	
-	final String defaultCustomFieldSpecs = FieldDataPacket.buildFieldListString(Bulletin.getDefaultPublicFieldSpecs());
+	final String defaultCustomFieldSpecs = FieldSpec.buildFieldListString(Bulletin.getDefaultPublicFieldSpecs());
 
 //Version 1
 	final String sampleAuthor = "author";

@@ -29,7 +29,6 @@ package org.martus.client.test;
 import org.martus.client.core.CustomFieldSpecValidator;
 import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.Bulletin;
-import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.test.TestCaseEnhanced;
 
 public class TestCustomFieldSpecValidator extends TestCaseEnhanced
@@ -63,7 +62,7 @@ public class TestCustomFieldSpecValidator extends TestCaseEnhanced
 	public void testBlankTag() throws Exception
 	{
 		FieldSpec[] specs = Bulletin.getDefaultPublicFieldSpecs();
-		specs = FieldDataPacket.addFieldSpec(specs, new FieldSpec("", "label"));
+		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("", "label"));
 		CustomFieldSpecValidator checker = new CustomFieldSpecValidator(specs);
 		assertFalse("valid?", checker.isValid());
 	}
@@ -71,8 +70,8 @@ public class TestCustomFieldSpecValidator extends TestCaseEnhanced
 	public void testDuplicateTags() throws Exception
 	{
 		FieldSpec[] specs = Bulletin.getDefaultPublicFieldSpecs();
-		specs = FieldDataPacket.addFieldSpec(specs, new FieldSpec("a"));
-		specs = FieldDataPacket.addFieldSpec(specs, new FieldSpec("a"));
+		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("a"));
+		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("a"));
 		CustomFieldSpecValidator checker = new CustomFieldSpecValidator(specs);
 		assertFalse("valid?", checker.isValid());
 	}
@@ -80,11 +79,11 @@ public class TestCustomFieldSpecValidator extends TestCaseEnhanced
 	public void testMissingCustomLabel() throws Exception
 	{
 		FieldSpec[] specs = Bulletin.getDefaultPublicFieldSpecs();
-		specs = FieldDataPacket.addFieldSpec(specs, new FieldSpec("a", "label"));
+		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("a", "label"));
 		CustomFieldSpecValidator checker = new CustomFieldSpecValidator(specs);
 		assertTrue("not valid?", checker.isValid());
 
-		specs = FieldDataPacket.addFieldSpec(specs, new FieldSpec("b"));
+		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("b"));
 		CustomFieldSpecValidator checker2 = new CustomFieldSpecValidator(specs);
 		assertFalse("valid?", checker2.isValid());
 	}
