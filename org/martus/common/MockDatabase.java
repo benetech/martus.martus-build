@@ -41,10 +41,9 @@ abstract public class MockDatabase implements Database
 		if(key == null || record == null)
 			throw new IOException("Null parameter");
 			
-		Map map = getPacketMapFor(key);
-		map.put(key, record);
+		addKeyToMap(key, record);
 	}
-	
+
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
 			IOException
 	{
@@ -94,8 +93,7 @@ abstract public class MockDatabase implements Database
 
 	public void discardRecord(DatabaseKey key)
 	{
-		Map map = getPacketMapFor(key);
-		map.remove(key);
+		internalDiscardRecord(key);
 	}
 
 	public boolean doesRecordExist(DatabaseKey key)
@@ -154,7 +152,10 @@ abstract public class MockDatabase implements Database
 		return map;
 	}
 
-	public abstract Set getAllKeys();
+	public Set getAllKeys()
+	{
+		return internalGetAllKeys();
+	}
 	
 	public int getRecordCount()
 	{
@@ -162,12 +163,6 @@ abstract public class MockDatabase implements Database
 	}
 	// end Database interface
 	
-	private String readRecord(DatabaseKey key)
-	{
-		Map map = getPacketMapFor(key);
-		return (String)map.get(key);
-	}
-
 	private File getInterimFile(DatabaseKey key, Map map) 
 	{
 		if(map.containsKey(key))
@@ -187,7 +182,11 @@ abstract public class MockDatabase implements Database
 		}
 	}
 
+	abstract void addKeyToMap(DatabaseKey key, String record);
+	abstract String readRecord(DatabaseKey key);
 	abstract Map getPacketMapFor(DatabaseKey key);
+	abstract Set internalGetAllKeys();
+	abstract void internalDiscardRecord(DatabaseKey key);
 	
 	Map sealedQuarantine;
 	Map draftQuarantine;

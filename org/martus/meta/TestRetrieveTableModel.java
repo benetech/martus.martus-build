@@ -3,6 +3,7 @@ package org.martus.meta;
 import java.util.Vector;
 
 import org.martus.client.Bulletin;
+import org.martus.client.BulletinStore;
 import org.martus.client.BulletinSummary;
 import org.martus.client.MartusApp;
 import org.martus.client.MockMartusApp;
@@ -108,21 +109,29 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
+		b1.save();
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
+		b2.save();
 		
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(true);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setDraft();
+		b3.save();
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
 		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
 		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+		
+		BulletinStore store = appWithAccount.getStore();
+		store.destroyBulletin(b1);
+		store.destroyBulletin(b2);
+		store.destroyBulletin(b3);
 
 		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, null);
 		model.Initalize();
@@ -279,21 +288,29 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setDraft();
+		b1.save();
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setDraft();
+		b2.save();
 		
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(true);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setSealed();
+		b3.save();
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
 		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
 		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+
+		BulletinStore store = appWithAccount.getStore();
+		store.destroyBulletin(b1);
+		store.destroyBulletin(b2);
+		store.destroyBulletin(b3);
 
 		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount, null);
 		model.Initalize();
@@ -406,18 +423,21 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
 		appWithAccount.setHQKeyInBulletin(b1);
+		b1.save();
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
 		appWithAccount.setHQKeyInBulletin(b2);
+		b2.save();
 		
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(false);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setDraft();
 		appWithAccount.setHQKeyInBulletin(b3);
+		b3.save();
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));

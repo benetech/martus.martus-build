@@ -183,6 +183,22 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestQuarantine(serverFileDb);
 	}
 	
+	public void testFindDraft() throws Exception
+	{
+		TRACE("testFindDrafts");
+		internalTestFindDraft(mockDb);
+		internalTestFindDraft(clientFileDb);
+		internalTestFindDraft(serverFileDb);
+	}
+	
+	public void testFindSealed() throws Exception
+	{
+		TRACE("testFindSealed");
+		internalTestFindSealed(mockDb);
+		internalTestFindSealed(clientFileDb);
+		internalTestFindSealed(serverFileDb);
+	}
+	
 	/////////////////////////////////////////////////////////////////////
 
 	private void internalTestEmptyDatabase(Database db) throws Exception
@@ -455,6 +471,26 @@ public class TestDatabase extends TestCaseEnhanced
 		Counter counter = new Counter();
 		db.visitAllRecords(counter);
 		assertEquals("Visited quarantined packets?", 0, counter.count);
+	}
+	
+	private void internalTestFindDraft(Database db) throws Exception
+	{
+		UniversalId uid = UniversalId.createDummyUniversalId();
+		DatabaseKey draftKey = DatabaseKey.createDraftKey(uid);
+		db.writeRecord(draftKey, smallString);
+		InputStream in = db.openInputStream(draftKey, security);
+		assertNotNull("not found?", in);
+		in.close();
+	}
+
+	private void internalTestFindSealed(Database db) throws Exception
+	{
+		UniversalId uid = UniversalId.createDummyUniversalId();
+		DatabaseKey sealedKey = DatabaseKey.createSealedKey(uid);
+		db.writeRecord(sealedKey, smallString);
+		InputStream in = db.openInputStream(sealedKey, security);
+		assertNotNull("not found?", in);
+		in.close();
 	}
 
 	static String buildLargeString()

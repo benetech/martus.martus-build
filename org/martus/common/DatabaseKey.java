@@ -21,8 +21,16 @@ public class DatabaseKey implements Comparable
 	public static DatabaseKey createLegacyKey(UniversalId uidToUse)
 	{
 		DatabaseKey key = new DatabaseKey(uidToUse);
-		key.status = statusUnknown;
+		key.setSealed();
 		return key;
+	}
+	
+	public static DatabaseKey createKey(UniversalId uidToUse, String status)
+	{
+		if(status.equals(BulletinConstants.STATUSDRAFT))
+			return createDraftKey(uidToUse);
+		else
+			return createSealedKey(uidToUse);
 	}
 	
 	public DatabaseKey(UniversalId uidToUse)

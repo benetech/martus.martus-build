@@ -13,17 +13,35 @@ public class MockClientDatabase extends MockDatabase
 		super.deleteAllData();
 	}
 	
-	public Set getAllKeys()
+	void addKeyToMap(DatabaseKey key, String record)
+	{
+		DatabaseKey newKey = DatabaseKey.createLegacyKey(key.getUniversalId());
+		packetMap.put(newKey, record);
+	}
+	
+	String readRecord(DatabaseKey key)
+	{
+		DatabaseKey newKey = DatabaseKey.createLegacyKey(key.getUniversalId());
+		return (String)packetMap.get(newKey);
+	}
+	
+	void internalDiscardRecord(DatabaseKey key)
+	{
+		DatabaseKey newKey = DatabaseKey.createLegacyKey(key.getUniversalId());
+		packetMap.remove(newKey);
+	}
+
+	Map getPacketMapFor(DatabaseKey key) 
+	{
+		return packetMap;
+	}
+
+	public Set internalGetAllKeys()
 	{
 		Set keys = new HashSet();
 		keys.addAll(packetMap.keySet());
 		return keys;
 	}
 	
-	Map getPacketMapFor(DatabaseKey key) 
-	{
-		return packetMap;
-	}
-
 	Map packetMap;
 }

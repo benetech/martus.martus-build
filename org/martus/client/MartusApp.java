@@ -26,6 +26,8 @@ import java.util.Vector;
 
 import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.common.Base64;
+import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.FileDatabase;
 import org.martus.common.MartusCrypto;
@@ -663,7 +665,9 @@ public class MartusApp
 		try
 		{
 			tempFile = File.createTempFile("$$$MartusUploadBulletin", null);
-			b.saveToFile(tempFile);
+			DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
+			Database db = store.getDatabase();
+			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
 			FileInputStream inputStream = new FileInputStream(tempFile);
 			int totalSize = MartusUtilities.getCappedFileLength(tempFile);
 			int offset = 0;

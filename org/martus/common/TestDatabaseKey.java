@@ -32,7 +32,17 @@ public class TestDatabaseKey extends TestCaseEnhanced
 		DatabaseKey key3 = DatabaseKey.createLegacyKey(uid1);
 		assertEquals("bad uid3?", uid1, key3.getUniversalId());
 		assertEquals("draft?", false, key3.isDraft());
-		assertEquals("sealed?", false, key3.isSealed());
+		assertEquals("not sealed?", true, key3.isSealed());
+		
+		DatabaseKey keySealed = DatabaseKey.createKey(uid1, BulletinConstants.STATUSSEALED);
+		assertEquals("bad keySealed?", uid1, keySealed.getUniversalId());
+		assertEquals("draft?", false, keySealed.isDraft());
+		assertEquals("not sealed?", true, keySealed.isSealed());
+
+		DatabaseKey keyDraft = DatabaseKey.createKey(uid1, BulletinConstants.STATUSDRAFT);
+		assertEquals("bad keyDraft?", uid1, keyDraft.getUniversalId());
+		assertEquals("not draft?", true, keyDraft.isDraft());
+		assertEquals("sealed?", false, keyDraft.isSealed());
 	}
 
 	public void testEqualsStrings() throws Exception
