@@ -75,6 +75,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testSmallWriteRecord");
 		internalTestSmallWriteRecord(mockDb);
 		internalTestSmallWriteRecord(clientFileDb);
+		internalTestSmallWriteRecord(serverFileDb);
 	}
 
 	public void testLargeWriteRecord() throws Exception
@@ -82,6 +83,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testLargeWriteRecord");
 		internalTestLargeWriteRecord(mockDb);
 		internalTestLargeWriteRecord(clientFileDb);
+		internalTestLargeWriteRecord(serverFileDb);
 	}
 
 	public void testLargeRecordInputStream() throws Exception
@@ -89,6 +91,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testLargeRecordInputStream");
 		internalTestLargeRecordInputStream(mockDb);
 		internalTestLargeRecordInputStream(clientFileDb);
+		internalTestLargeRecordInputStream(serverFileDb);
 	}
 
 	public void testReplaceWriteRecord() throws Exception
@@ -96,6 +99,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testReplaceWriteRecord");
 		internalTestReplaceWriteRecord(mockDb);
 		internalTestReplaceWriteRecord(clientFileDb);
+		internalTestReplaceWriteRecord(serverFileDb);
 	}
 
 	public void testDiscard() throws Exception
@@ -103,6 +107,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testDiscard");
 		internalTestDiscard(mockDb);
 		internalTestDiscard(clientFileDb);
+		internalTestDiscard(serverFileDb);
 	}
 
 	public void testDoesRecordExist() throws Exception
@@ -110,6 +115,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testDoesRecordExist");
 		internalTestDoesRecordExist(mockDb);
 		internalTestDoesRecordExist(clientFileDb);
+		internalTestDoesRecordExist(serverFileDb);
 	}
 
 	public void testVisitAllRecords() throws Exception
@@ -118,6 +124,7 @@ public class TestDatabase extends TestCaseEnhanced
 
 		internalTestVisitAllRecords(mockDb);
 		internalTestVisitAllRecords(clientFileDb);
+		internalTestVisitAllRecords(serverFileDb);
 	}
 
 	public void testDeleteAllData() throws Exception
@@ -125,6 +132,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testDeleteAllData");
 		internalTestDeleteAllData(mockDb);
 		internalTestDeleteAllData(clientFileDb);
+		internalTestDeleteAllData(serverFileDb);
 	}
 
 	public void testSmallWriteRecordFromStream() throws Exception
@@ -132,6 +140,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testSmallWriteRecordFromStream");
 		internalTestSmallWriteRecordFromStream(mockDb);
 		internalTestSmallWriteRecordFromStream(clientFileDb);
+		internalTestSmallWriteRecordFromStream(serverFileDb);
 	}
 
 	public void testLargeWriteRecordFromStream() throws Exception
@@ -139,6 +148,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testLargeWriteRecordFromStream");
 		internalTestLargeWriteRecordFromStream(mockDb);
 		internalTestLargeWriteRecordFromStream(clientFileDb);
+		internalTestLargeWriteRecordFromStream(serverFileDb);
 	}
 
 	public void testBadStream()
@@ -146,6 +156,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testBadKey");
 		internalTestBadStream(mockDb);
 		internalTestBadStream(clientFileDb);
+		internalTestBadStream(serverFileDb);
 	}
 
 	public void testInternalTestGetIncomingInterimFile() throws Exception
@@ -153,6 +164,7 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testInternalTestGetIncomingInterimFile");
 		internalTestGetIncomingInterimFile(mockDb);
 		internalTestGetIncomingInterimFile(clientFileDb);
+		internalTestGetIncomingInterimFile(serverFileDb);
 	}
 	
 	public void testGetOutgoingInterimFile() throws Exception
@@ -160,22 +172,15 @@ public class TestDatabase extends TestCaseEnhanced
 		TRACE("testBuildInterimFileFromBulletinPackets");
 		internalTestGetOutgoingInterimFile(mockDb);
 		internalTestGetOutgoingInterimFile(clientFileDb);
+		internalTestGetOutgoingInterimFile(serverFileDb);
 	}
 
-	public void testDraftsServer() throws Exception
-	{
-		TRACE("testDraftsServer");
-		internalTestDrafts(mockDb);
-		// this test is NOT VALID for ClientFileDatabase
-		//internalTestDrafts(clientFileDb);
-		internalTestDrafts(serverFileDb);
-	}
-	
 	public void testQuarantine() throws Exception
 	{
 		TRACE("testQuarantine");
 		internalTestQuarantine(mockDb);
 		internalTestQuarantine(clientFileDb);
+		internalTestQuarantine(serverFileDb);
 	}
 	
 	/////////////////////////////////////////////////////////////////////
@@ -406,46 +411,6 @@ public class TestDatabase extends TestCaseEnhanced
 		assertEquals(db.toString()+"interimSame size not the same?", fileSize, interimSame.length());
 	}	
 	
-	private void internalTestDrafts(Database db) throws Exception
-	{
-		UniversalId uid = UniversalId.createDummyUniversalId();
-		DatabaseKey draftKey = new DatabaseKey(uid);
-		draftKey.setDraft();
-		DatabaseKey sealedKey = new DatabaseKey(uid);
-		sealedKey.setSealed();
-		
-		db.writeRecord(draftKey, smallString);
-		db.writeRecord(sealedKey, smallString2);
-		
-		assertEquals(db.toString()+"draft wrong?", smallString, db.readRecord(draftKey, security));
-		assertEquals(db.toString()+"sealed wrong?", smallString2, db.readRecord(sealedKey, security));
-		
-		class Counter implements Database.PacketVisitor
-		{
-			Counter(Database databaseToUse, Vector expected)
-			{
-				db = databaseToUse;
-				expectedKeys = expected;
-			}
-			
-			public void visit(DatabaseKey key)
-			{
-				assertContains(db.toString()+"wrong key?", key, expectedKeys);
-				expectedKeys.remove(key);
-			}
-			
-			Database db;
-			Vector expectedKeys;
-		}
-		
-		Vector allKeys = new Vector();
-		allKeys.add(draftKey);
-		allKeys.add(sealedKey);
-		Counter counter = new Counter(db, allKeys);
-		db.visitAllRecords(counter);
-		assertEquals(db.toString()+"Not all keys visited?", 0, counter.expectedKeys.size());
-	}
-
 	private void internalTestQuarantine(Database db) throws Exception
 	{
 		UniversalId uid = UniversalId.createDummyUniversalId();
