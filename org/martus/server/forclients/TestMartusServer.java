@@ -2130,19 +2130,19 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
 		
 		worked = other.requestUploadRights("whatever", sampleMagicWord2);
-		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+		assertEquals("should work", NetworkInterfaceConstants.OK, worked);
 		
 		worked = other.requestUploadRights("whatever", nonExistentMagicWord);
-		assertEquals("didn't work?", NetworkInterfaceConstants.REJECTED, worked);
+		assertEquals("should be rejected", NetworkInterfaceConstants.REJECTED, worked);
 		
 		worked = other.requestUploadRights("whatever", sampleMagicWord1.toUpperCase());
-		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+		assertEquals("should ignore case sensitivity", NetworkInterfaceConstants.OK, worked);
 		
 		worked = other.requestUploadRights("whatever", sampleMagicWord3);
-		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+		assertEquals("should ignore spaces", NetworkInterfaceConstants.OK, worked);
 		
 		worked = other.requestUploadRights("whatever", sampleMagicWord4);
-		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
+		assertEquals("should ignore other whitespace", NetworkInterfaceConstants.OK, worked);
 		
 		other.deleteAllFiles();
 
