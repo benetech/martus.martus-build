@@ -56,7 +56,8 @@ public class UiAboutDlg extends JDialog implements ActionListener
 
 		JLabel icon = new JLabel(new ImageIcon(UiAboutDlg.class.getResource("MartusLogo.gif")),JLabel.LEFT);
 
-		String versionInfo = localization.getFieldLabel("aboutDlgVersionInfo");
+		String versionInfo = UiConstants.programName;
+		versionInfo += " " + localization.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
 
 		String buildDate = localization.getFieldLabel("aboutDlgBuildDate");

@@ -296,7 +296,7 @@ public class EnglishStrings
 "language:ur=Urdu",
 "language:vi=Vietnamese",
 
-"field:aboutDlgVersionInfo=Martus(TM) software version",
+"field:aboutDlgVersionInfo=software version",
 "field:aboutDlgBuildDate=Built on",
 "field:aboutDlgCopyright=Copyright 2001-2003 Beneficent Technology, Inc. (Benetech, at www.benetech.org).",
 "field:aboutDlgDisclaimer=Martus comes with ABSOLUTELY NO WARRANTY, and is made available under license terms in the file named license.txt in the Martus directory. This is free software, and you are welcome to redistribute it under certain conditions discussed in license.txt. ",

@@ -141,7 +141,8 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 
 	public static String getTextForTitle(MartusLocalization localization)
 	{
-		String versionInfo = localization.getFieldLabel("aboutDlgVersionInfo");
+		String versionInfo = UiConstants.programName;
+		versionInfo += " " + localization.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
 		String title = localization.getWindowTitle("MartusSignIn") +
 				" (" + versionInfo + ")";

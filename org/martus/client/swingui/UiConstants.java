@@ -31,6 +31,9 @@ public class UiConstants
 	public static final int defaultFontSize = 13;
 	public static final int textFieldColumns = 40;
 
-	public static final String programName = "Martus";
+	// NOTE: See the license terms to understand when the following MUST be changed.
+	// Also, you should search for "Martus" in EnglishStrings.txt and any .mtf files 
+	// and change other occurances as required by the license.
+	public static final String programName = "Martus™";
 	public static final String versionLabel = "Internal release after 1.0.2";
 }
