@@ -302,6 +302,12 @@ public class MartusApp
 		return("MartusHelp-en.txt");
 	}
 
+	public String getHelpTOCFilename()
+	{
+		String helpFile = "MartusHelpTOC-" + getCurrentLanguage() + ".txt";
+		return helpFile;
+	}
+
 	public static String getTranslationsDirectory()
 	{
 		return determineDataDirectory().getPath();

@@ -712,17 +712,26 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 
 		InputStream helpStream = null;
+		InputStream helpStreamTOC = null;
 		String helpFileShortName = app.getHelpFilename();
-		File file = new File(MartusApp.getTranslationsDirectory(), helpFileShortName);
+		String helpTOCFileShortName = app.getHelpTOCFilename();
+		File helpFile = new File(MartusApp.getTranslationsDirectory(), helpFileShortName);
+		File helpTOCFile = new File(MartusApp.getTranslationsDirectory(), helpTOCFileShortName);
 		try
 		{
-			if(file.exists())
-				helpStream = new FileInputStream(file);
+			if(helpFile.exists())
+				helpStream = new FileInputStream(helpFile);
 			else
 				helpStream = getClass().getResourceAsStream(helpFileShortName);
 			if(helpStream == null)
 				helpStream = getClass().getResourceAsStream(app.getEnglishHelpFilename());
-			new UiDisplayFileDlg(this, "Help", helpStream);
+				
+			if(helpTOCFile.exists())
+				helpStreamTOC = new FileInputStream(helpTOCFile);
+			else
+				helpStreamTOC = getClass().getResourceAsStream(helpTOCFileShortName);
+
+			new UiDisplayFileDlg(this, "Help", helpStream, helpStreamTOC);
 		}
 		catch (IOException e)
 		{
