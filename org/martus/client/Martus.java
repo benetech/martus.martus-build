@@ -2,8 +2,6 @@ package org.martus.client;
 
 import javax.swing.UIManager;
 
-import org.martus.meta.TestAll;
-
 class Martus
 {
     public static void main (String args[])
@@ -12,7 +10,8 @@ class Martus
 		{
 			if(args.length == 1 && args[0].compareToIgnoreCase("-testall")==0)
 			{
-				TestAll.runTests();
+				org.martus.common.TestAll.runTests();
+				org.martus.client.TestAll.runTests();
 				System.exit(0);
 			}
 			else
