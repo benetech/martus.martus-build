@@ -332,6 +332,22 @@ public class TestBulletin extends TestCaseEnhanced
 		}
 	}
 
+	public void testDateRangeCompatibility() throws Exception
+	{
+		String sampleDateRange = "2003-04-07,2003-05-17";
+		DateFormat df = Bulletin.getStoredDateFormat();
+		Date d = df.parse(sampleDateRange);
+		Calendar cal = new GregorianCalendar();
+		cal.setTime(d);
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH);
+		int day = cal.get(Calendar.DAY_OF_MONTH);
+		assertEquals(2003, year);
+		assertEquals(3, month);
+		assertEquals(7, day);
+	}
+		
+
 	public void testGetToday()
 	{
 		DateFormat df = Bulletin.getStoredDateFormat();
