@@ -1,27 +1,45 @@
-Instalación de Martus
-Desinstalar Martus
-Activar su cuenta con nombre de usuario y contraseña
-Información de contacto
-Establecer una conexión con el servidor
-Establecer sus preferencias
-Crear un boletín
-Campos de un boletín de Martus
-Editar un borrador
-Uso de una plantilla en el campo "detalles"
-Guardar un borrador
-Enviar un boletín
-Descartar el borrador
-Mantenimiento de los boletines
-Carpetas por defecto
-Otras carpetas creadas por Martus
-Añadir carpetas
-Organizar los boletines
-Descargar boletines
-Desechar Boletines
-Localizar boletines específicos.
-Imprimir los boletines
-Mantener sus datos seguros
-Copias de seguridad del fichero con el par de claves
-Recuperar su fichero con el par de claves
-Uso inteligente de la contraseña
-Compartir los datos privados con su organización
+El sistema de ayuda de Martus no está disponible en español.
+What is Martus(tm)?
+Why is security so important when using Martus?
+How does Martus keep the data secure?
+What does an individual need to do to keep data secure?
+What are the limitations to Martus security?
+Why send bulletins to the server?
+Getting Started
+Installing
+Choosing a password
+Setting up a server connection
+Setting your preferences
+Creating a Bulletin
+Completing fields in a bulletin
+Using a template in the Details field
+Saving and modifying Bulletins
+Saving a draft
+Modifying a copy of a sealed bulletin
+Modifying a draft
+Discarding a draft
+Managing Bulletins
+Default folders
+Other folders created by Martus
+Creating folders
+Discarding and deleting bulletins
+Organizing bulletins
+Dragging bulletins to the Windows desktop
+Retrieving sealed bulletins
+Retrieving draft bulletins
+Retrieving bulletins created by field desks
+Viewing and saving attachments
+Viewing damaged bulletins
+Searching for specific bulletins
+Printing bulletins
+Keeping Your Data Secure
+How Martus security works
+Back up your key pair file
+Restoring your key pair file
+Use your password wisely
+Use safe computing practices
+Sharing your private data with your organization 
+Instructions for Headquarters users
+Instructions for field users who want to provide access to Headquarters users
+Instructions for field users who want to deny future access to Headquarters users
+Frequently Asked Questions
