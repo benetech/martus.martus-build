@@ -11,22 +11,29 @@ import java.util.Vector;
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinFolder;
 import org.martus.client.BulletinStore;
+import org.martus.client.ClientSideNetworkGateway;
 import org.martus.client.ConfigInfo;
 import org.martus.client.MartusApp;
 import org.martus.client.MockBulletin;
 import org.martus.client.MockMartusApp;
 import org.martus.client.Retriever;
 import org.martus.common.Base64;
+import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.FieldDataPacket;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceForNonSSL;
+import org.martus.common.NetworkResponse;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusCrypto.MartusSignatureException;
+import org.martus.common.Packet.WrongAccountException;
 import org.martus.server.MartusServer;
 import org.martus.server.MockMartusServer;
 import org.martus.server.ServerSideNetworkHandler;
@@ -1073,6 +1080,86 @@ public class TestMartusApp extends TestCaseEnhanced
 
 		TRACE_END();
 	}
+	
+	class MockGateway extends ClientSideNetworkGateway
+	{
+		MockGateway()
+		{
+			super(null);
+		}
+		
+		public NetworkResponse deleteServerDraftBulletins(MartusCrypto signer, 
+						String authorAccountId, String[] bulletinLocalIds) throws 
+				MartusCrypto.MartusSignatureException
+		{
+			if(throwSigError)
+				throw new MartusCrypto.MartusSignatureException();
+				
+			gotSigner = signer;
+			gotAuthor = authorAccountId;
+			gotIds = bulletinLocalIds;
+			return new NetworkResponse(response);
+		}	
+		
+		MartusCrypto gotSigner;
+		String gotAuthor;
+		String[] gotIds;
+		Vector response;
+		boolean throwSigError;
+	}
+	
+	public void testDeleteServerDraftBulletins() throws Exception
+	{
+		appWithServer.setServerInfo("mock", mockServer.getAccountId());
+		MockGateway gateway = new MockGateway();
+
+		MartusSecurity security = new MartusSecurity();
+		security.createKeyPair(512);
+		MockMartusApp app= MockMartusApp.create(security);
+		app.currentSSLServerProxy = gateway;
+		String accountId = app.getAccountId();
+		
+		Vector uids = new Vector();
+		uids.add(BulletinHeaderPacket.createUniversalId(accountId));
+
+		Vector mockResponse = new Vector();
+		mockResponse.clear();
+		mockResponse.add(NetworkInterfaceConstants.OK);
+		gateway.response = mockResponse;
+		uids.add(BulletinHeaderPacket.createUniversalId(accountId));
+		uids.add(BulletinHeaderPacket.createUniversalId(accountId));
+		String result = app.deleteServerDraftBulletins(uids);
+		assertEquals("wrong result?", mockResponse.get(0), result);
+		assertEquals("wrong crypto?", app.getSecurity(), gateway.gotSigner);
+		assertEquals("wrong author?", app.getAccountId(), gateway.gotAuthor);
+		assertEquals("wrong id count?", uids.size(), gateway.gotIds.length);
+		for (int i = 0; i < gateway.gotIds.length; i++)
+		{
+			assertEquals("missing id " + i, ((UniversalId)uids.get(i)).getLocalId(), gateway.gotIds[i]);
+		}
+		
+		gateway.throwSigError = true;
+		try
+		{
+			String shouldThrow = app.deleteServerDraftBulletins(uids);
+			fail("Should have thrown for sig error (no key pair)");
+		}
+		catch (MartusSignatureException ignoreExpectedException)
+		{
+		}
+		gateway.throwSigError = false;
+
+		uids.add(BulletinHeaderPacket.createUniversalId(mockServer.getAccountId()));
+		try
+		{
+			String shouldThrow = app.deleteServerDraftBulletins(uids);
+			fail("Should have thrown for wrong account");
+		}
+		catch (WrongAccountException ignoreExpectedException)
+		{
+		}
+
+	}
 
 	public void testGetFieldOfficeAccountsNoServer() throws Exception
 	{
@@ -1698,7 +1785,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 	}
 	
-	Bulletin createAndUploadSampleBulletin() 
+	Bulletin createAndUploadSampleBulletin() throws Exception
 	{
 		BulletinStore store = appWithAccount.getStore();
 		mockServer.allowUploads(appWithAccount.getAccountId());

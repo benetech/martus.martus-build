@@ -93,6 +93,20 @@ public class ClientSideNetworkGateway
 		return new NetworkResponse(server.getPacket(signer.getPublicKeyString(), parameters, signature));
 	}
 	
+	public NetworkResponse deleteServerDraftBulletins(MartusCrypto signer, 
+					String authorAccountId, String[] bulletinLocalIds) throws 
+			MartusCrypto.MartusSignatureException
+	{
+		Vector parameters = new Vector();
+		parameters.add(new Integer(bulletinLocalIds.length));
+		for (int i = 0; i < bulletinLocalIds.length; i++)
+		{
+			parameters.add(bulletinLocalIds[i]);
+		}
+		String signature = MartusUtilities.sign(parameters, signer);
+		return new NetworkResponse(server.deleteDraftBulletins(signer.getPublicKeyString(), parameters, signature));
+	}
+	
 	final static String defaultReservedString = "";
 		
 	NetworkInterface server;

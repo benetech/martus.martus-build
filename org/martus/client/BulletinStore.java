@@ -382,6 +382,11 @@ public class BulletinStore
 	{
 		return RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER;
 	}
+	
+	public String getNameOfFolderDamaged()
+	{
+		return DAMAGED_BULLETIN_FOLDER;
+	}
 
 
 	public BulletinFolder getFolderOutbox()
@@ -802,6 +807,7 @@ public class BulletinStore
 	public static final String RECOVERED_BULLETIN_FOLDER = "%RecoveredBulletins";
 	public static final String RETRIEVE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
 	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletin";
+	public static final String DAMAGED_BULLETIN_FOLDER = "%DamagedBulletins";
 	private static final String DRAFT_OUTBOX = "*DraftOutbox";
 	
 	private MartusCrypto signer;

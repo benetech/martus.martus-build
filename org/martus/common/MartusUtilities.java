@@ -138,9 +138,7 @@ public class MartusUtilities
 				{
 					String thisElement = dataToSign.get(element).toString();
 					byte[] bytesToSign = thisElement.getBytes("UTF-8");
-					//TODO: might want to optimize this for speed
-					for(int b = 0; b < bytesToSign.length; ++b)
-						signer.signatureDigestByte(bytesToSign[b]);
+					signer.signatureDigestBytes(bytesToSign);
 					signer.signatureDigestByte((byte)0);
 				}
 				return Base64.encode(signer.signatureGet());
@@ -228,7 +226,13 @@ public class MartusUtilities
 			ZipFile zip = new ZipFile(destZipFile);
 			validateZipFilePackets(db, headerKey.getAccountId(), zip, security);
 			zip.close();
-		} 
+		}
+		catch (InvalidPacketException e)
+		{
+			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile:");
+			System.out.println("  InvalidPacket in bulletin: " + bhp.getLocalId());
+			throw e;
+		}
 		catch (Exception e) 
 		{
 			e.printStackTrace();

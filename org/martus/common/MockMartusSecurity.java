@@ -35,9 +35,13 @@ public class MockMartusSecurity extends MartusSecurity
 		super.readKeyPair(inputStream, passPhrase);
 	}
 	
+	public void createKeyPair()
+	{
+		createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
+	}
+	
 	public void createKeyPair(int publicKeyBits)
 	{
-		final int SMALLEST_LEGAL_KEY_FOR_TESTING = 512;
 		//System.out.println("WARNING: Calling MockMartusSecurity.createKeyPair " + publicKeyBits);
 		super.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 	}
@@ -180,6 +184,8 @@ public class MockMartusSecurity extends MartusSecurity
 		readKeyPair(in, samplePassphrase);
 		in.close();
 	}
+
+	static final int SMALLEST_LEGAL_KEY_FOR_TESTING = 512;
 
 	public boolean fakeSigVerifyFailure;
 	public boolean fakeAuthorizationFailure;

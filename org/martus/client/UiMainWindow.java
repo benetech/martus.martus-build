@@ -53,8 +53,10 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.MartusApp.ServerErrorException;
+import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.Packet;
 import org.martus.common.Base64.InvalidBase64Exception;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
@@ -1001,6 +1003,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return;
 			}
 				
+			notifyDlg(this, "retrieveworked");
 			folders.folderHasChanged(retrievedFolder);
 		} 
 		catch(ServerErrorException e) 
@@ -1016,6 +1019,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String topMessageTag = "DeleteServerDraftsMessage";
 		String okButtonTag = "DeleteServerDrafts";
 		String noneSelectedTag = "DeleteServerDraftsNone";
+		String deleteProgressTag = "DeleteServerDraftsProgress";
 
 		try 
 		{
@@ -1023,17 +1027,34 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 
-			System.out.println("TODO: Need to actually delete uidList drafts off the server here!");
-//			ServerDraftDeleter deleter = new ServerDraftDeleter(app, progressDlg);
-//			deleter.deleteBulletins(uidList);
-//			deleter.progressDlg.show();
-//			String result = deleter.getResult();
-//			if(!result.equals(NetworkInterfaceConstants.OK))
-//			{
-//				notifyDlg(this, "DeleteServerDraftsFailed");
-//				return;
-//			}
-		} 
+			Cursor originalCursor = getCursor();
+			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+			try
+			{
+				String result = app.deleteServerDraftBulletins(uidList);
+				if(!result.equals(NetworkInterfaceConstants.OK))
+				{
+					notifyDlg(this, "DeleteServerDraftsFailed");
+					return;
+				}
+
+				notifyDlg(this, "DeleteServerDraftsWorked");
+			}
+			finally
+			{
+				setCursor(originalCursor);
+			}
+		}
+		catch (MartusCrypto.MartusSignatureException e)
+		{
+			notifyDlg(this, "UnexpectedError");
+			return;
+		}
+		catch (Packet.WrongAccountException e)
+		{
+			notifyDlg(this, "UnexpectedError");
+			return;
+		}
 		catch(ServerErrorException e) 
 		{
 			notifyDlg(this, "ServerError");
@@ -1865,6 +1886,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 						folderContentsHaveChanged(getStore().getFolderSent());
 						folderContentsHaveChanged(getStore().getFolderOutbox());
 						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+						folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
 					}
 				}
 			}

@@ -325,7 +325,9 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenothing=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenoserver=Retrieve Bulletins");
+		addEnglishTranslation("wintitle:notifyDeleteServerDraftsWorked=Delete Drafts From Server");
 		addEnglishTranslation("wintitle:notifyDeleteServerDraftsNone=Delete Drafts From Server");
+		addEnglishTranslation("wintitle:notifyDeleteServerDraftsFailed=Delete Drafts From Server");
 		addEnglishTranslation("wintitle:notifypasswordsdontmatch=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyusernamessdontmatch=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyUserNameBlank=Invalid Setup Information");
@@ -583,6 +585,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
 		addEnglishTranslation("field:notifyretrievenothingcause=No bulletins were selected");
+		addEnglishTranslation("field:notifyDeleteServerDraftsWorkedcause=All of the selected draft bulletins have been deleted from the server.");
+		addEnglishTranslation("field:notifyDeleteServerDraftsFailedcause=Error: Unable to delete all of those draft bulletins from the server. Some of them may have been deleted.");
 		addEnglishTranslation("field:notifyDeleteServerDraftsNonecause=No bulletins were selected");
 		addEnglishTranslation("field:notifyretrievenoservercause=The current server is not responding");
 		addEnglishTranslation("field:notifypasswordsdontmatchcause=You must enter the same password twice");
@@ -666,6 +670,7 @@ public class MartusLocalization
 		addEnglishTranslation("folder:%RetrievedFieldOfficeBulletin=Field Desk Bulletins");
 		addEnglishTranslation("folder:%SearchResults=Search Results");
 		addEnglishTranslation("folder:%RecoveredBulletins=Recovered Bulletins");
+		addEnglishTranslation("folder:%DamagedBulletins=Damaged Bulletins");
 
 		addEnglishTranslation("month:jan=Jan");
 		addEnglishTranslation("month:feb=Feb");
