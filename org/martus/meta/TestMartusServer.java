@@ -232,7 +232,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("Correct Signature", OK, correctResult);		
 
 		assertTrue("File Doesn't exist?", contactFile.exists());
-		System.out.println(contactFile.length());
 		assertTrue("Size too small", contactFile.length() > 200);
 
 		contactFile.delete();
