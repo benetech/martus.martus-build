@@ -26,6 +26,7 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
+import java.awt.Cursor;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -206,12 +207,14 @@ class UiFolderTreePane extends JScrollPane
 
 		public void actionPerformed(ActionEvent ae)
 		{
+			Cursor originalCursor = parent.setWaitingCursor();
 			if(store.findFolder(nodeToDelete.getInternalName()).getBulletinCount() == 0
 				|| parent.confirmDlg(parent, "deletefolder"))
 			{
 				store.deleteFolder(nodeToDelete.getInternalName());
 				parent.folderTreeContentsHaveChanged();
 			}
+			parent.resetCursor(originalCursor);
 		}
 
 		public boolean isEnabled()
