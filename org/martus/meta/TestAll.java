@@ -27,6 +27,7 @@ public class TestAll extends java.lang.Object
 		suite.addTest(new TestSuite(TestSSL.class));
 		suite.addTest(new TestSuite(TestDatabase.class));
 		suite.addTest(new TestSuite(TestMartusUtilities.class));
+		suite.addTest(new TestSuite(TestThreads.class));
 
 		suite.addTest(new TestSuite(TestMartusServer.class));
 
