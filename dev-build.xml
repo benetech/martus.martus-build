@@ -235,6 +235,11 @@
     <jar jarfile="${dist}/Martus-updated-yy.mlp" basedir="mtf" 
 	    manifest="mtf/main-class"
 	    includes="**/*yy.txt **/*yy.mtf"/>
+
+    <jar jarfile="${dist}/Martus-en.mlp" basedir="mtf" 
+	    manifest="mtf/main-class"
+	    includes="**/*en.txt **/*en.mtf **/*en.pdf"/>
+
    </target>
 
 
