@@ -187,18 +187,31 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 			"</" + MartusXml.AccountElementName + ">\n" +
 			"<" + MartusXml.EncryptedFlagElementName + ">" +
 			"</" + MartusXml.EncryptedFlagElementName + ">" +
+			fieldListForTesting + 
 			"<" + MartusXml.FieldElementPrefix + aTag + ">" + data1 +
 			"</" + MartusXml.FieldElementPrefix + aTag + ">\n" +
 			"</FieldDataPacket>\n";
 		//System.out.println("{" + simpleFieldDataPacket + "}");
 
+		String[] noTags = {};
+		FieldDataPacket loaded = new FieldDataPacket(UniversalId.createDummyUniversalId(), noTags);
+
 		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
-		fdp.loadFromXml(in, (MartusCrypto)null);
-		assertEquals("account", account, fdp.getAccountId());
-		assertEquals("id", id, fdp.getLocalId());
-		assertEquals("aTag", data1, fdp.get(aTag));
-		assertEquals("encrypted", true, fdp.isEncrypted());
+		loaded.loadFromXml(in, (MartusCrypto)null);
+
+		assertEquals("account", account, loaded.getAccountId());
+		assertEquals("id", id, loaded.getLocalId());
+		assertEquals("encrypted", true, loaded.isEncrypted());
+
+		String[] tags = loaded.getFieldTags();
+		assertEquals("Not three fields?", 3, tags.length);
+		assertEquals(aTag, tags[0]);
+		assertEquals(bTag, tags[1]);
+		assertEquals(cTag, tags[2]);
+
+		assertEquals("aTag", data1, loaded.get(aTag));
+		
 	}
 
 	public void testLoadFromXmlWithSpaces() throws Exception
@@ -319,6 +332,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertContains(data1, result);
 		assertContains(data2base + xmlAmp + xmlLt + xmlGt, result);
 
+		assertContains(fieldListForTesting, result);
 	}
 
 	public void testWriteAndLoadXml() throws Exception
@@ -523,9 +537,9 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	String xmlAmp = "&amp;";
 	String xmlLt = "&lt;";
 	String xmlGt = "&gt;";
-	String aTag = "aMonte";
-	String bTag = "Blue";
-	String cTag = "cSharp";
+	static String aTag = "aMonte";
+	static String bTag = "Blue";
+	static String cTag = "cSharp";
 	String aData = "data for a";
 	String bData = line1 + "\n" + line2 + "\r\n" + line3 + "\n" + line4;
 	String cData = "after b";
@@ -534,4 +548,5 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	int SHORTEST_LEGAL_KEY_SIZE = 512;
 	static MartusSecurity security;
 	static MartusSecurity securityHQ;
+	static final String fieldListForTesting = "<FieldList>" + aTag + "," + bTag + "," + cTag + "</FieldList>";
 }

@@ -133,6 +133,7 @@ public class MartusXml
 	public final static String packetStartCommentEnd = ";-->";
 
 	public final static String PacketElementName = "Packet";
+	public final static String FieldListElementName = "FieldList";
 	public final static String FieldDataPacketElementName = "FieldDataPacket";
 	public final static String AttachmentPacketElementName = "AttachmentPacket";
 	public final static String BulletinHeaderPacketElementName = "BulletinHeaderPacket";
