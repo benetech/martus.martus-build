@@ -7,8 +7,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 
-import org.martus.client.*;
-
 
 public class TransferableBulletinList implements Transferable
 {
@@ -26,13 +24,14 @@ public class TransferableBulletinList implements Transferable
 	
 	boolean createTransferableZipFile() 
 	{
+// TODO: Remove when multiple select is working
 if(bulletins.length > 1)
 System.out.println("TransferableBulletinList.createTransferableZipFile: USING JUST FIRST BULLETIN!");
 		try
 		{
 			Bulletin bulletin = bulletins[0];
 			String summary = MartusApp.toFileName(bulletin.get(bulletin.TAGTITLE));
-			file = File.createTempFile(summary, ".mbf");
+			file = File.createTempFile(summary, BULLETIN_FILE_EXTENSION);
 			file.deleteOnExit();
 			bulletin.saveToFile(file);
 		}
@@ -156,6 +155,7 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 		return tb;
 	}
 
+	private static final String BULLETIN_FILE_EXTENSION = ".mba";
 	static DataFlavor bulletinListDataFlavor = new DataFlavor(TransferableBulletinList.class, "Martus Bulletins");
 	File file;
 	BulletinFolder folder;
