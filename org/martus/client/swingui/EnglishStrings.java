@@ -142,6 +142,7 @@ public class EnglishStrings
 "wintitle:inputservermagicword=Request Upload Permission",
 "wintitle:inputExportMyPublicKey=Export My Public Key",
 "wintitle:inputImportPublicCode=Import Headquarter's Public Key",
+"wintitle:inputCustomFields=Customize Fields",
 
 "wintitle:ErrorDateInFuture=Date Invalid",
 
@@ -191,6 +192,7 @@ public class EnglishStrings
 "button:inputExportMyPublicKeyok=Export",
 "button:inputImportPublicCodeok=Import",
 "button:inputLoadDefaultDetailsok=Load",
+"button:inputCustomFieldsok=OK",
 
 "button:cancel=Cancel",
 "button:browse=Browse...",
@@ -258,6 +260,7 @@ public class EnglishStrings
 "menu:ExportMyPublicKey=Export My Public Key",
 "menu:ImportHQPublicKey=Import Headquarters Key",
 "menu:RemoveExistingHQPublicKey=Remove Existing Headquarters",
+"menu:CustomFields=Customize Fields",
 "menu:help=Help",
 "menu:helpMessage=Help",
 "menu:about=About Martus",
@@ -526,6 +529,8 @@ public class EnglishStrings
 "field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:",
 "field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:",
 "field:inputExportMyPublicKeyentry=",
+
+"field:inputCustomFieldsentry=Enter the list of field tags below, in the order you want them to appear",
 
 "field:username=Username",
 "field:password1=Password",

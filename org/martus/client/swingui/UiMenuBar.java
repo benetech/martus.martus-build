@@ -32,6 +32,7 @@ import javax.swing.JMenuBar;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import org.martus.client.swingui.actions.ActionMenuCustomFields;
 import org.martus.client.swingui.actions.ActionMenuQuickErase;
 import org.martus.client.swingui.actions.UiActions;
 
@@ -98,8 +99,10 @@ public class UiMenuBar extends JMenuBar
 		JMenu options = new JMenu(localization.getMenuLabel("options"));
 		options.add(UiActions.newActionMenuPreferences(mainWindow));
 		options.add(UiActions.newActionMenuContactInfo(mainWindow));
-		options.add(UiActions.newActionMenuDefaultDetailsFieldContent(mainWindow));
 		options.add(UiActions.newActionMenuChangeUserNamePassword(mainWindow));
+		options.addSeparator();
+		options.add(UiActions.newActionMenuDefaultDetailsFieldContent(mainWindow));
+		options.add(new ActionMenuCustomFields(mainWindow));
 
 		JMenu tools = new JMenu(localization.getMenuLabel("tools"));
 		tools.add(new ActionMenuQuickErase(mainWindow));
