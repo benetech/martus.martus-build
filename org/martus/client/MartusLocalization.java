@@ -467,7 +467,7 @@ public class MartusLocalization
 		addEnglishTranslation("menu:paste=Paste");
 		addEnglishTranslation("menu:CutBulletins=Cut Bulletin(s)");
 		addEnglishTranslation("menu:CopyBulletins=Copy Bulletin(s)");
-		addEnglishTranslation("menu:pastebulletin=Paste Bulletin");
+		addEnglishTranslation("menu:PasteBulletins=Paste Bulletin(s)");
 		addEnglishTranslation("menu:search=Search");
 		addEnglishTranslation("menu:DiscardBulletins=Discard Bulletin(s)");
 		addEnglishTranslation("menu:DeleteBulletins=Delete Bulletin(s)");

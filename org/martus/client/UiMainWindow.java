@@ -1713,7 +1713,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public ActionMenuPaste()
 		{
-			super(app.getMenuLabel("pastebulletin"), null);
+			super(app.getMenuLabel("PasteBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
