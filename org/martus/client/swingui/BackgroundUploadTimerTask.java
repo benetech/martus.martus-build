@@ -102,7 +102,6 @@ class BackgroundUploadTimerTask extends TimerTask
 			mainWindow.folderTreeContentsHaveChanged();
 		}
 		
-		UiLocalization localization = mainWindow.getLocalization();
 		progressMeter.setStatusMessageTag(tag);
 		progressMeter.hideProgressMeter();
 	}

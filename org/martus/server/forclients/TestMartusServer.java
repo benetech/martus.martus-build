@@ -1594,7 +1594,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testServerShutdown");
 
 		String clientId = clientSecurity.getPublicKeyString();
-		String hqId = hqSecurity.getPublicKeyString();	
 		String bogusStringParameter = "this is never used in this call. right?";
 
 		ServerForClients serverForClients = testServer.serverForClients;		

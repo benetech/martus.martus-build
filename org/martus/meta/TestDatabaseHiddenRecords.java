@@ -177,8 +177,8 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		DatabaseKey hiddenSealedKey = DatabaseKey.createSealedKey(sealedUid);
 		HashMap entries = new HashMap();
 		entries.put(visibleKey, null);
-		entries.put(draftKey, null);
-		entries.put(sealedKey, null);
+		entries.put(hiddenDraftKey, null);
+		entries.put(hiddenSealedKey, null);
 		try
 		{
 			db.importFiles(entries);

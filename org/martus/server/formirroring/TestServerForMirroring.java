@@ -214,7 +214,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		DatabaseKey headerKey = bhp1.createKeyWithHeaderStatus(bhp1.getUniversalId());
 		String bulletinLocalId = headerKey.getLocalId();
 		MartusServerUtilities.writeSpecificBurToDatabase(coreServer.getDatabase(), bhp1, expectedBur);
-		String bur1 = server.getBulletinUploadRecord(bhp1.getAccountId(), bhp1.getLocalId());
+		String bur1 = server.getBulletinUploadRecord(bhp1.getAccountId(), bulletinLocalId);
 		assertNotNull("didn't find bur1?", bur1);
 		assertEquals("wrong bur?", expectedBur, bur1);
 	}
