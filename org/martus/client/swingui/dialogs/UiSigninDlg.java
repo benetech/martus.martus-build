@@ -32,6 +32,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Box;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
 import javax.swing.JTabbedPane;
@@ -41,6 +42,7 @@ import org.martus.client.swingui.UiConstants;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.UiSigninPanel;
+import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
 
 
@@ -83,9 +85,11 @@ public class UiSigninDlg extends JDialog
 		
 		if(shouldUseTabs(mode))
 		{
-			JTabbedPane tabbedPane = new JTabbedPane();
+			tabbedPane = new JTabbedPane();
 			tabbedPane.add(signinPane);
-			tabbedPane.setTitleAt(0, "Sign In");  
+			tabbedPane.setTitleAt(0, localization.getButtonLabel("SignIn"));  
+			tabbedPane.add(createNewAccountPane());
+			tabbedPane.setTitleAt(1, localization.getButtonLabel("NewAccount"));
 			getContentPane().add(tabbedPane);
 		}
 		else
@@ -137,10 +141,14 @@ public class UiSigninDlg extends JDialog
 		String completeTitle = title +" (" + versionInfo + ")";
 		return completeTitle;
 	}
-
-	public boolean getResult()
+	
+	public int getUserChoice()
 	{
-		return result;
+		if(okPressedForSignin)
+			return SIGN_IN;
+		if(okPressedForNewAccount)
+			return NEW_ACCOUNT;
+		return CANCEL;
 	}
 
 	public String getName()
@@ -162,12 +170,21 @@ public class UiSigninDlg extends JDialog
 	{
 		getRootPane().setDefaultButton(ok);
 	}
+	
+	JComponent createNewAccountPane()
+	{
+		String text = mainWindow.getLocalization().getFieldLabel("HowToCreateNewAccount");
+		return new UiWrappedTextArea("\n" + text);
+	}
 
 	class OkHandler implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			result = true;
+			if(tabbedPane != null && tabbedPane.getSelectedIndex() == 1)
+				okPressedForNewAccount = true;
+			else
+				okPressedForSignin = true;
 			dispose();
 		}
 	}
@@ -181,8 +198,10 @@ public class UiSigninDlg extends JDialog
 	}
 
 	UiSigninPanel signinPane;
+	JTabbedPane tabbedPane;
 	private UiMainWindow mainWindow;
-	private boolean result;
+	private boolean okPressedForSignin;
+	private boolean okPressedForNewAccount;
 	private JButton ok;
 
 	public final static int INITIAL = 1;
@@ -190,5 +209,9 @@ public class UiSigninDlg extends JDialog
 	public final static int SECURITY_VALIDATE = 3;
 	public final static int RETYPE_USERNAME_PASSWORD = 4;
 	public final static int CREATE_NEW = 5;
+
+	public final static int CANCEL = 10;
+	public final static int SIGN_IN = 11;
+	public final static int NEW_ACCOUNT = 12;
 }
 

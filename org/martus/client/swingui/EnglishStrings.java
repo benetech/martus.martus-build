@@ -215,6 +215,8 @@ public class EnglishStrings
 "button:ResetContents=Reset Contents",
 "button:ServerComplianceAccept=Accept",
 "button:ServerComplianceReject=Reject",
+"button:SignIn=Sign In",
+"button:NewAccount=New Account",
 
 "menu:file=File",
 "menu:CreateNewBulletin=Create New Bulletin",
@@ -548,6 +550,7 @@ public class EnglishStrings
 "field:SearchEndDate=Ending on:",
 "field:ExportPrivateData=Include private data in export",
 "field:ExportDetails=Information from the selected bulletins (listed below) will be exported to an XML file that you specify",
+"field:HowToCreateNewAccount=One or more accounts already exist on this computer. To create an additional account with a new username and passphrase, click OK.",
 
 "folder:%OutBox=Outbox",
 "folder:%Sent=Sent Bulletins",

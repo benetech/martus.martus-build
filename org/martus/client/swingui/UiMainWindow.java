@@ -150,7 +150,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		boolean newAccount = false;
 		if(app.doesAccountExist())
 		{
-			if(!signIn(UiSigninDlg.INITIAL))
+			int result = signIn(UiSigninDlg.INITIAL); 
+			if(result != SIGNED_IN)
 				return false;
 		}
 		else
@@ -945,10 +946,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean reSignIn()
 	{
-		boolean signedIn = signIn(UiSigninDlg.SECURITY_VALIDATE);
+		int result = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
 			exitWithoutSavingState();
-		return signedIn;
+		if(result == SIGNED_IN)
+			return true;
+		return false;
 	}
 
 
@@ -1404,7 +1407,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private boolean signIn(int mode)
+	private int signIn(int mode)
 	{
 		int seconds = 0;
 		UiModelessBusyDlg busyDlg = null;
@@ -1426,20 +1429,24 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				currentActiveFrame.setVisible(false);
 			}
 			UiSigninDlg signinDlg = new UiSigninDlg(this, currentActiveFrame, mode);
-			if(!signinDlg.getResult())
-				return false;
-			if(!app.attemptSignIn(signinDlg.getName(), signinDlg.getPassword()))
+			switch(signinDlg.getUserChoice())
 			{
-				notifyDlg(currentActiveFrame, "incorrectsignin");
-				busyDlg = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitAfterFailedSignIn"));
-				continue;
+				case UiSigninDlg.NEW_ACCOUNT:
+					return NEW_ACCOUNT;
+				case UiSigninDlg.SIGN_IN:
+					if(!app.attemptSignIn(signinDlg.getName(), signinDlg.getPassword()))
+					{
+						notifyDlg(currentActiveFrame, "incorrectsignin");
+						busyDlg = new UiModelessBusyDlg(getLocalization().getFieldLabel("waitAfterFailedSignIn"));
+						continue;
+					}
+					if(mode == UiSigninDlg.TIMED_OUT)
+						currentActiveFrame.setVisible(true);
+					return SIGNED_IN;
+				default:
+					return CANCELLED;
 			}
-			break;
 		}
-		if(mode == UiSigninDlg.TIMED_OUT)
-			currentActiveFrame.setVisible(true);
-		
-		return true;
 	}
 
 	private boolean createAccount()
@@ -1609,7 +1616,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			public void run()
 			{
 				currentActiveFrame.setState(ICONIFIED);
-				if(!signIn(UiSigninDlg.TIMED_OUT))
+				if(signIn(UiSigninDlg.TIMED_OUT) != SIGNED_IN)
 					exitWithoutSavingState();
 				currentActiveFrame.setState(NORMAL);
 			}
@@ -1665,4 +1672,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private static final int BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS = 5*1000;
 	private boolean modifyingBulletin;
 	private boolean mainWindowInitalizing;
+
+	public final static int CANCELLED = 10;
+	public final static int SIGNED_IN = 11;
+	public final static int NEW_ACCOUNT = 12;
+
 }

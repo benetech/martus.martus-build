@@ -55,7 +55,7 @@ public class UiCreateNewUserNameAndPasswordDlg
 		{
 			UiSigninDlg signinDlg1 =
 				new UiSigninDlg(window, window, UiSigninDlg.CREATE_NEW, originalUserName);
-			if (!signinDlg1.getResult())
+			if (signinDlg1.getUserChoice() != UiSigninDlg.SIGN_IN)
 				return;
 			userName1 = signinDlg1.getName();
 			userPassword1 = signinDlg1.getPassword();
@@ -65,7 +65,7 @@ public class UiCreateNewUserNameAndPasswordDlg
 
 			UiSigninDlg signinDlg2 =
 				new UiSigninDlg(window, window, UiSigninDlg.RETYPE_USERNAME_PASSWORD, defaultUserName);
-			if (!signinDlg2.getResult())
+			if (signinDlg2.getUserChoice() != UiSigninDlg.SIGN_IN)
 				return;
 			String userName2 = signinDlg2.getName();
 			String userPassword2 = signinDlg2.getPassword();
