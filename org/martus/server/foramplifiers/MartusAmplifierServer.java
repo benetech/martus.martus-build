@@ -16,6 +16,7 @@ import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
 import org.martus.common.MartusUtilities;
+import org.martus.common.XmlRpcThread;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.bulletin.BulletinZipUtilities;
@@ -39,7 +40,6 @@ import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.server.core.MartusSecureWebServer;
 import org.martus.server.core.ServerConstants;
 import org.martus.server.core.ServerFileDatabase;
-import org.martus.server.core.XmlRpcThread;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;
 import org.martus.util.Base64.InvalidBase64Exception;

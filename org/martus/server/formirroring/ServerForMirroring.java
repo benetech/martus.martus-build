@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import org.martus.common.LoggerInterface;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
@@ -39,7 +40,6 @@ import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.UniversalId;
-import org.martus.server.core.LoggerInterface;
 import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
 import org.martus.server.forclients.MartusServerUtilities;

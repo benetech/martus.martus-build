@@ -101,6 +101,7 @@ import org.apache.xmlrpc.Echo;
 import org.apache.xmlrpc.XmlRpc;
 import org.apache.xmlrpc.XmlRpcClient;
 import org.apache.xmlrpc.XmlRpcServer;
+import org.martus.common.*;
 
 public class WebServerWithClientId implements Runnable
 {

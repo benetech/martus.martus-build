@@ -43,7 +43,10 @@ import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
 
+import org.martus.common.LoggerInterface;
+import org.martus.common.LoggerToConsole;
 import org.martus.common.MartusUtilities;
+import org.martus.common.XmlRpcThread;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
@@ -71,11 +74,8 @@ import org.martus.common.packet.UniversalId;
 import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
-import org.martus.server.core.LoggerInterface;
-import org.martus.server.core.LoggerToConsole;
 import org.martus.server.core.ServerConstants;
 import org.martus.server.core.ServerFileDatabase;
-import org.martus.server.core.XmlRpcThread;
 import org.martus.server.formirroring.ServerForMirroring;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;
@@ -1706,11 +1706,6 @@ public class MartusServer implements NetworkInterfaceConstants
 			if(args[arg].equals("secure"))
 				enterSecureMode();
 		
-			if(args[arg].startsWith("--server-name="))
-			{
-				serverName = args[arg].substring(args[arg].indexOf("=")+1);
-				logger.setServerName(getServerName());
-			}
 		}
 		
 		if(isSecureMode())

@@ -24,19 +24,39 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.core;
+package org.martus.common;
 
-public class LoggerForTesting implements LoggerInterface
+import java.net.Socket;
+
+public class XmlRpcThread extends Thread
 {
-	public LoggerForTesting()
+	public XmlRpcThread(ThreadGroup group, Runnable runnable, Socket socketToUse)
 	{
+		super(group, runnable);
+		setSocket(socketToUse);
 	}
-
-	public void log(String message)
+	
+	public void setSocket(Socket socketToUse)
 	{
+		socket = socketToUse;
 	}
-
-	public void setServerName(String serverNameToUse)
+	      
+	public String getClientAddress()
 	{
+		return getClientIp() + ":" + getClientPort();
 	}
+	
+	public String getClientIp()
+	{
+		String ip = socket.getInetAddress().getHostAddress();
+		return ip;
+	}
+	
+	public int getClientPort()
+	{
+	    int port = socket.getPort();
+		return port;
+	}
+	  
+	Socket socket;
 }

@@ -30,6 +30,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Vector;
 
+import org.martus.common.LoggerForTesting;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.BulletinZipUtilities;
@@ -42,7 +43,6 @@ import org.martus.common.database.MockServerDatabase;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.TestCaseEnhanced;
-import org.martus.server.core.LoggerForTesting;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;

@@ -32,6 +32,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.common.FieldSpec;
+import org.martus.common.LoggerForTesting;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.bulletin.BulletinConstants;
@@ -43,7 +44,6 @@ import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.TestCaseEnhanced;
-import org.martus.server.core.LoggerForTesting;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.forclients.MockMartusServer;
 

@@ -24,10 +24,39 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.core;
+package org.martus.common;
 
-public interface LoggerInterface
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+
+
+public class LoggerToConsole implements LoggerInterface
 {
-	public void setServerName(String serverNameToUse);
-	public void log(String message);
+	public LoggerToConsole()
+	{
+	}
+	
+	public void log(String message)
+	{
+		Timestamp stamp = new Timestamp(System.currentTimeMillis());
+		SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
+		String threadId = getCurrentClientAddress();
+		if(threadId == null)
+			threadId = "";
+		else
+			threadId = threadId + ": ";
+		String logEntry = formatDate.format(stamp) + " " + threadId + message;
+		System.out.println(logEntry);
+	}
+
+	protected String getCurrentClientAddress()
+	{
+		Thread currThread = Thread.currentThread();
+		if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
+		{
+			String ip = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
+			return ip;
+		}
+		return null;
+	}
 }
