@@ -123,7 +123,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void selectBulletin(Bulletin b)
 	{
-		selectRow(bulletinsList.findBulletin(b));
+		selectRow(bulletinsList.findBulletin(b.getUniversalId()));
 	}
 	
 	public void selectBulletins(Bulletin[] bulletins)
@@ -131,7 +131,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		clearSelection();
 		for (int i = 0; i < bulletins.length; i++)
 		{
-			int row = bulletinsList.findBulletin(bulletins[i]);
+			int row = bulletinsList.findBulletin(bulletins[i].getUniversalId());
 			if(row >= 0)
 				addRowSelectionInterval(row, row);
 		}

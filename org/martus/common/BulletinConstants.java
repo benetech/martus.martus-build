@@ -10,6 +10,7 @@ public interface BulletinConstants
 	public static final int DATE = 2;
 	public static final int CHOICE = 4;
 
+	public static final String TAGSTATUS = "status";
 	public static final String TAGLANGUAGE = "language";
 	public static final String TAGAUTHOR = "author";
 	public static final String TAGORGANIZATION = "organization";

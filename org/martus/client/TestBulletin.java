@@ -1021,9 +1021,9 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.set(b1.TAGPUBLICINFO, "public info");
 		b1.set(b1.TAGPRIVATEINFO, "private info");
 		b1.setSealed();
-		assertEquals("Not Sealed Status?", BulletinConstants.STATUSSEALED, b1.get(BulletinsList.STATUS_TAG));
+		assertEquals("Not Sealed Status?", BulletinConstants.STATUSSEALED, b1.get(Bulletin.TAGSTATUS));
 		b1.setDraft();
-		assertEquals("Not Draft Status?", BulletinConstants.STATUSDRAFT, b1.get(BulletinsList.STATUS_TAG));
+		assertEquals("Not Draft Status?", BulletinConstants.STATUSDRAFT, b1.get(Bulletin.TAGSTATUS));
 	}
 
 	public void testPullFrom() throws Exception

@@ -264,6 +264,12 @@ public class BulletinStore
 		}
 	}
 
+	public String getFieldData(UniversalId uid, String fieldTag)
+	{
+		Bulletin b = findBulletinByUniversalId(uid);
+		return b.get(fieldTag);
+	}
+
 	public void saveBulletin(Bulletin b)
 	{
 		bulletinCache.remove(b.getUniversalId());

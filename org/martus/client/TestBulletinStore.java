@@ -163,8 +163,25 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(0, store.getBulletinCount());
 		assertEquals(0, f.getBulletinCount());
 		assertEquals(originalRecordCount, db.getRecordCount());
-}
+	}
 
+	public void testGetFieldData() throws Exception
+	{
+		TRACE("testGetFieldData");
+		assertEquals(0, store.getBulletinCount());
+		String sampleSummary = "Summary Data";
+		String sampleEventDate = "11-20-2002";
+		Bulletin b = store.createEmptyBulletin();
+		b.set(Bulletin.TAGSUMMARY, sampleSummary);
+		b.set(Bulletin.TAGEVENTDATE, sampleEventDate);
+		b.setDraft();
+		store.saveBulletin(b);
+		UniversalId uId = b.getUniversalId();
+		assertEquals("Wrong summary?", sampleSummary, store.getFieldData(uId, Bulletin.TAGSUMMARY));
+		assertEquals("Wrong event date?", sampleEventDate, store.getFieldData(uId, Bulletin.TAGEVENTDATE));
+		assertEquals("Wrong status?", b.getStatus(), store.getFieldData(uId, Bulletin.TAGSTATUS));
+		
+	}
 	public void testSaveBulletin() throws Exception
 	{
 		TRACE("testSaveBulletin");
