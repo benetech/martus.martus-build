@@ -35,11 +35,13 @@ import java.io.Writer;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.XmlWriterFilter;
+import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.ByteArrayInputStreamWithSeek;
+import org.martus.util.InputStreamWithSeek;
 
 public class TestPacket extends TestCaseEnhanced
 {
@@ -113,6 +115,59 @@ public class TestPacket extends TestCaseEnhanced
 		int sigIndex = MartusXml.packetSignatureStart.length();
 		int sigEndIndex = sigComment.length() - MartusXml.packetSignatureEnd.length();
 		sigComment.substring(sigIndex, sigEndIndex);
+	}
+	
+	public void testUnknownTags() throws Exception
+	{
+		class LoadablePacket extends Packet
+		{
+			protected String getPacketRootElementName()
+			{
+				return "LoadablePacket";
+			}
+
+			public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
+				IOException,
+				InvalidPacketException,
+				WrongPacketTypeException,
+				SignatureVerificationException,
+				MartusCrypto.DecryptionException,
+				MartusCrypto.NoKeyPairException
+			{
+				super.loadFromXmlInternal(inputStream, expectedSig, verifier);
+			}			
+		}
+		
+		class PacketWithoutUnknownTags extends LoadablePacket
+		{
+		}
+		
+		PacketWithoutUnknownTags without = new PacketWithoutUnknownTags();
+		StringWriter writerWithout = new StringWriter();
+		without.writeXml(writerWithout, security);
+		String resultWithout = writerWithout.toString();
+		ByteArrayInputStreamWithSeek inWithout = new ByteArrayInputStreamWithSeek(resultWithout.getBytes());
+		without.loadFromXml(inWithout, null, null);
+		assertFalse("has unknown?", without.hasUnknownTags());
+
+		class PacketWithUnknownTags extends LoadablePacket
+		{
+			protected void internalWriteXml(XmlWriterFilter dest) throws IOException
+			{
+				writeElement(dest, "UnknownTag", "");
+			}
+		}
+		
+		PacketWithUnknownTags with = new PacketWithUnknownTags();
+		StringWriter writerWith = new StringWriter();
+		with.writeXml(writerWith, security);
+		String resultWith = writerWith.toString();
+		
+		assertContains("<UnknownTag>", resultWith);
+		
+		ByteArrayInputStreamWithSeek inWith = new ByteArrayInputStreamWithSeek(resultWith.getBytes());
+		with.loadFromXml(inWith, null, null);
+		assertTrue("no unknown?", with.hasUnknownTags());
 	}
 
 	public void testWriteXmlToWriter() throws Exception

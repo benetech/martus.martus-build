@@ -126,6 +126,11 @@ public class Packet
 	{
 		return false;
 	}
+	
+	public boolean hasUnknownTags()
+	{
+		return hasUnknown;
+	}
 
 	public byte[] writeXml(OutputStream out, MartusCrypto signer) throws IOException
 	{
@@ -388,6 +393,15 @@ public class Packet
 		{
 			setAccountId(data);
 		}
+		else if(elementName.equals(getPacketRootElementName()))
+		{
+			// do nothing
+		}
+		else
+		{
+			//System.out.println(elementName);
+			hasUnknown = true;
+		}
 	}
 
 	class XmlHandler extends DefaultHandler
@@ -543,4 +557,5 @@ public class Packet
 
 	final static byte[] newlineBytes = "\n".getBytes();
 	UniversalId uid;
+	boolean hasUnknown;
 }
