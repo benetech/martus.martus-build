@@ -42,24 +42,24 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertNotEquals("account Id's equal?", fieldApp1.getAccountId(), fieldApp2.getAccountId());
 
 		b0 = fieldApp1.createBulletin();
-		b0.set(b0.TAGTITLE, title0);
-		b0.set(b0.TAGAUTHOR, author0);
+		b0.set(Bulletin.TAGTITLE, title0);
+		b0.set(Bulletin.TAGAUTHOR, author0);
 		b0.setAllPrivate(true);
 		b0.setHQPublicKey(hqApp.getAccountId());
 		b0.save();
 		b0Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b0.getBulletinHeaderPacket());
 
 		b1 = fieldApp1.createBulletin();
-		b1.set(b1.TAGTITLE, title1);
-		b1.set(b1.TAGAUTHOR, author1);
+		b1.set(Bulletin.TAGTITLE, title1);
+		b1.set(Bulletin.TAGAUTHOR, author1);
 		b1.setAllPrivate(false);
 		b1.setHQPublicKey(hqApp.getAccountId());
 		b1.save();
 		b1Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b1.getBulletinHeaderPacket());
 
 		b2 = fieldApp2.createBulletin();
-		b2.set(b2.TAGTITLE, title2);
-		b2.set(b2.TAGAUTHOR, author2);
+		b2.set(Bulletin.TAGTITLE, title2);
+		b2.set(Bulletin.TAGAUTHOR, author2);
 		b2.setAllPrivate(true);
 		b2.setHQPublicKey(hqApp.getAccountId());
 		b2.save();
@@ -138,9 +138,9 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		authors.add((String)modelWithData.getValueAt(0,2));
 		authors.add((String)modelWithData.getValueAt(1,2));
 		authors.add((String)modelWithData.getValueAt(2,2));
-		assertContains("Author 0 missing?", b0.get(b0.TAGAUTHOR), authors);
-		assertContains("Author 1 missing?", b1.get(b1.TAGAUTHOR), authors);
-		assertContains("Author 2 missing?", b2.get(b2.TAGAUTHOR), authors);
+		assertContains("Author 0 missing?", b0.get(Bulletin.TAGAUTHOR), authors);
+		assertContains("Author 1 missing?", b1.get(Bulletin.TAGAUTHOR), authors);
+		assertContains("Author 2 missing?", b2.get(Bulletin.TAGAUTHOR), authors);
 		
 		assertEquals("start bool", false, ((Boolean)modelWithData.getValueAt(0,0)).booleanValue());
 		modelWithData.setValueAt(new Boolean(true), 0,0);

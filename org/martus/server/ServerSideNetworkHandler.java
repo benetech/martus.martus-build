@@ -19,7 +19,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	// begin ServerInterface	
 	public Vector getServerInfo(Vector reservedForFuture)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("getServerInfo");
 		
 		server.incrementActiveClientsCounter();
@@ -38,7 +38,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector getUploadRights(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("getUploadRights");
 			
 		server.incrementActiveClientsCounter();
@@ -64,7 +64,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector getSealedBulletinIds(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("getSealedBulletinIds");
 			
 		server.incrementActiveClientsCounter();
@@ -94,7 +94,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector getDraftBulletinIds(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("getDraftBulletinIds");
 			
 		server.incrementActiveClientsCounter();
@@ -124,7 +124,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector getFieldOfficeAccountIds(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("getFieldOfficeAccountIds");
 			
 		server.incrementActiveClientsCounter();
@@ -154,7 +154,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector putBulletinChunk(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("putBulletinChunk");
 			
 		server.incrementActiveClientsCounter();
@@ -186,7 +186,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector getBulletinChunk(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("getBulletinChunk");
 			
 		server.incrementActiveClientsCounter();
@@ -220,7 +220,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector getPacket(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("getPacket");
 			
 		server.incrementActiveClientsCounter();
@@ -253,7 +253,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector deleteDraftBulletins(String myAccountId, Vector parameters, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("deleteDraftBulletins");
 			
 		server.incrementActiveClientsCounter();
@@ -286,7 +286,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
-			if(server.serverSSLLogging)
+			if(MartusServer.serverSSLLogging)
 				server.logging("putContactInfo:Signature Error");
 			result.add(SIG_ERROR);
 			server.decrementActiveClientsCounter();
@@ -301,7 +301,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	// begin legacy!
 	public String ping()
 	{		
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-Ping");
 		server.incrementActiveClientsCounter();
 		String response = server.ping();
@@ -311,7 +311,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public String requestUploadRights(String authorAccountId, String tryMagicWord)
 	{		
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-requestUploadRights");
 		server.incrementActiveClientsCounter();
 		String response = legacyRequestUploadRights(authorAccountId, tryMagicWord);
@@ -327,7 +327,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId,
 		int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-uploadBulletinChunk");
 		server.incrementActiveClientsCounter();
 		String response = server.uploadBulletinChunk(authorAccountId, bulletinLocalId,
@@ -339,7 +339,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	public Vector downloadMyBulletinChunk(String authorAccountId,String bulletinLocalId,
 		int chunkOffset, int maxChunkSize, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadMyBulletinChunk");
 		server.incrementActiveClientsCounter();
 		Vector response = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
@@ -350,7 +350,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadFieldOfficeBulletinChunk");
 		server.incrementActiveClientsCounter();
 		Vector response = server.downloadFieldOfficeBulletinChunk(authorAccountId, bulletinLocalId, hqAccountId, 
@@ -361,7 +361,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	public Vector downloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadAuthorizedPacket");
 		server.incrementActiveClientsCounter();
 		Vector response = server.legacyDownloadAuthorizedPacket(authorAccountId, packetLocalId, myAccountId, signature);
@@ -371,7 +371,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-listMyBulletinSummaries");
 		server.incrementActiveClientsCounter();
 		Vector response = server.legacyListMySealedBulletinIds(authorAccountId);
@@ -381,7 +381,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-downloadFieldDataPacket");
 		server.incrementActiveClientsCounter();
 		Vector response = server.downloadFieldDataPacket(authorAccountId, bulletinLocalId, packetLocalId, myAccountId, signature);
@@ -391,7 +391,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-listFieldOfficeBulletinSummaries");
 		server.incrementActiveClientsCounter();
 		Vector response = server.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
@@ -401,7 +401,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
-		if(server.serverSSLLogging)
+		if(MartusServer.serverSSLLogging)
 			server.logging("SSL-listFieldOfficeAccounts");
 		server.incrementActiveClientsCounter();
 		Vector response = legacyListFieldOfficeAccounts(hqAccountId);

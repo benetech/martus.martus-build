@@ -639,7 +639,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		mockSecurityForApp.loadSampleAccount();
 		Vector response = new Vector();
 		response.add(NetworkInterfaceConstants.OK);
-		response.add(this.mockSecurityForApp.getPublicKeyString());
+		response.add(mockSecurityForApp.getPublicKeyString());
 		response.add(Base64.encode(new String("whatever").getBytes()));
 		mockServer.infoResponse = response;
 		try
@@ -911,7 +911,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		String line2 = reader.readLine();
 		assertEquals(serverName, line2);
 		String line3 = reader.readLine();
-		assertEquals(logged.get(logged.TAGTITLE), line3);
+		assertEquals(logged.get(Bulletin.TAGTITLE), line3);
 		reader.close();
 		
 		TRACE_END();
@@ -990,7 +990,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		b2.setSealed();
 		b2.save();
 		Bulletin b3 = appWithAccount.createBulletin();
-		b3.set(b3.TAGAUTHOR, "author");
+		b3.set(Bulletin.TAGAUTHOR, "author");
 		b3.setSealed();
 		b3.save();
 		mockServer.allowUploads(appWithAccount.getAccountId());
@@ -1010,7 +1010,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		assertEquals("not back to three?", 3, store.getBulletinCount());
 		
 		Bulletin b3got = store.findBulletinByUniversalId(b3.getUniversalId());
-		assertEquals("missing author?", b3.get(b3.TAGAUTHOR), b3got.get(b3got.TAGAUTHOR));
+		assertEquals("missing author?", b3.get(Bulletin.TAGAUTHOR), b3got.get(Bulletin.TAGAUTHOR));
 		
 		TRACE_END();
 	}
@@ -1556,7 +1556,7 @@ public class TestMartusApp extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testCreateAccount");
 
-		this.mockSecurityForApp.clearKeyPair();
+		mockSecurityForApp.clearKeyPair();
 		try
 		{
 
@@ -1977,7 +1977,7 @@ public class TestMartusApp extends TestCaseEnhanced
 	{
 		Bulletin b = app.createBulletin();
 		b.setSealed();
-		b.set(b.TAGTITLE, "test title");
+		b.set(Bulletin.TAGTITLE, "test title");
 		b.save();
 		app.getFolderOutbox().add(b);
 		return b;
@@ -1987,7 +1987,7 @@ public class TestMartusApp extends TestCaseEnhanced
 	{
 		Bulletin b = app.createBulletin();
 		b.setDraft();
-		b.set(b.TAGTITLE, "test title");
+		b.set(Bulletin.TAGTITLE, "test title");
 		b.save();
 		app.getFolderDraftOutbox().add(b);
 		return b;

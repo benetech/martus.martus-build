@@ -20,15 +20,15 @@ public class TestMartusLocalization extends TestCase
 
 	public void testDateFormats()
 	{
-		ChoiceItem[] items = bd.getDateFormats();
+		ChoiceItem[] items = MartusLocalization.getDateFormats();
 		assertTrue("Should have multiple date formats", items.length > 1);
 	}
 
 	public void testMdyOrder()
 	{
-		assertEquals("dmy", bd.getMdyOrder("dd/mm/yy"));
-		assertEquals("mdy", bd.getMdyOrder("MM-dd-yyyy"));
-		assertEquals("ymd", bd.getMdyOrder("y.mmmmmmm.yy.d"));
+		assertEquals("dmy", MartusLocalization.getMdyOrder("dd/mm/yy"));
+		assertEquals("mdy", MartusLocalization.getMdyOrder("MM-dd-yyyy"));
+		assertEquals("ymd", MartusLocalization.getMdyOrder("y.mmmmmmm.yy.d"));
 	}
 
 	public void testLanguagess()

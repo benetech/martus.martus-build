@@ -345,7 +345,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		public void keyReleased(KeyEvent e)
 		{
-			if(e.getKeyCode() == e.VK_DELETE)
+			if(e.getKeyCode() == KeyEvent.VK_DELETE)
 			{
 				removeKeyListener(keyListener);
 				doDiscardBulletins();

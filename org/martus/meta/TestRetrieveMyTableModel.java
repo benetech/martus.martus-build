@@ -21,13 +21,13 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		app = MockMartusApp.create(appSecurity);
 
 		b0 = app.createBulletin();
-		b0.set(b0.TAGTITLE, title1);
+		b0.set(Bulletin.TAGTITLE, title1);
 		b0.save();
 		b1 = app.createBulletin();
-		b1.set(b1.TAGTITLE, title1);
+		b1.set(Bulletin.TAGTITLE, title1);
 		b1.save();
 		b2 = app.createBulletin();
-		b2.set(b2.TAGTITLE, title2);
+		b2.set(Bulletin.TAGTITLE, title2);
 		b2.save();
 
 		testServer = new MockServer();

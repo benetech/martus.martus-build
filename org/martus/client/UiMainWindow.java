@@ -141,9 +141,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		int quarantineCount = app.quarantineUnreadableBulletins();
 
-		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_OK))
+		if(uiState.getCurrentOperatingState().equals(CurrentUiState.OPERATING_STATE_OK))
 		{
-			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_UNKNOWN);
+			uiState.setCurrentOperatingState(CurrentUiState.OPERATING_STATE_UNKNOWN);
 			uiState.save(app.getUiStateFile());
 		}
 
@@ -175,9 +175,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		errorChecker = new javax.swing.Timer(10*1000, new UploadErrorChecker());
 		errorChecker.start();
 
-		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_UNKNOWN))
+		if(uiState.getCurrentOperatingState().equals(CurrentUiState.OPERATING_STATE_UNKNOWN))
 		{
-			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_OK);
+			uiState.setCurrentOperatingState(CurrentUiState.OPERATING_STATE_OK);
 			uiState.save(app.getUiStateFile());
 		}
 		waitingForBulletinsToLoad.endDialog();
@@ -483,7 +483,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(folder.getSortDirection() != uiState.getCurrentSortDirection())
 				folder.sortBy(sortTag);
 			folders.selectFolder(folderName);
-			if(!uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_BAD))
+			if(!uiState.getCurrentOperatingState().equals(CurrentUiState.OPERATING_STATE_BAD))
 				table.setCurrentBulletinIndex(uiState.getCurrentBulletinPosition());
 		}
 		catch(Exception e)
@@ -499,9 +499,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		uiState.load(stateFile);
 		uiState.setCurrentLanguage(app.getCurrentLanguage());
 		uiState.setCurrentDateFormat(app.getCurrentDateFormatCode());
-		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_UNKNOWN))
+		if(uiState.getCurrentOperatingState().equals(CurrentUiState.OPERATING_STATE_UNKNOWN))
 		{
-			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_BAD);
+			uiState.setCurrentOperatingState(CurrentUiState.OPERATING_STATE_BAD);
 			uiState.save(stateFile);
 		}
 	}
@@ -745,10 +745,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				if(all[i].getCategory().equals(MediaPrintableArea.class))
 				{
 					MediaPrintableArea area = (MediaPrintableArea)(all[i]);
-					paper.setImageableArea(	area.getX(area.INCH) * FRACTIONS_INCH,
-											area.getY(area.INCH) * FRACTIONS_INCH,
-											area.getWidth(area.INCH) * FRACTIONS_INCH,
-											area.getHeight(area.INCH) * FRACTIONS_INCH);
+					paper.setImageableArea(	area.getX(MediaPrintableArea.INCH) * FRACTIONS_INCH,
+											area.getY(MediaPrintableArea.INCH) * FRACTIONS_INCH,
+											area.getWidth(MediaPrintableArea.INCH) * FRACTIONS_INCH,
+											area.getHeight(MediaPrintableArea.INCH) * FRACTIONS_INCH);
 				}
 				if(all[i].getCategory().equals(Media.class))
 				{
@@ -756,8 +756,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 					{
 						MediaSizeName mediaSizeName = (MediaSizeName)(all[i]);
 						MediaSize size = MediaSize.getMediaSizeForName(mediaSizeName);
-						paper.setSize(	size.getX(size.INCH) * FRACTIONS_INCH,
-										size.getY(size.INCH) * FRACTIONS_INCH);
+						paper.setSize(	size.getX(MediaSize.INCH) * FRACTIONS_INCH,
+										size.getY(MediaSize.INCH) * FRACTIONS_INCH);
 						paperSizeSet = true;
 					} catch (RuntimeException e) 
 					{
@@ -768,11 +768,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				if(all[i].getCategory().equals(OrientationRequested.class))
 				{
 					OrientationRequested orientation = (OrientationRequested)(all[i]);
-					if(orientation.equals(orientation.LANDSCAPE))
+					if(orientation.equals(OrientationRequested.LANDSCAPE))
 						setOrientation(LANDSCAPE);
-					if(orientation.equals(orientation.PORTRAIT))
+					if(orientation.equals(OrientationRequested.PORTRAIT))
 						setOrientation(PORTRAIT);
-					if(orientation.equals(orientation.REVERSE_LANDSCAPE))
+					if(orientation.equals(OrientationRequested.REVERSE_LANDSCAPE))
 						setOrientation(REVERSE_LANDSCAPE);
 				}
 			}
@@ -1179,8 +1179,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle(app.getWindowTitle("saveBackupKeyPair"));
-		chooser.setFileSelectionMode(chooser.FILES_AND_DIRECTORIES);
-		chooser.setSelectedFile(new File(app.KEYPAIR_FILENAME));
+		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		chooser.setSelectedFile(new File(MartusApp.KEYPAIR_FILENAME));
 		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
 		{
 			File newBackupFile = chooser.getSelectedFile();
@@ -1830,9 +1830,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public void updateName() 
 		{
 			if(isDiscardedFolderSelected())
-				actionMenuDiscardBulletin.putValue(actionMenuDiscardBulletin.NAME, getApp().getMenuLabel("DeleteBulletins"));
+				actionMenuDiscardBulletin.putValue(ActionMenuDiscardBulletin.NAME, getApp().getMenuLabel("DeleteBulletins"));
 			else
-				actionMenuDiscardBulletin.putValue(actionMenuDiscardBulletin.NAME, getApp().getMenuLabel("DiscardBulletins"));
+				actionMenuDiscardBulletin.putValue(ActionMenuDiscardBulletin.NAME, getApp().getMenuLabel("DiscardBulletins"));
 		}
 	}
 
@@ -2255,7 +2255,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				notifyDlg(UiMainWindow.this, "uploadrejected");
 				rejectedErrorShown = true;
 			}
-			if(uploadResult.equals(app.AUTHENTICATE_SERVER_FAILED) && !authenticationErrorShown)
+			if(uploadResult.equals(MartusApp.AUTHENTICATE_SERVER_FAILED) && !authenticationErrorShown)
 			{
 				notifyDlg(UiMainWindow.this, "AuthenticateServerFailed");
 				authenticationErrorShown = true;

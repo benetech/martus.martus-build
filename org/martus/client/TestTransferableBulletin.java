@@ -60,7 +60,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 
 //		assertEquals(true, drag.isDataFlavorSupported(DataFlavor.stringFlavor));
 		assertEquals(true, drag.isDataFlavorSupported(DataFlavor.javaFileListFlavor));
-		assertEquals(true, drag.isDataFlavorSupported(drag.getBulletinListDataFlavor()));
+		assertEquals(true, drag.isDataFlavorSupported(TransferableBulletinList.getBulletinListDataFlavor()));
 //		assertEquals(true, drag.isDataFlavorSupported(drag.getMimeTextDataFlavor()));
 	}
 
@@ -93,7 +93,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 
 	public void testBulletinFlavor()
 	{
-		Object data = getData(drag, drag.getBulletinListDataFlavor());
+		Object data = getData(drag, TransferableBulletinList.getBulletinListDataFlavor());
 		assertNotNull("null bulletinFlavor?", data);
 		TransferableBulletinList tb = (TransferableBulletinList)data;
 		assertEquals("bad folder?", folder, tb.getFromFolder());
@@ -148,7 +148,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 	{
 		Bulletin b = store.createEmptyBulletin();
 		b.setSealed();
-		b.set(b.TAGTITLE, title);
+		b.set(Bulletin.TAGTITLE, title);
 		b.save();
 		Bulletin[] bulletins = new Bulletin[] {b};
 		TransferableBulletinList localTB = new TransferableBulletinList(bulletins, folder);

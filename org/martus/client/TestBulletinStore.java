@@ -131,7 +131,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	
 	public void testCaching()
 	{
-		int numBulletins = store.maxCachedBulletinCount + 1;
+		int numBulletins = BulletinStore.maxCachedBulletinCount + 1;
 		for(int i = 0; i < numBulletins; ++i)
 		{
 			Bulletin b = store.createEmptyBulletin();
@@ -139,7 +139,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			store.findBulletinByUniversalId(b.getUniversalId());
 		}
 		
-		assertEquals("cache too large?", true, store.bulletinCache.size() <= store.maxCachedBulletinCount);
+		assertEquals("cache too large?", true, store.bulletinCache.size() <= BulletinStore.maxCachedBulletinCount);
 	}
 
 	public void testDestroyBulletin() throws Exception
@@ -591,7 +591,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		Bulletin b = store.createEmptyBulletin();
 		final String author = "Mr. Peabody";
-		b.set(b.TAGAUTHOR, author);
+		b.set(Bulletin.TAGAUTHOR, author);
 		b.save();
 		store.saveFolders();
 		assertEquals("saving", 1, store.getBulletinCount());
@@ -603,7 +603,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("loaded", 1, newStoreSameDatabase.getBulletinCount());
 		Bulletin b2 = newStoreSameDatabase.findBulletinByUniversalId(b.getUniversalId());
 		assertEquals("id", b.getLocalId(), b2.getLocalId());
-		assertEquals("author", b.get(b.TAGAUTHOR), b2.get(b2.TAGAUTHOR));
+		assertEquals("author", b.get(Bulletin.TAGAUTHOR), b2.get(Bulletin.TAGAUTHOR));
 		assertEquals("Store is null", newStoreSameDatabase, b2.getStore());
 
 	}
@@ -748,8 +748,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		DatabaseKey originalKey = new DatabaseKey(original.getUniversalId());
 		AttachmentProxy a = new AttachmentProxy(tempFile1);
 		AttachmentProxy aPrivate = new AttachmentProxy(tempFile2);
-		original.set(original.TAGTITLE, "abbc");
-		original.set(original.TAGPRIVATEINFO, "priv");
+		original.set(Bulletin.TAGTITLE, "abbc");
+		original.set(Bulletin.TAGPRIVATEINFO, "priv");
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		original.setSealed();
@@ -779,8 +779,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("Attachment Private Packet missing", db.doesRecordExist(attachmentPrivateKey));
 		
 		Bulletin reloaded = Bulletin.loadFromDatabase(store, originalKey);
-		assertEquals("public?", original.get(original.TAGTITLE), reloaded.get(reloaded.TAGTITLE));
-		assertEquals("private?", original.get(original.TAGPRIVATEINFO), reloaded.get(reloaded.TAGPRIVATEINFO));
+		assertEquals("public?", original.get(Bulletin.TAGTITLE), reloaded.get(Bulletin.TAGTITLE));
+		assertEquals("private?", original.get(Bulletin.TAGPRIVATEINFO), reloaded.get(Bulletin.TAGPRIVATEINFO));
 		
 		File tempRawFilePublic = File.createTempFile("$$$MartusTestImpSealedZipRawPublic",null);
 		tempRawFilePublic.deleteOnExit();
@@ -925,8 +925,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		DatabaseKey originalKey = new DatabaseKey(original.getUniversalId());
 		AttachmentProxy a = new AttachmentProxy(tempFile1);
 		AttachmentProxy aPrivate = new AttachmentProxy(tempFile2);
-		original.set(original.TAGTITLE, "abc");
-		original.set(original.TAGPRIVATEINFO, "private");
+		original.set(Bulletin.TAGTITLE, "abc");
+		original.set(Bulletin.TAGPRIVATEINFO, "private");
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		original.saveToDatabase(db);
@@ -959,8 +959,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		Bulletin reloaded = Bulletin.loadFromDatabase(store, new DatabaseKey(savedAsId));
 		
-		assertEquals("public?", original.get(original.TAGTITLE), reloaded.get(reloaded.TAGTITLE));
-		assertEquals("private?", original.get(original.TAGPRIVATEINFO), reloaded.get(reloaded.TAGPRIVATEINFO));
+		assertEquals("public?", original.get(Bulletin.TAGTITLE), reloaded.get(Bulletin.TAGTITLE));
+		assertEquals("private?", original.get(Bulletin.TAGPRIVATEINFO), reloaded.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals("attachment", true, db.doesRecordExist(new DatabaseKey(reloaded.getPublicAttachments()[0].getUniversalId())));
 		assertEquals("attachment Private", true, db.doesRecordExist(new DatabaseKey(reloaded.getPrivateAttachments()[0].getUniversalId())));
 		

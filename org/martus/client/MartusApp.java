@@ -21,11 +21,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import org
-	.martus
-	.client
-	.ClientSideNetworkHandlerUsingXmlRpc
-	.SSLSocketSetupException;
+import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.common.Base64;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
@@ -848,7 +844,7 @@ public class MartusApp
 							UnicodeWriter log = new UnicodeWriter(file, UnicodeWriter.APPEND);
 							log.writeln(b.getLocalId());
 							log.writeln(configInfo.getServerName());
-							log.writeln(b.get(b.TAGTITLE));
+							log.writeln(b.get(Bulletin.TAGTITLE));
 							log.close();
 							log = null;
 						}

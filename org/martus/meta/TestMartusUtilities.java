@@ -173,9 +173,9 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		BulletinHeaderPacket bhp = b1.getBulletinHeaderPacket();
 		int emptySize = MartusUtilities.getBulletinSize(db, bhp);
 		assertTrue("empty size not correct?", emptySize > 1000 && emptySize < 3000);
-		b1.set(b1.TAGTITLE, "Title");
-		b1.set(b1.TAGPUBLICINFO, "Details1");
-		b1.set(b1.TAGPRIVATEINFO, "PrivateDetails1");
+		b1.set(Bulletin.TAGTITLE, "Title");
+		b1.set(Bulletin.TAGPUBLICINFO, "Details1");
+		b1.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails1");
 		File attachment = createTempFile();
 		FileOutputStream out = new FileOutputStream(attachment);
 		out.write(b1AttachmentBytes);
@@ -186,7 +186,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		b1 = Bulletin.loadFromDatabase(store, DatabaseKey.createSealedKey(b1.getUniversalId()));
 
 		int size = MartusUtilities.getBulletinSize(db, bhp);
-		b1.set(b1.TAGTITLE, "This is an very long title and should change the size of the result if things are working correctly");
+		b1.set(Bulletin.TAGTITLE, "This is an very long title and should change the size of the result if things are working correctly");
 		b1.save();
 		int size2 = MartusUtilities.getBulletinSize(db, bhp);
 		assertTrue("Size too small?", size > 4000);

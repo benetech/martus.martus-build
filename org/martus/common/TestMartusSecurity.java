@@ -168,7 +168,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		assertEquals("get/set private", keyPair.getPrivate(), gotKeyPair.getPrivate());
 		
 		String publicKeyString = security.getPublicKeyString();
-		PublicKey publicKey = security.extractPublicKey(publicKeyString);
+		PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
 		assertEquals("get/extract failed?", publicKey, security.getPublicKey());
 	}
 

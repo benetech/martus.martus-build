@@ -154,7 +154,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				BulletinSummary s = summaries[j];
 				if(b.getLocalId().equals(s.getLocalId()))
 				{
-					assertEquals(b.get(b.TAGTITLE), s.getTitle());
+					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
 					found[i] = true;
 				}
 			}
@@ -247,7 +247,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				BulletinSummary s = summaries[j];
 				if(b.getLocalId().equals(s.getLocalId()))
 				{
-					assertEquals(b.get(b.TAGTITLE), s.getTitle());
+					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
 					found[i] = true;
 				}
 				assertTrue("Not downloadable?", s.isDownloadable());
@@ -333,7 +333,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				BulletinSummary s = summaries[j];
 				if(b.getLocalId().equals(s.getLocalId()))
 				{
-					assertEquals(b.get(b.TAGTITLE), s.getTitle());
+					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
 					found[i] = true;
 				}
 			}
@@ -504,9 +504,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
 			Vector list = new Vector();
-			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE) + "=3000");
-			list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE) + "=3200");
-			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE) + "=3100");
+			list.add(b0.getLocalId() + "= " + b0.get(Bulletin.TAGTITLE) + "=3000");
+			list.add(b1.getLocalId() + "= " + b1.get(Bulletin.TAGTITLE) + "=3200");
+			list.add(b2.getLocalId() + "= " + b2.get(Bulletin.TAGTITLE) + "=3100");
 			result.add(list);
 			return result;
 		}

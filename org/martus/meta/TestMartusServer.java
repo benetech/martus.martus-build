@@ -110,9 +110,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		if(b1 == null)
 		{
 			b1 = store.createEmptyBulletin();
-			b1.set(b1.TAGTITLE, "Title1");
-			b1.set(b1.TAGPUBLICINFO, "Details1");
-			b1.set(b1.TAGPRIVATEINFO, "PrivateDetails1");
+			b1.set(Bulletin.TAGTITLE, "Title1");
+			b1.set(Bulletin.TAGPUBLICINFO, "Details1");
+			b1.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails1");
 			File attachment = createTempFile();
 			FileOutputStream out = new FileOutputStream(attachment);
 			out.write(b1AttachmentBytes);
@@ -125,23 +125,23 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			b1 = Bulletin.loadFromDatabase(store, DatabaseKey.createSealedKey(b1.getUniversalId()));
 	
 			b2 = store.createEmptyBulletin();
-			b2.set(b2.TAGTITLE, "Title2");
-			b2.set(b2.TAGPUBLICINFO, "Details2");
-			b2.set(b1.TAGPRIVATEINFO, "PrivateDetails2");
+			b2.set(Bulletin.TAGTITLE, "Title2");
+			b2.set(Bulletin.TAGPUBLICINFO, "Details2");
+			b2.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails2");
 			b2.setSealed();
 			b2.save();
 			
 			draft = store.createEmptyBulletin();
-			draft.set(draft.TAGPUBLICINFO, "draft public");
+			draft.set(Bulletin.TAGPUBLICINFO, "draft public");
 			draft.setDraft();
 			draft.save();
 
 
 			privateBulletin = store.createEmptyBulletin();
 			privateBulletin.setAllPrivate(true);
-			privateBulletin.set(privateBulletin.TAGTITLE, "TitlePrivate");
-			privateBulletin.set(privateBulletin.TAGPUBLICINFO, "DetailsPrivate");
-			privateBulletin.set(privateBulletin.TAGPRIVATEINFO, "PrivateDetailsPrivate");
+			privateBulletin.set(Bulletin.TAGTITLE, "TitlePrivate");
+			privateBulletin.set(Bulletin.TAGPUBLICINFO, "DetailsPrivate");
+			privateBulletin.set(Bulletin.TAGPRIVATEINFO, "PrivateDetailsPrivate");
 			privateBulletin.setSealed();
 			privateBulletin.save();
 
@@ -557,9 +557,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	public void testUploadDraft() throws Exception
 	{
 		Bulletin draft = store.createEmptyBulletin();
-		draft.set(draft.TAGTITLE, "Title1");
-		draft.set(draft.TAGPUBLICINFO, "Details1");
-		draft.set(draft.TAGPRIVATEINFO, "PrivateDetails1");
+		draft.set(Bulletin.TAGTITLE, "Title1");
+		draft.set(Bulletin.TAGPUBLICINFO, "Details1");
+		draft.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails1");
 		draft.setHQPublicKey(hqSecurity.getPublicKeyString());
 		draft.save();
 		draft = Bulletin.loadFromDatabase(store, new DatabaseKey(draft.getUniversalId()));
@@ -578,9 +578,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	public void testUploadDuplicates() throws Exception
 	{
 		Bulletin b = store.createEmptyBulletin();
-		b.set(b.TAGTITLE, "Title1");
-		b.set(b.TAGPUBLICINFO, "Details1");
-		b.set(b.TAGPRIVATEINFO, "PrivateDetails1");
+		b.set(Bulletin.TAGTITLE, "Title1");
+		b.set(Bulletin.TAGPUBLICINFO, "Details1");
+		b.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails1");
 		File attachment = createTempFile();
 		FileOutputStream out = new FileOutputStream(attachment);
 		out.write(b1AttachmentBytes);
@@ -744,8 +744,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.setSecurity(clientSecurity);
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		Bulletin bulletin = store.createEmptyBulletin();
-		bulletin.set(bulletin.TAGPUBLICINFO, "public info");
-		bulletin.set(bulletin.TAGPRIVATEINFO, "private info");
+		bulletin.set(Bulletin.TAGPUBLICINFO, "public info");
+		bulletin.set(Bulletin.TAGPRIVATEINFO, "private info");
 		bulletin.setSealed();
 		String data = MockBulletin.saveToZipString(bulletin);
 		assertEquals(NetworkInterfaceConstants.OK, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletin.getLocalId(), data));
@@ -758,8 +758,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Bulletin got = store.createEmptyBulletin();
 		MockBulletin.loadFromZipString(got, gotString);
 		assertEquals("id", bulletin.getLocalId(), got.getLocalId());
-		assertEquals("public", bulletin.get(bulletin.TAGPUBLICINFO), got.get(got.TAGPUBLICINFO));
-		assertEquals("private ", bulletin.get(bulletin.TAGPRIVATEINFO), got.get(got.TAGPRIVATEINFO));
+		assertEquals("public", bulletin.get(Bulletin.TAGPUBLICINFO), got.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("private ", bulletin.get(Bulletin.TAGPRIVATEINFO), got.get(Bulletin.TAGPRIVATEINFO));
 	}
 	
 	public void testDownloadBulletinChunkBadId() throws Exception
@@ -1217,9 +1217,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 		Bulletin b = nonFieldStore.createEmptyBulletin();
-		b.set(b.TAGTITLE, "Tifdfssftle3");
-		b.set(b.TAGPUBLICINFO, "Detasdfsdfils1");
-		b.set(b.TAGPRIVATEINFO, "PrivasdfsdfteDetails1");
+		b.set(Bulletin.TAGTITLE, "Tifdfssftle3");
+		b.set(Bulletin.TAGPUBLICINFO, "Detasdfsdfils1");
+		b.set(Bulletin.TAGPRIVATEINFO, "PrivasdfsdfteDetails1");
 		b.save();
 		testServer.uploadBulletin(nonFieldSecurity.getPublicKeyString(), b.getLocalId(), MockBulletin.saveToZipString(b));
 
@@ -1400,7 +1400,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		InputStreamWithSeek in = new StringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
-		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));
+		assertEquals("wrong data?", b1.get(Bulletin.TAGPUBLICINFO), gotPacket.get(Bulletin.TAGPUBLICINFO));
 
 	}
 
@@ -1422,7 +1422,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		InputStreamWithSeek in = new StringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
-		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));
+		assertEquals("wrong data?", b1.get(Bulletin.TAGPUBLICINFO), gotPacket.get(Bulletin.TAGPUBLICINFO));
 	}
 
 	public void testDownloadAuthorizedPacket() throws Exception

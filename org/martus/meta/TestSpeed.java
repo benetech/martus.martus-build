@@ -92,7 +92,7 @@ public class TestSpeed extends TestCaseEnhanced
 		String data = createRandomString(dataSize);
 		
 		Stopwatch digestTimer = new Stopwatch();
-		security.createDigestString(data);
+		MartusSecurity.createDigestString(data);
 		print("Digest " + data.length() + " characters of data", digestTimer.stop());
 	}
 	
@@ -189,7 +189,7 @@ public class TestSpeed extends TestCaseEnhanced
 
 		InputStreamWithSeek in1 = new StringInputStream(writerPlain.toString());
 		Stopwatch validatePlainTimer = new Stopwatch();
-		fdp.validateXml(in1, uid.getAccountId(), uid.getLocalId(), null, security);
+		FieldDataPacket.validateXml(in1, uid.getAccountId(), uid.getLocalId(), null, security);
 		print("Validate plaintext fdp", validatePlainTimer.stop());
 
 		InputStreamWithSeek in2 = new StringInputStream(writerPlain.toString());
@@ -211,7 +211,7 @@ public class TestSpeed extends TestCaseEnhanced
 		
 		InputStreamWithSeek in1 = new StringInputStream(writerEncrypted.toString());
 		Stopwatch validateTimer = new Stopwatch();
-		fdp.validateXml(in1, uid.getAccountId(), uid.getLocalId(), null, security);
+		FieldDataPacket.validateXml(in1, uid.getAccountId(), uid.getLocalId(), null, security);
 		print("Validate encrypted fdp", validateTimer.stop());
 
 		InputStreamWithSeek in2 = new StringInputStream(writerEncrypted.toString());

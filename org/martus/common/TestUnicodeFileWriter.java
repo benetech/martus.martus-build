@@ -155,7 +155,7 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 		create.writeln(text);
 		create.close();
 		assertTrue("created?", file.exists());
-		assertEquals("create length", len + create.NEWLINE.length(), file.length());
+		assertEquals("create length", len + UnicodeWriter.NEWLINE.length(), file.length());
 	}
 
 }

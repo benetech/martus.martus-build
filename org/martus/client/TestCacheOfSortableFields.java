@@ -27,14 +27,14 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		Bulletin b1 = new Bulletin((BulletinStore)null);
 		UniversalId uid1 = b1.getUniversalId();
 		b1.setDraft();
-		b1.set(b1.TAGEVENTDATE, eventdate1);
-		b1.set(b1.TAGTITLE, title1);
-		b1.set(b1.TAGAUTHOR, author1);
+		b1.set(Bulletin.TAGEVENTDATE, eventdate1);
+		b1.set(Bulletin.TAGTITLE, title1);
+		b1.set(Bulletin.TAGAUTHOR, author1);
 		cache.setFieldData(b1);
-		assertEquals("wrong status?",b1.get(b1.TAGSTATUS), cache.getFieldData(uid1, b1.TAGSTATUS));
-		assertEquals("event date not correct?",eventdate1, cache.getFieldData(uid1, b1.TAGEVENTDATE));
-		assertEquals("Title not correct?",title1, cache.getFieldData(uid1, b1.TAGTITLE));
-		assertEquals("author not correct?",author1, cache.getFieldData(uid1, b1.TAGAUTHOR));
+		assertEquals("wrong status?",b1.get(Bulletin.TAGSTATUS), cache.getFieldData(uid1, Bulletin.TAGSTATUS));
+		assertEquals("event date not correct?",eventdate1, cache.getFieldData(uid1, Bulletin.TAGEVENTDATE));
+		assertEquals("Title not correct?",title1, cache.getFieldData(uid1, Bulletin.TAGTITLE));
+		assertEquals("author not correct?",author1, cache.getFieldData(uid1, Bulletin.TAGAUTHOR));
 		
 		String title2 = "2 Title";
 		String author2 = "2 Author";
@@ -42,14 +42,14 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		Bulletin b2 = new Bulletin((BulletinStore)null);
 		UniversalId uid2 = b2.getUniversalId();
 		b2.setSealed();
-		b2.set(b2.TAGEVENTDATE, eventdate2);
-		b2.set(b2.TAGTITLE, title2);
-		b2.set(b2.TAGAUTHOR, author2);
+		b2.set(Bulletin.TAGEVENTDATE, eventdate2);
+		b2.set(Bulletin.TAGTITLE, title2);
+		b2.set(Bulletin.TAGAUTHOR, author2);
 		cache.setFieldData(b2);
-		assertEquals("2 wrong status?",b2.get(b2.TAGSTATUS), cache.getFieldData(uid2, b2.TAGSTATUS));
-		assertEquals("2 event date not correct?",eventdate2, cache.getFieldData(uid2, b2.TAGEVENTDATE));
-		assertEquals("2 title not correct?",title2, cache.getFieldData(uid2, b2.TAGTITLE));
-		assertEquals("2 author not correct?",author2, cache.getFieldData(uid2, b2.TAGAUTHOR));
+		assertEquals("2 wrong status?",b2.get(Bulletin.TAGSTATUS), cache.getFieldData(uid2, Bulletin.TAGSTATUS));
+		assertEquals("2 event date not correct?",eventdate2, cache.getFieldData(uid2, Bulletin.TAGEVENTDATE));
+		assertEquals("2 title not correct?",title2, cache.getFieldData(uid2, Bulletin.TAGTITLE));
+		assertEquals("2 author not correct?",author2, cache.getFieldData(uid2, Bulletin.TAGAUTHOR));
 	}
 
 	public void testGetBadTag() 
@@ -71,12 +71,12 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
 		Bulletin b2 = new Bulletin((BulletinStore)null);
-		b2.set(b2.TAGEVENTDATE, "1020");
+		b2.set(Bulletin.TAGEVENTDATE, "1020");
 		UniversalId uid2 = b2.getUniversalId();
 		cache.setFieldData(b2);
-		assertEquals("Date not found in cache?", "1020", cache.getFieldData(uid2, b2.TAGEVENTDATE));
+		assertEquals("Date not found in cache?", "1020", cache.getFieldData(uid2, Bulletin.TAGEVENTDATE));
 		cache.removeFieldData(uid2);
-		assertNull("Date still in cache?", cache.getFieldData(uid2, b2.TAGEVENTDATE));
+		assertNull("Date still in cache?", cache.getFieldData(uid2, Bulletin.TAGEVENTDATE));
 	}
 	
 	public void testSaveAndLoadCache() throws Exception
@@ -86,7 +86,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		
 		CacheOfSortableFields cache = new CacheOfSortableFields();
 		Bulletin b = new Bulletin((BulletinStore)null);
-		b.set(b.TAGEVENTDATE, "1020");
+		b.set(Bulletin.TAGEVENTDATE, "1020");
 		UniversalId uid = b.getUniversalId();
 		cache.setFieldData(b);
 
@@ -96,7 +96,7 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 		CacheOfSortableFields cache2 = new CacheOfSortableFields();
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(savedBytes);
 		cache2.load(in, security);
-		assertEquals("Data not saved?", "1020", cache2.getFieldData(uid, b.TAGEVENTDATE));
+		assertEquals("Data not saved?", "1020", cache2.getFieldData(uid, Bulletin.TAGEVENTDATE));
 		
 		ByteArrayInputStream nonCipherIn = new ByteArrayInputStream(savedBytes);
 		try 

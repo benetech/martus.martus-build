@@ -76,9 +76,9 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	{
 		currentBulletin = bulletin;
 		
-		String isAllPrivate = allPrivateField.FALSESTRING;
+		String isAllPrivate = UiField.FALSESTRING;
 		if(bulletin != null && bulletin.isAllPrivate())
-			isAllPrivate = allPrivateField.TRUESTRING;
+			isAllPrivate = UiField.TRUESTRING;
 		allPrivateField.setText(isAllPrivate);
 
 		publicStuff.clearAttachments();
@@ -138,7 +138,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	public void stateChanged(ChangeEvent event)
 	{
 		String flagString = allPrivateField.getText();
-		boolean nowEncrypted = (flagString.equals(allPrivateField.TRUESTRING));
+		boolean nowEncrypted = (flagString.equals(UiField.TRUESTRING));
 		if(wasEncrypted != nowEncrypted)
 		{
 			wasEncrypted = nowEncrypted;

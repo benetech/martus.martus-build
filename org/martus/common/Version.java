@@ -5,7 +5,7 @@ public class Version
 	public static void main(String[] args) 
 	{
 		MartusUtilities utilities = new MartusUtilities();
-		String date = utilities.getVersionDate(utilities.getClass());
+		String date = MartusUtilities.getVersionDate(utilities.getClass());
 		System.out.println(formatDateVersion(date));
 	}
 	

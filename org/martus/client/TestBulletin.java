@@ -100,10 +100,10 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(true, b.isStandardField("Location"));
 		assertEquals(true, b.isStandardField("location"));
 		assertEquals(true, b.isStandardField("LOCATION"));
-		assertEquals(false, b.isStandardField(b.TAGPRIVATEINFO));
+		assertEquals(false, b.isStandardField(Bulletin.TAGPRIVATEINFO));
 		
 		assertEquals(false, b.isPrivateField("LOCATION"));
-		assertEquals(true, b.isPrivateField(b.TAGPRIVATEINFO));
+		assertEquals(true, b.isPrivateField(Bulletin.TAGPRIVATEINFO));
 
 		b = store.createEmptyBulletin();
 		assertNotEquals("", b.getLocalId());
@@ -188,8 +188,8 @@ public class TestBulletin extends TestCaseEnhanced
 		b.set("author", "goodbye");
 		assertEquals("goodbye", b.get("AUTHOR"));
 		
-		b.set(b.TAGPRIVATEINFO, "secret");
-		assertEquals("secret", b.get(b.TAGPRIVATEINFO));
+		b.set(Bulletin.TAGPRIVATEINFO, "secret");
+		assertEquals("secret", b.get(Bulletin.TAGPRIVATEINFO));
 	}
 
 	public void testClear()
@@ -198,13 +198,13 @@ public class TestBulletin extends TestCaseEnhanced
 		String privateInfo = "private info";
 		
 		Bulletin b = store.createEmptyBulletin();
-		b.set(b.TAGPUBLICINFO, publicInfo);
-		b.set(b.TAGPRIVATEINFO, privateInfo);
-		assertEquals("public info not set?", publicInfo, b.get(b.TAGPUBLICINFO));
-		assertEquals("private info not set?", privateInfo, b.get(b.TAGPRIVATEINFO));
+		b.set(Bulletin.TAGPUBLICINFO, publicInfo);
+		b.set(Bulletin.TAGPRIVATEINFO, privateInfo);
+		assertEquals("public info not set?", publicInfo, b.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("private info not set?", privateInfo, b.get(Bulletin.TAGPRIVATEINFO));
 		b.clear();
-		assertEquals("public info not cleared?", "", b.get(b.TAGPUBLICINFO));
-		assertEquals("private info not cleared?", "", b.get(b.TAGPRIVATEINFO));
+		assertEquals("public info not cleared?", "", b.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("private info not cleared?", "", b.get(Bulletin.TAGPRIVATEINFO));
 	}
 
 	public void testMatches()
@@ -383,8 +383,8 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(0, db.getAllKeys().size());
 		Bulletin b = store.createEmptyBulletin();
 		b.addPublicAttachment(new AttachmentProxy(tempFile1));
-		b.set(b.TAGPUBLICINFO, "public info");
-		b.set(b.TAGPRIVATEINFO, "private info");
+		b.set(Bulletin.TAGPUBLICINFO, "public info");
+		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b.setSealed();
 		b.save();
 		b.saveToDatabase(db);
@@ -706,8 +706,8 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(0, db.getAllKeys().size());
 
 		Bulletin b = store.createEmptyBulletin();
-		b.set(b.TAGPUBLICINFO, "public info");
-		b.set(b.TAGPRIVATEINFO, "private info");
+		b.set(Bulletin.TAGPUBLICINFO, "public info");
+		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b.setSealed();
 		b.saveToDatabase(db);
 		assertEquals("saved 1", 3, db.getAllKeys().size());
@@ -716,8 +716,8 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin loaded = store.createEmptyBulletin();
 		loaded = Bulletin.loadFromDatabase(store, key);
 		assertEquals("id", b.getLocalId(), loaded.getLocalId());
-		assertEquals("public info", b.get(b.TAGPUBLICINFO), loaded.get(b.TAGPUBLICINFO));
-		assertEquals("private info", b.get(b.TAGPRIVATEINFO), loaded.get(b.TAGPRIVATEINFO));
+		assertEquals("public info", b.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("private info", b.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals("db", db, loaded.getDatabase());
 		assertEquals("status", b.getStatus(), loaded.getStatus());
 	}
@@ -743,8 +743,8 @@ public class TestBulletin extends TestCaseEnhanced
 	public void testLoadFromDatabaseDamaged() throws Exception
 	{
 		Bulletin b = store.createEmptyBulletin();
-		b.set(b.TAGPUBLICINFO, samplePublic);
-		b.set(b.TAGPRIVATEINFO, samplePrivate);
+		b.set(Bulletin.TAGPUBLICINFO, samplePublic);
+		b.set(Bulletin.TAGPRIVATEINFO, samplePrivate);
 		b.setHQPublicKey(b.getAccount());
 		saveAndVerifyValid("freshly created", b);
 		
@@ -868,16 +868,16 @@ public class TestBulletin extends TestCaseEnhanced
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 		assertEquals(label + " wrong fdp localId?", bhp.getFieldDataPacketId(), invalid.getFieldDataPacket().getLocalId());
 		assertEquals(label + " wrong private fdp localId?", bhp.getPrivateFieldDataPacketId(), invalid.getPrivateFieldDataPacket().getLocalId());
-		assertEquals(label + " public info", expectedPublic, invalid.get(b.TAGPUBLICINFO));
-		assertEquals(label + " private info", expectedPrivate, invalid.get(b.TAGPRIVATEINFO));
+		assertEquals(label + " public info", expectedPublic, invalid.get(Bulletin.TAGPUBLICINFO));
+		assertEquals(label + " private info", expectedPrivate, invalid.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals(label + " hq key", "", invalid.getHQPublicKey());
 	}
 	
 	public void testSaveToFile() throws Exception
 	{
 		Bulletin b = store.createEmptyBulletin();
-		b.set(b.TAGPUBLICINFO, "public info");
-		b.set(b.TAGPRIVATEINFO, "private info");
+		b.set(Bulletin.TAGPUBLICINFO, "public info");
+		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
 		tempFile.deleteOnExit();
@@ -895,7 +895,7 @@ public class TestBulletin extends TestCaseEnhanced
 		InputStreamWithSeek dataIn = new ZipEntryInputStream(zip, dataEntry);
 		FieldDataPacket data = new FieldDataPacket(uid, Bulletin.getStandardFieldNames());
 		data.loadFromXml(dataIn, security);
-		assertEquals("data wrong?", b.get(b.TAGPUBLICINFO), data.get(b.TAGPUBLICINFO));
+		assertEquals("data wrong?", b.get(Bulletin.TAGPUBLICINFO), data.get(Bulletin.TAGPUBLICINFO));
 
 		assertEquals("no private data?", true, entries.hasMoreElements());
 		ZipEntry privateDataEntry = (ZipEntry)entries.nextElement();
@@ -903,7 +903,7 @@ public class TestBulletin extends TestCaseEnhanced
 		InputStreamWithSeek privateDataIn = new ZipEntryInputStream(zip, privateDataEntry);
 		FieldDataPacket privateData = new FieldDataPacket(uid, Bulletin.getPrivateFieldNames());
 		privateData.loadFromXml(privateDataIn, security);
-		assertEquals("data wrong?", b.get(b.TAGPRIVATEINFO), privateData.get(b.TAGPRIVATEINFO));
+		assertEquals("data wrong?", b.get(Bulletin.TAGPRIVATEINFO), privateData.get(Bulletin.TAGPRIVATEINFO));
 
 		assertEquals("no header?", true, entries.hasMoreElements());
 		ZipEntry headerEntry = (ZipEntry)entries.nextElement();
@@ -923,8 +923,8 @@ public class TestBulletin extends TestCaseEnhanced
 	public void testLoadFromFile() throws Exception
 	{
 		Bulletin b = store.createEmptyBulletin();
-		b.set(b.TAGPUBLICINFO, "public info");
-		b.set(b.TAGPRIVATEINFO, "private info");
+		b.set(Bulletin.TAGPUBLICINFO, "public info");
+		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b.setSealed();
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
@@ -934,8 +934,8 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin loaded = store.createEmptyBulletin();
 		loaded.loadFromFile(tempFile, security);
 		assertEquals("wrong id?", b.getLocalId(), loaded.getLocalId());
-		assertEquals("public info", b.get(b.TAGPUBLICINFO), loaded.get(b.TAGPUBLICINFO));
-		assertEquals("private info", b.get(b.TAGPRIVATEINFO), loaded.get(b.TAGPRIVATEINFO));
+		assertEquals("public info", b.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("private info", b.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals("status", b.getStatus(), loaded.getStatus());
 	}
 	
@@ -1018,8 +1018,8 @@ public class TestBulletin extends TestCaseEnhanced
 	public void testGetStatus() throws Exception
 	{
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.set(b1.TAGPUBLICINFO, "public info");
-		b1.set(b1.TAGPRIVATEINFO, "private info");
+		b1.set(Bulletin.TAGPUBLICINFO, "public info");
+		b1.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b1.setSealed();
 		assertEquals("Not Sealed Status?", BulletinConstants.STATUSSEALED, b1.get(Bulletin.TAGSTATUS));
 		b1.setDraft();
@@ -1029,16 +1029,16 @@ public class TestBulletin extends TestCaseEnhanced
 	public void testPullFrom() throws Exception
 	{
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.set(b1.TAGPUBLICINFO, "public info");
-		b1.set(b1.TAGPRIVATEINFO, "private info");
+		b1.set(Bulletin.TAGPUBLICINFO, "public info");
+		b1.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b1.setSealed();
 		b1.save();
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.pullDataFrom(b1);
 		assertEquals("store unchanged", store, b2.getStore());
 		assertEquals("id unchanged", false, b2.getLocalId().equals(b1.getLocalId()));
-		assertEquals("public info", b1.get(b1.TAGPUBLICINFO), b2.get(b1.TAGPUBLICINFO));
-		assertEquals("private info", b1.get(b1.TAGPRIVATEINFO), b2.get(b1.TAGPRIVATEINFO));
+		assertEquals("public info", b1.get(Bulletin.TAGPUBLICINFO), b2.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("private info", b1.get(Bulletin.TAGPRIVATEINFO), b2.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals("wrong status?", b1.getStatus(), b2.getStatus());
 		assertEquals("wrong private?", b1.isAllPrivate(), b2.isAllPrivate());
 
@@ -1171,8 +1171,8 @@ public class TestBulletin extends TestCaseEnhanced
 		Database db = store.getDatabase();
 		
 		Bulletin original = store.createEmptyBulletin();
-		original.set(original.TAGPUBLICINFO, "public info");
-		original.set(original.TAGPRIVATEINFO, "private info");
+		original.set(Bulletin.TAGPUBLICINFO, "public info");
+		original.set(Bulletin.TAGPRIVATEINFO, "private info");
 		original.setSealed();
 		original.save();
 
@@ -1180,12 +1180,12 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("not valid?", true, loaded.isValid());
 		
 		FieldDataPacket fdp = loaded.getFieldDataPacket();
-		fdp.set(original.TAGPUBLICINFO, "different public!");
+		fdp.set(Bulletin.TAGPUBLICINFO, "different public!");
 		loaded.writePacketToDatabase(fdp, db, security);
 		
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not invalid?", false, loaded.isValid());
-		assertEquals("private messed up?", original.get(original.TAGPRIVATEINFO), loaded.get(loaded.TAGPRIVATEINFO));
+		assertEquals("private messed up?", original.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
 	}
 	
 	public void testDetectPrivateFieldPacketWithWrongSig() throws Exception
@@ -1193,8 +1193,8 @@ public class TestBulletin extends TestCaseEnhanced
 		Database db = store.getDatabase();
 		
 		Bulletin original = store.createEmptyBulletin();
-		original.set(original.TAGPUBLICINFO, "public info");
-		original.set(original.TAGPRIVATEINFO, "private info");
+		original.set(Bulletin.TAGPUBLICINFO, "public info");
+		original.set(Bulletin.TAGPRIVATEINFO, "private info");
 		original.setSealed();
 		original.save();
 
@@ -1202,19 +1202,19 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("not valid?", true, loaded.isValid());
 		
 		FieldDataPacket pdp = loaded.getPrivateFieldDataPacket();
-		pdp.set(original.TAGPRIVATEINFO, "different private!");
+		pdp.set(Bulletin.TAGPRIVATEINFO, "different private!");
 		loaded.writePacketToDatabase(pdp, db, security);
 		
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not invalid?", false, loaded.isValid());
-		assertEquals("public messed up?", original.get(original.TAGPUBLICINFO), loaded.get(loaded.TAGPUBLICINFO));
+		assertEquals("public messed up?", original.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
 	}
 	
 	public void testGetAndSetHQPublicKey()
 	{
 		Bulletin original = store.createEmptyBulletin();
 		assertEquals("HQKey already set?", "", original.getHQPublicKey());
-		original.set(original.TAGPUBLICINFO, "public info");
+		original.set(Bulletin.TAGPUBLICINFO, "public info");
 		String key = "12345";
 		original.setHQPublicKey(key);
 		assertEquals("HQKey not set?", key, original.getHQPublicKey());
@@ -1225,7 +1225,7 @@ public class TestBulletin extends TestCaseEnhanced
 	public void testLoadAndSaveWithHQPublicKey() throws Exception
 	{
 		Bulletin original = store.createEmptyBulletin();
-		original.set(original.TAGPUBLICINFO, "public info");
+		original.set(Bulletin.TAGPUBLICINFO, "public info");
 		String key = security.getPublicKeyString();
 		original.setHQPublicKey(key);
 		original.save();
@@ -1243,8 +1243,8 @@ public class TestBulletin extends TestCaseEnhanced
 	public void testExportAndImportZipBetweenAccounts() throws Exception
 	{
 		Bulletin original = store.createEmptyBulletin();
-		original.set(original.TAGPUBLICINFO, "public info");
-		original.set(original.TAGPRIVATEINFO, "private info");
+		original.set(Bulletin.TAGPUBLICINFO, "public info");
+		original.set(Bulletin.TAGPRIVATEINFO, "private info");
 		String key = security.getPublicKeyString();
 		File tempFile = createTempFile();
 		
@@ -1256,29 +1256,29 @@ public class TestBulletin extends TestCaseEnhanced
 		MockBulletin.saveToFile(original, tempFile);
 		Bulletin loaded2 = store.createEmptyBulletin();
 		loaded2.loadFromFile(tempFile, otherSecurity);
-		assertEquals("draft private could get public?", "", loaded2.get(loaded2.TAGPUBLICINFO));
-		assertEquals("draft private could get private?", "", loaded2.get(loaded2.TAGPRIVATEINFO));
+		assertEquals("draft private could get public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("draft private could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 		
 		original.setDraft();
 		original.setAllPrivate(false);
 		MockBulletin.saveToFile(original, tempFile);
 		loaded2.loadFromFile(tempFile, otherSecurity);
-		assertEquals("draft public could get encrypted public?", "", loaded2.get(loaded2.TAGPUBLICINFO));
-		assertEquals("draft public could get private?", "", loaded2.get(loaded2.TAGPRIVATEINFO));
+		assertEquals("draft public could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("draft public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 		
 		original.setSealed();
 		original.setAllPrivate(true);
 		MockBulletin.saveToFile(original, tempFile);
 		loaded2.loadFromFile(tempFile, otherSecurity);
-		assertEquals("sealed private could get encrypted public?", "", loaded2.get(loaded2.TAGPUBLICINFO));
-		assertEquals("sealed private could get private?", "", loaded2.get(loaded2.TAGPRIVATEINFO));
+		assertEquals("sealed private could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("sealed private could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 
 		original.setSealed();
 		original.setAllPrivate(false);
 		MockBulletin.saveToFile(original, tempFile);
 		loaded2.loadFromFile(tempFile, otherSecurity);
-		assertEquals("sealed public couldn't get encrypted public?", original.get(original.TAGPUBLICINFO), loaded2.get(loaded2.TAGPUBLICINFO));
-		assertEquals("sealed public could get private?", "", loaded2.get(loaded2.TAGPRIVATEINFO));
+		assertEquals("sealed public couldn't get encrypted public?", original.get(Bulletin.TAGPUBLICINFO), loaded2.get(Bulletin.TAGPUBLICINFO));
+		assertEquals("sealed public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 	}
 	
 	static final String samplePublic = "some public text";

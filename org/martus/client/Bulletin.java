@@ -274,7 +274,7 @@ public class Bulletin implements BulletinConstants
 
 	public boolean matches(SearchTreeNode node, String beginDate, String endDate)
 	{
-		if(node.getOperation() == node.VALUE)
+		if(node.getOperation() == SearchTreeNode.VALUE)
 		{
 			if(contains(node.getValue()))
 			{
@@ -283,10 +283,10 @@ public class Bulletin implements BulletinConstants
 			return false;
 		}
 
-		if(node.getOperation() == node.AND)
+		if(node.getOperation() == SearchTreeNode.AND)
 			return matches(node.getLeft(), beginDate, endDate) && matches(node.getRight(), beginDate, endDate);
 
-		if(node.getOperation() == node.OR)
+		if(node.getOperation() == SearchTreeNode.OR)
 			return matches(node.getLeft(), beginDate, endDate) || matches(node.getRight(), beginDate, endDate);
 
 		return false;
