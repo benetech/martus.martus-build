@@ -127,6 +127,8 @@ public class FileDatabase extends Database
 			File toFile = getFileForRecord(key);
 			toFile.delete();
 			fromFile.renameTo(toFile);
+			if(!toFile.exists())
+				throw new IOException("renameTo failed");
 		}
 	}
 
