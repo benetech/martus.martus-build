@@ -74,14 +74,6 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		return currentBulletin;
 	}
 
-	public void disableEdits()
-	{
-		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
-		{
-			fields[fieldNum].disableEdits();
-		}
-	}
-
 	public void copyDataToBulletin(Bulletin bulletin) throws 
 			IOException,
 			MartusCrypto.EncryptionException
@@ -145,7 +137,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			fieldTags[thisField] = tags[fieldNum];
 			fields[thisField] = fieldsInThisSection[fieldNum];
 		}
-		target.add(target.createAttachmentTable());
+		target.createAttachmentTable();
 	}
 
 	// ChangeListener interface

@@ -58,6 +58,12 @@ public class UiBulletinView extends UiBulletinComponent
 		}	
 	}
 
+	public void disableEdits()
+	{
+		publicStuff.disableEdits();
+		privateStuff.disableEdits();
+	}
+		
 	public UiField createBoolField()
 	{
 		return new UiBoolViewer(getApp());

@@ -394,8 +394,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:ConfigServer=Server Configuration");
 		addEnglishTranslation("wintitle:ServerSelectionResults=Server Configuration Results");
 		addEnglishTranslation("wintitle:search=Search");
-		
 		addEnglishTranslation("wintitle:saveBackupKeyPair=Back up key pair file");
+		addEnglishTranslation("wintitle:BulletinPreview=Bulletin Preview");
 
 		addEnglishTranslation("button:file=File");
 		addEnglishTranslation("button:edit=Edit");

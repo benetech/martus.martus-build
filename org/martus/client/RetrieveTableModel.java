@@ -239,7 +239,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	
 	public BulletinSummary getBulletinSummary(int row)
 	{
-		return (BulletinSummary)allSummaries.get(row);	
+		return (BulletinSummary)currentSummaries.get(row);	
 	}
 	
 

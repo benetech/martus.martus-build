@@ -239,13 +239,14 @@ public class UiServerSummariesDlg extends JDialog
 
 	class PreviewHandler implements ActionListener
 	{
+		
 		public void actionPerformed(ActionEvent ae)
 		{
 			int row = table.getSelectedRow();
 			if(row>=0)
 			{
 				FieldDataPacket fdp = model.getBulletinSummary(row).getFieldDataPacket();
-				System.out.println(fdp.get(Bulletin.TAGENTRYDATE));
+				UiBulletinPreviewDlg dlg = new UiBulletinPreviewDlg(mainWindow, fdp);
 			}
 		}
 	}

@@ -126,6 +126,14 @@ abstract public class UiBulletinComponentSection extends JPanel
 		encryptedIndicator.setText(title);
 	}
 	
+	public void disableEdits()
+	{
+		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
+		{
+			fields[fieldNum].disableEdits();
+		}
+	}
+
 	public void updateDamagedIndicator(boolean isDamaged)
 	{
 		damagedIndicator.setVisible(isDamaged);
@@ -161,7 +169,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	abstract public UiField createMultilineField();
 	abstract public UiField createChoiceField(ChoiceItem[] choices);
 	abstract public UiField createDateField();
-	abstract public JComponent createAttachmentTable();
+	abstract public void createAttachmentTable();
 	abstract public void addAttachment(AttachmentProxy a);
 	abstract public void clearAttachments();
 }

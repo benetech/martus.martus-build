@@ -45,12 +45,10 @@ public class UiBulletinComponentEditorSection extends UiBulletinComponentSection
 		attachmentEditor.clearAttachments();
 	}
 	
-	public JComponent createAttachmentTable()
+	public void createAttachmentTable()
 	{
-		if(attachmentEditor == null)
-			attachmentEditor = new UiAttachmentEditor(owner);
-
-		return attachmentEditor;
+		attachmentEditor = new UiAttachmentEditor(owner);
+		add(attachmentEditor);
 	}
 	
 	UiAttachmentEditor attachmentEditor;

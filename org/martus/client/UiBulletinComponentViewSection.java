@@ -35,12 +35,10 @@ public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 		return new UiChoiceViewer(choices);
 	}
 	
-	public JComponent createAttachmentTable()
+	public void createAttachmentTable()
 	{
-		if(attachmentViewer == null)
-			attachmentViewer = new UiAttachmentViewer(owner, bulletinComponent);
-
-		return attachmentViewer;
+		attachmentViewer = new UiAttachmentViewer(owner, bulletinComponent);
+		add(attachmentViewer);
 	}
 	
 	public void addAttachment(AttachmentProxy a)
