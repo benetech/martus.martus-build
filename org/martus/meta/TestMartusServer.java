@@ -1586,7 +1586,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	
 	public void testRequestUploadRights() throws Exception
 	{
-
 		String sampleId = "384759896";
 		String sampleMagicWord = "bliflfji";
 
@@ -1703,6 +1702,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		String clientId = clientSecurity.getPublicKeyString();
 		String hqId = hqSecurity.getPublicKeyString();
+		String emptyMagic = "";
 		File tempBanned = createTempFile();		
 		
 		UnicodeWriter writer = new UnicodeWriter(tempBanned);
@@ -1711,19 +1711,26 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		testServer.loadBannedClients(tempBanned);
 		
-		Vector result;
+		Vector vecResult;
+		String strResult;
 		
-		result = testServer.listMySealedBulletinIds(clientId);
-		verifyErrorResult("listMySealedBulletinIds", result, NetworkInterfaceConstants.REJECTED );
+		vecResult = testServer.listMySealedBulletinIds(clientId);
+		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		
-		result = testServer.listMyDraftBulletinIds(clientId);
-		verifyErrorResult("listMyDraftBulletinIds", result, NetworkInterfaceConstants.REJECTED );
+		vecResult = testServer.listMyDraftBulletinIds(clientId);
+		verifyErrorResult("listMyDraftBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		
-		result = testServer.listFieldOfficeSealedBulletinIds(hqId, clientId);
-		assertEquals("listFieldOfficeSealedBulletinIds", NetworkInterfaceConstants.OK, result.get(0) );
+		strResult = testServer.requestUploadRights(clientId, "");
+		assertEquals("requestUploadRights", NetworkInterfaceConstants.REJECTED, strResult );
 		
-		result = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId);
-		assertEquals("listFieldOfficeDraftBulletinIds", NetworkInterfaceConstants.OK, result.get(0) );
+		strResult = uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity);
+		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult );
+		
+		vecResult = testServer.listFieldOfficeSealedBulletinIds(hqId, clientId);
+		assertEquals("listFieldOfficeSealedBulletinIds", NetworkInterfaceConstants.OK, vecResult.get(0) );
+		
+		vecResult = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId);
+		assertEquals("listFieldOfficeDraftBulletinIds", NetworkInterfaceConstants.OK, vecResult.get(0) );
 	}
 	
 	public void testServerShutdown() throws Exception
@@ -1755,6 +1762,21 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.decrementActiveClientsCounter();
 		testServer.decrementActiveClientsCounter();
 		assertEquals("getNumberActiveClients 3", 0, testServer.getNumberActiveClients());
+	}
+	
+	public void testServerConnectionDuringShutdown() throws Exception
+	{
+		Vector reply;
+		
+		testServer.incrementActiveClientsCounter();
+		File exitFile = new File(testServer.getDataDirectory(), "exit");
+		exitFile.createNewFile();
+		
+		reply = testServer.getServerInformation();
+		assertEquals("getServerInformation", NetworkInterfaceConstants.SERVER_DOWN, reply.get(0) );
+		
+		testServer.decrementActiveClientsCounter();
+		exitFile.delete();
 	}
 	
 	void verifyErrorResult(String label, Vector vector, String expected )
