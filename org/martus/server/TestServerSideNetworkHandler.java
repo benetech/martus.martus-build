@@ -105,6 +105,17 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 
 	}
 
+	public void testOctober2002ClientRetrieve() throws Exception
+	{
+		String myAccountId = mySecurity.getPublicKeyString();
+
+		Vector parameters = new Vector();
+		parameters.add(myAccountId);
+		String sig = MartusUtilities.sign(parameters, mySecurity);
+		handler.getSealedBulletinIds(myAccountId, parameters, sig);
+		
+		handler.getDraftBulletinIds(myAccountId, parameters, sig);
+	}
 	
 	ServerSideNetworkHandler handler;
 	MockMartusServer mockServer;

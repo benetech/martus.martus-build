@@ -79,7 +79,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			
 		int index = 0;
 		String authorAccountId = (String)parameters.get(index++);
-		Vector retrieveTags = (Vector)parameters.get(index++);
+		Vector retrieveTags = new Vector();
+		if(index < parameters.size())
+			retrieveTags = (Vector)parameters.get(index++);
 		
 		if(myAccountId.equals(authorAccountId))
 			result = server.listMySealedBulletinIds(authorAccountId, retrieveTags);
@@ -107,7 +109,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			
 		int index = 0;
 		String authorAccountId = (String)parameters.get(index++);
-		Vector retrieveTags = (Vector)parameters.get(index++);
+		Vector retrieveTags = new Vector();
+		if(index < parameters.size())
+			retrieveTags = (Vector)parameters.get(index++);
 
 		if(myAccountId.equals(authorAccountId))
 			result = server.listMyDraftBulletinIds(authorAccountId, retrieveTags);
