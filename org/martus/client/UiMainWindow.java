@@ -1408,14 +1408,21 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void editBulletin(Bulletin b) 
 	{
+		editingBulletin = true;
 		setEnabled(false);
 		currentActiveFrame = new UiEditBulletinDlg(b, this);
 	}
 	
 	public void stopEditing()
 	{
+		editingBulletin = false;
 		setEnabled(true);
 		currentActiveFrame = this;
+	}
+	
+	public boolean isEditingBulletin()
+	{
+		return editingBulletin;	
 	}
 
 	public File getLastAttachmentLoadDirectory() 
@@ -2141,4 +2148,5 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;
+	private boolean editingBulletin;
 }
