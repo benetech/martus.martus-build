@@ -136,6 +136,7 @@ public class EnglishStrings
 "wintitle:notifyErrorSavingBulletin=Error Saving",
 "wintitle:notifyBackupKeyPairInformation=Backing Your Keypair",
 "wintitle:notifyExportFolderEmpty=Error Exporting Folder",
+"wintitle:notifyBackupKeyPairInformationMultiple=Backing Your Keypair",
 				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -522,6 +523,7 @@ public class EnglishStrings
 "field:notifyErrorSavingBulletincause=An error prevented the bulletin from being saved. Check to make sure the disk is not full or write protected.",		
 "field:notifyBackupKeyPairInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
 "field:notifyExportFolderEmptycause=The folder you are trying to export does not contain any bulletins.  Select a folder which has bulletins before exporting the folder.",		
+"field:notifyBackupKeyPairMultipleInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occurs in the future:",
