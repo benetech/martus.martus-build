@@ -31,9 +31,9 @@
                         ${hrvd-dir}/**/*.class,
                         ${logi-dir}/**/*.class,
                     	${common-dir}/**/*.class,
-						${jar-verifier-dir}/**/*.class,
-						${jar-verifier-dir}/**/ssmartusclientks,
-  	                	${swing-dir}/**/*.class
+			${jar-verifier-dir}/**/*.class,
+			${jar-verifier-dir}/**/ssmartusclientks,
+  	                ${swing-dir}/**/*.class
                     	"/>
 
   <property name="mspa-dir" value="${martus-dir}/mspa"/>
@@ -69,20 +69,20 @@
                 ${client-dir}/**/*.class,
                 ${client-dir}/core/main-class.txt,
                 ${client-dir}/**/Martus-ru.mtf,
- 			    ${client-dir}/**/Martus-es.mtf,
-	   			${client-dir}/**/Martus-ar.mtf,
-	   			${client-dir}/**/Martus-fr.mtf,
+ 		${client-dir}/**/Martus-es.mtf,
+		${client-dir}/**/Martus-ar.mtf,
+		${client-dir}/**/Martus-fr.mtf,
                 ${client-dir}/**/MartusHelp-en.txt,
                 ${client-dir}/**/MartusHelpTOC-en.txt,
                 ${client-dir}/**/MartusHelp-es.txt,
                 ${client-dir}/**/MartusHelpTOC-es.txt,
                 ${client-dir}/**/MartusHelp-ru.txt,
                 ${client-dir}/**/MartusHelpTOC-ru.txt,
-			    ${client-dir}/**/MartusHelp-ar.txt,
-			    ${client-dir}/**/MartusHelpTOC-ar.txt,
-			    ${client-dir}/**/MartusHelp-fr.txt,
-			    ${client-dir}/**/MartusHelpTOC-fr.txt,
-				${client-jar}/**/UnofficialTranslationMessage.txt,
+		${client-dir}/**/MartusHelp-ar.txt,
+		${client-dir}/**/MartusHelpTOC-ar.txt,
+		${client-dir}/**/MartusHelp-fr.txt,
+		${client-dir}/**/MartusHelpTOC-fr.txt,
+		${client-dir}/**/UnofficialTranslationMessage.txt,
                 ${client-dir}/**/*.png,
                 ${client-dir}/**/*.gif,
                 ${client-dir}/**/*.jpg
@@ -431,11 +431,11 @@
         <zip zipfile="${zip-filename}"
                     basedir="."
                     includes="org/**/*.java,
-                                        org/**/MartusHelpTOC-*.txt,
-                                        org/**/Martus-*.mtf,
-                                        org/**/MartusLogo.gif,
-                                        org/**/Martus.png,
-                                        org/**/*locked.jpg"
+				org/**/MartusHelpTOC-*.txt,
+				org/**/Martus-*.mtf,
+				org/**/MartusLogo.gif,
+				org/**/Martus.png,
+				org/**/*locked.jpg"
             excludes="org/martus/server/**,org/martus/meta/**"
                     />
         <!-- Set a variable if the library sources exists-->
