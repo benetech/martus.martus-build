@@ -15,17 +15,8 @@ import org.xml.sax.helpers.DefaultHandler;
 
 public class MartusXml
 {
-	public static String getFolderListTagStart()		{ return getTagStart(tagFolderList); }
-	public static String getFolderListTagEnd()			{ return getTagEnd(tagFolderList); }
-
-	public static String getBulletinTagStart(String id)	{ return getTagStart(tagBulletin, attrBulletin, id); }
-	public static String getBulletinTagEnd()			{ return getTagEnd(tagBulletin); }
-
 	public static String getFieldTagStart(String name)	{ return getTagStart(tagField, attrField, name); }
 	public static String getFieldTagEnd()				{ return getTagEnd(tagField); }
-
-	public static String getFolderTagStart(String name)	{ return getTagStart(tagFolder, attrFolder, name); }
-	public static String getFolderTagEnd()				{ return getTagEnd(tagFolder); }
 
 	public static String getIdTag(String id)			{ return "<Id>" + id + "</Id>\n"; }
 
@@ -49,6 +40,12 @@ public class MartusXml
 	public static String getTagStart(String tagName, String attrName, String attrValue)
 	{
 		return "<" + tagName + " " + attrName + "='" + attrValue + "'>";
+	}
+
+	public static String getTagStart(String tagName, String attr1Name, String attr1Value, String attr2Name, String attr2Value)
+	{
+		return "<" + tagName + " " + attr1Name + "='" + attr1Value +
+				"' " + attr2Name + "='" + attr2Value + "'>";
 	}
 
 	public static String getTagEnd(String tagName)
@@ -96,7 +93,8 @@ public class MartusXml
 	}
 
 	public final static String tagBulletin = "Bulletin";
-	public final static String attrBulletin = "id";
+	public final static String attrBulletinId = "id";
+	public final static String attrBulletinEventDate = "eventdate";
 	public final static String tagField = "Field";
 	public final static String attrField = "name";
 	public final static String tagAttachment = "Attachment";

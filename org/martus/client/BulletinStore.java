@@ -671,7 +671,7 @@ public class BulletinStore
 
 	public synchronized String foldersToXml()
 	{
-		String xml = MartusXml.getFolderListTagStart();
+		String xml = MartusClientXml.getFolderListTagStart();
 
 		for(int index=0; index < getFolderCount(); ++index)
 		{
@@ -679,19 +679,19 @@ public class BulletinStore
 			xml += folderToXml(folder);
 		}
 
-		xml += MartusXml.getFolderListTagEnd();
+		xml += MartusClientXml.getFolderListTagEnd();
 		return xml;
 	}
 
 	public String folderToXml(BulletinFolder folder)
 	{
-		String xml = MartusXml.getFolderTagStart(folder.getName());
+		String xml = MartusClientXml.getFolderTagStart(folder.getName());
 		for(int index=0; index < folder.getBulletinCount(); ++index)
 		{
 			Bulletin b = folder.getBulletinSorted(index);
 			xml += MartusXml.getIdTag(b.getUniversalIdString());
 		}
-		xml += MartusXml.getFolderTagEnd();
+		xml += MartusClientXml.getFolderTagEnd();
 		return xml;
 	}
 
@@ -743,7 +743,7 @@ public class BulletinStore
 				try 
 				{
 					UniversalId bId = UniversalId.createFromString(buffer);
-					currentFolder.add(bId);
+					currentFolder.add(bId, "");
 				} 
 				catch(NotUniversalIdException e) 
 				{

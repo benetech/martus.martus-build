@@ -466,15 +466,18 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		BulletinFolder folder = store.createFolder("Test");
 		String xml = store.folderToXml(folder);
-		assertEquals(MartusXml.getFolderTagStart("Test") + MartusXml.getFolderTagEnd(), xml);
+		assertEquals(MartusClientXml.getFolderTagStart("Test") + MartusClientXml.getFolderTagEnd(), xml);
 
 		Bulletin b = store.createEmptyBulletin();
 		b.save();
 		folder.add(b);
 		xml = store.folderToXml(folder);
-		assertStartsWith(MartusXml.getFolderTagStart("Test"), xml);
+		assertStartsWith(MartusClientXml.getFolderTagStart("Test"), xml);
 		assertContains(MartusXml.getIdTag(folder.getBulletinSorted(0).getUniversalIdString()), xml);
-		assertEndsWith(MartusXml.getFolderTagEnd(), xml);
+//		assertContains(MartusClientXml.getBulletinTagStart(b), xml);
+//		assertContains(MartusClientXml.getBulletinTagEnd(), xml);
+		assertEndsWith(MartusClientXml.getFolderTagEnd(), xml);
+		
 	}
 
 	public void testFoldersToXml()
@@ -484,28 +487,28 @@ public class TestBulletinStore extends TestCaseEnhanced
 		int i;
 		String expected;
 
-		expected = MartusXml.getFolderListTagStart();
+		expected = MartusClientXml.getFolderListTagStart();
 		Vector originalFolderNames = store.getAllFolderNames();
 		for(i = 0; i < originalFolderNames.size(); ++i)
 		{
 			BulletinFolder folder = store.findFolder((String)originalFolderNames.get(i));
 			expected += store.folderToXml(folder);
 		}
-		expected += MartusXml.getFolderListTagEnd();
+		expected += MartusClientXml.getFolderListTagEnd();
 		assertEquals(expected, store.foldersToXml());
 
 		BulletinFolder f1 = store.createFolder("First");
 		Bulletin b = store.createEmptyBulletin();
 		f1.add(b);
 
-		expected = MartusXml.getFolderListTagStart();
+		expected = MartusClientXml.getFolderListTagStart();
 		Vector updatedFolderNames = store.getAllFolderNames();
 		for(i = 0; i < updatedFolderNames.size(); ++i)
 		{
 			BulletinFolder folder = store.findFolder((String)updatedFolderNames.get(i));
 			expected += store.folderToXml(folder);
 		}
-		expected += MartusXml.getFolderListTagEnd();
+		expected += MartusClientXml.getFolderListTagEnd();
 		assertEquals(expected, store.foldersToXml());
 	}
 
