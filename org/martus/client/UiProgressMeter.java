@@ -17,7 +17,6 @@ public class UiProgressMeter extends JPanel
 
 		statusMessage = new JLabel("     ", JLabel.LEFT );
 		statusMessage.setMinimumSize(new Dimension(60, 25));
-		statusMessage.setBorder( new BevelBorder( BevelBorder.LOWERED ));
 
 		progressMeter = new JProgressBar(0, 10);
 		Dimension meterSize = new Dimension(100, 20);
