@@ -524,10 +524,12 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		assertEquals("can upload already?", false, mockServer.canClientUpload(clientId));
 		assertEquals("wrong word worked?", false, appWithAccount.requestServerUploadRights("wrong word"));
+		assertEquals("empty word worked?", false, appWithAccount.requestServerUploadRights(""));
 		assertEquals("can upload?", false, mockServer.canClientUpload(clientId));
 		
 		assertEquals("right word failed?", true, appWithAccount.requestServerUploadRights(sampleMagicWord));
 		assertEquals("still can't upload?", true, mockServer.canClientUpload(clientId));
+		assertEquals("empty word failed after right word passed?", true, appWithAccount.requestServerUploadRights(""));
 		mockServer.setMagicWord(null);
 	}
 	

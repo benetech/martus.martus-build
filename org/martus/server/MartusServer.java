@@ -362,6 +362,9 @@ public class MartusServer
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
+		if(tryMagicWord.length() == 0 && clientsThatCanUpload.contains(clientId))
+			return NetworkInterfaceConstants.OK;
+		
 		if(!tryMagicWord.equals(magicWord))
 		{
 			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + "magicWord=" + magicWord + " tryMagicWord=" +tryMagicWord);
