@@ -29,8 +29,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			AccountVisitor()
 			{
 				accounts = new Vector();
-				accounts.add(NetworkInterfaceConstants.OK);
-	}
+			}
 	
 			public void visit(String accountString)
 			{
@@ -39,7 +38,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			}
 	
 			public Vector getAccounts()
-	{
+			{
 				return accounts;
 			}
 			Vector accounts;
@@ -55,7 +54,10 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 		AccountVisitor visitor = new AccountVisitor();
 		server.getDatabase().visitAllAccounts(visitor);
 
-		return visitor.getAccounts();
+		result.add(NetworkInterfaceConstants.OK);
+		result.add(visitor.getAccounts());
+
+		return result;
 	}
 	
 	public Vector getAccountUniversalIds(String myAccountId, Vector parameters, String signature)
@@ -91,9 +93,15 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			Vector infos = new Vector();
 		}
 
-		Collector collector = new Collector();		
-		server.getDatabase().visitAllRecordsForAccount(collector, (String) parameters.get(1));
-		return collector.infos;
+		Collector collector = new Collector();
+		String parameter = (String) parameters.get(0);
+		Database db = server.getDatabase();
+		db.visitAllRecordsForAccount(collector, parameter);
+		
+		result.add(NetworkInterfaceConstants.OK);
+		result.add(collector.infos);
+		
+		return result;
 	}
 	
 	public Vector getAmplifierBulletinChunk(String myAccountId, Vector parameters, String signature)
