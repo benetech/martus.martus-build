@@ -34,6 +34,7 @@
                     	${swing-dir}/**/*.class
                     	"/>
 
+  <property name="mspa-jar" value= "${dist}/martus-mspa.jar"/>
   <property name="mspa-dir" value="${cvs.home}/martus-mspa/source/${martus-dir}/mspa"/>
   <property name="mspa-package" value="${martus-package}.mspa"/>
 
@@ -160,6 +161,34 @@
     <delete dir="${bin}"/>
 
   </target>
+  
+    <!-- Build mspa -->
+  <target name="build-mspa" depends="init">
+    <mkdir dir="${bin}"/>
+
+    <replace file="${mspa-dir}/client/core/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
+
+    <javac destdir="bin" target="1.4" optimize="on"
+    	srcdir="${mspa-dir};${hrvd-dir};${logi-dir};${util-dir};${swing-dir};${common-dir}"
+    	classpath=".;
+    		${thirdparty-jar-dir}/common/XMLRPC/bin/xmlrpc-1.2-b1.jar;
+    		${thirdparty-jar-dir}/common/InfiniteMonkey/bin/InfiniteMonkey.jar;
+    		${thirdparty-jar-dir}/libext/JUnit/bin/junit.jar;
+    		${thirdparty-jar-dir}/libext/BouncyCastle/bin/bcprov-jdk14-120.jar;
+    		"
+    	failonerror="true">
+            <include name="**/*.java"/>
+    </javac>
+
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${mspa-jar}" basedir="${bin}" includes="**/*.class"/>
+    
+    <!-- clean up -->
+    <delete dir="${bin}"/>
+
+  </target>
+  
 
   <!-- Build client -->
   <target name="build-client" depends="init,build-common">
