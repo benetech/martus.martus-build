@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.common;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 
 public class BulletinSaver
@@ -142,6 +143,7 @@ public class BulletinSaver
 		byte[] sessionKeyBytes = a.getSessionKeyBytes();
 		DatabaseKey key = new DatabaseKey(uid);
 		InputStreamWithSeek xmlIn = db.openInputStream(key, verifier);
-		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, destFile);
+		FileOutputStream out = new FileOutputStream(destFile);
+		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, out);
 	}
 }

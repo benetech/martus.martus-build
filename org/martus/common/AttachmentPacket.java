@@ -86,7 +86,7 @@ public class AttachmentPacket extends Packet
 		return sig;
 	}
 
-	public static void exportRawFileFromXml(InputStreamWithSeek xmlIn, byte[] sessionKeyBytes, MartusCrypto verifier, File destFile) throws
+	public static void exportRawFileFromXml(InputStreamWithSeek xmlIn, byte[] sessionKeyBytes, MartusCrypto verifier, OutputStream out) throws
 		IOException,
 		org.martus.common.Packet.InvalidPacketException,
 		org.martus.common.Packet.SignatureVerificationException,
@@ -115,16 +115,14 @@ public class AttachmentPacket extends Packet
 		base64File.delete();
 
 		InputStreamWithSeek inEncrypted = new FileInputStreamWithSeek(encryptedFile);
-		FileOutputStream outRaw = new FileOutputStream(destFile);
 		try
 		{
-			verifier.decrypt(inEncrypted, outRaw, sessionKeyBytes);
+			verifier.decrypt(inEncrypted, out, sessionKeyBytes);
 		}
 		catch(Exception e)
 		{
 			throw new IOException(e.toString());
 		}
-		outRaw.close();
 		inEncrypted.close();
 		encryptedFile.delete();
 	}

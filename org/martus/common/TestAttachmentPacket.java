@@ -100,7 +100,9 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		destFile.deleteOnExit();
 		destFile.delete();
 		ByteArrayInputStreamWithSeek inBytes = new ByteArrayInputStreamWithSeek(resultBytes);
-		AttachmentPacket.exportRawFileFromXml(inBytes, sessionKeyBytes, security, destFile);
+		FileOutputStream out = new FileOutputStream(destFile);
+		AttachmentPacket.exportRawFileFromXml(inBytes, sessionKeyBytes, security, out);
+		out.close();
 		inBytes.close();
 
 		assertTrue("not created?", destFile.exists());
@@ -130,7 +132,9 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		File decryptedFile = File.createTempFile("$$$MartusDecryptedAtt", null);
 		decryptedFile.deleteOnExit();
 		ByteArrayInputStreamWithSeek xmlIn = new ByteArrayInputStreamWithSeek(encryptedBytes);
-		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, decryptedFile);
+		FileOutputStream out = new FileOutputStream(decryptedFile);
+		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, out);
+		out.close();
 
 		byte[] fileBytes = new byte[sampleBytes.length];
 		FileInputStream inFile = new FileInputStream(decryptedFile);
@@ -185,7 +189,9 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		File decryptedFile = File.createTempFile("$$$MartusDecryptedBufferedAtt", null);
 		decryptedFile.deleteOnExit();
 		FileInputStreamWithSeek xmlIn = new FileInputStreamWithSeek(largeXmlFile);
-		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, decryptedFile);
+		FileOutputStream finalOut = new FileOutputStream(decryptedFile);
+		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, finalOut);
+		finalOut.close();
 		xmlIn.close();
 		//long readXmlEndedAt = System.currentTimeMillis();
 		//System.out.println("Read Xml Time = " + (readXmlEndedAt - readXmlStartedAt));

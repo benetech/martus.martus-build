@@ -959,7 +959,9 @@ public class MartusUtilities
 		byte[] sessionKeyBytes = oldProxy.getSessionKeyBytes();
 		File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
 		tempFile.deleteOnExit();
-		AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, tempFile);
+		FileOutputStream out = new FileOutputStream(tempFile);
+		AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, out);
+		out.close();
 		AttachmentProxy ap = new AttachmentProxy(tempFile);
 		ap.setLabel(oldProxy.getLabel());
 		return ap;
