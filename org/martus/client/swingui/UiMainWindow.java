@@ -112,6 +112,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean run()
 	{
+		notifyClientCompliance();
+
 		mainWindowInitalizing = true;
 		boolean newAccount = false;
 		if(app.doesAccountExist())
@@ -207,6 +209,37 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return true;
     }
 
+	void notifyClientCompliance()
+	{
+		// NOTE: If this program contains ANY changes that have 
+		// not been officially released by Benetech, you MUST 
+		// change the splash screen text as required by the 
+		// Martus source code license. The easiest way to do 
+		// this is to set modified=true and edit the text below. 
+		final boolean modified = false;
+		
+		String complianceStatementAlwaysEnglish = "";
+		if(modified)
+		{
+			complianceStatementAlwaysEnglish =
+			"<html><p align='center'><font size='5'>Welcome to [*your product name*].  <br></br>" +
+			"This software is not a standard Martus(TM) program, <br></br>" +
+			"because it has been modified by someone other than Benetech, <br></br>" +
+			"the copyright owner and original author of the Martus software.  <br></br>" +
+			"For details of what has been changed, see [*here*].</font></p></html>";
+		}
+		else
+		{
+			complianceStatementAlwaysEnglish =
+			"<html><p align='center'><font size='5'>" +
+			"Welcome to the Martus™<br></br>" +
+			"Human Rights Bulletin System,<br></br>" +
+			"created by Benetech.</font></p></html>";
+		}
+
+		new UiSplashDlg(getLocalization(), complianceStatementAlwaysEnglish);
+	}
+	
     public boolean isMainWindowInitalizing()
     {
     	return mainWindowInitalizing;
