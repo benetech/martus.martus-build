@@ -496,8 +496,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		{
 			StringBuffer logMsg = new StringBuffer();
-			logMsg.append("getBulletinChunk request by " + getClientAliasForLogging(myAccountId));
-			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+			logMsg.append("getBulletinChunk remote: " + getClientAliasForLogging(myAccountId));
+			logMsg.append(" local: " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
 			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
 			log(logMsg.toString());
 		}
