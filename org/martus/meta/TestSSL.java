@@ -1,8 +1,11 @@
 package org.martus.meta;
 
+import java.util.Vector;
+
 import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.NetworkResponse;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.server.MockMartusServer;
 import org.martus.server.ServerSideNetworkHandler;
@@ -44,7 +47,12 @@ public class TestSSL extends TestCaseEnhanced
 	public void testBasics()
 	{
 		proxy1.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
+
 		assertEquals(NetworkInterfaceConstants.VERSION, proxy1.ping());
+		
+		NetworkResponse response = new NetworkResponse(proxy1.getServerInfo(new Vector()));
+		assertEquals(NetworkInterfaceConstants.OK, response.getResultCode());
+		assertEquals(NetworkInterfaceConstants.VERSION, response.getResultVector().get(0));
 
 // TODO: After the callerSide of mirroring is available, hook up this test!
 //		proxy2.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
