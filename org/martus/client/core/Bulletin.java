@@ -46,13 +46,11 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
-import org.martus.common.Packet;
 import org.martus.common.UniversalId;
 import org.martus.common.ZipEntryInputStream;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.EncryptionException;
-import org.martus.common.MartusCrypto.NoKeyPairException;
 
 
 public class Bulletin implements BulletinConstants
@@ -138,6 +136,11 @@ public class Bulletin implements BulletinConstants
 	public String getLocalId()
 	{
 		return getBulletinHeaderPacket().getLocalId();
+	}
+	
+	public void setIsValid(boolean isValid)
+	{
+		isValidFlag = isValid;
 	}
 
 	public boolean isValid()
@@ -340,98 +343,6 @@ public class Bulletin implements BulletinConstants
 		getBulletinHeaderPacket().setHQPublicKey(key);
 		getFieldDataPacket().setHQPublicKey(key);
 		getPrivateFieldDataPacket().setHQPublicKey(key);
-	}
-
-	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key) throws
-		IOException,
-		DamagedBulletinException,
-		MartusCrypto.NoKeyPairException
-	{
-		return loadFromDatabase(store, key, store.getSignatureVerifier());
-	}
-
-	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key, MartusCrypto verifier) throws
-			IOException,
-			DamagedBulletinException,
-			NoKeyPairException
-	{
-		Bulletin b = new Bulletin(store);
-		b.clear();
-		b.isValidFlag = true;
-
-		boolean isHeaderValid = true;
-
-		BulletinHeaderPacket headerPacket = b.getBulletinHeaderPacket();
-		DatabaseKey headerKey = key;
-		final Database db = store.getDatabase();
-		loadAnotherPacket(headerPacket, db, headerKey, null, verifier);
-		if(!b.isValid())
-			isHeaderValid = false;
-
-		if(isHeaderValid)
-		{
-			FieldDataPacket dataPacket = b.getFieldDataPacket();
-			FieldDataPacket privateDataPacket = b.getPrivateFieldDataPacket();
-
-			DatabaseKey dataKey = b.getDatabaseKeyForLocalId(headerPacket.getFieldDataPacketId());
-
-			byte[] dataSig = headerPacket.getFieldDataSignature();
-			boolean isDataValid = loadAnotherPacket(dataPacket, db, dataKey, dataSig, verifier);
-
-			DatabaseKey privateDataKey = b.getDatabaseKeyForLocalId(headerPacket.getPrivateFieldDataPacketId());
-			byte[] privateDataSig = headerPacket.getPrivateFieldDataSignature();
-			boolean isPrivateDataValid = loadAnotherPacket(privateDataPacket, db, privateDataKey, privateDataSig, verifier);
-
-			b.isValidFlag = (isDataValid && isPrivateDataValid);
-		}
-
-		if(b.isValid())
-		{
-			b.setHQPublicKey(headerPacket.getHQPublicKey());
-		}
-		else
-		{
-			b.setHQPublicKey("");
-			if(!isHeaderValid)
-			{
-				//System.out.println("Bulletin.loadFromDatabase: Header invalid");
-				throw new DamagedBulletinException();
-			}
-		}
-
-		return b;
-	}
-
-	static boolean loadAnotherPacket(Packet packet, Database db, DatabaseKey key, byte[] expectedSig, MartusCrypto verifier) throws
-			IOException,
-			NoKeyPairException
-	{
-		packet.setUniversalId(key.getUniversalId());
-		try
-		{
-			InputStreamWithSeek in = db.openInputStream(key, verifier);
-			if(in == null)
-			{
-				//System.out.println("Packet not found: " + key.getLocalId());
-				return false;
-			}
-			packet.loadFromXml(in, expectedSig, verifier);
-			return true;
-		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-			throw e;
-		}
-		catch(NoKeyPairException e)
-		{
-			throw e;
-		}
-		catch(Exception e)
-		{
-			//e.printStackTrace();
-			return false;
-		}
 	}
 
 	DatabaseKey getDatabaseKeyForLocalId(String localId)

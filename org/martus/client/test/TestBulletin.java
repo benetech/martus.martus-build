@@ -45,23 +45,21 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinLoader;
 import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.SearchParser;
 import org.martus.client.core.SearchTreeNode;
-import org.martus.client.core.Bulletin.DamagedBulletinException;
 import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MartusXml;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
 import org.martus.common.TestCaseEnhanced;
@@ -406,7 +404,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertTrue("time wrong?", delta2 < 1000);
 
 		Thread.sleep(200);
-		Bulletin b2 = Bulletin.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
+		Bulletin b2 = BulletinLoader.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		long loadedTime = b2.getLastSavedTime();
 		assertEquals("Didn't keep time saved?", firstSavedTime, loadedTime);
 	}
@@ -424,7 +422,7 @@ public class TestBulletin extends TestCaseEnhanced
 		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData());
 		UniversalId uid = original.getUniversalId();
 
-		original = Bulletin.loadFromDatabase(store, new DatabaseKey(uid));
+		original = BulletinLoader.loadFromDatabase(store, new DatabaseKey(uid));
 		AttachmentProxy[] originalAttachments = original.getPublicAttachments();
 		assertEquals("not one attachment?", 1, originalAttachments.length);
 		DatabaseKey key2 = new DatabaseKey(originalAttachments[0].getUniversalId());
@@ -485,175 +483,6 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(label + " read count?", raw.length, inRaw.read(raw));
 		inRaw.close();
 		assertEquals(label + " wrong bytes?", true, Arrays.equals(bytes, raw));
-	}
-
-	public void testLoadFromDatabase() throws Exception
-	{
-		assertEquals(0, db.getAllKeys().size());
-
-		Bulletin b = store.createEmptyBulletin();
-		b.set(Bulletin.TAGPUBLICINFO, "public info");
-		b.set(Bulletin.TAGPRIVATEINFO, "private info");
-		b.setSealed();
-		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData());
-		assertEquals("saved 1", 3, db.getAllKeys().size());
-
-		DatabaseKey key = new DatabaseKey(b.getUniversalId());
-		Bulletin loaded = store.createEmptyBulletin();
-		loaded = Bulletin.loadFromDatabase(store, key);
-		assertEquals("id", b.getLocalId(), loaded.getLocalId());
-		assertEquals("public info", b.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
-		assertEquals("private info", b.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
-		assertEquals("status", b.getStatus(), loaded.getStatus());
-	}
-
-	public void testLoadFromDatabaseEncrypted() throws Exception
-	{
-		assertEquals(0, db.getAllKeys().size());
-
-		Bulletin b = store.createEmptyBulletin();
-		b.setAllPrivate(true);
-		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData());
-		assertEquals("saved 1", 3, db.getAllKeys().size());
-
-		DatabaseKey key = new DatabaseKey(b.getUniversalId());
-		Bulletin loaded = store.createEmptyBulletin();
-		loaded = Bulletin.loadFromDatabase(store, key);
-		assertEquals("id", b.getLocalId(), loaded.getLocalId());
-
-		assertEquals("not private?", b.isAllPrivate(), loaded.isAllPrivate());
-	}
-
-	public void testLoadFromDatabaseDamaged() throws Exception
-	{
-		Bulletin b = store.createEmptyBulletin();
-		b.set(Bulletin.TAGPUBLICINFO, samplePublic);
-		b.set(Bulletin.TAGPRIVATEINFO, samplePrivate);
-		b.setHQPublicKey(b.getAccount());
-		saveAndVerifyValid("freshly created", b);
-
-		DatabaseKey headerKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
-		verifyVariousTypesOfDamage("bad header", b, false, headerKey, "", "");
-
-		DatabaseKey dataKey = new DatabaseKey(b.getFieldDataPacket().getUniversalId());
-		verifyVariousTypesOfDamage("bad field data", b, true, dataKey, "", samplePrivate);
-
-		DatabaseKey privateDataKey = new DatabaseKey(b.getPrivateFieldDataPacket().getUniversalId());
-		verifyVariousTypesOfDamage("bad private field data", b, true, privateDataKey, samplePublic, "");
-	}
-
-	void verifyVariousTypesOfDamage(String label, Bulletin b, boolean headerIsValid, DatabaseKey packetKey,
-				String expectedPublic, String expectedPrivate) throws Exception
-	{
-		verifyCorruptByRemovingOneCharAfterHeaderComment(label + " remove one char after header comment",
-					b, headerIsValid, packetKey, expectedPublic, expectedPrivate);
-		verifyCorruptByDamagingHeaderComment(label + "damage header comment",
-					b, headerIsValid, packetKey, expectedPublic, expectedPrivate);
-		verifyCorruptByDamagingSigComment(label + "damage sig comment",
-					b, headerIsValid, packetKey, expectedPublic, expectedPrivate);
-		verifyCorruptByRemovingOneSigChar(label + "remove one sig char",
-					b, headerIsValid, packetKey, expectedPublic, expectedPrivate);
-		verifyCorruptByModifyingOneSigChar(label + "modify one sig char",
-					b, headerIsValid, packetKey, expectedPublic, expectedPrivate);
-	}
-
-	void verifyCorruptByRemovingOneCharAfterHeaderComment(String label, Bulletin b, boolean headerIsValid, DatabaseKey packetKey,
-				String expectedPublic, String expectedPrivate) throws Exception
-	{
-		saveAndVerifyValid(label, b);
-		String packetContents = db.readRecord(packetKey, security);
-		final int positionAfterHeaderSig = packetContents.indexOf("-->") + 20;
-		int removeCharAt = positionAfterHeaderSig;
-		db.writeRecord(packetKey, packetContents.substring(0,removeCharAt-1) + packetContents.substring(removeCharAt+1));
-		verifyBulletinIsInvalid(label, b, headerIsValid, expectedPublic, expectedPrivate);
-	}
-
-	void verifyCorruptByModifyingOneSigChar(String label, Bulletin b, boolean headerIsValid, DatabaseKey packetKey,
-				String expectedPublic, String expectedPrivate) throws Exception
-	{
-		saveAndVerifyValid(label, b);
-		String packetContents = db.readRecord(packetKey, security);
-		final int positionInsideSig = packetContents.indexOf("<!--sig=") + 20;
-		int modifyCharAt = positionInsideSig;
-		char charToModify = packetContents.charAt(modifyCharAt);
-		if(charToModify == '2')
-			charToModify = '3';
-		else
-			charToModify = '2';
-		String newPacketContents = packetContents.substring(0,modifyCharAt) + charToModify + packetContents.substring(modifyCharAt+1);
-		db.writeRecord(packetKey, newPacketContents);
-		verifyBulletinIsInvalid(label, b, headerIsValid, expectedPublic, expectedPrivate);
-	}
-
-	void verifyCorruptByRemovingOneSigChar(String label, Bulletin b, boolean headerIsValid, DatabaseKey packetKey,
-				String expectedPublic, String expectedPrivate) throws Exception
-	{
-		saveAndVerifyValid(label, b);
-		String packetContents = db.readRecord(packetKey, security);
-		final int positionInsideSig = packetContents.indexOf("<!--sig=") + 20;
-		int removeCharAt = positionInsideSig;
-		db.writeRecord(packetKey, packetContents.substring(0,removeCharAt-1) + packetContents.substring(removeCharAt+1));
-		verifyBulletinIsInvalid(label, b, headerIsValid, expectedPublic, expectedPrivate);
-	}
-
-	void verifyCorruptByDamagingHeaderComment(String label, Bulletin b, boolean headerIsValid, DatabaseKey packetKey,
-				String expectedPublic, String expectedPrivate) throws Exception
-	{
-		saveAndVerifyValid(label, b);
-		String packetContents = db.readRecord(packetKey, security);
-		final int positionAfterHeaderSig = packetContents.indexOf(MartusXml.packetStartCommentEnd);
-		int removeCharAt = positionAfterHeaderSig;
-		db.writeRecord(packetKey, packetContents.substring(0,removeCharAt-1) + packetContents.substring(removeCharAt+1));
-		verifyBulletinIsInvalid(label, b, headerIsValid, expectedPublic, expectedPrivate);
-	}
-
-	void verifyCorruptByDamagingSigComment(String label, Bulletin b, boolean headerIsValid, DatabaseKey packetKey,
-				String expectedPublic, String expectedPrivate) throws Exception
-	{
-		saveAndVerifyValid(label, b);
-		String packetContents = db.readRecord(packetKey, security);
-		final int positionAfterHeaderSig = packetContents.indexOf("<!--sig=");
-		int removeCharAt = positionAfterHeaderSig;
-		db.writeRecord(packetKey, packetContents.substring(0,removeCharAt-1) + packetContents.substring(removeCharAt+1));
-		verifyBulletinIsInvalid(label, b, headerIsValid, expectedPublic, expectedPrivate);
-	}
-
-	void saveAndVerifyValid(String label, Bulletin b) throws Exception
-	{
-		b.save();
-		DatabaseKey headerKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
-		Bulletin stillValid = Bulletin.loadFromDatabase(store, headerKey, security);
-		assertEquals(label + " not valid after save?", true, stillValid.isValid());
-	}
-
-	void verifyBulletinIsInvalid(String label, Bulletin b, boolean headerIsValid,
-				String expectedPublic, String expectedPrivate) throws Exception
-	{
-		DatabaseKey headerKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
-
-		if(!headerIsValid)
-		{
-			try
-			{
-				Bulletin.loadFromDatabase(b.getStore(), headerKey, security);
-			}
-			catch (DamagedBulletinException ignoreExpectedException)
-			{
-			}
-			return;
-		}
-
-		Bulletin invalid = Bulletin.loadFromDatabase(b.getStore(), headerKey, security);
-		assertEquals(label + " not invalid?", false, invalid.isValid());
-		assertEquals(label + " wrong uid?", b.getUniversalId(), invalid.getUniversalId());
-		assertEquals(label + " wrong fdp account?", b.getAccount(), invalid.getFieldDataPacket().getAccountId());
-		assertEquals(label + " wrong private fdp account?", b.getAccount(), invalid.getPrivateFieldDataPacket().getAccountId());
-		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
-		assertEquals(label + " wrong fdp localId?", bhp.getFieldDataPacketId(), invalid.getFieldDataPacket().getLocalId());
-		assertEquals(label + " wrong private fdp localId?", bhp.getPrivateFieldDataPacketId(), invalid.getPrivateFieldDataPacket().getLocalId());
-		assertEquals(label + " public info", expectedPublic, invalid.get(Bulletin.TAGPUBLICINFO));
-		assertEquals(label + " private info", expectedPrivate, invalid.get(Bulletin.TAGPRIVATEINFO));
-		assertEquals(label + " hq key", "", invalid.getHQPublicKey());
 	}
 
 	public void testSaveToFile() throws Exception
@@ -949,52 +778,6 @@ public class TestBulletin extends TestCaseEnhanced
 		assertTrue("didn't create?", destFile1.exists());
 	}
 
-	public void testDetectFieldPacketWithWrongSig() throws Exception
-	{
-		Database db = store.getDatabase();
-
-		Bulletin original = store.createEmptyBulletin();
-		original.set(Bulletin.TAGPUBLICINFO, "public info");
-		original.set(Bulletin.TAGPRIVATEINFO, "private info");
-		original.setSealed();
-		original.save();
-
-		Bulletin loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
-		assertEquals("not valid?", true, loaded.isValid());
-
-		FieldDataPacket fdp = loaded.getFieldDataPacket();
-		fdp.set(Bulletin.TAGPUBLICINFO, "different public!");
-		boolean encryptPublicData = store.mustEncryptPublicData();
-		fdp.writeXmlToDatabase(db, encryptPublicData, security);
-
-		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
-		assertEquals("not invalid?", false, loaded.isValid());
-		assertEquals("private messed up?", original.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
-	}
-
-	public void testDetectPrivateFieldPacketWithWrongSig() throws Exception
-	{
-		Database db = store.getDatabase();
-
-		Bulletin original = store.createEmptyBulletin();
-		original.set(Bulletin.TAGPUBLICINFO, "public info");
-		original.set(Bulletin.TAGPRIVATEINFO, "private info");
-		original.setSealed();
-		original.save();
-
-		Bulletin loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
-		assertEquals("not valid?", true, loaded.isValid());
-
-		FieldDataPacket fdp = loaded.getPrivateFieldDataPacket();
-		fdp.set(Bulletin.TAGPRIVATEINFO, "different private!");
-		boolean encryptPublicData = store.mustEncryptPublicData();
-		fdp.writeXmlToDatabase(db, encryptPublicData, security);
-
-		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
-		assertEquals("not invalid?", false, loaded.isValid());
-		assertEquals("public messed up?", original.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
-	}
-
 	public void testGetAndSetHQPublicKey()
 	{
 		Bulletin original = store.createEmptyBulletin();
@@ -1015,7 +798,7 @@ public class TestBulletin extends TestCaseEnhanced
 		original.setHQPublicKey(key);
 		original.save();
 		DatabaseKey dbKey = new DatabaseKey(original.getUniversalId());
-		Bulletin loaded = Bulletin.loadFromDatabase(store, dbKey);
+		Bulletin loaded = BulletinLoader.loadFromDatabase(store, dbKey);
 		assertEquals("Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded.getFieldDataPacket().getHQPublicKey());
 
 		File tempFile = createTempFile();

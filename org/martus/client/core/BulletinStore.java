@@ -293,7 +293,7 @@ public class BulletinStore
 
 		try
 		{
-			Bulletin b = Bulletin.loadFromDatabase(this, key);
+			Bulletin b = BulletinLoader.loadFromDatabase(this, key);
 			addToCaches(b);
 			return b;
 		}
