@@ -111,17 +111,6 @@ class ServerSideNetworkHandlerNotAvailable implements NetworkInterface
 		return null;
 	}
 	
-	public String uploadBulletinChunk(
-		String authorAccountId,
-		String bulletinLocalId,
-		int totalSize,
-		int chunkOffset,
-		int chunkSize,
-		String data,
-		String signature)
-	{
-		return null;
-	}
 	public Vector downloadMyBulletinChunk(
 		String authorAccountId,
 		String bulletinLocalId,

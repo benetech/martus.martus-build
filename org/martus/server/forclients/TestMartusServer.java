@@ -340,7 +340,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		// Note: These strings are legacy and can NEVER change
 		assertNotContains("ping", names);
 		assertNotContains("requestUploadRights", names);
-		assertContains("uploadBulletinChunk", names);
+		assertNotContains("uploadBulletinChunk", names);
 		assertContains("downloadMyBulletinChunk", names);
 		assertContains("listMyBulletinSummaries", names);
 		assertContains("downloadFieldOfficeBulletinChunk", names);
@@ -2423,7 +2423,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
 		byte[] sigBytes = signer.createSignature(new ByteArrayInputStream(bytesToSign));
 		String signature = Base64.encode(sigBytes);
-		return server.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
+		return testServer.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
 	}
 	
 	Vector downloadBulletinChunk(NetworkInterface server, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception

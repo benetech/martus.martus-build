@@ -171,21 +171,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	}
 	
 
-	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature)
-	{
-		logging("ServerInterfaceXmlRpcHandler:uploadBulletinChunk clientId=" + authorAccountId + "bulletinId=" + bulletinLocalId);
-		logging("totalSize=" + totalSize + ", chunk Offset=" + chunkOffset + ", chunk Size=" + chunkSize);
-		Vector params = new Vector();
-		params.add(authorAccountId);
-		params.add(bulletinLocalId);
-		params.add(new Integer(totalSize));
-		params.add(new Integer(chunkOffset));
-		params.add(new Integer(chunkSize));
-		params.add(data);
-		params.add(signature);
-		return (String)callServer(server, CMD_UPLOAD_CHUNK, params);
-	}
-
 	public Vector downloadMyBulletinChunk(String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize, String signature)
 	{
 		logging("ServerInterfaceXmlRpcHandler:downloadMyBulletinChunk clientId=" + authorAccountId + "bulletinId=" + bulletinLocalId);

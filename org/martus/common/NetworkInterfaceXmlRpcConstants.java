@@ -43,9 +43,9 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final String cmdGetNews = "getNews";
 	public static final String cmdGetServerCompliance = "getServerCompliance";
 
-	// legacy!
 	public static final String CMD_PING = "ping";
-	public static final String CMD_UPLOAD_CHUNK = "uploadBulletinChunk";
+
+	// legacy!
 	public static final String CMD_DOWNLOAD_CHUNK = "downloadMyBulletinChunk";
 	public static final String CMD_DOWNLOAD_FIELD_OFFICE_CHUNK = "downloadFieldOfficeBulletinChunk";
 	public static final String CMD_MY_SUMMARIES = "listMyBulletinSummaries";

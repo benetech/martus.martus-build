@@ -167,7 +167,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		assertEquals("requestUploadRights", NetworkInterfaceConstants.REJECTED, strResult );
 		assertEquals("requestUploadRights", 0, testServer.getNumberActiveClients() );
 		
-		strResult = uploadBulletinChunk(testServerInterface, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter, clientSecurity);
+		strResult = uploadBulletinChunk(testServer, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter, clientSecurity);
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult );
 		assertEquals("uploadBulletinChunk", 0, testServer.getNumberActiveClients() );
 
@@ -255,7 +255,7 @@ public class TestServerForClients extends TestCaseEnhanced
 		TRACE_END();
 	}
 	
-	String uploadBulletinChunk(NetworkInterface server, String authorId, String localId, int totalLength, int offset, int chunkLength, String data, MartusCrypto signer) throws Exception
+	String uploadBulletinChunk(ServerForClients server, String authorId, String localId, int totalLength, int offset, int chunkLength, String data, MartusCrypto signer) throws Exception
 	{
 		String stringToSign = authorId + "," + localId + "," + Integer.toString(totalLength) + "," + 
 					Integer.toString(offset) + "," + Integer.toString(chunkLength) + "," + data;
