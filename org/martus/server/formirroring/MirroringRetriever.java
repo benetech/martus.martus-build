@@ -42,6 +42,8 @@ public class MirroringRetriever
 		if(uid == null)
 			return;
 			
+		shouldSleepNextCycle = false;
+			
 		try
 		{
 			String publicCode = MartusUtilities.getPublicCode(uid.getAccountId());
@@ -107,8 +109,8 @@ public class MirroringRetriever
 			if(nextAccountId == null)
 				return null;
 
-			String publicCode = MartusUtilities.getPublicCode(nextAccountId);
-			//log("Mirroring: List bulletins: " + publicCode);
+			//String publicCode = MartusUtilities.getPublicCode(nextAccountId);
+			//log("Get bulletin list: " + publicCode);
 			NetworkResponse response = gateway.listBulletinsForMirroring(security, nextAccountId);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
@@ -139,6 +141,18 @@ public class MirroringRetriever
 		if(accountsToRetrieve.size() > 0)
 			return (String)accountsToRetrieve.remove(0);
 
+		if(isSleeping())
+			return null;
+
+		if(shouldSleepNextCycle)
+		{
+			log("Sleeping for " + INACTIVE_SLEEP_MILLIS / 1000 / 60 + " minutes");
+			sleepUntil = System.currentTimeMillis() + INACTIVE_SLEEP_MILLIS;
+			return null;
+		}
+
+		shouldSleepNextCycle = true;
+
 		try
 		{
 			log("Getting list of accounts");
@@ -155,6 +169,11 @@ public class MirroringRetriever
 			log("getNextAccountToRetrieve: " + e);
 		}
 		return null;
+	}
+
+	private boolean isSleeping()
+	{
+		return System.currentTimeMillis() < sleepUntil;
 	}
 	
 	void retrieveOneBulletin(File destFile, UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
@@ -175,9 +194,9 @@ public class MirroringRetriever
 	
 	void log(String message)
 	{
-		logger.log("Mirror " + ip + ": " + message);
+		logger.log("Mirror calling " + ip + ": " + message);
 	}
-
+	
 	Database db;	
 	CallerSideMirroringGatewayInterface gateway;
 	String ip;
@@ -186,4 +205,9 @@ public class MirroringRetriever
 	
 	Vector uidsToRetrieve;
 	Vector accountsToRetrieve;
+
+	public boolean shouldSleepNextCycle;
+	public long sleepUntil;
+	
+	static final long INACTIVE_SLEEP_MILLIS = 60 * 60 * 1000;
 }

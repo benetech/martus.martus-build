@@ -76,6 +76,18 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		assertNull("account again after emptied?", realRetriever.getNextAccountToRetrieve());
 	}
 	
+	public void testGetNextAccountSkipsIfNothingRecent() throws Exception
+	{
+		supplier.addAccountToMirror("Test account");
+		realRetriever.shouldSleepNextCycle = true;
+		realRetriever.getNextAccountToRetrieve();
+		assertTrue("Should have set sleepUntil", realRetriever.sleepUntil > System.currentTimeMillis() + 2000);
+		
+		realRetriever.sleepUntil = System.currentTimeMillis() + 5000;
+		assertNull("should have slept1", realRetriever.getNextAccountToRetrieve());
+		assertNull("should have slept2", realRetriever.getNextAccountToRetrieve());
+	}
+	
 	public void testRetrieveOneBulletin() throws Exception
 	{
 		supplier.returnResultTag = MirroringInterface.RESULT_OK;
@@ -93,10 +105,13 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 	
 	public void testTick() throws Exception
 	{
+		assertFalse("initial shouldsleep wrong?", realRetriever.shouldSleepNextCycle);
+		// get account list (empty)
 		realRetriever.tick();
 		assertNull("tick asked for account?", supplier.gotAccount);
 		assertNull("tick asked for id?", supplier.gotLocalId);
-
+		assertTrue("not ready to sleep?", realRetriever.shouldSleepNextCycle);
+		
 		MockServerDatabase fakeDatabase = new MockServerDatabase();
 		MartusCrypto otherServerSecurity = MockMartusSecurity.createOtherServer();
 
@@ -125,16 +140,20 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 			supplier.addBulletinToMirror(key, sigString);
 		}
 
+		realRetriever.shouldSleepNextCycle = false;
 		assertEquals("before tick a", 0, db.getRecordCount());
+		// get account list
 		realRetriever.tick();
 		assertNull("tick a asked for account?", supplier.gotAccount);
 		assertNull("tick a asked for id?", supplier.gotLocalId);
 		assertEquals("after tick a", 0, db.getRecordCount());
+		//get bulletin list
 		realRetriever.tick();
 		assertNull("tick b asked for account?", supplier.gotAccount);
 		assertNull("tick b asked for id?", supplier.gotLocalId);
 		assertEquals("after tick b", 0, db.getRecordCount());
 
+		assertTrue("shouldsleep defaulting false?", realRetriever.shouldSleepNextCycle);
 		supplier.returnResultTag = MirroringInterface.RESULT_OK;
 		for(int goodTick = 0; goodTick < 3; ++goodTick)
 		{
@@ -145,10 +164,12 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 			assertEquals("tick " + goodTick + " wrong account?", clientSecurity.getPublicKeyString(), supplier.gotAccount);
 			assertEquals("tick " + goodTick + " wrong id?", ((Bulletin)bulletins.get(goodTick)).getLocalId(), supplier.gotLocalId);
 			assertEquals("after tick " + goodTick, (goodTick+1)*databaseRecordsPerBulletin, db.getRecordCount());
+			assertFalse("shouldsleep " + goodTick + " wrong?", realRetriever.shouldSleepNextCycle);
 		}
 		realRetriever.tick();
 		assertEquals("after extra tick", 3*databaseRecordsPerBulletin, db.getRecordCount());
 		assertEquals("extra tick got uids?", 0, realRetriever.uidsToRetrieve.size());
+		assertTrue("after extra tick shouldsleep false?", realRetriever.shouldSleepNextCycle);
 		realRetriever.tick();
 		assertEquals("after extra tick2", 3*databaseRecordsPerBulletin, db.getRecordCount());
 		assertEquals("extra tick2 got uids?", 0, realRetriever.uidsToRetrieve.size());
