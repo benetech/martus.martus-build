@@ -156,6 +156,7 @@ public class Packet
 				dest.startSignature(signer);
 				String startComment = 	MartusXml.packetStartCommentStart +
 										MartusUtilities.getVersionDate() +
+										MartusXml.packetFormatVersion +
 										MartusXml.packetStartCommentEnd;
 				dest.writeDirect(startComment + MartusXml.newLine);
 				dest.writeStartTag(getPacketRootElementName());

@@ -59,6 +59,7 @@ public class TestPacket extends TestCaseEnhanced
 
 	public void testIsValidVersion()
 	{
+		assertContains(MartusXml.packetFormatVersion, MartusXml.packetStartCommentEnd);
 		assertFalse("Valid null comment?", Packet.isValidStartComment(null));
 		assertFalse("No End Comment is valid?", Packet.isValidStartComment(MartusXml.packetStartCommentStart));
 		assertFalse("No Start Comment is valid?", Packet.isValidStartComment(MartusXml.packetStartCommentEnd));

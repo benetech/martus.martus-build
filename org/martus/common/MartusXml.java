@@ -118,6 +118,14 @@ public class MartusXml
         saxParser.parse(new InputSource(xmlReader), handler);
 	}
 
+	// NOTE: Change the version any time the packet format changes in 
+	// a "substantial" way. It must start with ;
+	public final static String packetFormatVersion = ";1000";
+	
+	public final static String packetStartCommentStart = "<!--MartusPacket;";
+	public final static String packetStartCommentSigLen = "siglen=";
+	public final static String packetStartCommentEnd = ";-->";
+
 	public final static String tagField = "Field";
 	public final static String attrField = "name";
 	public final static String tagAttachment = "Attachment";
@@ -126,11 +134,6 @@ public class MartusXml
 	public final static String newLine = "\n";
 	public final static String packetSignatureStart = "<!--sig=";
 	public final static String packetSignatureEnd = "-->";
-
-
-	public final static String packetStartCommentStart = "<!--MartusPacket;";
-	public final static String packetStartCommentSigLen = "siglen=";
-	public final static String packetStartCommentEnd = ";-->";
 
 	public final static String PacketElementName = "Packet";
 	public final static String FieldListElementName = "FieldList";
