@@ -732,7 +732,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		if(!reSignIn())
 			return;
-		
+		inConfigServer = true;
 		ConfigInfo info = app.getConfigInfo();
 		UiConfigServerDlg serverInfoDlg = new UiConfigServerDlg(this, info);
 		if(serverInfoDlg.getResult())
@@ -771,6 +771,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String[] buttons = {ok};
 			
 			UiNotifyDlg notify = new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
+			inConfigServer = false;
 		}
 	}
 
@@ -1865,13 +1866,16 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 					clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
 					statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(app.getFieldLabel("StatusReady"));
 				}
-				uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
-				if(uploadResult != null)
+				if(!inConfigServer)
 				{
-					System.out.println("UiMainWindow.Tick.run: " + uploadResult);
-					folderContentsHaveChanged(getStore().getFolderSent());
-					folderContentsHaveChanged(getStore().getFolderOutbox());
-					folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
+					if(uploadResult != null)
+					{
+						System.out.println("UiMainWindow.Tick.run: " + uploadResult);
+						folderContentsHaveChanged(getStore().getFolderSent());
+						folderContentsHaveChanged(getStore().getFolderOutbox());
+						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+					}
 				}
 			}
 			catch(Exception e)
@@ -1945,6 +1949,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 
 	private JFrame currentActiveFrame;	
 	private boolean timedOutInDialog;
+	private boolean inConfigServer;
 
 	private static final int TIMEOUT_SECONDS = (10 * 60);
 	private static final int TICKS_TO_CLEAR_STATUS_MESSAGE = 5;
