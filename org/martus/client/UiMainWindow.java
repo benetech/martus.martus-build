@@ -1533,7 +1533,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public ActionModify()
 		{
-			super(app.getButtonLabel("edit"), null);
+			super(app.getButtonLabel("modify"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1678,7 +1678,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public ActionMenuEdit()
 		{
-			super(app.getMenuLabel("editBulletin"), null);
+			super(app.getMenuLabel("modifyBulletin"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)

@@ -304,7 +304,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmdeletefolder=Confirm Delete Folder");
 		addEnglishTranslation("wintitle:confirmRemoveAttachment=Confirm Remove Attachments");
 		addEnglishTranslation("wintitle:confirmOverWriteExistingFile=Confirm OverWrite Existing File");
-		addEnglishTranslation("wintitle:confirmCancelBulletinEdit=Cancel Bulletin Edit");
+		addEnglishTranslation("wintitle:confirmCancelModifyBulletin=Cancel Modify Bulletin");
 		addEnglishTranslation("wintitle:confirmSetImportPublicKey=Confirm Import of Public Key");
 		addEnglishTranslation("wintitle:confirmWarningSwitchToNormalKeyboard=Security Warning");
 		addEnglishTranslation("wintitle:confirmDeleteMultipleDiscardedBulletins=Confirm Delete Bulletins");
@@ -410,7 +410,6 @@ public class MartusLocalization
 		addEnglishTranslation("button:edit=Edit");
 		addEnglishTranslation("button:help=Help");
 		addEnglishTranslation("button:create=Create");
-		addEnglishTranslation("button:edit=Edit");
 		addEnglishTranslation("button:search=Search");
 		addEnglishTranslation("button:print=Print");
 		addEnglishTranslation("button:tools=Tools");
@@ -445,13 +444,14 @@ public class MartusLocalization
 		addEnglishTranslation("button:Preview=Preview");
 		addEnglishTranslation("button:Delete=Delete");
 		addEnglishTranslation("button:Leave=Leave");
+		addEnglishTranslation("button:modify=Modify");
 
 		addEnglishTranslation("menu:exit=Exit");
 		addEnglishTranslation("menu:newFolder=Add new Folder");
 		addEnglishTranslation("menu:DeleteFolder=Delete");
 		addEnglishTranslation("menu:RenameFolder=Rename");
 		addEnglishTranslation("menu:createBulletin=Create new Bulletin");
-		addEnglishTranslation("menu:editBulletin=Edit Bulletin");
+		addEnglishTranslation("menu:modifyBulletin=Modify Bulletin");
 		addEnglishTranslation("menu:printBulletin=Print Bulletin");
 		addEnglishTranslation("menu:language=Language");
 		addEnglishTranslation("menu:dateformat=Date Format");
@@ -598,7 +598,7 @@ public class MartusLocalization
 
 		addEnglishTranslation("field:confirmquestion=Are you sure you want to do this?");
 		addEnglishTranslation("field:confirmsendcause=You have chosen to send a completed bulletin to a Martus server.  ");
-		addEnglishTranslation("field:confirmsendeffect=This will permanently seal the bulletin from future edits.  ");
+		addEnglishTranslation("field:confirmsendeffect=This will permanently seal the bulletin from future modifications.  ");
 		addEnglishTranslation("field:confirmDiscardDraftBulletinscause=You have chosen to permanently delete a draft bulletin from the Discarded Bulletins folder.");
 		addEnglishTranslation("field:confirmDiscardDraftBulletinseffect=If this bulletin has already been sent to a server, it will remain on the server. This action will only delete it from this computer.");
 		addEnglishTranslation("field:confirmDiscardSealedBulletinscause=You have chosen to permanently delete a sealed bulletin from the Discarded Bulletins folder.");
@@ -611,8 +611,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmRemoveAttachmenteffect=The selected attachments will be permanently removed from this bulletin.");
 		addEnglishTranslation("field:confirmOverWriteExistingFilecause=This file already exists. Do you wish to overwrite this file?");
 		addEnglishTranslation("field:confirmOverWriteExistingFileeffect=The selected attachment will replace the file on your hard drive.");
-		addEnglishTranslation("field:confirmCancelBulletinEditcause=You have chosen to cancel editing this bulletin.");
-		addEnglishTranslation("field:confirmCancelBulletinEditeffect=Any changes you have made to this bulletin will be discarded.");
+		addEnglishTranslation("field:confirmCancelModifyBulletincause=You have chosen to cancel modifying this bulletin.");
+		addEnglishTranslation("field:confirmCancelModifyBulletineffect=Any changes you have made to this bulletin will be discarded.");
 		addEnglishTranslation("field:confirmSetImportPublicKeycause=You have chosen to allow this client the ability to view your public and PRIVATE data.");
 		addEnglishTranslation("field:confirmSetImportPublicKeyeffect=By clicking on Yes you are authorizing this client to view all portions of your bulletins.");
 		addEnglishTranslation("field:confirmWarningSwitchToNormalKeyboardcause=Warning! Using the regular keyboard to enter your password greatly reduces the security of the Martus system, and could make it easier for an attacker to view your private data.");
@@ -627,9 +627,9 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmDeleteDiscardedDraftBulletinWithOutboxCopyeffect=This draft bulletin has not been backed up to the server since it was last modified. Discarding this copy will prevent the latest changes from being backed up to the server.");
 		addEnglishTranslation("field:confirmClearHQInformationcause=You have chosen to remove your headquarter's account.  Any existing saved bulletins will still be visible by the old headquarters. Any sealed bulletins CANNOT be reset to be non-viewable by the headquarters. Draft bulletins must be re-saved after revoking the headquarters.");
 		addEnglishTranslation("field:confirmClearHQInformationeffect=By clicking on Yes any future saved or sealed bulletin will no longer be accessible by your headquarters.");
-		addEnglishTranslation("field:confirmCloneMySealedAsDraftcause=You have chosen to edit one of your sealed bulletins, but sealed bulletins cannot be modified.");
+		addEnglishTranslation("field:confirmCloneMySealedAsDraftcause=You have chosen to modify one of your sealed bulletins, but sealed bulletins cannot be modified.");
 		addEnglishTranslation("field:confirmCloneMySealedAsDrafteffect=Clicking on Yes will create a new bulletin that contains all the same information, and the original sealed bulletin will remain unchanged.");
-		addEnglishTranslation("field:confirmCloneBulletinAsMinecause=You have chosen to edit a bulletin that was created by someone else.");
+		addEnglishTranslation("field:confirmCloneBulletinAsMinecause=You have chosen to modify a bulletin that was created by someone else.");
 		addEnglishTranslation("field:confirmCloneBulletinAsMineeffect=Clicking on Yes will create a new bulletin that contains a copy of all the same information. You will be the official author of this new bulletin, and any private data in it will only be visible by you (and your headquarters, if you have one). The original bulletin will remain unchanged.");
 		addEnglishTranslation("field:confirmPrinterWarningcause=Since you have changed from the default print tray your print out may be incorrect, if you also changed the size of paper used.  You must first select the paper tray and then select the paper size in that order, for both to get set correctly.  If you only wanted to change the paper tray then disregard this message and select 'No'.");
 		addEnglishTranslation("field:confirmPrinterWarningeffect=Clicking on Yes will bring back the Printer Dialog so you can reselect your default paper tray and size.  Clicking on 'No' will print the document.");

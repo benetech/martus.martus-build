@@ -101,12 +101,12 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		} 
 		catch(IOException e) 
 		{
-			System.out.println("UiEditBulletinDlg.actionPerformed: " + e);
+			System.out.println("UiModifyBulletinDlg.actionPerformed: " + e);
 			return;
 		}
 		catch(MartusCrypto.EncryptionException e) 
 		{
-			System.out.println("UiEditBulletinDlg.actionPerformed: " + e);
+			System.out.println("UiModifyBulletinDlg.actionPerformed: " + e);
 			return;
 		}
 		
@@ -201,7 +201,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 
 	private void closeWindowUponConfirmation()
 	{
-		if(observer.confirmDlg(this, "CancelBulletinEdit"))
+		if(observer.confirmDlg(this, "CancelModifyBulletin"))
 		{
 			cleanupAndExit();
 		}
