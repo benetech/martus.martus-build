@@ -1618,6 +1618,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		setEnabled(false);
 		UiModifyBulletinDlg dlg = new UiModifyBulletinDlg(b, cancelHandler, this);
 		currentActiveFrame = dlg;
+		setVisible(false);
 		return dlg.wasBulletinSaved();
 	}
 
@@ -1625,6 +1626,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		modifyingBulletin = false;
 		setEnabled(true);
+		setVisible(true);
 		currentActiveFrame = this;
 	}
 
