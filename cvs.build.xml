@@ -55,6 +55,7 @@
     <!-- B U I L D                                                          -->
     <!-- ================================================================== -->
     <target depends="init" name="make.release" description="Executes subproject that builds martus">
+        <!-- TODO: CHANGE THIS SO THAT IT IS NOT A TEST RELEASE -->
         <ant antfile="build.xml" dir="." target="test.release"/>
     </target>
 
