@@ -26,12 +26,14 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.server.forclients;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.LineNumberReader;
+import java.io.StringReader;
 import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -451,7 +453,6 @@ public class MartusServerUtilities
 		MartusCrypto security)
 		throws CreateDigestException
 	{
-		String newline = "\n";
 		byte[] partOfPrivateKey = security.getDigestOfPartOfPrivateKey();
 		String stringToDigest = 
 				BULLETIN_UPLOAD_RECORD_IDENTIFIER + newline +
@@ -465,6 +466,36 @@ public class MartusServerUtilities
 			timeStamp + newline +
 			digest + newline;
 	}
+	
+	public static boolean wasBurCreatedByThisCrypto(String burToTest, MartusCrypto security)
+	{
+		BufferedReader reader = new BufferedReader(new StringReader(burToTest));
+		String digestFromTestBur;
+		String digestCreatedFromThisCrypto;
+		try
+		{
+			String fileTypeIdentifier = reader.readLine();
+			String localId = reader.readLine();
+			String timeStamp = reader.readLine(); 
+			digestFromTestBur = reader.readLine();
+
+			String stringToDigest = 
+					fileTypeIdentifier + newline +
+					localId  + newline +
+					timeStamp + newline +
+					Base64.encode(security.getDigestOfPartOfPrivateKey()) + newline;
+
+			digestCreatedFromThisCrypto = MartusSecurity.createDigestString(stringToDigest);
+
+		}
+		catch (Exception e)
+		{
+			return false;
+		}
+
+		return (digestCreatedFromThisCrypto.equals(digestFromTestBur));		
+	}
+
 
 	public static DatabaseKey getBurKey(DatabaseKey key)
 	{
@@ -494,5 +525,6 @@ public class MartusServerUtilities
 	private static final int MAX_ALLOWED_ENCRYPTED_FILESIZE = 1000*1000;
 
 	private static final String BULLETIN_UPLOAD_RECORD_IDENTIFIER = "Martus Bulletin Upload Record 1.0";
+	final static String newline = "\n";
 	
 }

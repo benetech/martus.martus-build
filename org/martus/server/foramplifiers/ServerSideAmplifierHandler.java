@@ -9,6 +9,7 @@ import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.BulletinHeaderPacket;
+import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.util.ByteArrayInputStreamWithSeek;
 import org.martus.util.Base64.InvalidBase64Exception;
 
@@ -141,6 +142,11 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 				{
 					return;
 				}
+				
+				DatabaseKey burKey = MartusServerUtilities.getBurKey(key);
+				String burInDatabase = server.getDatabase().readRecord(burKey, server.getSecurity());
+				if(!MartusServerUtilities.wasBurCreatedByThisCrypto(burInDatabase, server.getSecurity()))
+					return;				
 							
 				String headerXml = server.getDatabase().readRecord(key, server.getSecurity());
 				byte[] headerBytes = headerXml.getBytes("UTF-8");

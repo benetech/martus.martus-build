@@ -178,6 +178,15 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		assertEquals(uid.getAccountId(), sealedBurKey.getAccountId());
 		assertEquals("BUR-" + uid.getLocalId(), sealedBurKey.getLocalId());
 	}
+	
+	public void testWasBurCreatedByThisCrypto() throws Exception
+	{
+		UniversalId uid = UniversalId.createDummyUniversalId();
+		MockMartusSecurity otherSecurity = MockMartusSecurity.createOtherServer();
+		String burRecord = MartusServerUtilities.createBulletinUploadRecord(uid.getLocalId(), otherSecurity);
+		assertTrue("This burRecord was not created by this security?", MartusServerUtilities.wasBurCreatedByThisCrypto(burRecord, otherSecurity));
+		assertFalse("This burRecord was created by this security?", MartusServerUtilities.wasBurCreatedByThisCrypto(burRecord, serverSecurity));
+	}
 
 	
 	public File createTempFileWithContents(String content)
