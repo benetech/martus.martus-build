@@ -288,6 +288,18 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return clipboard.getContents(this);
 	}
 
+	public ActionMenuEdit getActionMenuEdit()
+	{
+		return actionMenuEdit;
+	}
+	public ActionMenuCut getActionMenuCut()
+	{
+		return actionMenuCut;
+	}
+	public ActionMenuCopy getActionMenuCopy()
+	{
+		return actionMenuCopy;
+	}
 	public ActionMenuPaste getActionMenuPaste()
 	{
 		return actionMenuPaste;
@@ -1638,7 +1650,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public ActionMenuCut()
 		{
-			super(app.getMenuLabel("cutbulletin"), null);
+			super(app.getMenuLabel("CutBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1656,7 +1668,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public ActionMenuCopy()
 		{
-			super(app.getMenuLabel("copybulletin"), null);
+			super(app.getMenuLabel("CopyBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1674,7 +1686,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public ActionMenuDiscard()
 		{
-			super(app.getMenuLabel("discardbulletin"), null);
+			super(app.getMenuLabel("DiscardBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1691,9 +1703,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public void updateName() 
 		{
 			if(isDiscardedFolderSelected())
-				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("deletebulletin"));
+				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("DeleteBulletins"));
 			else
-				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("discardbulletin"));
+				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("DiscardBulletins"));
 		}
 	}
 

@@ -286,22 +286,11 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void doPopupMenu(JComponent component, int x, int y)
 	{
-		AbstractAction edit = new ActionEditBulletin();
-		AbstractAction cut = new ActionCutBulletin();
-		AbstractAction copy = new ActionCopyBulletin();
-
-		Bulletin b = getSingleSelectedBulletin();
-		if(b == null)
-		{
-			edit.setEnabled(false);
-			cut.setEnabled(false);
-			copy.setEnabled(false);
-		}
-
 		JPopupMenu menu = new JPopupMenu();
-		menu.add(edit);
-		menu.add(cut);
-		menu.add(copy);
+		menu.add(mainWindow.getActionMenuEdit());
+		menu.addSeparator();
+		menu.add(mainWindow.getActionMenuCut());
+		menu.add(mainWindow.getActionMenuCopy());
 		menu.add(mainWindow.getActionMenuPaste());
 		menu.addSeparator();
 		menu.add(mainWindow.getActionMenuDiscard());
@@ -371,57 +360,6 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	}
 
 
-	class ActionEditBulletin extends AbstractAction
-	{
-		public ActionEditBulletin()
-		{
-			super(mainWindow.getApp().getMenuLabel("editBulletin"), null);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			doEditBulletin();
-		}
-	}
-
-	class ActionCutBulletin extends AbstractAction
-	{
-		public ActionCutBulletin()
-		{
-			super(mainWindow.getApp().getMenuLabel("cutbulletin"), null);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			doCutBulletin();
-		}
-	}
-
-	class ActionCopyBulletin extends AbstractAction
-	{
-		public ActionCopyBulletin()
-		{
-			super(mainWindow.getApp().getMenuLabel("copybulletin"), null);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			doCopyBulletin();
-		}
-	}
-
-	class ActionDiscardBulletin extends AbstractAction
-	{
-		public ActionDiscardBulletin()
-		{
-			super(mainWindow.getApp().getMenuLabel("discardbulletin"), null);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			doDiscardBulletin();
-		}
-	}
 
 	public void doDiscardBulletin()
 	{
