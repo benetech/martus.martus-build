@@ -31,7 +31,8 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.KeyPair;
 
-import org.martus.util.*;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
 
 public class MockMartusSecurity extends MartusSecurity
 {
@@ -70,7 +71,7 @@ public class MockMartusSecurity extends MartusSecurity
 		return security;
 	}
 	
-	private MockMartusSecurity() throws Exception
+	public MockMartusSecurity() throws Exception
 	{
 	}
 
