@@ -10,6 +10,7 @@ public interface MirroringInterface
 
 	public final static String RESULT_OK = NetworkInterfaceConstants.OK;
 
+	public final static String DEST_OBJECT_NAME = "MartusMirror";
 	public final static String CMD_MIRRORING_PING = "mirroringPing";
 	public final static String CMD_MIRRORING_LIST_ACCOUNTS = "mirroringListAccounts";
 	public final static String CMD_MIRRORING_LIST_SEALED_BULLETINS = "mirroringListSealedBulletins";
