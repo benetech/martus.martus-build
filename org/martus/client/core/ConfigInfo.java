@@ -33,8 +33,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.util.Vector;
 
+import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
+import org.martus.common.packet.FieldDataPacket;
 
 public class ConfigInfo implements Serializable
 {
@@ -66,6 +68,7 @@ public class ConfigInfo implements Serializable
 	public void setHQKey(String newHQKey)			{ hqKey = newHQKey; }
 	public void setSendContactInfoToServer(boolean newSendContactInfoToServer) {sendContactInfoToServer = newSendContactInfoToServer; }
 	public void setServerCompliance(String newCompliance) {serverCompliance = newCompliance;}
+	public void setCustomFieldSpecs(String newSpecs)	{customFieldSpecs = newSpecs;}
 
 	public void clearHQKey()						{ hqKey = ""; }
 	public void clearPromptUserRequestSendToServer() { mustAskUserToSendToServer = false; }
@@ -84,7 +87,8 @@ public class ConfigInfo implements Serializable
 	public boolean shouldContactInfoBeSentToServer() { return sendContactInfoToServer; }
 	public boolean promptUserRequestSendToServer() { return mustAskUserToSendToServer; }
 	public String getServerCompliance() {return serverCompliance;}
-
+	public String getCustomFieldSpecs() {return customFieldSpecs;}
+	
 	public void clear()
 	{
 		version = VERSION;
@@ -101,6 +105,7 @@ public class ConfigInfo implements Serializable
 		sendContactInfoToServer = false;
 		mustAskUserToSendToServer = false;
 		serverCompliance = "";
+		customFieldSpecs = FieldDataPacket.buildFieldListString(Bulletin.getDefaultPublicFieldSpecs());
 	}
 
 	public Vector getContactInfo(MartusCrypto signer) throws
@@ -143,6 +148,9 @@ public class ConfigInfo implements Serializable
 				loaded.mustAskUserToSendToServer = true;
 			if(loaded.version >= 4)
 				loaded.serverCompliance = in.readUTF();
+			if(loaded.version >= 5)
+				loaded.customFieldSpecs = in.readUTF();
+
 			in.close();
 		}
 		catch (Exception e)
@@ -170,6 +178,7 @@ public class ConfigInfo implements Serializable
 			out.writeUTF(serverPublicKey);
 			out.writeBoolean(sendContactInfoToServer);
 			out.writeUTF(serverCompliance);
+			out.writeUTF(customFieldSpecs);
 			out.close();
 		}
 		catch(Exception e)
@@ -180,7 +189,7 @@ public class ConfigInfo implements Serializable
 
 	private boolean mustAskUserToSendToServer;
 
-	public static final short VERSION = 4;
+	public static final short VERSION = 5;
 	//Version 1
 	private short version;
 	private String author;
@@ -198,4 +207,6 @@ public class ConfigInfo implements Serializable
 	//Version 3 flag to indicate AccountMap.txt is signed.
 	//Version 4
 	private String serverCompliance;
+	//Version 5
+	private String customFieldSpecs;
 }

@@ -33,7 +33,9 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.client.core.ConfigInfo;
+import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.packet.FieldDataPacket;
 import org.martus.common.test.TestCaseEnhanced;
 
 public class TestConfigInfo extends TestCaseEnhanced
@@ -175,6 +177,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		info.setHQKey(sampleHQKey);
 		info.setSendContactInfoToServer(sampleSendContactInfoToServer);
 		info.setServerCompliance(sampleServerCompliance);
+		info.setCustomFieldSpecs(sampleCustomFieldSpecs);
 	}
 
 	void verifyEmptyInfo(ConfigInfo info, String label)
@@ -192,6 +195,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleHQKey", "", info.getHQKey());
 		assertEquals(label + ": sampleSendContactInfoToServer", false, info.shouldContactInfoBeSentToServer());
 		assertEquals(label + ": sampleServerComplicance", "", info.getServerCompliance());
+		assertEquals(label + ": sampleCustomFieldSpecs", defaultCustomFieldSpecs, info.getCustomFieldSpecs());
 
 	}
 
@@ -220,6 +224,10 @@ public class TestConfigInfo extends TestCaseEnhanced
 			assertEquals(label + ": sampleServerComplicance", sampleServerCompliance, info.getServerCompliance());
 		else
 			assertEquals(label + ": sampleServerComplicance", "", info.getServerCompliance());
+		if(VERSION >= 5)
+			assertEquals(label + ": sampleCustomFieldSpecs", sampleCustomFieldSpecs, info.getCustomFieldSpecs());	
+		else
+			assertEquals(label + ": sampleCustomFieldSpecs", defaultCustomFieldSpecs, info.getCustomFieldSpecs());
 	}
 
 	void verifyLoadSpecificVersion(ByteArrayInputStream inputStream, short VERSION)
@@ -235,33 +243,35 @@ public class TestConfigInfo extends TestCaseEnhanced
 		ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 		DataOutputStream out = new DataOutputStream(outputStream);
 		out.writeShort(VERSION);
-		DataOutputStream out1 = out;
-		
-		out1.writeUTF(sampleAuthor);
-		out1.writeUTF(sampleOrg);
-		out1.writeUTF(sampleEmail);
-		out1.writeUTF(sampleWebPage);
-		out1.writeUTF(samplePhone);
-		out1.writeUTF(sampleAddress);
-		out1.writeUTF(sampleServerName);
-		out1.writeUTF(sampleTemplateDetails);
-		out1.writeUTF(sampleHQKey);
-		out1.writeUTF(sampleServerKey);
+		out.writeUTF(sampleAuthor);
+		out.writeUTF(sampleOrg);
+		out.writeUTF(sampleEmail);
+		out.writeUTF(sampleWebPage);
+		out.writeUTF(samplePhone);
+		out.writeUTF(sampleAddress);
+		out.writeUTF(sampleServerName);
+		out.writeUTF(sampleTemplateDetails);
+		out.writeUTF(sampleHQKey);
+		out.writeUTF(sampleServerKey);
 		if(VERSION >= 2)
 		{
-			DataOutputStream out2 = out;
-			out2.writeBoolean(sampleSendContactInfoToServer);
+			out.writeBoolean(sampleSendContactInfoToServer);
 		}
 		if(VERSION >= 3)
 			; // Version 3 added no data fields
 		if(VERSION >= 4)
 		{
-			DataOutputStream out2 = out;
-			out2.writeUTF(sampleServerCompliance);
+			out.writeUTF(sampleServerCompliance);
+		}
+		if(VERSION >= 5)
+		{
+			out.writeUTF(sampleCustomFieldSpecs);
 		}
 		out.close();
 		return outputStream.toByteArray();
 	}
+	
+	final String defaultCustomFieldSpecs = FieldDataPacket.buildFieldListString(Bulletin.getDefaultPublicFieldSpecs());
 
 //Version 1
 	final String sampleAuthor = "author";
@@ -280,4 +290,6 @@ public class TestConfigInfo extends TestCaseEnhanced
 	//nothing added just signed.
 //Version 4
 	final String sampleServerCompliance = "I am compliant";
+//Version 5
+	final String sampleCustomFieldSpecs = "language;author;custom,Custom Field;title;entrydate";
 }
