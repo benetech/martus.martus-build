@@ -1102,7 +1102,9 @@ public class MartusApp
 
 	public String getFolderLabel(String folderName)
 	{
-		return localization.getLabel(getCurrentLanguage(), "folder", folderName, "");
+		if(BulletinFolder.isNameLocalized(folderName))
+			return localization.getLabel(getCurrentLanguage(), "folder", folderName, "");
+		return folderName;
 	}
 
 	public String getLanguageName(String code)
@@ -1473,8 +1475,8 @@ public class MartusApp
 	private String currentUserName;
 	private int maxNewFolders;
 
-	public static final String RETRIEVE_BULLETIN_FOLDER = "Retrieved Bulletins";
-	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "Retrieved Field Desk Bulletins";
+	public static final String RETRIEVE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
+	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletin";
 
 	public static final String PUBLIC_INFO_EXTENSION = ".mpi";
 	public static final String AUTHENTICATE_SERVER_FAILED = "Failed to Authenticate Server";

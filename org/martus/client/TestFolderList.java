@@ -28,7 +28,7 @@ public class TestFolderList extends TestCase
 	{
 		app.loadSampleData();
 		BulletinStore store = app.getStore();
-		FolderList list = new FolderList();
+		FolderList list = new FolderList(app);
 		list.loadFolders(store);
 
 		int baseCount = getVisibleFolderCount(store);
@@ -67,7 +67,7 @@ public class TestFolderList extends TestCase
 		BulletinStore store = app.getStore();
 		assertTrue("Need sample folders", getVisibleFolderCount(store) > 0);
 
-		FolderList ourList = new FolderList();
+		FolderList ourList = new FolderList(app);
 		ourList.loadFolders(store);
 		assertEquals("Didn't load properly", getVisibleFolderCount(store), ourList.getCount());
 		ourList.loadFolders(store);

@@ -165,10 +165,11 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 					label.setIcon(openIcon);
 				else
 					label.setIcon(closedIcon);
-				BulletinFolder folder = store.findFolder(value.toString());
+				FolderTreeNode folderNode = (FolderTreeNode)value;
+				BulletinFolder folder = store.findFolder(folderNode.getInternalName());
 				String show = "?";
 				if(folder != null)
-					show = folder.getName()+ " (" + folder.getBulletinCount() + ")";
+					show = folderNode.getLocalizedName()+ " (" + folder.getBulletinCount() + ")";
 				label.setText(show);
 			}
 

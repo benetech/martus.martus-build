@@ -5,10 +5,11 @@ import javax.swing.tree.DefaultTreeModel;
 
 public class FolderList extends DefaultTreeModel
 {
-	public FolderList()
+	public FolderList(MartusApp appToUse)
 	{
-		super(new DefaultMutableTreeNode("?"));
-		root = (DefaultMutableTreeNode)getRoot();
+		super(new FolderTreeNode("?", appToUse));
+		app = appToUse;
+		root = (FolderTreeNode)getRoot();
 	}
 
 	public int getCount()
@@ -20,7 +21,7 @@ public class FolderList extends DefaultTreeModel
 	{
 		while(getCount() > 0)
 		{
-			DefaultMutableTreeNode item = (DefaultMutableTreeNode)getChild(root, 0);
+			FolderTreeNode item = (FolderTreeNode)getChild(root, 0);
 			removeNodeFromParent(item);
 		}
 
@@ -30,7 +31,7 @@ public class FolderList extends DefaultTreeModel
 			String folderName = folder.getName();
 			if(BulletinFolder.isNameVisible(folderName))
 			{
-				DefaultMutableTreeNode item = new DefaultMutableTreeNode(folderName);
+				FolderTreeNode item = new FolderTreeNode(folderName, app);
 				insertNodeInto(item, root, getCount());
 			}
 		}
@@ -38,20 +39,20 @@ public class FolderList extends DefaultTreeModel
 
 	public String getName(int index)
 	{
-		DefaultMutableTreeNode node = getNode(index);
+		FolderTreeNode node = getNode(index);
 		return node.toString();
 	}
 
-	public DefaultMutableTreeNode getNode(int index)
+	public FolderTreeNode getNode(int index)
 	{
-		return (DefaultMutableTreeNode)getChild(root, index);
+		return (FolderTreeNode)getChild(root, index);
 	}
 
-	public DefaultMutableTreeNode findFolder(String folderName)
+	public FolderTreeNode findFolder(String folderName)
 	{
 		for(int i = 0; i < getCount(); ++i)
 		{
-			DefaultMutableTreeNode node = getNode(i);
+			FolderTreeNode node = getNode(i);
 			if(folderName.equals(node.toString()))
 				return node;
 		}
@@ -59,5 +60,6 @@ public class FolderList extends DefaultTreeModel
 		return null;
 	}
 
-	DefaultMutableTreeNode root;
+	FolderTreeNode root;
+	MartusApp app;
 }

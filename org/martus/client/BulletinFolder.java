@@ -88,6 +88,11 @@ public class BulletinFolder
 		return isNameVisible(getName());
 	}
 
+	public boolean isLocalized()
+	{
+		return isNameLocalized(getName());
+	}
+
 	public boolean canAdd(String bulletinStatus)
 	{
 		if(getStatusAllowed() == null)
@@ -183,6 +188,11 @@ public class BulletinFolder
 	public static boolean isNameVisible(String folderName)
 	{
 		return !folderName.startsWith("*");
+	}
+
+	public static boolean isNameLocalized(String folderName)
+	{
+		return folderName.startsWith("%");
 	}
 
 	private void insertIntoSortedList(UniversalId uid) 
