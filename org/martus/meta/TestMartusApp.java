@@ -780,7 +780,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		Vector badList = new Vector();
 		badList.add("not an id");
 		Retriever retriever = new Retriever(appWithServer, null);	
-		retriever.retrieveMyBulletins(badList);
+		retriever.retrieveBulletins(badList, appWithServer.createFolderRetrieved());
 		assertEquals(NetworkInterfaceConstants.INCOMPLETE, retriever.getResult());
 		mockServer.setDownloadResponseReal();
 		TRACE_END();
@@ -798,7 +798,7 @@ public class TestMartusApp extends TestCaseEnhanced
 
 		Vector empty = new Vector();
 		Retriever retriever = new Retriever(appWithAccount, null);	
-		retriever.retrieveMyBulletins(empty);
+		retriever.retrieveBulletins(empty, appWithAccount.createFolderRetrieved());
 		assertEquals("empty", NetworkInterfaceConstants.OK, retriever.getResult());
 		assertEquals("Empty didn't even ask", null, mockServer.lastClientId);
 		assertEquals("Empty didn't download", 0, store.getBulletinCount());
@@ -821,7 +821,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		Vector justB1 = new Vector();
 		justB1.add(b1.getUniversalId());
 		Retriever retriever = new Retriever(appWithAccount, null);	
-		retriever.retrieveMyBulletins(justB1);
+		retriever.retrieveBulletins(justB1, appWithAccount.createFolderRetrieved());
 		assertEquals("justB1", NetworkInterfaceConstants.OK, retriever.getResult());
 		assertEquals("justB1 didn't even ask", null, mockServer.lastClientId);
 		assertEquals("justB1 didn't download", 1, store.getBulletinCount());
@@ -835,7 +835,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		errorResponse.add(errorString);
 
 		mockServer.downloadResponse = errorResponse;
-		retriever.retrieveMyBulletins(nonExistantUidList);
+		retriever.retrieveBulletins(nonExistantUidList, appWithAccount.createFolderRetrieved());
 		assertEquals("unknownId", NetworkInterfaceConstants.INCOMPLETE, retriever.getResult());
 		mockServer.downloadResponse = null;
 
@@ -858,7 +858,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		allThree.add(b1.getUniversalId());
 		allThree.add(b2.getUniversalId());
 		allThree.add(b3.getUniversalId());
-		retriever.retrieveMyBulletins(allThree);
+		retriever.retrieveBulletins(allThree, appWithAccount.createFolderRetrieved());
 		assertEquals("retrieve all", NetworkInterfaceConstants.OK, retriever.getResult());
 		assertEquals("not back to three?", 3, store.getBulletinCount());
 		
@@ -1060,7 +1060,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		Vector uploadedIdList = new Vector();
 		uploadedIdList.add("sample id");
 		Retriever retriever = new Retriever(appWithoutServer, null);	
-		retriever.retrieveMyBulletins(uploadedIdList);
+		retriever.retrieveBulletins(uploadedIdList, appWithoutServer.createFolderRetrieved());
 		assertEquals(NetworkInterfaceConstants.NO_SERVER, retriever.getResult());
 
 		TRACE_END();
@@ -1243,12 +1243,12 @@ public class TestMartusApp extends TestCaseEnhanced
 		uidList.add(b1.getUniversalId());
 		uidList.add(b2.getUniversalId());
 		Retriever retriever = new Retriever(hqApp, null);	
-		retriever.retrieveFieldOfficeBulletins(uidList);
+		retriever.retrieveBulletins(uidList, hqApp.createFolderRetrievedFieldOffice());
 		assertEquals("retrieve field office bulletins failed?", NetworkInterfaceConstants.OK, retriever.getResult());
 
 		uidList.clear();
 		uidList.add(b3.getUniversalId());
-		retriever.retrieveFieldOfficeBulletins(uidList);
+		retriever.retrieveBulletins(uidList, hqApp.createFolderRetrievedFieldOffice());
 		assertEquals("retrieve non-field office bulletins worked?", NetworkInterfaceConstants.INCOMPLETE, retriever.getResult());
 
 		hqApp.deleteAllFiles();

@@ -68,7 +68,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		hqApp.setSSLServerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQDraftsTableModel(hqApp, null);
-		modelWithData.Initalize();
+		modelWithData.initialize();
 		String z0 = MockBulletin.saveToZipString(b0);
 		String z1 = MockBulletin.saveToZipString(b1);
 		String z2 = MockBulletin.saveToZipString(b2);
@@ -83,7 +83,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		hqB2.save();
 		
 		modelWithoutData = new RetrieveHQDraftsTableModel(hqApp, null);
-		modelWithoutData.Initalize();
+		modelWithoutData.initialize();
 	}
 	
 	public void tearDown() throws Exception

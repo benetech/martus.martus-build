@@ -349,24 +349,31 @@ public class MartusApp
 		return store.getFolderDraftOutbox();
 	}
 	
-	public BulletinFolder getFolderRetrieved()
-	{
-		return store.findFolder(RETRIEVE_BULLETIN_FOLDER);
-	}
-
 	public BulletinFolder createFolderRetrieved()
 	{
-		return store.createOrFindFolder(RETRIEVE_BULLETIN_FOLDER);
-	}
-	
-	public BulletinFolder getFolderRetrievedFieldOffice()
-	{
-		return store.findFolder(RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER);
+		String folderName = getNameOfFolderRetrieved();
+		return createOrFindFolder(folderName);
 	}
 
 	public BulletinFolder createFolderRetrievedFieldOffice()
 	{
-		return store.createOrFindFolder(RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER);
+		String folderName = getNameOfFolderRetrievedFieldOffice();
+		return createOrFindFolder(folderName);
+	}
+
+	public String getNameOfFolderRetrieved()
+	{
+		return RETRIEVE_BULLETIN_FOLDER;
+	}
+	
+	public String getNameOfFolderRetrievedFieldOffice()
+	{
+		return RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER;
+	}
+	
+	public BulletinFolder createOrFindFolder(String name)
+	{
+		return store.createOrFindFolder(name);
 	}
 
 	public void setMaxNewFolders(int numFolders)
@@ -754,7 +761,9 @@ public class MartusApp
 			
 		if(getFolderDraftOutbox().getBulletinCount() > 0)
 			return backgroundUploadOneDraftBulletin(progressMeter);
-		progressMeter.setStatusMessageAndHideMeter(getFieldLabel("StatusReady"));
+
+		if(progressMeter != null)
+			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("StatusReady"));
 		return null;
 	}
 
@@ -762,7 +771,8 @@ public class MartusApp
 	{
 		if(!isSSLServerAvailable())
 		{
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
+			if(progressMeter != null)
+				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
 		}
 		
@@ -771,7 +781,8 @@ public class MartusApp
 		String result = uploadBulletin(b, progressMeter);
 		if(result == null)
 		{
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+			if(progressMeter != null)
+				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
 			return null;
 		}
 		
@@ -800,7 +811,10 @@ public class MartusApp
 			}
 		}
 		else
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+		{
+			if(progressMeter != null)
+				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+		}
 		return result;
 	}
 
@@ -808,7 +822,8 @@ public class MartusApp
 	{
 		if(!isSSLServerAvailable())
 		{
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
+			if(progressMeter != null)
+				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("NoServerAvailableProgressMessage"));
 			return null;
 		}
 		
@@ -817,7 +832,8 @@ public class MartusApp
 		String result = uploadBulletin(b, progressMeter);
 		if(result == null)
 		{
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+			if(progressMeter != null)
+				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
 			return null;
 		}
 		
@@ -827,7 +843,10 @@ public class MartusApp
 			store.saveFolders();
 		}
 		else
-			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+		{
+			if(progressMeter != null)
+				progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+		}
 		
 		return result;
 	}

@@ -44,11 +44,11 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 
 		testServer.hasData = false;
 		modelWithoutData = new DeleteMyServerDraftsTableModel(app, null);
-		modelWithoutData.Initalize();
+		modelWithoutData.initialize();
 		
 		testServer.hasData = true;
 		modelWithData = new DeleteMyServerDraftsTableModel(app, null);
-		modelWithData.Initalize();
+		modelWithData.initialize();
 	}
 	
 	public void tearDown() throws Exception

@@ -68,7 +68,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		try
 		{
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer, null);
-			model.Initalize();
+			model.initialize();
 			model.getMySummaries();
 			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid summaries?");
@@ -89,7 +89,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		try
 		{
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, null);
-			model.Initalize();
+			model.initialize();
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
@@ -134,7 +134,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		store.destroyBulletin(b3);
 
 		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, null);
-		model.Initalize();
+		model.initialize();
 		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
@@ -198,7 +198,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.getStore().destroyBulletin(b2);
 
 		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, null);
-		model.Initalize();
+		model.initialize();
 
 		Vector allResult = model.getAllSummaries();
 		assertEquals("wrong all summaries count?", 3, allResult.size());
@@ -268,7 +268,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		try
 		{
 			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer, null);
-			model.Initalize();
+			model.initialize();
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
@@ -313,7 +313,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		store.destroyBulletin(b3);
 
 		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount, null);
-		model.Initalize();
+		model.initialize();
 		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
@@ -347,7 +347,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		try
 		{
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer, null);
-			model.Initalize();
+			model.initialize();
 			model.getFieldOfficeSealedSummaries("");
 			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid sealed summaries?");
@@ -359,7 +359,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		try
 		{
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer, null);
-			model.Initalize();
+			model.initialize();
 			model.getFieldOfficeDraftSummaries("");
 			Vector failed = model.getDownloadableSummaries();
 			fail("Got valid draft summaries?");
@@ -380,7 +380,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		try
 		{
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer, null);
-			model.Initalize();
+			model.initialize();
 			model.getFieldOfficeSealedSummaries("");
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected sealed didn't throw?");
@@ -392,7 +392,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		try
 		{
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer, null);
-			model.Initalize();
+			model.initialize();
 			model.getFieldOfficeDraftSummaries("");
 			Vector failed = model.getDownloadableSummaries();
 			fail("rejected draft didn't throw?");
@@ -452,7 +452,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listFieldOfficeSummariesResponse = desiredSealedResult;	
 
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, null);
-		model.Initalize();
+		model.initialize();
 		Vector returnedSealedResults = model.getDownloadableSummaries();
 		assertEquals("Wrong size?", 2, returnedSealedResults.size());
 		BulletinSummary s1 = (BulletinSummary)returnedSealedResults.get(0);
@@ -475,7 +475,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listFieldOfficeSummariesResponse = desiredDraftResult;	
 
 		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, null);
-		model2.Initalize();
+		model2.initialize();
 		Vector returnedDraftResults = model2.getDownloadableSummaries();
 		assertEquals("Wrong draft size?", 1, returnedDraftResults.size());
 		BulletinSummary s3 = (BulletinSummary)returnedDraftResults.get(0);

@@ -13,7 +13,7 @@ public class RetrieveMyTableModel extends RetrieveTableModel
 		super(appToUse, retriever);
 	}
 
-	public void Initalize() throws ServerErrorException
+	public void initialize() throws ServerErrorException
 	{
 		getMySummaries();
 		setCurrentSummaries();

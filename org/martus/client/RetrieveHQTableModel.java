@@ -13,7 +13,7 @@ public class RetrieveHQTableModel extends RetrieveTableModel
 		super(appToUse, retriever);
 	}
 
-	public void Initalize() throws ServerErrorException
+	public void initialize() throws ServerErrorException
 	{
 		Vector accounts = app.getFieldOfficeAccounts();
 		for(int a = 0; a < accounts.size(); ++a)

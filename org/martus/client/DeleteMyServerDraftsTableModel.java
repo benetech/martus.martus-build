@@ -11,7 +11,7 @@ public class DeleteMyServerDraftsTableModel extends RetrieveTableModel
 		super(appToUse, retriever);
 	}
 
-	public void Initalize() throws ServerErrorException
+	public void initialize() throws ServerErrorException
 	{
 		getMyDraftSummaries();
 		setCurrentSummaries();

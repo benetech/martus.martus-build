@@ -16,22 +16,6 @@ public class Retriever
 		result = NetworkInterfaceConstants.INCOMPLETE;
 	}
 	
-	public void retrieveMyBulletins(Vector uidList)
-	{
-		BulletinFolder retrievedFolder = app.createFolderRetrieved();
-		app.getStore().saveFolders();
-
-		retrieveBulletins(uidList, retrievedFolder);
-	}
-
-	public void retrieveFieldOfficeBulletins(Vector uidList)
-	{
-		BulletinFolder retrievedFolder = app.createFolderRetrievedFieldOffice();
-		app.getStore().saveFolders();
-
-		retrieveBulletins(uidList, retrievedFolder);
-	}
-
 	public void retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder) 
 	{
 		if(!app.isSSLServerAvailable())

@@ -22,7 +22,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		allSummaries = new Vector();
 	}
 
-	abstract public void Initalize() throws ServerErrorException;
+	abstract public void initialize() throws ServerErrorException;
 
 	protected void setCurrentSummaries()
 	{
