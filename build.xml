@@ -2,6 +2,7 @@
 
   <!-- set global properties for this build -->
   <property name="dist"  value="dist"/>
+  <property name="docs"  value="TechDocs/javadocs"/>
   <property name="martus-dir" value="org/martus"/>
   <property name="martus-package" value="org.martus"/>
   
@@ -160,6 +161,30 @@
 		fork="true"
 		classpath = "${meta-jar}"/>
   </target>
+  
+	<target name="docs">
+		<!-- Generate javadocs  -->
+			<javadoc destdir="${docs}" access="private" use="true">
+				
+				<!-- Generate Server javadocs  -->
+        <fileset dir="${server-dir}" includes="*.java"/>
+        <fileset dir="${server-dir}/core/" includes="*.java"/>
+        <fileset dir="${server-dir}/foramplifiers/" includes="*.java"/>
+        <fileset dir="${server-dir}/forclients/" includes="*.java"/>
+        <fileset dir="${server-dir}/formirroring/" includes="*.java"/>
+        <fileset dir="${server-dir}/tools/" includes="*.java"/>
+        
+        <!-- Generate Client javadocs  -->
+        <fileset dir="${client-dir}" includes="*.java"/>
+        <fileset dir="${client-dir}/test/" includes="*.java"/>
+        <fileset dir="${client-dir}/core/" includes="*.java"/>
+        <fileset dir="${client-dir}/swingui/" includes="*.java"/>
+        
+        <!-- Generate the rest of javadocs  -->
+        <fileset dir="${common-dir}" includes="*.java"/>
+        <fileset dir="${meta-dir}" includes="*.java"/>
+			</javadoc>
+	</target>
 
 </project>
 
