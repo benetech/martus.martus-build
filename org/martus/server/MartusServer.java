@@ -1257,7 +1257,16 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 		Vector result = new Vector();
 		result.add(OK);
-		result.add(new Integer(newsItemCount));
+		if(isClientBanned(accountId))
+		{
+			newsItemCount = 1;
+			result.add(new Integer(newsItemCount));
+			result.add("This account is not allowed to access this server");
+		}
+		else
+		{
+			result.add(new Integer(newsItemCount));
+		}
 		return result;
 	}
 

@@ -300,7 +300,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
 		{
 			if(MartusServer.serverSSLLogging)
-				server.logging("putContactInfo:Signature Error");
+				server.logging("getNews:Signature Error");
 			result.add(SIG_ERROR);
 			server.clientConnectionExit();
 			return result;
@@ -311,6 +311,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 //		int index = 0;
 //		long wantNewsSince = ((Long)parameters.get(index++)).longValue();
 //		String newsCategory = (String)parameters.get(index++);
+//		String preferredLanguage = (String)parameters.get(index++);
 //		String versionLabel = (String)parameters.get(index++);
 //		String buildDate = (String)parameters.get(index++);
 		result = server.getNews(myAccountId);

@@ -169,6 +169,24 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("isShutdownRequested", false, testServer.isShutdownRequested());
 		testServer.deleteAllFiles();
 	}
+
+	public void testGetNews() throws Exception
+	{
+		String clientAccountId = clientSecurity.getPublicKeyString();
+		Vector noNews = testServer.getNews(clientAccountId);
+		assertEquals(2, noNews.size());
+		assertEquals("ok", noNews.get(0));
+		assertEquals(new Integer(0), (Integer)noNews.get(1));
+
+		testServer.clientsBanned.add(clientAccountId);
+		Vector bannedNews = testServer.getNews(clientAccountId);
+		assertEquals(3, bannedNews.size());
+		assertEquals("ok", bannedNews.get(0));
+		assertEquals(new Integer(1), (Integer)bannedNews.get(1));
+		assertEquals("This account is not allowed to access this server", bannedNews.get(2));
+		
+		testServer.clientsBanned.remove(clientAccountId);
+	}
 	
 	public void testLegacyApiMethodNamesNonSSL()
 	{
