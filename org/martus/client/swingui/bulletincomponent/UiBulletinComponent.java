@@ -36,7 +36,6 @@ import javax.swing.Scrollable;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.martus.client.core.BulletinStore;
 import org.martus.client.core.EncryptionChangeListener;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.fields.UiField;
@@ -55,36 +54,34 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 	public void createSections()
 	{
-		setLayout(new BorderLayout());
+		String[] standardFieldTags = currentBulletin.getPublicFieldTags();
+		String[] privateFieldTags = currentBulletin.getPrivateFieldTags();
 
-		publicStuff = createBulletinComponentSection(UiBulletinComponentSection.NOT_ENCRYPTED);
-		privateStuff = createBulletinComponentSection(UiBulletinComponentSection.ENCRYPTED);
-		privateStuff.updateSectionBorder(true);
-
-		allPrivateField = createBoolField();
-		allPrivateField.initalize();
-		publicStuff.add(privateStuff.createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
-		publicStuff.add(allPrivateField.getComponent());
-
-		String[] standardFieldTags = BulletinStore.getDefaultPublicFieldTags();
-		String[] privateFieldTags = BulletinStore.getDefaultPrivateFieldTags();
-
-		int numFields = standardFieldTags.length + privateFieldTags.length;
+		int numPublicFields = standardFieldTags.length;
+		int indexOfFirstPublicField = 0;
+		int indexOfFirstPrivateField = numPublicFields;
+		int numFields = numPublicFields + privateFieldTags.length;
 		fields = new UiField[numFields];
 		fieldTags = new String[numFields];
 
-		createLabelsAndFields(publicStuff, standardFieldTags, 0);
-		createLabelsAndFields(privateStuff, privateFieldTags, standardFieldTags.length);
+		publicStuff = createBulletinComponentSection(UiBulletinComponentSection.NOT_ENCRYPTED);
+		allPrivateField = createBoolField();
+		allPrivateField.initalize();
+		publicStuff.add(publicStuff.createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
+		publicStuff.add(allPrivateField.getComponent());
+		createLabelsAndFields(publicStuff, standardFieldTags, indexOfFirstPublicField);
+		if(!isEditable)
+			publicStuff.disableEdits();
+
+		privateStuff = createBulletinComponentSection(UiBulletinComponentSection.ENCRYPTED);
+		privateStuff.updateSectionBorder(true);
+		createLabelsAndFields(privateStuff, privateFieldTags, indexOfFirstPrivateField);
+		if(!isEditable)
+			privateStuff.disableEdits();
 
 		publicStuff.matchFirstColumnWidth(privateStuff);
 		privateStuff.matchFirstColumnWidth(publicStuff);
-		
-		if(!isEditable)
-		{
-			publicStuff.disableEdits();
-			privateStuff.disableEdits();
-		}
-
+		setLayout(new BorderLayout());
 		add(publicStuff, BorderLayout.NORTH);
 		add(privateStuff, BorderLayout.SOUTH);
 	}
