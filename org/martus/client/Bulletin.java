@@ -509,8 +509,9 @@ public class Bulletin implements BulletinConstants
 			InputStreamWithSeek in = db.openInputStream(key, verifier);
 			if(in == null)
 			{
+				System.out.println("Packet not found: " + key.getLocalId());
 				isValidFlag = false;
-				throw new IOException("Packet not found");
+				return;
 			}
 			packet.loadFromXml(in, expectedSig, verifier);
 		}
