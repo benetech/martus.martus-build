@@ -795,27 +795,9 @@ public class MartusApp
 
 	private String retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder) 
 	{
-		if(!isSSLServerAvailable())
-			return NetworkInterfaceConstants.NO_SERVER;
-		
-		for(int i = 0; i < uidList.size(); ++i)
-		{
-			try
-			{
-				UniversalId uid = (UniversalId)uidList.get(i);
-				if(store.findBulletinByUniversalId(uid) != null)
-					continue;
-		
-				retrieveOneBulletin(uid, retrievedFolder);
-			}
-			catch(Exception e)
-			{
-				return NetworkInterfaceConstants.INCOMPLETE;
-			}
-		
-		}
-		
-		return NetworkInterfaceConstants.OK;
+		Retriever retriever = new Retriever(this, store);
+		retriever.retrieveBulletins(uidList, retrievedFolder);
+		return retriever.getResult();
 	}
 	
 	public static class ServerErrorException extends Exception 

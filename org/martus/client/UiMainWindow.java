@@ -811,14 +811,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	
 	private void doRetrieveBulletins()
 	{
-		try 
+		try
 		{
 			String dlgTitleTag = "retrieve";
 			RetrieveTableModel model = new RetrieveMyTableModel(app);
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-				
 			String result = app.retrieveMyBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
