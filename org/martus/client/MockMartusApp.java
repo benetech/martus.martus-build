@@ -84,7 +84,7 @@ public class MockMartusApp extends MartusApp
 			b.set("author",		"Comisión para el Esclarecimiento Histórico");
 			b.set("title",		"Santa Rosa Xeputul Bombardeo");
 			b.set("location",	"Santa Rosa Xeputul, Guatemala");
-			b.set("eventdate",	"1989-12-19");
+			b.set("eventdate",	"1999-01-19");
 			b.set("entrydate",	"1999-02-17");
 			b.set("keywords",	"ejecución arbitraria, bombardeo");
 			b.set("summary",	"El día 19 de diciembre de 1989, un avión Cessna A-37B, " +

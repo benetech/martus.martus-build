@@ -352,21 +352,29 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_BEGIN("testSearch");
 		appWithServer.loadSampleData();
 		BulletinStore store = appWithServer.getStore();
-
+		String startDate = "1900-01-01";
+		String endDate = "2099-12-31";
 		assertNull("Search results already exists?", store.findFolder(store.getSearchFolderName()));
 
 		Bulletin b = store.findBulletinByUniversalId((UniversalId)store.getAllBulletinUids().get(0));
-		appWithServer.search(b.get("title"));
+		appWithServer.search(b.get("title"), startDate, endDate);
 		assertNotNull("Search results should have been created", store.getSearchFolderName());
 
-		appWithServer.search("--not in any bulletin--");
+		appWithServer.search("--not in any bulletin--", startDate, endDate);
 		assertEquals("search should clear results folder", 0, store.findFolder(store.getSearchFolderName()).getBulletinCount());
 
 		assertTrue("not enough bulletins?", appWithServer.getStore().getBulletinCount() >= 5);
 		assertTrue("too many bulletins?", appWithServer.getStore().getBulletinCount() <= 15);
-		appWithServer.search(b.get("author"));
+		appWithServer.search(b.get("author"), startDate, endDate);
 		assertEquals(1, store.findFolder(store.getSearchFolderName()).getBulletinCount());
+		appWithServer.search(b.get(""), startDate, endDate);
+		assertEquals(10, store.findFolder(store.getSearchFolderName()).getBulletinCount());
 
+		startDate = "1999-01-19";
+		endDate = startDate;
+		appWithServer.search(b.get(""), startDate, endDate);
+		assertEquals(1, store.findFolder(store.getSearchFolderName()).getBulletinCount());
+		
 		TRACE_END();
 	}
 

@@ -269,16 +269,22 @@ public class Bulletin implements BulletinConstants
 		getPrivateFieldDataPacket().clearAttachments();
 	}
 
-	public boolean matches(SearchTreeNode node)
+	public boolean matches(SearchTreeNode node, String beginDate, String endDate)
 	{
 		if(node.getOperation() == node.VALUE)
-			return contains(node.getValue());
+		{
+			if(contains(node.getValue()))
+			{
+				return withinDates(beginDate, endDate);	
+			}
+			return false;
+		}
 
 		if(node.getOperation() == node.AND)
-			return matches(node.getLeft()) && matches(node.getRight());
+			return matches(node.getLeft(), beginDate, endDate) && matches(node.getRight(), beginDate, endDate);
 
 		if(node.getOperation() == node.OR)
-			return matches(node.getLeft()) || matches(node.getRight());
+			return matches(node.getLeft(), beginDate, endDate) || matches(node.getRight(), beginDate, endDate);
 
 		return false;
 	}
@@ -294,6 +300,18 @@ public class Bulletin implements BulletinConstants
 				return true;
 		}
 		return false;
+	}
+	
+	private boolean withinDates(String beginDate, String endDate)
+	{
+		String eventDate = fieldData.get(Bulletin.TAGEVENTDATE);
+		String entryDate = fieldData.get(Bulletin.TAGENTRYDATE);
+		if(eventDate.compareTo(beginDate) >= 0 && eventDate.compareTo(endDate) <= 0)
+			return true;
+		if(entryDate.compareTo(beginDate) >= 0 && entryDate.compareTo(endDate) <= 0)
+			return true;
+			
+		return false;	
 	}
 
 	public void save()

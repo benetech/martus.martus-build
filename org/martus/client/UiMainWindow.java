@@ -514,7 +514,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(searchFor == null)
 			return;
 
-		app.search(searchFor);
+		app.search(searchFor, "", "");
 		BulletinStore store = getStore();
 		BulletinFolder searchFolder = store.findFolder(store.getSearchFolderName());
 		folders.folderHasChanged(searchFolder);

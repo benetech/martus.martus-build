@@ -552,7 +552,7 @@ public class MartusApp
 		setLastUploadRemindedTime(new Date());
 	}
 
-	public void search(String searchFor)
+	public void search(String searchFor, String startDate, String endDate)
 	{
 		SearchParser parser = new SearchParser(this);
 		SearchTreeNode searchNode = parser.parse(searchFor);
@@ -569,7 +569,7 @@ public class MartusApp
 		{
 			UniversalId uid = (UniversalId)uids.get(i);
 			Bulletin b = store.findBulletinByUniversalId(uid);
-			if(b.matches(searchNode))
+			if(b.matches(searchNode, startDate, endDate))
 				store.addBulletinToFolder(b.getUniversalId(), results);
 		}
 		store.saveFolders();

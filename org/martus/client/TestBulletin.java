@@ -211,31 +211,75 @@ public class TestBulletin extends TestCaseEnhanced
 		b.set("author", "hello");
 		b.set("summary", "summary");
 		b.set("title", "Josée");
+		b.set(Bulletin.TAGEVENTDATE, "2002-04-04");
+		b.set(Bulletin.TAGENTRYDATE, "2002-10-15");
+				
 		b.save();
+		String beginDate ="1900-01-01";
+		String endDate = "2099-12-31";
 
-		assertEquals("hello", true, b.matches(new SearchTreeNode("hello")));
+		assertEquals("hello", true, b.matches(new SearchTreeNode("hello"), beginDate, endDate));
 		// field names should not be searched
-		assertEquals("author", false, b.matches(new SearchTreeNode("author")));
+		assertEquals("author", false, b.matches(new SearchTreeNode("author"), beginDate, endDate));
 		// id should not be searched
-		assertEquals("getLocalId()", false, b.matches(new SearchTreeNode(b.getLocalId())));
+		assertEquals("getLocalId()", false, b.matches(new SearchTreeNode(b.getLocalId()), beginDate, endDate));
 
-		assertEquals("HELLO", true, b.matches(new SearchTreeNode("HELLO")));
-		assertEquals("Josée", true, b.matches(new SearchTreeNode("Josée")));
-		assertEquals("josée", true, b.matches(new SearchTreeNode("josée")));
-		assertEquals("josÉe", true, b.matches(new SearchTreeNode("josÉe")));
-		assertEquals("josee", false, b.matches(new SearchTreeNode("josee")));
+		assertEquals("HELLO", true, b.matches(new SearchTreeNode("HELLO"), beginDate, endDate));
+		assertEquals("Josée", true, b.matches(new SearchTreeNode("Josée"), beginDate, endDate));
+		assertEquals("josée", true, b.matches(new SearchTreeNode("josée"), beginDate, endDate));
+		assertEquals("josÉe", true, b.matches(new SearchTreeNode("josÉe"), beginDate, endDate));
+		assertEquals("josee", false, b.matches(new SearchTreeNode("josee"), beginDate, endDate));
+		assertEquals("Blank must match", true, b.matches(new SearchTreeNode(""), beginDate, endDate));
 
 		SearchParser parser = new SearchParser(app);
-		assertEquals("right false and", false, b.matches(parser.parse("hello and goodbye")));
-		assertEquals("left false and", false, b.matches(parser.parse("goodbye and hello")));
-		assertEquals("true and", true, b.matches(parser.parse("Hello and Summary")));
+		assertEquals("right false and", false, b.matches(parser.parse("hello and goodbye"), beginDate, endDate));
+		assertEquals("left false and", false, b.matches(parser.parse("goodbye and hello"), beginDate, endDate));
+		assertEquals("true and", true, b.matches(parser.parse("Hello and Summary"), beginDate, endDate));
 
-		assertEquals("false or", false, b.matches(parser.parse("swinging and swaying")));
-		assertEquals("left true or", true, b.matches(parser.parse("hello or goodbye")));
-		assertEquals("right true or", true, b.matches(parser.parse("goodbye or hello")));
-		assertEquals("both true or", true, b.matches(parser.parse("hello or summary")));
+		assertEquals("false or", false, b.matches(parser.parse("swinging and swaying"), beginDate, endDate));
+		assertEquals("left true or", true, b.matches(parser.parse("hello or goodbye"), beginDate, endDate));
+		assertEquals("right true or", true, b.matches(parser.parse("goodbye or hello"), beginDate, endDate));
+		assertEquals("both true or", true, b.matches(parser.parse("hello or summary"), beginDate, endDate));
+		assertEquals("Blank didn't match", true, b.matches(parser.parse(""), beginDate, endDate));
 	}
 
+	public void testDateMatches()
+	{
+		Bulletin b = store.createEmptyBulletin();
+		b.set("author", "Dave");
+		b.set("summary", "summary");
+		b.set("title", "cool day");
+		b.set(Bulletin.TAGEVENTDATE, "2002-04-04");
+		b.set(Bulletin.TAGENTRYDATE, "2002-10-15");
+				
+		b.save();
+		String outOfRangeBeginDate ="2003-01-01";
+		String outOfRangeEndDate = "2006-12-31";
+		String bothInRangeBeginDate ="2002-01-01";
+		String bothInRangeEndDate = "2002-12-31";
+		String eventInRangeBeginDate ="2002-01-01";
+		String eventInRangeEndDate = "2002-04-04";
+		String entryInRangeBeginDate ="2002-10-15";
+		String entryInRangeEndDate = "2002-10-16";
+		
+		assertEquals("out of range", false, b.matches(new SearchTreeNode(""), outOfRangeBeginDate, outOfRangeEndDate));
+		assertEquals("both event and entry in range", true, b.matches(new SearchTreeNode(""), bothInRangeBeginDate, bothInRangeEndDate));
+		assertEquals("event only in range", true, b.matches(new SearchTreeNode(""), eventInRangeBeginDate, eventInRangeEndDate));
+		assertEquals("entry only in range", true, b.matches(new SearchTreeNode(""), entryInRangeBeginDate, entryInRangeEndDate));
+
+		SearchParser parser = new SearchParser(app);
+		assertEquals("parser out of range", false, b.matches(parser.parse(""), outOfRangeBeginDate, outOfRangeEndDate));
+		assertEquals("parser both event and entry in range", true, b.matches(parser.parse(""), bothInRangeBeginDate, bothInRangeEndDate));
+		assertEquals("parser event only in range", true, b.matches(parser.parse(""), eventInRangeBeginDate, eventInRangeEndDate));
+		assertEquals("parser entry only in range", true, b.matches(parser.parse(""), entryInRangeBeginDate, entryInRangeEndDate));
+		
+		assertEquals("both event and entry in range but string doesn't match", false, b.matches(new SearchTreeNode("hello"), bothInRangeBeginDate, bothInRangeEndDate));
+		assertEquals("parser both event and entry in range but string doesn't match", false, b.matches(parser.parse("hi"), bothInRangeBeginDate, bothInRangeEndDate));
+
+		assertEquals("both event and entry in range and string matchs", true, b.matches(new SearchTreeNode("Dave"), bothInRangeBeginDate, bothInRangeEndDate));
+		assertEquals("parser both event and entry in range and string matchs", true, b.matches(parser.parse("Dave"), bothInRangeBeginDate, bothInRangeEndDate));
+
+	}
 	public void testGetStandardFieldNames()
 	{
 		List names = Arrays.asList(Bulletin.getStandardFieldNames());
