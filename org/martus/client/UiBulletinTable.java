@@ -290,19 +290,13 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		AbstractAction edit = new ActionEditBulletin();
 		AbstractAction cut = new ActionCutBulletin();
 		AbstractAction copy = new ActionCopyBulletin();
-		AbstractAction discard;
-		if(mainWindow.isDiscardedFolderSelected())
-			discard = new ActionDeleteBulletin();
-		else
-			discard = new ActionDiscardBulletin();
-		
+
 		Bulletin b = getSingleSelectedBulletin();
 		if(b == null)
 		{
 			edit.setEnabled(false);
 			cut.setEnabled(false);
 			copy.setEnabled(false);
-			discard.setEnabled(false);
 		}
 
 		JPopupMenu menu = new JPopupMenu();
@@ -311,7 +305,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		menu.add(copy);
 		menu.add(mainWindow.getActionMenuPaste());
 		menu.addSeparator();
-		menu.add(discard);
+		menu.add(mainWindow.getActionMenuDiscard());
 		menu.show(component, x, y);
 	}
 
@@ -438,20 +432,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 	}
 
-	class ActionDeleteBulletin extends AbstractAction
-	{
-		public ActionDeleteBulletin()
-		{
-			super(mainWindow.getApp().getMenuLabel("deletebulletin"), null);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			doDiscardBulletin();
-		}
-	}
-
-	private void doDiscardBulletin()
+	public void doDiscardBulletin()
 	{
 		boolean okToDiscard = true;
 		Bulletin[] bulletins = getSelectedBulletins();
@@ -496,9 +477,16 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 		boolean okToDiscard = true;
 		BulletinFolder draftOutBox = mainWindow.getApp().getFolderDraftOutbox();
+
 		Vector visibleFoldersContainingThisBulletin = mainWindow.getApp().findBulletinInAllVisibleFolders(b);
 		visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom.getName());
-		if(visibleFoldersContainingThisBulletin.size() == 0)
+		Vector localizedFoldersContainingThisBulletin = new Vector();
+		for(int i = 0 ; i < visibleFoldersContainingThisBulletin.size() ; ++i)
+		{
+			localizedFoldersContainingThisBulletin.add(mainWindow.getApp().getFolderLabel((String)(visibleFoldersContainingThisBulletin.get(i))));
+		}
+
+		if(localizedFoldersContainingThisBulletin.size() == 0)
 		{
 			String dialogTag = "";
 			if (b.isSealed())
@@ -514,7 +502,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		{
 			String title = mainWindow.getApp().getWindowTitle("confirmDeleteDiscardedBulletinWithCopies");
 			String cause = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopiescause");
-			String folders = visibleFoldersContainingThisBulletin.toString();
+			String folders = localizedFoldersContainingThisBulletin.toString();
 			String effect = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopieseffect");
 			String question = mainWindow.getApp().getFieldLabel("confirmquestion");
 			String[] contents = {cause, "", effect, folders, "", question};

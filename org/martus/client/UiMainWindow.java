@@ -291,6 +291,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return actionMenuPaste;
 	}
 
+	public ActionMenuDiscard getActionMenuDiscard()
+	{
+		return actionMenuDiscard;
+	}
+
 	//ClipboardOwner Interface
 	public void lostOwnership(Clipboard clipboard, Transferable contents)
 	{
@@ -449,14 +454,18 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		file.add(new ActionMenuExit());
 
 		JMenu edit = new JMenu(app.getButtonLabel("edit"));
+		edit.addMenuListener(new EditMenuListener());
 		edit.add(new ActionMenuEdit());
+
+		edit.addSeparator();
 		edit.add(new ActionMenuCut());
 		edit.add(new ActionMenuCopy());
-
 		actionMenuPaste = new ActionMenuPaste();
 		edit.add(actionMenuPaste);
-		edit.addMenuListener(actionMenuPaste);
+
 		edit.addSeparator();
+		actionMenuDiscard = new ActionMenuDiscard();
+		edit.add(actionMenuDiscard);
 		edit.add(new ActionMenuSearch());
 
 		JMenu tools = new JMenu(app.getButtonLabel("tools"));
@@ -526,6 +535,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private void doPasteBulletin()
 	{
 		table.doPasteBulletin();
+	}
+
+	private void doDiscardBulletin()
+	{
+		table.doDiscardBulletin();
 	}
 
 	private void doSearch()
@@ -1606,7 +1620,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuPaste extends AbstractAction implements MenuListener
+	class ActionMenuPaste extends AbstractAction
 	{
 		public ActionMenuPaste()
 		{
@@ -1619,20 +1633,58 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 		public boolean isEnabled()
 		{
-			return true;
-
-			// intermittently leaves paste disabled when cut 1st from right click
-			// return(getClipboardTransferableBulletin() != null);
+			 return(getClipboardTransferableBulletin() != null);
 		}
+	}
 
-		//MenuListener Interface
+	class EditMenuListener implements MenuListener
+	{
 		public void menuSelected(MenuEvent e)
 		{
-			setEnabled(isEnabled());
+			actionMenuPaste.setEnabled(actionMenuPaste.isEnabled());
+			actionMenuDiscard.updateName();
+			actionMenuDiscard.setEnabled(actionMenuDiscard.shouldEnable());
 		}
 
 		public void menuDeselected(MenuEvent e) {}
 		public void menuCanceled(MenuEvent e) {}
+		
+	}
+
+	class ActionMenuDiscard extends AbstractAction
+	{
+		public ActionMenuDiscard()
+		{
+			super(app.getMenuLabel("discardbulletin"), null);
+		}
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			doDiscardBulletin();
+		}
+		
+		public boolean isEnabled()
+		{
+			updateName();
+			return shouldEnable();
+		}
+
+		public boolean shouldEnable() 
+		{
+			Bulletin[] b = table.getSelectedBulletins();
+			if( b.length > 0)
+				return true;
+			return false;
+		}
+
+		public void updateName() 
+		{
+			if(isDiscardedFolderSelected())
+				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("deletebulletin"));
+			else
+				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("discardbulletin"));
+		}
+
 	}
 
 	class ActionMenuSearch extends AbstractAction
@@ -2005,6 +2057,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
 	private ActionMenuPaste actionMenuPaste;
+	private ActionMenuDiscard actionMenuDiscard;
 	private UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;	

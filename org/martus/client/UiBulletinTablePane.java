@@ -97,6 +97,11 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 		table.doPasteBulletin();
 	}
 
+	public void doDiscardBulletin()
+	{
+		table.doDiscardBulletin();
+	}
+
 	class TablePaneMouseAdapter extends MouseAdapter
 	{
 		public void mousePressed(MouseEvent e)
