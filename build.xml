@@ -1,7 +1,10 @@
 <!-- Ant build.xml - Need Ant v1.5 or later -->
-<project name="martus" default="test-meta" basedir=".">
+<project name="martus" default="build" basedir=".">
 
   <!-- set global properties for this build -->
+  <property file="build.properties" />
+  <property environment="env"/>
+
   <property name="dist"  value="dist"/>
   <property name="docs"  value="TechDocs/javadocs"/>
   <property name="martus-dir" value="org/martus"/>
@@ -50,11 +53,17 @@
   <property name="meta-package" value="${martus-package}.meta"/>
   <property name="meta-files" value="${meta-dir}/*.class"/>
   
+<!-- ================================================================== -->
+<!-- I N I T                                                            -->
+<!-- ================================================================== -->  
   <target name="init">
     <!-- tstamp task initializes ${DSTAMP} etc -->
     <tstamp/>
   </target>
 
+<!-- ================================================================== -->
+<!-- C L E A N                                                          -->
+<!-- ================================================================== -->
   <target name="clean">
   
     <!-- Remove dis jars & folder -->
@@ -94,6 +103,9 @@
     </delete>
   </target>
 
+<!-- ================================================================== -->
+<!-- B U I L D                                                          -->
+<!-- ================================================================== -->
   <target name="build" depends="init">
 
     <echo message="${DSTAMP}" file="${BuildDateFile}"/>
@@ -138,56 +150,156 @@
 
   </target>
 
+<!-- ================================================================== -->
+<!-- T E S T S                                                          -->
+<!-- ================================================================== -->
   <target name="test-common" depends="build">
-	<!-- Run the unit test suite -->
-	<java classname="${common-package}.TestAll" 
-		fork="true"
-		classpath = "${common-jar}"/>
+		<junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+			<classpath>
+				<pathelement location="${common-jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+			<test name="${common-package}.TestCommon"/>
+		</junit>
   </target>
 
   <target name="test-server" depends="build">
-	<!-- Run the unit test suite -->
-	<java classname="${server-package}.TestAll" 
-		fork="true"
-		classpath = "${server-jar}"/>
+		<junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+			<classpath>
+				<pathelement location="${server-jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+			<test name="${server-package}.core.TestAll"/>
+		</junit>
   </target>
 
   <target name="test-client" depends="build">
-	<!-- Run the unit test suite -->
-	<java classname="${client-package}.TestAll" 
-		fork="true"
-		classpath = "${client-jar}"/>
+		<junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+			<classpath>
+				<pathelement location="${client-jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+			<test name="${client-package}.test.TestAll"/>
+		</junit>
   </target>
 
-  <target name="test-meta" depends="build">
-	<!-- Run the unit test suite -->
-	<java classname="${meta-package}.TestAll" 
-		fork="true"
-		classpath = "${meta-jar}"/>
+  <target name="testall" depends="build">
+		<junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+			<classpath>
+				<pathelement location="${meta-jar}"/>
+				<pathelement path="${java.class.path}"/>
+			</classpath>
+			<test name="${meta-package}.TestAll"/>
+		</junit>	
   </target>
   
+<!-- ================================================================== -->
+<!-- J A V A D O C S                                                    -->
+<!-- ================================================================== -->
 	<target name="docs">
-		<!-- Generate javadocs  -->
-			<javadoc destdir="${docs}" access="private" use="true">
-				
-				<!-- Generate Server javadocs  -->
-        <fileset dir="${server-dir}" includes="*.java"/>
-        <fileset dir="${server-dir}/core/" includes="*.java"/>
-        <fileset dir="${server-dir}/foramplifiers/" includes="*.java"/>
-        <fileset dir="${server-dir}/forclients/" includes="*.java"/>
-        <fileset dir="${server-dir}/formirroring/" includes="*.java"/>
-        <fileset dir="${server-dir}/tools/" includes="*.java"/>
-        
-        <!-- Generate Client javadocs  -->
-        <fileset dir="${client-dir}" includes="*.java"/>
-        <fileset dir="${client-dir}/test/" includes="*.java"/>
-        <fileset dir="${client-dir}/core/" includes="*.java"/>
-        <fileset dir="${client-dir}/swingui/" includes="*.java"/>
-        
-        <!-- Generate the rest of javadocs  -->
-        <fileset dir="${common-dir}" includes="*.java"/>
-        <fileset dir="${meta-dir}" includes="*.java"/>
-			</javadoc>
+			<mkdir dir="${docs}"/>
+			<javadoc
+					destdir="${docs}"
+					sourcepath="."
+      		packagenames="${martus-package}.*"
+					access="private"
+					use="false"
+					bottom="Copyright &#169; 2003 Beneficent Technology, Inc. (Benetech)."
+					/>
+	</target>
+
+<!-- ================================================================== -->
+<!-- J A R S I G N E R                                                  -->
+<!-- ================================================================== -->
+	<target name="jarsigner" depends="build">
+		<signjar jar="${client-jar}"
+						keystore="${sign.keystore}"
+						storepass="${sign.storepass}"
+						keypass="${sign.keypass}"
+						alias="ssmtsjar"
+						/>
+
+		<signjar jar="${server-jar}"
+						keystore="${sign.keystore}"
+						storepass="${sign.storepass}"
+						keypass="${sign.keypass}"
+						alias="ssmtsjar"
+						/>
+						
+		<signjar jar="${common-jar}"
+						keystore="${sign.keystore}"
+						storepass="${sign.storepass}"
+						keypass="${sign.keypass}"
+						alias="ssmtsjar"
+						/>
+						
+		<signjar jar="${meta-jar}"
+						keystore="${sign.keystore}"
+						storepass="${sign.storepass}"
+						keypass="${sign.keypass}"
+						alias="ssmtsjar"
+						/>
+	</target>
+	
+<!-- ================================================================== -->
+<!-- M D 5                                                              -->
+<!-- ================================================================== -->
+	<target name="md5" depends="jarsigner">
+		<checksum>
+			<fileset dir="${dist}">
+				<include name="*.jar"/>
+			</fileset>
+		</checksum>
+	</target>
+	
+<!-- ================================================================== -->
+<!-- C V S  -   T A G                                                   -->
+<!-- ================================================================== -->
+	<target name="cvs-tag" depends="init">
+		<cvspass cvsroot="${cvs.cvsroot}"
+				 password="${cvs.pass}"
+		/>
+		<cvs cvsRoot="${cvs.cvsroot}"
+				 package="martus"
+				 quiet="true"
+				 command="tag v${DSTAMP}"
+		/>
+	</target>
+	
+<!-- ================================================================== -->
+<!-- Z I P  -  S O U R C E S                                            -->
+<!-- ================================================================== -->
+	<target name="zip-src" depends="init">
+		<mkdir dir="${dist}"/>
+		<property name="zip-filename"  value="${dist}/martus-${DSTAMP}-src.zip"/>
+		<delete file="${zip-filename}"/>
+		
+		<zip zipfile="${zip-filename}"
+					basedir="."
+					includes="org/**/*.java,
+										org/**/MartusHelpTOC-*.txt,
+										org/**/Martus-*.mtf,
+										org/**/MartusLogo.gif,
+										org/**/Martus.png,
+										org/**/*locked.jpg"
+       		excludes="org/martus/server/**,org/martus/meta/**"
+					/>
+		<!-- Set a variable if the library sources exists-->
+	</target>
+	
+	<target name="zip-lib-src" depends="zip-src" if="env.MARTUSISPROJECTDIR">
+		<property name="zip-filename"  value="${dist}/martus-${DSTAMP}-src.zip"/>
+		<echo message="dir = ${env.MARTUSISPROJECTDIR}"/>
+		<zip zipfile="${zip-filename}"
+					basedir="."
+					includes="${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/BouncyCastle/*,
+										${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/Sun/*,
+										${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/InfiniteMonkey1.0/src/**/*,
+										${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/InfiniteMonkey1.0/**/*.txt,
+										${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/junit3.7/**/src.jar,
+										${env.MARTUSISPROJECTDIR}/BuildFiles/SourceFiles/xmlrpc-1.1/**/*"
+       		excludes=""
+					/>
 	</target>
 
 </project>
