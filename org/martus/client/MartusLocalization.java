@@ -353,7 +353,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyFoundOrphans=Recovered Lost Bulletins");
 		addEnglishTranslation("wintitle:notifyFoundDamagedBulletins=Detected Damaged Bulletins");
 		addEnglishTranslation("wintitle:notifyErrorSavingState=Error Saving State");
-		addEnglishTranslation("wintitle:notifyExportPublicInfo=Account Information Exported");
+		addEnglishTranslation("wintitle:notifyExportMyPublicKey=Public Key Exported");
 		addEnglishTranslation("wintitle:notifyPublicInfoFileError=Error Importing Public Information");
 		addEnglishTranslation("wintitle:notifyAccountCodeWrong=Incorrect Public Code");
 		addEnglishTranslation("wintitle:notifyErrorSavingConfig=Error Saving Configuration File");
@@ -377,8 +377,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
 		addEnglishTranslation("wintitle:inputservermagicword=Request Upload Permission");
-		addEnglishTranslation("wintitle:inputexportPublicInfo=Export Public Account Information");
-		addEnglishTranslation("wintitle:inputImportPublicCode=Import Public Account Information");
+		addEnglishTranslation("wintitle:inputExportMyPublicKey=Export My Public Key");
+		addEnglishTranslation("wintitle:inputImportPublicCode=Import Headquarter's Public Key");
 
 		addEnglishTranslation("wintitle:setupsignin=Martus Setup Signin");
 		addEnglishTranslation("wintitle:setupcontact=Martus Setup Contact Information");
@@ -406,6 +406,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:saveBackupKeyPair=Back up key pair file");
 		addEnglishTranslation("wintitle:BulletinPreview=Bulletin Preview");
 		addEnglishTranslation("wintitle:DeleteBulletinFile=Delete Bulletin File");
+		addEnglishTranslation("wintitle:ImportHQPublicKey=Import Headquater's Public Key File");
 
 		addEnglishTranslation("button:help=Help");
 		addEnglishTranslation("button:create=Create");
@@ -419,7 +420,7 @@ public class MartusLocalization
 		addEnglishTranslation("button:inputserverpubliccodeok=OK");
 		addEnglishTranslation("button:inputsearchok=Search");
 		addEnglishTranslation("button:inputservermagicwordok=OK");
-		addEnglishTranslation("button:inputexportPublicInfook=Export");
+		addEnglishTranslation("button:inputExportMyPublicKeyok=Export");
 		addEnglishTranslation("button:inputImportPublicCodeok=Import");
 		
 		addEnglishTranslation("button:cancel=Cancel");
@@ -677,7 +678,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyFoundOrphanscause=One or more bulletins were not in any folder. These lost bulletins have been placed into the Recovered Bulletins folder.");
 		addEnglishTranslation("field:notifyFoundDamagedBulletinscause=One or more bulletins were severely damaged, and cannot be displayed. If these bulletins were backed up to a server, you may be able to retrieve undamaged copies from there.");
 		addEnglishTranslation("field:notifyErrorSavingStatecause=Unable to save current screen layout.");
-		addEnglishTranslation("field:notifyExportPublicInfocause=The following file has been exported.");
+		addEnglishTranslation("field:notifyExportMyPublicKeycause=The following file has been exported.");
 		addEnglishTranslation("field:notifyPublicInfoFileErrorcause=The file does not contain valid public information.");
 		addEnglishTranslation("field:notifyAccountCodeWrongcause=The Public Code does not match the one you entered.");
 		addEnglishTranslation("field:notifyErrorSavingConfigcause=Unable to save configuration file.");

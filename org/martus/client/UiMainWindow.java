@@ -1138,19 +1138,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return summariesDlg.getUniversalIdList();
 	}
 
-	private void doExportPublicAccountInfo()
+	private void doExportMyPublicKey()
 	{
 		try 
 		{
-			String fileName = getStringInput("exportPublicInfo", "NameOfExportedFile", "");
+			String fileName = getStringInput("ExportMyPublicKey", "NameOfExportedFile", "");
 			if(fileName == null)
 				return;
 			File export = app.getPublicInfoFile(fileName);
 			
 			//TODO check file exists and ask to over write.
 			app.exportPublicInfo(export);
-			String title = getApp().getWindowTitle("notifyExportPublicInfo");
-			String msg = getApp().getFieldLabel("notifyExportPublicInfocause");
+			String title = getApp().getWindowTitle("notifyExportMyPublicKey");
+			String msg = getApp().getFieldLabel("notifyExportMyPublicKeycause");
 			String ok = app.getButtonLabel("ok");
 			String[] contents = {msg, export.getCanonicalPath()};
 			String[] buttons = {ok};
@@ -1158,7 +1158,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		} 
 		catch(Exception e) 
 		{
-			System.out.println("UiMainWindow.doExportPublicAccountInfo :" + e);
+			System.out.println("UiMainWindow.doExportMyPublicKey :" + e);
 		}
 	}
 	
@@ -1222,13 +1222,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 		
-	private void doImportPublicAccountInfo()
+	private void doImportHQPublicKey()
 	{
 		if(!reSignIn())
 			return;
 		JFileChooser chooser = new JFileChooser();
+		chooser.setApproveButtonText(app.getButtonLabel("inputImportPublicCodeok"));
 		chooser.setFileFilter(new PublicInfoFileFilter());
-
+		chooser.setDialogTitle(app.getWindowTitle("ImportHQPublicKey"));
     	chooser.setCurrentDirectory(new File(app.getDataDirectory()));
 		int returnVal = chooser.showOpenDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION)
@@ -1290,8 +1291,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(publicCode.equals(normalizedPublicCode))
 				return true;
 
-			System.out.println("Entered:     " + userEnteredPublicCode);
-			System.out.println("Normalized:   " + normalizedPublicCode);
+			//System.out.println("Entered:     " + userEnteredPublicCode);
+			//System.out.println("Normalized:   " + normalizedPublicCode);
 			notifyDlg(this, errorBaseTag);
 		}
 	}
@@ -2057,7 +2058,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doExportPublicAccountInfo();
+			doExportMyPublicKey();
 		}
 	}
 
@@ -2070,7 +2071,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doImportPublicAccountInfo();
+			doImportHQPublicKey();
 		}
 	}
 
