@@ -29,7 +29,6 @@ package org.martus.server.forclients;
 import java.util.Vector;
 
 import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.TestCaseEnhanced;
 
@@ -67,7 +66,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 		parameters.add("abc");
 		parameters.add(new Integer(2));
 		String badSig = "123";
-		String wrongSig = MartusUtilities.sign(parameters, otherSecurity);
+		String wrongSig = otherSecurity.createSignatureOfVectorOfStrings(parameters);
 		
 		{
 			Vector badSigResult = handler.getUploadRights(myAccountId, parameters, badSig);
@@ -137,7 +136,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 
 		Vector parameters = new Vector();
 		parameters.add(myAccountId);
-		String sig = MartusUtilities.sign(parameters, mySecurity);
+		String sig = mySecurity.createSignatureOfVectorOfStrings(parameters);
 		handler.getSealedBulletinIds(myAccountId, parameters, sig);
 		
 		handler.getDraftBulletinIds(myAccountId, parameters, sig);

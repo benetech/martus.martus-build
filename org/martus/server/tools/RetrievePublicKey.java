@@ -32,6 +32,7 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.common.Base64;
+import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
@@ -99,7 +100,7 @@ public class RetrievePublicKey
 	{
 		try
 		{
-			if(!publicCode.equals(MartusUtilities.computePublicCode(publicKeyString)))
+			if(!publicCode.equals(MartusCrypto.computePublicCode(publicKeyString)))
 			{
 				System.out.println("Error Retrieved Public Key doesn't match public code!");
 				System.exit(3);
@@ -107,7 +108,7 @@ public class RetrievePublicKey
 			MartusSecurity security = new MartusSecurity();
 			byte[] publicKeyBytes = Base64.decode(publicKeyString);
 			ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-			if(!security.isSignatureValid(publicKeyString, in, Base64.decode(sig)))
+			if(!security.isValidSignatureOfStream(publicKeyString, in, Base64.decode(sig)))
 			{
 				System.out.println("Error Retrieved Public Key bad signature!");
 				System.exit(3);
@@ -165,7 +166,7 @@ public class RetrievePublicKey
 				port = new Integer(value).intValue();
 			
 			if(args[i].startsWith("--public-code"))
-				publicCode = MartusUtilities.removeNonDigits(value);
+				publicCode = MartusCrypto.removeNonDigits(value);
 			
 			if(args[i].startsWith("--output-file"))
 				outputFileName = value;

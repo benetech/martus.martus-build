@@ -163,8 +163,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		System.out.print("Server Public Code: ");
 		String accountId = getAccountId();
-		String publicCode = MartusUtilities.computePublicCode(accountId);
-		System.out.println(MartusUtilities.formatPublicCode(publicCode));
+		String publicCode = MartusCrypto.computePublicCode(accountId);
+		System.out.println(MartusCrypto.formatPublicCode(publicCode));
 		System.out.println();
 	}
 
@@ -274,7 +274,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			String publicKeyString = security.getPublicKeyString();
 			byte[] publicKeyBytes = Base64.decode(publicKeyString);
 			ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-			byte[] sigBytes = security.createSignature(in);
+			byte[] sigBytes = security.createSignatureOfStream(in);
 			
 			result.add(NetworkInterfaceConstants.OK);
 			result.add(publicKeyString);
@@ -726,7 +726,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 		String signature = (String)contactInfo.get(contactInfo.size()-1);
 		contactInfo.remove(contactInfo.size()-1);
-		if(!MartusUtilities.verifySignature(contactInfo, security, publicKey, signature))
+		if(!security.verifySignatureOfVectorOfStrings(contactInfo, publicKey, signature))
 			return NetworkInterfaceConstants.SIG_ERROR;
 		contactInfo.add(signature);
 
@@ -896,7 +896,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		try 
 		{
 			InputStream in = new ByteArrayInputStream(Base64.decode(tokenToSign));
-			byte[] sig = security.createSignature(in);
+			byte[] sig = security.createSignatureOfStream(in);
 			return Base64.encode(sig);
 		} 
 		catch(MartusSignatureException e) 
@@ -928,8 +928,8 @@ public class MartusServer implements NetworkInterfaceConstants
 		String formattedCode = "";
 		try 
 		{
-			String publicCode = MartusUtilities.computePublicCode(clientId);
-			formattedCode = MartusUtilities.formatPublicCode(publicCode);
+			String publicCode = MartusCrypto.computePublicCode(clientId);
+			formattedCode = MartusCrypto.formatPublicCode(publicCode);
 		} 
 		catch(InvalidBase64Exception e) 
 		{
@@ -1238,7 +1238,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		try
 		{
 			ByteArrayInputStream in = new ByteArrayInputStream(signedString.getBytes("UTF-8"));
-			return security.isSignatureValid(signerPublicKey, in, Base64.decode(signature));
+			return security.isValidSignatureOfStream(signerPublicKey, in, Base64.decode(signature));
 		}
 		catch(Exception e)
 		{

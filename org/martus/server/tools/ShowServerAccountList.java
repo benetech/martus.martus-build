@@ -126,7 +126,7 @@ public class ShowServerAccountList
 			String publicCode = "";
 			try
 			{
-				publicCode = MartusUtilities.formatPublicCode(MartusUtilities.computePublicCode(accountString));
+				publicCode = MartusCrypto.formatPublicCode(MartusCrypto.computePublicCode(accountString));
 			}
 			catch(Exception e)
 			{

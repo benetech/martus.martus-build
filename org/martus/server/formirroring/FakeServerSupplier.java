@@ -32,7 +32,6 @@ import java.util.Vector;
 import org.martus.common.Base64;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.UniversalId;
@@ -91,7 +90,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 		{
 			Vector result = new Vector();
 			result.add(security.getPublicKeyString());
-			result.add(MartusUtilities.getSignatureOfPublicKey(security));
+			result.add(security.getSignatureOfPublicKey());
 			return result;
 		}
 		catch (Exception e)

@@ -53,7 +53,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 	{
 		Vector parameters = new Vector();
 		parameters.add(tryMagicWord);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getUploadRights(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -63,7 +63,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		Vector parameters = new Vector();
 		parameters.add(authorAccountId);
 		parameters.add(retrieveTags);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getSealedBulletinIds(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -73,7 +73,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		Vector parameters = new Vector();
 		parameters.add(authorAccountId);
 		parameters.add(retrieveTags);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getDraftBulletinIds(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -82,7 +82,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 	{
 		Vector parameters = new Vector();
 		parameters.add(hqAccountId);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getFieldOfficeAccountIds(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -97,7 +97,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		parameters.add(new Integer(chunkOffset));
 		parameters.add(new Integer(chunkSize));
 		parameters.add(data);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.putBulletinChunk(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -110,7 +110,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(chunkOffset));
 		parameters.add(new Integer(maxChunkSize));
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getBulletinChunk(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -122,7 +122,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		parameters.add(authorAccountId);
 		parameters.add(bulletinLocalId);
 		parameters.add(packetLocalId);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getPacket(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -136,14 +136,14 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		{
 			parameters.add(bulletinLocalIds[i]);
 		}
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.deleteDraftBulletins(signer.getPublicKeyString(), parameters, signature));
 	}
 
 	public NetworkResponse	putContactInfo(MartusCrypto signer, String authorAccountId, Vector parameters) throws
 			MartusCrypto.MartusSignatureException
 	{
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.putContactInfo(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -153,7 +153,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 		Vector parameters = new Vector();
 		parameters.add(UiConstants.versionLabel);
 		parameters.add(MartusUtilities.getVersionDate());
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getNews(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -161,7 +161,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 			MartusCrypto.MartusSignatureException
 	{
 		Vector parameters = new Vector();
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(server.getServerCompliance(signer.getPublicKeyString(), parameters, signature));
 	}
 	

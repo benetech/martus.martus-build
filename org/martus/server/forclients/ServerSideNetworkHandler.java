@@ -29,7 +29,6 @@ package org.martus.server.forclients;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 
@@ -362,7 +361,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	private boolean isSignatureOk(String myAccountId, Vector parameters, String signature, MartusCrypto verifier)
 	{
 		server.log("request for client " + server.getPublicCode(myAccountId));
-		return MartusUtilities.verifySignature(parameters, verifier, myAccountId, signature);
+		return verifier.verifySignatureOfVectorOfStrings(parameters, myAccountId, signature);
 	}
 
 	final static String defaultReservedResponse = "";

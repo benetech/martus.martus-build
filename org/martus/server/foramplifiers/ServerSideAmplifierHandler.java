@@ -8,7 +8,6 @@ import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 
 public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
@@ -143,7 +142,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 
 	private boolean isSignatureOk(String myAccountId, Vector parameters, String signature, MartusCrypto verifier)
 	{
-		return MartusUtilities.verifySignature(parameters, verifier, myAccountId, signature);
+		return verifier.verifySignatureOfVectorOfStrings(parameters, myAccountId, signature);
 	}
 	
 	MartusAmplifierServer server;

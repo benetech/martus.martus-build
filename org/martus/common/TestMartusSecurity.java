@@ -326,7 +326,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
 		try
 		{
-			securityWithoutKeyPair.createSignature(inputStream);
+			securityWithoutKeyPair.createSignatureOfStream(inputStream);
 			fail("Signature passed with no key pair");
 		}
 		catch (MartusSecurity.MartusSignatureException e)
@@ -334,7 +334,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 			//Expected Exception
 		}
 
-		byte[] signature = security.createSignature(inputStream);
+		byte[] signature = security.createSignatureOfStream(inputStream);
 		assertNotNull("signature was null", signature);
 
 		TRACE_END();
@@ -378,7 +378,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		byte[] data = createRandomBytes(1000);
 
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(data);
-		byte[] signature = security.createSignature(inputStream);
+		byte[] signature = security.createSignatureOfStream(inputStream);
 		assertNotNull("signature was null", signature);
 
 		ByteArrayInputStream verifyStream = new ByteArrayInputStream(data);

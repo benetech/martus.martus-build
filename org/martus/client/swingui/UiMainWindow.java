@@ -81,7 +81,6 @@ import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
 import org.martus.client.swingui.UiUtilities.Delay;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
@@ -684,8 +683,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String formattedCodeContents = null;
 		try
 		{
-			codeContents = MartusUtilities.computePublicCode(keyContents);
-			formattedCodeContents = MartusUtilities.formatPublicCode(codeContents);
+			codeContents = MartusCrypto.computePublicCode(keyContents);
+			formattedCodeContents = MartusCrypto.formatPublicCode(codeContents);
 		}
 		catch(InvalidBase64Exception e)
 		{
@@ -1261,7 +1260,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			try
 			{
 				String publicKey = app.extractPublicInfo(importFile);
-				String publicCode = MartusUtilities.computePublicCode(publicKey);
+				String publicCode = MartusCrypto.computePublicCode(publicKey);
 				if(confirmPublicCode(publicCode, "ImportPublicCode", "AccountCodeWrong"))
 				{
 					if(confirmDlg(this, "SetImportPublicKey"))
@@ -1308,7 +1307,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			userEnteredPublicCode = getStringInput(baseTag, "", userEnteredPublicCode);
 			if(userEnteredPublicCode == null)
 				return false; // user hit cancel
-			String normalizedPublicCode = MartusUtilities.removeNonDigits(userEnteredPublicCode);
+			String normalizedPublicCode = MartusCrypto.removeNonDigits(userEnteredPublicCode);
 
 			if(publicCode.equals(normalizedPublicCode))
 				return true;

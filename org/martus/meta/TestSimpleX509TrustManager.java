@@ -5,7 +5,7 @@ import java.security.cert.X509Certificate;
 import java.security.interfaces.RSAPrivateCrtKey;
 import java.security.interfaces.RSAPublicKey;
 
-import org.martus.common.MartusUtilities;
+import org.martus.common.MartusCrypto;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.SimpleX509TrustManager;
 import org.martus.common.TestCaseEnhanced;
@@ -79,7 +79,7 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		verifyCheckServerTrustedThrows(chain0, "RSA");
 
 		SimpleX509TrustManager tm = new SimpleX509TrustManager();
-		tm.setExpectedPublicCode(MartusUtilities.computePublicCode(martusServerSecurity.getPublicKeyString()));
+		tm.setExpectedPublicCode(MartusCrypto.computePublicCode(martusServerSecurity.getPublicKeyString()));
 		try 
 		{
 			tm.checkServerTrusted(chain0, "RSA");
@@ -99,7 +99,7 @@ public class TestSimpleX509TrustManager extends TestCaseEnhanced
 		tm.setExpectedPublicKey(martusServerSecurity.getPublicKeyString());
 		tm.checkServerTrusted(validChain, "RSA");
 
-		tm.setExpectedPublicCode(MartusUtilities.computePublicCode(martusServerSecurity.getPublicKeyString()));
+		tm.setExpectedPublicCode(MartusCrypto.computePublicCode(martusServerSecurity.getPublicKeyString()));
 		tm.checkServerTrusted(validChain, "RSA");
 	}
 

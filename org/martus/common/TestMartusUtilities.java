@@ -98,7 +98,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		String key = security.getPublicKeyString();
 		byte[] publicKeyBytes = Base64.decode(key);
 		InputStream in = new ByteArrayInputStream(publicKeyBytes);
-		byte[] sigBytes = security.createSignature(in);
+		byte[] sigBytes = security.createSignatureOfStream(in);
 		String sig = Base64.encode(sigBytes);
 
 		File keyFile = createTempFile();
@@ -150,7 +150,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		String key = other.getPublicKeyString();
 		byte[] publicKeyBytes = Base64.decode(key);
 		InputStream in = new ByteArrayInputStream(publicKeyBytes);
-		byte[] sigBytes = security.createSignature(in);
+		byte[] sigBytes = security.createSignatureOfStream(in);
 		String sig = Base64.encode(sigBytes);
 
 		File keyFile = createTempFile();
@@ -199,7 +199,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		String key = security.getPublicKeyString();
 		byte[] publicKeyBytes = Base64.decode(key);
 		InputStream in = new ByteArrayInputStream(publicKeyBytes);
-		byte[] sigBytes = security.createSignature(in);
+		byte[] sigBytes = security.createSignatureOfStream(in);
 		String sig = Base64.encode(sigBytes);
 
 		File keyFile = createTempFile();

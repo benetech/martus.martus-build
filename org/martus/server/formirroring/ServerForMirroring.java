@@ -88,7 +88,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 		{
 			Vector result = new Vector();
 			result.add(getSecurity().getPublicKeyString());
-			result.add(MartusUtilities.getSignatureOfPublicKey(getSecurity()));
+			result.add(getSecurity().getSignatureOfPublicKey());
 			return result;
 		}
 		catch (Exception e)

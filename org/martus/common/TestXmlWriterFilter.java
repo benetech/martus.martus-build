@@ -62,7 +62,7 @@ public class TestXmlWriterFilter extends TestCaseEnhanced
 		String expectedText = "<a>\r\ncd\n</a>\n";
 		byte[] expectedBytes = expectedText.getBytes();
 		ByteArrayInputStream expectedIn = new ByteArrayInputStream(expectedBytes);
-		byte[] expectedSig = security.createSignature(expectedIn);
+		byte[] expectedSig = security.createSignatureOfStream(expectedIn);
 		expectedIn.close();
 
 		StringWriter stringWriter = new StringWriter();

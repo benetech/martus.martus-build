@@ -35,7 +35,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.UnsupportedEncodingException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -210,7 +209,7 @@ public class MartusApp
 
 
 			FileInputStream in = new FileInputStream(fileName);
-			byte[] signature = security.createSignature(in);
+			byte[] signature = security.createSignatureOfStream(in);
 			in.close();
 
 			FileOutputStream out = new FileOutputStream(getConfigInfoSignatureFilename());
@@ -247,7 +246,7 @@ public class MartusApp
 			inSignature.close();
 
 			FileInputStream inData = new FileInputStream(dataFile);
-			boolean verified = security.isSignatureValid(security.getPublicKeyString(), inData, signature);
+			boolean verified = security.isValidSignatureOfStream(security.getPublicKeyString(), inData, signature);
 			inData.close();
 			if(!verified)
 				throw new LoadConfigInfoException();
@@ -705,7 +704,7 @@ public class MartusApp
 	{
 		try
 		{
-			return MartusUtilities.computePublicCode(getServerPublicKey(serverName));
+			return MartusCrypto.computePublicCode(getServerPublicKey(serverName));
 		}
 		catch(Base64.InvalidBase64Exception e)
 		{
@@ -1261,13 +1260,6 @@ public class MartusApp
 		if(Character.isLetterOrDigit(c))
 			return true;
 		return false;
-	}
-
-	private String createSignature(String stringToSign)
-		throws UnsupportedEncodingException, MartusSignatureException
-	{
-		MartusCrypto security = getSecurity();
-		return MartusUtilities.createSignature(stringToSign, security);
 	}
 
 	protected String dataDirectory;

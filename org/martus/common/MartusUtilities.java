@@ -97,68 +97,6 @@ public class MartusUtilities
 		return "#{BUILDDATE}";
 	}
 
-	public static synchronized String createSignature(String stringToSign, MartusCrypto security)
-		throws UnsupportedEncodingException, MartusSignatureException
-	{
-		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
-		byte[] sigBytes = security.createSignature(new ByteArrayInputStream(bytesToSign));
-		String signature = Base64.encode(sigBytes);
-		return signature;
-	}
-
-	public static boolean verifySignature(Vector dataToSign, MartusCrypto verifier, String signedBy, String sig)
-	{
-		try
-		{
-			synchronized(verifier)
-			{
-				verifier.signatureInitializeVerify(signedBy);
-				for(int element = 0; element < dataToSign.size(); ++element)
-				{
-					String thisElement = dataToSign.get(element).toString();
-					byte[] bytesToSign = thisElement.getBytes("UTF-8");
-					//TODO: might want to optimize this for speed
-					for(int b = 0; b < bytesToSign.length; ++b)
-						verifier.signatureDigestByte(bytesToSign[b]);
-					verifier.signatureDigestByte((byte)0);
-				}
-				byte[] sigBytes = Base64.decode(sig);
-				return verifier.signatureIsValid(sigBytes);
-			}
-		}
-		catch(Exception e)
-		{
-			return false;
-		}
-	}
-
-	public static String sign(Vector dataToSign, MartusCrypto signer) throws
-			MartusCrypto.MartusSignatureException
-	{
-		try
-		{
-			synchronized(signer)
-			{
-				signer.signatureInitializeSign();
-				for(int element = 0; element < dataToSign.size(); ++element)
-				{
-					String thisElement = dataToSign.get(element).toString();
-					byte[] bytesToSign = thisElement.getBytes("UTF-8");
-					signer.signatureDigestBytes(bytesToSign);
-					signer.signatureDigestByte((byte)0);
-				}
-				return Base64.encode(signer.signatureGet());
-			}
-		}
-		catch(Exception e)
-		{
-			// TODO: Needs tests!
-			e.printStackTrace();
-			System.out.println("ServerProxy.sign: " + e);
-			throw new MartusCrypto.MartusSignatureException();
-		}
-	}
-
 	public static byte[] createSignatureFromFile(File fileToSign, MartusCrypto signer)
 		throws IOException, MartusSignatureException
 	{
@@ -166,7 +104,7 @@ public class MartusUtilities
 		try
 		{
 			in = new FileInputStream(fileToSign);
-			byte[] signature = signer.createSignature(in);
+			byte[] signature = signer.createSignatureOfStream(in);
 			return signature;
 		}
 		finally
@@ -231,7 +169,7 @@ public class MartusUtilities
 				throw new FileVerificationException();
 
 			inData = new FileInputStream(fileToVerify);
-			if( !verifier.isSignatureValid(key, inData, Base64.decode(signature)) )
+			if( !verifier.isValidSignatureOfStream(key, inData, Base64.decode(signature)) )
 				throw new FileVerificationException();
 		}
 		catch(Exception e)
@@ -288,7 +226,7 @@ public class MartusUtilities
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
 		String publicKeyString = security.getPublicKeyString();
-		String sigString = getSignatureOfPublicKey(security);
+		String sigString = security.getSignatureOfPublicKey();
 
 		UnicodeWriter writer = new UnicodeWriter(outputfile);
 		try
@@ -329,7 +267,7 @@ public class MartusUtilities
 		throws MartusSignatureException, InvalidBase64Exception, IOException
 	{
 		String publicKeyString = security.getPublicKeyString();
-		String sigString = getSignatureOfPublicKey(security);
+		String sigString = security.getSignatureOfPublicKey();
 
 		UnicodeWriter writer = new UnicodeWriter(outputfile);
 		try
@@ -341,60 +279,6 @@ public class MartusUtilities
 		{
 			writer.close();
 		}
-	}
-
-	public static String getSignatureOfPublicKey(MartusCrypto security)
-		throws InvalidBase64Exception, MartusSignatureException
-	{
-		String publicKeyString = security.getPublicKeyString();
-		byte[] publicKeyBytes = Base64.decode(publicKeyString);
-		ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-		byte[] sigBytes = security.createSignature(in);
-		String sigString = Base64.encode(sigBytes);
-		return sigString;
-	}
-
-	public static String formatPublicCode(String publicCode)
-	{
-		String formatted = "";
-		while(publicCode.length() > 0)
-		{
-			String portion = publicCode.substring(0, 4);
-			formatted += portion + "." ;
-			publicCode = publicCode.substring(4);
-		}
-		if(formatted.endsWith("."))
-			formatted = formatted.substring(0,formatted.length()-1);
-		return formatted;
-	}
-
-	public static String computePublicCode(String publicKeyString) throws
-		Base64.InvalidBase64Exception
-	{
-		String digest = null;
-		try
-		{
-			digest = MartusSecurity.createDigestString(publicKeyString);
-		}
-		catch(Exception e)
-		{
-			System.out.println("MartusApp.computePublicCode: " + e);
-			return "";
-		}
-
-		final int codeSizeChars = 20;
-		char[] buf = new char[codeSizeChars];
-		int dest = 0;
-		for(int i = 0; i < codeSizeChars/2; ++i)
-		{
-			int value = Base64.getValue(digest.charAt(i));
-			int high = value >> 3;
-			int low = value & 0x07;
-
-			buf[dest++] = (char)('1' + high);
-			buf[dest++] = (char)('1' + low);
-		}
-		return new String(buf);
 	}
 
 	public static void exportPublicBulletinPacketsFromDatabaseToZipFile(Database db, DatabaseKey headerKey, File destZipFile, MartusCrypto security) throws
@@ -1005,17 +889,6 @@ public class MartusUtilities
 		return ap;
 	}
 
-	public static String removeNonDigits(String userEnteredPublicCode)
-	{
-		String normalizedPublicCode = "";
-		for (int i=0 ; i < userEnteredPublicCode.length(); ++i)
-		{
-			if ("0123456789".indexOf(userEnteredPublicCode.substring(i, i+1)) >= 0)
-				normalizedPublicCode += userEnteredPublicCode.substring(i, i+1);
-		}
-		return normalizedPublicCode;
-	}
-
 	public static class PublicInformationInvalidException extends Exception {}
 
 
@@ -1025,7 +898,7 @@ public class MartusUtilities
 		try
 		{
 			ByteArrayInputStream in = new ByteArrayInputStream(Base64.decode(accountId));
-			if(!verifier.isSignatureValid(accountId, in, Base64.decode(sig)))
+			if(!verifier.isValidSignatureOfStream(accountId, in, Base64.decode(sig)))
 				throw new PublicInformationInvalidException();
 	
 		}
@@ -1053,12 +926,6 @@ public class MartusUtilities
 	
 		Timer timer = new Timer(true);
 		timer.schedule(task, IMMEDIATELY, interval);
-	}
-
-	public static String getPublicCode(String nextAccountId)
-		throws Base64.InvalidBase64Exception
-	{
-		return MartusUtilities.formatPublicCode(MartusUtilities.computePublicCode(nextAccountId));
 	}
 
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";

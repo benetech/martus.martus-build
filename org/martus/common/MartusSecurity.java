@@ -84,7 +84,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.isnetworks.provider.random.InfiniteMonkeyProvider;
 
-public class MartusSecurity implements MartusCrypto
+public class MartusSecurity extends MartusCryptoImplementation
 {
 	public MartusSecurity() throws CryptoInitializationException
 	{
@@ -172,7 +172,7 @@ public class MartusSecurity implements MartusCrypto
 		return(getKeyString(privateKey));
 	}
 
-	public byte[] createSignature(InputStream inputStream) throws
+	public byte[] createSignatureOfStream(InputStream inputStream) throws
 			MartusSignatureException
 	{
 		return createSignature(getPrivateKey(), inputStream);
@@ -181,13 +181,13 @@ public class MartusSecurity implements MartusCrypto
 	public boolean verifySignature(InputStream inputStream, byte[] signature) throws
 			MartusSignatureException
 	{
-		return isSignatureValid(getPublicKey(), inputStream, signature);
+		return isValidSignatureOfStream(getPublicKey(), inputStream, signature);
 	}
 
-	public boolean isSignatureValid(String publicKeyString, InputStream inputStream, byte[] signature) throws
+	public boolean isValidSignatureOfStream(String publicKeyString, InputStream inputStream, byte[] signature) throws
 			MartusSignatureException
 	{
-		return isSignatureValid(extractPublicKey(publicKeyString), inputStream, signature);
+		return isValidSignatureOfStream(extractPublicKey(publicKeyString), inputStream, signature);
 	}
 
 	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws
@@ -232,7 +232,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
+	public OutputStream createEncryptingOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
 		throws EncryptionException
 	{
 		return createCipherOutputStream(cipherStream, sessionKeyBytes, getPublicKeyString());
@@ -335,7 +335,7 @@ public class MartusSecurity implements MartusCrypto
 	public synchronized void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws
 			DecryptionException
 	{
-		CipherInputStream cis = createCipherInputStream(cipherStream, sessionKeyBytes);
+		InputStream cis = createDecryptingInputStream(cipherStream, sessionKeyBytes);
 		BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
 		try
 		{
@@ -356,7 +356,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public CipherInputStream createCipherInputStream(InputStreamWithSeek cipherStream, byte[] sessionKeyBytes)
+	public InputStream createDecryptingInputStream(InputStreamWithSeek cipherStream, byte[] sessionKeyBytes)
 		throws	DecryptionException
 	{
 		try
@@ -719,7 +719,7 @@ public class MartusSecurity implements MartusCrypto
 		}
 	}
 
-	public synchronized boolean isSignatureValid(PublicKey publicKey, InputStream inputStream, byte[] signature) throws
+	public synchronized boolean isValidSignatureOfStream(PublicKey publicKey, InputStream inputStream, byte[] signature) throws
 			MartusSignatureException
 	{
 		try

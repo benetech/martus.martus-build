@@ -29,88 +29,142 @@ package org.martus.common;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Vector;
 
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 import javax.net.ssl.KeyManager;
 
-public interface MartusCrypto
+public abstract class MartusCrypto
 {
-	public boolean hasKeyPair();
-	public void clearKeyPair();
-	public void createKeyPair();
-
-	public void writeKeyPair(OutputStream outputStream, String passPhrase) throws
+	// key pair stuff
+	public abstract boolean hasKeyPair();
+	public abstract void clearKeyPair();
+	public abstract void createKeyPair();
+	public abstract void writeKeyPair(OutputStream outputStream, String passPhrase) throws
 		IOException;
+	public abstract void readKeyPair(InputStream inputStream, String passPhrase) throws
+		IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException;
+	public abstract String getPublicKeyString();
+	public abstract byte[] getDigestOfPartOfPrivateKey() throws CreateDigestException;
+	public abstract String getSignatureOfPublicKey()
+		throws Base64.InvalidBase64Exception, MartusCrypto.MartusSignatureException;
 
-	public void readKeyPair(InputStream inputStream, String passPhrase) throws
-		IOException,
-		InvalidKeyPairFileVersionException,
-		AuthorizationFailedException;
-
-	public String getPublicKeyString();
-
-	public byte[] createSignature(InputStream inputStream) throws
+	// one-shot signature methods
+	public abstract byte[] createSignatureOfStream(InputStream inputStream) throws
 		MartusSignatureException;
-
-	public boolean isSignatureValid(String publicKeyString, InputStream inputStream, byte[] signature) throws
+	public abstract boolean isValidSignatureOfStream(String publicKeyString, InputStream inputStream, byte[] signature) throws
 		MartusSignatureException;
-
-	public void signatureInitializeSign() throws
+	public abstract String createSignatureOfVectorOfStrings(Vector dataToSign) throws
+			MartusCrypto.MartusSignatureException;
+	public abstract boolean verifySignatureOfVectorOfStrings(Vector dataToSign, String signedBy, String sig);
+		
+	// multi-part signature methods
+	public abstract void signatureInitializeSign() throws
 		MartusSignatureException;
-
-	public void signatureDigestByte(byte b) throws
+	public abstract void signatureDigestByte(byte b) throws
 		MartusSignatureException;
-
-	public void signatureDigestBytes(byte[] bytes) throws
+	public abstract void signatureDigestBytes(byte[] bytes) throws
 			MartusSignatureException;
-
-	public byte[] signatureGet() throws
+	public abstract byte[] signatureGet() throws
+		MartusSignatureException;
+	public abstract void signatureInitializeVerify(String publicKey) throws
+		MartusSignatureException;
+	public abstract boolean signatureIsValid(byte[] sig) throws
 		MartusSignatureException;
 
-	public void signatureInitializeVerify(String publicKey) throws
-		MartusSignatureException;
-
-	public boolean signatureIsValid(byte[] sig) throws
-		MartusSignatureException;
-
-
-	public byte[] createSessionKey() throws
+	// session keys
+	public abstract byte[] createSessionKey() throws
 			EncryptionException;
-
-	public void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws
-			EncryptionException,
-			NoKeyPairException;
-
-	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws
-			NoKeyPairException,
-			EncryptionException;
-
-	public byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws
+	public abstract byte[] encryptSessionKey(byte[] sessionKeyBytes, String publicKey) throws
 		EncryptionException;
-
-	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws
-			DecryptionException;
-
-	public void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream) throws
-			NoKeyPairException,
-			DecryptionException;
-
-	public byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws
+	public abstract byte[] decryptSessionKey(byte[] encryptedSessionKeyBytes) throws
 		DecryptionException;
 
-	public CipherOutputStream createCipherOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
-		throws EncryptionException;
+	// encrypt/decrypt
+	public abstract void encrypt(InputStream plainStream, OutputStream cipherStream, byte[] sessionKeyBytes) throws
+			EncryptionException,
+			NoKeyPairException;
+	public abstract void encrypt(InputStream plainStream, OutputStream cipherStream) throws
+			NoKeyPairException,
+			EncryptionException;
+	public abstract void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws
+			DecryptionException;
+	public abstract void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream) throws
+			NoKeyPairException,
+			DecryptionException;
 
-	public CipherInputStream createCipherInputStream(InputStreamWithSeek cipherStream, byte[] sessionKeyBytes)
+	// cipher streams
+	public abstract OutputStream createEncryptingOutputStream(OutputStream cipherStream, byte[] sessionKeyBytes)
+		throws EncryptionException;
+	public abstract InputStream createDecryptingInputStream(InputStreamWithSeek cipherStream, byte[] sessionKeyBytes)
 		throws	DecryptionException;
 
-	public String createRandomToken();
+	// other
+	public abstract String createRandomToken();
+	public abstract KeyManager [] createKeyManagers() throws Exception;
+
+	// public codes
+	public static String computePublicCode(String publicKeyString) throws
+		Base64.InvalidBase64Exception
+	{
+		String digest = null;
+		try
+		{
+			digest = MartusSecurity.createDigestString(publicKeyString);
+		}
+		catch(Exception e)
+		{
+			System.out.println("MartusApp.computePublicCode: " + e);
+			return "";
+		}
 	
-	public byte[] getDigestOfPartOfPrivateKey() throws CreateDigestException;
+		final int codeSizeChars = 20;
+		char[] buf = new char[codeSizeChars];
+		int dest = 0;
+		for(int i = 0; i < codeSizeChars/2; ++i)
+		{
+			int value = Base64.getValue(digest.charAt(i));
+			int high = value >> 3;
+			int low = value & 0x07;
+	
+			buf[dest++] = (char)('1' + high);
+			buf[dest++] = (char)('1' + low);
+		}
+		return new String(buf);
+	}
 
-	public KeyManager [] createKeyManagers() throws Exception;
+	public static String formatPublicCode(String publicCode)
+	{
+		String formatted = "";
+		while(publicCode.length() > 0)
+		{
+			String portion = publicCode.substring(0, 4);
+			formatted += portion + "." ;
+			publicCode = publicCode.substring(4);
+		}
+		if(formatted.endsWith("."))
+			formatted = formatted.substring(0,formatted.length()-1);
+		return formatted;
+	}
 
+	public static String removeNonDigits(String userEnteredPublicCode)
+	{
+		String normalizedPublicCode = "";
+		for (int i=0 ; i < userEnteredPublicCode.length(); ++i)
+		{
+			if ("0123456789".indexOf(userEnteredPublicCode.substring(i, i+1)) >= 0)
+				normalizedPublicCode += userEnteredPublicCode.substring(i, i+1);
+		}
+		return normalizedPublicCode;
+	}
+
+	public static String getFormattedPublicCode(String nextAccountId)
+		throws Base64.InvalidBase64Exception
+	{
+		return MartusCrypto.formatPublicCode(MartusCrypto.computePublicCode(nextAccountId));
+	}
+
+
+	// exceptions
 	public static class CryptoException extends Exception{}
 	public static class CryptoInitializationException extends CryptoException {}
 	public static class InvalidKeyPairFileVersionException extends CryptoException {}

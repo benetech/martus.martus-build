@@ -27,13 +27,11 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.core;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
-
-import javax.crypto.CipherInputStream;
-import javax.crypto.CipherOutputStream;
 
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
@@ -80,7 +78,7 @@ public class CacheOfSortableFields
 		try
 		{
 			byte[] sessionKeyBytes = security.createSessionKey();
-			CipherOutputStream cipherOut = security.createCipherOutputStream(out, sessionKeyBytes);
+			OutputStream cipherOut = security.createEncryptingOutputStream(out, sessionKeyBytes);
 			ObjectOutputStream dataOut = new ObjectOutputStream(cipherOut);
 			dataOut.writeObject(bulletinIdsHashMap);
 			dataOut.close();
@@ -95,7 +93,7 @@ public class CacheOfSortableFields
 	{
 		try
 		{
-			CipherInputStream cipherIn = security.createCipherInputStream(in, null);
+			InputStream cipherIn = security.createDecryptingInputStream(in, null);
 			ObjectInputStream dataIn = new ObjectInputStream(cipherIn);
 			bulletinIdsHashMap = (HashMap)dataIn.readObject();
 			dataIn.close();

@@ -129,8 +129,8 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 			System.out.println();
 
 			System.out.print("Server Public Code: ");
-			String publicCode = MartusUtilities.computePublicCode(accountId);
-			System.out.println(MartusUtilities.formatPublicCode(publicCode));
+			String publicCode = MartusCrypto.computePublicCode(accountId);
+			System.out.println(MartusCrypto.formatPublicCode(publicCode));
 			System.out.println();
 		}
 		catch(IOException e)
@@ -274,7 +274,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 			String publicKeyString = security.getPublicKeyString();
 			byte[] publicKeyBytes = Base64.decode(publicKeyString);
 			ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-			byte[] sigBytes = security.createSignature(in);
+			byte[] sigBytes = security.createSignatureOfStream(in);
 			
 			result.add(NetworkInterfaceConstants.OK);
 			result.add(publicKeyString);
@@ -373,7 +373,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		try 
 		{
 			InputStream in = new ByteArrayInputStream(Base64.decode(tokenToSign));
-			byte[] sig = security.createSignature(in);
+			byte[] sig = security.createSignatureOfStream(in);
 			return Base64.encode(sig);
 		} 
 		catch(MartusSignatureException e) 
@@ -397,8 +397,8 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		String formattedCode = "";
 		try 
 		{
-			String publicCode = MartusUtilities.computePublicCode(clientId);
-			formattedCode = MartusUtilities.formatPublicCode(publicCode);
+			String publicCode = MartusCrypto.computePublicCode(clientId);
+			formattedCode = MartusCrypto.formatPublicCode(publicCode);
 		} 
 		catch(InvalidBase64Exception e) 
 		{
@@ -590,7 +590,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		try
 		{
 			ByteArrayInputStream in = new ByteArrayInputStream(signedString.getBytes("UTF-8"));
-			return security.isSignatureValid(signerPublicKey, in, Base64.decode(signature));
+			return security.isValidSignatureOfStream(signerPublicKey, in, Base64.decode(signature));
 		}
 		catch(Exception e)
 		{

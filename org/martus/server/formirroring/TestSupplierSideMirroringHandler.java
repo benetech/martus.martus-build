@@ -63,7 +63,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	public void testBadSignature() throws Exception
 	{
 		Vector parameters = new Vector();
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		parameters.add("Hello");
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
@@ -76,7 +76,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 		Vector parameters = new Vector();
 		parameters.add(new Integer(3));
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
@@ -89,7 +89,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
 		parameters.add("This will never be a valid command!");
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(accountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.UNKNOWN_COMMAND, result.get(0));
@@ -103,7 +103,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_PING);
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(accountId, parameters, sig);
 		assertEquals(2, result.size());
 		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
@@ -150,7 +150,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	{
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.NOT_AUTHORIZED, result.get(0));
@@ -162,7 +162,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(2, result.size());
 		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
@@ -181,7 +181,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
 		Vector accounts = (Vector)result.get(1);
@@ -195,7 +195,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add("account id to ignore");
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.NOT_AUTHORIZED, result.get(0));
@@ -208,7 +208,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add(new Integer(3));
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
@@ -235,7 +235,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add(authorAccountId);
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
 		Vector infos = (Vector)result.get(1);
@@ -253,7 +253,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_UPLOAD_RECORD);
 		parameters.add("No such account");
 		parameters.add("No such bulletin");
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
 		assertEquals(1, result.size());
@@ -271,7 +271,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_UPLOAD_RECORD);
 		parameters.add(accountId);
 		parameters.add(localId);
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
 		assertEquals(2, result.size());
@@ -282,7 +282,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_CHUNK);
 		parameters.add("account id to ignore");
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.NOT_AUTHORIZED, result.get(0));
@@ -295,7 +295,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_CHUNK);
 		parameters.add(new Integer(3));
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
@@ -311,7 +311,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		parameters.add("pretend localid");
 		parameters.add(new Integer(3));
 		parameters.add("bad maxChunkSize");
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
 		assertEquals(NetworkInterfaceConstants.INVALID_DATA, result.get(0));
@@ -333,7 +333,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(offset));
 		parameters.add(new Integer(maxChunkSize));
-		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		String sig = callerSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 
 		assertEquals(authorAccountId, supplier.gotAccount);

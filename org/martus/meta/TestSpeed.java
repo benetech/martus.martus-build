@@ -116,7 +116,7 @@ public class TestSpeed extends TestCaseEnhanced
 		
 		InputStream in = new ByteArrayInputStream(data);
 		Stopwatch signer = new Stopwatch();
-		byte[] sig = security.createSignature(in);
+		byte[] sig = security.createSignatureOfStream(in);
 		print("Sign   " + data.length + " bytes of data", signer.stop());
 		
 		security.verifySignature(in, sig);

@@ -34,7 +34,6 @@ import java.util.Vector;
 
 import org.martus.client.core.ConfigInfo;
 import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
 import org.martus.common.TestCaseEnhanced;
 
 public class TestConfigInfo extends TestCaseEnhanced
@@ -157,7 +156,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals("phone not correct?", samplePhone, contactInfo.get(6));
 		String signature = (String)contactInfo.get(contactInfo.size()-1);
 		contactInfo.remove(contactInfo.size()-1);
-		assertTrue("Signature failed?", MartusUtilities.verifySignature(contactInfo, signer, publicKey, signature));
+		assertTrue("Signature failed?", signer.verifySignatureOfVectorOfStrings(contactInfo, publicKey, signature));
 	}
 	
 	

@@ -69,7 +69,7 @@ public class SimpleX509TrustManager implements X509TrustManager
 			if(tryPublicKey == null)
 			{
 				String certPublicKeyString = MartusSecurity.getKeyString(cert2.getPublicKey());
-				String certPublicCode = MartusUtilities.computePublicCode(certPublicKeyString);
+				String certPublicCode = MartusCrypto.computePublicCode(certPublicKeyString);
 				if(expectedPublicCode.equals(certPublicCode))
 					tryPublicKey = cert2.getPublicKey();
 			}

@@ -29,7 +29,6 @@ package org.martus.server.formirroring;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.Base64.InvalidBase64Exception;
 
@@ -69,7 +68,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		int cmd = extractCommand(parameters.get(0));
 		if(cmd == cmdPing)
 			return true;
-		return MartusUtilities.verifySignature(parameters, verifier, callerAccountId, signature);
+		return verifier.verifySignatureOfVectorOfStrings(parameters, callerAccountId, signature);
 	}
 	
 	Vector executeCommand(String callerAccountId, Vector parameters)
@@ -108,7 +107,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 				String publicCode;
 				try
 				{
-					publicCode = MartusUtilities.computePublicCode(authorAccountId);
+					publicCode = MartusCrypto.computePublicCode(authorAccountId);
 				}
 				catch (InvalidBase64Exception e)
 				{
@@ -116,7 +115,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 					result.add(INVALID_DATA);
 					return result;
 				}
-				log("listBulletins: " + MartusUtilities.formatPublicCode(publicCode));
+				log("listBulletins: " + MartusCrypto.formatPublicCode(publicCode));
 				Vector infos = supplier.listBulletinsForMirroring(authorAccountId);
 				
 				result.add(OK);

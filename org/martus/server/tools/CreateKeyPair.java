@@ -31,8 +31,8 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStreamReader;
 
+import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
 
 public class CreateKeyPair
 {
@@ -78,8 +78,8 @@ public class CreateKeyPair
 			security.writeKeyPair(out, passphrase);
 			out.close();
 			
-			String publicCode = MartusUtilities.computePublicCode(security.getPublicKeyString());
-			System.out.println("Public Code: " + MartusUtilities.formatPublicCode(publicCode));
+			String publicCode = MartusCrypto.computePublicCode(security.getPublicKeyString());
+			System.out.println("Public Code: " + MartusCrypto.formatPublicCode(publicCode));
 			System.exit(0);
 		}
 		catch(Exception e)

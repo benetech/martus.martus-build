@@ -36,7 +36,7 @@ import javax.swing.JTextField;
 
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
-import org.martus.common.MartusUtilities;
+import org.martus.common.MartusCrypto;
 import org.martus.common.Base64.InvalidBase64Exception;
 
 public class UiConfigServerDlg extends JDialog implements ActionListener
@@ -71,8 +71,8 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		{
 			if(serverPublicKey.length() > 0)
 			{
-				serverCode = MartusUtilities.computePublicCode(serverPublicKey);
-				serverCode = MartusUtilities.formatPublicCode(serverCode);
+				serverCode = MartusCrypto.computePublicCode(serverPublicKey);
+				serverCode = MartusCrypto.formatPublicCode(serverCode);
 			}
 		}
 		catch (InvalidBase64Exception e)
@@ -129,7 +129,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		if(serverName.length() == 0)
 			return errorMessage("InvalidServerName");
 
-		String normalizedPublicCode = MartusUtilities.removeNonDigits(userEnteredPublicCode);
+		String normalizedPublicCode = MartusCrypto.removeNonDigits(userEnteredPublicCode);
 		if(normalizedPublicCode.length() == 0)
 			return errorMessage("InvalidServerCode");
 
@@ -141,7 +141,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		try
 		{
 			serverKey = app.getServerPublicKey(serverName);
-			serverPublicCode = MartusUtilities.computePublicCode(serverKey);
+			serverPublicCode = MartusCrypto.computePublicCode(serverKey);
 		}
 		catch(Exception e)
 		{

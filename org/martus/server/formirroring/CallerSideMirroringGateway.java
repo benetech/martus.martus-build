@@ -29,7 +29,6 @@ package org.martus.server.formirroring;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkResponse;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
@@ -52,7 +51,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 	{
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
 	}
 	
@@ -61,7 +60,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add(authorAccountId);
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
 	}
 	
@@ -71,7 +70,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_UPLOAD_RECORD);
 		parameters.add(uid.getAccountId());
 		parameters.add(uid.getLocalId());
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
 	}
 
@@ -85,7 +84,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(chunkOffset));
 		parameters.add(new Integer(maxChunkSize));
-		String signature = MartusUtilities.sign(parameters, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(parameters);
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
 	}
 					

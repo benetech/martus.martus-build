@@ -329,7 +329,7 @@ public class MartusServerUtilities
 				throw new FileVerificationException();
 
 			inData = new FileInputStream(fileToVerify);
-			if( !verifier.isSignatureValid(key, inData, Base64.decode(signature)) )
+			if( !verifier.isValidSignatureOfStream(key, inData, Base64.decode(signature)) )
 				throw new FileVerificationException();
 		}
 		catch(Exception e)

@@ -34,7 +34,6 @@ import java.io.Serializable;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 
 public class ConfigInfo implements Serializable
@@ -116,7 +115,7 @@ public class ConfigInfo implements Serializable
 		contactInfo.add(webPage);
 		contactInfo.add(phone);
 		contactInfo.add(address);
-		String signature = MartusUtilities.sign(contactInfo, signer);
+		String signature = signer.createSignatureOfVectorOfStrings(contactInfo);
 		contactInfo.add(signature);
 		return contactInfo;
 	}

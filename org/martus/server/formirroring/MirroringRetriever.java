@@ -72,7 +72,7 @@ public class MirroringRetriever
 			
 		try
 		{
-			String publicCode = MartusUtilities.getPublicCode(uid.getAccountId());
+			String publicCode = MartusCrypto.getFormattedPublicCode(uid.getAccountId());
 			log("Get bulletin: " + publicCode + "->" + uid.getLocalId());
 			String bur = retrieveBurFromMirror(uid);
 			File zip = File.createTempFile("$$$MirroringRetriever", null);

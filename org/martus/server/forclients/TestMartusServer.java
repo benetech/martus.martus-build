@@ -416,7 +416,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		contactInfo.add(new Integer(2));
 		contactInfo.add("Data");
 		contactInfo.add("Data2");
-		String signature = MartusUtilities.sign(contactInfo, clientSecurity);
+		String signature = clientSecurity.createSignatureOfVectorOfStrings(contactInfo);
 		contactInfo.add(signature);
 		String incorrectAccoutResult = testServer.putContactInfo("differentAccountID", contactInfo);
 		assertEquals("Incorrect Accout ", INVALID_DATA, incorrectAccoutResult);		
@@ -461,10 +461,10 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		parameters.add(clientId);
 		parameters.add(new Integer(1));
 		parameters.add("Data");
-		String signature = MartusUtilities.sign(parameters, clientSecurity);
+		String signature = clientSecurity.createSignatureOfVectorOfStrings(parameters);
 		parameters.add(signature);
 
-		String sig = MartusUtilities.sign(parameters, clientSecurity);
+		String sig = clientSecurity.createSignatureOfVectorOfStrings(parameters);
 		
 		Vector result = testServerInterface.putContactInfo(clientId, parameters, sig);
 		File contactFile = testServer.getContactInfoFileForAccount(clientId);
@@ -523,15 +523,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		byte[] accountIdBytes = Base64.decode(accountId);
 
 		ByteArrayInputStream in = new ByteArrayInputStream(accountIdBytes);
-		byte[] expectedSig = serverSecurity.createSignature(in);
+		byte[] expectedSig = serverSecurity.createSignatureOfStream(in);
 		assertEquals(label + " encoded sig wrong?", Base64.encode(expectedSig), sig);
 
 		ByteArrayInputStream dataInClient = new ByteArrayInputStream(accountIdBytes);
-		boolean ok1 = clientSecurity.isSignatureValid(accountId, dataInClient, Base64.decode(sig));
+		boolean ok1 = clientSecurity.isValidSignatureOfStream(accountId, dataInClient, Base64.decode(sig));
 		assertEquals(label + " client verifySig failed", true, ok1);
 
 		ByteArrayInputStream dataInServer = new ByteArrayInputStream(accountIdBytes);
-		boolean ok2 = serverSecurity.isSignatureValid(accountId, dataInServer, Base64.decode(sig));
+		boolean ok2 = serverSecurity.isValidSignatureOfStream(accountId, dataInServer, Base64.decode(sig));
 		assertEquals(label + " server verifySig failed", true, ok2);
 	}
 	
@@ -692,7 +692,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String stringToSign = authorId + "," + localId + "," + Integer.toString(totalLength) + "," + 
 					Integer.toString(0) + "," + Integer.toString(chunkLength) + "," + b1ChunkData0;
 		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
-		byte[] sigBytes = serverSecurity.createSignature(new ByteArrayInputStream(bytesToSign));
+		byte[] sigBytes = serverSecurity.createSignatureOfStream(new ByteArrayInputStream(bytesToSign));
 		String signature = Base64.encode(sigBytes);
 		assertEquals("allowed wrong sig?", NetworkInterfaceConstants.SIG_ERROR, testServer.uploadBulletinChunk(authorId, localId, totalLength, 0, chunkLength, b1ChunkData0, signature));
 
@@ -971,7 +971,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		parameters.add(new Integer(chunkOffset));
 		parameters.add(new Integer(maxChunkSize));
 
-		String signature = MartusUtilities.sign(parameters, securityToUse);
+		String signature = securityToUse.createSignatureOfVectorOfStrings(parameters);
 		return server.getBulletinChunk(securityToUse.getPublicKeyString(), parameters, signature);
 	}
 
@@ -1083,11 +1083,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 				return false;						
 			}
 
-			public boolean isSignatureValid(PublicKey publicKey, InputStream inputStream, byte[] signature) throws
+			public boolean isValidSignatureOfStream(PublicKey publicKey, InputStream inputStream, byte[] signature) throws
 					MartusSignatureException
 			{
 				if(!shouldFailNext)
-					return super.isSignatureValid(publicKey, inputStream, signature);
+					return super.isValidSignatureOfStream(publicKey, inputStream, signature);
 				shouldFailNext = false;
 				return false;						
 			}			
@@ -1182,7 +1182,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		for (int i = 0; i < allIds.length; i++)
 			parameters.add(allIds[i]);
 
-		String sig = MartusUtilities.sign(parameters, clientSecurity);
+		String sig = clientSecurity.createSignatureOfVectorOfStrings(parameters);
 		Vector result = testServerInterface.deleteDraftBulletins(clientAccountId, parameters, sig);
 		assertEquals("Result size?", 1, result.size());
 		assertEquals("Result not ok?", OK, result.get(0));
@@ -1542,7 +1542,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		result = server.authenticateServer(base64data);
 		byte[] signature = Base64.decode(result);
 		InputStream in = new ByteArrayInputStream(Base64.decode(base64data));
-		assertTrue("Invalid signature?", clientSecurity.isSignatureValid(server.security.getPublicKeyString(), in, signature));
+		assertTrue("Invalid signature?", clientSecurity.isValidSignatureOfStream(server.security.getPublicKeyString(), in, signature));
 		
 		server.deleteAllFiles();
 
@@ -1664,7 +1664,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String stringToSign = authorId + "," + localId + "," + Integer.toString(totalLength) + "," + 
 					Integer.toString(offset) + "," + Integer.toString(chunkLength) + "," + data;
 		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
-		byte[] sigBytes = signer.createSignature(new ByteArrayInputStream(bytesToSign));
+		byte[] sigBytes = signer.createSignatureOfStream(new ByteArrayInputStream(bytesToSign));
 		String signature = Base64.encode(sigBytes);
 		return testServer.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
 	}

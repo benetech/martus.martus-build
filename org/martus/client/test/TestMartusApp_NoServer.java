@@ -643,7 +643,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	{
 		MockMartusSecurity security = MockMartusSecurity.createClient();
 		String publicKeyString = security.getPublicKeyString();
-		String publicCode = MartusUtilities.computePublicCode(publicKeyString);
+		String publicCode = MartusCrypto.computePublicCode(publicKeyString);
 		assertEquals("wrong code?", "71887634433124687372", publicCode);
 	}
 
@@ -947,11 +947,11 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		TRACE_BEGIN("testCreateFolders");
 		String clientId = appWithAccount.getAccountId();
 		assertNotNull("clientId Null?", clientId);
-		String publicCode = MartusUtilities.computePublicCode(clientId);
+		String publicCode = MartusCrypto.computePublicCode(clientId);
 		assertNotNull("publicCode Null?", publicCode);
-		String formattedCode = MartusUtilities.formatPublicCode(publicCode);
+		String formattedCode = MartusCrypto.formatPublicCode(publicCode);
 		assertNotEquals("formatted code is the same as the public code?", formattedCode, publicCode);
-		assertEquals("Not formatted correctly", "1234.5678.9012.3456", MartusUtilities.formatPublicCode("1234567890123456"));
+		assertEquals("Not formatted correctly", "1234.5678.9012.3456", MartusCrypto.formatPublicCode("1234567890123456"));
 		TRACE_END();
 
 	}
