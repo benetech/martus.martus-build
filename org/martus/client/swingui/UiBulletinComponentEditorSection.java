@@ -43,12 +43,12 @@ public class UiBulletinComponentEditorSection extends UiBulletinComponentSection
 
 	public UiField createNormalField()
 	{
-		return new UiNormalTextEditor(app);
+		return new UiNormalTextEditor(app.getLocalization());
 	}
 
 	public UiField createMultilineField()
 	{
-		return new UiMultilineTextEditor(app);
+		return new UiMultilineTextEditor(app.getLocalization());
 	}
 
 	public UiField createChoiceField(ChoiceItem[] choices)

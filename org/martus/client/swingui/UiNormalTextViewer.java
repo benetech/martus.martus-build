@@ -28,13 +28,11 @@ package org.martus.client.swingui;
 
 import java.awt.Font;
 
-import org.martus.client.core.MartusApp;
-
 public class UiNormalTextViewer extends UiNormalTextField
 {
-	public UiNormalTextViewer(MartusApp appToUse)
+	public UiNormalTextViewer(MartusLocalization localizationToUse)
 	{
-		super(appToUse);
+		super(localizationToUse);
 		widget = new UiTextArea(1, UiConstants.textFieldColumns);
 		widget.setLineWrap(true);
 		widget.setWrapStyleWord(true);

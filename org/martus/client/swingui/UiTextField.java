@@ -35,13 +35,11 @@ import javax.swing.Action;
 import javax.swing.JPopupMenu;
 import javax.swing.text.JTextComponent;
 
-import org.martus.client.core.MartusApp;
-
 public abstract class UiTextField extends UiField
 {
-	public UiTextField(MartusApp appToUse)
+	public UiTextField(MartusLocalization localizationToUse)
 	{
-		app = appToUse;
+		localization = localizationToUse;
 		mouseAdapter = new TextFieldMouseAdapter();
 	}
 
@@ -102,6 +100,11 @@ public abstract class UiTextField extends UiField
 	{
 		getEditor().selectAll();
 	}
+	
+	private String getMenuLabel(String tag)
+	{
+		return localization.getMenuLabel(tag);
+	}
 
 	abstract public JTextComponent getEditor();
 
@@ -119,7 +122,7 @@ public abstract class UiTextField extends UiField
 	{
 		public ActionCut()
 		{
-			super(app.getMenuLabel("cut"), null);
+			super(getMenuLabel("cut"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -132,7 +135,7 @@ public abstract class UiTextField extends UiField
 	{
 		public ActionCopy()
 		{
-			super(app.getMenuLabel("copy"), null);
+			super(getMenuLabel("copy"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -145,7 +148,7 @@ public abstract class UiTextField extends UiField
 	{
 		public ActionPaste()
 		{
-			super(app.getMenuLabel("paste"), null);
+			super(getMenuLabel("paste"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -158,7 +161,7 @@ public abstract class UiTextField extends UiField
 	{
 		public ActionDelete()
 		{
-			super(app.getMenuLabel("delete"), null);
+			super(getMenuLabel("delete"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -171,7 +174,7 @@ public abstract class UiTextField extends UiField
 	{
 		public ActionSelectAll()
 		{
-			super(app.getMenuLabel("selectall"), null);
+			super(getMenuLabel("selectall"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -180,7 +183,7 @@ public abstract class UiTextField extends UiField
 		}
 	}
 
-	MartusApp app;
+	MartusLocalization localization;
 	Action actionCut;
 	Action actionCopy;
 	Action actionPaste;

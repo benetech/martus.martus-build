@@ -48,12 +48,12 @@ public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 
 	public UiField createNormalField()
 	{
-		return new UiNormalTextViewer(app);
+		return new UiNormalTextViewer(app.getLocalization());
 	}
 
 	public UiField createMultilineField()
 	{
-		return new UiMultilineViewer(app);
+		return new UiMultilineViewer(app.getLocalization());
 	}
 
 	public UiField createChoiceField(ChoiceItem[] choices)

@@ -32,13 +32,11 @@ import javax.swing.JComponent;
 import javax.swing.JScrollPane;
 import javax.swing.text.JTextComponent;
 
-import org.martus.client.core.MartusApp;
-
 public class UiMultilineTextEditor extends UiTextField
 {
-	public UiMultilineTextEditor(MartusApp appToUse)
+	public UiMultilineTextEditor(MartusLocalization localizationToUse)
 	{
-		super(appToUse);
+		super(localizationToUse);
 		editor = new UiTextArea(5, UiConstants.textFieldColumns);
 		editor.setLineWrap(true);
 		editor.setWrapStyleWord(true);

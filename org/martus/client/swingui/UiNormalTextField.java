@@ -29,13 +29,11 @@ package org.martus.client.swingui;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
-import org.martus.client.core.MartusApp;
-
 public abstract class UiNormalTextField extends UiTextField
 {
-	public UiNormalTextField(MartusApp appToUse)
+	public UiNormalTextField(MartusLocalization localizationToUse)
 	{
-		super(appToUse);
+		super(localizationToUse);
 	}
 
 	public JComponent getComponent()

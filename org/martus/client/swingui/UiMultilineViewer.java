@@ -32,13 +32,11 @@ import java.awt.Rectangle;
 import javax.swing.JComponent;
 import javax.swing.text.JTextComponent;
 
-import org.martus.client.core.MartusApp;
-
 public class UiMultilineViewer extends UiTextField
 {
-	public UiMultilineViewer(MartusApp appToUse)
+	public UiMultilineViewer(MartusLocalization localizationToUse)
 	{
-		super(appToUse);
+		super(localizationToUse);
 		text = new PreviewTextArea(1, UiConstants.textFieldColumns);
 		supportContextMenu();
 	}
