@@ -42,10 +42,9 @@ public class MockDatabase implements Database
 	{
 		if(key == null || record == null)
 			throw new IOException("Null parameter");
-		if(key.isDraft())
-			draftPacketMap.put(key, record);
-		else
-			sealedPacketMap.put(key, record);
+			
+		Map map = getCorrectMap(key);
+		map.put(key, record);
 	}
 	
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
@@ -97,18 +96,13 @@ public class MockDatabase implements Database
 
 	public void discardRecord(DatabaseKey key)
 	{
-		if(key.isDraft())
-			draftPacketMap.remove(key);
-		else
-			sealedPacketMap.remove(key);
+		Map map = getCorrectMap(key);
+		map.remove(key);
 	}
 
 	public boolean doesRecordExist(DatabaseKey key)
 	{
-		if(key.isDraft())
-			return draftPacketMap.containsKey(key);
-		else
-			return sealedPacketMap.containsKey(key);
+		return (readRecord(key) != null);
 	}
 
 	public void visitAllRecords(PacketVisitor visitor)
@@ -197,10 +191,8 @@ public class MockDatabase implements Database
 
 	private String readRecord(DatabaseKey key)
 	{
-		if(key.isDraft())
-			return (String)draftPacketMap.get(key);
-		else
-			return (String)sealedPacketMap.get(key);
+		Map map = getCorrectMap(key);
+		return (String)map.get(key);
 	}
 
 	public int getSealedRecordCount()
@@ -218,6 +210,14 @@ public class MockDatabase implements Database
 		return draftPacketMap.keySet();
 	}
 	
+	private Map getCorrectMap(DatabaseKey key) 
+	{
+		Map map = sealedPacketMap;
+		if(key.isDraft())
+			map = draftPacketMap;
+		return map;
+	}
+
 	Map sealedPacketMap;
 	Map draftPacketMap;
 	Map incomingInterimMap;
