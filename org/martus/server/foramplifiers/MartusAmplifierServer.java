@@ -40,10 +40,10 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
-import org.martus.server.shared.MartusSecureWebServer;
-import org.martus.server.shared.ServerConstants;
-import org.martus.server.shared.ServerFileDatabase;
-import org.martus.server.shared.XmlRpcThread;
+import org.martus.server.core.MartusSecureWebServer;
+import org.martus.server.core.ServerConstants;
+import org.martus.server.core.ServerFileDatabase;
+import org.martus.server.core.XmlRpcThread;
 
 public class MartusAmplifierServer implements NetworkInterfaceConstants
 {

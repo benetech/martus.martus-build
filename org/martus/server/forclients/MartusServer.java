@@ -55,8 +55,8 @@ import org.martus.server.formirroring.MirroringInterface;
 import org.martus.server.formirroring.MirroringRetriever;
 import org.martus.server.formirroring.ServerSupplierInterface;
 import org.martus.server.formirroring.SupplierSideMirroringHandler;
-import org.martus.server.shared.*;
-import org.martus.server.shared.ServerFileDatabase;
+import org.martus.server.core.*;
+import org.martus.server.core.ServerFileDatabase;
 
 public class MartusServer implements NetworkInterfaceConstants, ServerSupplierInterface
 {

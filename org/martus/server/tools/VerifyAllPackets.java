@@ -19,7 +19,7 @@ import org.martus.common.Packet;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
-import org.martus.server.shared.ServerFileDatabase;
+import org.martus.server.core.ServerFileDatabase;
 
 public class VerifyAllPackets
 {

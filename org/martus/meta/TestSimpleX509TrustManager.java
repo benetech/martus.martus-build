@@ -9,7 +9,7 @@ import org.martus.client.core.SimpleX509TrustManager;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
-import org.martus.server.shared.MartusSecureWebServer;
+import org.martus.server.core.MartusSecureWebServer;
 
 public class TestSimpleX509TrustManager extends TestCaseEnhanced 
 {

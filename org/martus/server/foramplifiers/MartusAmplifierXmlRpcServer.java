@@ -1,6 +1,6 @@
 package org.martus.server.foramplifiers;
 
-import org.martus.server.shared.MartusSecureWebServer;
+import org.martus.server.core.MartusSecureWebServer;
 
 public class MartusAmplifierXmlRpcServer
 {

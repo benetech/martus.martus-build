@@ -1,6 +1,6 @@
 package org.martus.server.tools;
 
-import org.martus.server.shared.ServerConstants;
+import org.martus.server.core.ServerConstants;
 
 public class Version
 {
