@@ -35,6 +35,8 @@ public class EnglishStrings
 "wintitle:options=Options",
 "wintitle:HelpDefaultDetails=Help on Bulletin Details Field Default Content",
 "wintitle:MartusSignIn=Martus SignIn",
+"wintitle:MartusSignInValidate=Validate User",
+"wintitle:MartusSignInRetypePassword=Confirm Password",
 "wintitle:ServerCompliance=Server Compliance Statement",
 
 "wintitle:confirmsend=Confirm Send Bulletin",
@@ -444,7 +446,7 @@ public class EnglishStrings
 "field:notifyDeleteServerDraftsWorkedcause=All of the selected draft bulletins have been deleted from the server.",
 "field:notifyDeleteServerDraftsFailedcause=Error: Unable to delete all of those draft bulletins from the server. Some of them may have been deleted.",
 "field:notifyDeleteServerDraftsNonecause=No bulletins were selected",
-"field:notifyretrievenoservercause=The current server is not responding",
+"field:notifyretrievenoservercause=The current server is not responding or may need to be configured from the server menu.",
 "field:notifypasswordsdontmatchcause=You must enter the same password twice",
 "field:notifyusernamessdontmatchcause=You must enter the same username twice",
 "field:notifyUserNameBlankcause=User Name must not be blank",

@@ -120,8 +120,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		hiddenFrame.show();
 		currentActiveFrame = hiddenFrame;
 		notifyClientCompliance(hiddenFrame);
-
-		hiddenFrame.setTitle(UiSigninDlg.getTextForTitle(localization));
+		hiddenFrame.setTitle(UiSigninDlg.getTextForTitle(localization, UiSigninDlg.INITIAL));
 		mainWindowInitalizing = true;
 		boolean newAccount = false;
 		if(app.doesAccountExist())

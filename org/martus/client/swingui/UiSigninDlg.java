@@ -64,7 +64,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		
 		MartusLocalization localization = mainWindow.getLocalization();
 
-		String title = getTextForTitle(localization);
+		String title = getTextForTitle(localization, mode);
 		setTitle(title);
 
 		getContentPane().setLayout(new ParagraphLayout());
@@ -139,14 +139,27 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		show();
 	}
 
-	public static String getTextForTitle(MartusLocalization localization)
+	public static String getTextForTitle(MartusLocalization localization, int mode)
 	{
 		String versionInfo = UiConstants.programName;
 		versionInfo += " " + localization.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
-		String title = localization.getWindowTitle("MartusSignIn") +
-				" (" + versionInfo + ")";
-		return title;
+		String title = ""; 
+		switch (mode)
+		{
+			case SECURITY_VALIDATE:
+				title = localization.getWindowTitle("MartusSignInValidate"); 
+				break;
+			case RETYPE_USERNAME_PASSWORD:
+				title = localization.getWindowTitle("MartusSignInRetypePassword"); 
+				break;
+			default:
+				title = localization.getWindowTitle("MartusSignIn"); 
+				break;
+		}
+		
+		String completeTitle = title +" (" + versionInfo + ")";
+		return completeTitle;
 	}
 
 	public boolean getResult()
