@@ -714,22 +714,22 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		table.doModifyBulletin();
 	}
 
-	private void doCutBulletins()
-	{
-		table.doCutBulletins();
-	}
-	
 	private void doSelectAllBulletins()
 	{
 		table.doSelectAllBulletins();	
 	}
 
-	private void doCopyBulletins()
+	public void doCutBulletins()
+	{
+		table.doCutBulletins();
+	}
+
+	public void doCopyBulletins()
 	{
 		table.doCopyBulletins();
 	}
 
-	private void doPasteBulletins()
+	public void doPasteBulletins()
 	{
 		table.doPasteBulletins();
 	}

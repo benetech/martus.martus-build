@@ -28,6 +28,7 @@ package org.martus.client.swingui;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Point;
 import java.awt.dnd.DropTarget;
 import java.awt.event.KeyAdapter;
@@ -129,6 +130,18 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			{
 				parent.deleteCurrentFolderIfPossible();
 			}
+			if(e.isControlDown())
+			{
+				Cursor original = observer.setWaitingCursor();
+				if(e.getKeyCode() == KeyEvent.VK_X)
+					observer.doCutBulletins();
+				if(e.getKeyCode() == KeyEvent.VK_C)
+					observer.doCopyBulletins();
+				if(e.getKeyCode() == KeyEvent.VK_V)
+					observer.doPasteBulletins();
+				observer.resetCursor(original);
+			}			
+			
 		}
 	}
 	
