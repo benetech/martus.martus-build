@@ -151,7 +151,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getContactInfo(amplifier.getPublicKeyString(), parameters, signature);
 		assertEquals("Should have rejected us since we are not authorized", ServerForAmplifiers.NOT_AUTHORIZED, response.get(0));
 
-		File ampsWhoCallUs = new File(coreServer.getStartupConfigDirectory(), "AmpsWhoCallUs");
+		File ampsWhoCallUs = new File(coreServer.getStartupConfigDirectory(), "ampsWhoCallUs");
 		ampsWhoCallUs.deleteOnExit();
 		ampsWhoCallUs.mkdirs();
 		File pubKeyFile1 = new File(ampsWhoCallUs, "code=1.2.3.4.5-ip=1.2.3.4.txt");
@@ -210,7 +210,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		
 		MockMartusServer oneAuthorizedCore = new MockMartusServer();
 		oneAuthorizedCore.enterSecureMode();
-		File ampsWhoCallUs = new File(oneAuthorizedCore.getStartupConfigDirectory(), "AmpsWhoCallUs");
+		File ampsWhoCallUs = new File(oneAuthorizedCore.getStartupConfigDirectory(), "ampsWhoCallUs");
 		ampsWhoCallUs.deleteOnExit();
 		ampsWhoCallUs.mkdirs();
 		File pubKeyFile1 = new File(ampsWhoCallUs, "code=1.2.3.4.5-ip=1.2.3.4.txt");
@@ -237,7 +237,7 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		File compliance = new File(coreServer.getStartupConfigDirectory(), "compliance.txt");
 		compliance.deleteOnExit();
 		compliance.createNewFile();
-		File ampsWhoCallUs = new File(coreServer.getStartupConfigDirectory(), "AmpsWhoCallUs");
+		File ampsWhoCallUs = new File(coreServer.getStartupConfigDirectory(), "ampsWhoCallUs");
 		ampsWhoCallUs.deleteOnExit();
 		ampsWhoCallUs.mkdirs();
 		File pubKeyFile1 = new File(ampsWhoCallUs, "code=1.2.3.4.5-ip=1.2.3.4.txt");
