@@ -48,6 +48,7 @@
                     ${server-dir}/**/*.class,
                     ${amplifier-dir}/**/*.class,
                     ${amplifier-dir}/**/LanguageNames*.txt,
+                    ${amplifier-dir}/**/index.html,
                     ${mspa-dir}/common/**/*.class,
                     ${mspa-dir}/roothelper/**/*.class,
                     ${mspa-dir}/server/**/*.class,
