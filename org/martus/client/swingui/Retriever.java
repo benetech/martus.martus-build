@@ -120,7 +120,7 @@ public class Retriever
 				}
 				catch(Exception e)
 				{
-					e.printStackTrace();
+					//e.printStackTrace();
 					gotAllBulletins = false;
 				}
 			}
