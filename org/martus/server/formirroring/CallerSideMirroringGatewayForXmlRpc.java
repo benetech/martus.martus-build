@@ -19,27 +19,17 @@ public class CallerSideMirroringGatewayForXmlRpc implements MirroringInterface
 	{
 		server = serverName;
 		port = portToUse;
-		try
-		{
-			tm = new SimpleX509TrustManager();
-			HttpsURLConnection.setDefaultSSLSocketFactory(MartusUtilities.createSocketFactory(tm));
-			HttpsURLConnection.setDefaultHostnameVerifier(new SimpleHostnameVerifier());
-			serverUrl = "https://" + serverName + ":" + port + "/RPC2";
-		}
-		catch (Exception e)
-		{
-			throw new SSLSocketSetupException();
-		}
+		serverUrl = "https://" + serverName + ":" + port + "/RPC2";
 	}
 	
-	public void setExpectedPublicCode(String expectedPublicCode)
+	public void setExpectedPublicCode(String newExpectedPublicCode)
 	{
-		tm.setExpectedPublicCode(expectedPublicCode);
+		expectedPublicCode = newExpectedPublicCode; 
 	}
 
-	public void setExpectedPublicKey(String expectedPublicKey)
+	public void setExpectedPublicKey(String newExpectedPublicKey)
 	{
-		tm.setExpectedPublicKey(expectedPublicKey);
+		expectedPublicKey = newExpectedPublicKey; 
 	}
 
 	public Vector request(String callerAccountId, Vector parameters, String signature)
@@ -55,19 +45,37 @@ public class CallerSideMirroringGatewayForXmlRpc implements MirroringInterface
 		catch (XmlRpcException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 		catch (IOException e)
 		{
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
+		} catch (SSLSocketSetupException e)
+		{
+			// TODO Auto-generated catch block
+			//e.printStackTrace();
 		}
 		return null;
 	}
 	
 	Object callServer(String method, Vector params) throws 
-		XmlRpcException, IOException
+		XmlRpcException, IOException, SSLSocketSetupException
 	{
+		try
+		{
+			SimpleX509TrustManager tm = new SimpleX509TrustManager();
+			if(expectedPublicKey != null)
+				tm.setExpectedPublicKey(expectedPublicKey);
+			else if(expectedPublicCode != null)
+				tm.setExpectedPublicCode(expectedPublicCode);
+			HttpsURLConnection.setDefaultSSLSocketFactory(MartusUtilities.createSocketFactory(tm));
+			HttpsURLConnection.setDefaultHostnameVerifier(new SimpleHostnameVerifier());
+		}
+		catch (Exception e)
+		{
+			throw new SSLSocketSetupException();
+		}
 		// NOTE: We **MUST** create a new XmlRpcClient for each call, because
 		// there is a memory leak in apache xmlrpc 1.1 that will cause out of 
 		// memory exceptions if we reuse an XmlRpcClient object
@@ -76,7 +84,8 @@ public class CallerSideMirroringGatewayForXmlRpc implements MirroringInterface
 	}
 
 	String serverUrl;
-	SimpleX509TrustManager tm;
 	String server;
 	int port;
+	String expectedPublicKey;
+	String expectedPublicCode;
 }
