@@ -81,12 +81,14 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		supplier.returnResultTag = MirroringInterface.RESULT_OK;
 		
 		UniversalId uid = UniversalId.createDummyUniversalId();
-		File gotFile = realRetriever.retrieveOneBulletin(uid);
+		File tempFile = createTempFile();
+		tempFile.deleteOnExit();
+		realRetriever.retrieveOneBulletin(tempFile, uid);
 		assertEquals(uid.getAccountId(), supplier.gotAccount);
 		assertEquals(uid.getLocalId(), supplier.gotLocalId);
 
 		int expectedLength = Base64.decode(supplier.returnZipData).length;
-		assertEquals("file wrong length?", expectedLength, gotFile.length());
+		assertEquals("file wrong length?", expectedLength, tempFile.length());
 	}
 	
 	public void testTick() throws Exception
@@ -146,6 +148,10 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		}
 		realRetriever.tick();
 		assertEquals("after extra tick", 3*databaseRecordsPerBulletin, db.getRecordCount());
+		assertEquals("extra tick got uids?", 0, realRetriever.uidsToRetrieve.size());
+		realRetriever.tick();
+		assertEquals("after extra tick2", 3*databaseRecordsPerBulletin, db.getRecordCount());
+		assertEquals("extra tick2 got uids?", 0, realRetriever.uidsToRetrieve.size());
 	}
 	
 	private String getZipString(Database dbToExportFrom, Bulletin b, MartusCrypto signer) throws Exception

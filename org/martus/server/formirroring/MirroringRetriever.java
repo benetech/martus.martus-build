@@ -7,6 +7,7 @@ import java.util.Vector;
 
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
@@ -43,9 +44,18 @@ public class MirroringRetriever
 		{
 			log("Retrieving from mirror: " + uid.getLocalId());
 			String bur = retrieveBurFromMirror(uid);
-			File zip = retrieveOneBulletin(uid);
-			BulletinHeaderPacket bhp = MartusServerUtilities.saveZipFileToDatabase(db, uid.getAccountId(), zip, security);
-			MartusServerUtilities.writeSpecificBurToDatabase(db, bhp, bur);
+			File zip = File.createTempFile("$$$MirroringRetriever", null);
+			try
+			{
+				zip.deleteOnExit();
+				retrieveOneBulletin(zip, uid);
+				BulletinHeaderPacket bhp = MartusServerUtilities.saveZipFileToDatabase(db, uid.getAccountId(), zip, security);
+				MartusServerUtilities.writeSpecificBurToDatabase(db, bhp, bur);
+			}
+			finally
+			{
+				zip.delete();
+			}
 		}
 		catch (Exception e)
 		{
@@ -88,13 +98,16 @@ public class MirroringRetriever
 					Vector info = (Vector)infos.get(i);
 					String localId = (String)info.get(0);
 					UniversalId uid = UniversalId.createFromAccountAndLocalId(nextAccountId, localId);
-					uidsToRetrieve.add(uid);
+					DatabaseKey key = new DatabaseKey(uid);
+					if(!db.doesRecordExist(key))
+						uidsToRetrieve.add(uid);
 				}
 			}
 		}
 		catch (Throwable e)
 		{
 			// TODO: Better error handling
+			e.printStackTrace();
 			System.out.println("MirroringRetriever.getNextUidToRetrieve: " + e);
 		}
 
@@ -123,24 +136,20 @@ public class MirroringRetriever
 		return null;
 	}
 	
-	File retrieveOneBulletin(UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
+	void retrieveOneBulletin(File destFile, UniversalId uid) throws InvalidBase64Exception, IOException, MartusSignatureException, ServerErrorException
 	{
-		File tempFile = File.createTempFile("$$$MirroringRetriever", null);
-		tempFile.deleteOnExit();
-		FileOutputStream out = new FileOutputStream(tempFile);
+		FileOutputStream out = new FileOutputStream(destFile);
 
 		int chunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 		int totalLength = MartusUtilities.retrieveBulletinZipToStream(uid, out, chunkSize, gateway, security, null, null);
 
 		out.close();
 
-		if(tempFile.length() != totalLength)
+		if(destFile.length() != totalLength)
 		{
-			System.out.println("file=" + tempFile.length() + ", returned=" + totalLength);
+			System.out.println("file=" + destFile.length() + ", returned=" + totalLength);
 			throw new ServerErrorException("totalSize didn't match data length");
 		}
-
-		return tempFile;
 	}
 	
 	void log(String message)
