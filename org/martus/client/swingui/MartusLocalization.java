@@ -26,11 +26,13 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -80,12 +82,14 @@ public class MartusLocalization
 		bd.loadTranslationFile(languageCode);
 		Vector keys = bd.getAllTranslationStrings(languageCode);
 
-		final String NEWLINE = System.getProperty("line.separator");
 		try
 		{
 			UnicodeWriter writer = new UnicodeWriter(new File(args[1]));
 			for(int i = 0; i < keys.size(); ++i)
-				writer.write(keys.get(i) + NEWLINE);
+			{
+				String thisString = (String)keys.get(i);
+				writeWithNewlinesEncoded(writer, thisString);
+			}
 
 			writer.close();
 			System.out.println("Success");
@@ -97,6 +101,26 @@ public class MartusLocalization
 		}
 
     }
+
+	public static void writeWithNewlinesEncoded(UnicodeWriter writer, String thisString)
+		throws IOException
+	{
+		final String NEWLINE = System.getProperty("line.separator");
+		BufferedReader reader = new BufferedReader(new StringReader(thisString));
+		boolean additionalLine = false;
+		while(true)
+		{
+			String thisLine = reader.readLine();
+			if(thisLine == null)
+				break;
+			if(additionalLine)
+				writer.write("\\n");
+			additionalLine = true;
+			writer.write(thisLine);
+		}
+		writer.write(NEWLINE);
+		reader.close();
+	}
 
     public MartusLocalization(String directoryToUse)
     {
