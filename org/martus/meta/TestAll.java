@@ -3,6 +3,10 @@ package org.martus.meta;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
+import org.martus.client.TestClient;
+import org.martus.common.TestCommon;
+import org.martus.server.TestServer;
+
 public class TestAll extends java.lang.Object 
 {
     public TestAll() 
@@ -41,9 +45,9 @@ public class TestAll extends java.lang.Object
 		suite.addTest(new TestSuite(TestSimpleX509TrustManager.class));
 		
 		// shared stuff
-		suite.addTest(org.martus.common.TestAll.suite());
-		suite.addTest(org.martus.server.TestAll.suite());
-		suite.addTest(org.martus.client.TestAll.suite());
+		suite.addTest(TestCommon.suite());
+		suite.addTest(TestServer.suite());
+		suite.addTest(TestClient.suite());
 
 	    return suite;
 	}
