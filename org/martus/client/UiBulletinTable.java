@@ -358,19 +358,11 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		private void handleRightClick(MouseEvent e)
 		{
 			int thisRow = rowAtPoint(e.getPoint());
-			boolean extend = e.isShiftDown();
-			boolean toggle = e.isControlDown();
-			if(extend || toggle)
-			{
-				changeSelection(thisRow, 0, toggle, extend);
-			}
-			else
-			{
-				if(!isRowSelected(thisRow))
-					selectRow(thisRow);
+			boolean isInsideSelection = isRowSelected(thisRow);
+			if(!isInsideSelection && !e.isShiftDown() && !e.isControlDown())
+				selectRow(thisRow);
 
-				doPopupMenu(UiBulletinTable.this, e.getX(), e.getY());
-			}
+			doPopupMenu(UiBulletinTable.this, e.getX(), e.getY());
 		}
 
 		private void handleDoubleClick(MouseEvent e)
@@ -442,7 +434,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 		else
 		{
-			okToDiscard = false;
+			okToDiscard = confirmDiscardBulletins();
 		}
 
 		if(okToDiscard)
@@ -455,7 +447,9 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		Bulletin[] bulletinsToDiscard = getSelectedBulletins();
 		
-		BulletinFolder draftOutBox = mainWindow.getApp().getFolderDraftOutbox();
+		MartusApp app = mainWindow.getApp();
+		BulletinFolder draftOutBox = app.getFolderDraftOutbox();
+		BulletinFolder discardedFolder = app.getFolderDiscarded();
 		BulletinFolder folderToDiscardFrom = getFolder();
 		
 		for (int i = 0; i < bulletinsToDiscard.length; i++)
@@ -467,6 +461,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		
 		folderToDiscardFrom.getStore().saveFolders();
 		mainWindow.folderContentsHaveChanged(folderToDiscardFrom);
+		mainWindow.folderContentsHaveChanged(discardedFolder);
 	}
 
 	private boolean confirmDiscardSingleBulletin(Bulletin b)
@@ -511,6 +506,15 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		return okToDiscard;
 	}
 
+	private boolean confirmDiscardBulletins()
+	{
+		BulletinFolder folderToDiscardFrom = getFolder();
+		if(!isDiscardedFolder(folderToDiscardFrom))
+			return true;
+			
+		return false;
+	}
+	
 	private boolean isDiscardedFolder(BulletinFolder f)
 	{
 		return f.equals(f.getStore().getFolderDiscarded());
