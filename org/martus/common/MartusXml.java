@@ -67,11 +67,13 @@ public class MartusXml
 		{
 			error = e.getMessage() + ", " + e.getLineNumber() + ":" + e.getColumnNumber();
 			System.out.println("SAX Parse Exception: " + error);
+			e.printStackTrace();
 		}
 		catch(SAXException e)
 		{
 			error = e.toString();
 			System.out.println("SAX Exception: " + error);
+			e.printStackTrace();
         }
         catch (Throwable t)
         {
