@@ -48,6 +48,7 @@ public class TestCommon
 		TestSuite suite= new TestSuite("All Common Martus Tests");
 
 		// common stuff
+		suite.addTest(new TestSuite(TestFieldSpec.class));
 		suite.addTest(new TestSuite(TestFileOutputStreamViaTemp.class));
 		suite.addTest(new TestSuite(TestUniversalId.class));
 		suite.addTest(new TestSuite(TestDatabaseKey.class));

@@ -28,15 +28,13 @@ package org.martus.common;
 
 public class FieldSpec
 {
-	public FieldSpec(String tagToUse)
+	public FieldSpec(String thisFieldDescription)
 	{
-		this(tagToUse, null);
-	}
-	
-	public FieldSpec(String tagToUse, String labelToUse)
-	{
-		tag = tagToUse;
-		label = labelToUse;
+		tag = extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
+		label = extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
+		String unknownStuff = extractFieldSpecElement(thisFieldDescription, UNKNOWN_ELEMENT_NUMBER);
+		if(!unknownStuff.equals(""))
+			hasUnknown = true;
 	}
 	
 	public String getTag()
@@ -47,6 +45,11 @@ public class FieldSpec
 	public String getLabel()
 	{
 		return label;
+	}
+	
+	public boolean hasUnknownStuff()
+	{
+		return hasUnknown;
 	}
 
 	static public FieldSpec[] addFieldSpec(FieldSpec[] existingFieldSpecs, FieldSpec newFieldSpec)
@@ -65,7 +68,7 @@ public class FieldSpec
 		{
 			int comma = fieldDescription.indexOf(FIELD_SPEC_ELEMENT_DELIMITER, elementStart);
 			if(comma < 0)
-				return null;
+				return "";
 			elementStart = comma + 1;
 		}
 		
@@ -85,9 +88,7 @@ public class FieldSpec
 			if(delimiter < 0)
 				delimiter = delimitedTags.length();
 			String thisFieldDescription = delimitedTags.substring(tagStart, delimiter);
-			String newTag = FieldSpec.extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
-			String newLabel = FieldSpec.extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
-			FieldSpec newFieldSpec = new FieldSpec(newTag, newLabel);
+			FieldSpec newFieldSpec = new FieldSpec(thisFieldDescription);
 	
 			newFieldSpecs = FieldSpec.addFieldSpec(newFieldSpecs, newFieldSpec);
 			tagStart = delimiter + 1;
@@ -112,9 +113,11 @@ public class FieldSpec
 
 	String tag;
 	String label;
+	boolean hasUnknown;
 
 	private static final char FIELD_SPEC_DELIMITER = ';';
 	private static final char FIELD_SPEC_ELEMENT_DELIMITER = ',';
 	private static final int TAG_ELEMENT_NUMBER = 0;
 	private static final int LABEL_ELEMENT_NUMBER = 1;
+	private static final int UNKNOWN_ELEMENT_NUMBER = 2;
 }

@@ -386,7 +386,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	
 	public void testWriteXmlCustomField() throws Exception
 	{
-		FieldSpec[] specs = {new FieldSpec("tag", "<label>")};
+		FieldSpec[] specs = {new FieldSpec("tag,<label>")};
 		FieldDataPacket fdpCustom = new FieldDataPacket(UniversalId.createDummyUniversalId(), specs);
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();

@@ -62,7 +62,7 @@ public class TestCustomFieldSpecValidator extends TestCaseEnhanced
 	public void testBlankTag() throws Exception
 	{
 		FieldSpec[] specs = Bulletin.getDefaultPublicFieldSpecs();
-		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("", "label"));
+		specs = FieldSpec.addFieldSpec(specs, new FieldSpec(",label"));
 		CustomFieldSpecValidator checker = new CustomFieldSpecValidator(specs);
 		assertFalse("valid?", checker.isValid());
 	}
@@ -79,7 +79,7 @@ public class TestCustomFieldSpecValidator extends TestCaseEnhanced
 	public void testMissingCustomLabel() throws Exception
 	{
 		FieldSpec[] specs = Bulletin.getDefaultPublicFieldSpecs();
-		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("a", "label"));
+		specs = FieldSpec.addFieldSpec(specs, new FieldSpec("a,label"));
 		CustomFieldSpecValidator checker = new CustomFieldSpecValidator(specs);
 		assertTrue("not valid?", checker.isValid());
 
@@ -91,7 +91,7 @@ public class TestCustomFieldSpecValidator extends TestCaseEnhanced
 	public void testStandardFieldWithLabel() throws Exception
 	{
 		FieldSpec[] specs = Bulletin.getDefaultPublicFieldSpecs();
-		specs[3] = new FieldSpec(specs[3].getTag(), "illegal label");
+		specs[3] = new FieldSpec(specs[3].getTag() + ",illegal label");
 		CustomFieldSpecValidator checker = new CustomFieldSpecValidator(specs);
 		assertFalse("valid?", checker.isValid());
 	}
