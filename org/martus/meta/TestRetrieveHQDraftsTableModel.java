@@ -32,17 +32,14 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
-		hqSecurity.createKeyPair();
 		hqApp = MockMartusApp.create(hqSecurity);
 
 		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
-		fieldSecurity1.createKeyPair();
 		fieldApp1 = MockMartusApp.create(fieldSecurity1);
 		final BulletinStore store1 = fieldApp1.getStore();
 		Database db1 = store1.getDatabase();
 
 		MartusCrypto fieldSecurity2 = MockMartusSecurity.createOtherClient();
-		fieldSecurity2.createKeyPair();
 		fieldApp2 = MockMartusApp.create(fieldSecurity2);
 		final BulletinStore store2 = fieldApp2.getStore();
 		Database db2 = store2.getDatabase();

@@ -31,11 +31,9 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		handler = new SupplierSideMirroringHandler(supplier);
 		
 		callerSecurity = MockMartusSecurity.createClient();
-		callerSecurity.createKeyPair();
 		callerAccountId = callerSecurity.getPublicKeyString();
 		
 		authorSecurity = MockMartusSecurity.createOtherClient();
-		authorSecurity.createKeyPair();
 	}
 
 	public void testBadSignature() throws Exception

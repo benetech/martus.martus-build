@@ -29,7 +29,6 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		MartusCrypto appSecurity = MockMartusSecurity.createClient();
-		appSecurity.createKeyPair();
 		app = MockMartusApp.create(appSecurity);
 
 		b0 = app.createBulletin();

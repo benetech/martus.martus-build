@@ -25,7 +25,6 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 	{
 		db = new MockServerDatabase();
 		security = MockMartusSecurity.createServer();
-		security.createKeyPair();
 		
 		supplier = new FakeServerSupplier();
 		supplier.authorizedCaller = security.getPublicKeyString();
