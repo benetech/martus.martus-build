@@ -278,6 +278,19 @@ abstract public class MockDatabase extends Database
 		return file;
 	}
 
+	public File getOutgoingInterimPublicOnlyFile(DatabaseKey key) throws RecordHiddenException
+	{
+		throwIfRecordIsHidden(key);
+		File dir = getInterimFile(key, outgoingInterimMap);
+		dir.deleteOnExit();
+		dir.mkdirs();
+		File file = new File(dir, "$$$public");
+		file.deleteOnExit();
+		File sigFile = MartusUtilities.getSignatureFileFromFile(file);
+		sigFile.deleteOnExit();
+		return file;
+	}
+
 	public File getContactInfoFile(String accountId)
 	{
 		File dir = new File(getFolderForAccount(accountId));

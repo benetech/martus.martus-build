@@ -412,6 +412,7 @@ public class TestDatabase extends TestCaseEnhanced
 	{
 		TRACE("testBuildInterimFileFromBulletinPackets");
 		internalTestGetOutgoingInterimFile(mockDb);
+		internalTestGetOutgoingInterimPublicOnlyFile(mockDb);
 		internalTestGetOutgoingInterimFile(clientFileDb);
 		internalTestGetOutgoingInterimFile(serverFileDb);
 	}
@@ -853,6 +854,25 @@ public class TestDatabase extends TestCaseEnhanced
 		interimSame.delete();
 	}	
 	
+	private void internalTestGetOutgoingInterimPublicOnlyFile(Database db) throws Exception
+	{
+		File interim = db.getOutgoingInterimPublicOnlyFile(smallKey);
+		assertNotNull(db.toString()+"file is null?", interim);
+		assertEquals(db.toString()+"interim file exists?", false, interim.exists());
+		UnicodeWriter writer = new UnicodeWriter(interim);
+		writer.write("hello");
+		writer.close();
+		long fileSize = interim.length();
+		assertNotEquals(db.toString()+"Zero length?", 0, fileSize);
+		
+		File interimSame = db.getOutgoingInterimPublicOnlyFile(smallKey);
+		assertEquals(db.toString()+"Not the same file?", interim, interimSame);
+		assertEquals(db.toString()+"interimSame size not the same?", fileSize, interimSame.length());
+
+		interim.delete();
+		interimSame.delete();
+	}	
+
 	private void internalTestQuarantine(Database db) throws Exception
 	{
 		UniversalId uid = UniversalId.createDummyUniversalId();

@@ -83,6 +83,7 @@ abstract public class Database
 	abstract public void visitAllRecordsForAccount(PacketVisitor visitor, String accountString);
 	abstract public File getIncomingInterimFile(DatabaseKey key) throws IOException, RecordHiddenException;
 	abstract public File getOutgoingInterimFile(DatabaseKey key) throws IOException, RecordHiddenException;
+	abstract public File getOutgoingInterimPublicOnlyFile(DatabaseKey key) throws IOException, RecordHiddenException;
 
 	abstract public String getFolderForAccount(String accountString);
 	abstract public File getContactInfoFile(String accountId) throws IOException;

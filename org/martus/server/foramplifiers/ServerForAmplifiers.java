@@ -446,7 +446,7 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 			NoKeyPairException,
 			MartusUtilities.FileVerificationException, IOException, RecordHiddenException
 	{
-		File tempFile = getDatabase().getOutgoingInterimFile(headerKey);
+		File tempFile = getDatabase().getOutgoingInterimPublicOnlyFile(headerKey);
 		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
 		if(tempFile.exists() && tempFileSignature.exists())
 		{

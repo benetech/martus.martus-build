@@ -306,18 +306,28 @@ abstract public class FileDatabase extends Database
 	public File getIncomingInterimFile(DatabaseKey key) throws
 		IOException, RecordHiddenException
 	{
-		throwIfRecordIsHidden(key);
-		File folder = getAbsoluteInterimFolderForAccount(key.getAccountId());
-		return new File(folder, key.getLocalId()+".in");
+		return createInterimFile(key, "in");
 	}
 
 	public File getOutgoingInterimFile(DatabaseKey key) throws
 		IOException, RecordHiddenException
 	{
+		return createInterimFile(key, "out");
+	}
+
+	public File getOutgoingInterimPublicOnlyFile(DatabaseKey key) throws
+		IOException, RecordHiddenException
+	{
+		return createInterimFile(key, "public");
+	}
+
+	private File createInterimFile(DatabaseKey key, String extension) throws RecordHiddenException, IOException
+	{
 		throwIfRecordIsHidden(key);
 		File folder = getAbsoluteInterimFolderForAccount(key.getAccountId());
-		return new File(folder, key.getLocalId()+".out");
+		return new File(folder, key.getLocalId()+"."+extension);
 	}
+
 
 	public File getContactInfoFile(String accountId) throws
 		IOException
