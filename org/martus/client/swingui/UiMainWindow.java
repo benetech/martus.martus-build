@@ -829,7 +829,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		boolean signedIn = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
-			exitWithoutPrompting();
+			exitWithoutSavingState();
 		return signedIn;
 	}
 
@@ -1362,7 +1362,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			return;
 		saveState();
 		getStore().prepareToExit();
-		System.exit(0);
+		exitWithoutSavingState();
 	}
 
 	private void exitWithoutPrompting()
@@ -1376,6 +1376,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			System.out.println("UiMainWindow.exitWithoutPrompting: " + e);
 		}
 		getStore().prepareToExit();
+		exitWithoutSavingState();
+	}
+
+	private void exitWithoutSavingState()
+	{
 		System.exit(0);
 	}
 
@@ -1628,7 +1633,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			{
 				currentActiveFrame.setState(ICONIFIED);
 				if(!signIn(UiSigninDlg.TIMED_OUT))
-					exitWithoutPrompting();
+					exitWithoutSavingState();
 				currentActiveFrame.setState(NORMAL);
 			}
 		}
