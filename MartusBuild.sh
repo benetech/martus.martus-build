@@ -595,6 +595,9 @@ zipSources()
 	find . -name "MartusHelp-ar.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "Martus-ar.mtf" -print | zip $MARTUS_ZIP_PATH -q@
 
+	#all unofficial tranlation
+	find . -name "UnofficialTranslationMessage.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	
 	echo
 	echo "zipping third party items..."
 	cd $BUILDFILES_SRC_FILES
