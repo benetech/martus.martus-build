@@ -7,7 +7,7 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 
 public interface CallerSideMirroringGatewayInterface extends BulletinRetrieverGatewayInterface
 {
-	public NetworkResponse ping(MartusCrypto signer) throws MartusSignatureException;
+	public NetworkResponse ping() throws MartusSignatureException;
 	public NetworkResponse listBulletinsForMirroring(MartusCrypto signer, String authorAccountId) throws MartusSignatureException;
 	public NetworkResponse listAccountsForMirroring(MartusCrypto signer) throws MartusSignatureException;
 }

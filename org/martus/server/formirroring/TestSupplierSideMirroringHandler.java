@@ -88,6 +88,38 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertEquals(supplierSecurity.getPublicKeyString(), publicInfo.get(0));
 	}
 	
+	public void testUnsignedPing() throws Exception
+	{
+		String accountId = callerSecurity.getPublicKeyString();
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_MIRRORING_PING);
+		String sig = "";
+		Vector result = handler.request(accountId, parameters, sig);
+		assertEquals(2, result.size());
+		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
+		Vector publicInfo = (Vector)result.get(1);
+		String publicKey = (String)publicInfo.get(0);
+		String gotSig = (String)publicInfo.get(1);
+		MartusUtilities.validatePublicInfo(publicKey, gotSig, callerSecurity);
+		assertEquals(supplierSecurity.getPublicKeyString(), publicInfo.get(0));
+	}
+
+	public void testAnonymousPing() throws Exception
+	{
+		String accountId = "";
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_MIRRORING_PING);
+		String sig = "";
+		Vector result = handler.request(accountId, parameters, sig);
+		assertEquals(2, result.size());
+		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
+		Vector publicInfo = (Vector)result.get(1);
+		String publicKey = (String)publicInfo.get(0);
+		String gotSig = (String)publicInfo.get(1);
+		MartusUtilities.validatePublicInfo(publicKey, gotSig, callerSecurity);
+		assertEquals(supplierSecurity.getPublicKeyString(), publicInfo.get(0));
+	}
+
 	public void testGetAllAccountsNotAuthorized() throws Exception
 	{
 		Vector parameters = new Vector();

@@ -17,26 +17,33 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 	
 	public Vector request(String callerAccountId, Vector parameters, String signature)
 	{
-		if(!MartusUtilities.verifySignature(parameters, verifier, callerAccountId, signature))
-		{
-			supplier.log("Mirror: request: bad sig");
-			Vector result = new Vector();
-			result.add(SIG_ERROR);		
-			return result;
-		}
-
-		Vector result = new Vector();
 		try
 		{
+			if(!isSignatureAcceptable(callerAccountId, parameters, signature))
+			{
+				supplier.log("Mirror: request: bad sig");
+				Vector result = new Vector();
+				result.add(SIG_ERROR);		
+				return result;
+			}
+
 			return executeCommand(callerAccountId, parameters);
 		}
 		catch (RuntimeException e)
 		{
-			result = new Vector();
+			Vector result = new Vector();
 			result.add(INVALID_DATA);
 			return result;
 		}
 
+	}
+
+	private boolean isSignatureAcceptable(String callerAccountId, Vector parameters, String signature)
+	{
+		int cmd = extractCommand(parameters.get(0));
+		if(cmd == cmdPing)
+			return true;
+		return MartusUtilities.verifySignature(parameters, verifier, callerAccountId, signature);
 	}
 	
 	Vector executeCommand(String callerAccountId, Vector parameters)
