@@ -49,6 +49,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 
 	protected void tearDown() throws Exception
 	{
+		coreServer.deleteAllFiles();
 	}
 	
 	public void testGetPublicInfo() throws Exception
