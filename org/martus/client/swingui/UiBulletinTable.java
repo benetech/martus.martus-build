@@ -575,8 +575,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	private String buildFolderNameList(Vector visibleFoldersContainingThisBulletin)
 	{
-		MartusApp app = mainWindow.getApp();
-		MartusLocalization localization = app.getLocalization();
+		MartusLocalization localization = mainWindow.getLocalization();
 		String names = "";
 		for(int i = 0 ; i < visibleFoldersContainingThisBulletin.size() ; ++i)
 		{

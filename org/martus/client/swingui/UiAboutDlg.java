@@ -42,20 +42,16 @@ import javax.swing.JButton;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 
-import org.martus.client.core.MartusApp;
 import org.martus.common.MartusUtilities;
 
 public class UiAboutDlg extends JDialog implements ActionListener
 {
-	private MartusApp app;
-
 	public UiAboutDlg(UiMainWindow owner)
 		throws HeadlessException
 	{
 		super(owner, "" , true);
 		MartusLocalization localization = owner.getLocalization();
 		
-		app = owner.getApp();
 		setTitle(localization.getWindowTitle("about"));
 
 		JLabel icon = new JLabel(new ImageIcon(UiAboutDlg.class.getResource("MartusLogo.gif")),JLabel.LEFT);
