@@ -444,29 +444,34 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		try
 		{
-			String folderName = folders.getSelectedFolderName();
-			BulletinFolder folder = getStore().findFolder(folderName);
-			uiState.setCurrentFolder(folderName);
-			uiState.setCurrentDateFormat(app.getCurrentDateFormatCode());
-			uiState.setCurrentLanguage(app.getCurrentLanguage());
-			if(folder != null)
-			{
-				uiState.setCurrentSortTag(folder.sortedBy());
-				uiState.setCurrentSortDirection(folder.getSortDirection());
-				uiState.setCurrentBulletinPosition(table.getCurrentBulletinIndex());
-			}
-			uiState.setCurrentPreviewSplitterPosition(previewSplitter.getDividerLocation());
-			uiState.setCurrentFolderSplitterPosition(folderSplitter.getDividerLocation());
-			uiState.setCurrentAppDimension(getSize());
-			uiState.setCurrentAppPosition(getLocation());
-			boolean isMaximized = getExtendedState()==MAXIMIZED_BOTH;
-			uiState.setCurrentAppMaximized(isMaximized);
-			saveCurrentUiState();
+			saveStateWithoutPrompting();
 		}
 		catch(IOException e)
 		{
 			notifyDlg(null, "ErrorSavingState");
 		}
+	}
+
+	void saveStateWithoutPrompting() throws IOException
+	{
+		String folderName = folders.getSelectedFolderName();
+		BulletinFolder folder = getStore().findFolder(folderName);
+		uiState.setCurrentFolder(folderName);
+		uiState.setCurrentDateFormat(app.getCurrentDateFormatCode());
+		uiState.setCurrentLanguage(app.getCurrentLanguage());
+		if(folder != null)
+		{
+			uiState.setCurrentSortTag(folder.sortedBy());
+			uiState.setCurrentSortDirection(folder.getSortDirection());
+			uiState.setCurrentBulletinPosition(table.getCurrentBulletinIndex());
+		}
+		uiState.setCurrentPreviewSplitterPosition(previewSplitter.getDividerLocation());
+		uiState.setCurrentFolderSplitterPosition(folderSplitter.getDividerLocation());
+		uiState.setCurrentAppDimension(getSize());
+		uiState.setCurrentAppPosition(getLocation());
+		boolean isMaximized = getExtendedState()==MAXIMIZED_BOTH;
+		uiState.setCurrentAppMaximized(isMaximized);
+		saveCurrentUiState();
 	}
 
 	public void restoreState()
@@ -940,7 +945,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		boolean signedIn = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
-			ExitImmediately();
+			exitWithoutPrompting();
 		return signedIn;
 	}
 
@@ -1473,17 +1478,26 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return dontExitApplication;			
 	}
 
-	private void ExitNormally()
+	private void exitNormally()
 	{
 		if(doUploadReminderOnExit())
 			return;
 		saveState();
 		getStore().prepareToExit();
-		ExitImmediately();
+		System.exit(0);
 	}
 	
-	private void ExitImmediately()
+	private void exitWithoutPrompting()
 	{
+		try
+		{
+			saveStateWithoutPrompting();
+		}
+		catch (IOException e)
+		{
+			System.out.println("UiMainWindow.exitWithoutPrompting: " + e);
+		}
+		getStore().prepareToExit();
 		System.exit(0);
 	}
 
@@ -1625,7 +1639,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			ExitNormally();
+			exitNormally();
 		}
 	}
 	
@@ -2109,7 +2123,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public void windowClosing(WindowEvent event)
 		{
-			ExitNormally();
+			exitNormally();
 		}
 	}
 	
@@ -2246,7 +2260,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				if(currentActiveFrame != UiMainWindow.this)
 					UiMainWindow.this.setVisible(false);
 				if(!signIn(UiSigninDlg.TIMED_OUT))
-					ExitImmediately();
+					exitWithoutPrompting();
 				if(currentActiveFrame != UiMainWindow.this)
 					UiMainWindow.this.setVisible(true);
 				currentActiveFrame.setState(NORMAL);
