@@ -9,6 +9,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
+import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.swingui.Retriever;
 import org.martus.client.swingui.UiConstants;
 import org.martus.client.test.MockMartusApp;
@@ -157,7 +158,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 			appWithoutServer.getServerCompliance(appWithoutServer.getCurrentNetworkInterfaceGateway());
 			fail("noServer should have thrown");
 		}
-		catch (ServerCallFailedException expectedException)
+		catch (ServerNotAvailableException expectedException)
 		{
 		}
 		
@@ -260,7 +261,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 			appWithoutServer.getServerPublicKey(noServer);
 			fail("Should have thrown");
 		}
-		catch(MartusApp.ServerNotAvailableException expectedException)
+		catch(ServerNotAvailableException expectedException)
 		{
 		}
 	}

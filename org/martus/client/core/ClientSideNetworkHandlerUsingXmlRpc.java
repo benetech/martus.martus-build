@@ -37,6 +37,7 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import org.apache.xmlrpc.XmlRpcClient;
+import org.apache.xmlrpc.XmlRpcException;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
@@ -290,6 +291,14 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 			//This was added for connection refused: connect (no server connected)
 			//System.out.println("ServerInterfaceXmlRpcHandler:callServer Exception=" + e);
 			//e.printStackTrace();
+		}
+		catch (XmlRpcException e)
+		{
+			if(e.getMessage().indexOf("NoSuchMethodException") < 0)
+			{
+				System.out.println("ServerInterfaceXmlRpcHandler:callServer XmlRpcException=" + e);
+				e.printStackTrace();
+			}
 		}
 		catch (Exception e)
 		{

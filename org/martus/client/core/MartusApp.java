@@ -41,8 +41,14 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
+import org
+	.martus
+	.client
+	.core
+	.ClientSideNetworkHandlerUsingXmlRpc
+	.SSLSocketSetupException;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
+import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.swingui.DateUtilities;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiProgressMeter;
@@ -712,7 +718,6 @@ public class MartusApp
 		return getServerPublicKey(server);
 	}
 
-	public class ServerNotAvailableException extends Exception {}
 	public class PublicInformationInvalidException extends Exception {}
 
 	public String getServerPublicKey(NetworkInterfaceForNonSSL server) throws

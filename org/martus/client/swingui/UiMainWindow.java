@@ -78,8 +78,8 @@ import org.martus.client.core.CurrentUiState;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
+import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
-import org.martus.client.core.MartusApp.ServerNotAvailableException;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
 import org.martus.client.swingui.UiUtilities.Delay;
@@ -1653,8 +1653,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 					SwingUtilities.invokeAndWait(dlg);
 				}
 			}
-			catch (ServerCallFailedException weWillTryAgainLater)
+			catch (ServerCallFailedException userAlreadyKnows)
 			{
+				alreadyCheckedCompliance = true;
 				return;
 			}
 			catch (ServerNotAvailableException weWillTryAgainLater)

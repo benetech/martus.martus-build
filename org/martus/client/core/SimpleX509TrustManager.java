@@ -77,7 +77,8 @@ public class SimpleX509TrustManager implements X509TrustManager
 		}
 		catch (Exception e)
 		{
-			System.out.println("checkServerTrusted: " + e);
+			//Tests will cause this to fire
+			//System.out.println("checkServerTrusted: " + e);
 			throw new CertificateException(e.toString());
 		}
 	}
