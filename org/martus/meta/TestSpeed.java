@@ -22,6 +22,8 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusSecurity;
+import org.martus.common.MartusUtilities;
+import org.martus.common.Packet;
 import org.martus.common.Stopwatch;
 import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;
@@ -228,7 +230,7 @@ public class TestSpeed extends TestCaseEnhanced
 
 		timeAttachments(db, 1);
 		timeAttachments(db, 100 * 1024);
-//		timeAttachments(db, 5 * 1024 * 1024);
+		timeAttachments(db, 5 * 1024 * 1024);
 		
 		db.deleteAllData();
 		dir.delete();
@@ -254,11 +256,15 @@ public class TestSpeed extends TestCaseEnhanced
 
 		DatabaseKey key = new DatabaseKey(ap.getUniversalId());
 		InputStreamWithSeek xmlIn = db.openInputStream(key, security);
-		File destFile = createTempFile();		
+		File destFile = createTempFile();
 		
-		Stopwatch fileExportTimer = new Stopwatch();
-		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, destFile);
-		print("Export " + fileLength + " byte attachment", fileExportTimer.stop());
+		Stopwatch verifyTimer = new Stopwatch();
+		Packet.verifyPacketSignature(xmlIn, null, security);
+		print("Verify " + fileLength + " byte attachment", verifyTimer.stop());
+		
+//		Stopwatch fileExportTimer = new Stopwatch();
+//		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, destFile);
+//		print("Export " + fileLength + " byte attachment", fileExportTimer.stop());
 
 		xmlIn.close();
 		destFile.delete();
