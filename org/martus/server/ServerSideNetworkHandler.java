@@ -80,20 +80,12 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		int index = 0;
 		String authorAccountId = (String)parameters.get(index++);
 
-		Vector legacyResult = null;
 		if(myAccountId.equals(authorAccountId))
-			legacyResult = legacyListMyBulletinSummaries(myAccountId);
+			result = server.legacyListMySealedBulletinIds(authorAccountId);
 		else
-			legacyResult = legacyListFieldOfficeBulletinSummaries(myAccountId, authorAccountId);
+			result = server.legacyListFieldOfficeSealedBulletinIds(myAccountId, authorAccountId);
 
-		String resultCode = (String)legacyResult.get(0);
-		legacyResult.remove(0);
-
-		result.add(resultCode);
-		result.add(legacyResult);
-		
 		server.decrementActiveClientsCounter();
-		
 		return result;
 	}
 
@@ -384,16 +376,11 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		if(server.serverSSLLogging)
 			server.logging("SSL-listMyBulletinSummaries");
 		server.incrementActiveClientsCounter();
-		Vector response = legacyListMyBulletinSummaries(authorAccountId);
+		Vector response = server.legacyListMySealedBulletinIds(authorAccountId);
 		server.decrementActiveClientsCounter();
 		return response;
 	}
 	
-	public Vector legacyListMyBulletinSummaries(String authorAccountId)
-	{
-		return server.listMySealedBulletinIds(authorAccountId);
-	}
-
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
 		if(server.serverSSLLogging)
@@ -409,14 +396,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		if(server.serverSSLLogging)
 			server.logging("SSL-listFieldOfficeBulletinSummaries");
 		server.incrementActiveClientsCounter();
-		Vector response = legacyListFieldOfficeBulletinSummaries(hqAccountId, authorAccountId);
+		Vector response = server.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
 		server.decrementActiveClientsCounter();
 		return response;
-	}
-	
-	public Vector legacyListFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
-	{
-		return server.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
 	}
 	
 	public Vector listFieldOfficeAccounts(String hqAccountId)

@@ -1025,7 +1025,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 
-		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
+		Vector list1 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
 		assertNotNull("testListFieldOfficeBulletinSummaries returned null", list1);
 		assertEquals("wrong length list 1", 1, list1.size());
 		assertNotNull("null id1 [0] list 1", list1.get(0));
@@ -1048,7 +1048,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		privateBulletin.save();
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(privateBulletin));
 				
-		Vector list2 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
+		Vector list2 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
 		assertEquals("wrong length list2", 3, list2.size());
 		assertNotNull("null id1 [0] list2", list2.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
@@ -1072,7 +1072,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 
-		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
+		Vector list1 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
 		assertNotNull("testListFieldOfficeBulletinSummaries returned null", list1);
 		assertEquals("wrong length list 1", 1, list1.size());
 		assertNotNull("null id1 [0] list1", list1.get(0));
@@ -1196,7 +1196,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector list1 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
 		assertNotNull("listMyBulletinSummaries returned null", list1);
-		assertEquals("wrong length", 1, list1.size());
+		assertEquals("wrong length", 2, list1.size());
 		assertNotNull("null id1 [0]", list1.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
 
@@ -1205,14 +1205,17 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector list2 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
 		assertNotNull("listMyBulletinSummaries returned null", list2);
-		assertEquals("wrong length", 3, list2.size());
+		assertEquals("wrong length", 2, list2.size());
 		assertNotNull("null id1 [0]", list2.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
 
-		String gotSummary1 = (String)list2.get(1);
+		Vector ids = (Vector)list2.get(1);
+		assertEquals("Wrong # of ids", 2, ids.size());
+		
+		String gotSummary1 = (String)ids.get(0);
 		assertNotNull("1 was null", gotSummary1);
 
-		String gotSummary2 = (String)list2.get(2);
+		String gotSummary2 = (String)ids.get(1);
 		assertNotNull("2 was null", gotSummary2);
 		
 		int at1 = gotSummary1.indexOf("=");
@@ -1752,7 +1755,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.allowUploads(clientId);
 		testServer.loadBannedClients(tempBanned);
 
-		Vector vecResult = testServer.listMySealedBulletinIds(clientId);
+		Vector vecResult = testServer.legacyListMySealedBulletinIds(clientId);
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
 		
@@ -1772,7 +1775,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("downloadBulletinChunk", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("downloadBulletinChunk", 0, testServer.getNumberActiveClients() );
 
-		vecResult = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
+		vecResult = testServer.legacyListMySealedBulletinIds(clientSecurity.getPublicKeyString());
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
 
@@ -1804,7 +1807,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("downloadFieldDataPacket", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("downloadFieldDataPacket", 0, testServer.getNumberActiveClients() );		
 
-		vecResult = testServer.listFieldOfficeSealedBulletinIds(hqId, clientId);
+		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(hqId, clientId);
 		verifyErrorResult("listFieldOfficeSealedBulletinIds1", vecResult, NetworkInterfaceConstants.OK );
 		assertEquals("listFieldOfficeSealedBulletinIds1", 0, testServer.getNumberActiveClients() );
 		
@@ -1816,7 +1819,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("listFieldOfficeAccounts1", vecResult, NetworkInterfaceConstants.OK );
 		assertEquals("listFieldOfficeAccounts1", 0, testServer.getNumberActiveClients() );
 		
-		vecResult = testServer.listFieldOfficeSealedBulletinIds(clientId, clientId);
+		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(clientId, clientId);
 		verifyErrorResult("listFieldOfficeSealedBulletinIds2", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listFieldOfficeSealedBulletinIds2", 0, testServer.getNumberActiveClients() );
 		
@@ -1855,7 +1858,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		result = testServer.isShutdownRequested();
 		assertEquals("isShutdownRequested 2", true, result );
 
-		Vector vecResult = testServer.listMySealedBulletinIds(clientId);
+		Vector vecResult = testServer.legacyListMySealedBulletinIds(clientId);
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listMySealedBulletinIds", 1, testServer.getNumberActiveClients() );
 		
@@ -1875,7 +1878,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("downloadBulletinChunk", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("downloadBulletinChunk", 1, testServer.getNumberActiveClients() );
 
-		vecResult = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
+		vecResult = testServer.legacyListMySealedBulletinIds(clientSecurity.getPublicKeyString());
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listMySealedBulletinIds", 1, testServer.getNumberActiveClients() );
 
@@ -1907,7 +1910,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("downloadFieldDataPacket", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("downloadFieldDataPacket", 1, testServer.getNumberActiveClients() );
 
-		vecResult = testServer.listFieldOfficeSealedBulletinIds(hqId, clientId);
+		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(hqId, clientId);
 		verifyErrorResult("listFieldOfficeSealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listFieldOfficeSealedBulletinIds", 1, testServer.getNumberActiveClients() );
 		

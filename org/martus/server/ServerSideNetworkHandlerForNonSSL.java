@@ -76,7 +76,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
 		server.incrementActiveClientsCounter();
-		Vector vecResponse = server.listMySealedBulletinIds(authorAccountId);
+		Vector vecResponse = server.legacyListMySealedBulletinIds(authorAccountId);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
@@ -84,7 +84,7 @@ public class ServerSideNetworkHandlerForNonSSL implements NetworkInterfaceForNon
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
 	{
 		server.incrementActiveClientsCounter();
-		Vector vecResponse = server.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
+		Vector vecResponse = server.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
 		server.decrementActiveClientsCounter();
 		return vecResponse;
 	}
