@@ -29,17 +29,15 @@ package org.martus.client.swingui;
 import javax.swing.table.AbstractTableModel;
 
 import org.martus.client.core.BulletinFolder;
-import org.martus.client.core.MartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
 import org.martus.common.UniversalId;
 
 public class BulletinTableModel extends AbstractTableModel
 {
-    public BulletinTableModel(MartusApp appToUse)
+    public BulletinTableModel(MartusLocalization localizationToUse)
     {
-		app = appToUse;
-		localization = app.getLocalization();
+		localization = localizationToUse;
     }
 
 	public void setFolder(BulletinFolder folderToUse)
@@ -123,7 +121,6 @@ public class BulletinTableModel extends AbstractTableModel
 		folder.sortBy(getFieldName(columnIndex));
 	}
 
-	MartusApp app;
 	MartusLocalization localization;
 	BulletinFolder folder;
 }

@@ -32,9 +32,7 @@ import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.BulletinTableModel;
 import org.martus.common.Bulletin;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MockClientDatabase;
-import org.martus.common.MockMartusSecurity;
 import org.martus.common.UniversalId;
 
 public class TestBulletinTableModel extends TestCase
@@ -46,14 +44,12 @@ public class TestBulletinTableModel extends TestCase
 
     public void setUp() throws Exception
     {
-    	if(cryptoToUse == null)
-	    	cryptoToUse = new MockMartusSecurity();
-		app = MockMartusApp.create(cryptoToUse);
+		app = MockMartusApp.create();
 		app.store = new BulletinStore(new MockClientDatabase());
-		store = app.getStore();
-		store.setSignatureGenerator(cryptoToUse);
+		app.store.setSignatureGenerator(app.getSecurity());
 		app.loadSampleData();
-		folder = app.getFolderSent();
+		store = app.getStore();
+		folderSent = app.getFolderSent();
     }
 
     public void tearDown() throws Exception
@@ -61,35 +57,47 @@ public class TestBulletinTableModel extends TestCase
 		store.deleteAllData();
 		app.deleteAllFiles();
 	}
+	
+	public void test()
+	{
+		doTestColumns();
+		doTestFieldNames();
+		doTestRows();
+		doTestGetBulletin();
+		doTestGetValueAt();
+		doTestSetFolder();
+		doTestFindBulletin();
+		doTestSortByColumn();
+	}
 
-    public void testColumns()
+    public void doTestColumns()
     {
-		BulletinTableModel list = new BulletinTableModel(app);
-		list.setFolder(folder);
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		list.setFolder(folderSent);
 
-		assertEquals(4, list.getColumnCount());
+		assertEquals("column count", 4, list.getColumnCount());
 		assertEquals("Status", list.getColumnName(0));
 		assertEquals("Date of Event", list.getColumnName(1));
 		assertEquals("Title", list.getColumnName(2));
 		assertEquals("Author", list.getColumnName(3));
 	}
 
-	public void testFieldNames()
+	public void doTestFieldNames()
 	{
-		BulletinTableModel list = new BulletinTableModel(app);
-		list.setFolder(folder);
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		list.setFolder(folderSent);
 
-		assertEquals(4, list.getColumnCount());
+		assertEquals("row count", 4, list.getColumnCount());
 		assertEquals("status", list.getFieldName(0));
 		assertEquals("eventdate", list.getFieldName(1));
 		assertEquals("title", list.getFieldName(2));
 		assertEquals("author", list.getFieldName(3));
 	}
 
-	public void testRows()
+	public void doTestRows()
 	{
-		BulletinTableModel list = new BulletinTableModel(app);
-		list.setFolder(folder);
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		list.setFolder(folderSent);
 
 		assertEquals(store.getBulletinCount(), list.getRowCount());
 		Bulletin b = list.getBulletin(2);
@@ -100,22 +108,22 @@ public class TestBulletinTableModel extends TestCase
 		assertEquals(displayDate, list.getValueAt(4, 1));
     }
 
-	public void testGetBulletin()
+	public void doTestGetBulletin()
 	{
-		BulletinTableModel list = new BulletinTableModel(app);
-		list.setFolder(folder);
-		for(int i = 0; i < folder.getBulletinCount(); ++i)
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		list.setFolder(folderSent);
+		for(int i = 0; i < folderSent.getBulletinCount(); ++i)
 		{
-			UniversalId folderBulletinId = folder.getBulletinSorted(i).getUniversalId();
+			UniversalId folderBulletinId = folderSent.getBulletinSorted(i).getUniversalId();
 			UniversalId listBulletinId = list.getBulletin(i).getUniversalId();
 			assertEquals(i + "wrong bulletin?", folderBulletinId, listBulletinId);
 		}
 	}
 
-	public void testGetValueAt()
+	public void doTestGetValueAt()
 	{
-		BulletinTableModel list = new BulletinTableModel(app);
-		list.setFolder(folder);
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		list.setFolder(folderSent);
 
 		assertEquals("", list.getValueAt(1000, 0));
 
@@ -143,14 +151,14 @@ public class TestBulletinTableModel extends TestCase
 
 	}
 
-	public void testSetFolder()
+	public void doTestSetFolder()
 	{
-		BulletinTableModel list = new BulletinTableModel(app);
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
 		assertEquals(0, list.getRowCount());
 
-		list.setFolder(folder);
-		assertEquals(store.getBulletinCount(), folder.getBulletinCount());
-		assertEquals(folder.getBulletinSorted(0).getLocalId(), list.getBulletin(0).getLocalId());
+		list.setFolder(folderSent);
+		assertEquals(store.getBulletinCount(), folderSent.getBulletinCount());
+		assertEquals(folderSent.getBulletinSorted(0).getLocalId(), list.getBulletin(0).getLocalId());
 
 		BulletinFolder empty = store.createFolder("empty");
 		assertEquals(0, empty.getBulletinCount());
@@ -158,10 +166,10 @@ public class TestBulletinTableModel extends TestCase
 		assertEquals(0, list.getRowCount());
 	}
 
-	public void testFindBulletin()
+	public void doTestFindBulletin()
 	{
-		BulletinTableModel list = new BulletinTableModel(app);
-		list.setFolder(folder);
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		list.setFolder(folderSent);
 
 		assertEquals(-1, list.findBulletin(null));
 
@@ -178,24 +186,23 @@ public class TestBulletinTableModel extends TestCase
 		assertEquals(-1, list.findBulletin(b.getUniversalId()));
 	}
 
-	public void testSortByColumn()
+	public void doTestSortByColumn()
 	{
-		BulletinTableModel list = new BulletinTableModel(app);
-		list.setFolder(folder);
+		BulletinTableModel list = new BulletinTableModel(app.getLocalization());
+		list.setFolder(folderSent);
 
 		String tag = "eventdate";
 		int col = 1;
 		assertEquals(tag, list.getFieldName(col));
-		assertEquals(tag, folder.sortedBy());
+		assertEquals(tag, folderSent.sortedBy());
 		String first = (String)list.getValueAt(0, col);
 		list.sortByColumn(col);
-		assertEquals(tag, folder.sortedBy());
+		assertEquals(tag, folderSent.sortedBy());
 		assertEquals(false, first.equals(list.getValueAt(0,col)));
 	}
 
-	static MartusCrypto cryptoToUse;
 	MockMartusApp app;
 	BulletinStore store;
-	BulletinFolder folder;
+	BulletinFolder folderSent;
 
 }
