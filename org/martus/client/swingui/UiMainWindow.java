@@ -1364,12 +1364,14 @@ if(result == NEW_ACCOUNT)
 				if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
 				{
 					File shareFile = chooser.getSelectedFile();
-					parent = shareFile.getParent();
+					parent = shareFile.getPath();
 					try 
 					{
 						UnicodeReader reader = new UnicodeReader(shareFile);
 						shares.add(reader.readAll(6));
 						reader.close();
+						if(disk+1 <= minNumber)
+							notifyDlg(this, "KeyShareInsertNextDisk");
 						break;
 					} 
 					catch (IOException e) 
@@ -1402,12 +1404,16 @@ if(result == NEW_ACCOUNT)
 
 		notifyDlg(this, "RecoveredKeyShareSucceededNewUserNamePasswordRequired");
 
-		if(!getAndSaveUserNamePassword(app.getKeyPairFile(app.getMartusDataRootDirectory())))	
-			return false;
-		
-		notifyDlg(this, "RecoveryOfKeyShareComplete");
-
-		return true;
+		while(true)
+		{
+			if(getAndSaveUserNamePassword(app.getKeyPairFile(app.getMartusDataRootDirectory())))
+			{					
+				notifyDlg(this, "RecoveryOfKeyShareComplete");
+				return true;
+			}	
+			if(confirmDlg(this, "CancelShareRestore"))
+				return false;
+		}		
 	}
 
 	private void doBackupKeyPairToMultipleUnencryptedFiles() 
@@ -1453,7 +1459,11 @@ if(result == NEW_ACCOUNT)
 						continue;
 					}
 					if(writeSharePieceToFile(newBackupFile, (String) keyShareBundles.get(disk - 1)))
+					{
+						if(disk+1 <= maxFiles)
+							notifyDlg(this, "KeyShareInsertNextDisk");
 						break;
+					}
 				}
 				else
 				{

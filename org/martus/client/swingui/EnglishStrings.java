@@ -149,6 +149,7 @@ public class EnglishStrings
 "wintitle:notifyRecoveredKeyShareSucceededNewUserNamePasswordRequired=Recovery Succeded",				
 "wintitle:notifyRecoverShareDiskError=KeyShare File Error",				
 "wintitle:notifyRecoveryOfKeyShareComplete=Recovery Complete",				
+"wintitle:notifyKeyShareInsertNextDisk=Change Disks",				
 
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -567,6 +568,7 @@ public class EnglishStrings
 "field:notifyRecoveredKeyShareSucceededNewUserNamePasswordRequiredcause=Recovery of keypair succeeded!  You now have to enter a user name and password.",
 "field:notifyRecoverShareDiskErrorcause=An error occured reading this keyshare file.",
 "field:notifyRecoveryOfKeyShareCompletecause=You have successfully restored your keypair from your keyshare files.  It is very important that you now re-scatter your key share.  We also recommend you backup your keypair as an encrypted file, you do not need to recreate the multi-file keyshare.",
+"field:notifyKeyShareInsertNextDiskcause=Please insernt next disk, and press OK when done.",
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occures in the future:",
