@@ -4,18 +4,18 @@
   <!-- set global properties for this build -->
   <property file="build.properties" />
   <property environment="env"/>
-  
+
   <property name="dist"  value="dist"/>
   <property name="docs"  value="TechDocs/javadocs"/>
   <property name="martus-dir" value="org/martus"/>
   <property name="martus-package" value="org.martus"/>
-  
+
   <property name="util-dir" value="${martus-dir}/util"/>
   <property name="swing-dir" value="${martus-dir}/swing"/>
   <property name="hrvd-dir" value="org/hrvd"/>
   <property name="logi-dir" value="org/logi"/>
   <property name="amplifier-dir" value="${martus-dir}/amplifier"/>
-
+  
   <property name="jars-dir" value="ThirdPartyJars"/>
   <property name="htdocs-dir" value="www"/>
   <property name="verifier-dir" value="verify"/>
@@ -25,12 +25,27 @@
   <property name="common-package" value="${martus-package}.common"/>
 
   <property name="common-files" value="${common-dir}/*.class,
-  			${util-dir}/**/*.class,
-  			${hrvd-dir}/**/*.class,
-  			${logi-dir}/**/*.class,
+                        ${util-dir}/**/*.class,
+                        ${hrvd-dir}/**/*.class,
+                        ${logi-dir}/**/*.class,
                     	${common-dir}/**/*.class,
                     	${swing-dir}/**/*.class
                     	"/>
+  
+  <property name="mspa-dir" value="${martus-dir}/mspa"/>
+  <property name="mspa-package" value="${martus-package}.mspa"/>
+  
+  <property name="mspa-server-jar" value= "${dist}/martus-mspa-server.jar"/>
+  <property name="mspa-server-files" value="${mspa-dir}/server/**/*.class,
+                                            ${mspa-dir}/server/main-class.txt"/>
+  
+  <property name="mspa-client-jar" value= "${dist}/martus-mspa-client.jar"/>
+  <property name="mspa-client-files" value="${mspa-dir}/client/**/*.class,
+                                            ${mspa-dir}/main/**/*.class,
+                                            ${mspa-dir}/main/main-class.txt"/>
+  
+  <property name="mspa-common-jar" value= "${dist}/martus-mspa-common.jar"/>
+  <property name="mspa-common-files" value="${mspa-dir}/network/**/*.class"/>
 
   <property name="server-dir" value="${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
@@ -39,6 +54,7 @@
                     ${server-dir}/**/*.class,
                     ${amplifier-dir}/**/*.class,
                     ${amplifier-dir}/**/LanguageNames*.txt,
+                    ${mspa-dir}/server/*.class,
                     ${server-dir}/main/main-class.txt,
                     ${jars-dir}/**/*,
                     ${htdocs-dir}/**/*,
@@ -143,15 +159,29 @@
   <!-- Build server -->
   <target name="build-server" depends="init,build-common">
 
-    <javac target="1.4" optimize="on" srcdir="${server-dir};${amplifier-dir}" classpath=".;${common-jar}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${server-dir};${amplifier-dir};${mspa-dir}" classpath=".;${common-jar}" failonerror="true">
             <include name="**/*.java"/>
     </javac>
+    
+    <rmic classname="org.martus.mspa.network.roothelper.MessengerImpl" base="."/>
 
     <mkdir dir="${dist}"/>
 
     <jar jarfile="${server-jar}" basedir="."
-    	manifest="${server-dir}/main/main-class.txt"
+    	    manifest="${server-dir}/main/main-class.txt"
             includes="${server-files}, ${common-files}"/>
+            
+    <jar jarfile="${mspa-server-jar}" basedir="."
+            manifest="${mspa-dir}/server/main-class.txt"
+            includes="${mspa-server-files}"/>
+            
+    <jar jarfile="${mspa-common-jar}" basedir="."
+            includes="${mspa-common-files}"/>
+            
+    <jar jarfile="${mspa-client-jar}" basedir="."
+            manifest="${mspa-dir}/main/main-class.txt"
+            includes="${mspa-client-files}"/>
+            
   </target>
 
   <!-- Build meta -->
@@ -196,6 +226,26 @@
             <formatter type="brief" usefile="no" />
             <test name="${server-package}.core.TestAll"/>
         </junit>
+        
+        <!-- mspa server -->
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <pathelement location="${mspa-server-jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="${mspa-package}.server.test.TestAllServer"/>
+        </junit>
+        
+        <!-- mspa client -->
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <pathelement location="${mspa-client-jar}"/>
+                <pathelement path="${java.class.path}"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="${mspa-package}.client.test.TestAll"/>
+        </junit>        
   </target>
 
   <target name="test-client" depends="build-client">
@@ -301,6 +351,27 @@
     <target name="jarsign-server" depends="check_storepass, check_keypass, check_keystore, build">
 
         <signjar jar="${server-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+                        
+        <signjar jar="${mspa-server-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+                        
+        <signjar jar="${mspa-client-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+                        
+        <signjar jar="${mspa-common-jar}"
                         keystore="${sign.keystore}"
                         storepass="${sign.storepass}"
                         keypass="${sign.keypass}"
