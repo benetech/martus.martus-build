@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.tools;
+package org.martus.common.utilities;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -35,7 +35,6 @@ import java.text.ParseException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.common.utilities.MartusServerUtilities.MartusSignatureFileAlreadyExistsException;
 import org.martus.common.utilities.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
 

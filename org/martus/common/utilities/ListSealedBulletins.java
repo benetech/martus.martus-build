@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.tools;
+package org.martus.common.utilities;
 
 import java.io.File;
 import java.util.Vector;
@@ -34,7 +34,6 @@ import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.packet.BulletinHeaderPacket;
-import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.InputStreamWithSeek;
 
 public class ListSealedBulletins

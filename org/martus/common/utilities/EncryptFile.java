@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.tools;
+package org.martus.common.utilities;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -36,7 +36,6 @@ import java.util.Vector;
 
 import org.martus.common.MartusUtilities;
 import org.martus.common.crypto.MartusSecurity;
-import org.martus.common.utilities.MartusServerUtilities;
 import org.martus.util.Base64;
 import org.martus.util.UnicodeWriter;
 

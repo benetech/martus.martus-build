@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.tools;
+package org.martus.common.utilities;
 
 import java.io.File;
 
