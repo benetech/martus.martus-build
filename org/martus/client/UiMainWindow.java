@@ -333,26 +333,26 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return clipboard.getContents(this);
 	}
 
-	public ActionMenuEdit getActionMenuEdit()
+	public ActionMenuModifyBulletin getActionMenuEdit()
 	{
-		return actionMenuEdit;
+		return actionMenuModifyBulletin;
 	}
-	public ActionMenuCut getActionMenuCut()
+	public ActionMenuCutBulletin getActionMenuCut()
 	{
-		return actionMenuCut;
+		return actionMenuCutBulletin;
 	}
-	public ActionMenuCopy getActionMenuCopy()
+	public ActionMenuCopyBulletin getActionMenuCopy()
 	{
-		return actionMenuCopy;
+		return actionMenuCopyBulletin;
 	}
-	public ActionMenuPaste getActionMenuPaste()
+	public ActionMenuPasteBulletin getActionMenuPaste()
 	{
-		return actionMenuPaste;
+		return actionMenuPasteBulletin;
 	}
 
-	public ActionMenuDiscard getActionMenuDiscard()
+	public ActionMenuDiscardBulletin getActionMenuDiscard()
 	{
-		return actionMenuDiscard;
+		return actionMenuDiscardBulletin;
 	}
 
 	//ClipboardOwner Interface
@@ -520,69 +520,76 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private JComponent createMenubar()
 	{
-		JMenu file = new JMenu(app.getButtonLabel("file"));
-		file.add(new ActionMenuCreateFolder());
-		file.add(new ActionMenuCreateBulletin());
+		JMenu file = new JMenu(app.getMenuLabel("file"));
 		actionMenuPrint = new ActionMenuPrintBulletin();
 		file.addMenuListener(actionMenuPrint);
+
+		file.add(new ActionMenuCreateNewBulletin());
 		file.add(actionMenuPrint);
+		file.addSeparator();
+		file.add(new ActionMenuBackupMyKeyPair());		
+		file.add(new ActionMenuExportMyPublicKey());
+		file.addSeparator();
+		file.add(new ActionMenuImportHeadquarterPublicKey());
+		file.add(new ActionMenuRemoveExistingHeadquaterPublicKey());
 		file.addSeparator();
 		file.add(new ActionMenuExit());
 
-		JMenu edit = new JMenu(app.getButtonLabel("edit"));
-		actionMenuEdit = new ActionMenuEdit();
-		edit.add(actionMenuEdit);
 
-		edit.addSeparator();
-		actionMenuCut = new ActionMenuCut();
-		edit.add(actionMenuCut);
-		actionMenuCopy = new ActionMenuCopy();
-		edit.add(actionMenuCopy);
-		actionMenuPaste = new ActionMenuPaste();
-		edit.add(actionMenuPaste);
-
-		edit.addSeparator();
-		actionMenuDiscard = new ActionMenuDiscard();
-		edit.add(actionMenuDiscard);
-
+		JMenu edit = new JMenu(app.getMenuLabel("edit"));
+		actionMenuModifyBulletin = new ActionMenuModifyBulletin();
+		actionMenuCutBulletin = new ActionMenuCutBulletin();
+		actionMenuCopyBulletin = new ActionMenuCopyBulletin();
+		actionMenuPasteBulletin = new ActionMenuPasteBulletin();
+		actionMenuDiscardBulletin = new ActionMenuDiscardBulletin();
 		EditMenuListener menuListener = new EditMenuListener();
 		edit.addMenuListener(menuListener);
 		menuListener.initalize();
 
 		edit.add(new ActionMenuSearch());
+		edit.addSeparator();
+		edit.add(actionMenuModifyBulletin);
+		edit.addSeparator();
+		edit.add(actionMenuCutBulletin);
+		edit.add(actionMenuCopyBulletin);
+		edit.add(actionMenuPasteBulletin);
+		edit.addSeparator();
+		edit.add(actionMenuDiscardBulletin);
 
-		JMenu tools = new JMenu(app.getButtonLabel("tools"));
-		tools.add(new ActionMenuRetrieve());
-		tools.add(new ActionMenuRetrieveDrafts());
-		tools.addSeparator();
-		tools.add(new ActionMenuRetrieveHQ());
-		tools.add(new ActionMenuRetrieveHQDrafts());
-		tools.addSeparator();
-		tools.add(new ActionMenuDeleteServerDrafts());
-		tools.addSeparator();
-		tools.add(new ActionMenuExportPublicInfo());
-		tools.add(new ActionMenuImportPublicInfo());
-		tools.add(new ActionMenuClearPublicInfo());
 
-		JMenu options = new JMenu(app.getButtonLabel("options"));
-		options.add(new ActionMenuLanguage());
-		options.add(new ActionMenuDateFormat());
+		JMenu folders = new JMenu(app.getMenuLabel("folders"));
+		folders.add(new ActionMenuCreateFolder());
+
+
+		JMenu server = new JMenu(app.getMenuLabel("server"));
+		server.add(new ActionMenuRetrieveMySealedBulletins());
+		server.add(new ActionMenuRetrieveMyDraftBulletins());
+		server.add(new ActionMenuDeleteMyServerDraftBulletins());
+		server.addSeparator();
+		server.add(new ActionMenuRetrieveHQSealedBulletins());
+		server.add(new ActionMenuRetrieveHQDraftBulletins());
+		server.addSeparator();
+		server.add(new ActionMenuSelectServer());
+
+
+		JMenu options = new JMenu(app.getMenuLabel("options"));
+		options.add(new ActionMenuPreferences());
 		options.add(new ActionMenuContactInfo());
-		options.add(new ActionMenuServerInfo());
+		options.add(new ActionMenuDefaultDetailsFieldContent());
 		options.add(new ActionMenuChangeUserNamePassword());
-		options.add(new ActionMenuBackupKeyPair());		
-		options.add(new ActionMenuBulletinDetails());
 		
 
-		JMenu help = new JMenu(app.getButtonLabel("help"));
-		help.add(new ActionMenuAbout());
-		help.add(new ActionMenuAccount());
+		JMenu help = new JMenu(app.getMenuLabel("help"));
 		help.add(new ActionMenuHelp());
+		help.add(new ActionMenuAbout());
+		help.addSeparator();
+		help.add(new ActionMenuAccountDetails());
 
 		JMenuBar menubar = new JMenuBar();
 		menubar.add(file);
 		menubar.add(edit);
-		menubar.add(tools);
+		menubar.add(folders);
+		menubar.add(server);
 		menubar.add(options);
 		menubar.add(help);
 		return menubar;
@@ -1601,7 +1608,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public ActionMenuCreateFolder()
 		{
-			super(app.getMenuLabel("newFolder"), null);
+			super(app.getMenuLabel("CreateNewFolder"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1610,11 +1617,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 	
-	class ActionMenuCreateBulletin extends AbstractAction
+	class ActionMenuCreateNewBulletin extends AbstractAction
 	{
-		public ActionMenuCreateBulletin()
+		public ActionMenuCreateNewBulletin()
 		{
-			super(app.getMenuLabel("createBulletin"), null);
+			super(app.getMenuLabel("CreateNewBulletin"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1664,11 +1671,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuAccount extends AbstractAction
+	class ActionMenuAccountDetails extends AbstractAction
 	{
-		public ActionMenuAccount()
+		public ActionMenuAccountDetails()
 		{
-			super(app.getMenuLabel("account"), null);
+			super(app.getMenuLabel("ViewMyAccountDetails"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1690,9 +1697,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuEdit extends AbstractAction
+	class ActionMenuModifyBulletin extends AbstractAction
 	{
-		public ActionMenuEdit()
+		public ActionMenuModifyBulletin()
 		{
 			super(app.getMenuLabel("modifyBulletin"), null);
 		}
@@ -1708,9 +1715,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 	
-	class ActionMenuCut extends AbstractAction
+	class ActionMenuCutBulletin extends AbstractAction
 	{
-		public ActionMenuCut()
+		public ActionMenuCutBulletin()
 		{
 			super(app.getMenuLabel("CutBulletins"), null);
 		}
@@ -1728,9 +1735,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuCopy extends AbstractAction
+	class ActionMenuCopyBulletin extends AbstractAction
 	{
-		public ActionMenuCopy()
+		public ActionMenuCopyBulletin()
 		{
 			super(app.getMenuLabel("CopyBulletins"), null);
 		}
@@ -1746,9 +1753,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuDiscard extends AbstractAction
+	class ActionMenuDiscardBulletin extends AbstractAction
 	{
-		public ActionMenuDiscard()
+		public ActionMenuDiscardBulletin()
 		{
 			super(app.getMenuLabel("DiscardBulletins"), null);
 		}
@@ -1767,15 +1774,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public void updateName() 
 		{
 			if(isDiscardedFolderSelected())
-				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("DeleteBulletins"));
+				actionMenuDiscardBulletin.putValue(actionMenuDiscardBulletin.NAME, getApp().getMenuLabel("DeleteBulletins"));
 			else
-				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("DiscardBulletins"));
+				actionMenuDiscardBulletin.putValue(actionMenuDiscardBulletin.NAME, getApp().getMenuLabel("DiscardBulletins"));
 		}
 	}
 
-	class ActionMenuPaste extends AbstractAction
+	class ActionMenuPasteBulletin extends AbstractAction
 	{
-		public ActionMenuPaste()
+		public ActionMenuPasteBulletin()
 		{
 			super(app.getMenuLabel("PasteBulletins"), null);
 		}
@@ -1797,21 +1804,21 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public void menuSelected(MenuEvent e)
 		{
-			actionMenuEdit.setEnabled(actionMenuEdit.isEnabled());
-			actionMenuCut.setEnabled(actionMenuCut.isEnabled());
-			actionMenuCopy.setEnabled(actionMenuCopy.isEnabled());
-			actionMenuPaste.setEnabled(actionMenuPaste.isEnabled());
-			actionMenuDiscard.setEnabled(actionMenuDiscard.isEnabled());
+			actionMenuModifyBulletin.setEnabled(actionMenuModifyBulletin.isEnabled());
+			actionMenuCutBulletin.setEnabled(actionMenuCutBulletin.isEnabled());
+			actionMenuCopyBulletin.setEnabled(actionMenuCopyBulletin.isEnabled());
+			actionMenuPasteBulletin.setEnabled(actionMenuPasteBulletin.isEnabled());
+			actionMenuDiscardBulletin.setEnabled(actionMenuDiscardBulletin.isEnabled());
 		}
 		
 		public void initalize()
 		{
 			//Java Bug, menu items need to be disabled before correct behavior occures.
-			actionMenuEdit.setEnabled(false);
-			actionMenuCut.setEnabled(false);
-			actionMenuCopy.setEnabled(false);
-			actionMenuPaste.setEnabled(false);
-			actionMenuDiscard.setEnabled(false);
+			actionMenuModifyBulletin.setEnabled(false);
+			actionMenuCutBulletin.setEnabled(false);
+			actionMenuCopyBulletin.setEnabled(false);
+			actionMenuPasteBulletin.setEnabled(false);
+			actionMenuDiscardBulletin.setEnabled(false);
 		}
 
 		public void menuDeselected(MenuEvent e) {}
@@ -1831,24 +1838,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuLanguage extends AbstractAction
+	class ActionMenuPreferences extends AbstractAction
 	{
-		public ActionMenuLanguage()
+		public ActionMenuPreferences()
 		{
-			super(app.getMenuLabel("language"), null);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			doLocalize();
-		}
-	}
-
-	class ActionMenuDateFormat extends AbstractAction
-	{
-		public ActionMenuDateFormat()
-		{
-			super(app.getMenuLabel("dateformat"), null);
+			super(app.getMenuLabel("Preferences"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1870,11 +1864,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuServerInfo extends AbstractAction
+	class ActionMenuSelectServer extends AbstractAction
 	{
-		public ActionMenuServerInfo()
+		public ActionMenuSelectServer()
 		{
-			super(app.getMenuLabel("serverinfo"), null);
+			super(app.getMenuLabel("SelectServer"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1896,11 +1890,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 	
-	class ActionMenuBulletinDetails extends AbstractAction
+	class ActionMenuDefaultDetailsFieldContent extends AbstractAction
 	{
-		public ActionMenuBulletinDetails()
+		public ActionMenuDefaultDetailsFieldContent()
 		{
-			super(app.getMenuLabel("bulletinDetails"), null);
+			super(app.getMenuLabel("DefaultDetailsFieldContent"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1909,11 +1903,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuRetrieve extends AbstractAction
+	class ActionMenuRetrieveMySealedBulletins extends AbstractAction
 	{
-		public ActionMenuRetrieve()
+		public ActionMenuRetrieveMySealedBulletins()
 		{
-			super(app.getMenuLabel("retrieve"), null);
+			super(app.getMenuLabel("RetrieveMySealedBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1922,11 +1916,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 	
-	class ActionMenuRetrieveDrafts extends AbstractAction
+	class ActionMenuRetrieveMyDraftBulletins extends AbstractAction
 	{
-		public ActionMenuRetrieveDrafts()
+		public ActionMenuRetrieveMyDraftBulletins()
 		{
-			super(app.getMenuLabel("RetrieveDrafts"), null);
+			super(app.getMenuLabel("RetrieveMyDraftsBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1934,11 +1928,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			doRetrieveMyDraftBulletins();
 		}
 	}
-	class ActionMenuDeleteServerDrafts extends AbstractAction
+	class ActionMenuDeleteMyServerDraftBulletins extends AbstractAction
 	{
-		public ActionMenuDeleteServerDrafts()
+		public ActionMenuDeleteMyServerDraftBulletins()
 		{
-			super(app.getMenuLabel("DeleteServerDrafts"), null);
+			super(app.getMenuLabel("DeleteMyServerDrafts"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1947,11 +1941,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuRetrieveHQ extends AbstractAction
+	class ActionMenuRetrieveHQSealedBulletins extends AbstractAction
 	{
-		public ActionMenuRetrieveHQ()
+		public ActionMenuRetrieveHQSealedBulletins()
 		{
-			super(app.getMenuLabel("retrieveHQ"), null);
+			super(app.getMenuLabel("RetrieveHQSealedBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1960,11 +1954,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 	
-	class ActionMenuRetrieveHQDrafts extends AbstractAction
+	class ActionMenuRetrieveHQDraftBulletins extends AbstractAction
 	{
-		public ActionMenuRetrieveHQDrafts()
+		public ActionMenuRetrieveHQDraftBulletins()
 		{
-			super(app.getMenuLabel("retrieveHQDrafts"), null);
+			super(app.getMenuLabel("RetrieveHQDraftBulletins"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1973,11 +1967,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 	
-	class ActionMenuBackupKeyPair extends AbstractAction
+	class ActionMenuBackupMyKeyPair extends AbstractAction
 	{
-		public ActionMenuBackupKeyPair()
+		public ActionMenuBackupMyKeyPair()
 		{
-			super(app.getMenuLabel("backupKeyPair"), null);
+			super(app.getMenuLabel("BackupMyKeyPair"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1986,11 +1980,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 			
-	class ActionMenuExportPublicInfo extends AbstractAction
+	class ActionMenuExportMyPublicKey extends AbstractAction
 	{
-		public ActionMenuExportPublicInfo()
+		public ActionMenuExportMyPublicKey()
 		{
-			super(app.getMenuLabel("exportPublicAccountInfo"), null);
+			super(app.getMenuLabel("ExportMyPublicKey"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -1999,11 +1993,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuImportPublicInfo extends AbstractAction
+	class ActionMenuImportHeadquarterPublicKey extends AbstractAction
 	{
-		public ActionMenuImportPublicInfo()
+		public ActionMenuImportHeadquarterPublicKey()
 		{
-			super(app.getMenuLabel("importPublicAccountInfo"), null);
+			super(app.getMenuLabel("ImportHQPublicKey"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -2012,11 +2006,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionMenuClearPublicInfo extends AbstractAction
+	class ActionMenuRemoveExistingHeadquaterPublicKey extends AbstractAction
 	{
-		public ActionMenuClearPublicInfo()
+		public ActionMenuRemoveExistingHeadquaterPublicKey()
 		{
-			super(app.getMenuLabel("clearPublicAccountInfo"), null);
+			super(app.getMenuLabel("RemoveExistingHQPublicKey"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -2213,11 +2207,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
 	private ActionMenuPrintBulletin actionMenuPrint;
-	private ActionMenuEdit actionMenuEdit;
-	private ActionMenuCut actionMenuCut;
-	private ActionMenuCopy actionMenuCopy;
-	private ActionMenuPaste actionMenuPaste;
-	private ActionMenuDiscard actionMenuDiscard;
+	private ActionMenuModifyBulletin actionMenuModifyBulletin;
+	private ActionMenuCutBulletin actionMenuCutBulletin;
+	private ActionMenuCopyBulletin actionMenuCopyBulletin;
+	private ActionMenuPasteBulletin actionMenuPasteBulletin;
+	private ActionMenuDiscardBulletin actionMenuDiscardBulletin;
 	private UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;	

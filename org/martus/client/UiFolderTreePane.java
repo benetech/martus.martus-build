@@ -104,7 +104,7 @@ class UiFolderTreePane extends JScrollPane
 	{
 		public ActionNewFolder()
 		{
-			super(parent.getApp().getMenuLabel("newFolder"), null);
+			super(parent.getApp().getMenuLabel("CreateNewFolder"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
