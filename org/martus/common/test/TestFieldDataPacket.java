@@ -73,7 +73,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("lower", false, fdp.fieldExists(bTag.toLowerCase()));
 		assertEquals("upper", false, fdp.fieldExists(bTag.toUpperCase()));
 
-		assertEquals("tag list", true, Arrays.equals(fieldTags, fdp.getFieldTags()));
+		assertEquals("tag list", true, Arrays.equals(fieldTags, fdp.getFieldSpecs()));
 		assertEquals("HQ Key not ''?", "", fdp.getHQPublicKey());
 		String hqKey = "12345";
 		fdp.setHQPublicKey(hqKey);
@@ -205,7 +205,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("id", id, loaded.getLocalId());
 		assertEquals("encrypted", true, loaded.isEncrypted());
 
-		FieldSpec[] tags = loaded.getFieldTags();
+		FieldSpec[] tags = loaded.getFieldSpecs();
 		assertEquals("Not three fields?", 3, tags.length);
 		assertEquals(aTag, tags[0].getTag());
 		assertEquals(bTag, tags[1].getTag());
@@ -248,7 +248,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("id", id, loaded.getLocalId());
 		assertEquals("encrypted", true, loaded.isEncrypted());
 
-		FieldSpec[] tags = loaded.getFieldTags();
+		FieldSpec[] tags = loaded.getFieldSpecs();
 		assertEquals("wrong field count?", 5, tags.length);
 		assertEquals("title", tags[0].getTag());
 		assertEquals("author", tags[1].getTag());
@@ -481,7 +481,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertNotContains("encrypted data visible4?", data2base + xmlAmp + xmlLt + xmlGt, result);
 
 		UniversalId uid = UniversalId.createFromAccountAndPrefix("other acct", "");
-		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldTags());
+		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldSpecs());
 		byte[] bytes = result.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in, security);
@@ -513,7 +513,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertContains(MartusXml.getTagStart(MartusXml.HQSessionKeyElementName), result);
 
 		UniversalId uid = UniversalId.createFromAccountAndPrefix("other acct", "");
-		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldTags());
+		FieldDataPacket got = new FieldDataPacket(uid, fdp.getFieldSpecs());
 		byte[] bytes = result.getBytes("UTF-8");
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		got.loadFromXml(in, securityHQ);

@@ -64,7 +64,7 @@ public class BulletinHtmlGenerator
 			allPrivateValueTag = "yes";
 		html.append(getFieldHtmlString("allprivate", localization.getButtonLabel(allPrivateValueTag)));
 
-		FieldSpec[] standardFieldTags = b.getPublicFieldTags();
+		FieldSpec[] standardFieldTags = b.getPublicFieldSpecs();
 		html.append(getSectionHtmlString(b, standardFieldTags));
 		html.append(getAttachmentsHtmlString(b.getFieldDataPacket()));
 
@@ -74,7 +74,7 @@ public class BulletinHtmlGenerator
 		html.append(privateSectionTitle);
 		html.append("</b></u></td></tr>");
 		html.append("\n");
-		FieldSpec[] privateFieldTags = b.getPrivateFieldTags();
+		FieldSpec[] privateFieldTags = b.getPrivateFieldSpecs();
 		html.append(getSectionHtmlString(b, privateFieldTags));
 		html.append(getAttachmentsHtmlString(b.getPrivateFieldDataPacket()));
 

@@ -250,7 +250,7 @@ public class MartusApp
 			plainTextConfigOutputStream.close();
 			encryptedConfigFileInputStream.close();
 			
-			store.setPublicFieldTags(FieldDataPacket.parseFieldTagsFromString(configInfo.getCustomFieldSpecs()));
+			store.setPublicFieldTags(FieldDataPacket.parseFieldSpecsFromString(configInfo.getCustomFieldSpecs()));
 		}
 		catch (Exception e)
 		{

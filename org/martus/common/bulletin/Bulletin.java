@@ -63,7 +63,7 @@ public class Bulletin implements BulletinConstants
 		this(securityToUse, Bulletin.getDefaultPublicFieldSpecs(), Bulletin.getDefaultPrivateFieldSpecs());
 	}
 	
-	public Bulletin(MartusCrypto securityToUse, FieldSpec[] standardFieldNames, FieldSpec[] privateFieldNames)
+	public Bulletin(MartusCrypto securityToUse, FieldSpec[] publicFieldSpecs, FieldSpec[] privateFieldSpecs)
 	{
 		security = securityToUse;
 		String accountId = security.getPublicKeyString();
@@ -72,9 +72,9 @@ public class Bulletin implements BulletinConstants
 		UniversalId privateDataUid = FieldDataPacket.createUniversalId(accountId);
 
 		isValidFlag = true;
-		fieldData = new FieldDataPacket(dataUid, standardFieldNames);
+		fieldData = new FieldDataPacket(dataUid, publicFieldSpecs);
 		fieldData.setEncrypted(true);
-		privateFieldData = new FieldDataPacket(privateDataUid, privateFieldNames);
+		privateFieldData = new FieldDataPacket(privateDataUid, privateFieldSpecs);
 		privateFieldData.setEncrypted(true);
 		header = new BulletinHeaderPacket(headerUid);
 		header.setFieldDataPacketId(dataUid.getLocalId());
@@ -155,14 +155,14 @@ public class Bulletin implements BulletinConstants
 		return getBulletinHeaderPacket().getStatus();
 	}
 	
-	public FieldSpec[] getPublicFieldTags()
+	public FieldSpec[] getPublicFieldSpecs()
 	{
-		return fieldData.getFieldTags();
+		return fieldData.getFieldSpecs();
 	}
 	
-	public FieldSpec[] getPrivateFieldTags()
+	public FieldSpec[] getPrivateFieldSpecs()
 	{
-		return privateFieldData.getFieldTags();
+		return privateFieldData.getFieldSpecs();
 	}
 
 	public void set(String fieldName, String value)
@@ -267,7 +267,7 @@ public class Bulletin implements BulletinConstants
 
 	public boolean contains(String lookFor)
 	{
-		FieldSpec fields[] = fieldData.getFieldTags();
+		FieldSpec fields[] = fieldData.getFieldSpecs();
 		String lookForLowerCase = lookFor.toLowerCase();
 		for(int f = 0; f < fields.length; ++f)
 		{
@@ -375,7 +375,7 @@ public class Bulletin implements BulletinConstants
 		setAllPrivate(other.isAllPrivate());
 
 		{
-			FieldSpec fields[] = fieldData.getFieldTags();
+			FieldSpec fields[] = fieldData.getFieldSpecs();
 			for(int f = 0; f < fields.length; ++f)
 			{
 				set(fields[f].getTag(), other.get(fields[f].getTag()));
@@ -383,7 +383,7 @@ public class Bulletin implements BulletinConstants
 		}
 
 		{
-			FieldSpec privateFields[] = privateFieldData.getFieldTags();
+			FieldSpec privateFields[] = privateFieldData.getFieldSpecs();
 			for(int f = 0; f < privateFields.length; ++f)
 			{
 				set(privateFields[f].getTag(), other.get(privateFields[f].getTag()));

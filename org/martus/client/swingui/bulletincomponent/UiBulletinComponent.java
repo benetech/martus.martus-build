@@ -55,8 +55,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 	public void createSections()
 	{
-		FieldSpec[] publicFieldSpecs = currentBulletin.getPublicFieldTags();
-		FieldSpec[] privateFieldSpecs = currentBulletin.getPrivateFieldTags();
+		FieldSpec[] publicFieldSpecs = currentBulletin.getPublicFieldSpecs();
+		FieldSpec[] privateFieldSpecs = currentBulletin.getPrivateFieldSpecs();
 
 		int numPublicFields = publicFieldSpecs.length;
 		int indexOfFirstPublicField = 0;

@@ -86,7 +86,7 @@ public class ActionMenuCustomFields extends UiMenuAction
 				continue;
 			}
  
-			FieldSpec[] newSpecs = FieldDataPacket.parseFieldTagsFromString(newTags);
+			FieldSpec[] newSpecs = FieldDataPacket.parseFieldSpecsFromString(newTags);
 			CustomFieldSpecValidator checker = new CustomFieldSpecValidator(newSpecs);
 			if(checker.isValid())
 				return newSpecs;
