@@ -40,6 +40,7 @@ import org.martus.client.core.MartusClientXml;
 import org.martus.common.MartusXml;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
+import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.bulletin.MockBulletin;
 import org.martus.common.crypto.MockMartusSecurity;
@@ -269,12 +270,21 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(true, (b == null));
 
 		b = store.createEmptyBulletin();
+		b.set(BulletinConstants.TAGSUMMARY, "whoop-dee-doo");
+		b.setDraft();
 		store.saveBulletin(b);
 		UniversalId id = b.getUniversalId();
 
 		Bulletin b2 = store.findBulletinByUniversalId(id);
 		assertEquals(false, (b2 == null));
-		assertEquals(b.get("summary"), b2.get("summary"));
+		assertEquals(b.get(BulletinConstants.TAGSUMMARY), b2.get(BulletinConstants.TAGSUMMARY));
+		
+		b.setSealed();
+		store.saveBulletin(b);
+
+		Bulletin b3 = store.findBulletinByUniversalId(id);
+		assertEquals(false, (b3 == null));
+		assertEquals(b.get(BulletinConstants.TAGSUMMARY), b3.get(BulletinConstants.TAGSUMMARY));
 	}
 
 	public void testDiscardBulletin() throws Exception
