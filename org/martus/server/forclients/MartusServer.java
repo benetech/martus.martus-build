@@ -1683,8 +1683,8 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	private void createServerForClients()
 	{
-		serverForClients.handleNonSSL();
-		serverForClients.handleSSL(NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL);
+		serverForClients.handleNonSSL(NetworkInterfaceXmlRpcConstants.defaultNonSSLPorts);
+		serverForClients.handleSSL(NetworkInterfaceXmlRpcConstants.defaultSSLPorts);
 		serverForClients.displayClientStatistics();
 	}
 

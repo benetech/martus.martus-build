@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.NetworkInterfaceXmlRpcConstants;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.MartusUtilities.FileVerificationException;
@@ -117,17 +116,19 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		activeClientsCounter--;
 	}
 	
-	public void handleNonSSL()
+	public void handleNonSSL(int[] ports)
 	{
 		ServerSideNetworkHandlerForNonSSL nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
-		MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL);
+		for(int i=0; i < ports.length; ++i)
+			MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, ports[i]);
 	}
 	
-	public void handleSSL(int port)
+	public void handleSSL(int[] ports)
 	{
 		ServerSideNetworkHandler serverHandler = new ServerSideNetworkHandler(this);
 		MartusSecureWebServer.security = getSecurity();
-		MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, "MartusServer", port);
+		for(int i=0; i < ports.length; ++i)
+			MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, "MartusServer", ports[i]);
 	}
 	
 	

@@ -24,18 +24,19 @@ public class TestSSL extends TestCaseEnhanced
 	{
 		if(mockSecurityForServer == null)
 		{
-			int[] ports = {1987};
+			int[] nonSslPorts = {1988};
+			int[] sslPorts = {1987};
 			mockSecurityForServer = MockMartusSecurity.createServer();
 			mockServer = new MockMartusServer();
 			mockServer.verifyAndLoadConfigurationFiles();
 			mockServer.setSecurity(mockSecurityForServer);
 
 			ServerForClients serverForClients = new ServerForClients(mockServer);
-			serverForClients.handleNonSSL();
-			serverForClients.handleSSL(ports[0]);
+			serverForClients.handleNonSSL(nonSslPorts);
+			serverForClients.handleSSL(sslPorts);
 			
 //			XmlRpc.debug = true;
-			proxy1 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", ports);
+			proxy1 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", sslPorts);
 //			proxy2 = new ClientSideNetworkHandlerUsingXmlRpc("localhost", testport);
 		}
 	}
