@@ -16,7 +16,6 @@
     <fileset id="thirdparty.common.files" dir="${build.basedir}/${martus.thirdparty.module}" >
         <include name="${martus.thirdparty.lib.ant}/**/*.jar"/>
         <include name="${martus.thirdparty.lib.infinitemonkey}/**/*.jar"/>
-        <include name="${martus.thirdparty.lib.logi}/**/*.jar"/>
         <include name="${martus.thirdparty.lib.xmlrpc}/**/*.jar"/>
     </fileset>
 

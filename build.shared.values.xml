@@ -50,7 +50,6 @@
     <property name="martus.thirdparty.lib.velocity"  value="${build.basedir}/${martus.thirdparty.module}/server/Velocity/bin/"/>
     <property name="martus.thirdparty.lib.junit"  value="${build.basedir}/${martus.thirdparty.module}/libext/JUnit/bin/"/>
     <property name="martus.thirdparty.lib.bouncycastle"  value="${build.basedir}/${martus.thirdparty.module}/libext/BouncyCastle/bin/"/>
-    <property name="martus.thirdparty.lib.logi"  value="${build.basedir}/${martus.thirdparty.module}/common/Logi/bin/"/>
 
     <!-- swing module name and dirs -->
     <property name="martus.swing.module"  value="martus-swing"/>
