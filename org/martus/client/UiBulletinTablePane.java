@@ -27,13 +27,18 @@ public class UiBulletinTablePane extends JScrollPane
 	public void setFolder(BulletinFolder folder)
 	{
 		table.setFolder(folder);
-		table.selectFirstBulletin();
+		selectFirstBulletin();
 		refreshPreview();
+	}
+	
+	public Bulletin[] getSelectedBulletins()
+	{
+		return table.getSelectedBulletins();
 	}
 
 	public void selectFirstBulletin()
 	{
-		table.selectFirstBulletin();
+		setCurrentBulletinIndex(0);
 	}
 	
 	public int getCurrentBulletinIndex()
@@ -90,7 +95,7 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 	public void refreshPreview()
 	{
 System.out.println("UiBulletinTablePane.refreshPreview");
-		parent.bulletinSelectionHasChanged(table.getSelectedBulletins());
+		parent.bulletinSelectionHasChanged();
 	}
 
 	class TablePaneMouseAdapter extends MouseAdapter

@@ -126,11 +126,6 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 	}
 
-	public void selectFirstBulletin()
-	{
-		selectRow(0);
-	}
-
 	public void bulletinContentsHaveChanged(Bulletin b)
 	{
 		Bulletin[] selected = getSelectedBulletins();
@@ -143,8 +138,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		if(!e.getValueIsAdjusting() && bulletinsList != null)
 		{
-System.out.println("UiBulletinTable.valueChanged");
-			mainWindow.bulletinSelectionHasChanged(getSelectedBulletins());
+			mainWindow.bulletinSelectionHasChanged();
 		}
 		repaint();
 	}

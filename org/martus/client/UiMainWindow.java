@@ -165,14 +165,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return getApp().getStore();
 	}
 	
-	public void bulletinSelectionHasChanged(Bulletin[] selectedBulletins)
+	public void bulletinSelectionHasChanged()
 	{
-System.out.println("UiMainWindow.bulletinSelectionHasChanged: " + selectedBulletins.length);
+		Bulletin[] selected = table.getSelectedBulletins();
 		Bulletin b = null;
-		if(selectedBulletins.length == 1)
+		if(selected.length == 1)
 		{
-			b = selectedBulletins[0];
-System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITLE));
+			b = selected[0];
 		}
 		preview.setCurrentBulletin(b);
 	}
