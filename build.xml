@@ -23,6 +23,7 @@
   <property name="client-files" value="${client-dir}/*.class,
     			${client-dir}/Martus-es.mtf,
     			${client-dir}/MartusHelp-en.txt,
+    			${client-dir}/MartusHelp-es.txt,
     			${client-dir}/locked.jpg,
     			${client-dir}/unlocked.jpg,
     			${client-dir}/Martus.jpg,
