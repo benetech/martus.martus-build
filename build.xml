@@ -11,7 +11,9 @@
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
   <property name="common-package" value="${martus-package}.common"/>
   <property name="BuildDateFile" value="${common-dir}/BuildDate.txt"/>
-  <property name="common-files" value="${common-dir}/*.class, ${BuildDateFile}"/>
+  <property name="common-files" value="${common-dir}/*.class,
+  					${BuildDateFile}
+  					"/>
 
   <property name="server-dir" value="${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
@@ -21,7 +23,7 @@
   					${server-dir}/foramplifiers/*.class,
   					${server-dir}/forclients/*.class,
   					${server-dir}/formirroring/*.class,
-  					${server-dir}/tools/*.class,
+  					${server-dir}/tools/*.class
   					"/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
@@ -39,8 +41,9 @@
     			${client-dir}/swingui/MartusHelpTOC-es.txt,
     			${client-dir}/swingui/MartusLogo.gif,
     			${client-dir}/swingui/locked.jpg,
-    			${client-dir}/swingui/unlocked.jpg,
-    			${client-dir}/swingui/Martus.png"/>
+    			${client-dir}/swingui/Martus.png,
+    			${client-dir}/swingui/unlocked.jpg
+    			"/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
   <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
