@@ -289,7 +289,7 @@ public class FieldDataPacket extends Packet
 		if(isEncrypted() && !isEmpty())
 			writeElement(dest, MartusXml.EncryptedFlagElementName, "");
 
-		String fieldList = FieldSpec.buildFieldListString(getFieldSpecs());
+		String fieldList = getFieldListString();
 		writeElement(dest, MartusXml.FieldListElementName, fieldList);
 		Iterator iterator = fieldData.keySet().iterator();
 		while(iterator.hasNext())
@@ -307,6 +307,11 @@ public class FieldDataPacket extends Packet
 			writeElement(dest, MartusXml.AttachmentLabelElementName, a.getLabel());
 			dest.writeEndTag(MartusXml.AttachmentElementName);
 		}
+	}
+
+	protected String getFieldListString()
+	{
+		return FieldSpec.buildFieldListString(getFieldSpecs());
 	}
 
 	protected void setFromXml(String elementName, String data) throws

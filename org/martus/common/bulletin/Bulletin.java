@@ -73,11 +73,11 @@ public class Bulletin implements BulletinConstants
 		UniversalId privateDataUid = FieldDataPacket.createUniversalId(accountId);
 
 		isValidFlag = true;
-		fieldData = new FieldDataPacket(dataUid, publicFieldSpecs);
+		fieldData = createPublicFieldDataPacket(dataUid, publicFieldSpecs);
 		fieldData.setEncrypted(true);
-		privateFieldData = new FieldDataPacket(privateDataUid, privateFieldSpecs);
+		privateFieldData = createPrivateFieldDataPacket(privateDataUid, privateFieldSpecs);
 		privateFieldData.setEncrypted(true);
-		header = new BulletinHeaderPacket(headerUid);
+		header = createHeaderPacket(headerUid);
 		header.setFieldDataPacketId(dataUid.getLocalId());
 		header.setPrivateFieldDataPacketId(privateDataUid.getLocalId());
 		setPendingPublicAttachments(new Vector());
@@ -518,6 +518,32 @@ public class Bulletin implements BulletinConstants
 		return pendingPrivateAttachments;
 	}
 	
+	protected BulletinHeaderPacket createHeaderPacket(UniversalId headerUid)
+	{
+		return new BulletinHeaderPacket(headerUid);
+	}
+
+	protected FieldDataPacket createPrivateFieldDataPacket(
+		UniversalId privateDataUid,
+		FieldSpec[] privateFieldSpecs)
+	{
+		return createFieldDataPacket(privateDataUid, privateFieldSpecs);
+	}
+
+	protected FieldDataPacket createPublicFieldDataPacket(
+		UniversalId dataUid,
+		FieldSpec[] publicFieldSpecs)
+	{
+		return createFieldDataPacket(dataUid, publicFieldSpecs);
+	}
+
+	protected FieldDataPacket createFieldDataPacket(
+		UniversalId dataUid,
+		FieldSpec[] publicFieldSpecs)
+	{
+		return new FieldDataPacket(dataUid, publicFieldSpecs);
+	}
+
 	private boolean encryptedFlag;
 	private boolean isFromDatabase;
 	private boolean isValidFlag;

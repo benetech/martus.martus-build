@@ -35,13 +35,11 @@ import java.io.Writer;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.XmlWriterFilter;
-import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.ByteArrayInputStreamWithSeek;
-import org.martus.util.InputStreamWithSeek;
 
 public class TestPacket extends TestCaseEnhanced
 {
@@ -119,25 +117,6 @@ public class TestPacket extends TestCaseEnhanced
 	
 	public void testUnknownTags() throws Exception
 	{
-		class LoadablePacket extends Packet
-		{
-			protected String getPacketRootElementName()
-			{
-				return "LoadablePacket";
-			}
-
-			public void loadFromXml(InputStreamWithSeek inputStream, byte[] expectedSig, MartusCrypto verifier) throws
-				IOException,
-				InvalidPacketException,
-				WrongPacketTypeException,
-				SignatureVerificationException,
-				MartusCrypto.DecryptionException,
-				MartusCrypto.NoKeyPairException
-			{
-				super.loadFromXmlInternal(inputStream, expectedSig, verifier);
-			}			
-		}
-		
 		class PacketWithoutUnknownTags extends LoadablePacket
 		{
 		}
