@@ -276,6 +276,7 @@ public class BulletinStore
 		{
 			//TODO: Better error handling
 			System.out.println("BulletinStore.findBulletinByUniversalId: " + e);
+			e.printStackTrace();
 			return null;
 		}
 	}
