@@ -749,8 +749,8 @@ public class BulletinStore
 		String xml = MartusClientXml.getFolderTagStart(folder.getName());
 		for(int index=0; index < folder.getBulletinCount(); ++index)
 		{
-			Bulletin b = folder.getBulletinSorted(index);
-			xml += MartusXml.getIdTag(b.getUniversalIdString());
+			UniversalId uid = folder.getBulletinUniversalIdSorted(index);
+			xml += MartusXml.getIdTag(uid.toString());
 		}
 		xml += MartusClientXml.getFolderTagEnd();
 		return xml;
