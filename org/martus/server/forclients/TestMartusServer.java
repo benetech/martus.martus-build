@@ -437,6 +437,10 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector contactInfo = new Vector();
 		String clientId = clientSecurity.getPublicKeyString();
+		String clientNotAuthorized = testServer.putContactInfo(clientId, contactInfo);
+		assertEquals("Client has not been authorized should not accept contact info", REJECTED, clientNotAuthorized);
+
+		testServer.serverForClients.allowUploads(clientId);
 		String resultIncomplete = testServer.putContactInfo(clientId, contactInfo);
 		assertEquals("Empty ok?", INVALID_DATA, resultIncomplete);
 
@@ -459,6 +463,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		contactInfo.add("Data2");
 		String signature = clientSecurity.createSignatureOfVectorOfStrings(contactInfo);
 		contactInfo.add(signature);
+		testServer.allowUploads("differentAccountID");
 		String incorrectAccoutResult = testServer.putContactInfo("differentAccountID", contactInfo);
 		assertEquals("Incorrect Accout ", INVALID_DATA, incorrectAccoutResult);		
 
@@ -489,6 +494,10 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		contactFile.delete();
 		contactFile.getParentFile().delete();
 
+		testServer.serverForClients.clientsBanned.add(clientId);
+		String banned = testServer.putContactInfo(clientId, contactInfo);
+		assertEquals("Client is banned should not accept contact info", REJECTED, banned);
+		
 		TRACE_END();
 	}
 	
@@ -506,7 +515,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		parameters.add(signature);
 
 		String sig = clientSecurity.createSignatureOfVectorOfStrings(parameters);
-		
+
+		testServer.allowUploads(clientId);
 		Vector result = testServerInterface.putContactInfo(clientId, parameters, sig);
 		File contactFile = testServer.getContactInfoFileForAccount(clientId);
 		assertEquals("Result size?", 1, result.size());
@@ -536,7 +546,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Vector nothingReturned = testServer.getContactInfo(clientId);
 		assertEquals("No contactInfo should return null", NetworkInterfaceConstants.NOT_FOUND, nothingReturned.get(0));
-
+		testServer.allowUploads(clientId);
 		testServer.putContactInfo(clientId, contactInfo);
 		Vector infoReturned = testServer.getContactInfo(clientId);
 		assertEquals("Should be ok", NetworkInterfaceConstants.OK, infoReturned.get(0));	

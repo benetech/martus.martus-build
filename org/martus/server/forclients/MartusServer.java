@@ -723,7 +723,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	public String putContactInfo(String accountId, Vector contactInfo)
 	{
 		log("putContactInfo " + getClientAliasForLogging(accountId));
-		if(isClientBanned(accountId) )
+
+		if(isClientBanned(accountId) || !canClientUpload(accountId))
 			return NetworkInterfaceConstants.REJECTED;
 		
 		if( isShutdownRequested() )
