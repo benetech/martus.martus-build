@@ -1,9 +1,8 @@
 package org.martus.client;
 
-import org.martus.client.exception.BlankUserNameException;
-import org.martus.client.exception.InvalidUserNameOrPassword;
-import org.martus.client.exception.PasswordMatchedUserNameException;
-import org.martus.client.exception.PasswordTooShortException;
+import org.martus.client.Exceptions.BlankUserNameException;
+import org.martus.client.Exceptions.PasswordMatchedUserNameException;
+import org.martus.client.Exceptions.PasswordTooShortException;
 
 /**
  * 

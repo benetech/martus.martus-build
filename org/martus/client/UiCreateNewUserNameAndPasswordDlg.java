@@ -1,8 +1,8 @@
 package org.martus.client;
 
-import javax.swing.JFrame;
-
-import org.martus.client.exception.*;
+import org.martus.client.Exceptions.BlankUserNameException;
+import org.martus.client.Exceptions.PasswordMatchedUserNameException;
+import org.martus.client.Exceptions.PasswordTooShortException;
 
 /**
  * UiCreateNewUserNameAndPasswordDlg

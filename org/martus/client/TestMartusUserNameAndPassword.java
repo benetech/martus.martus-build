@@ -1,12 +1,9 @@
 package org.martus.client;
 
-import junit.framework.TestCase;
-import junit.framework.Assert;
-import org.martus.client.exception.BlankUserNameException;
-import org.martus.client.exception.InvalidUserNameOrPassword;
-import org.martus.client.exception.MartusClientApplicationException;
-import org.martus.client.exception.PasswordMatchedUserNameException;
-import org.martus.client.exception.PasswordTooShortException;
+import org.martus.client.Exceptions.BlankUserNameException;
+import org.martus.client.Exceptions.MartusClientApplicationException;
+import org.martus.client.Exceptions.PasswordMatchedUserNameException;
+import org.martus.client.Exceptions.PasswordTooShortException;
 import org.martus.common.TestCaseEnhanced;
 
 public class TestMartusUserNameAndPassword extends TestCaseEnhanced
