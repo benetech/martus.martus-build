@@ -33,6 +33,7 @@ public class TestClient
 		suite.addTest(new TestSuite(TestCurrentUiState.class));
 		suite.addTest(new TestSuite(TestClientFileDatabase.class));
 		suite.addTest(new TestSuite(TestMartusUserNameAndPassword.class));
+		suite.addTest(new TestSuite(TestCacheOfSortableFields.class));
 
 	    return suite;
 	}
