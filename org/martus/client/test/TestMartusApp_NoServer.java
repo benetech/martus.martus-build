@@ -1,4 +1,27 @@
-package org.martus.meta;
+/*
+
+The Martus(tm) free, social justice documentation and
+monitoring software. Copyright (C) 2002, Beneficent
+Technology, Inc. (Benetech).
+
+Martus is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version with the additions and exceptions described in the
+accompanying Martus license file entitled "license.txt".
+
+It is distributed WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, including warranties of fitness of purpose or
+merchantability.  See the accompanying Martus License and
+GPL license for more details on the required d a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+*/
+
+package org.martus.client.test;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -13,15 +36,12 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
-import org.martus.client.test.MockMartusApp;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
-import org.martus.server.forclients.MockMartusServer;
-import org.martus.server.forclients.ServerSideNetworkHandler;
 
 public class TestMartusApp_NoServer extends TestCaseEnhanced
 {
@@ -38,16 +58,13 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		if(mockSecurityForApp == null)
 			mockSecurityForApp = new MockMartusSecurity();
 
-		MockServerNotAvailable mockServerNotAvailable = new MockServerNotAvailable();
 		appWithAccount = MockMartusApp.create(mockSecurityForApp);
-		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandler(mockServerNotAvailable));
+		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(new ServerSideNetworkHandlerNotAvailable());
 
 		File keyPairFile = appWithAccount.getKeyPairFile();
 		keyPairFile.delete();
 		new File(appWithAccount.getConfigInfoFilename()).delete();
 		new File(appWithAccount.getConfigInfoSignatureFilename()).delete();
-
-		mockServerNotAvailable.deleteAllFiles();
 
 		TRACE_END();
 	}
@@ -904,27 +921,8 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		assertEquals("Key not set?", key, b1.getHQPublicKey());
 	}
 
-
-
-
-
-	public static class MockServerNotAvailable extends MockMartusServer
-	{
-		MockServerNotAvailable() throws Exception
-		{
-			super();
-		}
-
-		public String ping()
-		{
-			return null;
-		}
-
-	}
-
 	private static MockMartusSecurity mockSecurityForApp;
 
-//	private MockMartusApp appWithAccount;
 	private MockMartusApp appWithAccount;
 
 	static final String userName = "testuser";

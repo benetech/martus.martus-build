@@ -28,12 +28,11 @@ package org.martus.client.test;
 
 import java.util.Vector;
 
+import junit.framework.TestCase;
+
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.MartusLocalization;
-
-
-import junit.framework.TestCase;
 
 public class TestMartusLocalization extends TestCase
 {
@@ -47,19 +46,6 @@ public class TestMartusLocalization extends TestCase
 		if(bd == null)
 			bd = new MartusLocalization();
  	}
-
-	public void testDateFormats()
-	{
-		ChoiceItem[] items = MartusLocalization.getDateFormats();
-		assertTrue("Should have multiple date formats", items.length > 1);
-	}
-
-	public void testMdyOrder()
-	{
-		assertEquals("dmy", MartusLocalization.getMdyOrder("dd/mm/yy"));
-		assertEquals("mdy", MartusLocalization.getMdyOrder("MM-dd-yyyy"));
-		assertEquals("ymd", MartusLocalization.getMdyOrder("y.mmmmmmm.yy.d"));
-	}
 
 	public void testLanguagess()
 	{

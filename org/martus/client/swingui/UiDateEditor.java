@@ -61,7 +61,7 @@ public class UiDateEditor extends UiField
 		for(int year = 1900; year <= thisYear; ++year)
 			yearCombo.addItem(new Integer(year).toString());
 
-		String mdyOrder = MartusLocalization.getMdyOrder(app.getCurrentDateFormatCode());
+		String mdyOrder = DateUtilities.getMdyOrder(app.getCurrentDateFormatCode());
 		for(int i = 0; i < mdyOrder.length(); ++i)
 		{
 			switch(mdyOrder.charAt(i))

@@ -2280,7 +2280,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				}
 				if(uploadResult != null)
 				{
-					System.out.println("UiMainWindow.Tick.run: " + uploadResult);
+					//System.out.println("UiMainWindow.Tick.run: " + uploadResult);
 					folderContentsHaveChanged(getStore().getFolderSent());
 					folderContentsHaveChanged(getStore().getFolderOutbox());
 					folderContentsHaveChanged(getStore().getFolderDraftOutbox());

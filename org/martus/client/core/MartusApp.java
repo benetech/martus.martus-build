@@ -49,6 +49,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
+import org.martus.client.swingui.DateUtilities;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
@@ -122,7 +123,7 @@ public class MartusApp
 		{
 			languageFlag.delete();
 			setCurrentLanguage("es");
-			setCurrentDateFormatCode(MartusLocalization.DMY_SLASH.getCode());
+			setCurrentDateFormatCode(DateUtilities.DMY_SLASH.getCode());
 		}
 		else
 		{
@@ -136,7 +137,7 @@ public class MartusApp
 
 			String previouslySavedStateDateFormat = previouslySavedState.getCurrentDateFormat();
 			if(previouslySavedStateDateFormat == "")
-				setCurrentDateFormatCode(MartusLocalization.getDefaultDateFormatCode());
+				setCurrentDateFormatCode(DateUtilities.getDefaultDateFormatCode());
 			else
 				setCurrentDateFormatCode(previouslySavedStateDateFormat);
 		}

@@ -53,7 +53,9 @@ public class TestClient
 		suite.addTest(new TestSuite(TestSearchTreeNode.class));
 		suite.addTest(new TestSuite(TestSearchParser.class));
 		suite.addTest(new TestSuite(TestConfigInfo.class));
+		suite.addTest(new TestSuite(TestMartusApp_NoServer.class));
 		suite.addTest(new TestSuite(TestMartusLocalization.class));
+		suite.addTest(new TestSuite(TestDateUtilities.class));
 		suite.addTest(new TestSuite(TestBulletinTableModel.class));
 		suite.addTest(new TestSuite(TestFolderList.class));
 		suite.addTest(new TestSuite(TestTransferableBulletin.class));

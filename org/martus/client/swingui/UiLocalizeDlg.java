@@ -49,7 +49,7 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 
 		setTitle(app.getMenuLabel("Preferences"));
 
-		dateFormatDropdown = new UiChoiceEditor(MartusLocalization.getDateFormats());
+		dateFormatDropdown = new UiChoiceEditor(DateUtilities.getDateFormats());
 		dateFormatDropdown.setText(owner.getApp().getCurrentDateFormatCode());
 
 		languageDropdown = new UiChoiceEditor(app.getUiLanguages());
