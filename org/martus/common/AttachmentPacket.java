@@ -1,7 +1,6 @@
 package org.martus.common;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -112,58 +111,24 @@ public class AttachmentPacket extends Packet
 	{
 		super.internalWriteXml(dest);
 
-		File base64File = copyRawFileToBase64File(rawFile);
 		dest.writeStartTag(MartusXml.AttachmentBytesElementName);
 		
-		UnicodeReader reader = new UnicodeReader(base64File);
-		char[] buffer = new char[MartusConstants.streamBufferCopySize];
-		int count = 0;
-		while( (count = reader.read(buffer)) >= 0)
+		InputStream inRaw = new BufferedInputStream(new FileInputStream(rawFile));
+		OutputStream outXml = new Base64XmlOutputStream(dest);
+		try
 		{
-			String chunk = new String(buffer, 0, count);
-			dest.writeEncoded(chunk);
-			dest.writeDirect(NEWLINE);
+			security.encrypt(inRaw, outXml, sessionKey);
 		}
-		reader.close();
-
+		catch (Exception e)
+		{
+			throw new IOException(e.toString());
+		}
+		outXml.close();
+		inRaw.close();
+		
 		dest.writeEndTag(MartusXml.AttachmentBytesElementName);
 	}
 	
-	protected File copyRawFileToBase64File(File rawFile) throws 
-		IOException
-	
-	{
-		//System.out.println("AttachmentPacket.copyRawFileToBase64File begin");
-		File encryptedFile = File.createTempFile("MartusEncryptedAtt",null);
-		encryptedFile.deleteOnExit();
-		InputStream inRaw = new BufferedInputStream(new FileInputStream(rawFile));
-		OutputStream outEncrypted = new BufferedOutputStream(new FileOutputStream(encryptedFile));
-		try 
-		{
-			security.encrypt(inRaw, outEncrypted, sessionKey);
-		} 
-		catch(Exception e) 
-		{
-			throw new IOException(e.getMessage());
-		} 
-		outEncrypted.close();
-		inRaw.close();
-		//System.out.println("AttachmentPacket.copyRawFileToBase64File encrypted");
-
-		File base64File = File.createTempFile("MartusAtt",null);
-		base64File.deleteOnExit();
-
-		FileInputStream inEncrypted = new FileInputStream(encryptedFile);
-		UnicodeWriter base64Writer = new UnicodeWriter(base64File);
-
-		Base64.encode(inEncrypted, base64Writer);
-
-		base64Writer.close();
-		inEncrypted.close();
-		//System.out.println("AttachmentPacket.copyRawFileToBase64File base64");
-		return base64File;
-	}
-
 	static final String NEWLINE = "\n";	
 	byte[] sessionKey;
 	File rawFile;
