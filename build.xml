@@ -307,8 +307,8 @@
 						/>
 	</target>
 	
-	<!-- Sign all jar -->
-	<target name="jarsigner" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta"/>
+	<!-- Sign all jars -->
+	<target name="jarsigner" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta, testall"/>
 	
 <!-- ================================================================== -->
 <!-- M D 5                                                              -->
