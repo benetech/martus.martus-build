@@ -116,7 +116,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals("visible?", false, hiddenFolder.isVisible());
 	}
 
-	public void testGetBulletin()
+	public void testGetBulletin() throws Exception
 	{
 		BulletinFolder folder = store.createFolder("blah");
 		assertEquals(0, folder.getBulletinCount());
@@ -159,7 +159,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals(true, folder.canAdd(Bulletin.STATUSSEALED));
 	}
 
-	public void testAdd()
+	public void testAdd() throws Exception
 	{
 		BulletinFolder folder = store.createFolder("a2");
 
@@ -217,7 +217,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals(0, testFolder.getBulletinCount());
 	}
 
-	public void testFind()
+	public void testFind() throws Exception
 	{
 		BulletinFolder folder = store.createFolder("blah2");
 		Bulletin b = store.createEmptyBulletin();
@@ -229,7 +229,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals(2, folder.find(b.getUniversalId()));
 	}
 
-	public void testSorting()
+	public void testSorting() throws Exception
 	{
 		BulletinFolder folder = store.createFolder("blah3");
 
@@ -298,7 +298,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		assertEquals("zippy zorro", b.get("author"));
 	}
 
-	void createEmptyBulletins(BulletinFolder folder, int count)
+	void createEmptyBulletins(BulletinFolder folder, int count) throws Exception
 	{
 		BulletinStore store = folder.getStore();
 		for(int i = 0; i < count; ++i)

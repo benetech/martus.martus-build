@@ -103,7 +103,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("wrong account?", security.getPublicKeyString(), b.getAccount());
 	}
 
-	public void testGetAllBulletinUids()
+	public void testGetAllBulletinUids() throws Exception
 	{
 		TRACE("testGetAllBulletinUids");
 		Vector empty = store.getAllBulletinUids();
@@ -125,7 +125,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("missing 2?", two.contains(b2.getUniversalId()));
 	}
 
-	public void testVisitAllBulletins()
+	public void testVisitAllBulletins() throws Exception
 	{
 		TRACE("testVisitAllBulletins");
 
@@ -162,7 +162,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("missing 2?", two.contains(b2.getUniversalId()));
 	}
 
-	public void testCaching()
+	public void testCaching() throws Exception
 	{
 		TRACE("testCaching");
 		int oldMax = BulletinStore.maxCachedBulletinCount;
@@ -259,7 +259,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	}
 
-	public void testFindBulletinById()
+	public void testFindBulletinById() throws Exception
 	{
 		TRACE("testFindBulletinById");
 
@@ -323,7 +323,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertNull("Should no longer exist at all", store.findBulletinByUniversalId(b2.getUniversalId()));
 	}
 
-	public void testRemoveBulletinFromFolder()
+	public void testRemoveBulletinFromFolder() throws Exception
 	{
 		TRACE("testRemoveBulletinFromFolder");
 
@@ -434,7 +434,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		}
 	}
 
-	public void testDeleteFolder()
+	public void testDeleteFolder() throws Exception
 	{
 		TRACE("testDeleteFolder");
 
@@ -461,7 +461,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("B should be in discarded", true, folder.contains(b));
 	}
 
-	public void testMoveBulletin()
+	public void testMoveBulletin() throws Exception
 	{
 		TRACE("testMoveBulletin");
 
@@ -489,7 +489,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("still not in b again", false, folderB.contains(b));
 	}
 
-	public void testAddBulletinToFolder()
+	public void testAddBulletinToFolder() throws Exception
 	{
 		TRACE("testAddBulletinToFolder");
 
@@ -508,7 +508,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	}
 
-	public void testFolderToXml()
+	public void testFolderToXml() throws Exception
 	{
 		TRACE("testFolderToXml");
 
@@ -690,7 +690,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		store.loadFolders();
 	}
 
-	public void testClearFolder()
+	public void testClearFolder() throws Exception
 	{
 		TRACE("testClearFolder");
 		Bulletin b1 = store.createEmptyBulletin();
@@ -705,7 +705,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(0, folder.getBulletinCount());
 	}
 
-	public void testSave()
+	public void testSave() throws Exception
 	{
 		TRACE("testSave");
 		//TODO: This was moved in from TestBulletin, and it may
@@ -1069,7 +1069,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("sealed b2 from another account can't be put in discarded?", true, store.canPutBulletinInFolder(discardedbox, b2.getAccount(), b2.getStatus()));
 	}
 
-	public void testGetSetOfAllBulletinUniversalIds()
+	public void testGetSetOfAllBulletinUniversalIds() throws Exception
 	{
 		TRACE("testGetSetOfAllBulletinUniversalIds");
 		Set emptySet = store.getSetOfAllBulletinUniversalIds();
@@ -1085,7 +1085,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("Missing b2?", two.contains(b2.getUniversalId()));
 	}
 
-	public void testGetSetOfBulletinUniversalIdsInFolders()
+	public void testGetSetOfBulletinUniversalIdsInFolders() throws Exception
 	{
 		TRACE("testGetSetOfBulletinUniversalIdsInFolders");
 		Set emptySet = store.getSetOfBulletinUniversalIdsInFolders();
@@ -1108,7 +1108,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("Missing b2?", two.contains(b2.getUniversalId()));
 	}
 
-	public void testGetSetOfOrphanedBulletinUniversalIds()
+	public void testGetSetOfOrphanedBulletinUniversalIds() throws Exception
 	{
 		TRACE("testGetSetOfOrphanedBulletinUniversalIds");
 		Set emptySet = store.getSetOfOrphanedBulletinUniversalIds();
@@ -1136,7 +1136,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	}
 
-	public void testOrphansInHiddenFolders()
+	public void testOrphansInHiddenFolders() throws Exception
 	{
 		TRACE("testOrphansInHiddenFolders");
 		Bulletin b1 = store.createEmptyBulletin();

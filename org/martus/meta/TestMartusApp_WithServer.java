@@ -1151,7 +1151,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		boolean nullGetFieldOfficeAccountIds;
 	}
 
-	private Bulletin createSealedBulletin(MartusApp app)
+	private Bulletin createSealedBulletin(MartusApp app) throws Exception
 	{
 		Bulletin b = app.createBulletin();
 		b.setSealed();
@@ -1161,7 +1161,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		return b;
 	}
 
-	private Bulletin createDraftBulletin(MartusApp app)
+	private Bulletin createDraftBulletin(MartusApp app) throws Exception
 	{
 		Bulletin b = app.createBulletin();
 		b.setDraft();

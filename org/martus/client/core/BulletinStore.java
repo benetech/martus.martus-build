@@ -340,24 +340,15 @@ public class BulletinStore
 		return BulletinLoader.loadFromDatabase(getDatabase(), key, getSignatureVerifier());
 	}
 
-	public void saveBulletin(Bulletin b)
+	public void saveBulletin(Bulletin b) throws IOException, CryptoException
 	{
 		bulletinCache.remove(b.getUniversalId());
-		try
-		{
-			BulletinSaver.saveToClientDatabase(b, database, mustEncryptPublicData(), getSignatureGenerator());
-			//We don't call addToCaches here because we are not sure
-			//that this bulletin object is still usable -- maybe
-			//attachment proxies still point to disk files?
-			cacheOfSortableFields.setFieldData(b);
-		}
-		catch(Exception e)
-		{
-			//TODO: Better error handling!
-			System.out.println("BulletinStore.saveBulletin: " + e);
-			System.out.println("BulletinStore.saveBulletin: " + e.getMessage());
-			e.printStackTrace();
-		}
+		BulletinSaver.saveToClientDatabase(b, database, mustEncryptPublicData(), getSignatureGenerator());
+
+		//We don't call addToCaches here because we are not sure
+		//that this bulletin object is still usable -- maybe
+		//attachment proxies still point to disk files?
+		cacheOfSortableFields.setFieldData(b);
 	}
 
 	public synchronized void discardBulletin(BulletinFolder f, Bulletin b) throws IOException

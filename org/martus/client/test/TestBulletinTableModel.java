@@ -59,7 +59,7 @@ public class TestBulletinTableModel extends TestCase
 		app.deleteAllFiles();
 	}
 	
-	public void test()
+	public void test() throws Exception
 	{
 		doTestColumns();
 		doTestFieldNames();
@@ -121,7 +121,7 @@ public class TestBulletinTableModel extends TestCase
 		}
 	}
 
-	public void doTestGetValueAt()
+	public void doTestGetValueAt() throws Exception
 	{
 		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);
@@ -167,7 +167,7 @@ public class TestBulletinTableModel extends TestCase
 		assertEquals(0, list.getRowCount());
 	}
 
-	public void doTestFindBulletin()
+	public void doTestFindBulletin() throws Exception
 	{
 		BulletinTableModel list = new BulletinTableModel(localization);
 		list.setFolder(folderSent);

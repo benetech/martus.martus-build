@@ -127,7 +127,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		}
 	}
 	
-	public void testDeleteAllBulletins()
+	public void testDeleteAllBulletins() throws Exception
 	{
 		Bulletin b1 = appWithAccount.createBulletin();
 		Bulletin b2 = appWithAccount.createBulletin();
@@ -575,7 +575,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		TRACE_END();
 	}
 
-	public void testSearch()
+	public void testSearch() throws Exception
 	{
 		TRACE_BEGIN("testSearch");
 		BulletinStore store = appWithAccount.getStore();
@@ -980,7 +980,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		TRACE_END();
 	}
 
-	public void testRepairOrphans()
+	public void testRepairOrphans() throws Exception
 	{
 		assertEquals("already have orphans?", 0, appWithAccount.repairOrphans());
 		assertNull("Orphan Folder exists?", appWithAccount.getStore().findFolder(BulletinStore.RECOVERED_BULLETIN_FOLDER));

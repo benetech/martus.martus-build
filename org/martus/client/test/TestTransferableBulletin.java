@@ -101,7 +101,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		assertNull("found a stringFlavor?", data);
 	}
 
-	public void testFileFlavor()
+	public void testFileFlavor() throws Exception
 	{
 		File file = getFile(drag, "basic");
 		int at = file.getName().indexOf(TITLE);
@@ -175,7 +175,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		assertEquals(minimumLength, MartusUtilities.toFileName(minimumLength));
 	}
 
-	private TransferableBulletinList createTransferableBulletin(String title)
+	private TransferableBulletinList createTransferableBulletin(String title) throws Exception
 	{
 		Bulletin b = store.createEmptyBulletin();
 		b.setSealed();

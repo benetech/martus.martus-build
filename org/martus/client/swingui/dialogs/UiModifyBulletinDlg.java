@@ -53,6 +53,7 @@ import org.martus.client.swingui.bulletincomponent.UiBulletinComponent;
 import org.martus.client.swingui.bulletincomponent.UiBulletinEditor;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.swing.Utilities;
 
 public class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListener, EncryptionChangeListener
@@ -149,37 +150,58 @@ public class UiModifyBulletinDlg extends JFrame implements ActionListener, Windo
 		}
 
 
-		MartusApp app = observer.getApp();
-		BulletinStore store = app.getStore();
-
 		Cursor originalCursor = getCursor();
-		if(ae.getSource() == send)
-		{
-			if(!confirmSend())
-				return;
-			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			bulletin.setSealed();
-			app.setHQKeyInBulletin(bulletin);
-			store.saveBulletin(bulletin);
+		try {
+			MartusApp app = observer.getApp();
+			if(ae.getSource() == send)
+			{
+				if(!confirmSend())
+					return;
+				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				saveSealedBulletin(app);
+			}
+			else
+			{
+				setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
+				saveDraftBulletin(app);
+			}
 			observer.bulletinContentsHaveChanged(bulletin);
-			store.moveBulletin(bulletin, store.getFolderDrafts(), store.getFolderOutbox());
-			store.removeBulletinFromFolder(bulletin, store.getFolderDraftOutbox());
-		}
-		else
+			app.getStore().saveFolders();
+			observer.selectBulletinInCurrentFolderIfExists(bulletin.getUniversalId());
+			weAreDoneSoClose();
+			wasBulletinSavedFlag = true;
+		} 
+		catch (Exception e) 
 		{
-			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
-			bulletin.setDraft();
-			app.setHQKeyInBulletin(bulletin);
-			store.saveBulletin(bulletin);
-			observer.bulletinContentsHaveChanged(bulletin);
-			store.addBulletinToFolder(bulletin.getUniversalId(), store.getFolderDrafts());
-			store.addBulletinToFolder(bulletin.getUniversalId(), store.getFolderDraftOutbox());
+			e.printStackTrace();
+			observer.notifyDlg(this, "ErrorSavingBulletin");
+		} 
+		finally 
+		{
+			setCursor(originalCursor);
 		}
-		store.saveFolders();
-		observer.selectBulletinInCurrentFolderIfExists(bulletin.getUniversalId());
-		weAreDoneSoClose();
-		setCursor(originalCursor);
-		wasBulletinSavedFlag = true;
+	}
+
+	private void saveDraftBulletin(MartusApp app)
+		throws IOException, CryptoException 
+	{
+		bulletin.setDraft();
+		app.setHQKeyInBulletin(bulletin);
+		BulletinStore store = app.getStore();
+		store.saveBulletin(bulletin);
+		store.addBulletinToFolder(bulletin.getUniversalId(), store.getFolderDrafts());
+		store.addBulletinToFolder(bulletin.getUniversalId(), store.getFolderDraftOutbox());
+	}
+
+	private void saveSealedBulletin(MartusApp app)
+		throws IOException, CryptoException 
+	{
+		bulletin.setSealed();
+		app.setHQKeyInBulletin(bulletin);
+		BulletinStore store = app.getStore();
+		store.saveBulletin(bulletin);
+		store.moveBulletin(bulletin, store.getFolderDrafts(), store.getFolderOutbox());
+		store.removeBulletinFromFolder(bulletin, store.getFolderDraftOutbox());
 	}
 
 	public boolean wasBulletinSaved()

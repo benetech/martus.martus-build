@@ -54,7 +54,7 @@ public class TestFolderList extends TestCase
     	app.deleteAllFiles();
     }
 
-	public void testBasics()
+	public void testBasics() throws Exception
 	{
 		app.loadSampleData();
 		BulletinStore store = app.getStore();
@@ -91,7 +91,7 @@ public class TestFolderList extends TestCase
 		assertEquals(baseCount, list.getCount());
 	}
 
-	public void testLocalizedFolders()
+	public void testLocalizedFolders() throws Exception
 	{
 		app.loadSampleData();
 		BulletinStore store = app.getStore();
@@ -116,7 +116,7 @@ public class TestFolderList extends TestCase
 
 	}
 
-	public void testLoadFolders()
+	public void testLoadFolders() throws Exception
 	{
 		app.loadSampleData();
 		BulletinStore store = app.getStore();

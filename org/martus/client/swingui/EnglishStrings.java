@@ -130,6 +130,7 @@ public class EnglishStrings
 "wintitle:notifyQuickEraseFailed=Quick Erase Error",
 "wintitle:notifyUserRejectedServerCompliance=Server Compliance Statement",
 "wintitle:notifyExistingServerRemoved=Server Removed",
+"wintitle:notifyErrorSavingBulletin=Error Saving",
 				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -498,7 +499,7 @@ public class EnglishStrings
 "field:notifyQuickEraseFailedcause=Errors prevented some bulletins or folders from being deleted.",
 "field:notifyUserRejectedServerCompliancecause=You have chosen not to use this server",
 "field:notifyExistingServerRemovedcause=You will have to select a server for any bulletins to be backed up to that server, or to retrieve bulletins from that server.",
-		
+"field:notifyErrorSavingBulletincause=An error prevented the bulletin from being saved. Check to make sure the disk is not full or write protected.",		
 	
 "field:messageServerNewscause=The current server has sent this message:",
 
