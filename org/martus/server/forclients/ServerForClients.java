@@ -270,10 +270,12 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
+			log("Banned clients file not found: " + bannedClientsFile.getName());
 			clientsBanned.clear();
 		}
 		catch (IOException e)
 		{
+			// TODO: Should this abort?
 			log("loadBannedClients: " + e);
 		}
 	}
