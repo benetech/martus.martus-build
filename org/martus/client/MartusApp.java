@@ -744,6 +744,8 @@ public class MartusApp
 		BulletinFolder outbox = getFolderOutbox();
 		Bulletin b = outbox.getBulletinSorted(0);
 		String result = uploadBulletin(b, progressMeter);
+		if(result == null)
+			return null;
 		
 		if(result.equals(NetworkInterfaceConstants.OK) || result.equals(NetworkInterfaceConstants.DUPLICATE))
 		{
@@ -780,6 +782,8 @@ public class MartusApp
 		BulletinFolder draftOutbox = getFolderDraftOutbox();
 		Bulletin b = draftOutbox.getBulletinSorted(0);
 		String result = uploadBulletin(b, progressMeter);
+		if(result == null)
+			return null;
 		
 		if(result.equals(NetworkInterfaceConstants.OK))
 		{
