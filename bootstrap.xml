@@ -49,7 +49,7 @@
 
     <!-- run martus build file without signing of jars -->
     <target name="build.martus" depends="cvs.checkout">
-        <ant antfile="${cvs.home}/${martus.module}/cvs.build.xml" dir="${cvs.home}/${martus.module}" target="release.and.checkin"/>
+        <ant antfile="${cvs.home}/${martus.module}/cvs.build.xml" dir="${cvs.home}/${martus.module}" target="nosign.release.and.checkin"/>
         <!-- notify via email of success -->
     </target>
 

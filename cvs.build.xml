@@ -40,11 +40,21 @@
         <ant antfile="build-meta.xml" dir="." target="release"/>
     </target>
 
+    <target depends="init" name="make.release.nosign" description="Executes subproject that builds martus">
+        <ant antfile="build-meta.xml" dir="." target="nosign.release"/>
+    </target>
+
     <!-- ================================================================== -->
     <!-- C V S                                                              -->
     <!-- ================================================================== -->
     <!-- run build and check in results -->
-    <target name="release.and.checkin" depends="make.release,create.client.cvs.dirs,create.server.cvs.dirs" description="Tag CVS projects and check-in results">
+    <target name="release.and.checkin" depends="make.release,checkin.cvs">
+    </target>
+
+    <target name="nosign.release.and.checkin" depends="make.release.nosign,checkin.cvs">
+    </target>
+
+    <target name="checkin.cvs" depends="create.client.cvs.dirs,create.server.cvs.dirs" description="Tag CVS projects and check-in results">
         <!-- check in build number -->
         <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true" noexec="false">
             <commandline>
