@@ -39,6 +39,7 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import org.logi.crypto.secretshare.SecretSharingException;
+import org.martus.client.core.Exceptions.KeyShareException;
 import org.martus.common.MartusConstants;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
@@ -48,6 +49,7 @@ import org.martus.util.Base64;
 import org.martus.util.ByteArrayInputStreamWithSeek;
 import org.martus.util.StringInputStream;
 import org.martus.util.UnicodeReader;
+import org.martus.util.UnicodeStringWriter;
 
 
 public class TestMartusSecurity extends TestCaseEnhanced
@@ -192,24 +194,87 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		twoShares.add(share2);
 		byte[] recoveredSessionKey = originalSecurity.recoverShares(twoShares);
 		String item4Encoded = reader.readLine();
-		byte[] encryptedPrivateKey = Base64.decode(item4Encoded);
+		byte[] encryptedKeyPair = Base64.decode(item4Encoded);
 		in.close();
 		reader.close();
 		
 		MartusSecurity recoveredSecurity = new MartusSecurity();
-		ByteArrayInputStreamWithSeek inEncryptedPrivateKey = new ByteArrayInputStreamWithSeek(encryptedPrivateKey);
-		ByteArrayOutputStream outDecryptedPrivateKey = new ByteArrayOutputStream();
-		recoveredSecurity.decrypt( inEncryptedPrivateKey, outDecryptedPrivateKey, recoveredSessionKey);
-		outDecryptedPrivateKey.close();
-		inEncryptedPrivateKey.close();
+		ByteArrayInputStreamWithSeek inEncryptedKeyPair = new ByteArrayInputStreamWithSeek(encryptedKeyPair);
+		ByteArrayOutputStream outDecryptedKeyPair = new ByteArrayOutputStream();
+		recoveredSecurity.decrypt( inEncryptedKeyPair, outDecryptedKeyPair, recoveredSessionKey);
+		outDecryptedKeyPair.close();
+		inEncryptedKeyPair.close();
 
 		recoveredSecurity.clearKeyPair();
-		recoveredSecurity.setKeyPairFromData(outDecryptedPrivateKey.toByteArray());
+		recoveredSecurity.setKeyPairFromData(outDecryptedKeyPair.toByteArray());
 		
 		assertEquals("Public Keys don't match?",item2,recoveredSecurity.getPublicKeyString());		
 		assertEquals("Security Public Keys don't match?",originalSecurity.getPublicKeyString(),recoveredSecurity.getPublicKeyString());		
 		assertEquals("Security Private Keys don't match?",originalSecurity.getPrivateKeyString(),recoveredSecurity.getPrivateKeyString());		
 	}
+	
+	public void testRecoverFromKeyShareBundles() throws Exception
+	{
+		MartusSecurity recoveredSecurity = new MartusSecurity();
+		try 
+		{
+			recoveredSecurity.recoverFromKeyShareBundles(null);
+			fail("Did not throw with null vector of bundles?");
+		} 
+		catch (KeyShareException expectedException) 
+		{
+		}
+
+		try 
+		{
+			Vector emptyBundles = new Vector();
+			recoveredSecurity.recoverFromKeyShareBundles(emptyBundles);
+			fail("Did not throw with an empty vector of bundles?");
+		} 
+		catch (KeyShareException expectedException) 
+		{
+		}
+
+		try 
+		{
+			Vector fakeBundle = new Vector();
+			fakeBundle.add(new String("fake bundle 1"));
+			fakeBundle.add(new String("fake bundle 2"));
+			recoveredSecurity.recoverFromKeyShareBundles(fakeBundle);
+			fail("Did not throw with a fake vector of single element bundles?");
+		} 
+		catch (KeyShareException expectedException) 
+		{
+		}
+
+		try 
+		{
+			Vector fakeBundle = new Vector();
+			for(int i = 0; i < MartusConstants.minNumberOfFilesNeededToRecreateSecret; ++i)
+			{
+				UnicodeStringWriter writer = UnicodeStringWriter.create();
+				writer.writeln(MartusConstants.martusSecretShareFileID+"corrupt");
+				writer.writeln("corrupted Public code");
+				writer.writeln("corrupted Share");
+				writer.writeln(Base64.encode(new String("Corrupted KeyPair").getBytes()));
+				writer.close();
+				fakeBundle.add(writer.toString());
+			}			
+			recoveredSecurity.recoverFromKeyShareBundles(fakeBundle);
+			fail("Did not throw with a fake vector of corrupted 4 element bundles?");
+		} 
+		catch (KeyShareException expectedException) 
+		{
+		}
+
+		MartusSecurity originalSecurity = new MartusSecurity();
+		originalSecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
+		Vector bundles = originalSecurity.getKeyShareBundles();
+		recoveredSecurity.recoverFromKeyShareBundles(bundles);
+		assertEquals("Public Keys don't Match?",originalSecurity.getPublicKeyString(), recoveredSecurity.getPublicKeyString());
+		assertEquals("Private Keys don't Match?",originalSecurity.getPrivateKeyString(), recoveredSecurity.getPrivateKeyString());
+	}
+
 
 	public void testGetDigestOfPartOfPrivateKey() throws Exception
 	{

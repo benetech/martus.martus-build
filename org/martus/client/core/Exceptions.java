@@ -56,4 +56,7 @@ public class Exceptions
 	{
 	}
 
+	public static class KeyShareException extends Exception
+	{
+	}
 }

@@ -37,6 +37,7 @@ import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.security.InvalidKeyException;
 import java.security.Key;
@@ -84,9 +85,13 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.logi.crypto.Crypto;
 import org.logi.crypto.secretshare.PolySecretShare;
 import org.logi.crypto.secretshare.SecretSharingException;
+import org.martus.client.core.Exceptions.KeyShareException;
 import org.martus.common.MartusConstants;
 import org.martus.util.Base64;
+import org.martus.util.ByteArrayInputStreamWithSeek;
 import org.martus.util.InputStreamWithSeek;
+import org.martus.util.StringInputStream;
+import org.martus.util.UnicodeReader;
 import org.martus.util.UnicodeStringWriter;
 
 import com.isnetworks.provider.random.InfiniteMonkeyProvider;
@@ -205,7 +210,7 @@ public class MartusSecurity extends MartusCryptoImplementation
 		System.arraycopy(secretToShare,0,paddedSecret,1,secretToShare.length);
 		//We need to pad the secret beginning with a 1 because of a bug found 
 		//in the logi encryption algorithm that any secret
-		//beginning with a 0 or any byte > 127 will fail.
+		//beginning with a 0 or beginning with a byte > 127 will fail.
 		paddedSecret[0] = 1; 
 		int minNumber = MartusConstants.minNumberOfFilesNeededToRecreateSecret;
 		int numberShares = MartusConstants.numberOfFilesInShare;
@@ -230,7 +235,7 @@ public class MartusSecurity extends MartusCryptoImplementation
 			byte[] recoveredSecret = PolySecretShare.retrieve(polyShares);
 			//We needed to pad the secret beginning with a 1 because of a bug found 
 			//in the logi encryption algorithm that any secret
-			//beginning with a 0 or any byte > 127 will fail.
+			//beginning with a 0 or beginning with a byte > 127 will fail.
 			int unpaddedLength = recoveredSecret.length - 1;
 			byte[] unpaddedSecret = new byte[unpaddedLength];
 			System.arraycopy(recoveredSecret,1,unpaddedSecret,0,unpaddedLength);
@@ -272,6 +277,94 @@ public class MartusSecurity extends MartusCryptoImplementation
 		}
 		
 		return shareBundles;
+	}
+
+	public void recoverFromKeyShareBundles(Vector bundles) throws KeyShareException 
+	{
+		clearKeyPair();
+		
+		if(bundles == null)
+			throw new KeyShareException();
+		if(bundles.size() < MartusConstants.minNumberOfFilesNeededToRecreateSecret)
+			throw new KeyShareException();
+			
+		try 
+		{
+			Vector shares = new Vector();
+			shares = getSharesFromBundles(bundles);
+			byte[] encryptedKeyPair = getEncryptedKeyPairFromBundles(bundles);
+			decryptAndSetKeyPair(shares, encryptedKeyPair);
+		}
+		catch  (KeyShareException e)
+		{
+			throw e;
+		}
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			throw new KeyShareException();
+		}
+	}
+
+	private Vector getSharesFromBundles(Vector bundles)
+		throws  UnsupportedEncodingException, 
+				IOException, 
+				KeyShareException 
+		{
+			Vector shares = new Vector();
+			for(int i = 0; i < bundles.size(); ++i)
+			{
+				InputStream in = new StringInputStream((String) bundles.get(i));
+				UnicodeReader reader = new UnicodeReader(in);
+				String shareId = reader.readLine();
+				if(!shareId.equals(MartusConstants.martusSecretShareFileID))
+					throw new KeyShareException();
+				String publicCode = reader.readLine();
+				String sharePiece = reader.readLine();
+				in.close();
+				reader.close();
+				shares.add(sharePiece);
+			}
+			return shares;
+	}
+	
+	private byte[] getEncryptedKeyPairFromBundles(Vector bundles)
+		throws KeyShareException
+	{
+		byte[] encryptedKeyPair = null;
+		InputStream in;
+		try 
+		{
+			in = new StringInputStream((String) bundles.get(0));
+			UnicodeReader reader = new UnicodeReader(in);
+			reader.readLine();
+			reader.readLine();
+			reader.readLine();
+			encryptedKeyPair = Base64.decode(reader.readLine());
+			in.close();
+			reader.close();
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			throw new KeyShareException();
+		}
+		return 	encryptedKeyPair;	
+	}
+
+	private void decryptAndSetKeyPair(Vector shares, byte[] keyPairEncrypted) throws 
+						SecretSharingException, 
+						DecryptionException,
+						IOException,
+						AuthorizationFailedException 
+	{
+		byte[] recoveredSessionKey = recoverShares(shares);
+		ByteArrayInputStreamWithSeek inEncryptedKeyPair = new ByteArrayInputStreamWithSeek(keyPairEncrypted);
+		ByteArrayOutputStream outDecryptedKeyPair = new ByteArrayOutputStream();
+		decrypt( inEncryptedKeyPair, outDecryptedKeyPair, recoveredSessionKey);
+		outDecryptedKeyPair.close();
+		inEncryptedKeyPair.close();
+		setKeyPairFromData(outDecryptedKeyPair.toByteArray());
 	}
 
 	public void encrypt(InputStream plainStream, OutputStream cipherStream) throws
@@ -978,4 +1071,5 @@ public class MartusSecurity extends MartusCryptoImplementation
 	private KeyGenerator sessionKeyGenerator;
 	private KeyPairGenerator keyPairGenerator;
 	private SecretKeyFactory keyFactory;
+
 }

@@ -33,6 +33,7 @@ import java.util.Vector;
 
 import javax.net.ssl.KeyManager;
 
+import org.martus.client.core.Exceptions.KeyShareException;
 import org.martus.util.*;
 
 public abstract class MartusCrypto
@@ -106,6 +107,7 @@ public abstract class MartusCrypto
 	
 	// Secret Share of Private Key
 	public abstract Vector getKeyShareBundles();
+	public abstract void recoverFromKeyShareBundles(Vector shares) throws KeyShareException;
 
 	// public codes
 	public static String computePublicCode(String publicKeyString) throws
