@@ -58,8 +58,7 @@ public class UiProgressMeter extends JPanel
 	{
 		if(parentDlg != null)
 			return parentDlg.shouldExit();
-		return
-			false;
+		return false;
 	}
 	
 	private JLabel statusMessage;

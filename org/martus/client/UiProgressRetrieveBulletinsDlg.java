@@ -20,8 +20,6 @@ public class UiProgressRetrieveBulletinsDlg extends UiProgressRetrieveDlg
 		vBox.add(cancel);
 		vBox.add(new JLabel("    "));
 		getContentPane().add(vBox);
-		getContentPane().add(new JLabel("    "), BorderLayout.EAST);
-		getContentPane().add(new JLabel("    "), BorderLayout.WEST);
 		window.centerDlg(this);
 	}
 	

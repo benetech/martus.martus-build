@@ -1,5 +1,6 @@
 package org.martus.client;
 
+import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
@@ -7,6 +8,7 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 
 public class UiProgressRetrieveDlg extends JDialog 
 {
@@ -21,6 +23,8 @@ public class UiProgressRetrieveDlg extends JDialog
 		bulletinCountMeter = new UiProgressMeter(this);
 		statusMessage = window.getApp().getFieldLabel(tag);
 		updateBulletinCountMeter(0, 1);	
+		getContentPane().add(new JLabel("    "), BorderLayout.EAST);
+		getContentPane().add(new JLabel("    "), BorderLayout.WEST);
 	}
 
 	class WindowEventHandler extends WindowAdapter
