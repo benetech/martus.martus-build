@@ -133,7 +133,7 @@
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr" showoutput="yes">
             <classpath>
                 <fileset dir="${public.release.folder}" >
-                    <include name="*.jar"/>
+                    <include name="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar"/>
                 </fileset>
                 <pathelement path="${java.class.path}"/>
                 <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
@@ -230,7 +230,7 @@
         <echo message="Release Built."/>
     </target>
 
-    <target name="nosign.release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,test,zip-client-src,md5">
+    <target name="nosign.release" depends="test,zip-client-src,md5">
         <echo message="Unsigned Release Built."/>
     </target>
 
