@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import java.awt.Component;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
@@ -277,7 +278,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		clipboard.setContents(tb, mainWindow);
 	}
 
-	public void doPasteBulletin()
+	public void doPasteBulletins()
 	{
 		BulletinFolder folder = getFolder();
 		TransferableBulletinList tb = mainWindow.getClipboardTransferableBulletin();
@@ -380,6 +381,17 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				doDiscardBulletins();
 				DelayAddListener delay = new DelayAddListener();
 				delay.start();
+			}
+			if(e.isControlDown())
+			{
+				Cursor original = mainWindow.setWaitingCursor();				
+				if(e.getKeyCode() == KeyEvent.VK_X)
+					doCutBulletins();
+				if(e.getKeyCode() == KeyEvent.VK_C)
+					doCopyBulletins();
+				if(e.getKeyCode() == KeyEvent.VK_V)
+					doPasteBulletins();
+				mainWindow.resetCursor(original);
 			}
 		}
 	}
