@@ -56,8 +56,8 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(2, modelWithoutData.getColumnCount());
-		assertEquals(2, modelWithData.getColumnCount());
+		assertEquals(3, modelWithoutData.getColumnCount());
+		assertEquals(3, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()
@@ -133,6 +133,14 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 			list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE));
 			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
 			result.add(list);
+			Vector sizes = new Vector();
+			if(retrieveTags.size() == 1)
+			{
+				sizes.add(new Integer(b0Size));
+				sizes.add(new Integer(b1Size));
+				sizes.add(new Integer(b2Size));
+			}
+			result.add(sizes);
 			return result;
 		}
 		
@@ -148,6 +156,9 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;
+	int b0Size = 3;
+	int b1Size = 5;
+	int b2Size = 8;
 
 	RetrieveMyTableModel modelWithData;
 	RetrieveMyTableModel modelWithoutData;

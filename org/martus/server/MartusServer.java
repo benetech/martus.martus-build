@@ -844,7 +844,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
-		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId);
+		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId, new Vector());
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
 			logging("legacylistMySealedBulletinIds : Exit");
@@ -862,16 +862,16 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
-		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId);
+		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId, retrieveTags);
 		Vector summaries = summaryCollector.getSummaries();
-
+		Vector retrieveTagInfo = summaryCollector.getRetrievedTagInfo();
 		String resultCode = (String)summaries.get(0);
 		summaries.remove(0);
 
 		Vector result = new Vector();
 		result.add(resultCode);
 		result.add(summaries);
-
+		result.add(retrieveTagInfo);
 		if(serverMaxLogging)
 			logging("listMySealedBulletinIds : Exit");
 		return result;
@@ -888,7 +888,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
-		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId);
+		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId, new Vector());
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
 			logging("legacyListMyDraftBulletinIds : Exit");
@@ -906,7 +906,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
-		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId);
+		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId, retrieveTags);
 		Vector summaries = summaryCollector.getSummaries();
 
 		String resultCode = (String)summaries.get(0);
@@ -931,7 +931,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
-		SummaryCollector summaryCollector = new FieldOfficeSealedSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
+		SummaryCollector summaryCollector = new FieldOfficeSealedSummaryCollector(getDatabase(), hqAccountId, authorAccountId, new Vector());
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
 			logging("legacylistFieldOfficeSealedBulletinIds : Exit");
@@ -949,7 +949,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 		
-		SummaryCollector summaryCollector = new FieldOfficeSealedSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
+		SummaryCollector summaryCollector = new FieldOfficeSealedSummaryCollector(getDatabase(), hqAccountId, authorAccountId, retrieveTags);
 		Vector summaries = summaryCollector.getSummaries();
 
 		String resultCode = (String)summaries.get(0);
@@ -975,7 +975,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 			
-		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
+		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId, new Vector());
 		Vector summaries = summaryCollector.getSummaries();
 		if(serverMaxLogging)
 			logging("legacyListFieldOfficeDraftBulletinIds : Exit");
@@ -993,7 +993,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		if( isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 			
-		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
+		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId, retrieveTags);
 		Vector summaries = summaryCollector.getSummaries();
 
 		String resultCode = (String)summaries.get(0);
@@ -1797,10 +1797,11 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	abstract class SummaryCollector implements Database.PacketVisitor
 	{
-		SummaryCollector(Database dbToUse, String accountIdToUse)
+		SummaryCollector(Database dbToUse, String accountIdToUse, Vector retrieveTagsToUse)
 		{
 			db = dbToUse;
 			authorAccountId = accountIdToUse;
+			retrieveTags = retrieveTagsToUse;
 		}
 		
 		public void visit(DatabaseKey key)
@@ -1830,10 +1831,16 @@ public class MartusServer implements NetworkInterfaceConstants
 			if(summaries == null)
 			{
 				summaries = new Vector();
+				retrievedTagInfo = new Vector();
 				summaries.add(NetworkInterfaceConstants.OK);
 				db.visitAllRecords(this);
 			}
 			return summaries;	
+		}
+		
+		public Vector getRetrievedTagInfo()
+		{
+			return retrievedTagInfo;	
 		}
 
 		void addToSummary(BulletinHeaderPacket bhp) 
@@ -1847,13 +1854,15 @@ public class MartusServer implements NetworkInterfaceConstants
 		Database db;
 		String authorAccountId;
 		Vector summaries;
+		Vector retrieveTags;
+		Vector retrievedTagInfo;
 	}
 	
 	class MySealedSummaryCollector extends SummaryCollector
 	{
-		public MySealedSummaryCollector(Database dbToUse, String accountIdToUse) 
+		public MySealedSummaryCollector(Database dbToUse, String accountIdToUse, Vector retrieveTags) 
 		{
-			super(dbToUse, accountIdToUse);
+			super(dbToUse, accountIdToUse, retrieveTags);
 		}
 
 		public void addSummaryIfAppropriate(DatabaseKey key) 
@@ -1879,9 +1888,9 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	class MyDraftSummaryCollector extends SummaryCollector
 	{
-		public MyDraftSummaryCollector(Database dbToUse, String accountIdToUse) 
+		public MyDraftSummaryCollector(Database dbToUse, String accountIdToUse, Vector retrieveTagsToUse) 
 		{
-			super(dbToUse, accountIdToUse);
+			super(dbToUse, accountIdToUse, retrieveTagsToUse);
 		}
 
 		public void addSummaryIfAppropriate(DatabaseKey key) 
@@ -1908,9 +1917,9 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	class FieldOfficeSealedSummaryCollector extends SummaryCollector
 	{
-		public FieldOfficeSealedSummaryCollector(Database dbToUse, String hqAccountIdToUse, String authorAccountIdToUse) 
+		public FieldOfficeSealedSummaryCollector(Database dbToUse, String hqAccountIdToUse, String authorAccountIdToUse, Vector retrieveTagsToUse) 
 		{
-			super(dbToUse, authorAccountIdToUse);
+			super(dbToUse, authorAccountIdToUse, retrieveTagsToUse);
 			hqAccountId = hqAccountIdToUse;
 
 		}
@@ -1940,9 +1949,9 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	class FieldOfficeDraftSummaryCollector extends SummaryCollector
 	{
-		public FieldOfficeDraftSummaryCollector(Database dbToUse, String hqAccountIdToUse, String authorAccountIdToUse) 
+		public FieldOfficeDraftSummaryCollector(Database dbToUse, String hqAccountIdToUse, String authorAccountIdToUse, Vector retrieveTagsToUse) 
 		{
-			super(dbToUse, authorAccountIdToUse);
+			super(dbToUse, authorAccountIdToUse, retrieveTagsToUse);
 			hqAccountId = hqAccountIdToUse;
 
 		}

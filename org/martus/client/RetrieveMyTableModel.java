@@ -23,41 +23,56 @@ public class RetrieveMyTableModel extends RetrieveTableModel
 	
 	public String getColumnName(int column)
 	{
-		if(column == 0)
+		switch(column)
+		{
+		case 0:
 			return app.getFieldLabel("retrieveflag");
-
-		return app.getFieldLabel(Bulletin.TAGTITLE);
+		case 1:
+			return app.getFieldLabel(Bulletin.TAGTITLE);
+		case 2:
+		default:
+			return app.getFieldLabel("BulletinSize");
+		}
 	}
 
 	public int getColumnCount()
 	{
-		return 2;
+		return 3;
 	}
 
 	public Object getValueAt(int row, int column)
 	{
 		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
-		if(column == 0)
+		switch(column)
 		{
+		case 0:
 			return new Boolean(summary.isChecked());
+		case 1:
+			return summary.getTitle();
+		case 2:
+		default:
+			return new Integer(summary.getSize()).toString();
 		}
-		return summary.getTitle();
 	}
 
 	public void setValueAt(Object value, int row, int column)
 	{
 		BulletinSummary summary = (BulletinSummary)currentSummaries.get(row);
 		if(column == 0)
-		{
 			summary.setChecked(((Boolean)value).booleanValue());
-		}
 	}
 
 	public Class getColumnClass(int column)
 	{
-		if(column == 0)
+		switch(column)
+		{
+		case 0:
 			return Boolean.class;
-
-		return String.class;
+		case 1:
+			return String.class;
+		case 2:
+		default:
+			return String.class;
+		}
 	}
 }

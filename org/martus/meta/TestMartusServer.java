@@ -1194,7 +1194,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.security = serverSecurity;
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 
-		Vector list1 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), new Vector());
+		Vector list1 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), MartusUtilities.getRetrieveBulletinSummaryTags());
 		assertNotNull("listMyBulletinSummaries returned null", list1);
 		assertEquals("wrong length", 3, list1.size());
 		assertNotNull("null id1 [0]", list1.get(0));
@@ -1203,13 +1203,16 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(privateBulletin));
 
-		Vector list2 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), new Vector());
+		Vector list2 = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString(), MartusUtilities.getRetrieveBulletinSummaryTags());
 		assertNotNull("listMyBulletinSummaries returned null", list2);
+		assertEquals("wrong length", 3, list2.size());
 		assertNotNull("null id1 [0]", list2.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
 
 		Vector ids = (Vector)list2.get(1);
 		assertEquals("Wrong # of ids", 2, ids.size());
+		Vector sizes = (Vector)list2.get(2);
+//		assertEquals("Wrong # of sizes", 2, sizes.size());
 		
 		String gotSummary1 = (String)ids.get(0);
 		assertNotNull("1 was null", gotSummary1);
@@ -1217,6 +1220,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String gotSummary2 = (String)ids.get(1);
 		assertNotNull("2 was null", gotSummary2);
 		
+//		Integer size1 = (Integer)sizes.get(0);
+//		assertNotNull("Size of 1 was null", size1);
+//		Integer size2 = (Integer)sizes.get(1);
+//		assertNotNull("Size of 2 was null", size1);
+
 		int at1 = gotSummary1.indexOf("=");
 		assertTrue("no = in at1?", at1 >= 0);
 		String id1 = gotSummary1.substring(0, at1);

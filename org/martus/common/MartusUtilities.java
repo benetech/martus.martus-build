@@ -298,6 +298,13 @@ public class MartusUtilities
 			throw new IOException("Zip validation exception: " + e.getMessage());
 		}
 	}
+	
+	public static Vector getRetrieveBulletinSummaryTags()
+	{
+		Vector tags = new Vector();
+		tags.add(NetworkInterfaceConstants.TAG_BULLETIN_SIZE);
+		return tags;	
+	}
 
 	public static DatabaseKey[] getAllPacketKeys(BulletinHeaderPacket bhp)
 	{

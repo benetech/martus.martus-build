@@ -8,6 +8,7 @@ public class BulletinSummary
 		localId = localIdToUse;
 		title = titleToUse;
 		author = authorToUse;
+		size = 0;
 	}
 	
 	public void setChecked(boolean newValue)
@@ -50,11 +51,18 @@ public class BulletinSummary
 	{
 		this.downloadable = downloadable;
 	}
+	
+	public int getSize()
+	{
+		return size;	
+	}
+	
 
 	private String accountId;
 	String localId;
 	String title;
 	String author;
+	int size;
 	boolean checkedFlag;
 	boolean downloadable;
 }
