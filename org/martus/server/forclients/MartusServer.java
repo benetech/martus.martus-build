@@ -21,7 +21,6 @@ import java.util.Iterator;
 import java.util.TimerTask;
 import java.util.Vector;
 
-import org.martus.common.AttachmentPacket;
 import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
@@ -911,63 +910,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return getDatabase().getContactInfoFile(accountId);
 	}
 
-	public Vector legacyDownloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
-	{
-		//TODO reject requests for other accounts public packets
-		if(serverMaxLogging)
-			logging("downloadAuthorizedPacket: " + getClientAliasForLogging(myAccountId));
-			
-		if(isClientBanned(authorAccountId) )
-			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
-		
-		if( isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-	
-		String signedString = authorAccountId + "," + packetLocalId + "," + myAccountId;
-		if(!isSignatureCorrect(signedString, signature, myAccountId))
-			return returnSingleResponseAndLog("", NetworkInterfaceConstants.SIG_ERROR);
-		
-		return	legacyDownloadPacket(authorAccountId, packetLocalId);
-	}
-
-	public Vector legacyDownloadPacket(String clientId, String packetId)
-	{
-		if(serverMaxLogging)
-			logging("legacyDLPacket " + getClientAliasForLogging(clientId) + ": " + packetId);
-		Vector result = new Vector();
-		
-		if(AttachmentPacket.isValidLocalId(packetId))
-		{
-			return returnSingleResponseAndLog("legacyDLPacket invalid for attachments", NetworkInterfaceConstants.INVALID_DATA);
-		}
-
-		Database db = getDatabase();
-		UniversalId uid = UniversalId.createFromAccountAndLocalId(clientId, packetId);
-		DatabaseKey key = DatabaseKey.createSealedKey(uid);
-		if(db.doesRecordExist(key))
-		{
-			try
-			{
-				String packetXml = db.readRecord(key, security);
-				result.add(NetworkInterfaceConstants.OK);
-				result.add(packetXml);
-			}
-			catch(Exception e)
-			{
-				//TODO: Make sure this has a test!
-				logging("legacyDLPacket " + e);
-				result.clear();
-				result.add(NetworkInterfaceConstants.SERVER_ERROR);
-			}
-		}
-		else
-		{
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-			logging("legacyDLPacket NotFound: " + getClientAliasForLogging(clientId) + " : " + packetId);
-		}
-		return result;
-	}
-	
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
 	{
 		if(serverMaxLogging)

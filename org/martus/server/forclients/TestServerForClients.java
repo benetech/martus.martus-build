@@ -168,10 +168,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult );
 		assertEquals("uploadBulletinChunk", 0, testServer.getNumberActiveClients() );
 
-		vecResult = testServer.legacyDownloadAuthorizedPacket(clientId, bogusStringParameter, clientId, bogusStringParameter);
-		verifyErrorResult("legacyDownloadAuthorizedPacket", vecResult, NetworkInterfaceConstants.REJECTED );
-		assertEquals("legacyDownloadAuthorizedPacket", 0, testServer.getNumberActiveClients() );
-
 		strResult = testServer.putBulletinChunk(clientId, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter);
 		assertEquals("putBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult);
 		assertEquals("putBulletinChunk", 0, testServer.getNumberActiveClients() );
@@ -191,10 +187,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		strResult = testServer.putContactInfo(clientId, new Vector() );
 		assertEquals("putContactInfo", NetworkInterfaceConstants.REJECTED, strResult);		
 		assertEquals("putContactInfo", 0, testServer.getNumberActiveClients() );
-
-		vecResult = testServer.downloadFieldDataPacket(hqId, bogusStringParameter, bogusStringParameter, clientId, bogusStringParameter);
-		verifyErrorResult("downloadFieldDataPacket", vecResult, NetworkInterfaceConstants.REJECTED );
-		assertEquals("downloadFieldDataPacket", 0, testServer.getNumberActiveClients() );		
 
 		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(hqId, clientId);
 		verifyErrorResult("listFieldOfficeSealedBulletinIds1", vecResult, NetworkInterfaceConstants.OK );

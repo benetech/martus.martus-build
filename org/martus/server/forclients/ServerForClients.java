@@ -137,11 +137,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.deleteDraftBulletins(accountId, localIds);
 	}
 
-	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
-	{
-		return coreServer.downloadFieldDataPacket(authorAccountId, bulletinLocalId, packetLocalId, myAccountId, signature);
-	}
-
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize)
 	{
 		return coreServer.getBulletinChunk(myAccountId, authorAccountId, bulletinLocalId, chunkOffset, maxChunkSize);
@@ -175,11 +170,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	public String putContactInfo(String myAccountId, Vector parameters)
 	{
 		return coreServer.putContactInfo(myAccountId, parameters);
-	}
-
-	public Vector legacyDownloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
-	{
-		return coreServer.legacyDownloadAuthorizedPacket(authorAccountId, packetLocalId, myAccountId, signature);
 	}
 
 	public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
@@ -236,11 +226,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
 	{
 		return coreServer.downloadBulletin(authorAccountId, bulletinLocalId);
-	}
-
-	public Vector legacyDownloadPacket(String clientId, String packetId)
-	{
-		return coreServer.legacyDownloadPacket(clientId, packetId);
 	}
 
 	public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)

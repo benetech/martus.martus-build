@@ -171,38 +171,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	}
 	
 
-	public Vector downloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
-	{
-		logging("ServerInterfaceXmlRpcHandler:downloadAuthorizedPacket authorAccountId=" + authorAccountId + "packetLocalId=" + packetLocalId);
-		logging("myAccountId=" + myAccountId);
-		Vector params = new Vector();
-		params.add(authorAccountId);
-		params.add(packetLocalId);
-		params.add(myAccountId);
-		params.add(signature);
-		return (Vector)callServer(server, CMD_DOWNLOAD_AUTHORIZED_PACKET, params);
-	}
-
-	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
-	{
-		logging("ServerInterfaceXmlRpcHandler:downloadFieldDataPacket authorAccountId=" + authorAccountId + "bulletinLocalId=" + bulletinLocalId);
-		logging("packetLocalId=" + packetLocalId + "myAccountId=" + myAccountId);
-		Vector params = new Vector();
-		params.add(authorAccountId);
-		params.add(packetLocalId);
-		params.add(myAccountId);
-		params.add(signature);
-		return (Vector)callServer(server, CMD_DOWNLOAD_FIELD_DATA_PACKET, params);
-	}
-
-	public Vector listFieldOfficeAccounts(String hqAccountId)
-	{
-		logging("ServerInterfaceXmlRpcHandler:listFieldOfficeAccounts hqAccountId=" + hqAccountId);
-		Vector params = new Vector();
-		params.add(hqAccountId);
-		return (Vector)callServer(server, CMD_FIELD_OFFICE_ACCOUNTS, params);
-	}
-
 	public Object callServer(String serverName, String method, Vector params)
 	{
 		final String serverUrl = "https://" + serverName + ":" + port + "/RPC2";

@@ -1,6 +1,5 @@
 package org.martus.server.forclients;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -29,8 +28,6 @@ import org.martus.common.BulletinLoader;
 import org.martus.common.BulletinSaver;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
@@ -41,7 +38,6 @@ import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterface;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkInterfaceXmlRpcConstants;
-import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
@@ -344,8 +340,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotContains("listMyBulletinSummaries", names);
 		assertNotContains("downloadFieldOfficeBulletinChunk", names);
 		assertNotContains("listFieldOfficeBulletinSummaries", names);
-		assertContains("listFieldOfficeAccounts", names);
-		assertContains("downloadFieldDataPacket", names);
+		assertNotContains("listFieldOfficeAccounts", names);
+		assertNotContains("downloadFieldDataPacket", names);
 
 		TRACE_END();
 	}
@@ -1291,253 +1287,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
-	public void testDownloadFieldDataPacketWrongSig() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldDataPacketWrongSig");
-
-		uploadSampleBulletin();
-		String authorId = b1.getAccount();
-		String headerPacketLocalId = b1.getLocalId();
-		String fieldDataPacketLocalId = b1.getFieldDataPacket().getLocalId();
-		
-		String hqAccountId = hqSecurity.getPublicKeyString();
-		String stringToSign = authorId + "," + headerPacketLocalId + "," + fieldDataPacketLocalId + "," + hqAccountId;
-		String signature1 = MartusUtilities.createSignature(stringToSign, serverSecurity);
-		Vector result1 = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, hqAccountId, signature1);
-		assertEquals("Allowed download signed by wrong account?", NetworkInterfaceConstants.SIG_ERROR, result1.get(0));
-
-		String signature2 = MartusUtilities.createSignature(stringToSign+"x", hqSecurity);
-		Vector result2 = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, hqAccountId, signature2);
-		assertEquals("Allowed download signed wrong data?", NetworkInterfaceConstants.SIG_ERROR, result2.get(0));
-
-		TRACE_END();
-	}
-
-	public void testDownloadFieldDataPacketNotFieldDataPacket() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldDataPacketNotFieldDataPacket");
-
-		uploadSampleBulletin();
-		String authorId = b1.getAccount();
-		String headerPacketLocalId = b1.getLocalId();
-		
-		String hqAccountId = hqSecurity.getPublicKeyString();
-		String stringToSign = authorId + "," + headerPacketLocalId + "," + headerPacketLocalId + "," + hqAccountId;
-		String signature = MartusUtilities.createSignature(stringToSign, hqSecurity);
-		Vector result = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, headerPacketLocalId, hqAccountId, signature);
-		assertEquals("Allowed download non-field packet?", NetworkInterfaceConstants.INVALID_DATA, result.get(0));
-
-		TRACE_END();
-	}
-
-	public void testDownloadFieldDataPacketNotFound() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldDataPacketNotFieldDataPacket");
-
-		uploadSampleBulletin();
-		String authorId = b1.getAccount();
-		String headerPacketLocalId = b1.getLocalId();
-		String fieldDataPacketLocalId = b1.getFieldDataPacket().getLocalId();
-		
-		String hqAccountId = hqSecurity.getPublicKeyString();
-		String wrongHeaderLocalId = headerPacketLocalId + "x";
-		String wrongHeaderStringToSign = authorId + "," + wrongHeaderLocalId + "," + fieldDataPacketLocalId + "," + hqAccountId;
-		String wrongHeaderSignature = MartusUtilities.createSignature(wrongHeaderStringToSign, hqSecurity);
-		Vector result1 = testServer.downloadFieldDataPacket(authorId, wrongHeaderLocalId, fieldDataPacketLocalId, hqAccountId, wrongHeaderSignature);
-		assertEquals("Allowed download when header not found?", NetworkInterfaceConstants.NOT_FOUND, result1.get(0));
-
-		String wrongDataLocalId = fieldDataPacketLocalId + "x";
-		String wrongDataStringToSign = authorId + "," + headerPacketLocalId + "," + wrongDataLocalId + "," + hqAccountId;
-		String wrongDataSignature = MartusUtilities.createSignature(wrongDataStringToSign, hqSecurity);
-		Vector result2 = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, wrongDataLocalId, hqAccountId, wrongDataSignature);
-		assertEquals("Allowed download when data not found?", NetworkInterfaceConstants.NOT_FOUND, result2.get(0));
-
-		TRACE_END();
-	}
-
-	public void testDownloadFieldDataPacketNotAuthorized() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldDataPacketNotAuthorized");
-
-		uploadSampleBulletin();
-		String authorId = b1.getAccount();
-		String headerPacketLocalId = b1.getLocalId();
-		String fieldDataPacketLocalId = b1.getFieldDataPacket().getLocalId();
-		
-		String myAccountId = serverSecurity.getPublicKeyString();
-		String stringToSign = authorId + "," + headerPacketLocalId + "," + fieldDataPacketLocalId + "," + myAccountId;
-		String signature = MartusUtilities.createSignature(stringToSign, serverSecurity);
-		Vector result = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, myAccountId, signature);
-		assertEquals("Allowed non-author, non-hq to download packet?", NetworkInterfaceConstants.NOTYOURBULLETIN, result.get(0));
-
-		TRACE_END();
-	}
-
-	public void testDownloadFieldDataPacketByAuthor() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldDataPacketByAuthor");
-
-		uploadSampleBulletin();
-		String authorId = b1.getAccount();
-		String headerPacketLocalId = b1.getLocalId();
-		FieldDataPacket originalFdp = b1.getFieldDataPacket();
-		String fieldDataPacketLocalId = originalFdp.getLocalId();
-		
-		String myAccountId = clientSecurity.getPublicKeyString();
-		String stringToSign = authorId + "," + headerPacketLocalId + "," + fieldDataPacketLocalId + "," + myAccountId;
-		String signature = MartusUtilities.createSignature(stringToSign, clientSecurity);
-		Vector result = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, myAccountId, signature);
-		assertNotNull(result);
-		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
-
-		InputStreamWithSeek in = new StringInputStream((String)result.get(1));
-		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
-		gotPacket.loadFromXml(in, clientSecurity);
-		assertEquals("wrong data?", b1.get(Bulletin.TAGPUBLICINFO), gotPacket.get(Bulletin.TAGPUBLICINFO));
-
-
-		TRACE_END();
-	}
-
-	public void testDownloadFieldDataPacketByHq() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldDataPacketByAuthor");
-
-		uploadSampleBulletin();
-		String authorId = b1.getAccount();
-		String headerPacketLocalId = b1.getLocalId();
-		FieldDataPacket originalFdp = b1.getFieldDataPacket();
-		String fieldDataPacketLocalId = originalFdp.getLocalId();
-		
-		String myAccountId = hqSecurity.getPublicKeyString();
-		String stringToSign = authorId + "," + headerPacketLocalId + "," + fieldDataPacketLocalId + "," + myAccountId;
-		String signature = MartusUtilities.createSignature(stringToSign, hqSecurity);
-		Vector result = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, myAccountId, signature);
-		assertNotNull(result);
-		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
-		
-		InputStreamWithSeek in = new StringInputStream((String)result.get(1));
-		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
-		gotPacket.loadFromXml(in, clientSecurity);
-		assertEquals("wrong data?", b1.get(Bulletin.TAGPUBLICINFO), gotPacket.get(Bulletin.TAGPUBLICINFO));
-
-		TRACE_END();
-	}
-
-	public void testDownloadAuthorizedPacket() throws Exception
-	{
-		TRACE_BEGIN("testDownloadAuthorizedPacket");
-
-		uploadSampleBulletin();
-
-		String clientId = clientSecurity.getPublicKeyString();
-		String badLocalId = b1.getFieldDataPacket().getLocalId() + "x";
-		
-		Vector badSigResult = testServer.legacyDownloadAuthorizedPacket(clientId, badLocalId, clientId, "This is not a valid Signature");
-		assertNotNull(badSigResult);
-		assertEquals("Not Bad sig?", NetworkInterfaceConstants.SIG_ERROR, badSigResult.get(0));
-
-		String stringToSign = clientId + "," + badLocalId + "," + clientId;
-
-		String wrongSignature = MartusUtilities.createSignature(stringToSign, serverSecurity);
-		Vector wrongSigResult = testServer.legacyDownloadAuthorizedPacket(clientId, badLocalId, clientId, wrongSignature);
-		assertNotNull(wrongSigResult);
-		assertEquals("Not wrong sig?", NetworkInterfaceConstants.SIG_ERROR, wrongSigResult.get(0));
-
-		String signature = MartusUtilities.createSignature(stringToSign, clientSecurity);
-		
-		Vector notFoundResult = testServer.legacyDownloadAuthorizedPacket(clientId, badLocalId, clientId, signature);
-		assertNotNull(notFoundResult);
-		assertEquals("Not notfound?", NetworkInterfaceConstants.NOT_FOUND, notFoundResult.get(0));
-		
-		String zip = MockBulletin.saveToZipString(clientDatabase, privateBulletin, clientSecurity);
-		testServer.uploadBulletin(clientId, privateBulletin.getLocalId(), zip);
-
-		String localId =privateBulletin.getFieldDataPacket().getLocalId();
-		stringToSign = clientId + "," + localId + "," + clientId;
-		signature = MartusUtilities.createSignature(stringToSign, clientSecurity);
-		Vector foundResult = testServer.legacyDownloadAuthorizedPacket(clientId, localId, clientId, signature);
-		assertNotNull(foundResult);
-		assertEquals("not OK?", NetworkInterfaceConstants.OK, foundResult.get(0));
-		
-		File tempFile = File.createTempFile("$$$MartusTestSrvrDnldPkt", null);
-		tempFile.deleteOnExit();
-		FileOutputStream out = new FileOutputStream(tempFile);
-		out.write(Base64.decode(zip));
-		out.close();
-		
-		ZipFile zipFile = new ZipFile(tempFile);
-		ZipEntry entry = zipFile.getEntry(localId);
-		InputStream in = new BufferedInputStream(zipFile.getInputStream(entry));
-		byte[] packetBytes = new byte[(int)entry.getSize()];
-		int gotCount = in.read(packetBytes);
-		assertEquals("didn't read enough?", entry.getSize(), gotCount);
-		in.close();
-		zipFile.close();
-		tempFile.delete();
-		
-		String fdpXml = new String(packetBytes);
-		assertEquals("wrong data?", foundResult.get(1), fdpXml);
-
-		TRACE_END();
-	}
-
-
-	public void testDownloadPacket() throws Exception
-	{
-		TRACE_BEGIN("testDownloadPacket");
-
-		uploadSampleBulletin();
-
-		String clientId = clientSecurity.getPublicKeyString();
-		Vector notFoundResult = testServer.legacyDownloadPacket(clientId, "123bad");
-		assertNotNull(notFoundResult);
-		assertEquals("Not notfound?", NetworkInterfaceConstants.NOT_FOUND, notFoundResult.get(0));
-		
-		String zip = MockBulletin.saveToZipString(clientDatabase, privateBulletin, clientSecurity);
-		testServer.uploadBulletin(clientId, privateBulletin.getLocalId(), zip);
-
-		String localId =privateBulletin.getFieldDataPacket().getLocalId();
-		Vector foundResult = testServer.legacyDownloadPacket(clientId, localId);
-		assertNotNull(foundResult);
-		assertEquals("not OK?", NetworkInterfaceConstants.OK, foundResult.get(0));
-		
-		File tempFile = File.createTempFile("$$$MartusTestSrvrDnldPkt", null);
-		tempFile.deleteOnExit();
-		FileOutputStream out = new FileOutputStream(tempFile);
-		out.write(Base64.decode(zip));
-		out.close();
-		
-		ZipFile zipFile = new ZipFile(tempFile);
-		ZipEntry entry = zipFile.getEntry(localId);
-		InputStream in = new BufferedInputStream(zipFile.getInputStream(entry));
-		byte[] packetBytes = new byte[(int)entry.getSize()];
-		int gotCount = in.read(packetBytes);
-		assertEquals("didn't read enough?", entry.getSize(), gotCount);
-		in.close();
-		zipFile.close();
-		tempFile.delete();
-		
-		String fdpXml = new String(packetBytes);
-		assertEquals("wrong data?", foundResult.get(1), fdpXml);
-
-		TRACE_END();
-	}
-
-	public void testDownloadPacketAttachment()
-	{
-		TRACE_BEGIN("testDownloadPacketAttachment");
-
-		uploadSampleBulletin();
-		
-		String attachmentLocalId = b1.getBulletinHeaderPacket().getPublicAttachmentIds()[0];
-		
-		Vector result = testServer.legacyDownloadPacket(b1.getAccount(), attachmentLocalId);
-		assertEquals("didn't return invalid data?", NetworkInterfaceConstants.INVALID_DATA, result.get(0));
-
-		TRACE_END();
-	}
-
 	public void testDeleteDraftBulletinsEmptyList() throws Exception
 	{
 		TRACE_BEGIN("testDeleteDraftBulletinsEmptyList");
@@ -1957,10 +1706,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.SERVER_DOWN, strResult );
 		assertEquals("uploadBulletinChunk", 1, serverForClients.getNumberActiveClients() );
 
-		vecResult = testServer.legacyDownloadAuthorizedPacket(clientId, bogusStringParameter, clientId, bogusStringParameter);
-		verifyErrorResult("legacyDownloadAuthorizedPacket", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("legacyDownloadAuthorizedPacket", 1, serverForClients.getNumberActiveClients() );
-
 		strResult = testServer.putBulletinChunk(clientId, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter);
 		assertEquals("putBulletinChunk", NetworkInterfaceConstants.SERVER_DOWN, strResult);
 		assertEquals("putBulletinChunk", 1, serverForClients.getNumberActiveClients() );
@@ -1980,10 +1725,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		strResult = testServer.putContactInfo(clientId, new Vector() );
 		assertEquals("putContactInfo", NetworkInterfaceConstants.SERVER_DOWN, strResult);		
 		assertEquals("putContactInfo", 1, serverForClients.getNumberActiveClients() );
-
-		vecResult = testServer.downloadFieldDataPacket(hqId, bogusStringParameter, bogusStringParameter, clientId, bogusStringParameter);
-		verifyErrorResult("downloadFieldDataPacket", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("downloadFieldDataPacket", 1, serverForClients.getNumberActiveClients() );
 
 		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(hqId, clientId);
 		verifyErrorResult("listFieldOfficeSealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );

@@ -348,39 +348,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return server.requestUploadRights(authorAccountId, tryMagicWord);
 	}
 
-	public Vector downloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-downloadAuthorizedPacket");
-		server.logging("request for client " + server.getPublicCode(authorAccountId));
-		Vector response = server.legacyDownloadAuthorizedPacket(authorAccountId, packetLocalId, myAccountId, signature);
-		server.clientConnectionExit();
-		return response;
-	}
-
-	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature)
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-downloadFieldDataPacket");
-		server.logging("request for client " + server.getPublicCode(authorAccountId));
-		Vector response = server.downloadFieldDataPacket(authorAccountId, bulletinLocalId, packetLocalId, myAccountId, signature);
-		server.clientConnectionExit();
-		return response;
-	}
-	
-	public Vector listFieldOfficeAccounts(String hqAccountId)
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-listFieldOfficeAccounts");
-		server.logging("request for client " + server.getPublicCode(hqAccountId));
-		Vector response = legacyListFieldOfficeAccounts(hqAccountId);
-		server.clientConnectionExit();
-		return response;
-	}
-	
 	public Vector legacyListFieldOfficeAccounts(String hqAccountId)
 	{
 		server.logging("request for client " + server.getPublicCode(hqAccountId));

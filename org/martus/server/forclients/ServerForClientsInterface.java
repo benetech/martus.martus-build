@@ -13,7 +13,6 @@ public interface ServerForClientsInterface
 	public MartusCrypto getSecurity();
 	public String ping();
 	public String deleteDraftBulletins(String myAccountId, String[] idList);
-	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature);
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize);
 	public Vector getNews(String myAccountId, String versionLabel, String versionBuildDate);
 	public Vector getPacket(String myAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId);
@@ -23,7 +22,6 @@ public interface ServerForClientsInterface
 	public String putContactInfo(String myAccountId, Vector parameters);
 	public String requestUploadRights(String authorAccountId, String tryMagicWord);
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature);
-	public Vector legacyDownloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature);
 	public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId);
 	public Vector listFieldOfficeAccounts(String hqAccountId);
 	public Vector listFieldOfficeDraftBulletinIds(String myAccountId, String authorAccountId, Vector retrieveTags);

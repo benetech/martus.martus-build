@@ -123,28 +123,4 @@ public class NoServerNetworkInterfaceHandler implements NetworkInterface
 		return null;
 	}
 
-	public Vector downloadFieldDataPacket(
-		String authorAccountId,
-		String bulletinLocalId,
-		String packetLocalId,
-		String myAccountId,
-		String signature)
-	{
-		return null;
-	}
-
-	public Vector listFieldOfficeAccounts(String hqAccountId)
-	{
-		return null;
-	}
-
-	public Vector downloadAuthorizedPacket(
-		String authorAccountId,
-		String packetLocalId,
-		String myAccountId,
-		String signature)
-	{
-		return null;
-	}
-
 }

@@ -46,15 +46,10 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final String CMD_PING = "ping";
 
 	// legacy!
-	public static final String CMD_FIELD_OFFICE_ACCOUNTS = "listFieldOfficeAccounts";
-	public static final String CMD_DOWNLOAD_FIELD_DATA_PACKET = "downloadFieldDataPacket";
-
-	// legacy!
 	public static final String CMD_SERVER_INFO = "getServerInformation";
 	public static final String CMD_AUTHENTICATE_SERVER = "authenticateServer";
 	public static final String CMD_UPLOAD = "uploadBulletin";
 	public static final String CMD_DOWNLOAD = "downloadBulletin";
 	public static final String CMD_DOWNLOAD_PACKET = "downloadPacket";
-	public static final String CMD_DOWNLOAD_AUTHORIZED_PACKET = "downloadAuthorizedPacket";
 
 }
