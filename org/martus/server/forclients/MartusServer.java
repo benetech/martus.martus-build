@@ -17,6 +17,8 @@ import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -51,12 +53,14 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
+import org.martus.server.core.MartusSecureWebServer;
+import org.martus.server.core.ServerConstants;
+import org.martus.server.core.ServerFileDatabase;
+import org.martus.server.core.XmlRpcThread;
 import org.martus.server.formirroring.MirroringInterface;
 import org.martus.server.formirroring.MirroringRetriever;
 import org.martus.server.formirroring.ServerSupplierInterface;
 import org.martus.server.formirroring.SupplierSideMirroringHandler;
-import org.martus.server.core.*;
-import org.martus.server.core.ServerFileDatabase;
 
 public class MartusServer implements NetworkInterfaceConstants, ServerSupplierInterface
 {
@@ -265,7 +269,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		clientsThatCanUpload = new Vector();
 		clientsBanned = new Vector();
 		magicWords = new Vector();
-		failedUploadRequestCounter = 0;
+		failedUploadRequestsPerIp = new Hashtable();
 		
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(startupConfigDirectory, MAGICWORDSFILENAME);
@@ -489,10 +493,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(magicWords.contains(tryMagicWord))
 			uploadGranted = true;
 			
-		if(!areUploadRequestsCurrentlyAllowed())
+		if(!areUploadRequestsAllowedForCurrentIp())
 		{
 			if(!uploadGranted)
-				incrementFailedUploadRequests();
+				incrementFailedUploadRequestsForCurrentClientIp();
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		}
 
@@ -508,7 +512,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(!uploadGranted)
 		{
 			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + " magicWords=" + magicWords.toString() + " tryMagicWord=" +tryMagicWord);
-			incrementFailedUploadRequests();
+			incrementFailedUploadRequestsForCurrentClientIp();
 			return NetworkInterfaceConstants.REJECTED;
 		}
 		if(serverMaxLogging)
@@ -1879,25 +1883,48 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		activeClientsCounter--;
 	}
 	
-	public synchronized void incrementFailedUploadRequests()
+	public synchronized void incrementFailedUploadRequestsForCurrentClientIp()
 	{
-		failedUploadRequestCounter++;
+		String ip = getCurrentClientIp();
+		int failedUploadRequest = 1;
+		if(failedUploadRequestsPerIp.containsKey(ip))
+		{
+			Integer currentValue = (Integer) failedUploadRequestsPerIp.get(ip);
+			failedUploadRequest = currentValue.intValue() + failedUploadRequest;
+		}
+		failedUploadRequestsPerIp.put(ip, new Integer(failedUploadRequest));
 	}
 	
-	public synchronized void subtractMaxFailedUploadAttemptsFromCounter()
+	public synchronized void subtractMaxFailedUploadRequestsForIp(String ip)
 	{
-		failedUploadRequestCounter -= getMaxFailedUploadAllowedAttempts();
-		if(failedUploadRequestCounter < 0) failedUploadRequestCounter = 0;
+		if(failedUploadRequestsPerIp.containsKey(ip))
+		{
+			Integer currentValue = (Integer) failedUploadRequestsPerIp.get(ip);
+			int newValue = currentValue.intValue() - getMaxFailedUploadAllowedAttemptsPerIp();
+			if(newValue < 0)
+			{
+				failedUploadRequestsPerIp.remove(ip);
+			}
+			else
+			{
+				failedUploadRequestsPerIp.put(ip, new Integer(newValue));
+			}
+		}
 	}
 	
-	public synchronized int getNumFailedUploadRequest()
-	{
-		return failedUploadRequestCounter;
-	}
-	
-	public int getMaxFailedUploadAllowedAttempts()
+	public int getMaxFailedUploadAllowedAttemptsPerIp()
 	{
 		return MAX_FAILED_UPLOAD_ATTEMPTS;
+	}
+	
+	public int getNumFailedUploadRequestsForIp(String ip)
+	{
+		if(failedUploadRequestsPerIp.containsKey(ip))
+		{
+			Integer currentValue = (Integer) failedUploadRequestsPerIp.get(ip);
+			return currentValue.intValue();
+		}
+		return 0;
 	}
 	
 	public long getUploadRequestTimerInterval()
@@ -1905,28 +1932,56 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return magicWordsGuessIntervalMillis;
 	}
 	
-	synchronized boolean areUploadRequestsCurrentlyAllowed()
+	synchronized boolean areUploadRequestsAllowedForCurrentIp()
 	{
-		return (failedUploadRequestCounter < getMaxFailedUploadAllowedAttempts());
+		String ip = getCurrentClientIp();
+		if(failedUploadRequestsPerIp.containsKey(ip))
+		{
+			return (getNumFailedUploadRequestsForIp(ip) < getMaxFailedUploadAllowedAttemptsPerIp());
+		}
+		return true;
+	}
+
+
+	protected String getCurrentClientIp()
+	{
+		String ip;
+		Thread currThread = Thread.currentThread();
+		if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
+		{
+			ip = ((XmlRpcThread) Thread.currentThread()).getClientIp();
+		}
+		else
+		{
+			ip = Integer.toHexString(currThread.hashCode());
+		}
+
+		return ip;
+	}
+	
+	protected String getCurrentClientAddress()
+	{
+		String ip;
+		Thread currThread = Thread.currentThread();
+		if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
+		{
+			ip = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
+		}
+		else
+		{
+			ip = Integer.toHexString(currThread.hashCode());
+		}
+
+		return ip;
 	}
 
 	public synchronized void logging(String message)
 	{
 		if(serverLogging)
 		{
-			Thread currThread = Thread.currentThread();
 			Timestamp stamp = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
-			String threadId = null;
-			
-			if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
-			{
-				threadId = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
-			}
-			else
-			{
-				threadId = Integer.toHexString(currThread.hashCode());
-			}
+			String threadId = getCurrentClientAddress();
 			
 			String logEntry = formatDate.format(stamp) + " " + getServerName() + ": " + threadId + ": " + message;
 			System.out.println(logEntry);
@@ -2191,7 +2246,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		public void run()
 		{
-			subtractMaxFailedUploadAttemptsFromCounter();
+			Iterator failedUploadReqIps = failedUploadRequestsPerIp.keySet().iterator();
+			while(failedUploadReqIps.hasNext())
+			{
+				String ip = (String) failedUploadReqIps.next();
+				subtractMaxFailedUploadRequestsForIp(ip);
+			}
 		}
 	}
 	
@@ -2252,7 +2312,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
-	static int failedUploadRequestCounter;
+	
+	Hashtable failedUploadRequestsPerIp;
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";

@@ -633,24 +633,30 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	{
 		activeClientsCounter--;
 	}
+	
+	protected String getCurrentClientIp()
+	{
+		String ip;
+		Thread currThread = Thread.currentThread();
+		if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
+		{
+			ip = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
+		}
+		else
+		{
+			ip = Integer.toHexString(currThread.hashCode());
+		}
+
+		return ip;
+	}
 
 	public synchronized void logging(String message)
 	{
 		if(serverLogging)
 		{
-			Thread currThread = Thread.currentThread();
 			Timestamp stamp = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
-			String threadId = null;
-			
-			if( XmlRpcThread.class.getName() == currThread.getClass().getName() )
-			{
-				threadId = ((XmlRpcThread) Thread.currentThread()).getClientAddress();
-			}
-			else
-			{
-				threadId = Integer.toHexString(currThread.hashCode());
-			}
+			String threadId = getCurrentClientIp();
 			
 			String logEntry = formatDate.format(stamp) + " " + getServerName() + ": " + threadId + ": " + message;
 			System.out.println(logEntry);

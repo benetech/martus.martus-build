@@ -2006,11 +2006,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.clientsThatCanUpload.clear();
 		testServer.setMagicWord(sampleMagicWord);
 		
-		assertEquals("any upload attemps?", 0, testServer.getNumFailedUploadRequest());
+		assertEquals("any upload attemps?", 0, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 		
 		String failed = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("didn't work?", NetworkInterfaceConstants.REJECTED, failed);
-		assertEquals("incorrect upload attempt noted?", 1, testServer.getNumFailedUploadRequest());
+		assertEquals("incorrect upload attempt noted?", 1, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 		
 		String worked = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
@@ -2028,36 +2028,36 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.clientsThatCanUpload.clear();
 		testServer.setMagicWord(sampleMagicWord);
 		
-		assertEquals("counter 1?", 0, testServer.getNumFailedUploadRequest());
+		assertEquals("counter 1?", 0, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 		
 		String result = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("upload request 1?", NetworkInterfaceConstants.REJECTED, result);
-		assertEquals("counter 2?", 1, testServer.getNumFailedUploadRequest());
+		assertEquals("counter 2?", 1, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("upload request 2?", NetworkInterfaceConstants.OK, result);
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("upload request 3?", NetworkInterfaceConstants.REJECTED, result);
-		assertEquals("counter 3?", 2, testServer.getNumFailedUploadRequest());
+		assertEquals("counter 3?", 2, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("upload request 4?", NetworkInterfaceConstants.SERVER_ERROR, result);
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord + "x");
 		assertEquals("upload request 5?", NetworkInterfaceConstants.SERVER_ERROR, result);
-		assertEquals("counter 4?", 3, testServer.getNumFailedUploadRequest());
+		assertEquals("counter 4?", 3, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 		
 		testServer.subtractMaxFailedUploadAttemptsFromServerCounter();
 		
-		assertEquals("counter 5?", 1, testServer.getNumFailedUploadRequest());
+		assertEquals("counter 5?", 1, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
 		assertEquals("upload request 6?", NetworkInterfaceConstants.OK, result);
 		
 		result = testServer.requestUploadRights(sampleId, sampleMagicWord+ "x");
 		assertEquals("upload request 7?", NetworkInterfaceConstants.REJECTED, result);
-		assertEquals("counter 6?", 2, testServer.getNumFailedUploadRequest());
+		assertEquals("counter 6?", 2, testServer.getNumFailedUploadRequestsForIp(testServer.CLIENT_IP_ADDRESS));
 
 		TRACE_END();
 	}

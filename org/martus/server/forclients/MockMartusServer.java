@@ -224,7 +224,7 @@ public class MockMartusServer extends MartusServer
 		throw new Exception("MockServer serverExit called");
 	}
 	
-	public int getMaxFailedUploadAllowedAttempts()
+	public int getMaxFailedUploadAllowedAttemptsPerIp()
 	{
 		return 2;
 	}
@@ -241,7 +241,13 @@ public class MockMartusServer extends MartusServer
 	
 	public synchronized void subtractMaxFailedUploadAttemptsFromServerCounter()
 	{
-		super.subtractMaxFailedUploadAttemptsFromCounter();
+		String clientIp = getCurrentClientIp();
+		super.subtractMaxFailedUploadRequestsForIp(clientIp);
+	}
+	
+	protected String getCurrentClientIp()
+	{
+		return CLIENT_IP_ADDRESS;
 	}
 
 	static class TempDirectory extends File
@@ -327,5 +333,7 @@ public class MockMartusServer extends MartusServer
 	private boolean listFieldOfficeAccountsResponseNull;
 	
 	private String authenticateResponse;
+	
+	public static final String CLIENT_IP_ADDRESS = "192.168.1.123";
 
 }

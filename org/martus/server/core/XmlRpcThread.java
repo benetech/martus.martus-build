@@ -12,9 +12,19 @@ public class XmlRpcThread extends Thread
 	      
 	public String getClientAddress()
 	{
+		return getClientIp() + ":" + getClientPort();
+	}
+	
+	public String getClientIp()
+	{
 		String ip = socket.getInetAddress().getHostAddress();
+		return ip;
+	}
+	
+	public int getClientPort()
+	{
 	    int port = socket.getPort();
-		return ip + ":" + port;
+		return port;
 	}
 	  
 	Socket socket;
