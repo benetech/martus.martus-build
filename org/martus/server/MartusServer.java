@@ -634,7 +634,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + "HQ: " + getClientAliasForLogging(hqAccountId));
 		}
 		
-		if( !isClientAuthorized(authorAccountId) )
+		if( !isClientAuthorized(hqAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -933,8 +933,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(serverMaxLogging)
 			logging("listFieldOfficeAccounts " + getClientAliasForLogging(hqAccountId));
 			
-//		if( !isClientAuthorized(hqAccountId) )
-//			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+		if( !isClientAuthorized(hqAccountId) )
+			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog("  returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN);
 
 		FieldOfficeAccountCollector visitor = new FieldOfficeAccountCollector(hqAccountId);
 		getDatabase().visitAllRecords(visitor);
