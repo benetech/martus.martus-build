@@ -148,6 +148,8 @@ public class UiAttachmentEditor extends JPanel
 			File last = mainWindow.getLastAttachmentLoadDirectory();
 			if(last != null)
 				chooser.setCurrentDirectory(last);
+			MartusApp app = mainWindow.getApp();
+			chooser.setApproveButtonText(app.getButtonLabel("addattachment"));
 			int returnVal = chooser.showOpenDialog(UiAttachmentEditor.this);
 			if(returnVal == JFileChooser.APPROVE_OPTION)
 			{
