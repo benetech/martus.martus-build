@@ -1,12 +1,11 @@
 package org.martus.client;
 
-import java.awt.*;
-import java.awt.event.*;
-import java.awt.dnd.*;
-import javax.swing.*;
-import javax.swing.event.*;
+import java.awt.dnd.DropTarget;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
-import org.martus.client.*;
+import javax.swing.JScrollPane;
+import javax.swing.JViewport;
 
 public class UiBulletinTablePane extends JScrollPane
 {
@@ -23,11 +22,6 @@ public class UiBulletinTablePane extends JScrollPane
 		dropTarget = new DropTarget(getViewport(), table.getDropAdapter());
 		addMouseListener(new TablePaneMouseAdapter());
 
-	}
-
-	public void forceRefresh()
-	{
-		folderContentsHaveChanged(table.getFolder());
 	}
 
 	public void setFolder(BulletinFolder folder)
@@ -54,11 +48,12 @@ public class UiBulletinTablePane extends JScrollPane
 	
 	public void folderContentsHaveChanged(BulletinFolder folder)
 	{
+System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 		if(folder.equals(table.getFolder()))
 		{
-			Bulletin selected = table.getSelectedBulletin();
+			Bulletin[] selected = table.getSelectedBulletins();
 			table.setFolder(folder);
-			table.selectBulletin(selected);
+			table.selectBulletins(selected);
 			refreshPreview();
 			// the following is required (for unknown reasons)
 			// to get the table to redraw (later) if it is currently
@@ -94,8 +89,8 @@ public class UiBulletinTablePane extends JScrollPane
 
 	public void refreshPreview()
 	{
-		Bulletin b = table.getSelectedBulletin();
-		parent.bulletinSelectionHasChanged(b);
+System.out.println("UiBulletinTablePane.refreshPreview");
+		parent.bulletinSelectionHasChanged(table.getSelectedBulletins());
 	}
 
 	class TablePaneMouseAdapter extends MouseAdapter

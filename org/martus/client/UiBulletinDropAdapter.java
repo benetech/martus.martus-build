@@ -55,7 +55,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		
 		if(dtde.isDataFlavorSupported(TransferableBulletinList.getBulletinListDataFlavor()))
-			dopTransferableBulletin(dtde);
+			dropTransferableBulletins(dtde);
 		else if(dtde.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			dropFile(dtde);
 			
@@ -63,7 +63,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	}
 
 	// private methods
-	private void dopTransferableBulletin(DropTargetDropEvent dtde)
+	private void dropTransferableBulletins(DropTargetDropEvent dtde)
 	{
 		System.out.println("dropTransferableBulletin");
 		BulletinFolder toFolder = getFolder(dtde.getLocation());

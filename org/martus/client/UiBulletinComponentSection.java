@@ -64,14 +64,16 @@ abstract public class UiBulletinComponentSection extends JPanel
 	
 	public void copyDataFromPacket(FieldDataPacket fdp)
 	{
-		if(fdp == null)
-			return;
 		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
 		{
 			String text = "";
-			text = fdp.get(fieldTags[fieldNum]);
+			if(fdp != null)
+				text = fdp.get(fieldTags[fieldNum]);
 			fields[fieldNum].setText(text);
 		}
+
+		if(fdp == null)
+			return;
 
 		AttachmentProxy[] attachments = fdp.getAttachments();
 		for(int i = 0 ; i < attachments.length ; ++i)

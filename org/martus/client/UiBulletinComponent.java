@@ -19,6 +19,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.martus.common.AttachmentProxy;
+import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
 
 abstract public class UiBulletinComponent extends JPanel implements Scrollable, ChangeListener
@@ -91,11 +92,16 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 		publicStuff.clearAttachments();
 		privateStuff.clearAttachments();
+		
+		FieldDataPacket publicData = null;
+		FieldDataPacket privateData = null;
 		if(bulletin != null)
 		{
-			publicStuff.copyDataFromPacket(bulletin.getFieldDataPacket());
-			privateStuff.copyDataFromPacket(bulletin.getPrivateFieldDataPacket());
+			publicData = bulletin.getFieldDataPacket();
+			privateData = bulletin.getPrivateFieldDataPacket();
 		}
+		publicStuff.copyDataFromPacket(publicData);
+		privateStuff.copyDataFromPacket(privateData);
 
 		boolean isDamaged = false;
 		if(currentBulletin != null && !currentBulletin.isValid())

@@ -192,8 +192,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		setCursor(originalCursor);
 	}
 
-	public void bulletinSelectionHasChanged(Bulletin b)
+	public void bulletinSelectionHasChanged(Bulletin[] selectedBulletins)
 	{
+System.out.println("UiMainWindow.bulletinSelectionHasChanged: " + selectedBulletins.length);
+		Bulletin b = null;
+		if(selectedBulletins.length == 1)
+		{
+			b = selectedBulletins[0];
+System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITLE));
+		}
 		preview.refresh(b);
 	}
 

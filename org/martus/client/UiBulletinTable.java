@@ -114,6 +114,17 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		selectRow(bulletinsList.findBulletin(b));
 	}
+	
+	public void selectBulletins(Bulletin[] bulletins)
+	{
+		clearSelection();
+		for (int i = 0; i < bulletins.length; i++)
+		{
+			int row = bulletinsList.findBulletin(bulletins[i]);
+			if(row >= 0)
+				addRowSelectionInterval(row, row);
+		}
+	}
 
 	public void selectFirstBulletin()
 	{
@@ -122,9 +133,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public void bulletinHasChanged(Bulletin b)
 	{
-		Bulletin selected = getSelectedBulletin();
 		tableChanged(new TableModelEvent(bulletinsList));
-		selectBulletin(selected);
+		selectBulletin(b);
 	}
 
 	// ListSelectionListener interface
@@ -132,8 +142,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		if(!e.getValueIsAdjusting() && bulletinsList != null)
 		{
-			Bulletin b = getSelectedBulletin();
-			mainWindow.bulletinSelectionHasChanged(b);
+System.out.println("UiBulletinTable.valueChanged");
+			mainWindow.bulletinSelectionHasChanged(getSelectedBulletins());
 		}
 		repaint();
 	}
