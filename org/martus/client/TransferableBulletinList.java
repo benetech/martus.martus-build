@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Vector;
 
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -31,19 +32,22 @@ public class TransferableBulletinList implements Transferable
 	
 	boolean createTransferableZipFile() 
 	{
-// TODO: Remove when multiple select is working
-if(bulletins.length > 1)
-System.out.println("TransferableBulletinList.createTransferableZipFile: USING JUST FIRST BULLETIN!");
+		if(files == null)
+			files = new Vector();
 		try
 		{
-			Bulletin bulletin = bulletins[0];
-			String summary = MartusApp.toFileName(bulletin.get(bulletin.TAGTITLE));
-			file = File.createTempFile(summary, BULLETIN_FILE_EXTENSION);
-			file.deleteOnExit();
-			Database db = bulletin.getStore().getDatabase();
-			DatabaseKey headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
-			MartusCrypto security = bulletin.getStore().getSignatureGenerator();
-			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
+			for(int i = 0 ; i < bulletins.length ; ++i)
+			{
+				Bulletin bulletin = bulletins[i];
+				String summary = MartusApp.toFileName(bulletin.get(bulletin.TAGTITLE));
+				File file = File.createTempFile(summary, BULLETIN_FILE_EXTENSION);
+				file.deleteOnExit();
+				files.add(file);
+				Database db = bulletin.getStore().getDatabase();
+				DatabaseKey headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
+				MartusCrypto security = bulletin.getStore().getSignatureGenerator();
+				MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
+			}
 		}
 		catch(Exception e)
 		{
@@ -58,8 +62,11 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 	{
 		try
 		{
-			if(file != null)	
+			for(int i =0 ; i < files.size(); ++i)
+			{
+				File file = (File)files.get(i);
 				file.delete();
+			}
 		}
 		catch(Exception e)
 		{
@@ -86,7 +93,7 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 
 		if(flavor.equals(DataFlavor.javaFileListFlavor))
 		{
-			if(file == null)
+			if(files == null || files.size() == 0)
 			{
 				//System.out.println("TransferableBulletin.getTransferData : creatingZipFile");
 				if (!createTransferableZipFile())
@@ -94,7 +101,7 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 			}
 
 			LinkedList list = new LinkedList();
-			list.add(file);
+			list.addAll(files);
 			return list;
 		}
 
@@ -184,7 +191,7 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 
 	private static final String BULLETIN_FILE_EXTENSION = ".mba";
 	static DataFlavor bulletinListDataFlavor = new DataFlavor(TransferableBulletinList.class, "Martus Bulletins");
-	File file;
+	Vector files;
 	BulletinFolder folder;
 	Bulletin[] bulletins;
 }
