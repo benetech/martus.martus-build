@@ -15,14 +15,16 @@ import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.server.core.LoggerInterface;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class MirroringRetriever
 {
-	public MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, MartusCrypto securityToUse)
+	public MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, LoggerInterface loggerToUse, MartusCrypto securityToUse)
 	{
 		db = databaseToUse;
 		gateway = gatewayToUse;
+		logger = loggerToUse;
 		security = securityToUse;
 		
 		uidsToRetrieve = new Vector();
@@ -39,6 +41,7 @@ public class MirroringRetriever
 			
 		try
 		{
+			log("Retrieving from mirror: " + uid.getLocalId());
 			String bur = retrieveBurFromMirror(uid);
 			File zip = retrieveOneBulletin(uid);
 			BulletinHeaderPacket bhp = MartusServerUtilities.saveZipFileToDatabase(db, uid.getAccountId(), zip, security);
@@ -139,9 +142,15 @@ public class MirroringRetriever
 
 		return tempFile;
 	}
+	
+	void log(String message)
+	{
+		logger.log(message);
+	}
 
 	Database db;	
 	CallerSideMirroringGatewayInterface gateway;
+	LoggerInterface logger;
 	MartusCrypto security;
 	
 	Vector uidsToRetrieve;

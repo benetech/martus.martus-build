@@ -1677,7 +1677,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	private void createServerForMirroring() throws Exception
 	{
-		serverForMirroring = new ServerForMirroring(this);
+		serverForMirroring = new ServerForMirroring(this, logger);
 		serverForMirroring.addListeners();
 	}
 

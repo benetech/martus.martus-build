@@ -15,6 +15,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
+import org.martus.server.core.LoggerInterface;
 import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
 import org.martus.server.forclients.MartusServerUtilities;
@@ -22,10 +23,11 @@ import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSoc
 
 public class ServerForMirroring implements ServerSupplierInterface
 {
-	public ServerForMirroring(MartusServer coreServerToUse) throws 
+	public ServerForMirroring(MartusServer coreServerToUse, LoggerInterface loggerToUse) throws 
 			IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
 	{
 		coreServer = coreServerToUse;
+		logger = loggerToUse;
 		log("Initializing ServerForMirroring");
 		
 		authorizedCallers = new Vector();
@@ -39,7 +41,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 
 	public void log(String message)
 	{
-		coreServer.log(message);
+		logger.log(message);
 	}
 	
 	public void addListeners()
@@ -221,7 +223,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 			SSLSocketSetupException
 	{
 		CallerSideMirroringGateway gateway = createGatewayToCall(publicKeyFile);
-		MirroringRetriever retriever = new MirroringRetriever(getDatabase(), gateway, getSecurity());
+		MirroringRetriever retriever = new MirroringRetriever(getDatabase(), gateway, logger, getSecurity());
 		return retriever;
 	}
 	
@@ -291,6 +293,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 	}
 	
 	MartusServer coreServer;
+	LoggerInterface logger;
 	Vector authorizedCallers;
 	MirroringRetriever retriever;
 	Vector retrieversWeWillCall;

@@ -18,6 +18,7 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
+import org.martus.server.core.LoggerForTesting;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class TestMirroringRetriever extends TestCaseEnhanced
@@ -37,7 +38,8 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 
 		handler = new SupplierSideMirroringHandler(supplier, security);
 		realGateway = new CallerSideMirroringGateway(handler);
-		realRetriever = new MirroringRetriever(db, realGateway, security);
+		LoggerForTesting logger = new LoggerForTesting();
+		realRetriever = new MirroringRetriever(db, realGateway, logger, security);
 		
 	}
 	

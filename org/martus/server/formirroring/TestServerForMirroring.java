@@ -12,6 +12,7 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
+import org.martus.server.core.LoggerForTesting;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.forclients.MockMartusServer;
 
@@ -24,10 +25,11 @@ public class TestServerForMirroring extends TestCaseEnhanced
 
 	protected void setUp() throws Exception
 	{
+		logger = new LoggerForTesting();
 		MockMartusSecurity serverSecurity = MockMartusSecurity.createServer();
 		coreServer = new MockMartusServer();
 		coreServer.setSecurity(serverSecurity);
-		server = new ServerForMirroring(coreServer);
+		server = new ServerForMirroring(coreServer, logger);
 		
 		clientSecurity1 = MockMartusSecurity.createClient();
 		clientSecurity2 = MockMartusSecurity.createOtherClient();
@@ -70,7 +72,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	public void testLoadMirrorsToCall() throws Exception
 	{
 		MockMartusServer noCallsToMakeCore = new MockMartusServer();
-		ServerForMirroring noCallsToMake = new ServerForMirroring(noCallsToMakeCore);
+		ServerForMirroring noCallsToMake = new ServerForMirroring(noCallsToMakeCore, logger);
 		assertEquals(0, noCallsToMake.retrieversWeWillCall.size());
 		noCallsToMakeCore.deleteAllFiles();
 		
@@ -82,7 +84,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		MartusUtilities.exportServerPublicKey(clientSecurity1, pubKeyFile1);
 		File pubKeyFile2 = new File(mirrorsWhoWeCall, "code=2.3.4.5.6-ip=2.3.4.5.txt");
 		MartusUtilities.exportServerPublicKey(clientSecurity2, pubKeyFile2);
-		ServerForMirroring twoCallsToMake = new ServerForMirroring(twoCallsToMakeCore);
+		ServerForMirroring twoCallsToMake = new ServerForMirroring(twoCallsToMakeCore, logger);
 		assertEquals(2, twoCallsToMake.retrieversWeWillCall.size());
 		mirrorsWhoWeCall.delete();
 		twoCallsToMakeCore.deleteAllFiles();
@@ -91,7 +93,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	public void testIsAuthorizedForMirroring() throws Exception
 	{
 		MockMartusServer nobodyAuthorizedCore = new MockMartusServer();
-		ServerForMirroring nobodyAuthorized = new ServerForMirroring(nobodyAuthorizedCore);
+		ServerForMirroring nobodyAuthorized = new ServerForMirroring(nobodyAuthorizedCore, logger);
 		assertFalse("client already authorized?", nobodyAuthorized.isAuthorizedForMirroring(clientSecurity1.getPublicKeyString()));
 		nobodyAuthorizedCore.deleteAllFiles();
 		
@@ -103,7 +105,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		MartusUtilities.exportServerPublicKey(clientSecurity1, pubKeyFile1);
 		File pubKeyFile2 = new File(mirrorsWhoCallUs, "code=2.3.4.5.6-ip=2.3.4.5.txt");
 		MartusUtilities.exportServerPublicKey(clientSecurity2, pubKeyFile2);
-		ServerForMirroring twoAuthorized = new ServerForMirroring(twoAuthorizedCore);
+		ServerForMirroring twoAuthorized = new ServerForMirroring(twoAuthorizedCore, logger);
 		assertTrue("client1 not authorized?", twoAuthorized.isAuthorizedForMirroring(clientSecurity1.getPublicKeyString()));
 		assertTrue("client2 not authorized?", twoAuthorized.isAuthorizedForMirroring(clientSecurity2.getPublicKeyString()));
 		assertFalse("ourselves authorized?", twoAuthorized.isAuthorizedForMirroring(coreServer.getAccountId()));
@@ -178,6 +180,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 
 	ServerForMirroring server;
 	MockMartusServer coreServer;
+	LoggerForTesting logger;
 
 	MockMartusSecurity clientSecurity1;
 	MockMartusSecurity clientSecurity2;
