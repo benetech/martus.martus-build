@@ -41,7 +41,7 @@ public class UiProgressRetrieveDlg extends JDialog
 	public UiProgressRetrieveDlg(UiMainWindow window, String tag)
 	{
 		super(window, window.getLocalization().getWindowTitle(tag), true);
-		MartusLocalization localization = window.getLocalization();
+		UiLocalization localization = window.getLocalization();
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowEventHandler());
 		cancel = new JButton(localization.getButtonLabel("cancel"));

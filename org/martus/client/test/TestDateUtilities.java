@@ -27,7 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.test;
 
 import org.martus.client.core.ChoiceItem;
-import org.martus.client.swingui.DateUtilities;
+import org.martus.client.core.DateUtilities;
 import org.martus.common.TestCaseEnhanced;
 
 public class TestDateUtilities extends TestCaseEnhanced

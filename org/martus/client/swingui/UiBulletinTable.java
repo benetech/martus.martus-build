@@ -338,7 +338,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public boolean confirmDeletionOfFile(String filePath)
 	{
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 		String title = localization.getWindowTitle("DeleteBulletinFile");
 		String msg1 = localization.getFieldLabel("DeleteBulletinFileMsg1");
 		String msg2 = localization.getFieldLabel("DeleteBulletinFileMsg2");
@@ -568,7 +568,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	private boolean confirmDeleteBulletins(String dialogTag, Vector foldersToList)
 	{
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 		String title = localization.getWindowTitle(dialogTag);
 		String cause = localization.getFieldLabel(dialogTag + "cause");
 		String folders = buildFolderNameList(foldersToList);
@@ -580,7 +580,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	private String buildFolderNameList(Vector visibleFoldersContainingThisBulletin)
 	{
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 		String names = "";
 		for(int i = 0 ; i < visibleFoldersContainingThisBulletin.size() ; ++i)
 		{

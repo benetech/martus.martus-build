@@ -33,7 +33,7 @@ import org.martus.client.core.BulletinStore;
 
 public class FolderList extends DefaultTreeModel
 {
-	public FolderList(MartusLocalization localizationToUse)
+	public FolderList(UiLocalization localizationToUse)
 	{
 		super(new FolderTreeNode("?", localizationToUse));
 		localization = localizationToUse;
@@ -86,5 +86,5 @@ public class FolderList extends DefaultTreeModel
 	}
 
 	FolderTreeNode root;
-	MartusLocalization localization;
+	UiLocalization localization;
 }

@@ -34,7 +34,7 @@ import javax.swing.text.JTextComponent;
 
 public class UiMultilineViewer extends UiTextField
 {
-	public UiMultilineViewer(MartusLocalization localizationToUse)
+	public UiMultilineViewer(UiLocalization localizationToUse)
 	{
 		super(localizationToUse);
 		text = new PreviewTextArea(1, UiConstants.textFieldColumns);

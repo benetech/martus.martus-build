@@ -24,9 +24,8 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui;
+package org.martus.client.core;
 
-import org.martus.client.core.ChoiceItem;
 
 public class DateUtilities
 {

@@ -105,7 +105,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean run()
 	{
-		MartusLocalization localization = getLocalization();
+		UiLocalization localization = getLocalization();
 		JFrame hiddenFrame = new JFrame(UiConstants.programName);
 		UiUtilities.updateIcon(hiddenFrame);
 		hiddenFrame.setState(Frame.ICONIFIED);
@@ -252,7 +252,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return app;
 	}
 	
-	public MartusLocalization getLocalization()
+	public UiLocalization getLocalization()
 	{
 		return getApp().getLocalization();
 	}
@@ -498,7 +498,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	void saveStateWithoutPrompting() throws IOException
 	{
-		MartusLocalization localization = getLocalization();
+		UiLocalization localization = getLocalization();
 	
 		String folderName = folders.getSelectedFolderName();
 		BulletinFolder folder = getStore().findFolder(folderName);
@@ -549,7 +549,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void initalizeUiState()
 	{
-		MartusLocalization localization = app.getLocalization();
+		UiLocalization localization = app.getLocalization();
 
 		uiState = new CurrentUiState();
 		File stateFile = app.getUiStateFile();

@@ -30,12 +30,12 @@ import org.martus.client.core.BulletinFolder;
 
 public class FolderNode
 {
-	FolderNode(MartusLocalization localizationToUse)
+	FolderNode(UiLocalization localizationToUse)
 	{
 		this("??", localizationToUse);
 	}
 
-	FolderNode(String internalNameToUse, MartusLocalization localizationToUse)
+	FolderNode(String internalNameToUse, UiLocalization localizationToUse)
 	{
 		setInternalName(internalNameToUse);
 		localization = localizationToUse;
@@ -65,5 +65,5 @@ public class FolderNode
 	}
 	
 	String internalName;
-	MartusLocalization localization;
+	UiLocalization localization;
 }

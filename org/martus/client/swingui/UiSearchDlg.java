@@ -41,7 +41,7 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 	public UiSearchDlg(UiMainWindow owner)
 	{
 		super(owner, "", true);
-		MartusLocalization localization = owner.getLocalization();
+		UiLocalization localization = owner.getLocalization();
 
 		setTitle(localization.getWindowTitle("search"));
 		search = new JButton(localization.getButtonLabel("search"));

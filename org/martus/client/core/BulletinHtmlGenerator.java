@@ -30,7 +30,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.StringReader;
 
-import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
@@ -38,7 +38,7 @@ import org.martus.common.MartusUtilities;
 
 public class BulletinHtmlGenerator
 {
-	public BulletinHtmlGenerator(int widthToUse, MartusLocalization localizationToUse)
+	public BulletinHtmlGenerator(int widthToUse, UiLocalization localizationToUse)
 	{
 		width = widthToUse;
 		localization = localizationToUse;
@@ -155,5 +155,5 @@ public class BulletinHtmlGenerator
 	}
 
 	int width;
-	MartusLocalization localization;
+	UiLocalization localization;
 }

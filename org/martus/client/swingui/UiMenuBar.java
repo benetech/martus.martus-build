@@ -37,7 +37,7 @@ public class UiMenuBar extends JMenuBar
 	UiMenuBar(UiMainWindow mainWindowToUse)
 	{
 		mainWindow = mainWindowToUse;
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 		
 		createMenuActions();
 

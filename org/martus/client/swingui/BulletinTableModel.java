@@ -35,7 +35,7 @@ import org.martus.common.UniversalId;
 
 public class BulletinTableModel extends AbstractTableModel
 {
-    public BulletinTableModel(MartusLocalization localizationToUse)
+    public BulletinTableModel(UiLocalization localizationToUse)
     {
 		localization = localizationToUse;
     }
@@ -121,6 +121,6 @@ public class BulletinTableModel extends AbstractTableModel
 		folder.sortBy(getFieldName(columnIndex));
 	}
 
-	MartusLocalization localization;
+	UiLocalization localization;
 	BulletinFolder folder;
 }

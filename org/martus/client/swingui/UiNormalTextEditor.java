@@ -30,7 +30,7 @@ import java.awt.Font;
 
 public class UiNormalTextEditor extends UiNormalTextField
 {
-	public UiNormalTextEditor(MartusLocalization localizationToUse)
+	public UiNormalTextEditor(UiLocalization localizationToUse)
 	{
 		super(localizationToUse);
 		widget = new UiTextArea(1, UiConstants.textFieldColumns);

@@ -43,7 +43,7 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 		super(owner, "", true);
 		mainWindow = owner;
 
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 		setTitle(localization.getWindowTitle(titleTag));
 		ok = new JButton(localization.getButtonLabel(okButtonTag));
 		ok.addActionListener(this);

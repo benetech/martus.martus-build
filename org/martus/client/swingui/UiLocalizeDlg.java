@@ -35,6 +35,8 @@ import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.martus.client.core.*;
+
 
 
 public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeListener
@@ -43,7 +45,7 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 	{
 		super(mainWindow, "", true);
 		owner = mainWindow;
-		MartusLocalization localization = owner.getLocalization();
+		UiLocalization localization = owner.getLocalization();
 
 		setTitle(localization.getMenuLabel("Preferences"));
 

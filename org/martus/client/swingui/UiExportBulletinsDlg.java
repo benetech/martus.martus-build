@@ -55,7 +55,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 	UiExportBulletinsDlg(UiMainWindow mainWindowToUse, UniversalId[] selectedBulletins)
 	{
 		mainWindow = mainWindowToUse;
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 
 		bulletins = findBulletins(selectedBulletins);
 		

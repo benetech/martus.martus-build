@@ -31,7 +31,7 @@ import javax.swing.tree.DefaultMutableTreeNode;
 public class FolderTreeNode extends DefaultMutableTreeNode
 {
 
-	public FolderTreeNode(Object obj, MartusLocalization localizationToUse)
+	public FolderTreeNode(Object obj, UiLocalization localizationToUse)
 	{
 		super();
 		internalNode = new FolderNode(localizationToUse);

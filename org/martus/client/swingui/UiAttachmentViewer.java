@@ -72,7 +72,7 @@ public class UiAttachmentViewer extends JPanel
 
 		vbox.add(attachmentPane);
 
-		MartusLocalization localization = mainWindowToUse.getLocalization();
+		UiLocalization localization = mainWindowToUse.getLocalization();
 
 		saveButton = new JButton(localization.getButtonLabel("saveattachment"));
 		saveButton.addActionListener(new SaveHandler());

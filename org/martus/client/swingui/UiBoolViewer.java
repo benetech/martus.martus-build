@@ -34,7 +34,7 @@ import javax.swing.border.LineBorder;
 
 public class UiBoolViewer extends UiField
 {
-	public UiBoolViewer(MartusLocalization localizationToUse)
+	public UiBoolViewer(UiLocalization localizationToUse)
 	{
 		localization = localizationToUse;
 		widget = new JLabel();
@@ -66,7 +66,7 @@ public class UiBoolViewer extends UiField
 	{
 	}
 
-	MartusLocalization localization;
+	UiLocalization localization;
 	JLabel widget;
 }
 

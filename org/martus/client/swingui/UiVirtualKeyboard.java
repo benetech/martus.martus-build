@@ -43,7 +43,7 @@ import javax.swing.border.LineBorder;
 public class UiVirtualKeyboard
 {
 
-	public UiVirtualKeyboard(MartusLocalization localization, VirtualKeyboardHandler uiHandler)
+	public UiVirtualKeyboard(UiLocalization localization, VirtualKeyboardHandler uiHandler)
 	{
 		handler = uiHandler;
 		password = "";

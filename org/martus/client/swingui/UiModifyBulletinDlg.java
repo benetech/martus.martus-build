@@ -56,7 +56,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		observer = observerToUse;
 		cancelHandler = cancelHandlerToUse;
 
-		MartusLocalization localization = observer.getLocalization();
+		UiLocalization localization = observer.getLocalization();
 		setTitle(localization.getWindowTitle("create"));
 		UiUtilities.updateIcon(this);
 		try

@@ -65,7 +65,7 @@ public class UiServerSummariesDlg extends JDialog
 
 	void initialize(String topMessageTag, String okButtonTag)
 	{
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 
 		disabledBackgroundColor = getBackground();
 		JLabel label = new JLabel("");

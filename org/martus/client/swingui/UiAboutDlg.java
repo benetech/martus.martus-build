@@ -50,7 +50,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		throws HeadlessException
 	{
 		super(owner, "" , true);
-		MartusLocalization localization = owner.getLocalization();
+		UiLocalization localization = owner.getLocalization();
 		
 		setTitle(localization.getWindowTitle("about"));
 

@@ -44,7 +44,7 @@ class UiSetupDlg extends JDialog implements ActionListener
 		mainWindow = owner;
 		info = infoToUse;
 
-		MartusLocalization localization = owner.getLocalization();
+		UiLocalization localization = owner.getLocalization();
 
 		setTitle(localization.getWindowTitle("setup"));
 		ok = new JButton(localization.getButtonLabel("ok"));

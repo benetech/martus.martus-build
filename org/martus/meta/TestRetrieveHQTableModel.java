@@ -4,7 +4,7 @@ import java.io.File;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.RetrieveHQTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
@@ -102,7 +102,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		MartusLocalization localization = fieldApp1.getLocalization();
+		UiLocalization localization = fieldApp1.getLocalization();
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));

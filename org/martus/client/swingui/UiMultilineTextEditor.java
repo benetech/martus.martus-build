@@ -34,7 +34,7 @@ import javax.swing.text.JTextComponent;
 
 public class UiMultilineTextEditor extends UiTextField
 {
-	public UiMultilineTextEditor(MartusLocalization localizationToUse)
+	public UiMultilineTextEditor(UiLocalization localizationToUse)
 	{
 		super(localizationToUse);
 		editor = new UiTextArea(5, UiConstants.textFieldColumns);

@@ -28,32 +28,25 @@ package org.martus.client.swingui;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.StringReader;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.SortedSet;
-import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.martus.client.core.*;
 import org.martus.client.core.ChoiceItem;
+import org.martus.client.core.Localization;
 import org.martus.client.core.MartusApp;
-import org.martus.common.Bulletin;
-import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 
 
-public class MartusLocalization
+public class UiLocalization extends Localization
 {
     public static void main (String args[])
 	{
@@ -78,7 +71,7 @@ public class MartusLocalization
 		}
 
 		System.out.println("Exporting translations for: " + languageCode);
-		MartusLocalization bd = new MartusLocalization(MartusApp.getTranslationsDirectory());
+		UiLocalization bd = new UiLocalization(MartusApp.getTranslationsDirectory());
 		bd.loadTranslationFile(languageCode);
 		Vector keys = bd.getAllTranslationStrings(languageCode);
 
@@ -122,74 +115,13 @@ public class MartusLocalization
 		reader.close();
 	}
 
-    public MartusLocalization(String directoryToUse)
+    public UiLocalization(String directoryToUse)
     {
-    	directory = new File(directoryToUse);
-		languageTranslationsMap = new TreeMap();
+    	super(directoryToUse);
 		loadEnglishTranslations();
-    	setCurrentDateFormatCode(DateUtilities.MDY_SLASH.getCode());
+		setCurrentDateFormatCode(DateUtilities.MDY_SLASH.getCode());
 	}
 	
-	public String getCurrentDateFormatCode()
-	{
-		return currentDateFormat;
-	}
-
-	public void setCurrentDateFormatCode(String code)
-	{
-		currentDateFormat = code;
-	}
-
-
-	public void loadEnglishTranslations()
-	{
-		createStringMap(ENGLISH);
-		for(int i=0; i < EnglishStrings.strings.length; ++i)
-		{
-			addTranslation(ENGLISH, EnglishStrings.strings[i]);
-		}
-	}
-
-	public boolean isLanguageLoaded(String languageCode)
-	{
-		if(getStringMap(languageCode) == null)
-			return false;
-
-		return true;
-	}
-
-	public Map getStringMap(String languageCode)
-	{
-		return (Map)languageTranslationsMap.get(languageCode);
-	}
-
-	public void addTranslation(String languageCode, String translation)
-	{
-		if(translation == null)
-			return;
-
-		Map stringMap = getStringMap(languageCode);
-		if(stringMap == null)
-			return;
-
-		int endKey = translation.indexOf('=');
-		if(endKey < 0)
-			return;
-
-		String key = translation.substring(0,endKey);
-		String value = translation.substring(endKey + 1, translation.length());
-		value = value.replaceAll("\\\\n", "\n");
-		stringMap.put(key, value);
-	}
-
-	public Map createStringMap(String languageCode)
-	{
-		if(!isLanguageLoaded(languageCode))
-			languageTranslationsMap.put(languageCode, new TreeMap());
-
-		return getStringMap(languageCode);
-	}
-
 	public String getLabel(String languageCode, String category, String tag, String defaultResult)
 	{
 		return getLabel(languageCode, category + ":" + tag, defaultResult);
@@ -234,111 +166,9 @@ public class MartusLocalization
 		return (ChoiceItem[])(languages.toArray((Object[])(new ChoiceItem[0])));
 	}
 
-	public String getLanguageCodeFromFilename(String filename)
-	{
-		if(!isLanguageFile(filename))
-			return "";
-
-		int codeStart = filename.indexOf('-') + 1;
-		int codeEnd = filename.indexOf('.');
-		return filename.substring(codeStart, codeEnd);
-	}
-
-	private static boolean isLanguageFile(String filename)
-	{
-		return (filename.startsWith("Martus-") && filename.endsWith(".mtf"));
-	}
-
-	private static class LanguageFilenameFilter implements FilenameFilter
-	{
-		public boolean accept(File dir, String name)
-		{
-			return MartusLocalization.isLanguageFile(name);
-		}
-	}
-
 	public static String getDefaultUiLanguage()
 	{
 		return ENGLISH;
-	}
-
-	public Vector getAllTranslationStrings(String languageCode)
-	{
-		createStringMap(languageCode);
-
-		Vector strings = new Vector();
-		Map englishMap = getStringMap(ENGLISH);
-		Set englishKeys = englishMap.keySet();
-		SortedSet sorted = new TreeSet(englishKeys);
-		Iterator it = sorted.iterator();
-		while(it.hasNext())
-		{
-			String key = (String)it.next();
-			String value = getLabel(languageCode, key, "???");
-			strings.add(key + "=" + value);
-		}
-		return strings;
-	}
-
-	public void loadTranslationFile(String languageCode)
-	{
-		InputStream transStream = null;
-		String fileShortName = "Martus-" + languageCode + ".mtf";
-		File file = new File(MartusApp.getTranslationsDirectory(), fileShortName);
-		try
-		{
-			if(file.exists())
-			{
-				transStream = new FileInputStream(file);
-			}
-			else
-			{
-				transStream = getClass().getResourceAsStream(fileShortName);
-			}
-			if(transStream == null)
-			{
-				return;
-			}
-			loadTranslations(languageCode, transStream);
-		}
-
-		catch (IOException e)
-		{
-			System.out.println("BulletinDisplay.loadTranslationFile " + e);
-		}
-	}
-
-	public void loadTranslations(String languageCode, InputStream inputStream)
-	{
-		createStringMap(languageCode);
-		try
-		{
-			UnicodeReader reader = new UnicodeReader(inputStream);
-			String translation;
-			while(true)
-			{
-				translation = reader.readLine();
-				if(translation == null)
-					break;
-				addTranslation(languageCode, translation);
-			}
-			reader.close();
-		}
-		catch (IOException e)
-		{
-			System.out.println("BulletinDisplay.loadTranslations " + e);
-		}
-	}
-
-	public String getCurrentLanguageCode()
-	{
-		return currentLanguageCode;
-	}
-
-	public void setCurrentLanguageCode(String newLanguageCode)
-	{
-		loadTranslationFile(newLanguageCode);
-		currentLanguageCode = newLanguageCode;
 	}
 
 	public String getLocalizedFolderName(String folderName)
@@ -419,36 +249,41 @@ public class MartusLocalization
 		return tempChoicesArray;
 	}
 
-	public String convertStoredDateToDisplay(String storedDate)
+	public Vector getAllTranslationStrings(String languageCode)
 	{
-		DateFormat dfStored = Bulletin.getStoredDateFormat();
-		DateFormat dfDisplay = new SimpleDateFormat(getCurrentDateFormatCode());
-		String result = "";
-		try
+		createStringMap(languageCode);
+	
+		Vector strings = new Vector();
+		Map englishMap = getStringMap(ENGLISH);
+		Set englishKeys = englishMap.keySet();
+		SortedSet sorted = new TreeSet(englishKeys);
+		Iterator it = sorted.iterator();
+		while(it.hasNext())
 		{
-			Date d = dfStored.parse(storedDate);
-			result = dfDisplay.format(d);
+			String key = (String)it.next();
+			String value = getLabel(languageCode, key, "???");
+			strings.add(key + "=" + value);
 		}
-		catch(ParseException e)
-		{
-			// unparsable dates simply become blank strings,
-			// so we don't want to do anything for this exception
-			//System.out.println(e);
-		}
+		return strings;
+	}
 
-		return result;
+	public void loadEnglishTranslations()
+	{
+		createStringMap(ENGLISH);
+		for(int i=0; i < EnglishStrings.strings.length; ++i)
+		{
+			addTranslation(ENGLISH, EnglishStrings.strings[i]);
+		}
+	}
+
+	public static class LanguageFilenameFilter implements FilenameFilter
+	{
+		public boolean accept(File dir, String name)
+		{
+			return UiLocalization.isLanguageFile(name);
+		}
 	}
 
 
-	private File directory;
-	private Map languageTranslationsMap;
-	private String currentLanguageCode;
-	private String currentDateFormat;
 
-	private static final String ENGLISH = "en";
-	public static final String[] ALL_LANGUAGE_CODES = {
-				"?", "en", "ar",
-				"az", "bn", "my","zh", "nl", "eo", "fr", "de","gu","ha","he","hi","hu",
-				"it", "ja","jv","kn","ko","ml","mr","or","pa","pl","pt","ro","ru","sr",
-				"sr", "sd","si","es","ta","te", "th","tr","uk","ur","vi"};
 }

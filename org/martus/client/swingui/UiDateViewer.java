@@ -31,7 +31,7 @@ import javax.swing.JLabel;
 
 public class UiDateViewer extends UiField
 {
-	public UiDateViewer(MartusLocalization localizationToUse)
+	public UiDateViewer(UiLocalization localizationToUse)
 	{
 		localization = localizationToUse;
 		label = new JLabel();
@@ -57,7 +57,7 @@ public class UiDateViewer extends UiField
 	{
 	}
 
-	MartusLocalization localization;
+	UiLocalization localization;
 	JLabel label;
 	String value;
 }

@@ -49,7 +49,7 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		info = infoToUse;
 		mainWindow = owner;
 		app = owner.getApp();
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 		
 		setTitle(localization.getWindowTitle("ConfigServer"));
 		getContentPane().setLayout(new ParagraphLayout());

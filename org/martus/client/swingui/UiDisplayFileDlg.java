@@ -53,7 +53,7 @@ public class UiDisplayFileDlg extends JDialog
 	{
 		super(owner, "", true);
 		tocList = null;
-		MartusLocalization localization = owner.getLocalization();
+		UiLocalization localization = owner.getLocalization();
 
 		setTitle(localization.getWindowTitle(baseTag));
 		getContentPane().setLayout(new ParagraphLayout());

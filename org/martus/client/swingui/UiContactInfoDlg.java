@@ -44,7 +44,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		super(mainWindow, "", true);
 		info = infoToUse;
 
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 	
 		setTitle(localization.getWindowTitle("setupcontact"));
 		ok = new JButton(localization.getButtonLabel("ok"));

@@ -37,7 +37,7 @@ import javax.swing.text.JTextComponent;
 
 public abstract class UiTextField extends UiField
 {
-	public UiTextField(MartusLocalization localizationToUse)
+	public UiTextField(UiLocalization localizationToUse)
 	{
 		localization = localizationToUse;
 		mouseAdapter = new TextFieldMouseAdapter();
@@ -183,7 +183,7 @@ public abstract class UiTextField extends UiField
 		}
 	}
 
-	MartusLocalization localization;
+	UiLocalization localization;
 	Action actionCut;
 	Action actionCopy;
 	Action actionPaste;

@@ -39,7 +39,7 @@ import javax.swing.border.EmptyBorder;
 
 class UiSplashDlg extends JDialog implements ActionListener
 {
-	UiSplashDlg(Frame owner, MartusLocalization localization, String text)
+	UiSplashDlg(Frame owner, UiLocalization localization, String text)
 	{
 		super(owner, owner.getTitle(), true);
 		Container contents = getContentPane();

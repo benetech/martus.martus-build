@@ -43,7 +43,7 @@ import org.martus.common.FieldDataPacket;
 
 abstract public class UiBulletinComponentSection extends JPanel
 {
-	UiBulletinComponentSection(MartusLocalization localizationToUse, boolean encrypted)
+	UiBulletinComponentSection(UiLocalization localizationToUse, boolean encrypted)
 	{
 		localization = localizationToUse;
 
@@ -193,7 +193,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 			getParagraphLayout().setFirstColumnWidth(otherWidth);
 	}
 
-	MartusLocalization localization;
+	UiLocalization localization;
 	JLabel encryptedIndicator;
 	JLabel damagedIndicator;
 	UiField[] fields;

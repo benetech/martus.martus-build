@@ -3,7 +3,7 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.RetrieveMyTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
@@ -62,7 +62,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		MartusLocalization localization = app.getLocalization();
+		UiLocalization localization = app.getLocalization();
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));

@@ -31,7 +31,7 @@ import junit.framework.TestCase;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.FolderList;
 import org.martus.client.swingui.FolderTreeNode;
-import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.common.MockClientDatabase;
 
 public class TestFolderList extends TestCase
@@ -134,7 +134,7 @@ public class TestFolderList extends TestCase
 		return store.getVisibleFolderNames().size();
 	}
 	
-	private MartusLocalization getLocalization()
+	private UiLocalization getLocalization()
 	{
 		return app.getLocalization();
 

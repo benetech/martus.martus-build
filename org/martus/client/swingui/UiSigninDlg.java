@@ -62,7 +62,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 	{
 		mainWindow = window;
 		
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 
 		String title = getTextForTitle(localization, mode);
 		setTitle(title);
@@ -139,7 +139,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		show();
 	}
 
-	public static String getTextForTitle(MartusLocalization localization, int mode)
+	public static String getTextForTitle(UiLocalization localization, int mode)
 	{
 		String versionInfo = UiConstants.programName;
 		versionInfo += " " + localization.getFieldLabel("aboutDlgVersionInfo");
@@ -228,7 +228,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 
 	public void displayPasswordAreaUsingVirtualKeyboard()
 	{
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 
 		passwordArea.removeAll();
 		userNameDescription.setText(localization.getFieldLabel("VirtualUserNameDescription"));
@@ -253,7 +253,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 
 	public void displayPasswordAreaUsingNormalKeyboard()
 	{
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 
 		passwordArea.removeAll();
 		passwordArea.updateUI();

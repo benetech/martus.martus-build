@@ -62,7 +62,7 @@ public class UiAttachmentEditor extends JPanel
 
 		vbox.add(new JScrollPane(table));
 
-		MartusLocalization localization = mainWindowToUse.getLocalization();
+		UiLocalization localization = mainWindowToUse.getLocalization();
 		JButton add = new JButton(localization.getButtonLabel("addattachment"));
 		add.addActionListener(new AddHandler());
 		hbox.add(add);
@@ -185,7 +185,7 @@ public class UiAttachmentEditor extends JPanel
 			File last = getLastAttachmentLoadDirectory();
 			if(last != null)
 				chooser.setCurrentDirectory(last);
-			MartusLocalization localization = mainWindow.getLocalization();
+			UiLocalization localization = mainWindow.getLocalization();
 			chooser.setApproveButtonText(localization.getButtonLabel("addattachment"));
 			int returnVal = chooser.showOpenDialog(UiAttachmentEditor.this);
 			if(returnVal == JFileChooser.APPROVE_OPTION)

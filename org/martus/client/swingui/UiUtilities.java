@@ -91,7 +91,7 @@ public class UiUtilities
 		}
 	}
 
-	static void notifyDlg(MartusLocalization localization, JFrame parent, String baseTag, String titleTag)
+	static void notifyDlg(UiLocalization localization, JFrame parent, String baseTag, String titleTag)
 	{
 		String title = localization.getWindowTitle(titleTag);
 		String cause = localization.getFieldLabel("notify" + baseTag + "cause");
@@ -102,7 +102,7 @@ public class UiUtilities
 		new UiNotifyDlg(parent, title, contents, buttons);
 	}
 
-	static void messageDlg(MartusLocalization localization, JFrame parent, String baseTag, String message)
+	static void messageDlg(UiLocalization localization, JFrame parent, String baseTag, String message)
 	{
 		String title = localization.getWindowTitle(baseTag);
 		String cause = localization.getFieldLabel("message" + baseTag + "cause");
@@ -113,7 +113,7 @@ public class UiUtilities
 		new UiNotifyDlg(parent, title, contents, buttons);
 	}
 
-	static boolean confirmDlg(MartusLocalization localization, JFrame parent, String baseTag)
+	static boolean confirmDlg(UiLocalization localization, JFrame parent, String baseTag)
 	{
 		String title = localization.getWindowTitle("confirm" + baseTag);
 		String cause = localization.getFieldLabel("confirm" + baseTag + "cause");
@@ -123,7 +123,7 @@ public class UiUtilities
 		return confirmDlg(localization, parent, title, contents);
 	}
 
-	static boolean confirmDlg(MartusLocalization localization, JFrame parent, String title, String[] contents)
+	static boolean confirmDlg(UiLocalization localization, JFrame parent, String title, String[] contents)
 	{
 		String yes = localization.getButtonLabel("yes");
 		String no = localization.getButtonLabel("no");

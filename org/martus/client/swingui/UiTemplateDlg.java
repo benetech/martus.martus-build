@@ -53,7 +53,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		mainWindow = owner;
 		defaultDetailsFile = defaultDetailsFileToUse;
 
-		MartusLocalization localization = mainWindow.getLocalization();
+		UiLocalization localization = mainWindow.getLocalization();
 		setTitle(localization.getWindowTitle("BulletinDetails"));
 		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(this);
@@ -93,7 +93,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			MartusLocalization localization = mainWindow.getLocalization();
+			UiLocalization localization = mainWindow.getLocalization();
 			String title = localization.getWindowTitle("HelpDefaultDetails");
 			String helpMsg = localization.getFieldLabel("HelpDefaultDetails");
 			String helpMsgExample = localization.getFieldLabel("HelpExampleDefaultDetails");

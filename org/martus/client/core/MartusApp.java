@@ -43,8 +43,7 @@ import java.util.Vector;
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
-import org.martus.client.swingui.DateUtilities;
-import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinSearcher;
@@ -101,7 +100,7 @@ public class MartusApp
 
 			dataDirectory = dataDirectoryToUse.getPath() + "/";
 			security = cryptoToUse;
-			localization = new MartusLocalization(getTranslationsDirectory());
+			localization = new UiLocalization(getTranslationsDirectory());
 			store = new BulletinStore(dataDirectoryToUse, cryptoToUse);
 			configInfo = new ConfigInfo();
 
@@ -126,7 +125,7 @@ public class MartusApp
 			previouslySavedState.load(getUiStateFile());
 			String previouslySavedStateLanguage = previouslySavedState.getCurrentLanguage();
 			if(previouslySavedStateLanguage == "")
-				localization.setCurrentLanguageCode(MartusLocalization.getDefaultUiLanguage());
+				localization.setCurrentLanguageCode(UiLocalization.getDefaultUiLanguage());
 			else
 				localization.setCurrentLanguageCode(previouslySavedStateLanguage);
 
@@ -138,7 +137,7 @@ public class MartusApp
 		}
 	}
 	
-	public MartusLocalization getLocalization()
+	public UiLocalization getLocalization()
 	{
 		return localization;
 	}
@@ -628,7 +627,7 @@ public class MartusApp
 
 	public void search(String searchFor, String startDate, String endDate)
 	{
-		MartusLocalization localization = getLocalization();
+		UiLocalization localization = getLocalization();
 		SearchParser parser = new SearchParser(localization.getKeyword("and"), localization.getKeyword("or"));
 		SearchTreeNode searchNode = parser.parse(searchFor);
 		BulletinSearcher matcher = new BulletinSearcher(searchNode, startDate, endDate);
@@ -1234,7 +1233,7 @@ public class MartusApp
 	}
 
 	protected String dataDirectory;
-	private MartusLocalization localization;
+	private UiLocalization localization;
 	public BulletinStore store;
 	private ConfigInfo configInfo;
 	public NetworkInterface currentNetworkInterfaceHandler;

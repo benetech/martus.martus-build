@@ -32,7 +32,7 @@ import junit.framework.TestCase;
 
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiLocalization;
 
 public class TestMartusLocalization extends TestCase
 {
@@ -44,7 +44,7 @@ public class TestMartusLocalization extends TestCase
 	public void setUp()
 	{
 		if(bd == null)
-			bd = new MartusLocalization(MartusApp.getTranslationsDirectory());
+			bd = new UiLocalization(MartusApp.getTranslationsDirectory());
  	}
 
 	public void testLanguagess()
@@ -165,5 +165,5 @@ public class TestMartusLocalization extends TestCase
 		assertEquals("Should now contain esperanto silly key", true, strings.contains(sillyEsperanto));
 	}
 
-	static MartusLocalization bd;
+	static UiLocalization bd;
 }

@@ -37,11 +37,12 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
+import org.martus.client.core.*;
 import org.martus.common.Bulletin;
 
 public class UiDateEditor extends UiField
 {
-	public UiDateEditor(MartusLocalization localizationToUse)
+	public UiDateEditor(UiLocalization localizationToUse)
 	{
 		component = new JPanel();
 		Box box = Box.createHorizontalBox();

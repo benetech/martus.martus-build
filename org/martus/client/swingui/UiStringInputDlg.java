@@ -37,7 +37,7 @@ import javax.swing.JTextField;
 
 public class UiStringInputDlg extends JDialog
 {
-	public UiStringInputDlg(JFrame owner, MartusLocalization localization, String baseTag, String descriptionTag, String defaultText)
+	public UiStringInputDlg(JFrame owner, UiLocalization localization, String baseTag, String descriptionTag, String defaultText)
 	{
 		super(owner, "", true);
 

@@ -39,7 +39,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
-import org.martus.client.swingui.MartusLocalization;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiUtilities;
 import org.martus.common.Bulletin;
 import org.martus.common.Database;
@@ -756,7 +756,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testFieldLabels()
 	{
 		TRACE_BEGIN("testFieldLabels");
-		MartusLocalization localization = appWithAccount.getLocalization();
+		UiLocalization localization = appWithAccount.getLocalization();
 		assertEquals("Keep ALL Information Private", localization.getFieldLabel("allprivate"));
 		assertEquals("Author", localization.getFieldLabel("author"));
 		assertEquals("Organization", localization.getFieldLabel("organization"));
@@ -781,7 +781,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testLanguageNames()
 	{
 		TRACE_BEGIN("testLanguageNames");
-		MartusLocalization localization = appWithAccount.getLocalization();
+		UiLocalization localization = appWithAccount.getLocalization();
 		assertNotNull(localization.getLanguageName("Not a valid code"));
 		assertEquals("English", localization.getLanguageName("en"));
 		assertEquals("Arabic", localization.getLanguageName("ar"));
@@ -828,7 +828,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testGetLanguageNameChoices()
 	{
 		TRACE_BEGIN("testWindowTitles");
-		MartusLocalization localization = appWithAccount.getLocalization();
+		UiLocalization localization = appWithAccount.getLocalization();
 		String[] testLanguageCodes = {"es", "en", "si"};
 		ChoiceItem[] languageChoicesTest = localization.getLanguageNameChoices(testLanguageCodes);
 		assertEquals(localization.getLanguageName("en"), languageChoicesTest[0].toString());
@@ -861,7 +861,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testCurrentLanguage()
 	{
 		TRACE_BEGIN("testCurrentLanguage");
-		MartusLocalization localization = appWithAccount.getLocalization();
+		UiLocalization localization = appWithAccount.getLocalization();
 
 		assertEquals("en", localization.getCurrentLanguageCode());
 		assertEquals("MartusHelp-en.txt", appWithAccount.getHelpFilename());
@@ -879,7 +879,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testDateConvert()
 	{
 		TRACE_BEGIN("testDateConvert");
-		MartusLocalization localization = appWithAccount.getLocalization();
+		UiLocalization localization = appWithAccount.getLocalization();
 		assertEquals("12/13/1987", localization.convertStoredDateToDisplay("1987-12-13"));
 		assertEquals("", localization.convertStoredDateToDisplay("abc"));
 		assertEquals("", localization.convertStoredDateToDisplay("1987-13-13"));
@@ -890,7 +890,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testCurrentDateFormatCode");
 		
-		MartusLocalization localization = appWithAccount.getLocalization();
+		UiLocalization localization = appWithAccount.getLocalization();
 		assertEquals("MM/dd/yyyy", localization.getCurrentDateFormatCode());
 		localization.setCurrentDateFormatCode("dd.MM.yyyy");
 		assertEquals("dd.MM.yyyy", localization.getCurrentDateFormatCode());
@@ -903,7 +903,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testMonthLabels");
 
-		MartusLocalization localization = appWithAccount.getLocalization();
+		UiLocalization localization = appWithAccount.getLocalization();
 
 		assertEquals("Mar", localization.getMonthLabel("mar"));
 		String[] months = localization.getMonthLabels();
