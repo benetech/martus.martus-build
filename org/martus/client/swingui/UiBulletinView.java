@@ -55,7 +55,7 @@ public class UiBulletinView extends UiBulletinComponent
 
 	public UiField createBoolField()
 	{
-		return new UiBoolViewer(getApp());
+		return new UiBoolViewer(mainWindow.getLocalization());
 	}
 
 	private Vector bulletinViewSections;

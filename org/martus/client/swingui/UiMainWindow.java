@@ -699,7 +699,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		int width = preview.getView().getWidth();
 		
-		BulletinHtmlGenerator generator = new BulletinHtmlGenerator(width, app);
+		BulletinHtmlGenerator generator = new BulletinHtmlGenerator(width, getLocalization());
 		String html = generator.getHtmlString(currentBulletin);
 		JComponent view = new JLabel(html);
 		
@@ -802,14 +802,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}
 
 			String title = getLocalization().getWindowTitle("ServerSelectionResults");
-			String serverSelected = app.getFieldLabel("ServerSelectionResults") + serverIPAddress;
+			String serverSelected = getLocalization().getFieldLabel("ServerSelectionResults") + serverIPAddress;
 			String uploadGranted = "";
 			if(magicAccepted)
-				uploadGranted = app.getFieldLabel("ServerAcceptsUploads");
+				uploadGranted = getLocalization().getFieldLabel("ServerAcceptsUploads");
 			else
-				uploadGranted = app.getFieldLabel("ServerDeclinesUploads");
+				uploadGranted = getLocalization().getFieldLabel("ServerDeclinesUploads");
 
-			String ok = app.getButtonLabel("ok");
+			String ok = getLocalization().getButtonLabel("ok");
 			String[] contents = {serverSelected, uploadGranted};
 			String[] buttons = {ok};
 
@@ -1097,7 +1097,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			app.exportPublicInfo(export);
 			String title = getLocalization().getWindowTitle("notifyExportMyPublicKey");
 			String msg = getLocalization().getFieldLabel("notifyExportMyPublicKeycause");
-			String ok = app.getButtonLabel("ok");
+			String ok = getLocalization().getButtonLabel("ok");
 			String[] contents = {msg, export.getCanonicalPath()};
 			String[] buttons = {ok};
 			new UiNotifyDlg(currentActiveFrame, title, contents, buttons);
@@ -1173,7 +1173,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(!reSignIn())
 			return;
 		JFileChooser chooser = new JFileChooser();
-		chooser.setApproveButtonText(app.getButtonLabel("inputImportPublicCodeok"));
+		chooser.setApproveButtonText(getLocalization().getButtonLabel("inputImportPublicCodeok"));
 		chooser.setFileFilter(new PublicInfoFileFilter());
 		chooser.setDialogTitle(getLocalization().getWindowTitle("ImportHQPublicKey"));
     	chooser.setCurrentDirectory(new File(app.getDataDirectory()));

@@ -32,13 +32,11 @@ import javax.swing.JComponent;
 import javax.swing.JLabel;
 import javax.swing.border.LineBorder;
 
-import org.martus.client.core.MartusApp;
-
 public class UiBoolViewer extends UiField
 {
-	public UiBoolViewer(MartusApp appToUse)
+	public UiBoolViewer(MartusLocalization localizationToUse)
 	{
-		app = appToUse;
+		localization = localizationToUse;
 		widget = new JLabel();
 		widget.setBorder(new LineBorder(Color.black));
 	}
@@ -57,9 +55,9 @@ public class UiBoolViewer extends UiField
 	{
 		String text = "";
 		if(newText.equals(TRUESTRING))
-			text = app.getButtonLabel("yes");
+			text = localization.getButtonLabel("yes");
 		else
-			text = app.getButtonLabel("no");
+			text = localization.getButtonLabel("no");
 
 		widget.setText(" " + text + " ");
 	}
@@ -68,7 +66,7 @@ public class UiBoolViewer extends UiField
 	{
 	}
 
-	MartusApp app;
+	MartusLocalization localization;
 	JLabel widget;
 }
 

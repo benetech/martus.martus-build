@@ -1230,11 +1230,6 @@ public class MartusApp
 		return localization.getFieldLabel(fieldName);
 	}
 
-	public String getButtonLabel(String code)
-	{
-		return localization.getButtonLabel(code);
-	}
-
 	private String getCurrentLanguage()
 	{
 		return localization.getCurrentLanguageCode();

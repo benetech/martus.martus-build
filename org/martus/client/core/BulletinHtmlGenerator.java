@@ -38,10 +38,10 @@ import org.martus.common.MartusUtilities;
 
 public class BulletinHtmlGenerator
 {
-	public BulletinHtmlGenerator(int widthToUse, MartusApp appToUse)
+	public BulletinHtmlGenerator(int widthToUse, MartusLocalization localizationToUse)
 	{
 		width = widthToUse;
-		app = appToUse;
+		localization = localizationToUse;
 	}
 
 	public String getHtmlString(Bulletin b)
@@ -52,7 +52,7 @@ public class BulletinHtmlGenerator
 		html.append(Integer.toString(width));
 		html.append("'>");
 
-		String publicSectionTitle = app.getFieldLabel("publicsection");
+		String publicSectionTitle = localization.getFieldLabel("publicsection");
 		html.append("<tr><td colspan='2'><u><b>");
 		html.append(publicSectionTitle);
 		html.append("</b></u></td></tr>");
@@ -61,14 +61,14 @@ public class BulletinHtmlGenerator
 		String allPrivateValueTag = "no";
 		if(b.isAllPrivate())
 			allPrivateValueTag = "yes";
-		html.append(getFieldHtmlString("allprivate", app.getButtonLabel(allPrivateValueTag)));
+		html.append(getFieldHtmlString("allprivate", localization.getButtonLabel(allPrivateValueTag)));
 
 		String[] standardFieldTags = Bulletin.getStandardFieldNames();
 		html.append(getSectionHtmlString(b, standardFieldTags));
 		html.append(getAttachmentsHtmlString(b.getFieldDataPacket()));
 
 		html.append("<tr></tr>");
-		String privateSectionTitle = app.getFieldLabel("privatesection");
+		String privateSectionTitle = localization.getFieldLabel("privatesection");
 		html.append("<tr><td colspan='2'><u><b>");
 		html.append(privateSectionTitle);
 		html.append("</b></u></td></tr>");
@@ -84,7 +84,6 @@ public class BulletinHtmlGenerator
 
 	private String getSectionHtmlString(Bulletin b, String[] standardFieldTags)
 	{
-		MartusLocalization localization = app.getLocalization();
 		String sectionHtml = "";
 		for(int fieldNum = 0; fieldNum < standardFieldTags.length; ++fieldNum)
 		{
@@ -119,7 +118,7 @@ public class BulletinHtmlGenerator
 	{
 		StringBuffer fieldHtml = new StringBuffer(value.length() + 100);
 		fieldHtml.append("<tr><td width='15%' align='right' valign='top'>");
-		fieldHtml.append(app.getFieldLabel(tag));
+		fieldHtml.append(localization.getFieldLabel(tag));
 		fieldHtml.append("</td>");
 		fieldHtml.append("<td valign='top'>");
 		fieldHtml.append(value);
@@ -156,5 +155,5 @@ public class BulletinHtmlGenerator
 	}
 
 	int width;
-	MartusApp app;
+	MartusLocalization localization;
 }

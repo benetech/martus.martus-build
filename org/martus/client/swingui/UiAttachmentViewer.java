@@ -72,12 +72,14 @@ public class UiAttachmentViewer extends JPanel
 
 		vbox.add(attachmentPane);
 
-		saveButton = new JButton(app.getButtonLabel("saveattachment"));
+		MartusLocalization localization = mainWindowToUse.getLocalization();
+
+		saveButton = new JButton(localization.getButtonLabel("saveattachment"));
 		saveButton.addActionListener(new SaveHandler());
 		saveButton.setEnabled(false);
 		buttonBox.add(saveButton);
 		
-		viewButton = new JButton(app.getButtonLabel("viewattachment"));
+		viewButton = new JButton(localization.getButtonLabel("viewattachment"));
 		viewButton.addActionListener(new ViewHandler());
 		viewButton.setEnabled(false);
 		if(!UiUtilities.isMSWindows())
@@ -146,7 +148,7 @@ public class UiAttachmentViewer extends JPanel
 
 		public String getColumnName(int column)
 		{
-			return app.getButtonLabel("attachmentlabel");
+			return mainWindow.getLocalization().getButtonLabel("attachmentlabel");
 		}
 
 		public AttachmentProxy getAttachmentProxyAt(int row, int column)

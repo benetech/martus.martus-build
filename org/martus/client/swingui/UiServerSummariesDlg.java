@@ -66,9 +66,11 @@ public class UiServerSummariesDlg extends JDialog
 
 	void initialize(String topMessageTag, String okButtonTag)
 	{
+		MartusLocalization localization = mainWindow.getLocalization();
+
 		disabledBackgroundColor = getBackground();
 		JLabel label = new JLabel("");
-		String topMessageText = getApp().getFieldLabel(topMessageTag);
+		String topMessageText = localization.getFieldLabel(topMessageTag);
 		UiWrappedTextArea retrieveMessage = new UiWrappedTextArea(topMessageText);
 		tableBox = Box.createVerticalBox();
 		table = new RetrieveJTable(model);
@@ -85,9 +87,9 @@ public class UiServerSummariesDlg extends JDialog
 		tableBoxSize.height = 350; //To fit in 800x600
 		tableBox.setPreferredSize(tableBoxSize);
 
-		JRadioButton downloadableSummaries = new JRadioButton(getApp().getButtonLabel("DownloadableSummaries"), true);
+		JRadioButton downloadableSummaries = new JRadioButton(localization.getButtonLabel("DownloadableSummaries"), true);
 		downloadableSummaries.addActionListener(new ChangeDownloadableSummariesHandler());
-		JRadioButton allSummaries = new JRadioButton(getApp().getButtonLabel("AllSummaries"), false);
+		JRadioButton allSummaries = new JRadioButton(localization.getButtonLabel("AllSummaries"), false);
 		allSummaries.addActionListener(new ChangeAllSummariesHandler());
 		ButtonGroup summariesGroup = new ButtonGroup();
 		summariesGroup.add(downloadableSummaries);
@@ -97,16 +99,16 @@ public class UiServerSummariesDlg extends JDialog
 		radioPanel.add(downloadableSummaries);
 		radioPanel.add(allSummaries);
 
-		JButton ok = new JButton(getApp().getButtonLabel(okButtonTag));
+		JButton ok = new JButton(localization.getButtonLabel(okButtonTag));
 		ok.addActionListener(new OkHandler());
-		JButton cancel = new JButton(getApp().getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
-		JButton preview = new JButton(getApp().getButtonLabel("Preview"));
+		JButton preview = new JButton(localization.getButtonLabel("Preview"));
 		preview.addActionListener(new PreviewHandler());
 
-		JButton checkAll = new JButton(getApp().getButtonLabel("checkall"));
+		JButton checkAll = new JButton(localization.getButtonLabel("checkall"));
 		checkAll.addActionListener(new CheckAllHandler());
-		JButton unCheckAll = new JButton(getApp().getButtonLabel("uncheckall"));
+		JButton unCheckAll = new JButton(localization.getButtonLabel("uncheckall"));
 		unCheckAll.addActionListener(new UnCheckAllHandler());
 
 		getContentPane().setLayout(new ParagraphLayout());

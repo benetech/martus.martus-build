@@ -42,8 +42,6 @@ import javax.swing.JPasswordField;
 import javax.swing.JTextField;
 import javax.swing.border.LineBorder;
 
-import org.martus.client.core.MartusApp;
-
 
 
 public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
@@ -63,11 +61,10 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 	public void Initalize(UiMainWindow window, JFrame owner, int mode, String username)
 	{
 		mainWindow = window;
-		app = mainWindow.getApp();
 		
 		MartusLocalization localization = mainWindow.getLocalization();
 
-		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
+		String versionInfo = localization.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
 		String title = localization.getWindowTitle("MartusSignIn") +
 				" (" + versionInfo + ")";
@@ -130,7 +127,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.addActionListener(new switchKeyboardHandler());
 		passwordArea = new JPanel();
 		getContentPane().add(passwordArea);
-		keyboard = new UiVirtualKeyboard(app, this);
+		keyboard = new UiVirtualKeyboard(window.getApp(), this);
 		UpdatePasswordArea();
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
@@ -211,9 +208,11 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 
 	public void displayPasswordAreaUsingVirtualKeyboard()
 	{
+		MartusLocalization localization = mainWindow.getLocalization();
+
 		passwordArea.removeAll();
-		userNameDescription.setText(app.getFieldLabel("VirtualUserNameDescription"));
-		passwordDescription.setText(app.getFieldLabel("VirtualPasswordDescription"));
+		userNameDescription.setText(localization.getFieldLabel("VirtualUserNameDescription"));
+		passwordDescription.setText(localization.getFieldLabel("VirtualPasswordDescription"));
 
 		passwordArea.setLayout(new ParagraphLayout());
 		passwordArea.setBorder(new LineBorder(Color.black, 2));
@@ -226,7 +225,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		passwordArea.add(virtualKeyboardPanel);
 
 		passwordArea.add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		switchToNormalKeyboard.setText(app.getButtonLabel("VirtualKeyboardSwitchToNormal"));
+		switchToNormalKeyboard.setText(localization.getButtonLabel("VirtualKeyboardSwitchToNormal"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
 		UiUtilities.centerDlg(this);
@@ -234,6 +233,8 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 
 	public void displayPasswordAreaUsingNormalKeyboard()
 	{
+		MartusLocalization localization = mainWindow.getLocalization();
+
 		passwordArea.removeAll();
 		passwordArea.updateUI();
 		userNameDescription.setText("");
@@ -246,14 +247,14 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		passwordArea.add(passwordField);
 
 		passwordArea.add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		JLabel warningNormalKeyboard = new JLabel(app.getFieldLabel("NormalKeyboardMsg1"));
+		JLabel warningNormalKeyboard = new JLabel(localization.getFieldLabel("NormalKeyboardMsg1"));
 		warningNormalKeyboard.setFont(warningNormalKeyboard.getFont().deriveFont(Font.BOLD));
 		passwordArea.add(warningNormalKeyboard);
 		passwordArea.add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		passwordArea.add(new JLabel(app.getFieldLabel("NormalKeyboardMsg2")));
+		passwordArea.add(new JLabel(localization.getFieldLabel("NormalKeyboardMsg2")));
 
 		passwordArea.add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		switchToNormalKeyboard.setText(app.getButtonLabel("VirtualKeyboardSwitchToVirtual"));
+		switchToNormalKeyboard.setText(localization.getButtonLabel("VirtualKeyboardSwitchToVirtual"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
 		UiUtilities.centerDlg(this);
@@ -285,7 +286,6 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		}
 	}
 
-	private MartusApp app;
 	private UiMainWindow mainWindow;
 	private boolean result;
 	private String name;

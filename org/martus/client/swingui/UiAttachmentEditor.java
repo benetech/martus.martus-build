@@ -40,7 +40,6 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.AbstractTableModel;
 
-import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
 
 
@@ -63,11 +62,11 @@ public class UiAttachmentEditor extends JPanel
 
 		vbox.add(new JScrollPane(table));
 
-		MartusApp app = mainWindowToUse.getApp();
-		JButton add = new JButton(app.getButtonLabel("addattachment"));
+		MartusLocalization localization = mainWindowToUse.getLocalization();
+		JButton add = new JButton(localization.getButtonLabel("addattachment"));
 		add.addActionListener(new AddHandler());
 		hbox.add(add);
-		remove = new JButton(app.getButtonLabel("removeattachment"));
+		remove = new JButton(localization.getButtonLabel("removeattachment"));
 		remove.addActionListener(new RemoveHandler());
 		remove.setEnabled(false);
 		hbox.add(remove);
@@ -146,7 +145,7 @@ public class UiAttachmentEditor extends JPanel
 
 		public String getColumnName(int column)
 		{
-			return mainWindow.getApp().getButtonLabel("attachmentlabel");
+			return mainWindow.getLocalization().getButtonLabel("attachmentlabel");
 		}
 
 		public Object getValueAt(int row, int column)
@@ -175,8 +174,8 @@ public class UiAttachmentEditor extends JPanel
 			File last = mainWindow.getLastAttachmentLoadDirectory();
 			if(last != null)
 				chooser.setCurrentDirectory(last);
-			MartusApp app = mainWindow.getApp();
-			chooser.setApproveButtonText(app.getButtonLabel("addattachment"));
+			MartusLocalization localization = mainWindow.getLocalization();
+			chooser.setApproveButtonText(localization.getButtonLabel("addattachment"));
 			int returnVal = chooser.showOpenDialog(UiAttachmentEditor.this);
 			if(returnVal == JFileChooser.APPROVE_OPTION)
 			{

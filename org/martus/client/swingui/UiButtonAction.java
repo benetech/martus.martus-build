@@ -30,6 +30,6 @@ abstract class UiButtonAction extends UiMartusAction
 {
 	public UiButtonAction(UiMainWindow mainWindowToUse, String tag)
 	{
-		super(mainWindowToUse, mainWindowToUse.getApp().getButtonLabel(tag));
+		super(mainWindowToUse, mainWindowToUse.getLocalization().getButtonLabel(tag));
 	}
 }
