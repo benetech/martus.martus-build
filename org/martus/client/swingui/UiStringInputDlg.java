@@ -35,30 +35,28 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.martus.client.core.MartusApp;
-
 public class UiStringInputDlg extends JDialog
 {
-	public UiStringInputDlg(JFrame owner, MartusApp app, String baseTag, String descriptionTag, String defaultText)
+	public UiStringInputDlg(JFrame owner, MartusLocalization localization, String baseTag, String descriptionTag, String defaultText)
 	{
 		super(owner, "", true);
 
-		setTitle(app.getWindowTitle("input" + baseTag));
+		setTitle(localization.getWindowTitle("input" + baseTag));
 
-		JLabel label = new JLabel(app.getFieldLabel("input" + baseTag + "entry"));
+		JLabel label = new JLabel(localization.getFieldLabel("input" + baseTag + "entry"));
 		text = new JTextField(30);
 		text.setText(defaultText);
 
-		JButton ok = new JButton(app.getButtonLabel("input" + baseTag + "ok"));
+		JButton ok = new JButton(localization.getButtonLabel("input" + baseTag + "ok"));
 		ok.addActionListener(new OkHandler());
-		JButton cancel = new JButton(app.getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
 
 		getContentPane().setLayout(new ParagraphLayout());
 		if(descriptionTag.length() > 0)
 		{
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			getContentPane().add(new JLabel(app.getFieldLabel(descriptionTag)));
+			getContentPane().add(new JLabel(localization.getFieldLabel(descriptionTag)));
 		}
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(label);

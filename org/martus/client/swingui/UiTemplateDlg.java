@@ -46,20 +46,22 @@ import org.martus.common.UnicodeReader;
 
 public class UiTemplateDlg extends JDialog implements ActionListener
 {
-	public UiTemplateDlg(UiMainWindow owner, ConfigInfo infoToUse)
+	public UiTemplateDlg(UiMainWindow owner, ConfigInfo infoToUse, File defaultDetailsFileToUse)
 	{
 		super(owner, "", true);
 		info = infoToUse;
 		mainWindow = owner;
-		app = owner.getApp();
-		setTitle(app.getWindowTitle("BulletinDetails"));
-		ok = new JButton(app.getButtonLabel("ok"));
+		defaultDetailsFile = defaultDetailsFileToUse;
+
+		MartusLocalization localization = mainWindow.getLocalization();
+		setTitle(localization.getWindowTitle("BulletinDetails"));
+		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(this);
-		JButton cancel = new JButton(app.getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
-		JButton help = new JButton(app.getButtonLabel("help"));
+		JButton help = new JButton(localization.getButtonLabel("help"));
 		help.addActionListener(new helpHandler());
-		JButton loadFromFile = new JButton(app.getButtonLabel("ResetContents"));
+		JButton loadFromFile = new JButton(localization.getButtonLabel("ResetContents"));
 		loadFromFile.addActionListener(new loadFileHandler());
 
 		details = new UiTextArea(15, 65);
@@ -71,7 +73,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 		details.setText(info.getTemplateDetails());
 
 		getContentPane().setLayout(new ParagraphLayout());
-		getContentPane().add(new JLabel(app.getFieldLabel("TemplateDetails")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("TemplateDetails")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(detailScrollPane);
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
@@ -91,13 +93,14 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
-			String title = app.getWindowTitle("HelpDefaultDetails");
-			String helpMsg = app.getFieldLabel("HelpDefaultDetails");
-			String helpMsgExample = app.getFieldLabel("HelpExampleDefaultDetails");
-			String helpMsgExample1 = app.getFieldLabel("HelpExample1DefaultDetails");
-			String helpMsgExample2 = app.getFieldLabel("HelpExample2DefaultDetails");
-			String helpMsgExampleEtc = app.getFieldLabel("HelpExampleEtcDefaultDetails");
-			String ok = app.getButtonLabel("ok");
+			MartusLocalization localization = mainWindow.getLocalization();
+			String title = localization.getWindowTitle("HelpDefaultDetails");
+			String helpMsg = localization.getFieldLabel("HelpDefaultDetails");
+			String helpMsgExample = localization.getFieldLabel("HelpExampleDefaultDetails");
+			String helpMsgExample1 = localization.getFieldLabel("HelpExample1DefaultDetails");
+			String helpMsgExample2 = localization.getFieldLabel("HelpExample2DefaultDetails");
+			String helpMsgExampleEtc = localization.getFieldLabel("HelpExampleEtcDefaultDetails");
+			String ok = localization.getButtonLabel("ok");
 			String[] contents = {helpMsg, "", "",helpMsgExample, helpMsgExample1, "", helpMsgExample2, "", helpMsgExampleEtc};
 			String[] buttons = {ok};
 
@@ -112,7 +115,6 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 			if(mainWindow.confirmDlg(mainWindow, "ResetDefaultDetails"))
 			{
 				details.setText("");
-				File defaultDetailsFile = app.getDefaultDetailsFile();
 				try
 				{
 					if(defaultDetailsFile.exists())
@@ -155,7 +157,7 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 
 		public String getDescription()
 		{
-			return app.getFieldLabel("DefaultDetailFiles");
+			return mainWindow.getLocalization().getFieldLabel("DefaultDetailFiles");
 		}
 	}
 
@@ -181,5 +183,5 @@ public class UiTemplateDlg extends JDialog implements ActionListener
 	UiTextArea details;
 	boolean result;
 	UiMainWindow mainWindow;
-	MartusApp app;
+	File defaultDetailsFile;
 }

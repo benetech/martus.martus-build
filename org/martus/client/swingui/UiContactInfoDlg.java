@@ -46,10 +46,12 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		info = infoToUse;
 
 		MartusApp app = mainWindow.getApp();
-		setTitle(app.getWindowTitle("setupcontact"));
-		ok = new JButton(app.getButtonLabel("ok"));
+		MartusLocalization localization = mainWindow.getLocalization();
+	
+		setTitle(localization.getWindowTitle("setupcontact"));
+		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(this);
-		JButton cancel = new JButton(app.getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
 
 		source = new JTextField(50);
@@ -75,28 +77,28 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(space, ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(new JLabel());
 
-		UiWrappedTextArea infoRequired = new UiWrappedTextArea(app.getFieldLabel("ContactInfoRequiredFields"), 60);
+		UiWrappedTextArea infoRequired = new UiWrappedTextArea(localization.getFieldLabel("ContactInfoRequiredFields"), 60);
 		infoRequired.setFont(space.getFont());
 		infoRequired.setRows(2);
 		getContentPane().add(infoRequired);
 
-		String authorPrompt = app.getFieldLabel("AuthorRequired");
+		String authorPrompt = localization.getFieldLabel("AuthorRequired");
 		getContentPane().add(new JLabel(authorPrompt), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(source);
 
-		String organizationPrompt = app.getFieldLabel("OrganizationRequired");
+		String organizationPrompt = localization.getFieldLabel("OrganizationRequired");
 		getContentPane().add(new JLabel(organizationPrompt), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(organization);
-		getContentPane().add(new JLabel(app.getFieldLabel("email")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("email")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(email);
-		getContentPane().add(new JLabel(app.getFieldLabel("webpage")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("webpage")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(webpage);
-		getContentPane().add(new JLabel(app.getFieldLabel("phone")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("phone")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(phone);
-		getContentPane().add(new JLabel(app.getFieldLabel("address")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("address")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(addressScrollPane);
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(new JLabel(app.getFieldLabel("ContactInfoDescriptionOfFields")));
+		getContentPane().add(new JLabel(localization.getFieldLabel("ContactInfoDescriptionOfFields")));
 
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
 		UiWrappedTextArea infoFuture = new UiWrappedTextArea(app.getFieldLabel("ContactInfoFutureUseOfFields"), 60);
@@ -105,7 +107,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 		getContentPane().add(infoFuture);
 
 		getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(new JLabel(app.getFieldLabel("ContactInfoUpdateLater")));
+		getContentPane().add(new JLabel(localization.getFieldLabel("ContactInfoUpdateLater")));
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(ok);

@@ -800,7 +800,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testWindowTitles()
 	{
 		TRACE_BEGIN("testWindowTitles");
-		assertEquals("Martus Human Rights Bulletin System", appWithAccount.getWindowTitle("main"));
+		assertEquals("Martus Human Rights Bulletin System", appWithAccount.getLocalization().getWindowTitle("main"));
 		TRACE_END();
 	}
 

@@ -337,14 +337,14 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	public boolean confirmDeletionOfFile(String filePath)
 	{
-		MartusApp app = mainWindow.getApp();
-		String title = app.getWindowTitle("DeleteBulletinFile");
-		String msg1 = app.getFieldLabel("DeleteBulletinFileMsg1");
-		String msg2 = app.getFieldLabel("DeleteBulletinFileMsg2");
+		MartusLocalization localization = mainWindow.getLocalization();
+		String title = localization.getWindowTitle("DeleteBulletinFile");
+		String msg1 = localization.getFieldLabel("DeleteBulletinFileMsg1");
+		String msg2 = localization.getFieldLabel("DeleteBulletinFileMsg2");
 		String[] contents = {msg1, filePath, msg2};
 
-		String delete = app.getButtonLabel("Delete");
-		String leave = app.getButtonLabel("Leave");
+		String delete = localization.getButtonLabel("Delete");
+		String leave = localization.getButtonLabel("Leave");
 		String[] buttons = {delete, leave};
 
 		UiNotifyDlg notify = new UiNotifyDlg(mainWindow, title, contents, buttons);
@@ -563,12 +563,12 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	private boolean confirmDeleteBulletins(String dialogTag, Vector foldersToList)
 	{
-		MartusApp app = mainWindow.getApp();
-		String title = app.getWindowTitle(dialogTag);
-		String cause = app.getFieldLabel(dialogTag + "cause");
+		MartusLocalization localization = mainWindow.getLocalization();
+		String title = localization.getWindowTitle(dialogTag);
+		String cause = localization.getFieldLabel(dialogTag + "cause");
 		String folders = buildFolderNameList(foldersToList);
-		String effect = app.getFieldLabel(dialogTag + "effect");
-		String question = app.getFieldLabel("confirmquestion");
+		String effect = localization.getFieldLabel(dialogTag + "effect");
+		String question = localization.getFieldLabel("confirmquestion");
 		String[] contents = {cause, "", effect, folders, "", question};
 		return mainWindow.confirmDlg(mainWindow, title, contents);
 	}

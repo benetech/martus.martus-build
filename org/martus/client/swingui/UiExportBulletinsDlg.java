@@ -56,17 +56,19 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 	UiExportBulletinsDlg(UiMainWindow mainWindowToUse, UniversalId[] selectedBulletins)
 	{
 		mainWindow = mainWindowToUse;
+		MartusLocalization localization = mainWindow.getLocalization();
+
 		bulletins = findBulletins(selectedBulletins);
 		
 		setModal(true);
-		setTitle(mainWindow.getApp().getWindowTitle("ExportBulletins"));
+		setTitle(localization.getWindowTitle("ExportBulletins"));
 
-		includePrivate = new JCheckBox(mainWindow.getApp().getFieldLabel("ExportPrivateData"));
+		includePrivate = new JCheckBox(localization.getFieldLabel("ExportPrivateData"));
 
-		ok = new JButton(getApp().getButtonLabel("Continue"));
+		ok = new JButton(localization.getButtonLabel("Continue"));
 		ok.addActionListener(this);
 
-		cancel = new JButton(getApp().getButtonLabel("cancel"));
+		cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
 
 		Box hBoxButtons = Box.createHorizontalBox();
@@ -83,7 +85,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 
 		Box upperStuff = Box.createVerticalBox();
 		upperStuff.add(new JLabel(" "));
-		upperStuff.add(new JLabel(getApp().getFieldLabel("ExportDetails")));
+		upperStuff.add(new JLabel(localization.getFieldLabel("ExportDetails")));
 		upperStuff.add(new JLabel(" "));
 		upperStuff.add(tocMsgAreaScrollPane);
 		upperStuff.add(new JLabel(" "));
@@ -132,7 +134,7 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 	File askForDestinationFile()
 	{
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle(mainWindow.getApp().getWindowTitle("ExportBulletinsSaveAs"));
+		chooser.setDialogTitle(mainWindow.getLocalization().getWindowTitle("ExportBulletinsSaveAs"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
 			return null;

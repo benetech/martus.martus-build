@@ -57,7 +57,7 @@ public class UiServerSummariesDlg extends JDialog
 	public UiServerSummariesDlg(UiMainWindow owner, RetrieveTableModel tableModel,
 			String windowTitleTag, String topMessageTag, String okButtonTag, String noneSelectedTag)
 	{
-		super(owner, owner.getApp().getWindowTitle(windowTitleTag), true);
+		super(owner, owner.getLocalization().getWindowTitle(windowTitleTag), true);
 		mainWindow = owner;
 		model = tableModel;
 		this.noneSelectedTag = noneSelectedTag;

@@ -56,8 +56,8 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		observer = observerToUse;
 		cancelHandler = cancelHandlerToUse;
 
-		MartusApp app = getApp();
-		setTitle(app.getWindowTitle("create"));
+		MartusLocalization localization = observer.getLocalization();
+		setTitle(localization.getWindowTitle("create"));
 		UiUtilities.updateIcon(this);
 		try
 		{
@@ -68,11 +68,11 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 
 			view.setEncryptionChangeListener(this);
 
-			send = new JButton(app.getButtonLabel("send"));
+			send = new JButton(localization.getButtonLabel("send"));
 			send.addActionListener(this);
-			draft = new JButton(app.getButtonLabel("savedraft"));
+			draft = new JButton(localization.getButtonLabel("savedraft"));
 			draft.addActionListener(this);
-			cancel = new JButton(app.getButtonLabel("cancel"));
+			cancel = new JButton(localization.getButtonLabel("cancel"));
 			cancel.addActionListener(this);
 
 			scroller = new JScrollPane();

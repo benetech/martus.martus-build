@@ -35,7 +35,6 @@ import javax.swing.JLabel;
 import javax.swing.JTextField;
 
 import org.martus.client.core.ConfigInfo;
-import org.martus.client.core.MartusApp;
 
 class UiSetupDlg extends JDialog implements ActionListener
 {
@@ -45,14 +44,15 @@ class UiSetupDlg extends JDialog implements ActionListener
 		mainWindow = owner;
 		info = infoToUse;
 
-		MartusApp app = owner.getApp();
-		setTitle(app.getWindowTitle("setup"));
-		ok = new JButton(app.getButtonLabel("ok"));
+		MartusLocalization localization = owner.getLocalization();
+
+		setTitle(localization.getWindowTitle("setup"));
+		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(this);
-		JButton cancel = new JButton(app.getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
 
-		UiTextArea description = new UiTextArea(app.getFieldLabel("setupdescription"));
+		UiTextArea description = new UiTextArea(localization.getFieldLabel("setupdescription"));
 		description.setEditable(false);
 		description.setLineWrap(true);
 		description.setWrapStyleWord(true);
@@ -69,18 +69,18 @@ class UiSetupDlg extends JDialog implements ActionListener
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(description);
 
-		getContentPane().add(new JLabel(app.getFieldLabel("author")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("author")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(source);
 
-		getContentPane().add(new JLabel(app.getFieldLabel("organization")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("organization")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(organization);
-		getContentPane().add(new JLabel(app.getFieldLabel("email")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("email")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(email);
-		getContentPane().add(new JLabel(app.getFieldLabel("webpage")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("webpage")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(webpage);
-		getContentPane().add(new JLabel(app.getFieldLabel("phone")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("phone")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(phone);
-		getContentPane().add(new JLabel(app.getFieldLabel("address")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("address")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(address);
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);

@@ -364,7 +364,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public String getStringInput(String baseTag, String description, String defaultText)
 	{
-		UiStringInputDlg inputDlg = new UiStringInputDlg(this, getApp(), baseTag, description, defaultText);
+		UiStringInputDlg inputDlg = new UiStringInputDlg(this, getLocalization(), baseTag, description, defaultText);
 		inputDlg.show();
 		return inputDlg.getResult();
 	}
@@ -608,9 +608,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(bulletinsFound > 0)
 		{
 			selectSearchFolder();
-			String title = getApp().getWindowTitle("notifySearchFound");
-			String cause = getApp().getFieldLabel("notifySearchFoundcause");
-			String ok = app.getButtonLabel("ok");
+			String title = getLocalization().getWindowTitle("notifySearchFound");
+			String cause = getLocalization().getFieldLabel("notifySearchFoundcause");
+			String ok = getLocalization().getButtonLabel("ok");
 			String[] buttons = { ok };
 			cause = cause + bulletinsFound;
 			JOptionPane pane = new JOptionPane(cause, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION,
@@ -631,12 +631,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	void showAccountInfo()
 	{
-		String title = app.getWindowTitle("AccountInfo");
-		String userName = app.getFieldLabel("AccountInfoUserName")
+		String title = getLocalization().getWindowTitle("AccountInfo");
+		String userName = getLocalization().getFieldLabel("AccountInfoUserName")
 						  + app.getUserName();
-		String keyDescription = app.getFieldLabel("AccountInfoPublicKey");
+		String keyDescription = getLocalization().getFieldLabel("AccountInfoPublicKey");
 		String keyContents = app.getAccountId();
-		String codeDescription = app.getFieldLabel("AccountInfoPublicCode");
+		String codeDescription = getLocalization().getFieldLabel("AccountInfoPublicCode");
 		String codeContents = null;
 		String formattedCodeContents = null;
 		try
@@ -647,7 +647,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		catch(InvalidBase64Exception e)
 		{
 		}
-		String ok = app.getButtonLabel("ok");
+		String ok = getLocalization().getButtonLabel("ok");
 		String[] contents = {userName, " ", keyDescription, keyContents," ", codeDescription, formattedCodeContents};
 		String[] buttons = {ok};
 
@@ -801,7 +801,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				}
 			}
 
-			String title = app.getWindowTitle("ServerSelectionResults");
+			String title = getLocalization().getWindowTitle("ServerSelectionResults");
 			String serverSelected = app.getFieldLabel("ServerSelectionResults") + serverIPAddress;
 			String uploadGranted = "";
 			if(magicAccepted)
@@ -870,7 +870,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void updateBulletinDetails(File defaultFile)
 	{
 		ConfigInfo info = app.getConfigInfo();
-		UiTemplateDlg templateDlg = new UiTemplateDlg(this, info);
+		File details = app.getDefaultDetailsFile();
+		UiTemplateDlg templateDlg = new UiTemplateDlg(this, info, details);
 		try
 		{
 			if(defaultFile != null)
@@ -1094,8 +1095,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			}while(export.exists());
 			
 			app.exportPublicInfo(export);
-			String title = getApp().getWindowTitle("notifyExportMyPublicKey");
-			String msg = getApp().getFieldLabel("notifyExportMyPublicKeycause");
+			String title = getLocalization().getWindowTitle("notifyExportMyPublicKey");
+			String msg = getLocalization().getFieldLabel("notifyExportMyPublicKeycause");
 			String ok = app.getButtonLabel("ok");
 			String[] contents = {msg, export.getCanonicalPath()};
 			String[] buttons = {ok};
@@ -1118,7 +1119,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 
 		JFileChooser chooser = new JFileChooser();
-		chooser.setDialogTitle(app.getWindowTitle("saveBackupKeyPair"));
+		chooser.setDialogTitle(getLocalization().getWindowTitle("saveBackupKeyPair"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 		chooser.setSelectedFile(new File(MartusApp.KEYPAIR_FILENAME));
 		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
@@ -1174,7 +1175,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		JFileChooser chooser = new JFileChooser();
 		chooser.setApproveButtonText(app.getButtonLabel("inputImportPublicCodeok"));
 		chooser.setFileFilter(new PublicInfoFileFilter());
-		chooser.setDialogTitle(app.getWindowTitle("ImportHQPublicKey"));
+		chooser.setDialogTitle(getLocalization().getWindowTitle("ImportHQPublicKey"));
     	chooser.setCurrentDirectory(new File(app.getDataDirectory()));
 		int returnVal = chooser.showOpenDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION)
@@ -1246,7 +1247,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		getContentPane().removeAll();
 
-		setTitle(app.getWindowTitle("main"));
+		setTitle(getLocalization().getWindowTitle("main"));
 
 		preview = new UiBulletinPreview(this);
 		table = new UiBulletinTablePane(this);

@@ -45,8 +45,6 @@ import javax.swing.JScrollPane;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import org.martus.client.core.MartusApp;
-
 
 
 public class UiDisplayFileDlg extends JDialog
@@ -55,8 +53,9 @@ public class UiDisplayFileDlg extends JDialog
 	{
 		super(owner, "", true);
 		tocList = null;
-		MartusApp app = owner.getApp();
-		setTitle(app.getWindowTitle(baseTag));
+		MartusLocalization localization = owner.getLocalization();
+
+		setTitle(localization.getWindowTitle(baseTag));
 		getContentPane().setLayout(new ParagraphLayout());
 
 		message = getFileContents(fileStream);
@@ -82,17 +81,17 @@ public class UiDisplayFileDlg extends JDialog
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			tocMsgAreaScrollPane.setPreferredSize(new Dimension(580, 100));
 			getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-			getContentPane().add(new JLabel(app.getFieldLabel(tagTOCMessage+"Description")));
-			getContentPane().add(new JLabel(app.getFieldLabel(tagTOCMessage)), ParagraphLayout.NEW_PARAGRAPH);
+			getContentPane().add(new JLabel(localization.getFieldLabel(tagTOCMessage+"Description")));
+			getContentPane().add(new JLabel(localization.getFieldLabel(tagTOCMessage)), ParagraphLayout.NEW_PARAGRAPH);
 			getContentPane().add(tocMsgAreaScrollPane);
 			tocList.setSelectedIndex(0);
 		}
 
-		ok = new JButton(app.getButtonLabel("ok"));
+		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(new OkHandler());
 		ok.addKeyListener(new MakeEnterKeyExit());
 
-		getContentPane().add(new JLabel(app.getFieldLabel(tagMessage)), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel(tagMessage)), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(msgAreaScrollPane);
 		getContentPane().add(ok, ParagraphLayout.NEW_PARAGRAPH);
 		getRootPane().setDefaultButton(ok);

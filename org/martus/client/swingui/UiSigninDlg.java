@@ -64,50 +64,52 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 	{
 		mainWindow = window;
 		app = mainWindow.getApp();
+		
+		MartusLocalization localization = mainWindow.getLocalization();
 
 		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
-		String title = window.getApp().getWindowTitle("MartusSignIn") +
+		String title = localization.getWindowTitle("MartusSignIn") +
 				" (" + versionInfo + ")";
 		setTitle(title);
 
 		getContentPane().setLayout(new ParagraphLayout());
-		ok = new JButton(app.getButtonLabel("ok"));
+		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(new OkHandler());
-		JButton cancel = new JButton(app.getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
 		if(mode == TIMED_OUT)
 		{
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			JLabel timedOutNote1 = new JLabel(app.getFieldLabel("timedout1"));
+			JLabel timedOutNote1 = new JLabel(localization.getFieldLabel("timedout1"));
 			getContentPane().add(timedOutNote1);
 			if(window.isModifyingBulletin())
 			{
 				getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-				JLabel timedOutNote2 = new JLabel(app.getFieldLabel("timedout2"));
+				JLabel timedOutNote2 = new JLabel(localization.getFieldLabel("timedout2"));
 				getContentPane().add(timedOutNote2);
 			}
 		}
 		else if(mode == SECURITY_VALIDATE)
 		{
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			JLabel securityServerConfigValidate = new JLabel(app.getFieldLabel("securityServerConfigValidate"));
+			JLabel securityServerConfigValidate = new JLabel(localization.getFieldLabel("securityServerConfigValidate"));
 			getContentPane().add(securityServerConfigValidate);
 		}
 		else if(mode == RETYPE_USERNAME_PASSWORD)
 		{
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			JLabel retypeUserNamePassword = new JLabel(app.getFieldLabel("RetypeUserNameAndPassword"));
+			JLabel retypeUserNamePassword = new JLabel(localization.getFieldLabel("RetypeUserNameAndPassword"));
 			getContentPane().add(retypeUserNamePassword);
 		}
 		else if(mode == CREATE_NEW)
 		{
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			JLabel createNewUserNamePassword = new JLabel(app.getFieldLabel("CreateNewUserNamePassword"));
+			JLabel createNewUserNamePassword = new JLabel(localization.getFieldLabel("CreateNewUserNamePassword"));
 			getContentPane().add(createNewUserNamePassword);
 
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(app.getFieldLabel("HelpOnCreatingNewPassword"));
+			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(localization.getFieldLabel("HelpOnCreatingNewPassword"));
 			getContentPane().add(helpOnCreatingPassword);
 
 		}
@@ -115,16 +117,16 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		userNameDescription = new JLabel("");
 		passwordDescription = new JLabel("");
 
-		getContentPane().add(new JLabel(app.getFieldLabel("username")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("username")), ParagraphLayout.NEW_PARAGRAPH);
 		nameField = new JTextField(20);
 		nameField.setText(username);
 		getContentPane().add(userNameDescription);
 		getContentPane().add(nameField);
 
-		getContentPane().add(new JLabel(app.getFieldLabel("password")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("password")), ParagraphLayout.NEW_PARAGRAPH);
 		passwordField = new JPasswordField(20);
 
-		switchToNormalKeyboard = new JButton(app.getButtonLabel("VirtualKeyboardSwitchToNormal"));
+		switchToNormalKeyboard = new JButton(localization.getButtonLabel("VirtualKeyboardSwitchToNormal"));
 		switchToNormalKeyboard.addActionListener(new switchKeyboardHandler());
 		passwordArea = new JPanel();
 		getContentPane().add(passwordArea);

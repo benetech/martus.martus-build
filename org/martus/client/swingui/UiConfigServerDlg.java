@@ -49,19 +49,21 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 		info = infoToUse;
 		mainWindow = owner;
 		app = owner.getApp();
-		setTitle(app.getWindowTitle("ConfigServer"));
+		MartusLocalization localization = mainWindow.getLocalization();
+		
+		setTitle(localization.getWindowTitle("ConfigServer"));
 		getContentPane().setLayout(new ParagraphLayout());
 
 		serverIP = new JTextField(25);
 		serverPublicCode = new JTextField(25);
 
-		getContentPane().add(new JLabel(app.getFieldLabel("ServerNameEntry")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("ServerNameEntry")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(serverIP);
 		serverIPAddress = info.getServerName();
 		serverIP.setText(serverIPAddress);
 		serverIP.requestFocus();
 
-		getContentPane().add(new JLabel(app.getFieldLabel("ServerPublicCodeEntry")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("ServerPublicCodeEntry")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(serverPublicCode);
 		String serverPublicKey = info.getServerPublicKey();
 		String serverCode = "";
@@ -80,9 +82,9 @@ public class UiConfigServerDlg extends JDialog implements ActionListener
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 
-		ok = new JButton(app.getButtonLabel("ok"));
+		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(this);
-		JButton cancel = new JButton(app.getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
 		getContentPane().add(ok);
 		getContentPane().add(cancel);

@@ -44,7 +44,7 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 
 	public UiBulletinPreviewDlg(UiMainWindow owner, FieldDataPacket fdp)
 	{
-		super(owner, owner.getApp().getWindowTitle("BulletinPreview"), true);
+		super(owner, owner.getLocalization().getWindowTitle("BulletinPreview"), true);
 		boolean isEncrypted = fdp.isEncrypted();
 		getContentPane().setLayout(new ParagraphLayout());
 
@@ -62,7 +62,7 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 		scrollPane.getViewport().add(view);
 		scrollPane.setPreferredSize(new Dimension(720, 500));
 
-		JButton ok = new JButton(owner.getApp().getButtonLabel("ok"));
+		JButton ok = new JButton(owner.getLocalization().getButtonLabel("ok"));
 		ok.addActionListener(this);
 		Dimension okSize = ok.getPreferredSize();
 		okSize.width += 40;

@@ -53,24 +53,26 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		throws HeadlessException
 	{
 		super(owner, "" , true);
+		MartusLocalization localization = owner.getLocalization();
+		
 		app = owner.getApp();
-		setTitle(app.getWindowTitle("about"));
+		setTitle(localization.getWindowTitle("about"));
 
 		JLabel icon = new JLabel(new ImageIcon(UiAboutDlg.class.getResource("MartusLogo.gif")),JLabel.LEFT);
 
-		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
+		String versionInfo = localization.getFieldLabel("aboutDlgVersionInfo");
 		versionInfo += " " + UiConstants.versionLabel;
 
-		String buildDate = app.getFieldLabel("aboutDlgBuildDate");
+		String buildDate = localization.getFieldLabel("aboutDlgBuildDate");
 		buildDate += " " + MartusUtilities.getVersionDate();
 
-		JButton ok = new JButton(app.getButtonLabel("ok"));
+		JButton ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(this);
 		ok.addKeyListener(new MakeEnterKeyExit());
 
 		Box vBoxVersionInfo = Box.createVerticalBox();
 		vBoxVersionInfo.add(new JLabel(versionInfo));
-		vBoxVersionInfo.add(new JLabel(app.getFieldLabel("aboutDlgCopyright")));
+		vBoxVersionInfo.add(new JLabel(localization.getFieldLabel("aboutDlgCopyright")));
 		vBoxVersionInfo.add(new JLabel(buildDate));
 
 		Box hBoxVersionAndIcon = Box.createHorizontalBox();
@@ -84,8 +86,8 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		hBoxOk.add(ok);
 		hBoxOk.add(Box.createHorizontalGlue());
 
-		final String disclaimer = app.getFieldLabel("aboutDlgDisclaimer");
-		final String credits = app.getFieldLabel("aboutDlgCredits");
+		final String disclaimer = localization.getFieldLabel("aboutDlgDisclaimer");
+		final String credits = localization.getFieldLabel("aboutDlgCredits");
 		final String notice = "\n" + disclaimer + "\n\n" + credits + "\n\n" +
 					RSANOTICE + "\n" + IBMNOTICE + "\n" + APACHENOTICE;
 

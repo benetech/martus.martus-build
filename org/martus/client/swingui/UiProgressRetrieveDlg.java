@@ -40,14 +40,15 @@ public class UiProgressRetrieveDlg extends JDialog
 {
 	public UiProgressRetrieveDlg(UiMainWindow window, String tag)
 	{
-		super(window, window.getApp().getWindowTitle(tag), true);
+		super(window, window.getLocalization().getWindowTitle(tag), true);
+		MartusLocalization localization = window.getLocalization();
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowEventHandler());
-		cancel = new JButton(window.getApp().getButtonLabel("cancel"));
+		cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
 		cancel.setAlignmentX(JButton.CENTER_ALIGNMENT);
 		bulletinCountMeter = new UiProgressMeter(this);
-		statusMessage = window.getApp().getFieldLabel(tag);
+		statusMessage = localization.getFieldLabel(tag);
 		updateBulletinCountMeter(0, 1);
 		getContentPane().add(new JLabel("    "), BorderLayout.EAST);
 		getContentPane().add(new JLabel("    "), BorderLayout.WEST);
