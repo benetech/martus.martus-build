@@ -8,6 +8,7 @@ import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 import org.martus.server.forclients.MartusServer;
 import org.martus.server.forclients.MartusXmlRpcServer;
 
@@ -22,10 +23,26 @@ public class ServerForMirroring implements ServerSupplierInterface
 	{
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this, getSecurity());
-		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, port);
+		MartusXmlRpcServer.createSSLXmlRpcServer(supplierHandler, MirroringInterface.DEST_OBJECT_NAME, port);
 	}
 
 	// Begin ServerSupplierInterface
+	public Vector getPublicInfo()
+	{
+		try
+		{
+			Vector result = new Vector();
+			result.add(getSecurity().getPublicKeyString());
+			result.add(MartusUtilities.getSignatureOfPublicKey(getSecurity()));
+			return result;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return new Vector();
+		}
+	}
+	
 	public boolean isAuthorizedForMirroring(String callerAccountId)
 	{
 		return false;
