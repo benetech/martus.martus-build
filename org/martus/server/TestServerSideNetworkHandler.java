@@ -20,14 +20,19 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 		mySecurity = new MockMartusSecurity();
 		mySecurity.createKeyPair();
 		
-		server = new MockMartusServer();
-		server.setSecurity(mySecurity);
-		handler = new ServerSideNetworkHandler(server);
+		mockServer = new MockMartusServer();
+		mockServer.setSecurity(mySecurity);
+		handler = new ServerSideNetworkHandler(mockServer);
 
 		otherSecurity = new MockMartusSecurity();
 		otherSecurity.createKeyPair();
 	}
 	
+	public void tearDown() throws Exception
+	{
+		mockServer.deleteAllFiles();
+	}
+
 	public void testSigs() throws Exception
 	{
 		String myAccountId = mySecurity.getPublicKeyString();
@@ -101,7 +106,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 
 	
 	ServerSideNetworkHandler handler;
-	MockMartusServer server;
+	MockMartusServer mockServer;
 	MockMartusSecurity mySecurity;
 	MockMartusSecurity otherSecurity;
 }

@@ -54,6 +54,14 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.deleteAllData();
 	}
 
+	public void tearDown() throws Exception
+	{
+		appWithoutServer.deleteAllFiles();
+		appWithServer.deleteAllFiles();
+		appWithAccount.deleteAllFiles();
+		mockServer.deleteAllFiles();
+	}
+
 	public void testGetMyBulletinSummariesNoServer() throws Exception
 	{
 		try

@@ -11,12 +11,10 @@ import java.util.Vector;
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinFolder;
 import org.martus.client.BulletinStore;
-import org.martus.client.BulletinSummary;
 import org.martus.client.ConfigInfo;
 import org.martus.client.MartusApp;
 import org.martus.client.MockMartusApp;
 import org.martus.client.Retriever;
-
 import org.martus.common.Base64;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusUtilities;
@@ -140,7 +138,11 @@ public class TestMartusApp extends TestCaseEnhanced
 			if(packetDirectory != null)
 				packetDirectory.delete();
 			if(fakeDataDirectory != null)
+			{
+				new File(fakeDataDirectory, "MartusConfig.dat").delete();
+				new File(fakeDataDirectory, "MartusConfig.sig").delete();
 				fakeDataDirectory.delete();
+			}
 		}
 	}
 	

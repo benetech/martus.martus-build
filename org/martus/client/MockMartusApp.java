@@ -3,7 +3,9 @@ package org.martus.client;
 import java.io.File;
 import java.io.IOException;
 
-import org.martus.common.*;
+import org.martus.common.MartusCrypto;
+import org.martus.common.MockDatabase;
+import org.martus.common.MockMartusSecurity;
 
 public class MockMartusApp extends MartusApp 
 {

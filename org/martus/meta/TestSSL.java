@@ -1,8 +1,11 @@
 package org.martus.meta;
 
-import org.martus.client.*;
-import org.martus.common.*;
-import org.martus.server.*;
+import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc;
+import org.martus.common.MockMartusSecurity;
+import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.TestCaseEnhanced;
+import org.martus.server.MockMartusServer;
+import org.martus.server.ServerSideNetworkHandler;
 
 
 
@@ -28,6 +31,11 @@ public class TestSSL extends TestCaseEnhanced
 		}
 	}
 	
+	public void tearDown() throws Exception
+	{
+		mockServer.deleteAllFiles();
+	}
+
 	
 	public void testBasics()
 	{
