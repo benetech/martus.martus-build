@@ -89,9 +89,9 @@ public class TestBulletin extends TestCaseEnhanced
     {
 		Bulletin b = new Bulletin(security);
 		assertEquals(false, b.isStandardField("Nope"));
-		assertEquals(true, b.isStandardField("Location"));
+		assertEquals(false, b.isStandardField("Location"));
 		assertEquals(true, b.isStandardField("location"));
-		assertEquals(true, b.isStandardField("LOCATION"));
+		assertEquals(false, b.isStandardField("LOCATION"));
 		assertEquals(false, b.isStandardField(Bulletin.TAGPRIVATEINFO));
 
 		assertEquals(false, b.isPrivateField("LOCATION"));
@@ -172,16 +172,16 @@ public class TestBulletin extends TestCaseEnhanced
 		b.set("NoSuchField", "hello");
 		assertEquals("", b.get("NoSuchField"));
 
-		assertEquals("", b.get("Author"));
-		b.set("Author", "hello");
+		assertEquals("", b.get("author"));
+		b.set("author", "hello");
 		assertEquals("hello", b.get("author"));
-		assertEquals("hello", b.get("Author"));
-		assertEquals("hello", b.get("AUTHOR"));
+		assertEquals("", b.get("Author"));
+		assertEquals("", b.get("AUTHOR"));
 
-		b.set("Location", "94404");
-		assertEquals("94404", b.get("Location"));
+		b.set("location", "94404");
+		assertEquals("94404", b.get("location"));
 		b.set("author", "goodbye");
-		assertEquals("goodbye", b.get("AUTHOR"));
+		assertEquals("goodbye", b.get("author"));
 
 		b.set(Bulletin.TAGPRIVATEINFO, "secret");
 		assertEquals("secret", b.get(Bulletin.TAGPRIVATEINFO));

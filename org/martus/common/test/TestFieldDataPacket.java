@@ -69,8 +69,8 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("getFieldCount", fieldTags.length, fdp.getFieldCount());
 		assertEquals("nope", false, fdp.fieldExists("Nope"));
 		assertEquals("plain tag", true, fdp.fieldExists(bTag));
-		assertEquals("lower", true, fdp.fieldExists(bTag.toLowerCase()));
-		assertEquals("upper", true, fdp.fieldExists(bTag.toUpperCase()));
+		assertEquals("lower", false, fdp.fieldExists(bTag.toLowerCase()));
+		assertEquals("upper", false, fdp.fieldExists(bTag.toUpperCase()));
 
 		assertEquals("tag list", true, Arrays.equals(fieldTags, fdp.getFieldTags()));
 		assertEquals("HQ Key not ''?", "", fdp.getHQPublicKey());
@@ -146,11 +146,11 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("hello", fdp.get(aTag));
 
 		fdp.set(aTag.toUpperCase(), "another");
-		assertEquals("another", fdp.get(aTag));
+		assertEquals("not another", "hello", fdp.get(aTag));
 
 		fdp.set(bTag, "94404");
 		assertEquals("94404", fdp.get(bTag));
-		assertEquals("after setting other field", "another", fdp.get(aTag));
+		assertEquals("after setting other field", "hello", fdp.get(aTag));
 		fdp.set(aTag, "goodbye");
 		assertEquals("goodbye", fdp.get(aTag));
 	}
@@ -314,8 +314,8 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertContains(fdp.getLocalId(), result);
 		assertNotContains("encrypted?", MartusXml.EncryptedFlagElementName, result);
 
-		assertContains(aTag.toLowerCase(), result);
-		assertContains(bTag.toLowerCase(), result);
+		assertContains(aTag, result);
+		assertContains(bTag, result);
 		assertContains(data1, result);
 		assertContains(data2base + xmlAmp + xmlLt + xmlGt, result);
 

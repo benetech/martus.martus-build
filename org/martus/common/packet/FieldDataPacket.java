@@ -61,8 +61,6 @@ public class FieldDataPacket extends Packet
 	void setFieldTags(String[] fieldTagsToUse)
 	{
 		fieldTags = fieldTagsToUse;
-		for(int f = 0; f < fieldTags.length; ++f)
-			fieldTags[f] = fieldTags[f].toLowerCase();
 	}
 
 	public static UniversalId createUniversalId(String accountId)
@@ -123,10 +121,9 @@ public class FieldDataPacket extends Packet
 
 	public boolean fieldExists(String fieldTag)
 	{
-		String lookFor = fieldTag.toLowerCase();
 		for(int f = 0; f < fieldTags.length; ++f)
 		{
-			if(fieldTags[f].equals(lookFor))
+			if(fieldTags[f].equals(fieldTag))
 				return true;
 		}
 		return false;
@@ -134,7 +131,7 @@ public class FieldDataPacket extends Packet
 
 	public String get(String fieldTag)
 	{
-		Object value = fieldData.get(fieldTag.toLowerCase());
+		Object value = fieldData.get(fieldTag);
 		if(value == null)
 			return "";
 
@@ -146,7 +143,7 @@ public class FieldDataPacket extends Packet
 		if(!fieldExists(fieldTag))
 			return;
 
-		fieldData.put(fieldTag.toLowerCase(), data);
+		fieldData.put(fieldTag, data);
 	}
 
 	public void clearAll()
@@ -195,6 +192,7 @@ public class FieldDataPacket extends Packet
 		MartusCrypto.NoKeyPairException
 	{
 		setEncrypted(false);
+		fieldData.clear();
 		super.loadFromXmlInternal(inputStream, expectedSig, verifier);
 		if(encryptedDataDuringLoad == null)
 			return;
