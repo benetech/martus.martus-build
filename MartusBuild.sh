@@ -665,8 +665,6 @@ cp $MARTUSBUILDFILES/Documents/README*.txt $CD_IMAGE_DIR
 rm $CD_IMAGE_DIR/*_th.txt
 cp $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR
 
-cp $MARTUSBUILDFILES/ProgramFiles/autorun.inf $CD_IMAGE_DIR
-
 mkdir -p $CD_IMAGE_DIR/Win95
 cp $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
 
@@ -674,8 +672,11 @@ mkdir -p $CD_IMAGE_DIR/verify
 cp $MARTUSBUILDFILES/Verify/* $CD_IMAGE_DIR/verify/
 rm $CD_IMAGE_DIR/verify/*_th.txt
 
+cp $MARTUSBUILDFILES/ProgramFiles/autorun.inf $CD_IMAGE_DIR
+
 mkdir -p $CD_IMAGE_DIR/Martus
 cp $MARTUSBUILDFILES/ProgramFiles/* $CD_IMAGE_DIR/Martus/
+rm -f $CD_IMAGE_DIR/Martus/autorun.inf
 cp $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR/Martus/
 cp $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR/Martus/
 
@@ -685,6 +686,7 @@ cp $MARTUSBUILDFILES/Documents/quickstartguide.pdf $CD_IMAGE_DIR/Martus/Docs
 cp $MARTUSBUILDFILES/Documents/*_fr.pdf $CD_IMAGE_DIR/Martus/Docs
 cp $MARTUSBUILDFILES/Documents/*_es.pdf $CD_IMAGE_DIR/Martus/Docs
 cp $MARTUSBUILDFILES/Documents/*_ru.pdf $CD_IMAGE_DIR/Martus/Docs
+cp $MARTUSBUILDFILES/Documents/LinuxJavaInstall.txt $CD_IMAGE_DIR/Martus/Docs/
 
 cp -r $MARTUSBUILDFILES/Documents/Licenses $CD_IMAGE_DIR/Martus/Docs/
 
@@ -699,7 +701,8 @@ if [ $include_sources = 'Y' ]; then
 fi
 
 mkdir -p $CD_IMAGE_DIR/Java/Linux/i586
-cp "$MARTUSBUILDFILES/Java redist/Linux/i586/*.bin" $CD_IMAGE_DIR/Java/Linux/i586/
+cd "$MARTUSBUILDFILES/Java redist/Linux/i586/"
+cp *.bin $CD_IMAGE_DIR/Java/Linux/i586/
 
 cd $CD_IMAGE_DIR
 find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
@@ -722,7 +725,6 @@ else
 fi
 cp $MARTUSNSISPROJECTDIR/MartusSetup.exe $CD_IMAGE_DIR/
 cd $INITIAL_DIR
-####################################################################################
 
 # ##################################################################################
 # Create Single Installer Image to use
@@ -749,6 +751,29 @@ else
 fi
 
 cd $INITIAL_DIR
+
+# ##################################################################################
+# Create Upgrade Installer Image to use
+
+cd $MARTUSNSISPROJECTDIR
+if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" ]; then
+	rm -f $MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe
+fi
+echo "starting the Upgrade NSIS installer build...";
+
+makensis.exe /V2 NSIS_Martus_Upgrade.nsi
+if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" ]; then
+	echo
+	echo "Build succeded..."
+	cp "$MARTUSNSISPROJECTDIR/MartusSetupUpgrade.exe" /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe
+else
+	echo
+	echo "Build failed..."
+	exit 1
+fi
+
+cd $INITIAL_DIR
+
 
 ####################################################################################
 
@@ -828,6 +853,22 @@ if [ $cvs_tag = 'Y' ]; then
 		cp /tmp/Releases/MartusClient-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
 	else
 		echo "Beneserve2 not available. You must move the Client Single Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its md5 has already been checked into CVS"
+	fi
+	
+	# add Upgrade exe md5 to CVS
+	cp /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe || exit
+	cd $HOMEDRIVE/$HOMEPATH/binary-martus/Releases/ClientExe/
+	echo "Adding to CVS: MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5"
+	cvs.exe add MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5  || exit
+	cvs.exe commit -m "v $cvs_date build $BUILD_NUMBER" MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 || exit
+	
+	# move Upgrade Exe onto Network
+	if [ -d "/cygdrive/h/Martus/ClientExe" ]; then
+		echo "Moving MartusSetupUpgrade onto network drive"
+		cp /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe /cygdrive/h/Martus/ClientExe/ || exit
+		cp /tmp/Releases/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_DATE.$BUILD_NUMBER.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
+	else
+		echo "Beneserve2 not available. You must move the Client Upgrade Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its md5 has already been checked into CVS"
 	fi
 fi
 
