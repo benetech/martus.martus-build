@@ -83,7 +83,7 @@ import org.martus.client.swingui.dialogs.UiDisplayFileDlg;
 import org.martus.client.swingui.dialogs.UiExportBulletinsDlg;
 import org.martus.client.swingui.dialogs.UiLocalizeDlg;
 import org.martus.client.swingui.dialogs.UiModelessBusyDlg;
-import org.martus.client.swingui.dialogs.UiModifyBulletinDlg;
+import org.martus.client.swingui.dialogs.UiBulletinModifyDlg;
 import org.martus.client.swingui.dialogs.UiProgressRetrieveBulletinsDlg;
 import org.martus.client.swingui.dialogs.UiProgressRetrieveSummariesDlg;
 import org.martus.client.swingui.dialogs.UiSearchDlg;
@@ -93,8 +93,8 @@ import org.martus.client.swingui.dialogs.UiSigninDlg;
 import org.martus.client.swingui.dialogs.UiSplashDlg;
 import org.martus.client.swingui.dialogs.UiStringInputDlg;
 import org.martus.client.swingui.dialogs.UiTemplateDlg;
-import org.martus.client.swingui.dialogs.UiModifyBulletinDlg.CancelHandler;
-import org.martus.client.swingui.dialogs.UiModifyBulletinDlg.DoNothingOnCancel;
+import org.martus.client.swingui.dialogs.UiBulletinModifyDlg.CancelHandler;
+import org.martus.client.swingui.dialogs.UiBulletinModifyDlg.DoNothingOnCancel;
 import org.martus.client.swingui.foldertree.UiFolderTreePane;
 import org.martus.client.swingui.tablemodels.DeleteMyServerDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveHQDraftsTableModel;
@@ -1513,7 +1513,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		modifyingBulletin = true;
 		setEnabled(false);
-		UiModifyBulletinDlg dlg = new UiModifyBulletinDlg(b, cancelHandler, this);
+		UiBulletinModifyDlg dlg = new UiBulletinModifyDlg(b, cancelHandler, this);
 		currentActiveFrame = dlg;
 		setVisible(false);
 		return dlg.wasBulletinSaved();

@@ -56,9 +56,9 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
 import org.martus.swing.Utilities;
 
-public class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListener, EncryptionChangeListener
+public class UiBulletinModifyDlg extends JFrame implements ActionListener, WindowListener, EncryptionChangeListener
 {
-	public UiModifyBulletinDlg(Bulletin b, CancelHandler cancelHandlerToUse, UiMainWindow observerToUse)
+	public UiBulletinModifyDlg(Bulletin b, CancelHandler cancelHandlerToUse, UiMainWindow observerToUse)
 	{
 		observer = observerToUse;
 		cancelHandler = cancelHandlerToUse;
