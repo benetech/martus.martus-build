@@ -148,6 +148,11 @@ public class MartusApp
 				setCurrentDateFormatCode(previouslySavedStateDateFormat);
 		}
 	}
+	
+	public MartusLocalization getLocalization()
+	{
+		return localization;
+	}
 
 	public void enableUploadLogging()
 	{
@@ -1221,11 +1226,6 @@ public class MartusApp
 	public boolean attemptSignIn(String userName, String userPassPhrase)
 	{
 		return attemptSignInInternal(getKeyPairFile(), userName, userPassPhrase);
-	}
-
-	public String getLocalizedFolderName(String folderName)
-	{
-		return localization.getLabel(getCurrentLanguage(), "folder", folderName, "");
 	}
 
 	public String getFieldLabel(String fieldName)

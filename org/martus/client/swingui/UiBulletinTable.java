@@ -576,11 +576,12 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	private String buildFolderNameList(Vector visibleFoldersContainingThisBulletin)
 	{
 		MartusApp app = mainWindow.getApp();
+		MartusLocalization localization = app.getLocalization();
 		String names = "";
 		for(int i = 0 ; i < visibleFoldersContainingThisBulletin.size() ; ++i)
 		{
 			BulletinFolder thisFolder = (BulletinFolder)visibleFoldersContainingThisBulletin.get(i);
-			FolderNode node = new FolderNode(thisFolder.getName(), app);
+			FolderNode node = new FolderNode(thisFolder.getName(), localization);
 			names += node.getLocalizedName() + "\n";
 		}
 		return names;

@@ -298,6 +298,11 @@ public class MartusLocalization
 		currentLanguageCode = newLanguageCode;
 	}
 
+	public String getLocalizedFolderName(String folderName)
+	{
+		return getLabel(getCurrentLanguageCode(), "folder", folderName, "");
+	}
+
 	public String getFieldLabel(String fieldName)
 	{
 		return getLabel(getCurrentLanguageCode(), "field", fieldName, "");

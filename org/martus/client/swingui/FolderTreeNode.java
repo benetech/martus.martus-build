@@ -28,15 +28,13 @@ package org.martus.client.swingui;
 
 import javax.swing.tree.DefaultMutableTreeNode;
 
-import org.martus.client.core.MartusApp;
-
 public class FolderTreeNode extends DefaultMutableTreeNode
 {
 
-	public FolderTreeNode(Object obj, MartusApp appToUse)
+	public FolderTreeNode(Object obj, MartusLocalization localizationToUse)
 	{
 		super(obj);
-		internalNode = new FolderNode(super.toString(), appToUse);
+		internalNode = new FolderNode(super.toString(), localizationToUse);
 	}
 
 	public String getInternalName()

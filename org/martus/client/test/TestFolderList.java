@@ -31,6 +31,7 @@ import junit.framework.TestCase;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.swingui.FolderList;
 import org.martus.client.swingui.FolderTreeNode;
+import org.martus.client.swingui.MartusLocalization;
 import org.martus.common.MockClientDatabase;
 
 public class TestFolderList extends TestCase
@@ -56,7 +57,7 @@ public class TestFolderList extends TestCase
 	{
 		app.loadSampleData();
 		BulletinStore store = app.getStore();
-		FolderList list = new FolderList(app);
+		FolderList list = new FolderList(getLocalization());
 		list.loadFolders(store);
 
 		int baseCount = getVisibleFolderCount(store);
@@ -68,7 +69,7 @@ public class TestFolderList extends TestCase
 		store.createFolder("test");
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
-		assertEquals("Outbox not first?", app.getLocalizedFolderName(app.getFolderOutbox().getName()), list.getName(0));
+		assertEquals("Outbox not first?", getLocalization().getLocalizedFolderName(app.getFolderOutbox().getName()), list.getName(0));
 
 		node = list.getNode(baseCount);
 		assertEquals("test", node.toString());
@@ -93,7 +94,7 @@ public class TestFolderList extends TestCase
 	{
 		app.loadSampleData();
 		BulletinStore store = app.getStore();
-		FolderList list = new FolderList(app);
+		FolderList list = new FolderList(getLocalization());
 		list.loadFolders(store);
 
 		int baseCount = getVisibleFolderCount(store);
@@ -102,12 +103,12 @@ public class TestFolderList extends TestCase
 		store.createFolder(app.getNameOfFolderRetrievedSealed());
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
-		assertEquals("Outbox not first?", app.getLocalizedFolderName(app.getFolderOutbox().getName()), list.getName(0));
+		assertEquals("Outbox not first?", getLocalization().getLocalizedFolderName(app.getFolderOutbox().getName()), list.getName(0));
 
 		FolderTreeNode node = list.getNode(baseCount);
 		assertEquals(app.getNameOfFolderRetrievedSealed(), node.getInternalName());
 
-		assertEquals(app.getLocalizedFolderName(app.getNameOfFolderRetrievedSealed()), node.getLocalizedName());
+		assertEquals(getLocalization().getLocalizedFolderName(app.getNameOfFolderRetrievedSealed()), node.getLocalizedName());
 		store.deleteFolder(app.getNameOfFolderRetrievedSealed());
 		list.loadFolders(store);
 		assertEquals(baseCount, list.getCount());
@@ -120,7 +121,7 @@ public class TestFolderList extends TestCase
 		BulletinStore store = app.getStore();
 		assertTrue("Need sample folders", getVisibleFolderCount(store) > 0);
 
-		FolderList ourList = new FolderList(app);
+		FolderList ourList = new FolderList(getLocalization());
 		ourList.loadFolders(store);
 		assertEquals("Didn't load properly", getVisibleFolderCount(store), ourList.getCount());
 		ourList.loadFolders(store);
@@ -131,6 +132,12 @@ public class TestFolderList extends TestCase
 	private int getVisibleFolderCount(BulletinStore store)
 	{
 		return store.getVisibleFolderNames().size();
+	}
+	
+	private MartusLocalization getLocalization()
+	{
+		return app.getLocalization();
+
 	}
 
 	MockMartusApp app;

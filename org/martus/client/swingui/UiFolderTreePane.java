@@ -48,7 +48,7 @@ class UiFolderTreePane extends JScrollPane
 		parent = mainWindow;
 		store = parent.getStore();
 
-		model = new FolderList(parent.getApp());
+		model = new FolderList(parent.getApp().getLocalization());
 		model.loadFolders(store);
 
 		tree = new UiFolderTree(this, model, store, parent);

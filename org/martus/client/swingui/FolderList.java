@@ -30,14 +30,13 @@ import java.util.Vector;
 import javax.swing.tree.DefaultTreeModel;
 
 import org.martus.client.core.BulletinStore;
-import org.martus.client.core.MartusApp;
 
 public class FolderList extends DefaultTreeModel
 {
-	public FolderList(MartusApp appToUse)
+	public FolderList(MartusLocalization localizationToUse)
 	{
-		super(new FolderTreeNode("?", appToUse));
-		app = appToUse;
+		super(new FolderTreeNode("?", localizationToUse));
+		localization = localizationToUse;
 		root = (FolderTreeNode)getRoot();
 	}
 
@@ -59,7 +58,7 @@ public class FolderList extends DefaultTreeModel
 		for(int f = 0; f < visibleFolderNames.size(); ++f)
 		{
 			String folderName = (String)visibleFolderNames.get(f);
-			FolderTreeNode item = new FolderTreeNode(folderName, app);
+			FolderTreeNode item = new FolderTreeNode(folderName, localization);
 			insertNodeInto(item, root, getCount());
 		}
 	}
@@ -87,5 +86,5 @@ public class FolderList extends DefaultTreeModel
 	}
 
 	FolderTreeNode root;
-	MartusApp app;
+	MartusLocalization localization;
 }
