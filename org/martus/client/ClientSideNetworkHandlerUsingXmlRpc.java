@@ -125,6 +125,14 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		return (Vector)callServer(server, cmdPutContactInfo, params);
 	}
 
+	public Vector getNews(String myAccountId, Vector parameters, String signature)
+	{
+		Vector params = new Vector();
+		params.add(myAccountId);
+		params.add(parameters);
+		params.add(signature);
+		return (Vector)callServer(server, cmdGetNews, params);
+	}
 
 	public String ping()
 	{

@@ -1251,6 +1251,15 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return NetworkInterfaceConstants.OK;
 	}
 
+	public Vector getNews(String accountId)
+	{
+		int newsItemCount = 0;
+
+		Vector result = new Vector();
+		result.add(OK);
+		result.add(new Integer(newsItemCount));
+		return result;
+	}
 
 	public File getContactInfoFileForAccount(String accountId) throws
 		IOException

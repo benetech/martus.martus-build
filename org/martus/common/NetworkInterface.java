@@ -14,6 +14,7 @@ public interface NetworkInterface
 	public Vector getPacket(String myAccountId, Vector parameters, String signature);
 	public Vector deleteDraftBulletins(String myAccountId, Vector parameters, String signature);
 	public Vector putContactInfo(String myAccountId, Vector parameters, String signature);
+	public Vector getNews(String myAccountId, Vector parameters, String signature);
 
 	// TODO: Delete everything below this line after all clients have been upgraded to 2002-08-28 or later
 	public String ping();

@@ -292,6 +292,32 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return result;
 	}
 
+	public Vector getNews(String myAccountId, Vector parameters, String signature)
+	{
+		server.clientConnectionStart();
+		Vector result = new Vector();
+
+		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		{
+			if(MartusServer.serverSSLLogging)
+				server.logging("putContactInfo:Signature Error");
+			result.add(SIG_ERROR);
+			server.clientConnectionExit();
+			return result;
+		}
+
+// The following will be required when the server has real news
+// They are here because CLIENTS ARE ALREADY CODED WITH THESE PARAMETERS!
+//		int index = 0;
+//		long wantNewsSince = ((Long)parameters.get(index++)).longValue();
+//		String newsCategory = (String)parameters.get(index++);
+//		String versionLabel = (String)parameters.get(index++);
+//		String buildDate = (String)parameters.get(index++);
+		result = server.getNews(myAccountId);
+
+		server.clientConnectionExit();
+		return result;
+	}
 
 	// begin legacy!
 	public String ping()
