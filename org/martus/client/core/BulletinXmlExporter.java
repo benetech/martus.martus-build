@@ -29,6 +29,7 @@ package org.martus.client.core;
 import java.io.IOException;
 import java.io.Writer;
 
+import org.martus.common.AttachmentProxy;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 
@@ -51,11 +52,26 @@ public class BulletinXmlExporter
 		writeElement(dest, AccountIdElementName, b.getAccount());
 		String[] tags = Bulletin.getStandardFieldNames();
 		writeFields(dest, b, tags);
+		
+		dest.write(MartusXml.getTagStart(AttachmentsListElementName));
+		AttachmentProxy[] publicAttachments = b.getPublicAttachments();
+		writeAttachments(dest, publicAttachments);
+		dest.write(MartusXml.getTagEnd(AttachmentsListElementName));
 
 		dest.write(MartusXml.getTagEnd(BulletinElementName));
 		dest.write("\n");
 
 		dest.write(MartusXml.getTagEnd(ExportedBulletinsElementName));
+	}
+
+	static void writeAttachments(Writer dest, AttachmentProxy[] publicAttachments)
+		throws IOException
+	{
+		for (int i = 0; i < publicAttachments.length; i++)
+		{
+			AttachmentProxy proxy = publicAttachments[i];
+			writeElement(dest, AttachmentElementName, proxy.getLabel());
+		}
 	}
 
 	static void writeFields(Writer dest, Bulletin b, String[] tags)
@@ -80,4 +96,6 @@ public class BulletinXmlExporter
 	public final static String BulletinElementName = "MartusBulletin";
 	public final static String LocalIdElementName = "LocalId";
 	public final static String AccountIdElementName = "AuthorAccountId";
+	public final static String AttachmentsListElementName = "AttachmentList";
+	public final static String AttachmentElementName = "Attachment";
 }

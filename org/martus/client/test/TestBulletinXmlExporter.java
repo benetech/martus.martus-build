@@ -26,11 +26,13 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.test;
 
+import java.io.File;
 import java.io.StringWriter;
 
 import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.BulletinXmlExporter;
+import org.martus.common.AttachmentProxy;
 import org.martus.common.BulletinConstants;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
@@ -51,9 +53,12 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		
 		final String sampleAuthor = "someone special";
 		final String samplePrivateInfo = "this should not appear in the xml";
+		final File sampleAttachmentFile = createTempFile();
 
 		b.set(BulletinConstants.TAGAUTHOR, sampleAuthor);
 		b.set(BulletinConstants.TAGPRIVATEINFO, samplePrivateInfo);
+		AttachmentProxy ap = new AttachmentProxy(sampleAttachmentFile);
+		b.addPublicAttachment(ap);
 		
 		StringWriter writer = new StringWriter();
 		BulletinXmlExporter.export(b, writer);
@@ -64,6 +69,7 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 		assertContains(b.getAccount(), result);
 		assertContains(b.getLocalId(), result);
 		assertContains(sampleAuthor, result);
+		assertContains(sampleAttachmentFile.getName(), result);
 		
 		//System.out.println(result);
 	}
