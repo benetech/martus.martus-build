@@ -233,6 +233,16 @@ public class MockMartusServer extends MartusServer
 	{
 		return 100 * 1000;
 	}
+	
+	public synchronized void subtractMaxFailedUploadAttemptsFromCounter()
+	{
+		return;
+	}
+	
+	public synchronized void subtractMaxFailedUploadAttemptsFromServerCounter()
+	{
+		super.subtractMaxFailedUploadAttemptsFromCounter();
+	}
 
 	static class TempDirectory extends File
 	{

@@ -1755,7 +1755,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("upload request 5?", NetworkInterfaceConstants.SERVER_ERROR, result);
 		assertEquals("counter 4?", 3, testServer.getNumFailedUploadRequest());
 		
-		testServer.subtractMaxFailedUploadAttemptsFromCounter();
+		testServer.subtractMaxFailedUploadAttemptsFromServerCounter();
 		
 		assertEquals("counter 5?", 1, testServer.getNumFailedUploadRequest());
 		
