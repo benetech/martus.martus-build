@@ -54,7 +54,7 @@ public class TransferableBulletinList implements Transferable
 		folder = fromFolder;
 	}
 
-	boolean createTransferableZipFile()
+	boolean createTransferableZipFiles()
 	{
 		if(files == null)
 			files = new Vector();
@@ -74,7 +74,7 @@ public class TransferableBulletinList implements Transferable
 		catch(Exception e)
 		{
 			e.printStackTrace();
-			System.out.println("TransferableBulletin createTransferableZipFile: " + e);
+			System.out.println("TransferableBulletin createTransferableZipFiles: " + e);
 			return false;
 		}
 		return true;
@@ -121,7 +121,7 @@ public class TransferableBulletinList implements Transferable
 			if(files == null || files.size() == 0)
 			{
 				//System.out.println("TransferableBulletin.getTransferData : creatingZipFile");
-				if (!createTransferableZipFile())
+				if (!createTransferableZipFiles())
 					throw new UnsupportedFlavorException(flavor);
 			}
 
