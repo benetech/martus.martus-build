@@ -34,7 +34,7 @@ public class MockMartusServer extends MartusServer
 		database = databaseToUse;
 	}
 	
-	public void initialize() throws IOException
+	public void initialize() throws Exception
 	{
 		try
 		{
