@@ -19,7 +19,7 @@ public class TestAll
 	{
 		TestSuite suite= new TestSuite("All Server Martus Tests");
 
-		suite.addTest(TestServer.suite());
+		suite.addTest(TestServerCore.suite());
 		suite.addTest(org.martus.common.TestCommon.suite());
 
 	    return suite;

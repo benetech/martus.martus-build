@@ -26,6 +26,16 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		MartusSecureWebServer.security = getSecurity();
 		MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, port);
 	}
+	
+	public void allowUploads(String clientId)
+	{
+		coreServer.allowUploads(clientId);
+	}
+	
+	public int getNumberActiveClients()
+	{
+		return coreServer.getNumberActiveClients();
+	}
 
 	// BEGIN SSL interface
 	public String deleteDraftBulletins(String accountId, String[] localIds)

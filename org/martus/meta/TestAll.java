@@ -5,7 +5,8 @@ import junit.framework.TestSuite;
 
 import org.martus.client.test.TestClient;
 import org.martus.common.TestCommon;
-import org.martus.server.core.TestServer;
+import org.martus.server.core.TestServerCore;
+import org.martus.server.forclients.TestServerForClientsPackage;
 
 public class TestAll extends java.lang.Object 
 {
@@ -31,7 +32,8 @@ public class TestAll extends java.lang.Object
 		
 		// shared stuff
 		suite.addTest(TestCommon.suite());
-		suite.addTest(TestServer.suite());
+		suite.addTest(TestServerCore.suite());
+		suite.addTest(TestServerForClientsPackage.suite());
 		suite.addTest(TestClient.suite());
 
 	    return suite;
