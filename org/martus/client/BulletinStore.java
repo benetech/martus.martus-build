@@ -850,7 +850,7 @@ public class BulletinStore
 		return true;	
 	}
 
-	void addToCache(Bulletin b) 
+	synchronized void addToCache(Bulletin b) 
 	{
 		if(bulletinCache.size() >= maxCachedBulletinCount)
 			bulletinCache.clear();
