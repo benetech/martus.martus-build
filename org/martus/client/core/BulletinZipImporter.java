@@ -127,12 +127,18 @@ public class BulletinZipImporter
 			AttachmentProxy[] attachments = b.getPublicAttachments();
 			b.clearPublicAttachments();
 			for(int i=0; i < attachments.length; ++i)
-				b.addPublicAttachment(BulletinZipImporter.extractZipAttachmentToFileProxy(verifier, zip, attachments[i]));
+			{
+				final AttachmentProxy ap = BulletinZipImporter.extractZipAttachmentToFileProxy(verifier, zip, attachments[i]);
+				b.addPublicAttachment(ap);
+			}
 	
 			AttachmentProxy[] attachmentsPrivate = b.getPrivateAttachments();
 			b.clearPrivateAttachments();
 			for(int i=0; i < attachmentsPrivate.length; ++i)
-				b.addPrivateAttachment(BulletinZipImporter.extractZipAttachmentToFileProxy(verifier, zip, attachmentsPrivate[i]));
+			{
+				final AttachmentProxy ap = BulletinZipImporter.extractZipAttachmentToFileProxy(verifier, zip, attachmentsPrivate[i]);
+				b.addPrivateAttachment(ap);
+			}
 			
 			b.setHQPublicKey(header.getHQPublicKey());
 		}
