@@ -90,7 +90,7 @@ public class RetrievePublicKey
 	
 	void processArgs(String[] args)
 	{
-		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
+		port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 
 		for (int i = 0; i < args.length; i++)
 		{
@@ -112,7 +112,7 @@ public class RetrievePublicKey
 
 		if(ip == null || publicCode == null || outputFileName == null)
 		{
-			System.err.println("Incorrect arguments: RetrievePublicKey --ip=1.2.3.4 [--port=5] --public-code=6.7.8.1.2 --output-file=pubkey.txt --keypair-file=keypair.dat\n");
+			System.err.println("Incorrect arguments: RetrievePublicKey --ip=1.2.3.4 [--port=5] --public-code=6.7.8.1.2 --output-file=pubkey.txt\n");
 			System.exit(2);
 		}
 		
