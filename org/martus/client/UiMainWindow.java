@@ -80,6 +80,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		Timestamp expire = Timestamp.valueOf("2002-11-15 1:00:00.000000000");
 		if(stamp.after(expire))
 			notifyDlg(this, "BetaExpired");
+		clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
 
 		if(app.doesAccountExist())
 		{
@@ -130,7 +131,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		errorChecker = new javax.swing.Timer(10*1000, new UploadErrorChecker());
 		errorChecker.start();
-		clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
 		return true;
     }
 
@@ -828,7 +828,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-			Retriever retriever = createRetriever();
+			Retriever retriever = createRetriever("RetrieveMySealedBulletinProgress");
 			String result = retriever.retrieveMyBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
@@ -836,7 +836,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return;
 			}
 				
-			notifyDlg(this, "retrieveworked");
 			folders.folderHasChanged(app.getFolderRetrieved());
 		} 
 		catch(ServerErrorException e) 
@@ -856,7 +855,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 				
-			Retriever retriever = createRetriever();
+			Retriever retriever = createRetriever("RetrieveMyDraftBulletinProgress");
 			String result = retriever.retrieveMyBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
@@ -864,7 +863,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return;
 			}
 				
-			notifyDlg(this, "retrieveworked");
 			folders.folderHasChanged(app.getFolderRetrieved());
 		} 
 		catch(ServerErrorException e) 
@@ -883,7 +881,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-			Retriever retriever = createRetriever();
+			Retriever retriever = createRetriever("RetrieveHQSealedBulletinProgress");
 			String result = retriever.retrieveFieldOfficeBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
@@ -891,7 +889,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return;
 			}
 				
-			notifyDlg(this, "retrieveworked");
 			folders.folderHasChanged(app.getFolderRetrieved());
 		} 
 		catch(ServerErrorException e) 
@@ -910,7 +907,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-			Retriever retriever = createRetriever();
+			Retriever retriever = createRetriever("RetrieveHQDraftBulletinProgress");
 			String result = retriever.retrieveFieldOfficeBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
@@ -918,7 +915,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				return;
 			}
 				
-			notifyDlg(this, "retrieveworked");
 			folders.folderHasChanged(app.getFolderRetrieved());
 		} 
 		catch(ServerErrorException e) 
@@ -928,9 +924,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private Retriever createRetriever() 
+	private Retriever createRetriever(String statusMessage) 
 	{
-		UiProgressRetrieveDlg retrieveDlg = new UiProgressRetrieveDlg(this);	
+		UiProgressRetrieveDlg retrieveDlg = new UiProgressRetrieveDlg(this, statusMessage);	
 		return new Retriever(app, retrieveDlg);
 	}
 
@@ -1106,8 +1102,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		
 		getContentPane().add(folderSplitter);
 		statusBar = new UiStatusBar();
-		statusBar.getBackgroundProgressMeter().setStatusMessage(app.getFieldLabel("StatusReady"));
-		statusBar.getBackgroundProgressMeter().hideProgressMeter();
+		statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(app.getFieldLabel("StatusReady"));
 		getContentPane().add(statusBar, BorderLayout.SOUTH );
 		
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
@@ -1731,8 +1726,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 			if(--clearStatusMessage < 0)
 			{
 				clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
-				statusBar.getBackgroundProgressMeter().setStatusMessage(app.getFieldLabel("StatusReady"));
-				statusBar.getBackgroundProgressMeter().hideProgressMeter();
+				statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(app.getFieldLabel("StatusReady"));
 			}
 			uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
 			if(uploadResult != null)

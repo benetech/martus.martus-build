@@ -314,7 +314,6 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedDraftBulletinWithOutboxCopy=Confirm Delete Draft Bulletin");
 
 		addEnglishTranslation("wintitle:notifyillegaldrop=Cannot Move Bulletin");
-		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenothing=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyconfignoserver=Unable to Connect to Server");
@@ -368,6 +367,10 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:about=About Martus");
 		addEnglishTranslation("wintitle:AccountInfo=Account Information");
 		addEnglishTranslation("wintitle:Help=Help on Martus");
+		addEnglishTranslation("wintitle:RetrieveMySealedBulletinProgress=Retrieving Bulletins");
+		addEnglishTranslation("wintitle:RetrieveMyDraftBulletinProgress=Retrieving Bulletins");
+		addEnglishTranslation("wintitle:RetrieveHQSealedBulletinProgress=Retrieving Bulletins");
+		addEnglishTranslation("wintitle:RetrieveHQDraftBulletinProgress=Retrieving Bulletins");
 
 		addEnglishTranslation("button:file=File");
 		addEnglishTranslation("button:edit=Edit");
@@ -492,6 +495,11 @@ public class MartusLocalization
 		addEnglishTranslation("field:UploadingSealedBulletin=Uploading Sealed Bulletin");
 		addEnglishTranslation("field:UploadingDraftBulletin=Uploading Draft Bulletin");
 		addEnglishTranslation("field:StatusReady=Ready");
+		addEnglishTranslation("field:RetrieveMySealedBulletinProgress=Retrieving Sealed Bulletins");
+		addEnglishTranslation("field:RetrieveMyDraftBulletinProgress=Retrieving Draft Bulletins");
+		addEnglishTranslation("field:RetrieveHQSealedBulletinProgress=Retrieving Headquarter Sealed Bulletins");
+		addEnglishTranslation("field:RetrieveHQDraftBulletinProgress=Retrieving Headquarter Draft Bulletins");
+		addEnglishTranslation("field:ChunkProgressStatusMessage=Download Progress");
 
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");
@@ -532,7 +540,6 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmCloneBulletinAsMineeffect=Clicking on Yes will create a new bulletin that contains a copy of all the same information. You will be the official author of this new bulletin, and any private data in it will only be visible by you (and your headquarters, if you have one). The original bulletin will remain unchanged.");
 
 		addEnglishTranslation("field:notifyillegaldropcause=This bulletin cannot be moved to that folder, probably because of its status");
-		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
 		addEnglishTranslation("field:notifyretrievenothingcause=No bulletins were selected");
 		addEnglishTranslation("field:notifyconfignoservercause=The selected server is not responding. Before you choose a server, you must be connected to the internet, and that server must be available.");

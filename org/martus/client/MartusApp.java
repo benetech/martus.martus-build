@@ -950,7 +950,8 @@ public class MartusApp
 		return fdp;
 	}
 
-	public void retrieveOneBulletin(UniversalId uid, BulletinFolder retrievedFolder) throws Exception
+	public void retrieveOneBulletin(UniversalId uid, BulletinFolder retrievedFolder, UiProgressMeter progressMeter) throws
+		Exception
 	{
 		File tempFile = File.createTempFile("$$$MartusApp", null);
 		tempFile.deleteOnExit();
@@ -960,8 +961,11 @@ public class MartusApp
 		int totalSize = 0;
 		int chunkOffset = 0;
 		String lastResponse = "";
+		if(progressMeter != null)
+			progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), 0, 1);	
 		while(!lastResponse.equals(NetworkInterfaceConstants.OK))
 		{
+			
 			NetworkResponse response = getCurrentSSLServerProxy().getBulletinChunk(security, 
 								uid.getAccountId(), uid.getLocalId(), chunkOffset, serverChunkSize);
 								
@@ -993,7 +997,11 @@ public class MartusApp
 
 			Base64.decode(reader, outputStream);
 			chunkOffset += chunkSize;
+			if(progressMeter != null)
+				progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), chunkOffset, masterTotalSize);	
 		}
+		if(progressMeter != null)
+			progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), chunkOffset, masterTotalSize);	
 
 		outputStream.close();
 

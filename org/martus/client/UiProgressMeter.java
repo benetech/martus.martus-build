@@ -31,6 +31,12 @@ public class UiProgressMeter extends JPanel
 		add( progressMeter );
 	}
 
+	public void setStatusMessageAndHideMeter(String message)
+	{
+		setStatusMessage(message);
+		hideProgressMeter();
+	}
+
 	public void setStatusMessage(String message)
 	{
 		statusMessage.setText(" " + message + " ");
