@@ -131,6 +131,8 @@ public class EnglishStrings
 "wintitle:notifyUserRejectedServerCompliance=Server Compliance Statement",
 "wintitle:notifyExistingServerRemoved=Server Removed",
 "wintitle:notifyErrorSavingBulletin=Error Saving",
+"wintitle:notifyErrorVerifyingEntryDate=Entry Date Invalid",
+"wintitle:notifyErrorVerifyingEventDate=Event Date Invalid",
 				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -500,6 +502,8 @@ public class EnglishStrings
 "field:notifyUserRejectedServerCompliancecause=You have chosen not to use this server",
 "field:notifyExistingServerRemovedcause=You will have to select a server for any bulletins to be backed up to that server, or to retrieve bulletins from that server.",
 "field:notifyErrorSavingBulletincause=An error prevented the bulletin from being saved. Check to make sure the disk is not full or write protected.",		
+"field:notifyErrorVerifyingEntryDatecause=The date entered in the 'Date Entered' field occurs in the future.",
+"field:notifyErrorVerifyingEventDatecause=The date entered in the 'Date of Event' field occurs in the future.",
 	
 "field:messageServerNewscause=The current server has sent this message:",
 

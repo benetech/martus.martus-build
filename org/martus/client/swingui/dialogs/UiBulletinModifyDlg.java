@@ -133,10 +133,20 @@ public class UiBulletinModifyDlg extends JFrame implements ActionListener, Windo
 			closeWindowUponConfirmation();
 			return;
 		}
-
 		try
 		{
+			view.validateData();
 			view.copyDataToBulletin(bulletin);
+		}
+		catch(UiBulletinComponent.EntryDateInvalidException e)
+		{
+			observer.notifyDlg(this,"ErrorVerifyingEntryDate");
+			return;
+		}
+		catch(UiBulletinComponent.EventDateInvalidException e)
+		{
+			observer.notifyDlg(this,"ErrorVerifyingEventDate");
+			return;
 		}
 		catch(IOException e)
 		{

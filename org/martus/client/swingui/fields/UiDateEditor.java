@@ -84,16 +84,33 @@ public class UiDateEditor extends UiField
 		return new JComponent[]{dayCombo, monthCombo, yearCombo};
 	}
 
+	public void validate() throws ValidationException 
+	{
+		Date value = getDate();
+		Date today = new Date();
+		if (value.after(today))
+		{
+			dayCombo.requestFocus();	
+			throw new ValidationException();
+		}
+	}
+
 	public String getText()
+	{
+		Date date = getDate();
+		DateFormat df = Bulletin.getStoredDateFormat();
+		return df.format(date);
+	}
+
+	private Date getDate() 
 	{
 		Calendar cal = new GregorianCalendar();
 		cal.set(yearCombo.getSelectedIndex()+1900,
 				monthCombo.getSelectedIndex(),
 				dayCombo.getSelectedIndex()+1);
-
+		
 		Date d = cal.getTime();
-		DateFormat df = Bulletin.getStoredDateFormat();
-		return df.format(d);
+		return d;
 	}
 
 	public void setText(String newText)

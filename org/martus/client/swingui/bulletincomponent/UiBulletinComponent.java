@@ -97,6 +97,20 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			MartusCrypto.EncryptionException
 	{
 	}
+	
+	public static class EntryDateInvalidException extends Exception
+	{
+	}
+	
+	public static class EventDateInvalidException extends Exception
+	{
+	}
+	
+	public void validateData() throws 
+		EntryDateInvalidException,
+		EventDateInvalidException
+	{
+	}
 
 	public void copyDataFromBulletin(Bulletin bulletin) throws IOException
 	{

@@ -39,10 +39,17 @@ abstract public class UiField
 	abstract public void setText(String newText);
 	abstract public void disableEdits();
 
+	static public class ValidationException extends Exception
+	{
+	}
+	
+	public void validate() throws ValidationException {}
+	
 	public JComponent[] getFocusableComponents()
 	{
 		return null;
 	}
+	
 	public void initalize()
 	{
 		JComponent[] focusableComponents = getFocusableComponents();

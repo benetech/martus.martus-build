@@ -50,6 +50,29 @@ public class UiBulletinEditor extends UiBulletinComponent
 		return new UiBulletinComponentEditorSection(this, owner, encrypted);
 	}
 
+	public void validateData() throws 
+		EntryDateInvalidException,
+		EventDateInvalidException
+		
+	{
+		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
+		{
+			try 
+			{
+				fields[fieldNum].validate();
+			} 
+			catch (UiField.ValidationException e) 
+			{
+				if(fieldTags[fieldNum].equals(Bulletin.TAGENTRYDATE))
+					throw new EntryDateInvalidException();
+				if(fieldTags[fieldNum].equals(Bulletin.TAGEVENTDATE))
+					throw new EventDateInvalidException();
+				System.out.println("UiBulletinEditor.validateData: " + e);
+			}
+		}
+	}
+
+
 	public void copyDataToBulletin(Bulletin bulletin) throws
 		IOException,
 		MartusCrypto.EncryptionException
