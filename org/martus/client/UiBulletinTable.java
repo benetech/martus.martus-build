@@ -344,20 +344,18 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		public void mousePressed(MouseEvent e)
 		{
-			super.mousePressed(e);
-			handleRightClick(e);
+			if(e.isPopupTrigger())
+				handleRightClick(e);
 		}
 
 		public void mouseReleased(MouseEvent e)
 		{
-			super.mouseReleased(e);
-			handleRightClick(e);
+			if(e.isPopupTrigger())
+				handleRightClick(e);
 		}
 
 		public void mouseClicked(MouseEvent e)
 		{
-			super.mouseClicked(e);
-			handleRightClick(e);
 			if(e.getClickCount() == 2)
 				handleDoubleClick(e);
 		}
@@ -365,19 +363,20 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 		private void handleRightClick(MouseEvent e)
 		{
-			if(!e.isPopupTrigger())
-				return;
-
 			int thisRow = rowAtPoint(e.getPoint());
-			if(getSelectedRowCount() != 1 || getSelectedRow() != thisRow)
-				selectRow(thisRow);
-			
-			if(getSelectedRowCount() == 0)
+			boolean extend = e.isShiftDown();
+			boolean toggle = e.isControlDown();
+			if(extend || toggle)
 			{
-				System.out.println("Table clicked on non-selected row");
-				return;
+				changeSelection(thisRow, 0, toggle, extend);
 			}
-			doPopupMenu(UiBulletinTable.this, e.getX(), e.getY());
+			else
+			{
+				if(!isRowSelected(thisRow))
+					selectRow(thisRow);
+
+				doPopupMenu(UiBulletinTable.this, e.getX(), e.getY());
+			}
 		}
 
 		private void handleDoubleClick(MouseEvent e)
@@ -454,48 +453,79 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 	private void doDiscardBulletin()
 	{
-		Bulletin b = getSelectedBulletin();
-		BulletinFolder f = getFolder();
-		if(f.equals(f.getStore().getFolderDiscarded()))
+		boolean okToDiscard = true;
+		Bulletin[] bulletins = getSelectedBulletins();
+		if(bulletins.length == 1)
 		{
-			Vector visibleFoldersContainingThisBulletin = mainWindow.getApp().findBulletinInAllVisibleFolders(b);
-			final int justTheDiscardedFolder = 1;
-			if(visibleFoldersContainingThisBulletin.size() == justTheDiscardedFolder)
-			{
-				if (b.isSealed())
-				{
-					if(!mainWindow.confirmDlg(mainWindow, "DiscardSealedBulletins"))
-						return;
-				}				
-				else
-				{
-					BulletinFolder draftOutBox = mainWindow.getApp().getFolderDraftOutbox();
-					if(draftOutBox.contains(b))
-					{
-						if(!mainWindow.confirmDlg(mainWindow, "DeleteDiscardedDraftBulletinWithOutboxCopy"))
-							return;
-						draftOutBox.getStore().discardBulletin(draftOutBox, b);
-					}
-					else if(!mainWindow.confirmDlg(mainWindow, "DiscardDraftBulletins"))
-						return;
-				}
-			}
-			else
-			{
-				visibleFoldersContainingThisBulletin.remove(f.getName());
-				String title = mainWindow.getApp().getWindowTitle("confirmDeleteDiscardedBulletinWithCopies");
-				String cause = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopiescause");
-				String folders = visibleFoldersContainingThisBulletin.toString();
-				String effect = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopieseffect");
-				String question = mainWindow.getApp().getFieldLabel("confirmquestion");
-				String[] contents = {cause, "", effect, folders, "", question};
-				if(!mainWindow.confirmDlg(mainWindow, title, contents))
-					return;
-			}
+			okToDiscard = confirmDiscardSingleBulletin(bulletins[0]);
 		}
-		f.getStore().discardBulletin(f, b);
-		f.getStore().saveFolders();
-		mainWindow.folderContentsHaveChanged(f);
+		else
+		{
+			okToDiscard = false;
+		}
+
+		if(okToDiscard)
+		{
+			discardAllSelectedBulletins();
+		}
+	}
+
+	private void discardAllSelectedBulletins()
+	{
+		Bulletin[] bulletinsToDiscard = getSelectedBulletins();
+		
+		BulletinFolder draftOutBox = mainWindow.getApp().getFolderDraftOutbox();
+		BulletinFolder folderToDiscardFrom = getFolder();
+		
+		for (int i = 0; i < bulletinsToDiscard.length; i++)
+		{
+			Bulletin b = bulletinsToDiscard[i];
+			draftOutBox.getStore().discardBulletin(draftOutBox, b);
+			folderToDiscardFrom.getStore().discardBulletin(folderToDiscardFrom, b);
+		}
+		
+		folderToDiscardFrom.getStore().saveFolders();
+		mainWindow.folderContentsHaveChanged(folderToDiscardFrom);
+	}
+
+	private boolean confirmDiscardSingleBulletin(Bulletin b)
+	{
+		BulletinFolder folderToDiscardFrom = getFolder();
+		if(!isDiscardedFolder(folderToDiscardFrom))
+			return true;
+
+		boolean okToDiscard = true;
+		BulletinFolder draftOutBox = mainWindow.getApp().getFolderDraftOutbox();
+		Vector visibleFoldersContainingThisBulletin = mainWindow.getApp().findBulletinInAllVisibleFolders(b);
+		visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom.getName());
+		if(visibleFoldersContainingThisBulletin.size() == 0)
+		{
+			String dialogTag = "";
+			if (b.isSealed())
+				dialogTag = "DiscardSealedBulletins";
+			else if(draftOutBox.contains(b))
+				dialogTag = "DeleteDiscardedDraftBulletinWithOutboxCopy";
+			else
+				dialogTag = "DiscardDraftBulletins";
+		
+			okToDiscard = mainWindow.confirmDlg(mainWindow, dialogTag);
+		}
+		else
+		{
+			String title = mainWindow.getApp().getWindowTitle("confirmDeleteDiscardedBulletinWithCopies");
+			String cause = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopiescause");
+			String folders = visibleFoldersContainingThisBulletin.toString();
+			String effect = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopieseffect");
+			String question = mainWindow.getApp().getFieldLabel("confirmquestion");
+			String[] contents = {cause, "", effect, folders, "", question};
+			okToDiscard = mainWindow.confirmDlg(mainWindow, title, contents);
+		}
+		return okToDiscard;
+	}
+
+	private boolean isDiscardedFolder(BulletinFolder f)
+	{
+		return f.equals(f.getStore().getFolderDiscarded());
 	}
 
 	void selectRow(int rowIndex)
