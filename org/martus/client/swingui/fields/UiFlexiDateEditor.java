@@ -50,25 +50,30 @@ public class UiFlexiDateEditor extends UiField
 	public UiFlexiDateEditor(UiLocalization localization)
 	{
 		localizationToUse = localization;
+		init();
+	}	
+	
+	private void init()
+	{
 		component = new JPanel();		
 		component.setLayout(new ParagraphLayout());		
 		Box boxDateSelection = Box.createHorizontalBox();				
 		exactDateRB = new JRadioButton(localizationToUse.getFieldLabel("DateExact"), true);			
 		flexiDateRB = new JRadioButton(localizationToUse.getFieldLabel("DateRange"));		
-		
+
 		ButtonGroup radioGroup = new ButtonGroup();
 		radioGroup.add(exactDateRB);
 		radioGroup.add(flexiDateRB);		
-	
+
 		boxDateSelection.add(exactDateRB);
 		boxDateSelection.add(flexiDateRB);	
 		component.add(boxDateSelection);
-								
+						
 		flexiDateRB.addItemListener(new RadioItemListener());
 		exactDateRB.addItemListener(new RadioItemListener());
-							  							
+					  							
 		component.add(buildExactDatePanel(), ParagraphLayout.NEW_PARAGRAPH);
-	}	
+	}
 	
 	private JPanel buildFlexiDatePanel()
 	{			
@@ -86,11 +91,17 @@ public class UiFlexiDateEditor extends UiField
 	
 	private JPanel buildExactDatePanel()
 	{		
-		extDatePanel = new JPanel();																
-	
-		extDatePanel.add(new JLabel(" "));				
+		extDatePanel = new JPanel();		
+		extDatePanel.setLayout(new ParagraphLayout());
+																
+		JLabel dummy1 = new JLabel(localizationToUse.getFieldLabel("DateRangeFrom"));		
+		extDatePanel.add(dummy1);					
 		extDatePanel.add( buildBeginDateBox());
-		
+		JLabel dummy2 = new JLabel(localizationToUse.getFieldLabel("DateRangeFrom"));
+		extDatePanel.add(dummy2, ParagraphLayout.NEW_PARAGRAPH);
+		dummy1.setForeground(extDatePanel.getBackground());
+		dummy2.setForeground(extDatePanel.getBackground());
+				
 		return extDatePanel;			
 	}
 				
@@ -138,14 +149,14 @@ public class UiFlexiDateEditor extends UiField
 		public void itemStateChanged(ItemEvent e)
 		{
 			if (isFlexiDate())
-			{							
+			{											
 				component.remove(extDatePanel);						
 				component.add(buildFlexiDatePanel(), ParagraphLayout.NEW_PARAGRAPH);																	
 				component.revalidate();								
 			}
 			
 			if (isExactDate())
-			{			
+			{									
 				component.remove(flexiDatePanel);						
 				component.add(buildExactDatePanel(), ParagraphLayout.NEW_PARAGRAPH);											
 				component.revalidate();				
