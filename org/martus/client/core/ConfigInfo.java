@@ -181,7 +181,7 @@ public class ConfigInfo implements Serializable
 
 	private boolean mustAskUserToSendToServer;
 
-	final short VERSION = 4;
+	public static final short VERSION = 4;
 	//Version 1
 	private short version;
 	private String author;
