@@ -12,7 +12,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.StringReader;
-import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -302,38 +301,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 	
 	
-	public String uploadBulletin(String authorAccountId, String bulletinLocalId, String data)
-	{
-		if(serverMaxLogging)
-			logging("uploadBulletin " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-
-		if(!canClientUpload(authorAccountId))
-		{
-			logging("uploadBulletin REJECTED (!canClientUpload)");
-			return NetworkInterfaceConstants.REJECTED;
-		}
-		
-		File tempFile = null;
-		try 
-		{
-			tempFile = Base64.decodeToTempFile(data);
-		} 
-		catch(Exception e)
-		{
-			//System.out.println("MartusServer.uploadBulletin: " + e);
-			logging("uploadBulletin INVALID_DATA " + e);
-			return NetworkInterfaceConstants.INVALID_DATA;
-		}
-		String result = saveUploadedBulletinZipFile(authorAccountId, tempFile);
-		tempFile.delete();
-
-		if(serverMaxLogging)
-			logging("uploadBulletin : Exit " + result);
-		return result;
-	}
-
-
-	
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature)
 	{
 		if(serverMaxLogging)
@@ -491,52 +458,6 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 
 
-	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
-	{
-		if(serverMaxLogging)
-			logging("downloadBulletin " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			
-		if( isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-
-		Vector result = new Vector();
-		
-		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
-		DatabaseKey headerKey = DatabaseKey.createSealedKey(uid);
-		if(!getDatabase().doesRecordExist(headerKey))
-		{
-			logging("downloadBulletin NOT_FOUND");
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-		}
-		else
-		{
-			try
-			{
-				File tempFile = createInterimBulletinFile(headerKey);
-				//TODO: if file is bigger than one chunk, should return an error here!
-				
-				StringWriter writer = new StringWriter();
-				FileInputStream in = new FileInputStream(tempFile);
-				Base64.encode(in, writer);
-				in.close();
-				String zipString = writer.toString();
-	
-				MartusUtilities.deleteInterimFileAndSignature(tempFile);
-				result.add(NetworkInterfaceConstants.OK);
-				result.add(zipString);
-				if(serverMaxLogging)
-					logging("downloadBulletin : Exit OK");
-			}
-			catch(Exception e)
-			{
-				logging("downloadBulletin SERVER_ERROR " + e);
-				//System.out.println("MartusServer.download: " + e);
-				result.add(NetworkInterfaceConstants.SERVER_ERROR);
-			}
-		}
-		return result;
-	}
-
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId,
 		int chunkOffset, int maxChunkSize) 
 	{
@@ -636,24 +557,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return result;
 	}
 
-	public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
-	{
-		if(serverMaxLogging)
-			logging("legacylistFieldOfficeSealedBulletinIds " + getClientAliasForLogging(hqAccountId));
-			
-		if(isClientBanned(hqAccountId) )
-			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
-		
-		if( isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-		
-		SummaryCollector summaryCollector = new FieldOfficeSealedSummaryCollector(getDatabase(), hqAccountId, authorAccountId, new Vector());
-		Vector summaries = summaryCollector.getSummaries();
-		if(serverMaxLogging)
-			logging("legacylistFieldOfficeSealedBulletinIds : Exit");
-		return summaries;	
-	}
-
 	public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
 	{
 		if(serverMaxLogging)
@@ -678,24 +581,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(serverMaxLogging)
 			logging("listFieldOfficeSealedBulletinIds : Exit");
 		return result;	
-	}
-
-	public Vector legacyListFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId)
-	{
-		if(serverMaxLogging)
-			logging("legacyListFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));
-
-		if(isClientBanned(hqAccountId) )
-			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
-		
-		if( isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-			
-		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId, new Vector());
-		Vector summaries = summaryCollector.getSummaries();
-		if(serverMaxLogging)
-			logging("legacyListFieldOfficeDraftBulletinIds : Exit");
-		return summaries;
 	}
 
 	public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)
@@ -1190,7 +1075,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		return null;
 	}
 
-	private String saveUploadedBulletinZipFile(String authorAccountId, File zipFile) 
+	String saveUploadedBulletinZipFile(String authorAccountId, File zipFile) 
 	{
 		String result = NetworkInterfaceConstants.OK;
 		

@@ -54,8 +54,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 
 		int index = 0;
 		String tryMagicWord = (String)parameters.get(index++);
+		server.logging("request for client " + server.getPublicCode(myAccountId));
 		
-		String legacyResult = legacyRequestUploadRights(myAccountId, tryMagicWord);
+		String legacyResult = server.requestUploadRights(myAccountId, tryMagicWord);
 		result.add(legacyResult);
 		
 		server.clientConnectionExit();
@@ -136,8 +137,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			
 		int index = 0;
 		String hqAccountId = (String)parameters.get(index++);
+		server.logging("request for client " + server.getPublicCode(hqAccountId));
 
-		Vector legacyResult = legacyListFieldOfficeAccounts(hqAccountId);
+		Vector legacyResult = server.listFieldOfficeAccounts(hqAccountId);
 		String resultCode = (String)legacyResult.get(0);
 		legacyResult.remove(0);
 		
@@ -340,20 +342,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return result;
 	}
 
-	// begin legacy!
-	
-	public String legacyRequestUploadRights(String authorAccountId, String tryMagicWord)
-	{
-		server.logging("request for client " + server.getPublicCode(authorAccountId));
-		return server.requestUploadRights(authorAccountId, tryMagicWord);
-	}
-
-	public Vector legacyListFieldOfficeAccounts(String hqAccountId)
-	{
-		server.logging("request for client " + server.getPublicCode(hqAccountId));
-		return server.listFieldOfficeAccounts(hqAccountId);
-	}
-	
 	private boolean isSignatureOk(String myAccountId, Vector parameters, String signature, MartusCrypto verifier)
 	{
 		server.logging("request for client " + server.getPublicCode(myAccountId));

@@ -213,26 +213,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.listFieldOfficeAccounts(hqAccountId);
 	}
 	
-	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature)
-	{
-		return coreServer.uploadBulletinChunk(authorAccountId, bulletinLocalId, totalSize, chunkOffset, chunkSize, data, signature);
-	}
-	
-	public String uploadBulletin(String authorAccountId, String bulletinLocalId, String data)
-	{
-		return coreServer.uploadBulletin(authorAccountId, bulletinLocalId, data);
-	}
-	
-	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
-	{
-		return coreServer.downloadBulletin(authorAccountId, bulletinLocalId);
-	}
-
-	public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
-	{
-		return coreServer.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
-	}
-
 	File getBannedFile()
 	{
 		return new File(coreServer.getStartupConfigDirectory(), BANNEDCLIENTSFILENAME);

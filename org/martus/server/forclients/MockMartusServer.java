@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.martus.common.Base64;
 import org.martus.common.Database;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -83,7 +84,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		if(uploadResponse != null)
 			return new String(uploadResponse);
 
-		return "" + super.uploadBulletin(authorAccountId, bulletinLocalId, data);
+		return "" + mockUploadBulletin(authorAccountId, bulletinLocalId, data);
 	}
 	
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature) 
@@ -109,16 +110,6 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 										totalSize, chunkOffset, chunkSize, data);
 	}
 
-	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
-	{
-		lastClientId = authorAccountId;
-
-		if(downloadResponse != null)
-			return new Vector(downloadResponse);
-
-		return (Vector)(super.downloadBulletin(authorAccountId, bulletinLocalId)).clone();
-	}
-	
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId,
 		int chunkOffset, int maxChunkSize) 
 	{
@@ -349,6 +340,33 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		serverForClients.allowUploads(clientId);
 	}
 
+	public String mockUploadBulletin(String authorAccountId, String bulletinLocalId, String data)
+	{
+		if(!canClientUpload(authorAccountId))
+		{
+			logging("uploadBulletin REJECTED (!canClientUpload)");
+			return NetworkInterfaceConstants.REJECTED;
+		}
+		
+		File tempFile = null;
+		try 
+		{
+			tempFile = Base64.decodeToTempFile(data);
+		} 
+		catch(Exception e)
+		{
+			//System.out.println("MartusServer.uploadBulletin: " + e);
+			logging("uploadBulletin INVALID_DATA " + e);
+			return NetworkInterfaceConstants.INVALID_DATA;
+		}
+		String result = saveUploadedBulletinZipFile(authorAccountId, tempFile);
+		tempFile.delete();
+
+		return result;
+	}
+
+
+	
 	public int countDownToGetPacketFailure;
 	public Vector newsResponse;
 	public String newsVersionLabelToCheck;

@@ -533,53 +533,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(label + " server verifySig failed", true, ok2);
 	}
 	
-	public void testUploadBulletinUnauthorizedAccount() throws Exception
-	{
-		TRACE_BEGIN("testUploadBulletinUnauthorizedAccount");
-
-		testServer.serverForClients.clearCanUploadList();
-
-		String wrongAccount = clientSecurity.getPublicKeyString();
-		assertEquals(NetworkInterfaceConstants.REJECTED, testServer.uploadBulletin(wrongAccount, b1.getLocalId(), b1ZipString));
-		assertEquals(NetworkInterfaceConstants.REJECTED, uploadBulletinChunk(testServerInterface, wrongAccount, b1.getLocalId(), 10000, 0, 10000, b1ZipString, clientSecurity));
-
-		TRACE_END();
-	}
-	
-	public void testUploadBulletinNotYourBulletin() throws Exception
-	{
-		TRACE_BEGIN("testUploadBulletinNotYourBulletin");
-
-		testServer.serverForClients.clearCanUploadList();
-		String wrongAccount = serverSecurity.getPublicKeyString();
-		testServer.allowUploads(wrongAccount);
-		assertEquals(NetworkInterfaceConstants.NOTYOURBULLETIN, testServer.uploadBulletin(wrongAccount, b1.getLocalId(), b1ZipString));
-
-		assertEquals(NetworkInterfaceConstants.CHUNK_OK, uploadBulletinChunk(testServerInterface, wrongAccount, b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, serverSecurity));
-		assertEquals(NetworkInterfaceConstants.NOTYOURBULLETIN, uploadBulletinChunk(testServerInterface, wrongAccount, b1.getLocalId(), b1ZipBytes.length, b1ChunkBytes0.length, b1ChunkBytes1.length, b1ChunkData1, serverSecurity));
-
-		TRACE_END();
-	}
-	
-	public void testUploadBulletin() throws Exception
-	{
-		TRACE_BEGIN("testUploadBulletin");
-
-		testServer.serverForClients.clearCanUploadList();
-		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		assertEquals(NetworkInterfaceConstants.OK, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString));
-
-		Database db = testServer.getDatabase();
-		assertNotNull("no database?", db);
-		DatabaseKey key = DatabaseKey.createSealedKey(b1.getUniversalId());
-		Bulletin got = BulletinLoader.loadFromDatabase(db, key, clientSecurity);
-		assertEquals("id", b1.getLocalId(), got.getLocalId());
-
-		assertEquals(NetworkInterfaceConstants.DUPLICATE, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString));
-
-		TRACE_END();
-	}
-
 	public void testUploadBulletinOneChunkOnly() throws Exception
 	{
 		TRACE_BEGIN("testUploadBulletinOneChunkOnly");
@@ -966,45 +919,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
-	public void testDownloadBulletinFail() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinFail");
-
-		Vector result = testServer.downloadBulletin("clientid","bulletinid");
-		assertNotNull("result null", result);
-		assertEquals(1, result.size());
-		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
-
-		TRACE_END();
-	}
-
-	public void testDownloadBulletinOk() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinOk");
-
-		testServer.setSecurity(clientSecurity);
-		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		Bulletin bulletin = new Bulletin(clientSecurity);
-		bulletin.set(Bulletin.TAGPUBLICINFO, "public info");
-		bulletin.set(Bulletin.TAGPRIVATEINFO, "private info");
-		bulletin.setSealed();
-		String data = MockBulletin.saveToZipString(clientDatabase, bulletin, clientSecurity);
-		assertEquals(NetworkInterfaceConstants.OK, testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletin.getLocalId(), data));
-		Vector result = testServer.downloadBulletin(clientSecurity.getPublicKeyString(), bulletin.getLocalId());
-		assertNotNull("result null", result);
-		assertEquals(2, result.size());
-		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
-		String gotString = (String)result.get(1);
-		
-		Bulletin got = new Bulletin(clientSecurity);
-		MockBulletin.loadFromZipString(got, gotString, clientSecurity);
-		assertEquals("id", bulletin.getLocalId(), got.getLocalId());
-		assertEquals("public", bulletin.get(Bulletin.TAGPUBLICINFO), got.get(Bulletin.TAGPUBLICINFO));
-		assertEquals("private ", bulletin.get(Bulletin.TAGPRIVATEINFO), got.get(Bulletin.TAGPRIVATEINFO));
-
-		TRACE_END();
-	}
-	
 	
 	public void testExtractPacketsToZipStream() throws Exception
 	{
@@ -1098,53 +1012,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		Vector result = getBulletinChunk(clientSecurity, testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertEquals("Failed? I am the author", NetworkInterfaceConstants.OK, result.get(0));
-
-		TRACE_END();
-	}
-
-	public void testListFieldOfficeSealedBulletinIds() throws Exception
-	{
-		TRACE_BEGIN("testListFieldOfficeSealedBulletinIds");
-
-		testServer.security = serverSecurity;
-
-		MartusSecurity fieldSecurity1 = clientSecurity;
-		testServer.allowUploads(fieldSecurity1.getPublicKeyString());
-
-		MartusSecurity nonFieldSecurity = MockMartusSecurity.createOtherClient();
-		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
-
-		Vector list1 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
-		assertNotNull("testListFieldOfficeBulletinSummaries returned null", list1);
-		assertEquals("wrong length list 1", 1, list1.size());
-		assertNotNull("null id1 [0] list 1", list1.get(0));
-		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
-
-		Bulletin bulletinSealed = new Bulletin(clientSecurity);
-		bulletinSealed.setHQPublicKey(hqSecurity.getPublicKeyString());
-		bulletinSealed.setSealed();
-		BulletinSaver.saveToDatabase(bulletinSealed, clientDatabase, true, clientSecurity);
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinSealed.getLocalId(), MockBulletin.saveToZipString(clientDatabase, bulletinSealed, clientSecurity));
-
-		Bulletin bulletinDraft = new Bulletin(clientSecurity);
-		bulletinDraft.setHQPublicKey(hqSecurity.getPublicKeyString());
-		bulletinDraft.setDraft();
-		BulletinSaver.saveToDatabase(bulletinDraft, clientDatabase, true, clientSecurity);
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), MockBulletin.saveToZipString(clientDatabase, bulletinDraft, clientSecurity));
-
-		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
-		
-		BulletinSaver.saveToDatabase(privateBulletin, clientDatabase, true, clientSecurity);
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(clientDatabase, privateBulletin, clientSecurity));
-				
-		Vector list2 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
-		assertEquals("wrong length list2", 3, list2.size());
-		assertNotNull("null id1 [0] list2", list2.get(0));
-		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
-		String b1Summary = bulletinSealed.getLocalId() + "=" + bulletinSealed.getFieldDataPacket().getLocalId();
-		String privateBulletinSummary = privateBulletin.getLocalId() + "=" + privateBulletin.getFieldDataPacket().getLocalId();
-		assertContains("missing b1?",b1Summary , list2);
-		assertContains("missing privateBulletin?",privateBulletinSummary, list2);
 
 		TRACE_END();
 	}
@@ -1726,14 +1593,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("putContactInfo", NetworkInterfaceConstants.SERVER_DOWN, strResult);		
 		assertEquals("putContactInfo", 1, serverForClients.getNumberActiveClients() );
 
-		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(hqId, clientId);
-		verifyErrorResult("listFieldOfficeSealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("listFieldOfficeSealedBulletinIds", 1, serverForClients.getNumberActiveClients() );
-		
-		vecResult = testServer.legacyListFieldOfficeDraftBulletinIds(hqId, clientId);
-		verifyErrorResult("listFieldOfficeDraftBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("listFieldOfficeDraftBulletinIds", 1, serverForClients.getNumberActiveClients() );
-		
 		vecResult = testServer.listFieldOfficeAccounts(clientId);
 		verifyErrorResult("listFieldOfficeAccounts", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listFieldOfficeAccounts", 1, serverForClients.getNumberActiveClients() );

@@ -44,12 +44,5 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final String cmdGetServerCompliance = "getServerCompliance";
 
 	public static final String CMD_PING = "ping";
-
-	// legacy!
 	public static final String CMD_SERVER_INFO = "getServerInformation";
-	public static final String CMD_AUTHENTICATE_SERVER = "authenticateServer";
-	public static final String CMD_UPLOAD = "uploadBulletin";
-	public static final String CMD_DOWNLOAD = "downloadBulletin";
-	public static final String CMD_DOWNLOAD_PACKET = "downloadPacket";
-
 }

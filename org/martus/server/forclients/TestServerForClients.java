@@ -1,6 +1,5 @@
 package org.martus.server.forclients;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.util.Vector;
@@ -11,7 +10,6 @@ import org.martus.common.Bulletin;
 import org.martus.common.BulletinLoader;
 import org.martus.common.BulletinSaver;
 import org.martus.common.DatabaseKey;
-import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MockBulletin;
 import org.martus.common.MockClientDatabase;
@@ -164,10 +162,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		assertEquals("requestUploadRights", NetworkInterfaceConstants.REJECTED, strResult );
 		assertEquals("requestUploadRights", 0, testServer.getNumberActiveClients() );
 		
-		strResult = uploadBulletinChunk(testServer, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter, clientSecurity);
-		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult );
-		assertEquals("uploadBulletinChunk", 0, testServer.getNumberActiveClients() );
-
 		strResult = testServer.putBulletinChunk(clientId, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter);
 		assertEquals("putBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult);
 		assertEquals("putBulletinChunk", 0, testServer.getNumberActiveClients() );
@@ -188,10 +182,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		assertEquals("putContactInfo", NetworkInterfaceConstants.REJECTED, strResult);		
 		assertEquals("putContactInfo", 0, testServer.getNumberActiveClients() );
 
-		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(hqId, clientId);
-		verifyErrorResult("listFieldOfficeSealedBulletinIds1", vecResult, NetworkInterfaceConstants.OK );
-		assertEquals("listFieldOfficeSealedBulletinIds1", 0, testServer.getNumberActiveClients() );
-		
 		vecResult = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId, new Vector());
 		verifyErrorResult("listFieldOfficeDraftBulletinIds1", vecResult, NetworkInterfaceConstants.OK );
 		assertEquals("listFieldOfficeDraftBulletinIds1", 0, testServer.getNumberActiveClients() );
@@ -199,10 +189,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		vecResult = testServer.listFieldOfficeAccounts(hqId);
 		verifyErrorResult("listFieldOfficeAccounts1", vecResult, NetworkInterfaceConstants.OK );
 		assertEquals("listFieldOfficeAccounts1", 0, testServer.getNumberActiveClients() );
-		
-		vecResult = testServer.legacyListFieldOfficeSealedBulletinIds(clientId, clientId);
-		verifyErrorResult("listFieldOfficeSealedBulletinIds2", vecResult, NetworkInterfaceConstants.REJECTED );
-		assertEquals("listFieldOfficeSealedBulletinIds2", 0, testServer.getNumberActiveClients() );
 		
 		vecResult = testServer.listFieldOfficeDraftBulletinIds(clientId, clientId, new Vector());
 		verifyErrorResult("listFieldOfficeDraftBulletinIds2", vecResult, NetworkInterfaceConstants.REJECTED );
@@ -230,16 +216,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		assertEquals("getNumberActiveClients 3", 0, testServer.getNumberActiveClients());
 
 		TRACE_END();
-	}
-	
-	String uploadBulletinChunk(ServerForClients server, String authorId, String localId, int totalLength, int offset, int chunkLength, String data, MartusCrypto signer) throws Exception
-	{
-		String stringToSign = authorId + "," + localId + "," + Integer.toString(totalLength) + "," + 
-					Integer.toString(offset) + "," + Integer.toString(chunkLength) + "," + data;
-		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
-		byte[] sigBytes = signer.createSignature(new ByteArrayInputStream(bytesToSign));
-		String signature = Base64.encode(sigBytes);
-		return server.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
 	}
 	
 	void verifyErrorResult(String label, Vector vector, String expected )
