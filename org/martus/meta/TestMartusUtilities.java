@@ -110,6 +110,26 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		catch (IOException ignoreExpectedException)
 		{
 		}
+		
+		File zipWithRelativePathInformation = createCopyOfZipFile(originalZipFile, null, "../../../acctmap.txt");
+		try
+		{
+			validateZipFile(accountId, zipWithRelativePathInformation);
+			fail("Should have thrown for relative path in name");
+		}
+		catch(InvalidPacketException ignoreExpectedException)
+		{
+		}
+		
+		File zipWithAbsolutePathInformation = createCopyOfZipFile(originalZipFile, null, "c:/MartusServer/packets/acctmap.txt");
+		try
+		{
+			validateZipFile(accountId, zipWithAbsolutePathInformation);
+			fail("Should have thrown for absolute path in name");
+		}
+		catch(InvalidPacketException ignoreExpectedException)
+		{
+		}
 	}
 
 	private void validateZipFile(String accountId, File copiedZipFile)

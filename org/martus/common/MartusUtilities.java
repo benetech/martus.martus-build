@@ -436,26 +436,6 @@ public class MartusUtilities
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
 			
-			if(entry.isDirectory())
-			{
-				continue;
-			}
-			
-			if(entry.getName().startsWith(".."))
-			{
-				continue;
-			}
-			
-			if(entry.getName().indexOf("\\") >= 0 )
-			{
-				continue;
-			}
-			
-			if(entry.getName().indexOf("/") >= 0 )
-			{
-				continue;
-			}
-			
 			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
 
 			File file = File.createTempFile(tempFileName, null);
@@ -547,6 +527,23 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
+			
+			if(entry.isDirectory())
+			{
+				throw new Packet.InvalidPacketException("Directory entry");
+			}
+
+			if(entry.getName().startsWith(".."))
+			{
+				throw new Packet.InvalidPacketException("Relative path in name");
+			}
+
+			if(entry.getName().indexOf("\\") >= 0 ||
+				entry.getName().indexOf("/") >= 0 )
+			{
+				throw new Packet.InvalidPacketException("Path in name");
+			}
+			
 			String thisLocalId = entry.getName();
 			if(!localIds.contains(thisLocalId))
 				throw new IOException("Extra packet");
