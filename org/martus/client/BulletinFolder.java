@@ -1,8 +1,8 @@
 package org.martus.client;
 
-import java.util.*;
+import java.util.Vector;
 
-import org.martus.common.*;
+import org.martus.common.UniversalId;
 
 public class BulletinFolder
 {
@@ -14,7 +14,8 @@ public class BulletinFolder
 		store = storeToUse;
 		name = nameToUse;
 
-		idList = new Vector();
+		rawIdList = new Vector();
+		sortedIdList = null;
 	}
 
 	public BulletinStore getStore()
@@ -67,7 +68,7 @@ public class BulletinFolder
 
 	public int getBulletinCount()
 	{
-		return idList.size();
+		return rawIdList.size();
 	}
 
 	public String sortedBy()
@@ -93,42 +94,37 @@ public class BulletinFolder
 		return (getStatusAllowed().indexOf(bulletinStatus) != -1);
 	}
 
-	public synchronized void add(Bulletin b)
+	public synchronized void add(UniversalId id) 
 	{
-		UniversalId id = b.getUniversalId();
-		if(idList.contains(id))
+		if(rawIdList.contains(id))
 		{
 			//System.out.println("already contains " + id);
 			return;
 		}
-
+		
 		if(store.findBulletinByUniversalId(id) == null)
 		{
 			//System.out.println("not in store: " + id);
 			return;
 		}
-
-		String thisValue = b.get(sortTag);
-		int index;
-		for(index = 0; index < idList.size(); ++index)
-		{
-			Bulletin tryBulletin = getBulletin(index);
-			if(tryBulletin.get(sortTag).compareTo(thisValue) * sortDir > 0)
-				break;
-		}
-		idList.insertElementAt(id, index);
+		
+		rawIdList.add(id);
+		insertIntoSortedList(id);
 	}
 
 	public synchronized void remove(UniversalId id)
 	{
-		if(!idList.contains(id))
+		if(!rawIdList.contains(id))
 			return;
-		idList.remove(id);
+		rawIdList.remove(id);
+		if(sortedIdList != null)
+			sortedIdList.remove(id);
 	}
 
 	public synchronized void removeAll()
 	{
-		idList.clear();
+		rawIdList.clear();
+		sortedIdList = null;
 	}
 
 	public Bulletin getBulletin(int index)
@@ -141,15 +137,16 @@ public class BulletinFolder
 	
 	public UniversalId getBulletinUniversalId(int index)
 	{
-		if(index < 0 || index >= idList.size())
+		needSortedIdList();
+		if(index < 0 || index >= sortedIdList.size())
 			return null;
-		return  (UniversalId)idList.get(index);
+		return  (UniversalId)sortedIdList.get(index);
 	}
 
 	public boolean contains(Bulletin b)
 	{
 		UniversalId id = b.getUniversalId();
-		return idList.contains(id);
+		return rawIdList.contains(id);
 	}
 
 	public void sortBy(String tag)
@@ -168,7 +165,8 @@ public class BulletinFolder
 
 	public int find(UniversalId id)
 	{
-		return idList.indexOf(id);
+		needSortedIdList();
+		return sortedIdList.indexOf(id);
 	}
 	
 	public static boolean isNameVisible(String folderName)
@@ -176,22 +174,44 @@ public class BulletinFolder
 		return !folderName.startsWith("*");
 	}
 
+	private void insertIntoSortedList(UniversalId uid) 
+	{
+		if(sortedIdList == null)
+			return;
+			
+		Bulletin b = store.findBulletinByUniversalId(uid);
+		String thisValue = b.get(sortTag);
+		int index;
+		for(index = 0; index < sortedIdList.size(); ++index)
+		{
+			Bulletin tryBulletin = getBulletin(index);
+			if(tryBulletin.get(sortTag).compareTo(thisValue) * sortDir > 0)
+				break;
+		}
+		sortedIdList.insertElementAt(uid, index);
+	}
+
 	private synchronized void sortExisting()
 	{
-		int size = idList.size();
-		Vector oldIdList = idList;
-		idList = new Vector();
-		for(int i = 0; i < size; ++i)
+		sortedIdList = new Vector();
+		for(int i = 0; i < rawIdList.size(); ++i)
 		{
-			UniversalId id = (UniversalId)oldIdList.get(i);
-			add(store.findBulletinByUniversalId(id));
+			UniversalId id = (UniversalId)rawIdList.get(i);
+			insertIntoSortedList(id);
 		}
+	}
+	
+	private void needSortedIdList()
+	{
+		if(sortedIdList == null)
+			sortExisting();
 	}
 
 	private BulletinStore store;
 	private String name;
 
-	private Vector idList;
+	private Vector rawIdList;
+	private Vector sortedIdList;
 	private boolean canRename = true;
 	private boolean canDelete = true;
 	private String sortTag = "eventdate";

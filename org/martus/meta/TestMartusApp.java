@@ -377,13 +377,13 @@ public class TestMartusApp extends TestCaseEnhanced
 		BulletinFolder f2 = app.createUniqueFolder();
 		BulletinFolder f3 = app.createUniqueFolder();
 		BulletinFolder f4 = app.getFolderDraftOutbox();
-		f1.add(b1);
-		f2.add(b2);
-		f3.add(b1);
-		f3.add(b2);
-		f4.add(b2);
+		f1.add(b1.getUniversalId());
+		f2.add(b2.getUniversalId());
+		f3.add(b1.getUniversalId());
+		f3.add(b2.getUniversalId());
+		f4.add(b2.getUniversalId());
 		BulletinFolder discarded = app.getFolderDiscarded();
-		discarded.add(b2);
+		discarded.add(b2.getUniversalId());
 
 		Vector v1 = app.findBulletinInAllVisibleFolders(b1);
 		Vector v2 = app.findBulletinInAllVisibleFolders(b2);
@@ -1909,7 +1909,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		b.setSealed();
 		b.set(b.TAGTITLE, "test title");
 		b.save();
-		app.getFolderOutbox().add(b);
+		app.getFolderOutbox().add(b.getUniversalId());
 		return b;
 	}
 
@@ -1919,7 +1919,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		b.setDraft();
 		b.set(b.TAGTITLE, "test title");
 		b.save();
-		app.getFolderDraftOutbox().add(b);
+		app.getFolderDraftOutbox().add(b.getUniversalId());
 		return b;
 	}
 
