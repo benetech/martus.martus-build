@@ -352,6 +352,10 @@ public class FieldDataPacket extends Packet
 		{
 			encryptedDataDuringLoad = data;
 		}
+		else if(elementName.equals(MartusXml.AttachmentElementName))
+		{
+			//do nothing
+		}
 		else
 		{
 			super.setFromXml(elementName, data);
