@@ -46,7 +46,7 @@ abstract public class MockDatabase implements Database
 		addKeyToMap(key, record);
 	}
 	
-	public void writeRecord(HashMap fileMapping) throws IOException
+	public void importFiles(HashMap fileMapping) throws IOException
 	{
 		Iterator keys = fileMapping.keySet().iterator();
 		while(keys.hasNext())

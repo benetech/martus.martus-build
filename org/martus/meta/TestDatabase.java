@@ -203,7 +203,7 @@ public class TestDatabase extends TestCaseEnhanced
 	public void testWriteRecords() throws Exception
 	{
 		TRACE("testWriteRecords");
-		internalTestWriteRecords(mockDb);
+		internalTestImportFiles(mockDb);
 		
 	}
 	
@@ -504,10 +504,17 @@ public class TestDatabase extends TestCaseEnhanced
 		in.close();
 	}
 	
-	private void internalTestWriteRecords(Database db) throws Exception
+	private void internalTestImportFiles(Database db) throws Exception
 	{
 		File temp1 = createTempFile();
+		UnicodeWriter writer = new UnicodeWriter(temp1);
+		writer.write(smallString);
+		writer.close();
+
 		File temp2 = createTempFile();
+		writer = new UnicodeWriter(temp2);
+		writer.write(largeString);
+		writer.close();
 
 		UniversalId uid1 = UniversalId.createDummyUniversalId();
 		DatabaseKey sealedKey1 = DatabaseKey.createSealedKey(uid1);
@@ -519,17 +526,20 @@ public class TestDatabase extends TestCaseEnhanced
 		entries.put(sealedKey1, temp1.getAbsolutePath());
 		entries.put(sealedKey2, temp2.getAbsolutePath());
 
-		db.writeRecord(entries);
+		db.importFiles(entries);
 		
 		InputStream in = db.openInputStream(sealedKey1, security);
-		assertNotNull("not found?", in);
+		assertNotNull(db.toString() + " not found 1?", in);
 		in.close();
 		in = db.openInputStream(sealedKey2, security);
-		assertNotNull("not found?", in);
+		assertNotNull(db.toString() + " not found 2?", in);
 		in.close();
 
 		assertFalse(temp1.toString() +" file exists?", temp1.exists());
 		assertFalse(temp2.toString() +" file exists?", temp2.exists());
+		
+		assertEquals(db.toString() + " record 1 incorrect?", smallString, db.readRecord(sealedKey1, security));
+		assertEquals(db.toString() + " record 2 incorrect?", largeString, db.readRecord(sealedKey2, security));
 	}
 
 	static String buildLargeString()

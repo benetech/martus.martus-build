@@ -324,9 +324,8 @@ public class MartusUtilities
 		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
 		
 		HashMap zipEntries = new HashMap();
-		zipEntries.clear();
 		
-		final String tempFileName = "$$$";
+		final String tempFileName = "$$$importZip";
 		
 		Enumeration entries = zip.entries();
 		while(entries.hasMoreElements())
@@ -336,25 +335,25 @@ public class MartusUtilities
 
 			File file = File.createTempFile(tempFileName, null);
 
-			FileOutputStream out = new FileOutputStream(file);
-			BufferedOutputStream bout = new BufferedOutputStream(out);
+			FileOutputStream rawOut = new FileOutputStream(file);
+			BufferedOutputStream out = new BufferedOutputStream(rawOut);
 			
-			byte bArray[] = new byte[256];
+			byte bytes[] = new byte[MartusConstants.streamBufferCopySize];
 			int nBytesRead;
 			while(in.available() > 0)
 			{
-				nBytesRead = in.read(bArray);
-				bout.write(bArray, 0, nBytesRead);
+				nBytesRead = in.read(bytes);
+				out.write(bytes, 0, nBytesRead);
 			}
-			bout.flush();
-			bout.close();
+			out.flush();
+			out.close();
 		
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
 			DatabaseKey key = MartusUtilities.createKeyWithHeaderStatus(header, uid);
 
-			zipEntries.put(key,file.getAbsolutePath());
+			zipEntries.put(key,file);
 		}
-		db.writeRecord(zipEntries);
+		db.importFiles(zipEntries);
 	}
 
 	private static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws

@@ -54,19 +54,18 @@ public class FileDatabase implements Database
 		writeRecord(key, new StringInputStream(record));
 	}
 	
-	public void writeRecord(HashMap fileMapping)  throws IOException
+	public void importFiles(HashMap fileMapping)  throws IOException
 	{
 		Iterator keys = fileMapping.keySet().iterator();
 		while(keys.hasNext())
 		{
 			DatabaseKey key = (DatabaseKey) keys.next();
-			String filePath = (String) fileMapping.get(key);
+			File file = (File) fileMapping.get(key);
 
-			InputStream in = new FileInputStream(filePath);
+			InputStream in = new FileInputStream(file.getAbsolutePath());
 			writeRecord(key,in);
 			in.close();
-			
-			File file = new File(filePath);
+
 			file.delete();
 		}
 	}

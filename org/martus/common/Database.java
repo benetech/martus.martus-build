@@ -9,9 +9,9 @@ public interface Database
 {
 	public void deleteAllData();
 	public void writeRecord(DatabaseKey key, String record) throws IOException;
-	public void writeRecord(HashMap entries) throws IOException;
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws IOException, MartusCrypto.CryptoException;
 	public void writeRecord(DatabaseKey key, InputStream record) throws IOException;
+	public void importFiles(HashMap entries) throws IOException;
 	public InputStream openInputStream(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
 	public String readRecord(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
 	public void discardRecord(DatabaseKey key);
