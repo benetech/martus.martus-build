@@ -13,7 +13,6 @@ import org.martus.common.NetworkInterfaceConstants;
 
 public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 {
-	
 	public ServerSideAmplifierHandler(MartusAmplifierServer serverToUse)
 	{
 		server = serverToUse;
@@ -32,7 +31,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 			public void visit(String accountString)
 			{
-				PublicDataCollector collector = new PublicDataCollector();
+				UniversidlIdOfPublicBulletinsCollector collector = new UniversidlIdOfPublicBulletinsCollector();
 				Database db = server.getDatabase();
 				db.visitAllRecordsForAccount(collector, accountString);
 				
@@ -63,7 +62,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 		return result;
 	}
 	
-	public Vector getAccountUniversalIds(String myAccountId, Vector parameters, String signature)
+	public Vector getPublicBulletinUniversalIds(String myAccountId, Vector parameters, String signature)
 	{
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
@@ -72,7 +71,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			return result;
 		}
 		
-		PublicDataCollector collector = new PublicDataCollector();
+		UniversidlIdOfPublicBulletinsCollector collector = new UniversidlIdOfPublicBulletinsCollector();
 		String accountString = (String) parameters.get(0);
 		Database db = server.getDatabase();
 		db.visitAllRecordsForAccount(collector, accountString);
@@ -111,7 +110,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 	/// End Interface //
 	
-	class PublicDataCollector implements Database.PacketVisitor
+	class UniversidlIdOfPublicBulletinsCollector implements Database.PacketVisitor
 	{
 		public void visit(DatabaseKey key)
 		{
