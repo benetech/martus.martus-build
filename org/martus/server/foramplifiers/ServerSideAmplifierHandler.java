@@ -3,12 +3,10 @@ package org.martus.server.foramplifiers;
 import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
-import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
-import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
@@ -75,9 +73,9 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 		}
 		
 		PublicDataCollector collector = new PublicDataCollector();
-		String parameter = (String) parameters.get(0);
+		String accountString = (String) parameters.get(0);
 		Database db = server.getDatabase();
-		db.visitAllRecordsForAccount(collector, parameter);
+		db.visitAllRecordsForAccount(collector, accountString);
 		
 		result.add(NetworkInterfaceConstants.OK);
 		result.add(collector.infos);
@@ -123,12 +121,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 				{
 					return;
 				}
-				
-				InputStreamWithSeek in = server.getDatabase().openInputStream(key, null);
-				byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, server.security);
-				in.close();
-				String sigString = Base64.encode(sigBytes);
-				
+							
 				String headerXml = server.getDatabase().readRecord(key, server.security);
 				byte[] headerBytes = headerXml.getBytes("UTF-8");
 				
@@ -137,10 +130,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 				bhp.loadFromXml(headerIn, null);
 				if(! bhp.isAllPrivate())
 				{
-					Vector info = new Vector();
-					info.add(key.getLocalId());
-					info.add(sigString);
-					infos.add(info);
+					infos.add(key.getUniversalId().toString());
 				}
 			}
 			catch (Exception e)
