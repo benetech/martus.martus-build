@@ -71,9 +71,26 @@ class BackgroundUploadTimerTask extends TimerTask
 	private void doUploading()
 		throws InterruptedException, InvocationTargetException
 	{
+		UiProgressMeter progressMeter = mainWindow.statusBar.getBackgroundProgressMeter();
+		String tag = "StatusReady";
 		try
 		{
-			mainWindow.uploadResult = uploader.backgroundUpload();
+			BackgroundUploader.UploadResult uploadResult = uploader.backgroundUpload(); 
+			mainWindow.uploadResult = uploadResult.result;
+			if(uploadResult.result == null)
+			{
+				tag = "UploadFailedProgressMessage"; 
+				if(uploadResult.exceptionThrown == null)
+					tag = "NoServerAvailableProgressMessage";
+			}
+			else if(uploadResult.uid != null)
+			{
+				//System.out.println("UiMainWindow.Tick.run: " + uploadResult);
+				mainWindow.folderContentsHaveChanged(getStore().getFolderSent());
+				mainWindow.folderContentsHaveChanged(getStore().getFolderOutbox());
+				mainWindow.folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+				mainWindow.folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
+			}
 		}
 		catch (MartusApp.DamagedBulletinException e)
 		{
@@ -84,14 +101,10 @@ class BackgroundUploadTimerTask extends TimerTask
 			mainWindow.folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
 			mainWindow.folderTreeContentsHaveChanged();
 		}
-		if(mainWindow.uploadResult != null)
-		{
-			//System.out.println("UiMainWindow.Tick.run: " + uploadResult);
-			mainWindow.folderContentsHaveChanged(getStore().getFolderSent());
-			mainWindow.folderContentsHaveChanged(getStore().getFolderOutbox());
-			mainWindow.folderContentsHaveChanged(getStore().getFolderDraftOutbox());
-			mainWindow.folderContentsHaveChanged(getApp().createOrFindFolder(getStore().getNameOfFolderDamaged()));
-		}
+		
+		UiLocalization localization = mainWindow.getLocalization();
+		progressMeter.setStatusMessageTag(tag);
+		progressMeter.hideProgressMeter();
 	}
 		
 	public void checkComplianceStatement()

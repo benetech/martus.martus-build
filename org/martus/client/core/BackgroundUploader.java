@@ -66,23 +66,24 @@ public class BackgroundUploader
 		localization = app.getLocalization();
 	}
 
-	public String backgroundUpload() throws
+	public UploadResult backgroundUpload() throws
 		MartusApp.DamagedBulletinException
 	{
-		String result = null;
+		UploadResult uploadResult = new UploadResult();
+		uploadResult.result = NetworkInterfaceConstants.OK;
 	
 		BulletinFolder folderOutbox = app.getFolderOutbox();
 		BulletinFolder folderDraftOutbox = app.getFolderDraftOutbox();
 		if(folderOutbox.getBulletinCount() > 0)
-			result = backgroundUploadOneSealedBulletin(folderOutbox);
+			uploadResult = backgroundUploadOneSealedBulletin(folderOutbox);
 		else if(folderDraftOutbox.getBulletinCount() > 0)
-			result = backgroundUploadOneDraftBulletin(folderDraftOutbox);
+			uploadResult = backgroundUploadOneDraftBulletin(folderDraftOutbox);
 		else if(app.getConfigInfo().shouldContactInfoBeSentToServer())
 			sendContactInfoToServer();
 	
-		if(progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(localization.getFieldLabel("StatusReady"));
-		return result;
+		if(uploadResult.isHopelesslyDamaged)
+			throw new MartusApp.DamagedBulletinException(uploadResult.exceptionThrown);
+		return uploadResult;
 	}
 
 	public String uploadBulletin(Bulletin b) throws
@@ -98,8 +99,9 @@ public class BackgroundUploader
 			MartusCrypto security = app.getSecurity();
 			BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
 			
-			String message = getUploadProgressMessage(b);
-			return uploadBulletinZipFile(uid, tempFile, message);
+			String tag = getUploadProgressTag(b);
+			progressMeter.setStatusMessageTag(tag);
+			return uploadBulletinZipFile(uid, tempFile);
 		}
 		finally
 		{
@@ -107,21 +109,15 @@ public class BackgroundUploader
 		}
 	}
 	
-	private String getUploadProgressMessage(Bulletin b)
+	private String getUploadProgressTag(Bulletin b)
 	{
-		String tag;
 		if(b.isDraft())
-			tag = "UploadingDraftBulletin";
+			return "UploadingDraftBulletin";
 		else
-			tag = "UploadingSealedBulletin";
-		String message = localization.getFieldLabel(tag);
-		return message;
+			return "UploadingSealedBulletin";
 	}
 	
-	private String uploadBulletinZipFile(
-		UniversalId uid,
-		File tempFile,
-		String message)
+	private String uploadBulletinZipFile(UniversalId uid, File tempFile)
 		throws
 			FileTooLargeException,
 			FileNotFoundException,
@@ -136,7 +132,7 @@ public class BackgroundUploader
 		while(true)
 		{
 			if(progressMeter != null)
-				progressMeter.updateProgressMeter(message, offset, totalSize);
+				progressMeter.updateProgressMeter(offset, totalSize);
 			int chunkSize = inputStream.read(rawBytes);
 			if(chunkSize <= 0)
 				break;
@@ -164,11 +160,7 @@ public class BackgroundUploader
 		BackgroundUploader.UploadResult uploadResult = new BackgroundUploader.UploadResult();
 	
 		if(!app.isSSLServerAvailable())
-		{
-			if(progressMeter != null)
-				progressMeter.setStatusMessageAndHideMeter(app.getLocalization().getFieldLabel("NoServerAvailableProgressMessage"));
 			return uploadResult;
-		}
 	
 		int randomBulletin = new Random().nextInt(uploadFromFolder.getBulletinCount());
 		Bulletin b = uploadFromFolder.getBulletinSorted(randomBulletin);
@@ -225,10 +217,10 @@ public class BackgroundUploader
 		return uploadResult;
 	}
 
-	String backgroundUploadOneSealedBulletin(BulletinFolder uploadFromFolder) throws
+	UploadResult backgroundUploadOneSealedBulletin(BulletinFolder uploadFromFolder) throws
 		MartusApp.DamagedBulletinException
 	{
-		BackgroundUploader.UploadResult uploadResult = uploadOneBulletin(uploadFromFolder);
+		UploadResult uploadResult = uploadOneBulletin(uploadFromFolder);
 		
 		if(uploadResult.result != null)
 		{
@@ -258,22 +250,18 @@ public class BackgroundUploader
 					}
 				}
 			}
-			return uploadResult.result;
+			return uploadResult;
 		}
 	
 		if(uploadResult.isHopelesslyDamaged)
 			app.moveBulletinToDamaged(uploadFromFolder, uploadResult.uid);
-		if(uploadResult.result == null && progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(localization.getFieldLabel("UploadFailedProgressMessage"));
-		if(uploadResult.exceptionThrown != null)
-			throw new MartusApp.DamagedBulletinException(uploadResult.exceptionThrown);
-		return null;
+		return uploadResult;
 	}
 
-	String backgroundUploadOneDraftBulletin(BulletinFolder uploadFromFolder) throws
+	UploadResult backgroundUploadOneDraftBulletin(BulletinFolder uploadFromFolder) throws
 		MartusApp.DamagedBulletinException
 	{
-		BackgroundUploader.UploadResult uploadResult = uploadOneBulletin(uploadFromFolder);
+		UploadResult uploadResult = uploadOneBulletin(uploadFromFolder);
 		
 		if(uploadResult.result != null)
 		{
@@ -282,16 +270,12 @@ public class BackgroundUploader
 				uploadFromFolder.remove(uploadResult.uid);
 				app.getStore().saveFolders();
 			}
-			return uploadResult.result;
+			return uploadResult;
 		}
 	
 		if(uploadResult.isHopelesslyDamaged)
 			app.moveBulletinToDamaged(uploadFromFolder, uploadResult.uid);
-		if(uploadResult.result == null && progressMeter != null)
-			progressMeter.setStatusMessageAndHideMeter(localization.getFieldLabel("UploadFailedProgressMessage"));
-		if(uploadResult.exceptionThrown != null)
-			throw new MartusApp.DamagedBulletinException(uploadResult.exceptionThrown);
-		return null;
+		return uploadResult;
 	}
 
 	public String putContactInfoOnServer(Vector info)  throws
@@ -336,12 +320,12 @@ public class BackgroundUploader
 		}
 	}
 
-	static class UploadResult
+	public static class UploadResult
 	{
-		UniversalId uid;
-		String result;
-		String exceptionThrown;
-		boolean isHopelesslyDamaged;
+		public UniversalId uid;
+		public String result;
+		public String exceptionThrown;
+		public boolean isHopelesslyDamaged;
 	}
 
 	MartusApp app;

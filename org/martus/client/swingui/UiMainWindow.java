@@ -1333,8 +1333,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		folderSplitter.setDividerLocation(uiState.getCurrentFolderSplitterPosition());
 
 		getContentPane().add(folderSplitter);
-		statusBar = new UiStatusBar();
-		statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(getLocalization().getFieldLabel("StatusReady"));
+		statusBar = new UiStatusBar(getLocalization());
+		UiProgressMeter r = statusBar.getBackgroundProgressMeter();
+		r.setStatusMessageTag("StatusReady");
+		r.hideProgressMeter();
 		getContentPane().add(statusBar, BorderLayout.SOUTH );
 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();

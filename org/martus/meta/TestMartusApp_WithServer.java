@@ -1201,6 +1201,5 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	private BackgroundUploader uploaderWithServer;
 	private BackgroundUploader uploaderWithoutServer;
 	static final String sampleMagicWord = "beans!";
-
 }
 

@@ -47,8 +47,8 @@ public class UiProgressRetrieveDlg extends JDialog
 		cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(new CancelHandler());
 		cancel.setAlignmentX(JButton.CENTER_ALIGNMENT);
-		bulletinCountMeter = new UiProgressMeter(this);
-		statusMessage = localization.getFieldLabel(tag);
+		bulletinCountMeter = new UiProgressMeter(this, localization);
+		bulletinCountMeter.setStatusMessageTag(tag);
 		updateBulletinCountMeter(0, 1);
 		getContentPane().add(new JLabel("    "), BorderLayout.EAST);
 		getContentPane().add(new JLabel("    "), BorderLayout.WEST);
@@ -93,12 +93,11 @@ public class UiProgressRetrieveDlg extends JDialog
 
 	public void updateBulletinCountMeter(int currentValue, int maxValue)
 	{
-		bulletinCountMeter.updateProgressMeter(statusMessage, currentValue, maxValue);
+		bulletinCountMeter.updateProgressMeter(currentValue, maxValue);
 	}
 
 	public UiProgressMeter bulletinCountMeter;
 	public JButton cancel;
 
-	private String statusMessage;
 	private boolean isExitRequested;
 }

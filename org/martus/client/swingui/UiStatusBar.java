@@ -30,24 +30,22 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import org.martus.client.core.*;
-
 public class UiStatusBar extends JPanel
 {
 
-	public UiStatusBar()
+	public UiStatusBar(UiLocalization localization)
 	{
 		super();
 		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
 
 		statusBarBox = Box.createHorizontalBox();
-		backgroundProgressMeter = new UiProgressMeter(null);
+		backgroundProgressMeter = new UiProgressMeter(null, localization);
 		statusBarBox.add(backgroundProgressMeter);
 		statusBarBox.add(Box.createHorizontalGlue());
 		add(statusBarBox);
 	}
 
-	public ProgressMeterInterface getBackgroundProgressMeter()
+	public UiProgressMeter getBackgroundProgressMeter()
 	{
 		return backgroundProgressMeter;
 	}

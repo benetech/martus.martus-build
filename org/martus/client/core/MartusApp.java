@@ -928,10 +928,9 @@ public class MartusApp
 		tempFile.deleteOnExit();
 		FileOutputStream outputStream = new FileOutputStream(tempFile);
 
-		String progressTag = getLocalization().getFieldLabel("ChunkProgressStatusMessage");
 		int masterTotalSize = BulletinZipUtilities.retrieveBulletinZipToStream(uid, outputStream,
 						serverChunkSize, getCurrentNetworkInterfaceGateway(),  security,
-						progressMeter, progressTag);
+						progressMeter);
 
 		outputStream.close();
 

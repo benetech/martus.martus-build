@@ -88,6 +88,11 @@ public class Retriever
 		{
 			uidList = list;
 			retrievedFolder = folder;
+			if(progressDlg != null)
+			{
+				String progressTag = "ChunkProgressStatusMessage";
+				progressDlg.getChunkCountMeter().setStatusMessageTag(progressTag);
+			}
 		}
 
 		public void run()
@@ -115,7 +120,7 @@ public class Retriever
 				}
 				catch(Exception e)
 				{
-					//e.printStackTrace();
+					e.printStackTrace();
 					gotAllBulletins = false;
 				}
 			}

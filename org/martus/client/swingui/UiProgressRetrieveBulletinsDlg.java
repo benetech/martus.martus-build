@@ -34,8 +34,10 @@ public class UiProgressRetrieveBulletinsDlg extends UiProgressRetrieveDlg
 	public UiProgressRetrieveBulletinsDlg(UiMainWindow window, String tag)
 	{
 		super(window, tag);
-		chunkCountMeter = new UiProgressMeter(this);
-		chunkCountMeter.updateProgressMeter(window.getLocalization().getFieldLabel("ChunkProgressStatusMessage"), 0, 1);
+		chunkCountMeter = new UiProgressMeter(this, window.getLocalization());
+		
+		chunkCountMeter.setStatusMessageTag("ChunkProgressStatusMessage");
+		chunkCountMeter.updateProgressMeter(0, 1);
 		Box vBox = Box.createVerticalBox();
 		vBox.add(new JLabel("    "));
 		vBox.add(bulletinCountMeter);
@@ -46,7 +48,7 @@ public class UiProgressRetrieveBulletinsDlg extends UiProgressRetrieveDlg
 		getContentPane().add(vBox);
 		UiUtilities.centerDlg(this);
 	}
-
+	
 	public UiProgressMeter getChunkCountMeter()
 	{
 		return chunkCountMeter;

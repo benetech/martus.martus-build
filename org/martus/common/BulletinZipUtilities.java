@@ -184,255 +184,255 @@ public class BulletinZipUtilities
 		return keys;
 	}
 
-		public static void extractPacketsToZipStream(String clientId, Database db, DatabaseKey[] packetKeys, OutputStream outputStream, MartusCrypto security) throws
-			IOException,
-			UnsupportedEncodingException
+	public static void extractPacketsToZipStream(String clientId, Database db, DatabaseKey[] packetKeys, OutputStream outputStream, MartusCrypto security) throws
+		IOException,
+		UnsupportedEncodingException
+	{
+		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
+// TODO: Setting the method to STORED seems like it should dramatically
+// speed up writing and reading zip files. The javadocs say it is supported.
+// But every time I try it, the zip file ends up empty. kbs.
+//		zipOut.setMethod(zipOut.STORED);
+
+		try
 		{
-			ZipOutputStream zipOut = new ZipOutputStream(outputStream);
-	// TODO: Setting the method to STORED seems like it should dramatically
-	// speed up writing and reading zip files. The javadocs say it is supported.
-	// But every time I try it, the zip file ends up empty. kbs.
-	//		zipOut.setMethod(zipOut.STORED);
-	
-			try
+			for(int i = 0; i < packetKeys.length; ++i)
 			{
-				for(int i = 0; i < packetKeys.length; ++i)
-				{
-					DatabaseKey key = packetKeys[i];
-					ZipEntry entry = new ZipEntry(key.getLocalId());
-					zipOut.putNextEntry(entry);
-	
-					InputStream in = db.openInputStream(key, security);
-	
-					int got;
-					byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
-					while( (got=in.read(bytes)) >= 0)
-						zipOut.write(bytes, 0, got);
-	
-					in.close();
-					zipOut.flush();
-				}
-			}
-			catch(MartusCrypto.CryptoException e)
-			{
-				throw new IOException("CryptoException " + e);
-			}
-			finally
-			{
-				zipOut.close();
+				DatabaseKey key = packetKeys[i];
+				ZipEntry entry = new ZipEntry(key.getLocalId());
+				zipOut.putNextEntry(entry);
+
+				InputStream in = db.openInputStream(key, security);
+
+				int got;
+				byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
+				while( (got=in.read(bytes)) >= 0)
+					zipOut.write(bytes, 0, got);
+
+				in.close();
+				zipOut.flush();
 			}
 		}
+		catch(MartusCrypto.CryptoException e)
+		{
+			throw new IOException("CryptoException " + e);
+		}
+		finally
+		{
+			zipOut.close();
+		}
+	}
 
-		public static void importBulletinPacketsFromZipFileToDatabase(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
-			throws IOException,
+	public static void importBulletinPacketsFromZipFileToDatabase(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+		throws IOException,
+		Packet.InvalidPacketException,
+		Packet.SignatureVerificationException,
+		Packet.WrongAccountException,
+		MartusCrypto.DecryptionException
+	{
+		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		if(authorAccountId == null)
+			authorAccountId = header.getAccountId();
+	
+		BulletinZipUtilities.validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
+		MartusUtilities.deleteDraftBulletinPackets(db, header.getUniversalId(), security);
+	
+		HashMap zipEntries = new HashMap();
+		StreamCopier copier = new StreamCopier();
+		StreamEncryptor encryptor = new StreamEncryptor(security);
+	
+		DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(header);
+		for (int i = 0; i < keys.length; i++)
+		{
+			String localId = keys[i].getLocalId();
+			ZipEntry entry = zip.getEntry(localId);
+	
+			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
+	
+			final String tempFileName = "$$$importZip";
+			File file = File.createTempFile(tempFileName, null);
+			FileOutputStream rawOut = new FileOutputStream(file);
+	
+			StreamFilter filter = copier;
+			if(db.mustEncryptLocalData() && MartusUtilities.doesPacketNeedLocalEncryption(header, in))
+				filter = encryptor;
+	
+			MartusUtilities.copyStreamWithFilter(in, rawOut, filter);
+	
+			rawOut.close();
+			in.close();
+	
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, keys[i].getLocalId());
+			DatabaseKey key = header.createKeyWithHeaderStatus(uid);
+	
+			zipEntries.put(key,file);
+		}
+		db.importFiles(zipEntries);
+	}
+
+	public static void validateIntegrityOfZipFilePublicPackets(String authorAccountId, ZipFile zip, MartusCrypto security)
+		throws
 			Packet.InvalidPacketException,
+			IOException,
 			Packet.SignatureVerificationException,
 			Packet.WrongAccountException,
 			MartusCrypto.DecryptionException
+	{
+		BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		DatabaseKey[] keys = bhp.getPublicPacketKeys();
+		Vector localIds = new Vector();
+		for (int i = 0; i < keys.length; i++)
+			localIds.add(keys[i].getLocalId());
+	
+		//TODO validate Header Packet matches other packets
+		Enumeration entries = zip.entries();
+		if(!entries.hasMoreElements())
 		{
-			BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
-			if(authorAccountId == null)
-				authorAccountId = header.getAccountId();
-		
-			BulletinZipUtilities.validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
-			MartusUtilities.deleteDraftBulletinPackets(db, header.getUniversalId(), security);
-		
-			HashMap zipEntries = new HashMap();
-			StreamCopier copier = new StreamCopier();
-			StreamEncryptor encryptor = new StreamEncryptor(security);
-		
-			DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(header);
-			for (int i = 0; i < keys.length; i++)
-			{
-				String localId = keys[i].getLocalId();
-				ZipEntry entry = zip.getEntry(localId);
-		
-				InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
-		
-				final String tempFileName = "$$$importZip";
-				File file = File.createTempFile(tempFileName, null);
-				FileOutputStream rawOut = new FileOutputStream(file);
-		
-				StreamFilter filter = copier;
-				if(db.mustEncryptLocalData() && MartusUtilities.doesPacketNeedLocalEncryption(header, in))
-					filter = encryptor;
-		
-				MartusUtilities.copyStreamWithFilter(in, rawOut, filter);
-		
-				rawOut.close();
-				in.close();
-		
-				UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, keys[i].getLocalId());
-				DatabaseKey key = header.createKeyWithHeaderStatus(uid);
-		
-				zipEntries.put(key,file);
-			}
-			db.importFiles(zipEntries);
+			throw new Packet.InvalidPacketException("Empty zip file");
 		}
-
-		public static void validateIntegrityOfZipFilePublicPackets(String authorAccountId, ZipFile zip, MartusCrypto security)
-			throws
-				Packet.InvalidPacketException,
-				IOException,
-				Packet.SignatureVerificationException,
-				Packet.WrongAccountException,
-				MartusCrypto.DecryptionException
+	
+		while(entries.hasMoreElements())
 		{
-			BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
-			DatabaseKey[] keys = bhp.getPublicPacketKeys();
-			Vector localIds = new Vector();
-			for (int i = 0; i < keys.length; i++)
-				localIds.add(keys[i].getLocalId());
-		
-			//TODO validate Header Packet matches other packets
-			Enumeration entries = zip.entries();
-			if(!entries.hasMoreElements())
+			ZipEntry entry = (ZipEntry)entries.nextElement();
+	
+			if(entry.isDirectory())
 			{
-				throw new Packet.InvalidPacketException("Empty zip file");
+				throw new Packet.InvalidPacketException("Directory entry");
 			}
-		
-			while(entries.hasMoreElements())
+	
+			if(entry.getName().startsWith(".."))
 			{
-				ZipEntry entry = (ZipEntry)entries.nextElement();
-		
-				if(entry.isDirectory())
-				{
-					throw new Packet.InvalidPacketException("Directory entry");
-				}
-		
-				if(entry.getName().startsWith(".."))
-				{
-					throw new Packet.InvalidPacketException("Relative path in name");
-				}
-		
-				if(entry.getName().indexOf("\\") >= 0 ||
-					entry.getName().indexOf("/") >= 0 )
-				{
-					throw new Packet.InvalidPacketException("Path in name");
-				}
-		
-				String thisLocalId = entry.getName();
-				if(!localIds.contains(thisLocalId))
-					throw new IOException("Extra packet");
-				localIds.remove(thisLocalId);
-				InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
-				Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
+				throw new Packet.InvalidPacketException("Relative path in name");
 			}
-		
-			if(localIds.size() > 0)
-				throw new IOException("Missing packets");
+	
+			if(entry.getName().indexOf("\\") >= 0 ||
+				entry.getName().indexOf("/") >= 0 )
+			{
+				throw new Packet.InvalidPacketException("Path in name");
+			}
+	
+			String thisLocalId = entry.getName();
+			if(!localIds.contains(thisLocalId))
+				throw new IOException("Extra packet");
+			localIds.remove(thisLocalId);
+			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
+			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}
+	
+		if(localIds.size() > 0)
+			throw new IOException("Missing packets");
+	}
 
-		public static void validateIntegrityOfZipFilePackets(String authorAccountId, ZipFile zip, MartusCrypto security)
-			throws
-				Packet.InvalidPacketException,
-				IOException,
-				Packet.SignatureVerificationException,
-				Packet.WrongAccountException,
-				MartusCrypto.DecryptionException
+	public static void validateIntegrityOfZipFilePackets(String authorAccountId, ZipFile zip, MartusCrypto security)
+		throws
+			Packet.InvalidPacketException,
+			IOException,
+			Packet.SignatureVerificationException,
+			Packet.WrongAccountException,
+			MartusCrypto.DecryptionException
+	{
+		BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(bhp);
+		Vector localIds = new Vector();
+		for (int i = 0; i < keys.length; i++)
+			localIds.add(keys[i].getLocalId());
+	
+		//TODO validate Header Packet matches other packets
+		Enumeration entries = zip.entries();
+		if(!entries.hasMoreElements())
 		{
-			BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
-			DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(bhp);
-			Vector localIds = new Vector();
-			for (int i = 0; i < keys.length; i++)
-				localIds.add(keys[i].getLocalId());
-		
-			//TODO validate Header Packet matches other packets
-			Enumeration entries = zip.entries();
-			if(!entries.hasMoreElements())
-			{
-				throw new Packet.InvalidPacketException("Empty zip file");
-			}
-		
-			while(entries.hasMoreElements())
-			{
-				ZipEntry entry = (ZipEntry)entries.nextElement();
-		
-				if(entry.isDirectory())
-				{
-					throw new Packet.InvalidPacketException("Directory entry");
-				}
-		
-				if(entry.getName().startsWith(".."))
-				{
-					throw new Packet.InvalidPacketException("Relative path in name");
-				}
-		
-				if(entry.getName().indexOf("\\") >= 0 ||
-					entry.getName().indexOf("/") >= 0 )
-				{
-					throw new Packet.InvalidPacketException("Path in name");
-				}
-		
-				String thisLocalId = entry.getName();
-				if(!localIds.contains(thisLocalId))
-					throw new IOException("Extra packet");
-				localIds.remove(thisLocalId);
-				InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
-				Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
-			}
-		
-			if(localIds.size() > 0)
-				throw new IOException("Missing packets");
+			throw new Packet.InvalidPacketException("Empty zip file");
 		}
-
-		public static int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream,
-				int chunkSize, BulletinRetrieverGatewayInterface gateway, MartusCrypto security,
-				ProgressMeterInterface progressMeter, String progressTag)
-			throws
-				MartusCrypto.MartusSignatureException,
-				MartusUtilities.ServerErrorException,
-				IOException,
-				Base64.InvalidBase64Exception
+	
+		while(entries.hasMoreElements())
 		{
-			int masterTotalSize = 0;
-			int totalSize = 0;
-			int chunkOffset = 0;
-			String lastResponse = "";
+			ZipEntry entry = (ZipEntry)entries.nextElement();
+	
+			if(entry.isDirectory())
+			{
+				throw new Packet.InvalidPacketException("Directory entry");
+			}
+	
+			if(entry.getName().startsWith(".."))
+			{
+				throw new Packet.InvalidPacketException("Relative path in name");
+			}
+	
+			if(entry.getName().indexOf("\\") >= 0 ||
+				entry.getName().indexOf("/") >= 0 )
+			{
+				throw new Packet.InvalidPacketException("Path in name");
+			}
+	
+			String thisLocalId = entry.getName();
+			if(!localIds.contains(thisLocalId))
+				throw new IOException("Extra packet");
+			localIds.remove(thisLocalId);
+			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
+			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
+		}
+	
+		if(localIds.size() > 0)
+			throw new IOException("Missing packets");
+	}
+
+	public static int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream,
+			int chunkSize, BulletinRetrieverGatewayInterface gateway, MartusCrypto security,
+			ProgressMeterInterface progressMeter)
+		throws
+			MartusCrypto.MartusSignatureException,
+			MartusUtilities.ServerErrorException,
+			IOException,
+			Base64.InvalidBase64Exception
+	{
+		int masterTotalSize = 0;
+		int totalSize = 0;
+		int chunkOffset = 0;
+		String lastResponse = "";
+		if(progressMeter != null)
+			progressMeter.updateProgressMeter(0, 1);
+		while(!lastResponse.equals(NetworkInterfaceConstants.OK))
+		{
+			NetworkResponse response = gateway.getBulletinChunk(security,
+								uid.getAccountId(), uid.getLocalId(), chunkOffset, chunkSize);
+	
+			lastResponse = response.getResultCode();
+			if(!lastResponse.equals(NetworkInterfaceConstants.OK) &&
+				!lastResponse.equals(NetworkInterfaceConstants.CHUNK_OK))
+			{
+				//System.out.println((String)result.get(0));
+				throw new MartusUtilities.ServerErrorException("result=" + lastResponse);
+			}
+	
+			Vector result = response.getResultVector();
+			totalSize = ((Integer)result.get(0)).intValue();
+			if(masterTotalSize == 0)
+				masterTotalSize = totalSize;
+	
+			if(totalSize != masterTotalSize)
+				throw new MartusUtilities.ServerErrorException("totalSize not consistent");
+			if(totalSize < 0)
+				throw new MartusUtilities.ServerErrorException("totalSize negative");
+	
+			int thisChunkSize = ((Integer)result.get(1)).intValue();
+			if(thisChunkSize < 0 || thisChunkSize > totalSize - chunkOffset)
+				throw new MartusUtilities.ServerErrorException("chunkSize out of range: " + thisChunkSize);
+	
+			// TODO: validate that length of data == chunkSize that was returned
+			String data = (String)result.get(2);
+			StringReader reader = new StringReader(data);
+	
+			Base64.decode(reader, outputStream);
+			chunkOffset += thisChunkSize;
 			if(progressMeter != null)
-				progressMeter.updateProgressMeter(progressTag, 0, 1);
-			while(!lastResponse.equals(NetworkInterfaceConstants.OK))
 			{
-				NetworkResponse response = gateway.getBulletinChunk(security,
-									uid.getAccountId(), uid.getLocalId(), chunkOffset, chunkSize);
-		
-				lastResponse = response.getResultCode();
-				if(!lastResponse.equals(NetworkInterfaceConstants.OK) &&
-					!lastResponse.equals(NetworkInterfaceConstants.CHUNK_OK))
-				{
-					//System.out.println((String)result.get(0));
-					throw new MartusUtilities.ServerErrorException("result=" + lastResponse);
-				}
-		
-				Vector result = response.getResultVector();
-				totalSize = ((Integer)result.get(0)).intValue();
-				if(masterTotalSize == 0)
-					masterTotalSize = totalSize;
-		
-				if(totalSize != masterTotalSize)
-					throw new MartusUtilities.ServerErrorException("totalSize not consistent");
-				if(totalSize < 0)
-					throw new MartusUtilities.ServerErrorException("totalSize negative");
-		
-				int thisChunkSize = ((Integer)result.get(1)).intValue();
-				if(thisChunkSize < 0 || thisChunkSize > totalSize - chunkOffset)
-					throw new MartusUtilities.ServerErrorException("chunkSize out of range: " + thisChunkSize);
-		
-				// TODO: validate that length of data == chunkSize that was returned
-				String data = (String)result.get(2);
-				StringReader reader = new StringReader(data);
-		
-				Base64.decode(reader, outputStream);
-				chunkOffset += thisChunkSize;
-				if(progressMeter != null)
-				{
-					if(progressMeter.shouldExit())
-						break;
-					progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);
-				}
+				if(progressMeter.shouldExit())
+					break;
+				progressMeter.updateProgressMeter(chunkOffset, masterTotalSize);
 			}
-			if(progressMeter != null)
-				progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);
-			return masterTotalSize;
 		}
+		if(progressMeter != null)
+			progressMeter.updateProgressMeter(chunkOffset, masterTotalSize);
+		return masterTotalSize;
+	}
 }

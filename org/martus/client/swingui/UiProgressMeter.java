@@ -38,9 +38,11 @@ import org.martus.client.core.ProgressMeterInterface;
 
 public class UiProgressMeter extends JPanel implements ProgressMeterInterface
 {
-	public UiProgressMeter(UiProgressRetrieveDlg dlg)
+	public UiProgressMeter(UiProgressRetrieveDlg dlg, UiLocalization localizationToUse)
 	{
 		super();
+		localization = localizationToUse;
+		
 		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
 		parentDlg = dlg;
 		statusMessage = new JLabel("     ", JLabel.LEFT );
@@ -57,21 +59,15 @@ public class UiProgressMeter extends JPanel implements ProgressMeterInterface
 		add( statusMessage );
 		add( progressMeter );
 	}
-
-	public void setStatusMessageAndHideMeter(String message)
+	
+	public void setStatusMessageTag(String tagToShow)
 	{
-		setStatusMessage(message);
-		hideProgressMeter();
-	}
-
-	public void setStatusMessage(String message)
-	{
+		String message = localization.getFieldLabel(tagToShow);
 		statusMessage.setText(" " + message + " ");
 	}
 
-	public void updateProgressMeter(String message, int currentValue, int maxValue)
+	public void updateProgressMeter(int currentValue, int maxValue)
 	{
-		setStatusMessage(message);
 		progressMeter.setValue(currentValue);
 		progressMeter.setMaximum(maxValue);
 		progressMeter.setVisible(true);
@@ -92,4 +88,5 @@ public class UiProgressMeter extends JPanel implements ProgressMeterInterface
 	private JLabel statusMessage;
 	private JProgressBar progressMeter;
 	private UiProgressRetrieveDlg parentDlg;
+	private UiLocalization localization;
 }

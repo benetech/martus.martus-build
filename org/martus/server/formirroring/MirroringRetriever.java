@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.martus.client.core.ProgressMeterInterface;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
@@ -207,7 +208,8 @@ public class MirroringRetriever
 		FileOutputStream out = new FileOutputStream(destFile);
 
 		int chunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
-		int totalLength = BulletinZipUtilities.retrieveBulletinZipToStream(uid, out, chunkSize, gateway, security, null, null);
+		ProgressMeterInterface nullProgressMeter = null;
+		int totalLength = BulletinZipUtilities.retrieveBulletinZipToStream(uid, out, chunkSize, gateway, security, nullProgressMeter);
 
 		out.close();
 
