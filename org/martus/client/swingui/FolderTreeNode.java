@@ -33,8 +33,9 @@ public class FolderTreeNode extends DefaultMutableTreeNode
 
 	public FolderTreeNode(Object obj, MartusLocalization localizationToUse)
 	{
-		super(obj);
-		internalNode = new FolderNode(super.toString(), localizationToUse);
+		super();
+		internalNode = new FolderNode(localizationToUse);
+		setUserObject(obj);
 	}
 
 	public String getInternalName()
@@ -50,6 +51,12 @@ public class FolderTreeNode extends DefaultMutableTreeNode
 	public String getLocalizedName()
 	{
 		return internalNode.getLocalizedName();
+	}
+
+	public void setUserObject(Object object)
+	{
+		super.setUserObject(object);
+		internalNode.setInternalName(object.toString());
 	}
 
 	private FolderNode internalNode;
