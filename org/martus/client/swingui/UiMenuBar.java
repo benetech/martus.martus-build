@@ -32,18 +32,16 @@ import javax.swing.JMenuBar;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
-import org.martus.client.core.MartusApp;
-
 public class UiMenuBar extends JMenuBar
 {
 	UiMenuBar(UiMainWindow mainWindowToUse)
 	{
 		mainWindow = mainWindowToUse;
-		MartusApp app = mainWindow.getApp();
+		MartusLocalization localization = mainWindow.getLocalization();
 		
 		createMenuActions();
 
-		JMenu file = new JMenu(app.getMenuLabel("file"));
+		JMenu file = new JMenu(localization.getMenuLabel("file"));
 		PrintMenuListener printMenuListener = new PrintMenuListener();
 		file.addMenuListener(printMenuListener);
 		printMenuListener.initalize();
@@ -62,7 +60,7 @@ public class UiMenuBar extends JMenuBar
 		file.add(UiActions.newActionMenuExit(mainWindow));
 
 
-		JMenu edit = new JMenu(app.getMenuLabel("edit"));
+		JMenu edit = new JMenu(localization.getMenuLabel("edit"));
 		EditMenuListener menuListener = new EditMenuListener();
 		edit.addMenuListener(menuListener);
 		menuListener.initalize();
@@ -78,7 +76,7 @@ public class UiMenuBar extends JMenuBar
 		edit.addSeparator();
 		edit.add(actionMenuDiscardBulletins);
 
-		JMenu folders = new JMenu(app.getMenuLabel("folders"));
+		JMenu folders = new JMenu(localization.getMenuLabel("folders"));
 		FoldersMenuListener menuFolderListener = new FoldersMenuListener();
 		folders.addMenuListener(menuFolderListener);
 		menuFolderListener.initalize();
@@ -88,7 +86,7 @@ public class UiMenuBar extends JMenuBar
 		folders.add(actionMenuDeleteFolder);
 
 
-		JMenu server = new JMenu(app.getMenuLabel("server"));
+		JMenu server = new JMenu(localization.getMenuLabel("server"));
 		server.add(UiActions.newActionMenuRetrieveMySealedBulletins(mainWindow));
 		server.add(UiActions.newActionMenuRetrieveMyDraftBulletins(mainWindow));
 		server.add(UiActions.newActionMenuDeleteMyServerDraftBulletins(mainWindow));
@@ -99,16 +97,16 @@ public class UiMenuBar extends JMenuBar
 		server.add(UiActions.newActionMenuSelectServer(mainWindow));
 
 
-		JMenu options = new JMenu(app.getMenuLabel("options"));
+		JMenu options = new JMenu(localization.getMenuLabel("options"));
 		options.add(UiActions.newActionMenuPreferences(mainWindow));
 		options.add(UiActions.newActionMenuContactInfo(mainWindow));
 		options.add(UiActions.newActionMenuDefaultDetailsFieldContent(mainWindow));
 		options.add(UiActions.newActionMenuChangeUserNamePassword(mainWindow));
 
-		JMenu tools = new JMenu(app.getMenuLabel("tools"));
+		JMenu tools = new JMenu(localization.getMenuLabel("tools"));
 		tools.add(new ActionMenuQuickErase(mainWindow));
 		
-		JMenu help = new JMenu(app.getMenuLabel("help"));
+		JMenu help = new JMenu(localization.getMenuLabel("help"));
 		help.add(UiActions.newActionMenuHelp(mainWindow));
 		help.add(UiActions.newActionMenuAbout(mainWindow));
 		help.addSeparator();

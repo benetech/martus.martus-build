@@ -807,14 +807,14 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testButtonLabels()
 	{
 		TRACE_BEGIN("testButtonLabels");
-		assertEquals("Help", appWithAccount.getButtonLabel("help"));
+		assertEquals("Help", appWithAccount.getLocalization().getButtonLabel("help"));
 		TRACE_END();
 	}
 
 	public void testMenuLabels()
 	{
 		TRACE_BEGIN("testMenuLabels");
-		assertEquals("File", appWithAccount.getMenuLabel("file"));
+		assertEquals("File", appWithAccount.getLocalization().getMenuLabel("file"));
 		TRACE_END();
 	}
 

@@ -503,9 +503,9 @@ public class UiActions
 		public void updateName()
 		{
 			if(mainWindow.isDiscardedFolderSelected())
-				putValue(ActionMenuDiscardBulletins.NAME, mainWindow.getApp().getMenuLabel("DeleteBulletins"));
+				putValue(ActionMenuDiscardBulletins.NAME, mainWindow.getLocalization().getMenuLabel("DeleteBulletins"));
 			else
-				putValue(ActionMenuDiscardBulletins.NAME, mainWindow.getApp().getMenuLabel("DiscardBulletins"));
+				putValue(ActionMenuDiscardBulletins.NAME, mainWindow.getLocalization().getMenuLabel("DiscardBulletins"));
 		}
 	}
 

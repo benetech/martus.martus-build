@@ -1243,11 +1243,6 @@ public class MartusApp
 		return localization.getButtonLabel(code);
 	}
 
-	public String getMenuLabel(String code)
-	{
-		return localization.getMenuLabel(code);
-	}
-
 	public String getCurrentLanguage()
 	{
 		return localization.getCurrentLanguageCode();

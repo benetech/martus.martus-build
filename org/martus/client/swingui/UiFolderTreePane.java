@@ -162,7 +162,7 @@ class UiFolderTreePane extends JScrollPane
 	{
 		public ActionNewFolder()
 		{
-			super(parent.getApp().getMenuLabel("CreateNewFolder"), null);
+			super(parent.getLocalization().getMenuLabel("CreateNewFolder"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
@@ -209,7 +209,7 @@ class UiFolderTreePane extends JScrollPane
 	{
 		public ActionDelete(FolderTreeNode node)
 		{
-			String text = parent.getApp().getMenuLabel("DeleteFolder") + " ";
+			String text = parent.getLocalization().getMenuLabel("DeleteFolder") + " ";
 			if(node != null)
 				text += node.getLocalizedName();
 
@@ -234,7 +234,7 @@ class UiFolderTreePane extends JScrollPane
 	{
 		public ActionRename(FolderTreeNode node)
 		{
-			String text = parent.getApp().getMenuLabel("RenameFolder") + " ";
+			String text = parent.getLocalization().getMenuLabel("RenameFolder") + " ";
 			if(node != null)
 				text += node.getLocalizedName();
 
