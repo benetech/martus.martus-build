@@ -283,7 +283,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void notifyDlg(JFrame parent, String baseTag)
 	{
-		String title = app.getWindowTitle("notify" + baseTag);
+		notifyDlg(parent, baseTag, "notify" + baseTag);
+	}
+
+	public void notifyDlg(JFrame parent, String baseTag, String titleTag) 
+	{
+		String title = app.getWindowTitle(titleTag);
 		String cause = app.getFieldLabel("notify" + baseTag + "cause");
 		String ok = app.getButtonLabel("ok");
 		String[] contents = {cause};
@@ -970,7 +975,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	
 	private void doRetrieveMySealedBulletins()
 	{
-		String dlgTitleTag = "retrieve";
+		String dlgTitleTag = "RetrieveMySealedBulletins";
 		String summariesProgressTag = "RetrieveMySealedBulletinSummaries";
 		String retrieverProgressTag = "RetrieveMySealedBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedSealed();
@@ -981,7 +986,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void doRetrieveMyDraftBulletins()
 	{
-		String dlgTitleTag = "RetrieveDrafts";
+		String dlgTitleTag = "RetrieveMyDraftBulletins";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
 		String retrieverProgressTag = "RetrieveMyDraftBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedDraft();
@@ -992,7 +997,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void doRetrieveHQBulletins()
 	{
-		String dlgTitleTag = "retrieveHQ";
+		String dlgTitleTag = "RetrieveHQSealedBulletins";
 		String summariesProgressTag = "RetrieveHQSealedBulletinSummaries";
 		String retrieverProgressTag = "RetrieveHQSealedBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedFieldOfficeSealed();
@@ -1003,7 +1008,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void doRetrieveHQDraftsBulletins()
 	{
-		String dlgTitleTag = "retrieveHQDrafts";
+		String dlgTitleTag = "RetrieveHQDraftBulletins";
 		String summariesProgressTag = "RetrieveHQDraftBulletinSummaries";
 		String retrieverProgressTag = "RetrieveHQDraftBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedFieldOfficeDraft();
@@ -1014,7 +1019,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void doDeleteServerDraftBulletins()
 	{
-		String dlgTitleTag = "DeleteServerDrafts";
+		String dlgTitleTag = "DeleteMyDraftsFromServer";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
 
 		RetrieveTableModel model = new DeleteMyServerDraftsTableModel(app);
@@ -1047,9 +1052,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			{
 				String result = retriever.getResult();
 				if(!result.equals(NetworkInterfaceConstants.OK))
-					notifyDlg(this, "retrievefailed");
+					notifyDlg(this, "retrievefailed", dlgTitleTag);
 				else
-					notifyDlg(this, "retrieveworked");
+					notifyDlg(this, "retrieveworked", dlgTitleTag);
 			}
 
 			folderTreeContentsHaveChanged();
@@ -1118,7 +1123,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		if(!app.isSSLServerAvailable())
 		{
-			notifyDlg(this, "retrievenoserver");
+			notifyDlg(this, "retrievenoserver", dlgTitleTag);
 			return null;
 		}
 		UiProgressRetrieveSummariesDlg progressDlg = new UiProgressRetrieveSummariesDlg(this, summariesProgressTag);
