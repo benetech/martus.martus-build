@@ -642,7 +642,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:timedout1=For security reasons, you must sign into Martus again.");
 		addEnglishTranslation("field:timedout2=Any unsaved bulletins will be lost unless you sign in and save them.");
 		addEnglishTranslation("field:defaultFolderName=New Folder");
-		addEnglishTranslation("field:searchrules=When searching for bulletins you can add the key words 'or', 'and' between multiple words.  The 'starting on' and 'ending on' dates will further refine your search matching either the event date or the date entered.  If you leave the search text blank Martus will perform only a date search.");
+		addEnglishTranslation("field:SearchBulletinRules=When searching for bulletins you can add the key words 'or', 'and' between multiple words.  The 'starting on' and 'ending on' dates will further refine your search matching either the event date or the date entered.  If you leave the search text blank Martus will perform only a date search.");
 		addEnglishTranslation("field:AccountInfoUserName=User Name: ");
 		addEnglishTranslation("field:AccountInfoPublicKey=Public Key:");
 		addEnglishTranslation("field:AccountInfoPublicCode=Public Code:");
