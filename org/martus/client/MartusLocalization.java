@@ -588,6 +588,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:RetrieveHQDraftBulletinSummaries=Retrieving Field Desk Draft Bulletin Summaries");
 		addEnglishTranslation("field:DeleteBulletinFileMsg1=This bulletin has been pasted into Martus from the file:");
 		addEnglishTranslation("field:DeleteBulletinFileMsg2=Do you want to delete the original file, or leave it in place?");
+		addEnglishTranslation("field:OnlineHelpMessage=Details:");
+		addEnglishTranslation("field:OnlineHelpTOCMessage=Topics:");
 
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");

@@ -731,7 +731,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			else
 				helpStreamTOC = getClass().getResourceAsStream(helpTOCFileShortName);
 
-			new UiDisplayFileDlg(this, "Help", helpStream, helpStreamTOC);
+			new UiDisplayFileDlg(this, "Help", helpStream, "OnlineHelpMessage", helpStreamTOC, "OnlineHelpTOCMessage");
 		}
 		catch (IOException e)
 		{

@@ -1,9 +1,6 @@
 package org.martus.client;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -26,11 +23,13 @@ import javax.swing.event.ListSelectionListener;
 
 public class UiDisplayFileDlg extends JDialog
 {
-	public UiDisplayFileDlg(UiMainWindow owner, String baseTag, InputStream fileStream, InputStream fileStreamToc)
+	public UiDisplayFileDlg(UiMainWindow owner, String baseTag, InputStream fileStream, String tagMessage, InputStream fileStreamToc, String tagTOCMessage)
 	{
 		super(owner, "", true);
-		message = "";
-		
+		MartusApp app = owner.getApp();
+		setTitle(app.getWindowTitle(baseTag));
+		getContentPane().setLayout(new ParagraphLayout());
+
 		message = getFileContents(fileStream);
 		if(message == null)
 		{
@@ -38,53 +37,32 @@ public class UiDisplayFileDlg extends JDialog
 			return;	
 		}
 
-		Vector messageTOC = null;
-		messageTOC = getFileVectorContents(fileStreamToc);
-
-		MartusApp app = owner.getApp();
-		setTitle(app.getWindowTitle(baseTag));
-		getContentPane().setLayout(new BorderLayout());
-		getContentPane().add(new JLabel(" "), BorderLayout.NORTH);
-		getContentPane().add(new JLabel("   "), BorderLayout.WEST);
-		getContentPane().add(new JLabel(" "), BorderLayout.EAST);
-
+		Vector messageTOC = getFileVectorContents(fileStreamToc);
 		if(messageTOC != null)
 		{
 			tocList = new JList(messageTOC);
 			tocList.addListSelectionListener(new ListHandler());
 			JScrollPane tocMsgAreaScrollPane = new JScrollPane(tocList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-			tocMsgAreaScrollPane.setPreferredSize(new Dimension(600, 100));
-			Container msgPlacement = new Container();
-			msgPlacement.setLayout(new ParagraphLayout());
-			msgPlacement.add(tocMsgAreaScrollPane, ParagraphLayout.NEW_PARAGRAPH);
-			msgPlacement.add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-			getContentPane().add(msgPlacement, BorderLayout.NORTH);
+			tocMsgAreaScrollPane.setPreferredSize(new Dimension(580, 100));
+			getContentPane().add(new JLabel(app.getFieldLabel(tagTOCMessage)), ParagraphLayout.NEW_PARAGRAPH);
+			getContentPane().add(tocMsgAreaScrollPane);
 		}
 
 		msgArea = new UiWrappedTextArea(owner, message);
 		msgArea.addKeyListener(new TabToOkButton());
-		msgArea.setRows(10);
+		msgArea.setRows(14);
 		msgArea.setColumns(80);
 		msgAreaScrollPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		Container msgPlacement = new Container();
-		msgPlacement.setLayout(new ParagraphLayout());
-		msgPlacement.add(msgAreaScrollPane, ParagraphLayout.NEW_PARAGRAPH);
-		msgPlacement.add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(msgPlacement, BorderLayout.CENTER);
 
 		ok = new JButton(app.getButtonLabel("ok"));
 		ok.addActionListener(new OkHandler());
 		ok.addKeyListener(new MakeEnterKeyExit());
-		Container okPlacement = new Container();
-		okPlacement.setLayout(new GridLayout(1,5));
-		okPlacement.add(new JLabel(""));
-		okPlacement.add(new JLabel(""));
-		okPlacement.add(ok);
-		okPlacement.add(new JLabel(""));
-		okPlacement.add(new JLabel(""));
-		getContentPane().add(okPlacement,BorderLayout.SOUTH);
+
+		getContentPane().add(new JLabel(app.getFieldLabel(tagMessage)), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(msgAreaScrollPane);
+		getContentPane().add(ok, ParagraphLayout.NEW_PARAGRAPH);
 		getRootPane().setDefaultButton(ok);
 		ok.requestFocus();
 
