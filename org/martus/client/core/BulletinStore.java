@@ -262,7 +262,16 @@ public class BulletinStore
 	public synchronized void removeBulletinFromStore(UniversalId uid)
 	{
 		Bulletin foundBulletin = findBulletinByUniversalId(uid);
-		foundBulletin.removeBulletinFromDatabase(database, getSignatureVerifier());
+		MartusCrypto crypto = getSignatureVerifier();
+		try
+		{
+			MartusUtilities.deleteBulletinFromDatabase(foundBulletin.getBulletinHeaderPacket(), database, crypto);
+		}
+		catch(Exception e)
+		{
+			//TODO: NEED BETTER ERROR HANDLING HERE!!!
+			//System.out.println("removeBulletinFromDatabase: " + e);
+		}
 		bulletinCache.remove(uid);
 		cacheOfSortableFields.removeFieldData(uid);
 	}
@@ -317,7 +326,7 @@ public class BulletinStore
 		try
 		{
 			b.setStore(this);
-			b.saveToDatabase(database);
+			BulletinSaver.saveToDatabase(b, database);
 			//We don't call addToCaches here because we are not sure
 			//that this bulletin object is still usable -- maybe 
 			//attachment proxies still point to disk files?

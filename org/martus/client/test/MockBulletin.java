@@ -42,6 +42,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusConstants;
@@ -131,12 +132,13 @@ public class MockBulletin extends Bulletin
 		IOException, 
 		CryptoException 
 	{
+		Database db = b.getStore().getDatabase();
 		for(int i = 0 ; i < attachments.length ; ++i)
 		{
 			UniversalId uid = attachments[i].getUniversalId();
 			ZipEntry attachmentEntry = new ZipEntry(uid.getLocalId());
 			zipOut.putNextEntry(attachmentEntry);
-			InputStream in = new BufferedInputStream(b.getDatabase().openInputStream(new DatabaseKey(uid), b.getStore().getSignatureVerifier()));
+			InputStream in = new BufferedInputStream(db.openInputStream(new DatabaseKey(uid), b.getStore().getSignatureVerifier()));
 
 			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 			int got;

@@ -37,6 +37,7 @@ import java.util.Vector;
 
 import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinFolder;
+import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusClientXml;
 import org.martus.common.AttachmentProxy;
@@ -779,7 +780,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		original.setSealed();
-		original.saveToDatabase(db);
+		BulletinSaver.saveToDatabase(original, db);
 		File zipFile = File.createTempFile("$$$MartusTestZipSealed", null);
 		zipFile.deleteOnExit();
 		Bulletin loaded = Bulletin.loadFromDatabase(store, originalKey);
@@ -955,7 +956,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.set(Bulletin.TAGPRIVATEINFO, "private");
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
-		original.saveToDatabase(db);
+		BulletinSaver.saveToDatabase(original, db);
 		
 		Bulletin loaded = Bulletin.loadFromDatabase(store, originalKey);
 

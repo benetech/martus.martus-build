@@ -47,7 +47,6 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
 import org.martus.common.ZipEntryInputStream;
@@ -135,14 +134,6 @@ public class Bulletin implements BulletinConstants
 		return isValidFlag;
 	}
 
-	public Database getDatabase()
-	{
-		if(store == null)
-			return null;
-	
-		return store.getDatabase();
-	}
-	
 	public long getLastSavedTime()
 	{
 		return getBulletinHeaderPacket().getLastSavedTime();
@@ -238,7 +229,7 @@ public class Bulletin implements BulletinConstants
 			byte[] sessionKeyBytes = getStore().getSignatureGenerator().createSessionKey();
 			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, store.getSignatureVerifier());
 			bhp.addPrivateAttachmentLocalId(ap.getLocalId());
-			pendingPrivateAttachments.add(ap);
+			getPendingPrivateAttachments().add(ap);
 			a.setUniversalIdAndSessionKey(ap.getUniversalId(), sessionKeyBytes);
 		}
 		else
@@ -270,7 +261,8 @@ public class Bulletin implements BulletinConstants
 		UniversalId uid = a.getUniversalId();
 		byte[] sessionKeyBytes = a.getSessionKeyBytes();
 		DatabaseKey key = new DatabaseKey(uid);
-		InputStreamWithSeek xmlIn = getDatabase().openInputStream(key, verifier);
+		Database db = getStore().getDatabase();
+		InputStreamWithSeek xmlIn = db.openInputStream(key, verifier);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, destFile);
 	}
 
@@ -280,7 +272,7 @@ public class Bulletin implements BulletinConstants
 		getFieldDataPacket().clearAll();
 		getPrivateFieldDataPacket().clearAll();
 		pendingPublicAttachments.clear();
-		pendingPrivateAttachments.clear();
+		getPendingPrivateAttachments().clear();
 		set(TAGENTRYDATE, getToday());
 		set(TAGEVENTDATE, getFirstOfThisYear());
 		setDraft();
@@ -348,86 +340,6 @@ public class Bulletin implements BulletinConstants
 		store.saveBulletin(this);
 	}
 	
-	public void saveToDatabase(Database db) throws 
-			IOException,
-			MartusCrypto.CryptoException
-	{
-		MartusCrypto signer = store.getSignatureGenerator();
-		
-		UniversalId uid = getUniversalId();
-		BulletinHeaderPacket oldBhp = new BulletinHeaderPacket(uid);
-		DatabaseKey key = new DatabaseKey(uid);
-		boolean bulletinAlreadyExisted = false;
-		try
-		{
-			if(db.doesRecordExist(key))
-			{
-				InputStreamWithSeek in = db.openInputStream(key, signer);
-				oldBhp.loadFromXml(in, signer);
-				bulletinAlreadyExisted = true;
-			}
-		}
-		catch(Exception ignoreItBecauseWeCantDoAnythingAnyway)
-		{
-			//e.printStackTrace();
-			//System.out.println("Bulletin.saveToDatabase: " + e);
-		}
-		
-		BulletinHeaderPacket bhp = getBulletinHeaderPacket();
-
-		FieldDataPacket publicDataPacket = getFieldDataPacket();
-		boolean shouldEncryptPublicData = (isDraft() || isAllPrivate());
-		publicDataPacket.setEncrypted(shouldEncryptPublicData);
-			
-		byte[] dataSig = writePacketToDatabase(publicDataPacket, db, signer);
-		bhp.setFieldDataSignature(dataSig);
-
-		byte[] privateDataSig = writePacketToDatabase(getPrivateFieldDataPacket(), db, signer);
-		bhp.setPrivateFieldDataSignature(privateDataSig);
-
-		for(int i = 0; i < pendingPublicAttachments.size(); ++i)
-		{
-			// TODO: Should the bhp also remember attachment sigs?
-			Packet packet = (Packet)pendingPublicAttachments.get(i);
-			writePacketToDatabase(packet, db, signer);
-		}
-
-		for(int i = 0; i < pendingPrivateAttachments.size(); ++i)
-		{
-			// TODO: Should the bhp also remember attachment sigs?
-			Packet packet = (Packet)pendingPrivateAttachments.get(i);
-			writePacketToDatabase(packet, db, signer);
-		}
-
-		bhp.updateLastSavedTime();
-		writePacketToDatabase(bhp, db, signer);
-
-		if(bulletinAlreadyExisted)
-		{
-			
-			String[] oldPublicAttachmentIds = oldBhp.getPublicAttachmentIds();
-			String[] newPublicAttachmentIds = bhp.getPublicAttachmentIds();
-			deleteRemovedPackets(db, oldPublicAttachmentIds, newPublicAttachmentIds);
-
-			String[] oldPrivateAttachmentIds = oldBhp.getPrivateAttachmentIds();
-			String[] newPrivateAttachmentIds = bhp.getPrivateAttachmentIds();
-			deleteRemovedPackets(db, oldPrivateAttachmentIds, newPrivateAttachmentIds);
-		}
-	}
-
-	protected void deleteRemovedPackets(Database db, String[] oldIds, String[] newIds) 
-	{
-		for(int oldIndex = 0; oldIndex < oldIds.length; ++oldIndex)
-		{
-			String oldLocalId = oldIds[oldIndex];
-			if(!MartusUtilities.isStringInArray(newIds, oldLocalId))
-			{
-				UniversalId auid = UniversalId.createFromAccountAndLocalId(getAccount(), oldLocalId);
-				db.discardRecord(new DatabaseKey(auid));
-			}
-		}
-	}
-
 	public String getHQPublicKey()
 	{
 		return getBulletinHeaderPacket().getHQPublicKey();	
@@ -440,25 +352,6 @@ public class Bulletin implements BulletinConstants
 		getPrivateFieldDataPacket().setHQPublicKey(key);
 	}
 	
-	public byte[] writePacketToDatabase(Packet packet, Database db, MartusCrypto signer) throws 
-			IOException,
-			MartusCrypto.CryptoException
-	{
-		return packet.writeXmlToDatabase(db, mustEncryptPublicData(), signer);
-	}
-	
-	public void removeBulletinFromDatabase(Database db, MartusCrypto crypto)
-	{
-		try
-		{
-			MartusUtilities.deleteBulletinFromDatabase(getBulletinHeaderPacket(), db, crypto);
-		}
-		catch(Exception e)
-		{
-			//System.out.println("removeBulletinFromDatabase: " + e);
-		}
-	}
-
 	public static Bulletin loadFromDatabase(BulletinStore store, DatabaseKey key) throws 
 		IOException,
 		DamagedBulletinException,
@@ -524,7 +417,8 @@ public class Bulletin implements BulletinConstants
 		packet.setUniversalId(key.getUniversalId());
 		try
 		{
-			InputStreamWithSeek in = getDatabase().openInputStream(key, verifier);
+			Database db = getStore().getDatabase();
+			InputStreamWithSeek in = db.openInputStream(key, verifier);
 			if(in == null)
 			{
 				System.out.println("Packet not found: " + key.getLocalId());
@@ -569,7 +463,7 @@ public class Bulletin implements BulletinConstants
 		original.loadFromFile(inputFile, verifier);
 		Bulletin imported = store.createEmptyBulletin();
 		imported.pullDataFrom(original);
-		imported.saveToDatabase(db);
+		BulletinSaver.saveToDatabase(imported, db);
 		return imported.getUniversalId();
 	}
 
@@ -849,7 +743,7 @@ public class Bulletin implements BulletinConstants
 		}
 
 		pendingPublicAttachments.addAll(other.pendingPublicAttachments);
-		pendingPrivateAttachments.addAll(other.pendingPrivateAttachments);
+		getPendingPrivateAttachments().addAll(other.getPendingPrivateAttachments());
 	}
 
 	private String getFirstOfThisYear()
@@ -908,8 +802,28 @@ public class Bulletin implements BulletinConstants
 		header = new BulletinHeaderPacket(headerUid);
 		header.setFieldDataPacketId(dataUid.getLocalId());
 		header.setPrivateFieldDataPacketId(privateDataUid.getLocalId());
-		pendingPublicAttachments = new Vector();
-		pendingPrivateAttachments = new Vector();
+		setPendingPublicAttachments(new Vector());
+		setPendingPrivateAttachments(new Vector());
+	}
+
+	private void setPendingPublicAttachments(Vector pendingPublicAttachments)
+	{
+		this.pendingPublicAttachments = pendingPublicAttachments;
+	}
+
+	Vector getPendingPublicAttachments()
+	{
+		return pendingPublicAttachments;
+	}
+
+	private void setPendingPrivateAttachments(Vector pendingPrivateAttachments)
+	{
+		this.pendingPrivateAttachments = pendingPrivateAttachments;
+	}
+
+	Vector getPendingPrivateAttachments()
+	{
+		return pendingPrivateAttachments;
 	}
 	
 	private boolean encryptedFlag;

@@ -45,6 +45,7 @@ import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.SearchParser;
 import org.martus.client.core.SearchTreeNode;
@@ -410,254 +411,6 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("Didn't keep time saved?", firstSavedTime, loadedTime);
 	}
 	
-	public void testRemoveBulletinFromDatabase() throws Exception
-	{
-		MockDatabase db = new MockClientDatabase();
-		assertEquals(0, db.getAllKeys().size());
-		Bulletin b = store.createEmptyBulletin();
-		b.addPublicAttachment(new AttachmentProxy(tempFile1));
-		b.set(Bulletin.TAGPUBLICINFO, "public info");
-		b.set(Bulletin.TAGPRIVATEINFO, "private info");
-		b.setSealed();
-		b.save();
-		b.saveToDatabase(db);
-		assertTrue("didn't write?", db.getAllKeys().size() > 0);
-		
-		b.removeBulletinFromDatabase(db, security);
-		assertEquals(0, db.getAllKeys().size());
-	}
-
-	public void testSaveToDatabase() throws Exception
-	{
-		assertEquals(0, db.getAllKeys().size());
-
-		Bulletin b = store.createEmptyBulletin();
-		b.set("summary", "New bulletin");
-		b.saveToDatabase(db);
-		DatabaseKey headerKey1 = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
-		DatabaseKey dataKey1 = new DatabaseKey(b.getFieldDataPacket().getUniversalId());
-		assertEquals("saved 1", 3, db.getAllKeys().size());
-		assertEquals("saved 1 header key", true,db.doesRecordExist(headerKey1));
-		assertEquals("saved 1 data key", true,db.doesRecordExist(dataKey1));
-
-		// re-saving the same bulletin replaces the old one
-		b.saveToDatabase(db);
-		assertEquals("resaved 1", 3, db.getAllKeys().size());
-		assertEquals("resaved 1 header key", true,db.doesRecordExist(headerKey1));
-		assertEquals("resaved 1 data key", true,db.doesRecordExist(dataKey1));
-
-		// saving a bulletin with the same id replaces the old one
-		Bulletin b2 = new Bulletin(b);
-		b2.set("summary", "Replaced bulletin");
-		b2.saveToDatabase(db);
-		assertEquals("resaved 2", 3, db.getAllKeys().size());
-		DatabaseKey headerKey2 = new DatabaseKey(b2.getBulletinHeaderPacket().getUniversalId());
-		DatabaseKey dataKey2 = new DatabaseKey(b2.getFieldDataPacket().getUniversalId());
-		assertEquals("resaved 2 header key", true,db.doesRecordExist(headerKey2));
-		assertEquals("resaved 2 data key", true,db.doesRecordExist(dataKey2));
-		
-		Bulletin b3 = Bulletin.loadFromDatabase(store, headerKey2);
- 		assertEquals("id", b2.getLocalId(), b3.getLocalId());
-		assertEquals("summary", b2.get("summary"), b3.get("summary"));
-		
-		// unsaved bulletin changes should not be in the store
-		b.set("summary", "not saved yet");
-		Bulletin b4 = Bulletin.loadFromDatabase(store, headerKey2);
-		assertEquals("id", b2.getLocalId(), b4.getLocalId());
-		assertEquals("summary", b2.get("summary"), b4.get("summary"));
-
-		// saving a new bulletin with a non-empty id should retain that id
-		b = store.createEmptyBulletin();
-		b.saveToDatabase(db);
-		assertEquals("saved another", 6, db.getAllKeys().size());
-		assertEquals("old header key", true, db.doesRecordExist(headerKey2));
-		assertEquals("old data key", true, db.doesRecordExist(dataKey2));
-		DatabaseKey newHeaderKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
-		DatabaseKey newDataKey = new DatabaseKey(b.getFieldDataPacket().getUniversalId());
-		assertEquals("new header key", true, db.doesRecordExist(newHeaderKey));
-		assertEquals("new data key", true, db.doesRecordExist(newDataKey));
-	}
-	
-	public void testSaveToDatabaseWithPendingAttachment() throws Exception
-	{
-		Bulletin b = store.createEmptyBulletin();
-		AttachmentProxy a = new AttachmentProxy(tempFile1);
-		b.addPublicAttachment(a);
-		String[] attachmentIds = b.getBulletinHeaderPacket().getPublicAttachmentIds();
-		assertEquals("one attachment", 1, attachmentIds.length);
-		b.saveToDatabase(db);
-		assertEquals("saved", 4, db.getAllKeys().size());
-
-		Bulletin got = Bulletin.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
-		assertEquals("id", b.getLocalId(), got.getLocalId());
-		assertEquals("attachment count", b.getPublicAttachments().length, got.getPublicAttachments().length);
-	}
-	
-	public void testSaveToDatabaseWithAttachment() throws Exception
-	{
-		Bulletin b = store.createEmptyBulletin();
-		DatabaseKey key = new DatabaseKey(b.getUniversalId());
-		b.addPublicAttachment(proxy1);
-		b.addPublicAttachment(proxy2);
-		b.saveToDatabase(db);
-		assertEquals("saved", 5, db.getAllKeys().size());
-
-		Bulletin got1 = Bulletin.loadFromDatabase(store, key);
-		verifyLoadedBulletin("First load", b, got1);
-	}
-	
-	public void testSaveToDatabaseAllPrivate() throws Exception
-	{
-		Bulletin somePublicDraft = store.createEmptyBulletin();
-		somePublicDraft.setAllPrivate(false);
-		somePublicDraft.setDraft();
-		somePublicDraft.saveToDatabase(db);
-		assertEquals("public draft was not encrypted?", true, somePublicDraft.getFieldDataPacket().isEncrypted());
-		
-		Bulletin allPrivateDraft = store.createEmptyBulletin();
-		allPrivateDraft.setAllPrivate(true);
-		allPrivateDraft.setDraft();
-		allPrivateDraft.saveToDatabase(db);
-		assertEquals("private draft was not encrypted?", true, allPrivateDraft.getFieldDataPacket().isEncrypted());
-		
-		Bulletin somePublicSealed = store.createEmptyBulletin();
-		somePublicSealed.setAllPrivate(false);
-		somePublicSealed.setSealed();
-		somePublicSealed.saveToDatabase(db);
-		assertEquals("public sealed was encrypted?", false, somePublicSealed.getFieldDataPacket().isEncrypted());
-
-		Bulletin allPrivateSealed = store.createEmptyBulletin();
-		allPrivateSealed.setAllPrivate(true);
-		allPrivateSealed.setSealed();
-		allPrivateSealed.saveToDatabase(db);
-		assertEquals("private sealed was encrypted?", true, allPrivateSealed.getFieldDataPacket().isEncrypted());
-	}
-	
-	
-	public void testReSaveToDatabaseWithAttachments() throws Exception
-	{
-		Bulletin b = store.createEmptyBulletin();
-		DatabaseKey key = new DatabaseKey(b.getUniversalId());
-		b.addPublicAttachment(proxy1);
-		b.addPublicAttachment(proxy2);
-		b.saveToDatabase(db);
-		assertEquals("saved", 5, db.getAllKeys().size());
-		Bulletin got1 = Bulletin.loadFromDatabase(store, key);
-		got1.saveToDatabase(db);
-		assertEquals("resaved", 5, db.getAllKeys().size());
-		
-		Bulletin got2 = Bulletin.loadFromDatabase(store, key);
-		verifyLoadedBulletin("Reload after save", got1, got2);
-	}
-	
-	public void testReSaveToDatabaseAddAttachments() throws Exception
-	{		
-		Bulletin b = store.createEmptyBulletin();
-		DatabaseKey key = new DatabaseKey(b.getUniversalId());
-		b.addPublicAttachment(proxy1);
-		b.addPublicAttachment(proxy2);
-		b.addPrivateAttachment(proxy4);
-		b.addPrivateAttachment(proxy5);
-		b.saveToDatabase(db);
-		Bulletin got1 = Bulletin.loadFromDatabase(store, key);
-
-		got1.clear();
-		got1.addPublicAttachment(proxy1);
-		got1.addPublicAttachment(proxy2);
-		got1.addPublicAttachment(proxy3);
-		got1.addPrivateAttachment(proxy4);
-		got1.addPrivateAttachment(proxy5);
-		got1.addPrivateAttachment(proxy6);
-		got1.saveToDatabase(db);
-		assertEquals("resaved", 9, db.getAllKeys().size());
-
-		Bulletin got3 = Bulletin.loadFromDatabase(store, key);
-		verifyLoadedBulletin("Reload after save", got1, got3);
-
-		String[] publicAttachmentIds = got3.getBulletinHeaderPacket().getPublicAttachmentIds();
-		assertEquals("wrong public attachment count in bhp?", 3, publicAttachmentIds.length);
-		String[] privateAttachmentIds = got3.getBulletinHeaderPacket().getPrivateAttachmentIds();
-		assertEquals("wrong private attachment count in bhp?", 3, privateAttachmentIds.length);
-	}
-	
-	public void testReSaveToDatabaseRemoveAttachment() throws Exception
-	{		
-		Bulletin b = store.createEmptyBulletin();
-		DatabaseKey key = new DatabaseKey(b.getUniversalId());
-		b.addPublicAttachment(proxy1);
-		b.addPublicAttachment(proxy2);
-		b.addPrivateAttachment(proxy3);
-		b.addPrivateAttachment(proxy4);
-		b.saveToDatabase(db);
-		assertEquals("saved key count", 7, db.getAllKeys().size());
-		Bulletin got1 = Bulletin.loadFromDatabase(store, key);
-		AttachmentProxy keep = got1.getPublicAttachments()[1];
-		AttachmentProxy keepPrivate = got1.getPrivateAttachments()[1];
-
-		got1.clear();
-		got1.addPublicAttachment(keep);
-		got1.addPrivateAttachment(keepPrivate);
-		got1.saveToDatabase(db);
-		assertEquals("resaved modified", 5, db.getAllKeys().size());
-
-		Bulletin got3 = Bulletin.loadFromDatabase(store, key);
-		verifyLoadedBulletin("Reload after save", got1, got3);
-
-		String[] publicAttachmentIds = got3.getBulletinHeaderPacket().getPublicAttachmentIds();
-		assertEquals("wrong public attachment count in bhp?", 1, publicAttachmentIds.length);
-		String[] privateAttachmentIds = got3.getBulletinHeaderPacket().getPrivateAttachmentIds();
-		assertEquals("wrong private attachment count in bhp?", 1, privateAttachmentIds.length);
-	}
-
-	protected void verifyLoadedBulletin(String tag, Bulletin original, Bulletin got) throws Exception
-	{
-		assertEquals(tag + " id", original.getUniversalId(), got.getUniversalId());
-		AttachmentProxy[] originalAttachments = got.getPublicAttachments();
-		assertEquals(tag + " wrong public attachment count?", original.getPublicAttachments().length, originalAttachments.length);
-		verifyAttachments(tag + "public", got, originalAttachments);
-
-		AttachmentProxy[] originalPrivateAttachments = got.getPrivateAttachments();
-		assertEquals(tag + " wrong private attachment count?", original.getPrivateAttachments().length, originalPrivateAttachments.length);
-		verifyAttachments(tag + "private", got, originalPrivateAttachments);
-	}
-
-	protected void verifyAttachments(String tag, Bulletin got, AttachmentProxy[] originalAttachments) throws Exception
-	{
-		for(int i=0; i < originalAttachments.length; ++i)
-		{
-			AttachmentProxy gotA = originalAttachments[i];
-			String localId = gotA.getUniversalId().getLocalId();
-			DatabaseKey key1 = new DatabaseKey(gotA.getUniversalId());
-			assertEquals(tag + i + " missing original record?", true,  store.getDatabase().doesRecordExist(key1));
-		
-			File tempFile = File.createTempFile("$$$MartusTestBullSvAtt", null);
-			tempFile.deleteOnExit();
-			got.extractAttachmentToFile(gotA, security, tempFile);
-			FileInputStream in = new FileInputStream(tempFile);
-			byte[] gotBytes = new byte[in.available()];
-			in.read(gotBytes);
-			in.close();
-			byte[] expectedBytes = null;
-			if(localId.equals(proxy1.getUniversalId().getLocalId()))
-				expectedBytes = sampleBytes1;
-			else if(localId.equals(proxy2.getUniversalId().getLocalId()))
-				expectedBytes = sampleBytes2;
-			else if(localId.equals(proxy3.getUniversalId().getLocalId()))
-				expectedBytes = sampleBytes3;
-			else if(localId.equals(proxy4.getUniversalId().getLocalId()))
-				expectedBytes = sampleBytes4;
-			else if(localId.equals(proxy5.getUniversalId().getLocalId()))
-				expectedBytes = sampleBytes5;
-			else if(localId.equals(proxy6.getUniversalId().getLocalId()))
-				expectedBytes = sampleBytes6;
-				
-		
-			assertEquals(tag + i + "got wrong data length?", expectedBytes.length, gotBytes.length);
-			assertEquals(tag + i + "got bad data?", true, Arrays.equals(gotBytes, expectedBytes));
-			tempFile.delete();
-		}
-	}
-	
 	public void testSaveToFileWithAttachment() throws Exception
 	{
 		UniversalId dummyUid = UniversalId.createDummyUniversalId();
@@ -668,7 +421,7 @@ public class TestBulletin extends TestCaseEnhanced
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		original.setSealed();
-		original.saveToDatabase(db);
+		BulletinSaver.saveToDatabase(original, db);
 		UniversalId uid = original.getUniversalId();
 
 		original = Bulletin.loadFromDatabase(store, new DatabaseKey(uid));
@@ -742,7 +495,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b.set(Bulletin.TAGPUBLICINFO, "public info");
 		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b.setSealed();
-		b.saveToDatabase(db);
+		BulletinSaver.saveToDatabase(b, db);
 		assertEquals("saved 1", 3, db.getAllKeys().size());
 		
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
@@ -751,7 +504,6 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("id", b.getLocalId(), loaded.getLocalId());
 		assertEquals("public info", b.get(Bulletin.TAGPUBLICINFO), loaded.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info", b.get(Bulletin.TAGPRIVATEINFO), loaded.get(Bulletin.TAGPRIVATEINFO));
-		assertEquals("db", db, loaded.getDatabase());
 		assertEquals("status", b.getStatus(), loaded.getStatus());
 	}
 	
@@ -761,13 +513,12 @@ public class TestBulletin extends TestCaseEnhanced
 
 		Bulletin b = store.createEmptyBulletin();
 		b.setAllPrivate(true);
-		b.saveToDatabase(db);
+		BulletinSaver.saveToDatabase(b, db);
 		assertEquals("saved 1", 3, db.getAllKeys().size());
 		
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
 		Bulletin loaded = store.createEmptyBulletin();
 		loaded = Bulletin.loadFromDatabase(store, key);
-		assertEquals("db", db, loaded.getDatabase());
 		assertEquals("id", b.getLocalId(), loaded.getLocalId());
 
 		assertEquals("not private?", b.isAllPrivate(), loaded.isAllPrivate());
@@ -1213,7 +964,8 @@ public class TestBulletin extends TestCaseEnhanced
 		
 		FieldDataPacket fdp = loaded.getFieldDataPacket();
 		fdp.set(Bulletin.TAGPUBLICINFO, "different public!");
-		loaded.writePacketToDatabase(fdp, db, security);
+		boolean encryptPublicData = loaded.mustEncryptPublicData();
+		byte[] writePacketToDatabase = fdp.writeXmlToDatabase(db, encryptPublicData, security);
 		
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not invalid?", false, loaded.isValid());
@@ -1233,9 +985,10 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not valid?", true, loaded.isValid());
 		
-		FieldDataPacket pdp = loaded.getPrivateFieldDataPacket();
-		pdp.set(Bulletin.TAGPRIVATEINFO, "different private!");
-		loaded.writePacketToDatabase(pdp, db, security);
+		FieldDataPacket fdp = loaded.getPrivateFieldDataPacket();
+		fdp.set(Bulletin.TAGPRIVATEINFO, "different private!");
+		boolean encryptPublicData = loaded.mustEncryptPublicData();
+		byte[] writePacketToDatabase = fdp.writeXmlToDatabase(db, encryptPublicData, security);
 		
 		loaded = Bulletin.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not invalid?", false, loaded.isValid());
