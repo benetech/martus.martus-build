@@ -1580,6 +1580,24 @@ if(result == NEW_ACCOUNT)
 		return modifyingBulletin;
 	}
 
+	public void doExportFolder()
+	{
+	
+		BulletinFolder selectedFolder = folders.getSelectedFolder();
+		int bulletinCount = selectedFolder.getBulletinCount();
+		if(bulletinCount == 0)
+		{
+			notifyDlg(this, "ExportFolderEmpty");
+			return;
+		}
+		Vector bulletins = new Vector();
+		for (int i = 0; i < bulletinCount; ++i)
+		{
+			bulletins.add(selectedFolder.getBulletinSorted(i));
+		}
+		new UiExportBulletinsDlg(this, bulletins, selectedFolder.getName());
+	}
+
 	public void doExportBulletins()
 	{
 		UniversalId[] uids = table.getSelectedBulletinUids();

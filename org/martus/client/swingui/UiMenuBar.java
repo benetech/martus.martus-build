@@ -55,6 +55,7 @@ public class UiMenuBar extends JMenuBar
 		file.add(UiActions.newActionMenuBackupMyKeyPair(mainWindow));
 		file.add(UiActions.newActionMenuExportMyPublicKey(mainWindow));
 		file.addSeparator();
+		file.add(UiActions.newActionMenuExportFolder(mainWindow));
 		file.add(UiActions.newActionMenuExportBulletins(mainWindow));
 		file.addSeparator();
 		file.add(UiActions.newActionMenuImportHeadquarterPublicKey(mainWindow));

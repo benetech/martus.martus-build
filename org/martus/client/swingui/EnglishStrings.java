@@ -134,6 +134,7 @@ public class EnglishStrings
 "wintitle:notifyExistingServerRemoved=Server Removed",
 "wintitle:notifyErrorSavingBulletin=Error Saving",
 "wintitle:notifyBackupKeyPairInformation=Backing Your Keypair",
+"wintitle:notifyExportFolderEmpty=Error Exporting Folder",
 				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -223,6 +224,7 @@ public class EnglishStrings
 "menu:CreateNewBulletin=Create New Bulletin",
 "menu:printBulletin=Print Bulletin",
 "menu:ExportBulletins=Export Bulletins",
+"menu:ExportFolder=Export Folder",
 "menu:BackupMyKeyPair=Backup My Private Key",
 "menu:ExportMyPublicKey=Export My Public Key",
 "menu:ImportHQPublicKey=Import Headquarters Key",
@@ -512,6 +514,7 @@ public class EnglishStrings
 "field:notifyExistingServerRemovedcause=You will have to select a server for any bulletins to be backed up to that server, or to retrieve bulletins from that server.",
 "field:notifyErrorSavingBulletincause=An error prevented the bulletin from being saved. Check to make sure the disk is not full or write protected.",		
 "field:notifyBackupKeyPairInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
+"field:notifyExportFolderEmptycause=The folder you are trying to export does not contain any bulletins.  Select a folder which has bulletins before exporting the folder.",		
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occurs in the future:",
@@ -552,8 +555,9 @@ public class EnglishStrings
 "field:SearchStartDate=Starting on:",
 "field:SearchEndDate=Ending on:",
 "field:ExportPrivateData=Include private data in export",
-"field:ExportDetails=Information from the selected bulletins (listed below) will be exported to an XML file that you specify",
+"field:ExportBulletinDetails=Information from the selected bulletins (listed below) will be exported to an XML file that you specify.\n\nPlease Note: This is a one way opperation, you will not be able to import the XML file saved back into Martus.  This opperation exists so you can bring Martus Bulletins into aother application that does import XML files.",
 "field:HowToCreateNewAccount=One or more accounts already exist on this computer. To create an additional account with a new username and passphrase, click OK.",
+"field:UntitledBulletin=Untitled Bulletin",
 
 "folder:%OutBox=Outbox",
 "folder:%Sent=Sent Bulletins",

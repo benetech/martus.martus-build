@@ -117,8 +117,13 @@ public class UiActions
 	{
 		return new ActionMenuCreateNewBulletin(mainWindowToUse);
 	}
+		
+	static public UiMartusAction newActionMenuExportFolder(UiMainWindow mainWindowToUse)
+	{
+		return new ActionMenuExportFolder(mainWindowToUse);
+	}
 	
-	static public UiMartusAction newActionMenuExportBulletins(UiMainWindow mainWindowToUse)
+		static public UiMartusAction newActionMenuExportBulletins(UiMainWindow mainWindowToUse)
 	{
 		return new ActionMenuExportBulletins(mainWindowToUse);
 	}
@@ -336,7 +341,20 @@ public class UiActions
 			mainWindow.createBulletin();
 		}
 	}
+	
+	private static class ActionMenuExportFolder extends UiMenuAction
+	{
+		public ActionMenuExportFolder(UiMainWindow mainWindowToUse)
+		{
+			super(mainWindowToUse, "ExportFolder");
+		}
 
+		public void actionPerformed(ActionEvent ae)
+		{
+			mainWindow.doExportFolder();
+		}
+	}
+	
 	private static class ActionMenuExportBulletins extends UiMenuAction
 	{
 		public ActionMenuExportBulletins(UiMainWindow mainWindowToUse)

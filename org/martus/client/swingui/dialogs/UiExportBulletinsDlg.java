@@ -51,59 +51,70 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.packet.UniversalId;
 import org.martus.swing.UiFileChooser;
+import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
 import org.martus.util.UnicodeWriter;
 
 public class UiExportBulletinsDlg extends JDialog implements ActionListener
 {
+	public UiExportBulletinsDlg(UiMainWindow mainWindowToUse, Vector bulletinsToExport, String defaultName)
+	{
+		mainWindow = mainWindowToUse;
+		defaultFileName = defaultName;
+		bulletins = bulletinsToExport;
+		constructDialog();
+	}
+
 	public UiExportBulletinsDlg(UiMainWindow mainWindowToUse, UniversalId[] selectedBulletins)
 	{
 		mainWindow = mainWindowToUse;
-		UiLocalization localization = mainWindow.getLocalization();
-
 		bulletins = findBulletins(selectedBulletins);
-		
+		constructDialog();
+	}
+
+	private void constructDialog()
+	{
 		setModal(true);
+		UiLocalization localization = mainWindow.getLocalization();
 		setTitle(localization.getWindowTitle("ExportBulletins"));
-
+		
 		includePrivate = new JCheckBox(localization.getFieldLabel("ExportPrivateData"));
-
 		ok = new JButton(localization.getButtonLabel("Continue"));
 		ok.addActionListener(this);
-
+		
 		cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
-
+		
 		Box hBoxButtons = Box.createHorizontalBox();
 		hBoxButtons.add(ok);
 		hBoxButtons.add(cancel);
 		hBoxButtons.add(Box.createHorizontalGlue());
-
+		
 		String[] titles = extractTitles(bulletins);
 		JList bulletinList = new JList(titles);
 		JScrollPane tocMsgAreaScrollPane = new JScrollPane(bulletinList,
 				JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 		tocMsgAreaScrollPane.setPreferredSize(new Dimension(580, 100));
-
+		
 		Box upperStuff = Box.createVerticalBox();
 		upperStuff.add(new JLabel(" "));
-		upperStuff.add(new JLabel(localization.getFieldLabel("ExportDetails")));
+		upperStuff.add(new UiWrappedTextArea(localization.getFieldLabel("ExportBulletinDetails")));
 		upperStuff.add(new JLabel(" "));
 		upperStuff.add(tocMsgAreaScrollPane);
 		upperStuff.add(new JLabel(" "));
 		upperStuff.add(includePrivate);
 		upperStuff.add(new JLabel(" "));
-
+		
 		Box upperStuffLeftAligned = Box.createHorizontalBox();
 		upperStuffLeftAligned.add(upperStuff);
 		upperStuffLeftAligned.add(Box.createHorizontalGlue());
-
+		
 		Box vBoxAll = Box.createVerticalBox();
 		vBoxAll.add(upperStuffLeftAligned);
 		vBoxAll.add(hBoxButtons);
 		getContentPane().add(vBoxAll);
-
+		
 		pack();
 		Dimension size = getSize();
 		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
@@ -129,7 +140,10 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		for (int i = 0; i < titles.length; i++)
 		{
 			Bulletin b = (Bulletin)bulletins.get(i);
-			titles[i] = b.get(BulletinConstants.TAGTITLE);
+			String bulletinTitle = b.get(BulletinConstants.TAGTITLE);
+			if(bulletinTitle == null || bulletinTitle.length() == 0)
+				bulletinTitle = mainWindow.getLocalization().getFieldLabel("UntitledBulletin");
+			titles[i] = bulletinTitle;
 		}
 		return titles;
 	}
@@ -139,6 +153,11 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 		UiFileChooser chooser = new UiFileChooser();
 		chooser.setDialogTitle(mainWindow.getLocalization().getWindowTitle("ExportBulletinsSaveAs"));
 		chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+		if(defaultFileName != null && defaultFileName.length() > 0)
+		{
+			defaultFileName += ".xml";
+			chooser.setSelectedFile(new File(defaultFileName));
+		}
 		if (chooser.showSaveDialog(this) != JFileChooser.APPROVE_OPTION)
 			return null;
 
@@ -195,4 +214,5 @@ public class UiExportBulletinsDlg extends JDialog implements ActionListener
 	JCheckBox includePrivate;
 	JButton ok;
 	JButton cancel;
+	String defaultFileName;
 }
