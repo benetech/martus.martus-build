@@ -6,6 +6,7 @@ import java.util.Vector;
 import org.martus.common.Base64;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
 
@@ -49,6 +50,22 @@ class FakeServerSupplier implements ServerSupplierInterface
 	public MartusCrypto getSecurity()
 	{
 		return security;
+	}
+	
+	public Vector getPublicInfo()
+	{
+		try
+		{
+			Vector result = new Vector();
+			result.add(security.getPublicKeyString());
+			result.add(MartusUtilities.getSignatureOfPublicKey(security));
+			return result;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	public boolean isAuthorizedForMirroring(String callerAccountId)

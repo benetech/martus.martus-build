@@ -6,6 +6,7 @@ import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
@@ -48,6 +49,18 @@ public class TestServerForMirroring extends TestCaseEnhanced
 
 	protected void tearDown() throws Exception
 	{
+	}
+	
+	public void testGetPublicInfo() throws Exception
+	{
+		Vector publicInfo = server.getPublicInfo();
+		assertEquals(2, publicInfo.size());
+		String publicKey = (String)publicInfo.get(0);
+		String gotSig = (String)publicInfo.get(1);
+		String serverPublicKeyString = server.getSecurity().getPublicKeyString();
+		MartusUtilities.validatePublicInfo(publicKey, gotSig, clientSecurity1);
+		assertEquals(serverPublicKeyString, publicInfo.get(0));
+		
 	}
 
 	public void testListAccounts() throws Exception

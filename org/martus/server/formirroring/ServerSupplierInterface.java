@@ -4,6 +4,7 @@ import java.util.Vector;
 
 public interface ServerSupplierInterface
 {
+	public Vector getPublicInfo();
 	public boolean isAuthorizedForMirroring(String callerAccountId);
 	public Vector listAccountsForMirroring();
 	public Vector listBulletinsForMirroring(String authorAccountId);
