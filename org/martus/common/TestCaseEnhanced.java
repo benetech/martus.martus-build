@@ -21,6 +21,18 @@ public class TestCaseEnhanced extends TestCase
 		file.deleteOnExit();
 		return file;
 	}
+	
+	public File createTempFile(String contents) throws IOException
+	{
+		final String tempFileName = "$$$" + getName();
+		File file = File.createTempFile(tempFileName, null);
+		UnicodeWriter writer = new UnicodeWriter(file);
+		writer.writeln(contents);
+		writer.flush();
+		writer.close();
+		file.deleteOnExit();
+		return file;
+	}
 
 	public static void assertFalse(String message, boolean actual)
 	{
