@@ -30,13 +30,25 @@ public class FieldSpec
 {
 	public FieldSpec(String tagToUse)
 	{
+		this(tagToUse, null);
+	}
+	
+	public FieldSpec(String tagToUse, String labelToUse)
+	{
 		tag = tagToUse;
+		label = labelToUse;
 	}
 	
 	public String getTag()
 	{
 		return tag;
 	}
+	
+	public String getLabel()
+	{
+		return label;
+	}
 
 	String tag;
+	String label;
 }

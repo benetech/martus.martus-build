@@ -49,7 +49,6 @@ import org.martus.util.InputStreamWithSeek;
 
 public class FieldDataPacket extends Packet
 {
-	private static final char FIELD_TAG_DELIMITER = ';';
 	public FieldDataPacket(UniversalId universalIdToUse, FieldSpec[] fieldTagsToUse)
 	{
 		super(universalIdToUse);
@@ -89,27 +88,39 @@ public class FieldDataPacket extends Packet
 			if(delimiter < 0)
 				delimiter = delimitedTags.length();
 			String thisFieldDescription = delimitedTags.substring(tagStart, delimiter);
-			String thisTag = extractTag(thisFieldDescription);
-			newFieldTags = appendTag(newFieldTags, thisTag);
+			String newTag = extractElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
+			String newLabel = extractElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
+			FieldSpec newFieldSpec = new FieldSpec(newTag, newLabel);
+
+			newFieldTags = addFieldSpec(newFieldTags, newFieldSpec);
 			tagStart = delimiter + 1;
 		}
 		return newFieldTags;
 	}
 	
-	static private String extractTag(String fieldDescription)
+	private static String extractElement(String fieldDescription, int elementNumber)
 	{
-		int comma = fieldDescription.indexOf(',');
-		if(comma < 0)
-			return fieldDescription;
-		return fieldDescription.substring(0, comma);
+		int elementStart = 0;
+		for(int i = 0; i < elementNumber; ++i)
+		{
+			int comma = fieldDescription.indexOf(FIELD_ELEMENT_DELIMITER, elementStart);
+			if(comma < 0)
+				return null;
+			elementStart = comma + 1;
+		}
+		
+		int trailingComma = fieldDescription.indexOf(FIELD_ELEMENT_DELIMITER, elementStart);
+		if(trailingComma < 0)
+			trailingComma = fieldDescription.length();
+		return fieldDescription.substring(elementStart, trailingComma);
 	}
 
-	static private FieldSpec[] appendTag(FieldSpec[] existingFieldTags, String newTag)
+	static private FieldSpec[] addFieldSpec(FieldSpec[] existingFieldTags, FieldSpec newFieldSpec)
 	{
 		int oldTagCount = existingFieldTags.length;
 		FieldSpec[] tempFieldTags = new FieldSpec[oldTagCount + 1];
 		System.arraycopy(existingFieldTags, 0, tempFieldTags, 0, oldTagCount);
-		tempFieldTags[oldTagCount] = new FieldSpec(newTag);
+		tempFieldTags[oldTagCount] = newFieldSpec;
 		return tempFieldTags;
 	}
 	
@@ -413,5 +424,11 @@ public class FieldDataPacket extends Packet
 	private byte[] pendingAttachmentKeyBytes;
 	private static final String prefix = "F-";
 	private String hqPublicKey;
+
+	private static final char FIELD_TAG_DELIMITER = ';';
+	private static final char FIELD_ELEMENT_DELIMITER = ',';
+	
+	private static final int TAG_ELEMENT_NUMBER = 0;
+	private static final int LABEL_ELEMENT_NUMBER = 1;
 }
 

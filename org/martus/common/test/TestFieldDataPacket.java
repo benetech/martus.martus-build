@@ -220,6 +220,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		String account = "asbid";
 		String id = "1234567";
 		String data1 = "data 1í";
+		String label = "\"<Town> \"";
 		String simpleFieldDataPacket =
 			"<FieldDataPacket>\n" +
 			"<" + MartusXml.PacketIdElementName + ">" + id +
@@ -255,7 +256,10 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("entrydate", tags[3].getTag());
 		assertEquals("language", tags[4].getTag());
 
-		assertEquals("custom", data1, loaded.get("custom1"));
+		assertNull("standard label not null?", tags[0].getLabel());
+		assertEquals("custom label", label, tags[2].getLabel());
+
+		assertEquals("custom data", data1, loaded.get("custom1"));
 		
 	}
 
