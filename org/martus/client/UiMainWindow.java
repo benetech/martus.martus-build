@@ -107,6 +107,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				doContactInfo();
 
 		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
+		int quarantineCount = app.quarantineUnreadableBulletins();
 		app.loadFolders();
 		int orphanCount = app.repairOrphans();
 
@@ -116,10 +117,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		restoreState();
 		waitingForBulletinsToLoad.endDialog();
 
+		if(quarantineCount > 0)
+			notifyDlg(this, "FoundDamagedBulletins");
+		
 		if(orphanCount > 0)
-		{
 			notifyDlg(this, "FoundOrphans");
-		}
+		
 		show();
 
 		inactivityDetector = new InactivityDetector();

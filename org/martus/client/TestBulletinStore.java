@@ -53,6 +53,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
     public void tearDown() throws Exception
     {
+    	assertEquals("Still some mock streams open?", 0, db.getOpenStreamCount());
 		store.deleteAllData();
     }
 

@@ -314,6 +314,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedDraftBulletinWithOutboxCopy=Confirm Delete Draft Bulletin");
 
 		addEnglishTranslation("wintitle:notifyillegaldrop=Cannot Move Bulletin");
+		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenothing=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyconfignoserver=Unable to Connect to Server");
@@ -339,6 +340,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifySearchFound=Search Results");
 		addEnglishTranslation("wintitle:notifyServerError=Server Error");
 		addEnglishTranslation("wintitle:notifyFoundOrphans=Recovered Lost Bulletins");
+		addEnglishTranslation("wintitle:notifyFoundDamagedBulletins=Detected Damaged Bulletins");
 		addEnglishTranslation("wintitle:notifyErrorSavingState=Error Saving State");
 		addEnglishTranslation("wintitle:notifyExportPublicInfo=Account Information Exported");
 		addEnglishTranslation("wintitle:notifyPublicInfoFileError=Error Importing Public Information");
@@ -476,6 +478,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:attachments=Attachments");
 		addEnglishTranslation("field:publicsection=Public Information");
 		addEnglishTranslation("field:privatesection=Private Information");
+		addEnglishTranslation("field:MayBeDamaged=Warning: Portions may be missing or damaged");
 		addEnglishTranslation("field:retrieveflag=Retrieve?");
 		addEnglishTranslation("field:waitingForKeyPairGeneration=Please wait a minute while your account is being created...");
 		addEnglishTranslation("field:waitingForBulletinsToLoad=Loading Martus.  Please wait...");
@@ -540,6 +543,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmCloneBulletinAsMineeffect=Clicking on Yes will create a new bulletin that contains a copy of all the same information. You will be the official author of this new bulletin, and any private data in it will only be visible by you (and your headquarters, if you have one). The original bulletin will remain unchanged.");
 
 		addEnglishTranslation("field:notifyillegaldropcause=This bulletin cannot be moved to that folder, probably because of its status");
+		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
 		addEnglishTranslation("field:notifyretrievenothingcause=No bulletins were selected");
 		addEnglishTranslation("field:notifyconfignoservercause=The selected server is not responding. Before you choose a server, you must be connected to the internet, and that server must be available.");
@@ -565,6 +569,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifySearchFoundcause=Number of bulletins found = ");
 		addEnglishTranslation("field:notifyServerErrorcause=Server Error, the server may be down, please try again later");
 		addEnglishTranslation("field:notifyFoundOrphanscause=One or more bulletins were not in any folder. These lost bulletins have been placed into the Recovered Bulletins folder.");
+		addEnglishTranslation("field:notifyFoundDamagedBulletinscause=One or more bulletins were severely damaged, and cannot be displayed. If these bulletins were backed up to a server, you may be able to retrieve undamaged copies from there.");
 		addEnglishTranslation("field:notifyErrorSavingStatecause=Unable to save current screen layout.");
 		addEnglishTranslation("field:notifyExportPublicInfocause=The following file has been exported.");
 		addEnglishTranslation("field:notifyPublicInfoFileErrorcause=The file does not contain valid public information.");

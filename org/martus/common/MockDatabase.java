@@ -5,6 +5,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,6 +20,11 @@ public class MockDatabase implements Database
 	public MockDatabase()
 	{
 		deleteAllData();
+	}
+	
+	public int getOpenStreamCount()
+	{
+		return streamsThatAreOpen.size();
 	}
 
 	// Database interface
@@ -75,7 +81,7 @@ public class MockDatabase implements Database
 		try 
 		{
 			byte[] bytes = data.getBytes("UTF-8");
-			return new ByteArrayInputStream(bytes);
+			return new MockRecordInputStream(key, bytes, streamsThatAreOpen);
 		} 
 		catch(Exception e) 
 		{
@@ -218,4 +224,24 @@ public class MockDatabase implements Database
 	Map outgoingInterimMap;
 	Map draftQuarantine;
 	Map sealedQuarantine;
+	
+	HashMap streamsThatAreOpen = new HashMap();
 }
+
+class MockRecordInputStream extends ByteArrayInputStream
+{
+	MockRecordInputStream(DatabaseKey key, byte[] inputBytes, Map observer)
+	{
+		super(inputBytes);
+		streamsThatAreOpen = observer;
+		streamsThatAreOpen.put(this, key);
+	}
+	
+	public void close()
+	{
+		streamsThatAreOpen.remove(this);
+	}
+	
+	Map streamsThatAreOpen;
+}
+	

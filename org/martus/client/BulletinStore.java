@@ -546,14 +546,20 @@ public class BulletinStore
 		{
 			public void visit(DatabaseKey key)
 			{
+				InputStream in = null;
 				try
 				{
-					InputStream in = database.openInputStream(key, getSignatureVerifier());
+					in = database.openInputStream(key, getSignatureVerifier());
 					Packet.validateXml(in, key.getAccountId(), key.getLocalId(), null, getSignatureVerifier());
+					in.close();
 				}
 				catch(Exception e)
 				{
 					++quarantinedCount;
+					if(in != null)
+					{
+						try { in.close(); } catch(Exception ignore) {}
+					}
 					database.moveRecordToQuarantine(key);
 				}
 			}

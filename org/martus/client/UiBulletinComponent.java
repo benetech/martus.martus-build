@@ -279,7 +279,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			
 			damagedIndicator = new JLabel("", null, JLabel.LEFT);
 			damagedIndicator.setVerticalTextPosition(JLabel.TOP);
-			damagedIndicator.setText("Warning: Missing or damaged information");
+			damagedIndicator.setText(getApp().getFieldLabel("MayBeDamaged"));
 			damagedIndicator.setFont(damagedIndicator.getFont().deriveFont(Font.BOLD));
 			damagedIndicator.setBackground(Color.yellow);
 			damagedIndicator.setForeground(Color.black);

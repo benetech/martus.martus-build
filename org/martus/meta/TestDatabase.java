@@ -476,6 +476,20 @@ public class TestDatabase extends TestCaseEnhanced
 		db.moveRecordToQuarantine(sealedKey);
 		assertTrue(db.toString()+" sealed removed from quarantine?", db.isInQuarantine(sealedKey));
 		assertFalse(db.toString()+" sealed not removed from main db again?", db.doesRecordExist(sealedKey));
+		
+		class Counter implements Database.PacketVisitor
+		{
+			public void visit(DatabaseKey key)
+			{
+				++count;
+			}
+			
+			int count;
+		}
+		
+		Counter counter = new Counter();
+		db.visitAllRecords(counter);
+		assertEquals("Visited quarantined packets?", 0, counter.count);
 	}
 
 	static String buildLargeString()

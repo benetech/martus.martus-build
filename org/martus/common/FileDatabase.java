@@ -296,6 +296,9 @@ public class FileDatabase implements Database
 			for(int packetBucket = 0; packetBucket < packetBuckets.length; ++packetBucket)
 			{
 				File bucketDir = new File(accountDir, packetBuckets[packetBucket]);
+				if(isQuarantineBucketDirectory(bucketDir))
+					continue;
+				
 				String[] files = bucketDir.list();
 				if(files != null)
 				{
@@ -310,9 +313,18 @@ public class FileDatabase implements Database
 						visitor.visit(key);
 					}
 				}
-				bucketDir.delete();
 			}
 		}
+	}
+
+	boolean isQuarantineBucketDirectory(File bucketDir) 
+	{
+		if(bucketDir.getName().startsWith(draftQuarantinePrefix))
+			return true;
+		if(bucketDir.getName().startsWith(sealedQuarantinePrefix))
+			return true;
+			
+		return false;
 	}
 	
 	public void deleteAllPackets() 
