@@ -18,15 +18,18 @@ public class UiWrappedTextArea extends JTextArea
 	public UiWrappedTextArea(UiMainWindow mainWindow, String message, int maxChars)
 	{
 		super(message);
-		int cols = message.length();
+		int messageLength = message.length();
+		int cols = messageLength;
 		int rows = 1;
 		if(cols > maxChars)
-		{
 			cols = maxChars;
-		}
 
 		int startOfParagraph = 0;
 		int endOfParagraph = message.indexOf("\n");
+		
+		if(endOfParagraph == -1 && messageLength > maxChars)
+			rows = messageLength / maxChars;
+		
 		while(endOfParagraph >= 0 )
 		{
 			int paragraphLength = endOfParagraph - startOfParagraph;
@@ -37,7 +40,8 @@ public class UiWrappedTextArea extends JTextArea
 		}
 		
 		// cushion for safety
-		++rows;
+		if(messageLength > maxChars)
+			++rows;
 
 		setRows(rows);
 		setColumns(cols);
