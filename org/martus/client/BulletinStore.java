@@ -700,7 +700,7 @@ public class BulletinStore
 		return new UID().toString();
 	}
 	
-	public class StatusNotAllowedException extends Exception {}
+	public static class StatusNotAllowedException extends Exception {}
 	
 	public void importZipFileBulletin(File zipFile, BulletinFolder toFolder, boolean forceSameUids) throws
 			IOException,

@@ -299,8 +299,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:MartusSignIn=Martus SignIn");
 		addEnglishTranslation("wintitle:confirmsend=Confirm Send Bulletin");
 		addEnglishTranslation("wintitle:confirmretrieve=Confirm Retrieve Bulletins");
-		addEnglishTranslation("wintitle:confirmDiscardDraftBulletin=Confirm Delete Draft Bulletin");
-		addEnglishTranslation("wintitle:confirmDiscardSealedBulletin=Confirm Delete Sealed Bulletin");
+		addEnglishTranslation("wintitle:confirmDiscardDraftBulletins=Confirm Delete Draft Bulletin");
+		addEnglishTranslation("wintitle:confirmDiscardSealedBulletins=Confirm Delete Sealed Bulletin");
 		addEnglishTranslation("wintitle:confirmdeletefolder=Confirm Delete Folder");
 		addEnglishTranslation("wintitle:confirmRemoveAttachment=Confirm Remove Attachments");
 		addEnglishTranslation("wintitle:confirmOverWriteExistingFile=Confirm OverWrite Existing File");
@@ -580,10 +580,10 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmquestion=Are you sure you want to do this?");
 		addEnglishTranslation("field:confirmsendcause=You have chosen to send a completed bulletin to a Martus server.  ");
 		addEnglishTranslation("field:confirmsendeffect=This will permanently seal the bulletin from future edits.  ");
-		addEnglishTranslation("field:confirmDiscardDraftBulletincause=You have chosen to delete a draft bulletin from the Discarded Bulletins folder.");
-		addEnglishTranslation("field:confirmDiscardDraftBulletineffect=This will permanently delete the bulletin from this computer.");
-		addEnglishTranslation("field:confirmDiscardSealedBulletincause=You have chosen to delete a sealed bulletin from the Discarded Bulletins folder.");
-		addEnglishTranslation("field:confirmDiscardSealedBulletineffect=If this bulletin has already been sent to a server, it will remain on the server. This action will only delete it from this computer.");
+		addEnglishTranslation("field:confirmDiscardDraftBulletinscause=You have chosen to permanently delete a draft bulletin from the Discarded Bulletins folder.");
+		addEnglishTranslation("field:confirmDiscardDraftBulletinseffect=If this bulletin has already been sent to a server, it will remain on the server. This action will only delete it from this computer.");
+		addEnglishTranslation("field:confirmDiscardSealedBulletinscause=You have chosen to permanently delete a sealed bulletin from the Discarded Bulletins folder.");
+		addEnglishTranslation("field:confirmDiscardSealedBulletinseffect=If this bulletin has already been sent to a server, it will remain on the server. This action will only delete it from this computer.");
 		addEnglishTranslation("field:confirmdeletefoldercause=You have chosen to permanently delete a folder.  ");
 		addEnglishTranslation("field:confirmdeletefoldereffect=Any bulletins in the folder will be moved to Discarded Bulletins.  ");
 		addEnglishTranslation("field:confirmretrievecause=You have chosen to retrieve all bulletins from the Martus server.  ");

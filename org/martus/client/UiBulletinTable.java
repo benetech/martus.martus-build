@@ -259,7 +259,15 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			}
 		}
 		else
-			worked = dropAdapter.attemptDropBulletins(tb.getBulletins(), folder);
+		{
+			try
+			{
+				dropAdapter.attemptDropBulletins(tb.getBulletins(), folder);
+			}
+			catch (StatusNotAllowedException e)
+			{
+			}
+		}
 		
 		if(!worked)
 			Toolkit.getDefaultToolkit().beep();
@@ -441,7 +449,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			{
 				if (b.isSealed())
 				{
-					if(!mainWindow.confirmDlg(mainWindow, "DiscardSealedBulletin"))
+					if(!mainWindow.confirmDlg(mainWindow, "DiscardSealedBulletins"))
 						return;
 				}				
 				else
@@ -453,7 +461,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 							return;
 						draftOutBox.getStore().discardBulletin(draftOutBox, b);
 					}
-					else if(!mainWindow.confirmDlg(mainWindow, "DiscardDraftBulletin"))
+					else if(!mainWindow.confirmDlg(mainWindow, "DiscardDraftBulletins"))
 						return;
 				}
 			}

@@ -82,11 +82,19 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 			return;
 		}
 		dtde.acceptDrop(dtde.getDropAction());
-		System.out.println("dropTransferableBulletin: accepted");
+		//System.out.println("dropTransferableBulletin: accepted");
 
-		boolean worked = false;
-		worked = attemptDropBulletins(tb.getBulletins(), toFolder);
-		System.out.println("dropTransferableBulletin: Drop Complete!");
+		String resultMessageTag = null;
+		boolean worked = true;
+		try
+		{
+			attemptDropBulletins(tb.getBulletins(), toFolder);
+		}
+		catch (StatusNotAllowedException e)
+		{
+			worked = false;
+		}
+		//System.out.println("dropTransferableBulletin: Drop Complete!");
 
 		if(worked)
 		{
@@ -113,7 +121,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		dtde.dropComplete(worked);
 		if(!worked)
 		{
-			observer.notifyDlg(observer, "illegaldrop");
+			observer.notifyDlg(observer, "DropNotAllowed");
 		}
 		
 	}
@@ -216,7 +224,8 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	}
 
 
-	public boolean attemptDropBulletins(Bulletin[] bulletins, BulletinFolder toFolder)
+	public void attemptDropBulletins(Bulletin[] bulletins, BulletinFolder toFolder) throws
+		BulletinStore.StatusNotAllowedException
 	{
 		System.out.println("attemptDropBulletin");
 
@@ -227,7 +236,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 			Bulletin bulletin = bulletins[i];
 System.out.println("UiBulletinDropAdapter.attemptDropBulletins: " + bulletin.get(Bulletin.TAGTITLE));
 			if(!store.canPutBulletinInFolder(toFolder, bulletin.getAccount(), bulletin.getStatus()))
-				return false;
+				throw new BulletinStore.StatusNotAllowedException();
 		}
 
 		
@@ -239,7 +248,6 @@ System.out.println("UiBulletinDropAdapter.attemptDropBulletins: " + bulletin.get
 		store.saveFolders();
 		
 		observer.folderContentsHaveChanged(toFolder);
-		return true;
 	}
 
 	UiMainWindow observer;
