@@ -87,6 +87,11 @@ public class ConfigInfo implements Serializable
 	public boolean promptUserRequestSendToServer() { return mustAskUserToSendToServer; }
 	public String getServerCompliance() {return serverCompliance;}
 	public String getCustomFieldSpecs() {return customFieldSpecs;}
+
+	public boolean isServerConfigured()
+	{
+		return (serverName.length()>0 && serverPublicKey.length()>0);
+	}
 	
 	public void clear()
 	{

@@ -161,6 +161,16 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertTrue("Signature failed with signature removed from vector?", signer.verifySignatureOfVectorOfStrings(contactInfo, publicKey, signature));
 	}
 	
+	public void testIsServerConfigured()
+	{
+		ConfigInfo newInfo = new ConfigInfo();
+		assertFalse("Didn't set up a server should not exist", newInfo.isServerConfigured());
+		newInfo.setServerName("tmp Server");
+		assertFalse("server publick key not set yet", newInfo.isServerConfigured());
+		newInfo.setServerPublicKey("some key");
+		assertTrue("Server should be setup now", newInfo.isServerConfigured());
+	}
+	
 	
 	
 	void setConfigToSampleData(ConfigInfo info)
