@@ -83,7 +83,7 @@ public class UiSigninPanel extends JPanel implements VirtualKeyboardHandler
 			add(createNewUserNamePassword);
 		
 			add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(localization.getFieldLabel("HelpOnCreatingNewPassword"));
+			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(localization.getFieldLabel("HelpOnCreatingNewPassword"),100);
 			add(helpOnCreatingPassword);
 		
 		}

@@ -27,6 +27,9 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui.dialogs;
 
 import java.awt.BorderLayout;
+import java.awt.Container;
+import java.awt.Dimension;
+import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -35,6 +38,9 @@ import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.border.EmptyBorder;
 
@@ -42,6 +48,7 @@ import org.martus.client.swingui.UiConstants;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.UiMainWindow;
 import org.martus.client.swingui.UiSigninPanel;
+import org.martus.swing.ParagraphLayout;
 import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
 
@@ -71,7 +78,7 @@ public class UiSigninDlg extends JDialog
 		setTitle(title);
 		
 		signinPane = new UiSigninPanel(this, mode, username);
-
+		
 		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(new OkHandler());
 		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
@@ -82,7 +89,7 @@ public class UiSigninDlg extends JDialog
 		buttonBox.add(cancel);
 		buttonBox.add(Box.createHorizontalGlue());
 		buttonBox.setBorder(new EmptyBorder(5,5,5,5));
-		
+		JPanel scrolledPanel = new JPanel(); 
 		if(shouldUseTabs(mode))
 		{
 			tabbedPane = new JTabbedPane();
@@ -90,19 +97,30 @@ public class UiSigninDlg extends JDialog
 			tabbedPane.setTitleAt(0, localization.getButtonLabel("SignIn"));  
 			tabbedPane.add(createNewAccountPane());
 			tabbedPane.setTitleAt(1, localization.getButtonLabel("NewAccount"));
-			getContentPane().add(tabbedPane);
+			scrolledPanel.add(tabbedPane);
 		}
 		else
 		{
-			getContentPane().add(signinPane);
+			scrolledPanel.add(signinPane);
 		}
 
+		Container scrollingPane = new JScrollPane(scrolledPanel);
+		getContentPane().add(scrollingPane);
 		getContentPane().add(buttonBox, BorderLayout.SOUTH);
-
+		
 		getRootPane().setDefaultButton(ok);
 		signinPane.refreshForNewVirtualMode();
-		Utilities.centerDlg(this);
 		setResizable(true);
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		if(screenSize.width < 1000)
+		{	
+			setSize(screenSize.width, screenSize.height * 8 / 10);
+			setLocation(0,screenSize.height/10);
+		}
+		else
+		{	
+			Utilities.centerDlg(this);
+		}
 		show();
 	}
 

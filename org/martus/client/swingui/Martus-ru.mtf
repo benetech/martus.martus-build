@@ -1,4 +1,4 @@
-&#65279;# Martus Client Translation File
+﻿&#65279;# Martus Client Translation File
 # Language code:  ru
 # Language name:  Russian
 # Exported date:  Wed Nov 19 08:07:15 PST 2003
@@ -140,7 +140,7 @@ field:UploadFailedProgressMessage=Ошибка отправки данных
 field:UploadingDraftBulletin=Отправка черновой сводки
 field:UploadingSealedBulletin=Отправка чистовой сводки
 field:VirtualKeyboardBackSpace=Забой (Back Space)
-field:VirtualKeyboardKeys=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-+=!@#$%^&*()_,.[]{}<>\/?|;:~
+field:VirtualKeyboardKeys=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-+=!@#$%^&*()_,.[]{}<>\/?|;:~АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя
 field:VirtualKeyboardSpace=Пробел
 field:VirtualPasswordDescription=Введите пароль, нажимая мышью клавиши на экранной клавиатуре, изображенной ниже
 field:VirtualUserNameDescription=(Ввод с обычной клавиатуры)
