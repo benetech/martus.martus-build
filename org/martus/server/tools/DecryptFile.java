@@ -9,17 +9,22 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.Arrays;
 
+import org.martus.common.Base64;
+import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.FileInputStreamWithSeek;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusSecurity;
+import org.martus.common.UnicodeReader;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class DecryptFile
 {
 	public static class IncorrectEncryptedFileIdentifierException extends Exception {};
+	public static class IncorrectPublicKeyException extends Exception {};
+	public static class DigestFailedException extends Exception {};
 	
-	public static void main(String[] args)
+	public static void main(String[] args) throws IOException
 	{
 		File keyPairFile = null;
 		File plainTextFile = null;
@@ -75,25 +80,52 @@ public class DecryptFile
 			System.exit(3);
 		}
 
+		InputStreamWithSeek encryptedFileInput = null;
+		UnicodeReader encryptedFileReader = null;
+		OutputStream plainTextOutput = null;
+		ByteArrayInputStreamWithSeek inEncrypted = null;
 		try
 		{
 			security = (MartusSecurity) MartusServerUtilities.loadCurrentMartusSecurity(keyPairFile, passphrase);
 			
-			InputStreamWithSeek encryptedFileInput = new FileInputStreamWithSeek(cryptoFile);
-			OutputStream plainTextOutput = new BufferedOutputStream(new FileOutputStream(plainTextFile));
-			
-			int len = MartusSecurity.geEncryptedFileIdentifier().getBytes().length;
+			encryptedFileInput = new FileInputStreamWithSeek(cryptoFile);
+			encryptedFileReader = new UnicodeReader(encryptedFileInput);
+			plainTextOutput = new BufferedOutputStream(new FileOutputStream(plainTextFile));
+
 			byte[] identifierBytesExpected = MartusSecurity.geEncryptedFileIdentifier().getBytes();
-			byte[] identifierBytesRetrieved = new byte[len];
-			
-			encryptedFileInput.read(identifierBytesRetrieved, 0, len);
+			byte[] identifierBytesRetrieved = encryptedFileReader.readLine().getBytes();
 
 			if(! Arrays.equals(identifierBytesExpected, identifierBytesRetrieved))
 			{
 				throw new IncorrectEncryptedFileIdentifierException();
 			}
 			
-			security.decrypt(encryptedFileInput, plainTextOutput);
+			String RetrievedPublicKeyString = encryptedFileReader.readLine();
+			byte[] rpbByteArray = Base64.decode(RetrievedPublicKeyString);
+			
+			String publicKeyString = security.getPublicKeyString();
+			byte[] pbByteArray = publicKeyString.getBytes();
+			
+			if(! Arrays.equals(rpbByteArray, pbByteArray))
+			{
+				throw new IncorrectPublicKeyException();
+			}
+			
+			String retrievedDigest = encryptedFileReader.readLine();
+			
+			String retrievedEncryptedText = encryptedFileReader.readLine();
+			byte[] encryptedBytes = Base64.decode(retrievedEncryptedText);
+			inEncrypted = new ByteArrayInputStreamWithSeek(encryptedBytes);
+
+			security.decrypt(inEncrypted, plainTextOutput);
+			
+			String plainText = MartusServerUtilities.getFileContents(plainTextFile);			
+			String calculatedDigest = MartusSecurity.createDigestString(plainText);
+
+			if(calculatedDigest.compareTo(retrievedDigest) != 0)
+			{
+				throw new DigestFailedException();
+			}			
 		}
 		catch (AuthorizationFailedException e)
 		{
@@ -104,6 +136,13 @@ public class DecryptFile
 		{
 			System.err.println("Error: " + e.toString() );
 			System.exit(3);
+		}
+		finally
+		{
+			plainTextOutput.close();
+			encryptedFileReader.close();
+			encryptedFileInput.close();
+			inEncrypted.close();
 		}
 		if(prompt)
 		{

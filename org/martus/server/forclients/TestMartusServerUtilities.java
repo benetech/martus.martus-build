@@ -49,7 +49,7 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 			MartusServerUtilities.getLatestSignatureFileFromFile(fileToSign);
 			fail("Signature file should not exist.");
 		}
-		catch (MartusSignatureFileDoesntExistsException e)
+		catch (MartusSignatureFileDoesntExistsException ignoredException)
 		{}
 		
 		fileValidSignature = MartusServerUtilities.createSignatureFileFromFileOnServer(fileToSign, serverSecurity);
@@ -74,25 +74,10 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		catch (FileVerificationException e)
 		{}
 		
-		if(fileToSign.exists())
-		{
-			fileToSign.delete(); 
-		}
-		
-		if(fileValidSignature.exists())
-		{
-			fileValidSignature.delete();
-		}
-		
-		if(tempFile.exists())
-		{
-			tempFile.delete();
-		}
-		
-		if(fileInvalidSignature.exists())
-		{
-			fileInvalidSignature.delete();
-		}
+		fileToSign.delete();
+		fileValidSignature.delete();
+		tempFile.delete();
+		fileInvalidSignature.delete();
 
 		TRACE_END();
 	}
@@ -111,25 +96,10 @@ public class TestMartusServerUtilities extends TestCaseEnhanced
 		File validSignatureFile = MartusServerUtilities.getLatestSignatureFileFromFile(fileToSign);
 		assertEquals("Incorrect signature file retrieved", validSignatureFile.getAbsolutePath(), newestFile.getAbsolutePath());
 		
-		if(fileToSign.exists())
-		{
-			fileToSign.delete(); 
-		}
-		
-		if(earliestFile.exists())
-		{
-			earliestFile.delete();
-		}
-		
-		if(newestFile.exists())
-		{
-			newestFile.delete();
-		}
-		
-		if(sigDir.exists())
-		{
-			sigDir.delete();
-		}
+		fileToSign.delete(); 
+		earliestFile.delete();
+		newestFile.delete();
+		sigDir.delete();
 	}
 	
 	public File createTempFileWithContents(String content)

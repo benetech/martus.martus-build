@@ -74,15 +74,23 @@ public class AttachmentPacket extends Packet
 	{
 		File temp = File.createTempFile("$$$MartusAttachment", null);
 		temp.deleteOnExit();
-		UnicodeWriter writer = new UnicodeWriter(temp);
-		byte[] sig = writeXml(writer, signer);
-		writer.close();
+		
+		byte[] sig = writeAttachmentXmlFile(signer, temp);
 
 		DatabaseKey headerKey = new DatabaseKey(getUniversalId());
 		HashMap importMap = new HashMap();
 		importMap.put(headerKey, temp);
 		db.importFiles(importMap);
 		temp.delete();
+		return sig;
+	}
+
+	public byte[] writeAttachmentXmlFile(MartusCrypto signer, File temp)
+		throws IOException
+	{
+		UnicodeWriter writer = new UnicodeWriter(temp);
+		byte[] sig = writeXml(writer, signer);
+		writer.close();
 		return sig;
 	}
 

@@ -834,7 +834,7 @@ public class MartusSecurity implements MartusCrypto
 	private static final String PBE_ALGORITHM = "PBEWithSHAAndTwofish-CBC";
 	private static final String SIGN_ALGORITHM = "SHA1WithRSA";
 	private static final String DIGEST_ALGORITHM = "SHA1";
-	private static final String ENCRYPTED_FILE_VERSION_IDENTIFIER = "Martus Encrypted File Version 001\n";
+	private static final String ENCRYPTED_FILE_VERSION_IDENTIFIER = "Martus Encrypted File Version 001";
 
 	private static final int bitsInSessionKey = 256;
 	private static final int bitsInPublicKey = 2048;

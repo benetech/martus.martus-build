@@ -2,16 +2,20 @@ package org.martus.server.tools;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.security.PublicKey;
 
+import org.martus.common.Base64;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
+import org.martus.server.forclients.MartusServerUtilities;
 
 public class EncryptFile
 {
@@ -56,25 +60,49 @@ public class EncryptFile
 			System.exit(3);
 		}
 		
+		InputStream plainStream = null;
+		OutputStream cipherStream = null;
+		ByteArrayOutputStream cipherByteArrayOutputStream = null;
 		try
 		{
-			InputStream plainStream = new BufferedInputStream(new FileInputStream(plainTextFile));
-			OutputStream cipherStream = new BufferedOutputStream(new FileOutputStream(cryptoFile));
-			
-			byte[] buffer = MartusSecurity.geEncryptedFileIdentifier().getBytes();
-			int len = buffer.length;
-			cipherStream.write(buffer, 0, len);
+			plainStream = new BufferedInputStream(new FileInputStream(plainTextFile));
+			cipherStream = new BufferedOutputStream(new FileOutputStream(cryptoFile));
 			
 			String publicKeyString = (String) MartusUtilities.importServerPublicKeyFromFile(publicKeyFile, security).get(0);
 			PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
+			String encodedPubKey = Base64.encode(publicKeyString.getBytes());
 			
-			security.encrypt(plainStream, cipherStream, security.createSessionKey(), publicKey);
+			cipherByteArrayOutputStream = new ByteArrayOutputStream();
+			security.encrypt(plainStream, cipherByteArrayOutputStream, security.createSessionKey(), publicKey);
+			String encodedEncryptedFile = Base64.encode(cipherByteArrayOutputStream.toByteArray());
+			
+			String fileContents = MartusServerUtilities.getFileContents(plainTextFile);
+			String digest = MartusSecurity.createDigestString(fileContents);
+			
+			byte[] buffer = (MartusSecurity.geEncryptedFileIdentifier() + "\n").getBytes();
+			int len = buffer.length;
+			cipherStream.write(buffer, 0, len);
+			cipherStream.write((encodedPubKey + "\n").getBytes());
+			cipherStream.write((digest + "\n").getBytes());
+
+			cipherStream.write((encodedEncryptedFile + "\n").getBytes());
 		}
 		catch (Exception e)
 		{
 			System.err.println("EncryptFile.main: " + e);
 			e.printStackTrace();
 			System.exit(3);
+		}
+		finally
+		{
+			try
+			{
+				cipherByteArrayOutputStream.close();
+				cipherStream.close();
+				plainStream.close();
+			}
+			catch(IOException ignoredException)
+			{}
 		}
 
 		System.exit(0);

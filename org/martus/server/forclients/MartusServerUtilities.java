@@ -225,14 +225,20 @@ public class MartusServerUtilities
 		String sigString = Base64.encode(signature);
 
 		UnicodeWriter writer = new UnicodeWriter(signatureFile);
-		writer.writeln(MARTUS_SIGNATURE_FILE_IDENTIFIER);
-		writer.writeln(date);
-		writer.writeln(Long.toString(filesize));
-		writer.writeln(Long.toString(lineCount));
-		writer.writeln(signer.getPublicKeyString());
-		writer.writeln(sigString);
-		writer.flush();
-		writer.close();
+		try
+		{
+			writer.writeln(MARTUS_SIGNATURE_FILE_IDENTIFIER);
+			writer.writeln(date);
+			writer.writeln(Long.toString(filesize));
+			writer.writeln(Long.toString(lineCount));
+			writer.writeln(signer.getPublicKeyString());
+			writer.writeln(sigString);
+			writer.flush();
+		}
+		finally
+		{
+			writer.close();
+		}
 	}
 	
 	static long getLineCountForFile(File file)
@@ -293,6 +299,20 @@ public class MartusServerUtilities
 			{
 			}
 		}
+	}
+	
+	public static String getFileContents(File plainTextFile) throws IOException
+	{
+		UnicodeReader reader = new UnicodeReader(plainTextFile);
+		String all = "";
+		String line;
+		while((line = reader.readLine()) != null)
+		{
+			all += line + System.getProperty("line.separator");
+		}
+		reader.close();
+		
+		return all;
 	}
 	
 	public static class MartusSignatureFileAlreadyExistsException extends Exception {}
