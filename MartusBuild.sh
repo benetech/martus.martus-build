@@ -600,7 +600,12 @@ zipSources()
 	find . -name "MartusHelp-ar.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "Martus-ar.mtf" -print | zip $MARTUS_ZIP_PATH -q@
 
-	#all unofficial tranlation
+	#french
+	find . -name "MartusHelpTOC-fr.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "MartusHelp-fr.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "Martus-fr.mtf" -print | zip $MARTUS_ZIP_PATH -q@
+
+	#unofficial
 	find . -name "UnofficialTranslationMessage.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	
 	echo
