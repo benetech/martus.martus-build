@@ -112,16 +112,9 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		currentBulletin = bulletinToShow;
 		if(currentBulletin == null)
 		{
-			if(publicStuff != null)
-			{
-				remove(publicStuff);
-				publicStuff = null;
-			}
-			if(privateStuff != null)
-			{
-				remove(privateStuff);
-				privateStuff = null;
-			}
+			publicStuff = null;
+			privateStuff = null;
+			removeAll();
 			repaint();
 			return;
 		}
