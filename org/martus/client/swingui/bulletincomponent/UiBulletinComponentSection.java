@@ -76,16 +76,16 @@ abstract public class UiBulletinComponentSection extends JPanel
 		add(damagedIndicator);
 	}
 
-	public UiField[] createLabelsAndFields(JPanel target, FieldSpec[] tags)
+	public UiField[] createLabelsAndFields(JPanel target, FieldSpec[] specs)
 	{
-		fieldTags = tags;
+		fieldTags = specs;
 
-		fields = new UiField[tags.length];
-		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
+		fields = new UiField[specs.length];
+		for(int fieldNum = 0; fieldNum < specs.length; ++fieldNum)
 		{
-			fields[fieldNum] = createField(tags[fieldNum]);
+			fields[fieldNum] = createField(specs[fieldNum]);
 			fields[fieldNum].initalize();
-			target.add(createLabel(tags[fieldNum].getTag()), ParagraphLayout.NEW_PARAGRAPH);
+			target.add(createLabel(specs[fieldNum]), ParagraphLayout.NEW_PARAGRAPH);
 			target.add(fields[fieldNum].getComponent());
 		}
 		JLabel attachments = new JLabel(localization.getFieldLabel("attachments"));
@@ -111,9 +111,12 @@ abstract public class UiBulletinComponentSection extends JPanel
 			addAttachment(attachments[i]);
 	}
 
- 	public JLabel createLabel(String fieldTag)
+ 	public JLabel createLabel(FieldSpec spec)
 	{
-		return new JLabel(localization.getFieldLabel(fieldTag));
+		String labelText = spec.getLabel();
+		if(labelText == null)
+			labelText = localization.getFieldLabel(spec.getTag());
+		return new JLabel(labelText);
 	}
 
 	private UiField createField(FieldSpec fieldSpec)

@@ -66,14 +66,17 @@ public class FieldDataPacket extends Packet
 		fieldTags = parseFieldTagsFromString(commaSeparatedTags);
 	}
 
-	static public String buildFieldListString(FieldSpec[] tempFieldTags)
+	static public String buildFieldListString(FieldSpec[] fieldSpecs)
 	{
 		String fieldList = "";
-		for(int i = 0; i < tempFieldTags.length; ++i)
+		for(int i = 0; i < fieldSpecs.length; ++i)
 		{
 			if(i > 0)
 				fieldList += FIELD_TAG_DELIMITER;
-			fieldList += tempFieldTags[i].getTag();
+			FieldSpec spec = fieldSpecs[i];
+			fieldList += spec.getTag();
+			if(spec.getLabel() != null)
+				fieldList += FIELD_ELEMENT_DELIMITER + spec.getLabel();
 		}
 		return fieldList;
 	}

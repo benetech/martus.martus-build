@@ -383,6 +383,19 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 
 		assertContains(fieldListForTesting, result);
 	}
+	
+	public void testWriteXmlCustomField() throws Exception
+	{
+		FieldSpec[] specs = {new FieldSpec("tag", "<label>")};
+		FieldDataPacket fdpCustom = new FieldDataPacket(UniversalId.createDummyUniversalId(), specs);
+		
+		ByteArrayOutputStream out = new ByteArrayOutputStream();
+		fdpCustom.writeXml(out, security);
+		String result = new String(out.toByteArray(), "UTF-8");
+		out.close();
+		
+		assertContains("<FieldList>tag,&lt;label&gt;</FieldList>", result);
+	}
 
 	public void testWriteAndLoadXml() throws Exception
 	{

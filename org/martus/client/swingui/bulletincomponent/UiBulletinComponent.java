@@ -55,28 +55,28 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 
 	public void createSections()
 	{
-		FieldSpec[] standardFieldTags = currentBulletin.getPublicFieldTags();
-		FieldSpec[] privateFieldTags = currentBulletin.getPrivateFieldTags();
+		FieldSpec[] publicFieldSpecs = currentBulletin.getPublicFieldTags();
+		FieldSpec[] privateFieldSpecs = currentBulletin.getPrivateFieldTags();
 
-		int numPublicFields = standardFieldTags.length;
+		int numPublicFields = publicFieldSpecs.length;
 		int indexOfFirstPublicField = 0;
 		int indexOfFirstPrivateField = numPublicFields;
-		int numFields = numPublicFields + privateFieldTags.length;
+		int numFields = numPublicFields + privateFieldSpecs.length;
 		fields = new UiField[numFields];
 		fieldTags = new String[numFields];
 
 		publicStuff = createBulletinComponentSection(UiBulletinComponentSection.NOT_ENCRYPTED);
 		allPrivateField = createBoolField();
 		allPrivateField.initalize();
-		publicStuff.add(publicStuff.createLabel("allprivate"), ParagraphLayout.NEW_PARAGRAPH);
+		publicStuff.add(publicStuff.createLabel(new FieldSpec("allprivate")), ParagraphLayout.NEW_PARAGRAPH);
 		publicStuff.add(allPrivateField.getComponent());
-		createLabelsAndFields(publicStuff, standardFieldTags, indexOfFirstPublicField);
+		createLabelsAndFields(publicStuff, publicFieldSpecs, indexOfFirstPublicField);
 		if(!isEditable)
 			publicStuff.disableEdits();
 
 		privateStuff = createBulletinComponentSection(UiBulletinComponentSection.ENCRYPTED);
 		privateStuff.updateSectionBorder(true);
-		createLabelsAndFields(privateStuff, privateFieldTags, indexOfFirstPrivateField);
+		createLabelsAndFields(privateStuff, privateFieldSpecs, indexOfFirstPrivateField);
 		if(!isEditable)
 			privateStuff.disableEdits();
 
@@ -169,13 +169,13 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			encryptionListener.encryptionChanged(newState);
 	}
 
-	void createLabelsAndFields(UiBulletinComponentSection target, FieldSpec[] tags, int startIndex)
+	void createLabelsAndFields(UiBulletinComponentSection target, FieldSpec[] specs, int startIndex)
 	{
-		UiField[] fieldsInThisSection = target.createLabelsAndFields(target, tags);
-		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
+		UiField[] fieldsInThisSection = target.createLabelsAndFields(target, specs);
+		for(int fieldNum = 0; fieldNum < specs.length; ++fieldNum)
 		{
 			int thisField = startIndex + fieldNum;
-			fieldTags[thisField] = tags[fieldNum].getTag();
+			fieldTags[thisField] = specs[fieldNum].getTag();
 			fields[thisField] = fieldsInThisSection[fieldNum];
 		}
 		target.createAttachmentTable();
