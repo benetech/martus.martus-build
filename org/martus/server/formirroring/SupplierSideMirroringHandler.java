@@ -108,6 +108,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 				try
 				{
 					publicCode = MartusCrypto.computePublicCode(authorAccountId);
+					log("listBulletins: " + publicCode);
 				}
 				catch (InvalidBase64Exception e)
 				{
