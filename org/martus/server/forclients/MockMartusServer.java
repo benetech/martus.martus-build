@@ -34,11 +34,11 @@ public class MockMartusServer extends MartusServer
 		database = databaseToUse;
 	}
 	
-	public void initialize() throws Exception
+	public void verifyAndLoadConfigurationFiles() throws Exception
 	{
 		try
 		{
-			super.initialize();
+			super.verifyAndLoadConfigurationFiles();
 		}
 		catch (FileNotFoundException okIfComplianceFileIsMissing)
 		{

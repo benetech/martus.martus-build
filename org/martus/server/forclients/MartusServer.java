@@ -43,9 +43,11 @@ import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.DecryptionException;
+import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.MartusUtilities.FileTooLargeException;
@@ -67,55 +69,50 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	public static void main(String[] args)
 	{
-		System.out.println("MartusServer");
-		processCommandLine(args);
-		
-		MartusServer server = null;
 		try
 		{
+			displayVersion();
 			System.out.println("Initializing...this will take a few seconds...");
-			server = new MartusServer(getDefaultDataDirectory());
-		} 
+			MartusServer server = new MartusServer(getDefaultDataDirectory());
+
+			server.processCommandLine(args);
+			server.deleteRunningFile();
+
+			if(!server.hasAccount())
+			{
+				System.out.println("***** Key pair file not found *****");
+				System.exit(2);
+			}
+
+			String passphrase = getPassphraseFromConsole(server);
+			server.loadAccount(passphrase);
+			server.verifyAndLoadConfigurationFiles();
+			server.deleteStartupFiles();
+			server.displayStatistics();
+			server.setDataDirectory(getDefaultDataDirectory());
+
+			System.out.println("Setting up sockets (this may take up to a minute or longer)...");
+			server.createServerForClients();
+			server.createServerForMirroring();
+			MartusServer.writeSyncFile(server.getRunningFile());
+			System.out.println("Waiting for connection...");
+		}
 		catch(CryptoInitializationException e) 
 		{
 			System.out.println("Crypto Initialization Exception" + e);
 			System.exit(1);			
 		}
-		
-		displayVersion();
-
-		if(!server.hasAccount())
+		catch (AuthorizationFailedException e)
 		{
-			System.out.println("***** Key pair file not found *****");
-			System.exit(2);
-		}
-		
-		String passphrase = getPassphraseFromConsole(server);
-		
-		try
-		{
-			server.loadAccount(passphrase);
-		}
-		catch (Exception e1)
-		{
-			System.out.println("Invalid password: " + e1);
+			System.out.println("Invalid password: " + e);
 			System.exit(73);
 		}
-			
-		try
+		catch (Exception e)
 		{
-			server.initialize();
-		}
-		catch (Exception e2)
-		{
-			System.out.println("MartusServer.main: " + e2);
+			System.out.println("MartusServer.main: " + e);
 			System.exit(3);
 		}
-
-		server.setDataDirectory(getDefaultDataDirectory());
-		server.displayClientStatistics();
-		server.createListeners();
-		System.out.println("Waiting for connection...");
+			
 	}
 
 	MartusServer(File dir) throws 
@@ -196,14 +193,18 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		System.out.println("---");
 	}
 
-	public void initialize() throws Exception
+	public void verifyAndLoadConfigurationFiles() throws Exception
 	{
 		verifyConfigurationFiles();
 		loadConfigurationFiles();
+	}
 
+	private void displayStatistics() throws InvalidBase64Exception
+	{
 		displayComplianceStatement();
 		displayServerAccountId();
 		displayServerPublicCode();
+		displayClientStatistics();
 	}
 	
 	public void verifyConfigurationFiles()
@@ -313,7 +314,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return keyPairFile.exists();
 	}
 	
-	void loadAccount(String passphrase) throws Exception
+	void loadAccount(String passphrase) throws AuthorizationFailedException, InvalidKeyPairFileVersionException, IOException
 	{
 		FileInputStream in = new FileInputStream(keyPairFile);
 		readKeyPair(in, passphrase);
@@ -1811,6 +1812,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public void deleteStartupFiles()
 	{
+		if(!secureMode)
+			return;
+
 		if(!magicWordsFile.delete())
 		{
 			System.out.println("Unable to delete magicwords");
@@ -2259,23 +2263,32 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	}
 
 
-	private void createListeners()
+	private void createServerForMirroring()
 	{
-		File runningFile = new File(triggerDirectory, "running");
-		runningFile.delete();
-		if(secureMode)
-			deleteStartupFiles();
-				
-		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
+		createMirroringSupplierXmlRpcServer();
+	}
+
+	private void createServerForClients()
+	{
 		createNonSSLXmlRpcServer();
 		createSSLXmlRpcServer();
-		createMirroringSupplierXmlRpcServer();
-		writeSyncFile(runningFile);
+	}
+
+	private void deleteRunningFile()
+	{
+		getRunningFile().delete();
+	}
+
+	private File getRunningFile()
+	{
+		File runningFile = new File(triggerDirectory, "running");
+		return runningFile;
 	}
 
 
 	private static void displayVersion()
 	{
+		System.out.println("MartusServer");
 		System.out.println("Version " + ServerConstants.version);
 		String versionInfo = MartusUtilities.getVersionDate();
 		System.out.println("Build Date " + versionInfo);
@@ -2291,7 +2304,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	}
 
 
-	private static void processCommandLine(String[] args)
+	private void processCommandLine(String[] args)
 	{
 		for(int arg = 0; arg < args.length; ++arg)
 		{
@@ -2433,10 +2446,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private int activeClientsCounter;
 	private String complianceStatement; 
 
-	private static boolean secureMode;
-	private static String servername;
-	private static boolean serverLogging;
-	private static boolean serverMaxLogging;
+	private boolean secureMode;
+	private String servername;
+	private boolean serverLogging;
+	private boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
 	
 	Hashtable failedUploadRequestsPerIp;

@@ -155,7 +155,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		testServer = new MockMartusServer();
 		testServer.setSecurity(testServerSecurity);
-		testServer.initialize();
+		testServer.verifyAndLoadConfigurationFiles();
 		testServerInterface = new ServerSideNetworkHandler(testServer);
 		serverDatabase = (MockServerDatabase)testServer.getDatabase();
 
@@ -208,7 +208,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
 		other.setSecurity(testServer.security);
-		other.initialize();
+		other.verifyAndLoadConfigurationFiles();
 		assertEquals("didn't get saved/loaded?", true, other.canClientUpload(sampleId));
 		other.deleteAllFiles();
 
@@ -2136,7 +2136,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		writer.close();
 		
 		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
-		other.initialize();
+		other.verifyAndLoadConfigurationFiles();
 		other.setSecurity(testServerSecurity);
 		
 		String worked = other.requestUploadRights("whatever", sampleMagicWord1);

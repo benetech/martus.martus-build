@@ -45,7 +45,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		app.getStore().saveBulletin(b2);
 
 		testServer = new MockServer();
-		testServer.initialize();
+		testServer.verifyAndLoadConfigurationFiles();
 		
 		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);

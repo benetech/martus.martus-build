@@ -21,7 +21,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 		mySecurity.createKeyPair(512);
 		
 		mockServer = new MockMartusServer();
-		mockServer.initialize();
+		mockServer.verifyAndLoadConfigurationFiles();
 		mockServer.setSecurity(mySecurity);
 		handler = new ServerSideNetworkHandler(mockServer);
 
