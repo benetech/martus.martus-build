@@ -245,7 +245,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		clientsThatCanUpload = new Vector();
 		clientsBanned = new Vector();
 		magicWords = new Vector();
-		bannedClientsFile = new File(dataDirectory, NOTAUTHORIZEDCLIENTSFILENAME);
+		bannedClientsFile = new File(dataDirectory, BANNEDCLIENTSFILENAME);
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(dataDirectory, getKeypairFilename());
@@ -427,7 +427,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
-		if( !isClientAuthorized(clientId) )
+		if( isClientBanned(clientId) )
 			return NetworkInterfaceConstants.REJECTED;
 			
 		if( isShutdownRequested() )
@@ -487,7 +487,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			logging("uploadBulletinChunk");
 		}
 		
-		if( !isClientAuthorized(authorAccountId) )
+		if(isClientBanned(authorAccountId) )
 			return NetworkInterfaceConstants.REJECTED;
 		
 		if( isShutdownRequested() )
@@ -520,7 +520,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				logging("Last Chunk = " + chunkSize);
 		}
 		
-		if( !isClientAuthorized(authorAccountId) || !canClientUpload(authorAccountId))
+		if(isClientBanned(authorAccountId) || !canClientUpload(authorAccountId))
 		{
 			logging("putBulletinChunk REJECTED");
 			return NetworkInterfaceConstants.REJECTED;
@@ -689,7 +689,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + "HQ: " + getClientAliasForLogging(hqAccountId));
 		}
 		
-		if( !isClientAuthorized(hqAccountId) )
+		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -746,7 +746,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
 		}
 		
-		if( !isClientAuthorized(authorAccountId) )
+		if(isClientBanned(authorAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -837,7 +837,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
 		}
 		
-		if( !isClientAuthorized(myAccountId) )
+		if(isClientBanned(myAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -880,7 +880,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("legacylistMySealedBulletinIds " + getClientAliasForLogging(clientId));
 		
-		if( !isClientAuthorized(clientId) )
+		if(isClientBanned(clientId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
@@ -898,7 +898,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("listMySealedBulletinIds " + getClientAliasForLogging(clientId));
 		
-		if( !isClientAuthorized(clientId) )
+		if(isClientBanned(clientId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
@@ -922,7 +922,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("legacyListMyDraftBulletinIds " + getClientAliasForLogging(authorAccountId));
 			
-		if( !isClientAuthorized(authorAccountId) )
+		if(isClientBanned(authorAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
@@ -940,7 +940,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("listMyDraftBulletinIds " + getClientAliasForLogging(authorAccountId));
 			
-		if( !isClientAuthorized(authorAccountId) )
+		if(isClientBanned(authorAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
@@ -965,7 +965,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("legacylistFieldOfficeSealedBulletinIds " + getClientAliasForLogging(hqAccountId));
 			
-		if( !isClientAuthorized(hqAccountId) )
+		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
@@ -983,7 +983,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("listFieldOfficeSealedBulletinIds " + getClientAliasForLogging(hqAccountId));
 			
-		if( !isClientAuthorized(hqAccountId) )
+		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
@@ -1009,7 +1009,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("legacyListFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));
 
-		if( !isClientAuthorized(hqAccountId) )
+		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -1027,7 +1027,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("listFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));
 
-		if( !isClientAuthorized(hqAccountId) )
+		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -1091,7 +1091,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("listFieldOfficeAccounts " + getClientAliasForLogging(hqAccountId));
 			
-		if( !isClientAuthorized(hqAccountId) )
+		if(isClientBanned(hqAccountId) )
 			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		if( isShutdownRequested() )
@@ -1107,7 +1107,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public String deleteDraftBulletins(String accountId, String[] localIds)
 	{
-		if( !isClientAuthorized(accountId) )
+		if(isClientBanned(accountId) )
 			return REJECTED;
 		
 		if( isShutdownRequested() )
@@ -1140,7 +1140,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		if(serverMaxLogging)
 			logging("putContactInfo " + getClientAliasForLogging(accountId));
-		if( !isClientAuthorized(accountId) )
+		if(isClientBanned(accountId) )
 			return NetworkInterfaceConstants.REJECTED;
 		
 		if( isShutdownRequested() )
@@ -1199,7 +1199,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(serverMaxLogging)
 			logging("downloadAuthorizedPacket: " + getClientAliasForLogging(myAccountId));
 			
-		if( !isClientAuthorized(authorAccountId) )
+		if(isClientBanned(authorAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -1258,7 +1258,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			logging("  packet " + packetLocalId + " requested by: " + getClientAliasForLogging(myAccountId));
 		}
 		
-		if( !isClientAuthorized(myAccountId) )
+		if(isClientBanned(myAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -1285,7 +1285,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		Vector result = new Vector();
 		
-		if( !isClientAuthorized(myAccountId) )
+		if(isClientBanned(myAccountId) )
 			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
 		
 		if( isShutdownRequested() )
@@ -1376,9 +1376,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return clientsThatCanUpload.contains(clientId);
 	}
 	
-	public boolean isClientAuthorized(String clientId)
+	public boolean isClientBanned(String clientId)
 	{
-		return !clientsBanned.contains(clientId);
+		return clientsBanned.contains(clientId);
 	}
 
 	public synchronized void allowUploads(String clientId)
@@ -1463,11 +1463,11 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				logging("loadCanUploadList : Exit OK");
 	}
 	
-	public synchronized void loadNotAuthorizedClients()
+	public synchronized void loadBannedClients()
 	{
 // Too much logging!
 //		if(serverMaxLogging)
-//			logging("loadNotAuthorizedClients");
+//			logging("loadBannedClients()");
 
 		loadBannedClients(bannedClientsFile);
 	}
@@ -1492,7 +1492,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 		catch (IOException e)
 		{
-			logging("loadNotAuthorizedClients -- Error loading can-upload list: " + e);
+			logging("loadBannedClients: " + e);
 		}
 	}
 
@@ -2048,7 +2048,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		public void run()
 		{
-			loadNotAuthorizedClients();
+			loadBannedClients();
 		}
 	}
 	
@@ -2100,7 +2100,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
-	private static final String NOTAUTHORIZEDCLIENTSFILENAME = "notauthorized.txt";
+	private static final String BANNEDCLIENTSFILENAME = "notauthorized.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	private final long IMMEDIATELY = 0;
 	private static final long bannedCheckIntervalMillis = 60000;
