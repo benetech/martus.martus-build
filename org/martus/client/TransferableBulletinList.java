@@ -60,6 +60,9 @@ public class TransferableBulletinList implements Transferable
 
 	public void dispose()
 	{
+		if(files == null)
+			return;
+			
 		try
 		{
 			for(int i =0 ; i < files.size(); ++i)
