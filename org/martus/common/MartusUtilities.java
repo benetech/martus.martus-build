@@ -62,7 +62,7 @@ public class MartusUtilities
 	public static String getVersionDate()
 	{
 		java.lang.Class classToUse = MartusUtilities.class;
-		String versionDate = "";
+		String versionDate = "[?]";
 		InputStream versionStream = null;
 		String fileVersionInfo = "BuildDate.txt";
 		versionStream = classToUse.getResourceAsStream(fileVersionInfo);

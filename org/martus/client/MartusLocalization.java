@@ -522,7 +522,8 @@ public class MartusLocalization
 		addEnglishTranslation("language:ur=Urdu");
 		addEnglishTranslation("language:vi=Vietnamese");
 		
-		addEnglishTranslation("field:aboutDlgVersionInfo=Martus Beta Version ");
+		addEnglishTranslation("field:aboutDlgVersionInfo=Martus Version");
+		addEnglishTranslation("field:aboutDlgBuildDate=Built on");
 		addEnglishTranslation("field:aboutDlgCopyright=Copyright 2002 Benetech");
 		addEnglishTranslation("field:aboutDlgLine3=Martus Software is developed by Benetech in partnership with the information program ");
 		addEnglishTranslation("field:aboutDlgLine4=of the Open Society Institute and the American Association for the Advancement of Science.");

@@ -27,7 +27,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 
 	public UiSigninDlg(UiMainWindow window, JFrame owner, int mode, String username)
 	{
-		super(owner, window.getApp().getWindowTitle("MartusSignIn"), true);
+		super(owner, true);
 		Initalize(window, owner, mode, username);
 	}
 
@@ -36,6 +36,13 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 	{
 		mainWindow = window;
 		app = mainWindow.getApp();
+
+		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
+		versionInfo += " " + UiConstants.versionLabel;
+		String title = window.getApp().getWindowTitle("MartusSignIn") + 
+				" (" + versionInfo + ")";
+		setTitle(title);
+
 		getContentPane().setLayout(new ParagraphLayout());
 		ok = new JButton(app.getButtonLabel("ok"));
 		ok.addActionListener(new OkHandler());

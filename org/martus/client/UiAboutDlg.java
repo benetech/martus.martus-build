@@ -1,10 +1,7 @@
 
 package org.martus.client;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Rectangle;
@@ -13,6 +10,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
+import javax.swing.Box;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JDialog;
@@ -30,41 +28,52 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		super(owner, "" , true);
 		app = owner.getApp();
 		setTitle(app.getWindowTitle("about"));
-		getContentPane().setLayout(new BorderLayout());
+
 		JLabel icon = new JLabel(new ImageIcon(UiAboutDlg.class.getResource("MartusLogo.gif")),JLabel.LEFT);
-		getContentPane().add(icon, BorderLayout.NORTH);
 
-		getContentPane().add(new JLabel("   "), BorderLayout.WEST);
-		getContentPane().add(new JLabel("   "), BorderLayout.EAST);
-		
 		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
-		versionInfo += MartusUtilities.getVersionDate();
+		versionInfo += " " + UiConstants.versionLabel;
 		
-		Container info = new Container();
-		info.setLayout(new GridLayout(10,1));
-		info.add(new JLabel(""));
-		info.add(new JLabel(versionInfo, JLabel.CENTER));
-		info.add(new JLabel(app.getFieldLabel("aboutDlgCopyright"), JLabel.CENTER));
-		info.add(new JLabel(""));
-		info.add(new JLabel(app.getFieldLabel("aboutDlgLine3")));
-		info.add(new JLabel(app.getFieldLabel("aboutDlgLine4")));
-		info.add(new JLabel(""));
-		info.add(new JLabel(RSANOTICE));
-		info.add(new JLabel(IBMNOTICE));
-		info.add(new JLabel(""));
-		getContentPane().add(info, BorderLayout.CENTER);
-
+		String buildDate = app.getFieldLabel("aboutDlgBuildDate");
+		buildDate += " " + MartusUtilities.getVersionDate();
+		
 		JButton ok = new JButton(app.getButtonLabel("ok"));
 		ok.addActionListener(this);
 		ok.addKeyListener(new MakeEnterKeyExit());
-		Container okPlacement = new Container();
-		okPlacement.setLayout(new GridLayout(1,5));
-		okPlacement.add(new JLabel(""));
-		okPlacement.add(new JLabel(""));
-		okPlacement.add(ok);
-		okPlacement.add(new JLabel(""));
-		okPlacement.add(new JLabel(""));
-		getContentPane().add(okPlacement, BorderLayout.SOUTH);
+
+		Box vBoxVersionInfo = Box.createVerticalBox();
+		vBoxVersionInfo.add(new JLabel(versionInfo));
+		vBoxVersionInfo.add(new JLabel(app.getFieldLabel("aboutDlgCopyright")));
+		vBoxVersionInfo.add(new JLabel(buildDate));
+
+		Box hBoxVersionAndIcon = Box.createHorizontalBox();
+		hBoxVersionAndIcon.add(Box.createHorizontalGlue());
+		hBoxVersionAndIcon.add(vBoxVersionInfo);
+		hBoxVersionAndIcon.add(Box.createHorizontalGlue());
+		hBoxVersionAndIcon.add(icon);
+		
+		Box hBoxOk = Box.createHorizontalBox();
+		hBoxOk.add(Box.createHorizontalGlue());
+		hBoxOk.add(ok);
+		hBoxOk.add(Box.createHorizontalGlue());
+
+		Box vBoxDetails = Box.createVerticalBox();		
+		vBoxDetails.add(new JLabel(" "));
+		vBoxDetails.add(new JLabel(app.getFieldLabel("aboutDlgLine3")));
+		vBoxDetails.add(new JLabel(app.getFieldLabel("aboutDlgLine4")));
+		vBoxDetails.add(new JLabel(" "));
+		vBoxDetails.add(new JLabel(RSANOTICE));
+		vBoxDetails.add(new JLabel(IBMNOTICE));
+		vBoxDetails.add(new JLabel(" "));
+		vBoxDetails.add(hBoxOk);
+
+		Box hBoxDetails = Box.createHorizontalBox();
+		hBoxDetails.add(vBoxDetails);
+		
+		Box vBoxAboutDialog = Box.createVerticalBox();
+		vBoxAboutDialog.add(hBoxVersionAndIcon);
+		vBoxAboutDialog.add(hBoxDetails);
+		getContentPane().add(vBoxAboutDialog);
 
 		pack();
 		Dimension size = getSize();
