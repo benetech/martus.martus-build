@@ -1,6 +1,5 @@
 package org.martus.client;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeModel;
 
 public class FolderList extends DefaultTreeModel
@@ -48,12 +47,12 @@ public class FolderList extends DefaultTreeModel
 		return (FolderTreeNode)getChild(root, index);
 	}
 
-	public FolderTreeNode findFolder(String folderName)
+	public FolderTreeNode findFolderByLocalizedName(String folderName)
 	{
 		for(int i = 0; i < getCount(); ++i)
 		{
 			FolderTreeNode node = getNode(i);
-			if(folderName.equals(node.toString()))
+			if(folderName.equals(node.getLocalizedName()))
 				return node;
 		}
 

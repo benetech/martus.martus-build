@@ -1,6 +1,5 @@
 package org.martus.client;
 
-import javax.swing.tree.DefaultMutableTreeNode;
 import junit.framework.TestCase;
 
 import org.martus.common.MockClientDatabase;
@@ -34,7 +33,7 @@ public class TestFolderList extends TestCase
 		int baseCount = getVisibleFolderCount(store);
 		assertEquals("Initial count", baseCount, list.getCount());
 
-		DefaultMutableTreeNode node = list.findFolder("lisjf;lisjef");
+		FolderTreeNode node = list.findFolderByLocalizedName("lisjf;lisjef");
 		assertNull("Find folder that isn't there", node);
 
 		BulletinFolder folder = store.createFolder("test");
@@ -44,21 +43,46 @@ public class TestFolderList extends TestCase
 
 		node = list.getNode(baseCount);
 		assertEquals("test", node.toString());
-		node = list.findFolder("test");
+		node = list.findFolderByLocalizedName("test");
 		assertEquals("test", node.toString());
 
 		store.renameFolder("test", "new");
 		list.loadFolders(store);
 		assertEquals(getVisibleFolderCount(store), list.getCount());
 		assertEquals("new", list.getName(list.getCount()-1));
-		node = list.findFolder("test");
+		node = list.findFolderByLocalizedName("test");
 		assertNull("Find deleted folder", node);
-		node = list.findFolder("new");
+		node = list.findFolderByLocalizedName("new");
 		assertEquals("new", node.toString());
 
 		store.deleteFolder("new");
 		list.loadFolders(store);
 		assertEquals(baseCount, list.getCount());
+	}
+
+	public void testLocalizedFolders()
+	{
+		app.loadSampleData();
+		BulletinStore store = app.getStore();
+		FolderList list = new FolderList(app);
+		list.loadFolders(store);
+
+		int baseCount = getVisibleFolderCount(store);
+		assertEquals("Initial count", baseCount, list.getCount());
+
+		BulletinFolder folder = store.createFolder(app.getNameOfFolderRetrieved());
+		list.loadFolders(store);
+		assertEquals(baseCount+1, list.getCount());
+		assertEquals(store.getFolder(0).getName(), list.getName(0));
+
+		FolderTreeNode node = list.getNode(baseCount);
+		assertEquals(app.getNameOfFolderRetrieved(), node.getInternalName());
+
+		assertEquals(app.getFolderLabel(app.getNameOfFolderRetrieved()), node.getLocalizedName());
+		store.deleteFolder(app.getNameOfFolderRetrieved());
+		list.loadFolders(store);
+		assertEquals(baseCount, list.getCount());
+		
 	}
 
 	public void testLoadFolders()

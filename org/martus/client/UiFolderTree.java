@@ -13,7 +13,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.TreeModelEvent;
 import javax.swing.event.TreeSelectionEvent;
 import javax.swing.event.TreeSelectionListener;
-import javax.swing.tree.DefaultMutableTreeNode;
 import javax.swing.tree.DefaultTreeCellEditor;
 import javax.swing.tree.DefaultTreeCellRenderer;
 import javax.swing.tree.TreeModel;
@@ -63,7 +62,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 
 	public BulletinFolder getFolderAt(TreePath path)
 	{
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
+		FolderTreeNode node = (FolderTreeNode)path.getLastPathComponent();
 		if (node == null)
 		{
 			return null;
@@ -73,7 +72,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			return null;
 		}
 
-		String name = node.toString();
+		String name = node.getInternalName();
 		return store.findFolder(name);
 	}
 
@@ -95,14 +94,14 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			observer.folderSelectionHasChanged(folder);
     }
 
-	private DefaultMutableTreeNode getActualNode(TreeModelEvent event)
+	private FolderTreeNode getActualNode(TreeModelEvent event)
 	{
-		DefaultMutableTreeNode node = getChildNodeIfAny(event);
+		FolderTreeNode node = getChildNodeIfAny(event);
 
 		if(node == null)
 		{
 			TreePath path = event.getTreePath();
-			node = (DefaultMutableTreeNode)path.getLastPathComponent();
+			node = (FolderTreeNode)path.getLastPathComponent();
 		}
 
 		return node;
@@ -111,28 +110,28 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 	private TreePath getActualPath(TreeModelEvent event)
 	{
 		TreePath path = event.getTreePath();
-		DefaultMutableTreeNode node = getChildNodeIfAny(event);
+		FolderTreeNode node = getChildNodeIfAny(event);
 		if(node != null)
 			path = path.pathByAddingChild(node);
 
 		return path;
 	}
 
-	private DefaultMutableTreeNode getChildNodeIfAny(TreeModelEvent event)
+	private FolderTreeNode getChildNodeIfAny(TreeModelEvent event)
 	{
-		DefaultMutableTreeNode child = null;
+		FolderTreeNode child = null;
 		TreePath path = event.getTreePath();
-		DefaultMutableTreeNode parent = (DefaultMutableTreeNode)path.getLastPathComponent();
+		FolderTreeNode parent = (FolderTreeNode)path.getLastPathComponent();
 
 		// we may get passed the parent node, with a child index
 		int[] children = event.getChildIndices();
 		if(children != null && children.length > 0)
-			child = (DefaultMutableTreeNode)parent.getChildAt(children[0]);
+			child = (FolderTreeNode)parent.getChildAt(children[0]);
 
 		return child;
 	}
 
-	private TreePath getPathOfNode(DefaultMutableTreeNode node)
+	private TreePath getPathOfNode(FolderTreeNode node)
 	{
 		TreePath rootPath = new TreePath(getModel().getRoot());
 		return rootPath.pathByAddingChild(node);
@@ -204,9 +203,11 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		{
 			super.prepareForEditing();
 			System.out.println("prepareForEditing: " + getCellEditorValue());
-			oldFolderName = getCellEditorValue().toString();
+			oldLocalizedFolderName = getCellEditorValue().toString();
 			FolderList model = (FolderList)getModel();
-			node = model.findFolder(oldFolderName);
+			node = model.findFolderByLocalizedName(oldLocalizedFolderName);
+			if(node != null)
+				oldInternalFolderName = node.getInternalName();
 		}
 
 		// begin CellEditorListener interface
@@ -215,13 +216,15 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 			String newFolderName = getCellEditorValue().toString();
 			System.out.println("editingStopped: " + newFolderName);
 
-			if(newFolderName.equals(oldFolderName))
-				return;
-
-			if(!store.renameFolder(oldFolderName, newFolderName))
+			if(newFolderName.equals(oldLocalizedFolderName))
+			{
+				System.out.println("Same name");
+				newFolderName = oldInternalFolderName;
+			}
+			else if(!store.renameFolder(oldInternalFolderName, newFolderName))
 			{
 				System.out.println("rename failed");
-				newFolderName = oldFolderName;
+				newFolderName = oldInternalFolderName;
 			}
 
 			TreePath path = getPathOfNode(node);
@@ -233,8 +236,9 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		}
 		// end CellEditorListener interface
 
-		String oldFolderName;
-		DefaultMutableTreeNode node;
+		String oldLocalizedFolderName;
+		String oldInternalFolderName;
+		FolderTreeNode node;
 	}
 
 

@@ -52,7 +52,7 @@ class UiFolderTreePane extends JScrollPane
 		if(newFolder == null)
 			return;
 		parent.folderHasChanged(newFolder);
-		DefaultMutableTreeNode node = model.findFolder(newFolder.getName());
+		FolderTreeNode node = model.findFolderByLocalizedName(newFolder.getName());
 		if(node == null)
 			return;
 		tree.stopEditing();
@@ -69,7 +69,7 @@ class UiFolderTreePane extends JScrollPane
 	
 	public void folderContentsHaveChanged(BulletinFolder f)
 	{
-		DefaultMutableTreeNode node = model.findFolder(f.getName());
+		FolderTreeNode node = model.findFolderByLocalizedName(f.getName());
 		if(node != null)
 			model.nodeChanged(node);
 	}
@@ -81,12 +81,12 @@ class UiFolderTreePane extends JScrollPane
 			if(!e.isMetaDown())
 				return;
 
-			DefaultMutableTreeNode node = null;
+			FolderTreeNode node = null;
 			TreePath path = tree.getPathForLocation(e.getX(), e.getY());
 			if(path != null)
 			{
 				tree.setSelectionPath(path);
-				node = (DefaultMutableTreeNode)path.getLastPathComponent();
+				node = (FolderTreeNode)path.getLastPathComponent();
 			}
 
 			JPopupMenu menu = new JPopupMenu();
@@ -120,11 +120,11 @@ class UiFolderTreePane extends JScrollPane
 
 	class ActionDelete extends AbstractAction
 	{
-		public ActionDelete(DefaultMutableTreeNode node)
+		public ActionDelete(FolderTreeNode node)
 		{
 			String text = parent.getApp().getMenuLabel("DeleteFolder") + " ";
 			if(node != null)
-				text += node.toString();
+				text += node.getLocalizedName();
 
 			putValue(NAME, text);
 			nodeToDelete = node;
@@ -132,10 +132,10 @@ class UiFolderTreePane extends JScrollPane
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			if(store.findFolder(nodeToDelete.toString()).getBulletinCount() == 0 
+			if(store.findFolder(nodeToDelete.getInternalName()).getBulletinCount() == 0 
 				|| parent.confirmDlg(parent, "deletefolder"))
 			{
-				store.deleteFolder(nodeToDelete.toString());
+				store.deleteFolder(nodeToDelete.getInternalName());
 				parent.folderHasChanged(null);
 			}
 		}
@@ -145,23 +145,23 @@ class UiFolderTreePane extends JScrollPane
 			if(nodeToDelete == null)
 				return false;
 
-			BulletinFolder folder = store.findFolder(nodeToDelete.toString());
+			BulletinFolder folder = store.findFolder(nodeToDelete.getInternalName());
 			if(folder == null || !folder.canDelete())
 				return false;
 
 			return true;
 		}
 
-		DefaultMutableTreeNode nodeToDelete;
+		FolderTreeNode nodeToDelete;
 	}
 
 	class ActionRename extends AbstractAction
 	{
-		public ActionRename(DefaultMutableTreeNode node)
+		public ActionRename(FolderTreeNode node)
 		{
 			String text = parent.getApp().getMenuLabel("RenameFolder") + " ";
 			if(node != null)
-				text += node.toString();
+				text += node.getLocalizedName();
 
 			putValue(NAME, text);
 			nodeToRename = node;
@@ -169,7 +169,7 @@ class UiFolderTreePane extends JScrollPane
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			System.out.println("Rename " + nodeToRename.toString());
+			System.out.println("Rename " + nodeToRename.getLocalizedName());
 			TreePath path = getPathOfNode(nodeToRename);
 			if(!tree.isPathEditable(path))
 				return;
@@ -183,20 +183,20 @@ class UiFolderTreePane extends JScrollPane
 			if(nodeToRename == null)
 				return false;
 
-			BulletinFolder folder = store.findFolder(nodeToRename.toString());
+			BulletinFolder folder = store.findFolder(nodeToRename.getInternalName());
 			if(folder != null && folder.canRename())
 				return true;
 
 			return false;
 		}
 
-		DefaultMutableTreeNode nodeToRename;
+		FolderTreeNode nodeToRename;
 	}
 
 
 	private BulletinFolder getFolderAt(TreePath path)
 	{
-		DefaultMutableTreeNode node = (DefaultMutableTreeNode)path.getLastPathComponent();
+		FolderTreeNode node = (FolderTreeNode)path.getLastPathComponent();
 		if (node == null)
 		{
 			return null;
@@ -206,11 +206,11 @@ class UiFolderTreePane extends JScrollPane
 			return null;
 		}
 
-		String name = node.toString();
+		String name = node.getInternalName();
 		return store.findFolder(name);
 	}
 
-	private TreePath getPathOfNode(DefaultMutableTreeNode node)
+	private TreePath getPathOfNode(FolderTreeNode node)
 	{
 		TreePath rootPath = new TreePath(model.getRoot());
 		return rootPath.pathByAddingChild(node);
@@ -218,7 +218,7 @@ class UiFolderTreePane extends JScrollPane
 
 	private TreePath getPathOfFolder(String folderName)
 	{
-		DefaultMutableTreeNode node = model.findFolder(folderName);
+		FolderTreeNode node = model.findFolderByLocalizedName(folderName);
 		if(node == null)
 			return null;
 		return getPathOfNode(node);

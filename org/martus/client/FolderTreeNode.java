@@ -1,7 +1,6 @@
 package org.martus.client;
 
 import javax.swing.tree.DefaultMutableTreeNode;
-import javax.swing.tree.DefaultTreeModel;
 
 public class FolderTreeNode extends DefaultMutableTreeNode 
 {
