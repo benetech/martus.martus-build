@@ -24,13 +24,11 @@ public class TestCaseEnhanced extends TestCase
 	
 	public File createTempFile(String contents) throws IOException
 	{
-		final String tempFileName = "$$$" + getName();
-		File file = File.createTempFile(tempFileName, null);
+		File file = createTempFile();
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.writeln(contents);
 		writer.flush();
 		writer.close();
-		file.deleteOnExit();
 		return file;
 	}
 
