@@ -58,7 +58,8 @@ public class MockMartusSecurity extends MartusSecurity
 	public byte[] signatureGet() throws 
 		MartusSignatureException
 	{
-		return Integer.toHexString(checksum).getBytes();
+		int result = checksum;
+		return Integer.toHexString(result).getBytes();
 	}
 		
 	public void signatureInitializeVerify(String publicKey) throws
@@ -174,7 +175,7 @@ public class MockMartusSecurity extends MartusSecurity
 	public boolean fakeAuthorizationFailure;
 	public boolean fakeKeyPairVersionFailure;
 	
-	private int checksum;
+	private static int checksum;
 
 	final static String samplePassphrase = "test";
 	final static String sampleKeyPair = 

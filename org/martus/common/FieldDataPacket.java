@@ -139,10 +139,12 @@ public class FieldDataPacket extends Packet
 	
 	public byte[] writeXml(Writer writer, MartusCrypto signer) throws IOException
 	{
+		byte[] result = null;
 		if(isEncrypted() && !isEmpty())
-			return writeXmlEncrypted(writer, signer);
+			result = writeXmlEncrypted(writer, signer);
 		else
-			return writeXmlPlainText(writer, signer);
+			result = writeXmlPlainText(writer, signer);
+		return result;
 	}
 	
 	public void loadFromXml(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws 

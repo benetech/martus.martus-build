@@ -1,8 +1,10 @@
 package org.martus.common;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -12,17 +14,25 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
 import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
+import java.util.TreeMap;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
+import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.martus.common.Database.AccountVisitor;
+import org.martus.common.Database.PacketVisitor;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongAccountException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
 public class MartusUtilities 
@@ -127,6 +137,7 @@ public class MartusUtilities
 		catch(Exception e)
 		{
 			// TODO: Needs tests!
+			e.printStackTrace();
 			System.out.println("ServerProxy.sign: " + e);
 			throw new MartusCrypto.MartusSignatureException();
 		}
@@ -194,11 +205,24 @@ public class MartusUtilities
 		
 		MartusCrypto doNotCheckSigDuringDownload = null;
 		bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
-		
 		DatabaseKey[] packetKeys = getAllPacketKeys(bhp);
-		
+
 		FileOutputStream outputStream = new FileOutputStream(destZipFile);
 		extractPacketsToZipStream(headerKey.getAccountId(), db, packetKeys, outputStream, security);
+
+		// TODO: REMOVE THIS! IT IS ONLY FOR DEBUGGING! SLOW SLOW SLOW!		
+		try 
+		{
+			ZipFile zip = new ZipFile(destZipFile);
+			validateZipFilePackets(db, headerKey.getAccountId(), zip, security);
+			zip.close();
+		} 
+		catch (Exception e) 
+		{
+			e.printStackTrace();
+			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile: validation failed!");
+			throw new IOException("Zip validation exception: " + e.getMessage());
+		}
 	}
 
 	public static DatabaseKey[] getAllPacketKeys(BulletinHeaderPacket bhp)
@@ -246,7 +270,7 @@ public class MartusUtilities
 		IOException, 
 		UnsupportedEncodingException 
 	{
-		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
+		ZipOutputStream zipOut = new ZipOutputStream(new BufferedOutputStream(outputStream));
 		
 		try 
 		{
@@ -355,6 +379,20 @@ public class MartusUtilities
 		Packet.WrongAccountException,
 		MartusCrypto.DecryptionException
 	{
+		validateZipFilePackets(db, authorAccountId, zip, security);
+		ensureZipFilePacketsOkToImport(db, authorAccountId, zip, security);
+	}
+
+	public static void validateZipFilePackets(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+		throws
+			InvalidPacketException,
+			IOException,
+			SignatureVerificationException,
+			SealedPacketExistsException,
+			DuplicatePacketException,
+			WrongAccountException,
+			DecryptionException 
+	{
 		//TODO validate Header Packet matches other packets
 		Enumeration entries = zip.entries();
 		if(!entries.hasMoreElements())
@@ -362,6 +400,26 @@ public class MartusUtilities
 			throw new Packet.InvalidPacketException("Empty zip file");
 		}
 
+		while(entries.hasMoreElements())
+		{
+			ZipEntry entry = (ZipEntry)entries.nextElement();
+			InputStream in = new ZipEntryInputStream(zip, entry);
+			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
+		}
+	}
+
+	private static void ensureZipFilePacketsOkToImport(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
+		throws
+			InvalidPacketException,
+			IOException,
+			SignatureVerificationException,
+			SealedPacketExistsException,
+			DuplicatePacketException,
+			WrongAccountException,
+			DecryptionException 
+	{
+		//TODO validate Header Packet matches other packets
+		Enumeration entries = zip.entries();
 		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
 		while(entries.hasMoreElements())
 		{
@@ -377,9 +435,6 @@ public class MartusUtilities
 				else
 					throw new DuplicatePacketException(entry.getName());
 			}
-		
-			InputStream in = new ZipEntryInputStream(zip, entry);
-			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}
 	}
 
@@ -391,4 +446,14 @@ public class MartusUtilities
 			return DatabaseKey.createSealedKey(uid);
 	}
 
+	public static ByteArrayInputStream openStringInputStream(String data)
+		throws IOException, UnsupportedEncodingException 
+	{
+		if(data == null)
+			throw new IOException("Null data");
+
+		byte[] bytes = data.getBytes("UTF-8");
+		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+		return in;
+	}
 }

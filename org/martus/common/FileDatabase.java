@@ -48,7 +48,7 @@ public class FileDatabase implements Database
 
 	public void writeRecord(DatabaseKey key, String record) throws IOException
 	{
-		writeRecord(key, openStringInputStream(record));
+		writeRecord(key, MartusUtilities.openStringInputStream(record));
 	}
 	
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
@@ -575,7 +575,7 @@ public class FileDatabase implements Database
 			try
 			{
 				out.write(0);
-				crypto.encrypt(openStringInputStream(data), out);
+				crypto.encrypt(MartusUtilities.openStringInputStream(data), out);
 			}
 			catch(MartusCrypto.CryptoException e)
 			{
@@ -649,17 +649,6 @@ public class FileDatabase implements Database
 		}
 	}
 
-	public static ByteArrayInputStream openStringInputStream(String data)
-		throws IOException, UnsupportedEncodingException 
-	{
-		if(data == null)
-			throw new IOException("Null data");
-
-		byte[] bytes = data.getBytes("UTF-8");
-		ByteArrayInputStream in = new ByteArrayInputStream(bytes);
-		return in;
-	}
-	
 	public boolean isDraftPacketBucket(String folderName)
 	{
 		return false;

@@ -1211,7 +1211,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(result);
 		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
 
-		InputStream in = FileDatabase.openStringInputStream((String)result.get(1));
+		InputStream in = MartusUtilities.openStringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));
@@ -1233,7 +1233,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertNotNull(result);
 		assertEquals("not OK?", NetworkInterfaceConstants.OK, result.get(0));
 		
-		InputStream in = FileDatabase.openStringInputStream((String)result.get(1));
+		InputStream in = MartusUtilities.openStringInputStream((String)result.get(1));
 		FieldDataPacket gotPacket = new FieldDataPacket(originalFdp.getUniversalId(), originalFdp.getFieldTags());
 		gotPacket.loadFromXml(in, clientSecurity);
 		assertEquals("wrong data?", b1.get(b1.TAGPUBLICINFO), gotPacket.get(b1.TAGPUBLICINFO));

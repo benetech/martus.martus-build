@@ -14,7 +14,6 @@ import java.util.Arrays;
 
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.martus.common.*;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -127,6 +126,7 @@ public class Packet
 		}
 		catch(MartusCrypto.MartusSignatureException e)
 		{
+			e.printStackTrace();
 			throw new IOException("Signature creation exception: " + e.getMessage());
 		}
 	}
@@ -193,7 +193,7 @@ public class Packet
 		verifyPacketSignature(inputStream, null, verifier);
 	}
 	
-	protected static void verifyPacketSignature(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws
+	public static void verifyPacketSignature(InputStream inputStream, byte[] expectedSig, MartusCrypto verifier) throws
 					IOException,
 					InvalidPacketException,
 					SignatureVerificationException
@@ -258,7 +258,17 @@ public class Packet
 		if(expectedSig != null && !Arrays.equals(expectedSig, sigBytes))
 			throw new SignatureVerificationException();
 		
+		verifySignature(bufferedInputStream, dataLength, publicKey, sigBytes, verifier);
 
+		inputStream.reset();
+	}
+
+	private static synchronized void verifySignature(BufferedInputStream bufferedInputStream,
+									final long dataLength, final String publicKey, 
+									byte[] expectedSigBytes, MartusCrypto verifier) throws 
+			IOException, 
+			SignatureVerificationException 
+	{
 		try
 		{
 			verifier.signatureInitializeVerify(publicKey);
@@ -272,19 +282,18 @@ public class Packet
 					verifier.signatureDigestByte(bytes[i]);
 				remaining -= got;
 			}
-
+		
 			got = bufferedInputStream.read(bytes, 0, (int)remaining);
 			for(int i = 0; i < got; ++i)
 				verifier.signatureDigestByte(bytes[i]);
-
-			if(!verifier.signatureIsValid(sigBytes))
+		
+			if(!verifier.signatureIsValid(expectedSigBytes))
 				throw new SignatureVerificationException();
 		}
 		catch(MartusCrypto.MartusSignatureException e)
 		{
 			throw new SignatureVerificationException();
 		}
-		inputStream.reset();
 	}
 
 	protected String getPacketRootElementName()
