@@ -28,11 +28,12 @@ import org.martus.common.FieldDataPacket;
 public class UiServerSummariesDlg extends JDialog
 {
 	public UiServerSummariesDlg(UiMainWindow owner, RetrieveTableModel tableModel, 
-			String windowTitleTag, String topMessageTag, String okButtonTag)
+			String windowTitleTag, String topMessageTag, String okButtonTag, String noneSelectedTag)
 	{
 		super(owner, owner.getApp().getWindowTitle(windowTitleTag), true);
 		mainWindow = owner;
 		model = tableModel;
+		this.noneSelectedTag = noneSelectedTag;
 		initialize(topMessageTag, okButtonTag);
 	}
 
@@ -224,6 +225,13 @@ public class UiServerSummariesDlg extends JDialog
 	{
 		public void actionPerformed(ActionEvent ae)
 		{
+			Vector uidList = getUniversalIdList();
+			if( uidList.size() == 0)
+			{
+				mainWindow.notifyDlg(mainWindow, noneSelectedTag);
+				return;
+			}
+		
 			result = true;
 			dispose();
 		}
@@ -302,5 +310,5 @@ public class UiServerSummariesDlg extends JDialog
 	TableCellRenderer oldIntegerRenderer;
 	Color disabledBackgroundColor;
 	Box tableBox;
-	
+	String noneSelectedTag;	
 }

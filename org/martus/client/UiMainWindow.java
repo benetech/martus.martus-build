@@ -1094,7 +1094,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		model.initialize(progressDlg);
 		if(progressDlg.shouldExit())
 			return null;
-		UiServerSummariesDlg summariesDlg = new UiServerSummariesDlg(this, model, dlgTitleTag, topMessageTag, okButtonTag);
+		UiServerSummariesDlg summariesDlg = new UiServerSummariesDlg(this, model, dlgTitleTag, topMessageTag, okButtonTag, noneSelectedTag);
 
 		// the following is required (for unknown reasons)
 		// to get the window to redraw after the dialog
@@ -1104,14 +1104,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(!summariesDlg.getResult())
 			return null;
 		
-		Vector uidList = summariesDlg.getUniversalIdList();
-		if( uidList.size() == 0)
-		{
-			notifyDlg(this, noneSelectedTag);
-			return null;
-		}
-
-		return uidList;
+		return summariesDlg.getUniversalIdList();
 	}
 
 	private void doExportPublicAccountInfo()
