@@ -5,6 +5,8 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.File;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 import org.martus.common.Database;
@@ -136,10 +138,22 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 	static public File extractFileFrom(Transferable t)
 	{
 		if(!t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
-			return null;	
+			return null;
+		try 
+		{
+			Collection fileList = (Collection)t.getTransferData(DataFlavor.javaFileListFlavor);
+			if(fileList.size() != 1)
+				return null;
 
-		System.out.println("extractFileFrom :" + t);
-		return null;
+			Iterator iterator = fileList.iterator();
+			File file = (File)iterator.next();	
+			return file;
+		} 
+		catch (Exception e) 
+		{
+			System.out.println("extractFileFrom :" + e);
+			return null;
+		}
 	}
 
 	static public TransferableBulletinList extractFrom(Transferable t)

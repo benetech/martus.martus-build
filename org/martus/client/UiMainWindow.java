@@ -1722,7 +1722,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 		public boolean isEnabled()
 		{
-			 return(getClipboardTransferableBulletin() != null);
+			boolean enable = (getClipboardTransferableBulletin() != null);
+			if(!enable)
+				enable = (getClipboardTransferableFile() != null);
+			 return enable;
 		}
 	}
 
