@@ -21,6 +21,7 @@
     <property name="swing-module" value="martus-swing"/>
     <property name="thirdparty-module" value="martus-thirdparty"/>
     <property name="utils-module" value="martus-utils"/>
+    <property name="binary-module" value="binary-martus"/>
 
     <!-- create CVS_ROOT -->
     <property name="cvs.cvsroot" value=":${cvs.protocol}:${cvs.username}@${cvs.location}:${cvs.repository}"/>
@@ -62,6 +63,11 @@
     <!-- run martus build file -->
     <target name="build.martus" depends="cvs.checkout">
         <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="release.and.checkin"/>
+    </target>
+
+    <target name="build.martus.and.installer" depends="cvs.checkout,cvs">
+        <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="release.and.checkin"/>
+        <ant antfile="${cvs.home}/${martus-module}/installer.build.xml" dir="${cvs.home}" target="build.installers"/>
     </target>
 
 
