@@ -125,11 +125,27 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	{
 		if(clientsBanned.contains(clientId))
 		{
-			log("client BANNED : ");
+			log("client BANNED: " + getPublicCode(clientId));
 			return true;
 		}
 		return false;
 	}
+	
+	public boolean canClientUpload(String clientId)
+	{
+		if(!clientsThatCanUpload.contains(clientId))
+		{
+			log("client NOT AUTHORIZED: " + getPublicCode(clientId));
+			return false;
+		}
+		return true;
+	}
+	
+	public void clearCanUploadList()
+	{
+		clientsThatCanUpload.clear();
+	}
+	
 
 	public boolean canExitNow()
 	{
@@ -349,16 +365,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	static String normalizeMagicWord(String original)
 	{
 		return original.toLowerCase().trim().replaceAll("\\s", "");
-	}
-
-	public boolean canClientUpload(String clientId)
-	{
-		return clientsThatCanUpload.contains(clientId);
-	}
-	
-	public void clearCanUploadList()
-	{
-		clientsThatCanUpload.clear();
 	}
 
 	public synchronized void allowUploads(String clientId)
