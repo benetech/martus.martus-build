@@ -285,8 +285,11 @@ public class MartusUtilities
 		Packet.WrongAccountException,
 		MartusCrypto.DecryptionException
 	{
-		validateZipFilePacketsForImport(db, authorAccountId, zip, security);
 		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
+		if(authorAccountId == null)
+			authorAccountId = header.getAccountId();
+			
+		validateZipFilePacketsForImport(db, authorAccountId, zip, security);
 		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
 		
 		Enumeration entries = zip.entries();

@@ -560,16 +560,6 @@ public class Bulletin implements BulletinConstants
 		return new DatabaseKey(uidFdp);
 	}
 
-	static void importZipFileToStoreWithSameUids(ZipFile zip, BulletinStore store) throws 
-		IOException,
-		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException, 
-		WrongAccountException, 
-		DecryptionException
-	{
-		importFileToDatabaseWithSameUids(zip, store.getDatabase(), store.getSignatureVerifier());
-	}
-
 	static UniversalId importZipFileToStoreWithNewUids(File inputFile, BulletinStore store) throws 
 		IOException, 
 		EncryptionException, 
@@ -584,53 +574,6 @@ public class Bulletin implements BulletinConstants
 		imported.pullDataFrom(original);
 		imported.saveToDatabase(db);
 		return imported.getUniversalId();
-	}
-
-	static void verifyAllPacketsInZip(ZipFile zip, MartusCrypto verifier) throws 
-		IOException, 
-		InvalidPacketException, 
-		SignatureVerificationException, 
-		DecryptionException, 
-		WrongAccountException 
-	{
-		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, verifier);
-		String dataLocalId = header.getFieldDataPacketId();
-		String privateDataLocalId = header.getPrivateFieldDataPacketId();
-		Enumeration entries = zip.entries();
-		while(entries.hasMoreElements())
-		{
-			byte[] expectedSig = null;
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-			String localId = entry.getName();
-			if(localId.equals(dataLocalId))
-				expectedSig = header.getFieldDataSignature();
-			else if(localId.equals(privateDataLocalId))
-				expectedSig = header.getPrivateFieldDataSignature();
-				
-			ZipEntryInputStream in = new ZipEntryInputStream(zip, entry);
-			//TODO: should also pass in expectedsig!
-			Packet.validateXml(in, header.getAccountId(), entry.getName(), expectedSig, verifier);
-		}
-	}
-
-	static void importFileToDatabaseWithSameUids(ZipFile zip, Database db, MartusCrypto verifier) throws 
-		IOException, 
-		InvalidPacketException, 
-		SignatureVerificationException, 
-		WrongAccountException, 
-		DecryptionException 
-	{
-		verifyAllPacketsInZip(zip, verifier);
-		Enumeration entries = zip.entries();
-		entries = zip.entries();
-		while(entries.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-			InputStream in = new ZipEntryInputStream(zip, entry);
-			String oldAccountId = BulletinHeaderPacket.loadFromZipFile(zip, verifier).getAccountId();
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(oldAccountId, entry.getName());
-			db.writeRecord(new DatabaseKey(uid), in);
-		}
 	}
 
 	public void loadFromFile(File inputFile, MartusCrypto verifier) throws IOException

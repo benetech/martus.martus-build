@@ -11,8 +11,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import org.martus.client.*;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
 
@@ -196,6 +196,17 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		}
 		catch(BulletinStore.StatusNotAllowedException e)
 		{
+			e.printStackTrace();
+			return false;
+		}
+		catch(MartusUtilities.DuplicatePacketException e)
+		{
+			e.printStackTrace();
+			return false;
+		}
+		catch(MartusUtilities.SealedPacketExistsException e)
+		{
+			e.printStackTrace();
 			return false;
 		}
 		

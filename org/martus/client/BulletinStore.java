@@ -20,12 +20,12 @@ import java.util.TreeMap;
 import java.util.Vector;
 import java.util.zip.ZipFile;
 
-import org.martus.client.*;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileDatabase;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
@@ -691,7 +691,9 @@ public class BulletinStore
 			StatusNotAllowedException,
 			MartusCrypto.CryptoException,
 			Packet.InvalidPacketException,
-			Packet.SignatureVerificationException
+			Packet.SignatureVerificationException,
+			MartusUtilities.DuplicatePacketException,
+			MartusUtilities.SealedPacketExistsException
 	{
 		ZipFile zip = new ZipFile(zipFile);
 		try
@@ -724,14 +726,16 @@ public class BulletinStore
 		IOException,
 		MartusCrypto.CryptoException,
 		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException
+		Packet.SignatureVerificationException,
+		MartusUtilities.DuplicatePacketException,
+		MartusUtilities.SealedPacketExistsException
 	{
 		final MartusCrypto verifier = getSignatureVerifier();
 
 		ZipFile zip = new ZipFile(inputFile);
 		try
 		{
-			Bulletin.importZipFileToStoreWithSameUids(zip, this);
+			MartusUtilities.importBulletinPacketsFromZipFileToDatabase(getDatabase(), null, zip, getSignatureVerifier());
 		}
 		catch(WrongAccountException shouldBeImpossible)
 		{
