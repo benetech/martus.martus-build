@@ -481,7 +481,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			Bulletin b = bulletins[i];
 			Vector visibleFoldersContainingThisBulletin = app.findBulletinInAllVisibleFolders(b);
 			visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom);
-			visibleFoldersContainingAnyBulletin.addAll(visibleFoldersContainingThisBulletin);
+			addUniqueEntriesOnly(visibleFoldersContainingAnyBulletin, visibleFoldersContainingThisBulletin);
 		}
 		
 		String dialogTag = "";
@@ -491,6 +491,16 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			dialogTag = "confirmDeleteMultipleDiscardedBulletins";
 
 		return confirmDeleteBulletins(dialogTag, visibleFoldersContainingAnyBulletin);
+	}
+	
+	private void addUniqueEntriesOnly(Vector to, Vector from)
+	{
+		for(int i = 0 ; i < from.size(); ++i)
+		{
+			Object elementToAdd = from.get(i);
+			if(!to.contains(elementToAdd))
+				to.add(elementToAdd);
+		}	
 	}
 
 	private boolean confirmDeleteBulletins(String dialogTag, Vector foldersToList)
