@@ -8,5 +8,6 @@
     <classpathentry kind="var" path="InfiniteMonkeys"/>
     <classpathentry kind="var" path="jsse"/>
     <classpathentry kind="var" path="JRE_LIB"/>
+    <classpathentry kind="src" path="/martus-hrdag"/>
     <classpathentry kind="output" path=""/>
 </classpath>
