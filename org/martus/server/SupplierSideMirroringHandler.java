@@ -97,8 +97,10 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 			{
 				String authorAccountId = (String)parameters.get(1);
 				String bulletinLocalId = (String)parameters.get(2);
+				int offset = ((Integer)parameters.get(3)).intValue();
+				int maxChunkSize = ((Integer)parameters.get(4)).intValue();
 
-				Vector data = getBulletinChunk(authorAccountId, bulletinLocalId);
+				Vector data = getBulletinChunk(authorAccountId, bulletinLocalId, offset, maxChunkSize);
 				
 				result.add(OK);
 				result.add(data);
@@ -162,7 +164,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return collector.infos;
 	}
 	
-	Vector getBulletinChunk(String authorAccountId, String bulletinLocalId)
+	Vector getBulletinChunk(String authorAccountId, String bulletinLocalId, int offset, int maxChunkSize)
 	{
 		return null;
 	}

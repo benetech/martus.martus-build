@@ -214,14 +214,16 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
 	}
 	
-	public void testGetBulletinChunkBadBulletinLocal() throws Exception
+	public void testGetBulletinChunkBadParameter() throws Exception
 	{
 		handler.addAuthorizedCaller(callerAccountId);
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
 		parameters.add("pretend account");
+		parameters.add("pretend localid");
 		parameters.add(new Integer(3));
+		parameters.add("bad maxChunkSize");
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
