@@ -51,7 +51,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b0.setAllPrivate(true);
 		b0.setHQPublicKey(hqApp.getAccountId());
 		b0.setDraft();
-		b0.save();
+		fieldApp1.getStore().saveBulletin(b0);
 		b0Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b0.getBulletinHeaderPacket());
 
 		b1 = fieldApp1.createBulletin();
@@ -60,7 +60,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(false);
 		b1.setHQPublicKey(hqApp.getAccountId());
 		b1.setSealed();
-		b1.save();
+		fieldApp1.getStore().saveBulletin(b1);
 		b1Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b1.getBulletinHeaderPacket());
 
 		b2 = fieldApp2.createBulletin();
@@ -69,7 +69,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		b2.setAllPrivate(true);
 		b2.setHQPublicKey(hqApp.getAccountId());
 		b2.setDraft();
-		b2.save();
+		fieldApp2.getStore().saveBulletin(b2);
 		b2Size = 2300;
 		testServer = new MockServer();
 		testServer.initialize();

@@ -53,12 +53,10 @@ public class Bulletin implements BulletinConstants
 
 	public Bulletin(BulletinStore bulletinStore)
 	{
-		BulletinStore newStore = bulletinStore;
-		store = newStore;
-		security = store.getSignatureGenerator();
+		security = bulletinStore.getSignatureGenerator();
 		String accountId = "";
-		if(store != null)
-			accountId = store.getAccountId();
+		if(bulletinStore != null)
+			accountId = bulletinStore.getAccountId();
 		UniversalId headerUid = BulletinHeaderPacket.createUniversalId(accountId);
 		UniversalId dataUid = FieldDataPacket.createUniversalId(accountId);
 		UniversalId privateDataUid = FieldDataPacket.createUniversalId(accountId);
@@ -288,11 +286,6 @@ public class Bulletin implements BulletinConstants
 		return false;
 	}
 
-	public void save()
-	{
-		store.saveBulletin(this);
-	}
-
 	public String getHQPublicKey()
 	{
 		return getBulletinHeaderPacket().getHQPublicKey();
@@ -518,7 +511,6 @@ public class Bulletin implements BulletinConstants
 	private boolean isFromDatabase;
 	private boolean isValidFlag;
 	private MartusCrypto security;
-	private BulletinStore store;
 	private BulletinHeaderPacket header;
 	private FieldDataPacket fieldData;
 	private FieldDataPacket privateFieldData;

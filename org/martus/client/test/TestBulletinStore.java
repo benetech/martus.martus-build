@@ -108,7 +108,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("not empty?", 0, empty.size());
 
 		Bulletin b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		Vector one = store.getAllBulletinUids();
 		assertEquals("not one?", 1, one.size());
 		UniversalId gotUid = (UniversalId)one.get(0);
@@ -116,7 +116,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("wrong uid 1?", bUid, gotUid);
 
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 		Vector two = store.getAllBulletinUids();
 		assertEquals("not two?", 2, two.size());
 		assertTrue("missing 1?", two.contains(b.getUniversalId()));
@@ -145,7 +145,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("not empty?", 0, new BulletinUidCollector(store).uids.size());
 		
 		Bulletin b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		Vector one = new BulletinUidCollector(store).uids;
 		assertEquals("not one?", 1, one.size());
 		UniversalId gotUid = (UniversalId)one.get(0);
@@ -153,7 +153,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("wrong uid 1?", bUid, gotUid);
 
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 		Vector two = new BulletinUidCollector(store).uids;
 		assertEquals("not two?", 2, two.size());
 		assertTrue("missing 1?", two.contains(b.getUniversalId()));
@@ -166,7 +166,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		for(int i = 0; i < numBulletins; ++i)
 		{
 			Bulletin b = store.createEmptyBulletin();
-			b.save();
+			store.saveBulletin(b);
 			store.findBulletinByUniversalId(b.getUniversalId());
 		}
 		
@@ -187,7 +187,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		b.addPrivateAttachment(a2);
 		assertEquals("added 4", 1, b.getPrivateAttachments().length);
 		
-		b.save();
+		store.saveBulletin(b);
 		BulletinFolder f = store.createFolder("test");
 		f.add(b);
 		store.destroyBulletin(b);
@@ -244,7 +244,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		int oldCount = store.getBulletinCount();
 		b = store.createEmptyBulletin();
 		UniversalId uid = b.getBulletinHeaderPacket().getUniversalId();
-		b.save();
+		store.saveBulletin(b);
 		assertEquals(oldCount+1, store.getBulletinCount());
 		assertEquals("b uid?", uid, b.getBulletinHeaderPacket().getUniversalId());
 		
@@ -263,7 +263,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(true, (b == null));
 
 		b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		UniversalId id = b.getUniversalId();
 
 		Bulletin b2 = store.findBulletinByUniversalId(id);
@@ -281,7 +281,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertNotNull("Need Discarded folder", f);
 		
 		Bulletin start1 = store.createEmptyBulletin();
-		start1.save();
+		store.saveBulletin(start1);
 		f.add(start1);
 		
 		Bulletin b = f.getBulletinSorted(0);
@@ -295,7 +295,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.set("subject", "amazing");
-		b2.save();
+		store.saveBulletin(b2);
 		BulletinFolder user1 = store.createFolder("1");
 		BulletinFolder user2 = store.createFolder("2");
 		user1.add(b2);
@@ -325,7 +325,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertNotNull("Need Sent folder", f);
 
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.save();
+		store.saveBulletin(b1);
 		f.add(b1);
 		assertEquals(true, f.contains(b1));
 		store.removeBulletinFromFolder(b1, f);
@@ -447,7 +447,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertNotNull("Couldn't create folder b", folder);
 		Bulletin b = store.createEmptyBulletin();
 		b.set("subject", "golly");
-		b.save();
+		store.saveBulletin(b);
 		folder.add(b);
 		assertEquals(true, folder.contains(b));
 		store.deleteFolder("b");
@@ -462,7 +462,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinFolder folderA = store.createFolder("a");
 		BulletinFolder folderB = store.createFolder("b");
 		Bulletin b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		assertEquals("not in a", false, folderA.contains(b));
 		assertEquals("not in b", false, folderB.contains(b));
 
@@ -488,7 +488,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		TRACE("testAddBulletinToFolder");
 
 		Bulletin b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		UniversalId id = b.getUniversalId();
 		BulletinFolder folder = store.createFolder("test");
 		store.addBulletinToFolder(id, folder);
@@ -511,7 +511,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(MartusClientXml.getFolderTagStart("Test") + MartusClientXml.getFolderTagEnd(), xml);
 
 		Bulletin b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		folder.add(b);
 		xml = store.folderToXml(folder);
 		assertStartsWith(MartusClientXml.getFolderTagStart("Test"), xml);
@@ -617,7 +617,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		final String author = "Mr. Peabody";
 		b.set(Bulletin.TAGAUTHOR, author);
-		b.save();
+		store.saveBulletin(b);
 		store.saveFolders();
 		assertEquals("saving", 1, store.getBulletinCount());
 		assertEquals("keys", 3*store.getBulletinCount(), db.getRecordCount());
@@ -641,7 +641,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		int systemFolderCount = store.getFolderCount();
 		BulletinFolder f = store.createFolder(folderName);
 		Bulletin b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		f.add(b);
 		store.saveFolders();
 
@@ -661,7 +661,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	public void testLoadAllDataWithErrors() throws Exception
 	{
 		Bulletin b = store.createEmptyBulletin();
-		b.save();
+		store.saveBulletin(b);
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 		FieldDataPacket fdp = b.getFieldDataPacket();
 		DatabaseKey headerKey = new DatabaseKey(b.getUniversalId());
@@ -686,9 +686,9 @@ public class TestBulletinStore extends TestCaseEnhanced
 	public void testClearFolder()
 	{
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.save();
+		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 		BulletinFolder folder = store.createFolder("blah");
 		folder.add(b1);
 		folder.add(b2);
@@ -705,8 +705,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		{
 			store.deleteAllData();
 			Bulletin b = store.createEmptyBulletin();
+			store.saveBulletin(b);
 
-			b.save();
 			assertEquals("save bulletin f ", false, store.getFoldersFile().exists());
 
 			DatabaseKey bulletinKey = new DatabaseKey(b.getUniversalId());
@@ -735,7 +735,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			DatabaseKey bulletinKey = new DatabaseKey(b.getUniversalId());
 			assertNull("clearFolder b ", store.getDatabase().readRecord(bulletinKey, security));
 
-			b.save();
+			store.saveBulletin(b);
 			store.destroyBulletin(b);
 			assertNull("destroyBulletin b ", store.getDatabase().readRecord(bulletinKey, security));
 		}
@@ -1026,9 +1026,9 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("not empty to start?", emptySet.isEmpty());
 		
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.save();
+		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 		Set two = store.getSetOfAllBulletinUniversalIds();
 		assertEquals("not two?", 2, two.size());
 		assertTrue("Missing b1?", two.contains(b1.getUniversalId()));
@@ -1041,9 +1041,9 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("not empty to start?", emptySet.isEmpty());
 
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.save();
+		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 		Set stillEmptySet = store.getSetOfBulletinUniversalIdsInFolders();
 		assertTrue("not still empty", stillEmptySet.isEmpty());
 
@@ -1063,9 +1063,9 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("not empty to start?", emptySet.isEmpty());
 
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.save();
+		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 
 		Set two = store.getSetOfOrphanedBulletinUniversalIds();
 		assertEquals("not two?", 2, two.size());
@@ -1087,9 +1087,9 @@ public class TestBulletinStore extends TestCaseEnhanced
 	public void testOrphansInHiddenFolders()
 	{
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.save();
+		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 		
 		store.getFolderDraftOutbox().add(b1);
 		assertEquals("hidden-only not an orphan?", true, store.isOrphan(b1));
@@ -1103,7 +1103,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	{
 		assertEquals("found a bad bulletin in an empty database?", 0, store.quarantineUnreadableBulletins());
 		Bulletin b1 = store.createEmptyBulletin();
-		b1.save();
+		store.saveBulletin(b1);
 		assertEquals("quarantined a good record?", 0, store.quarantineUnreadableBulletins());
 		corruptBulletinHeader(b1);
 		assertEquals("didn't claim to quarantine 1 record?", 1, store.quarantineUnreadableBulletins());
@@ -1118,7 +1118,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		for (int i = 0; i < bulletins.length; i++) 
 		{
 			bulletins[i] = store.createEmptyBulletin();
-			bulletins[i].save();
+			store.saveBulletin(bulletins[i]);
 		}
 
 		final int badCount = 4;

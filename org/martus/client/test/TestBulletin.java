@@ -228,7 +228,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b.set(Bulletin.TAGEVENTDATE, "2002-04-04");
 		b.set(Bulletin.TAGENTRYDATE, "2002-10-15");
 
-		b.save();
+		store.saveBulletin(b);
 		String beginDate ="1900-01-01";
 		String endDate = "2099-12-31";
 
@@ -266,7 +266,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b.set(Bulletin.TAGEVENTDATE, "2002-04-04");
 		b.set(Bulletin.TAGENTRYDATE, "2002-10-15");
 
-		b.save();
+		store.saveBulletin(b);
 		String outOfRangeBeginDate ="2003-01-01";
 		String outOfRangeEndDate = "2006-12-31";
 		String bothInRangeBeginDate ="2002-01-01";
@@ -339,7 +339,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b.setSealed();
 		b.setAllPrivate(false);
 		assertEquals("Ecrypted?", true, store.mustEncryptPublicData());
-		b.save();
+		store.saveBulletin(b);
 		assertEquals("Didn't Encrypt or Encyrpted too many packets.", 1, db.encryptWasCalled);
 	}
 
@@ -354,7 +354,7 @@ public class TestBulletin extends TestCaseEnhanced
 		int oldCount = store.getBulletinCount();
 		Bulletin b = store.createEmptyBulletin();
 		b.set("author", "testsave");
-		b.save();
+		store.saveBulletin(b);
 		assertEquals(oldCount+1, store.getBulletinCount());
 		b = store.findBulletinByUniversalId(b.getUniversalId());
 		assertEquals("testsave", b.get("author"));
@@ -362,10 +362,10 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("Saved ID must be non-empty\n", false, empty);
 
 		Bulletin b2 = store.createEmptyBulletin();
-		b2.save();
+		store.saveBulletin(b2);
 		assertNotEquals("Saved ID must be unique\n", b.getLocalId(), b2.getLocalId());
 
-		b2.save();
+		store.saveBulletin(b2);
 	}
 
 	public void testLastSavedTime() throws Exception
@@ -375,7 +375,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("time already set?", BulletinHeaderPacket.TIME_UNKNOWN, createdTime);
 
 		Thread.sleep(200);
-		b.save();
+		store.saveBulletin(b);
 		long firstSavedTime = b.getLastSavedTime();
 		assertNotEquals("Didn't update time saved?", createdTime, firstSavedTime);
 		long delta2 = Math.abs(firstSavedTime - System.currentTimeMillis());
@@ -404,7 +404,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.set(Bulletin.TAGPUBLICINFO, "public info");
 		b1.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b1.setSealed();
-		b1.save();
+		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.pullDataFrom(b1);
 		assertEquals("signer", b1.getSignatureGenerator(), b2.getSignatureGenerator());
@@ -523,7 +523,7 @@ public class TestBulletin extends TestCaseEnhanced
 		AttachmentProxy a2 = new AttachmentProxy(tempFile2);
 		original.addPublicAttachment(a1);
 		original.addPublicAttachment(a2);
-		original.save();
+		store.saveBulletin(original);
 		assertEquals("wrong record count", 5, db.getRecordCount());
 
 		Bulletin loaded = store.findBulletinByUniversalId(original.getUniversalId());

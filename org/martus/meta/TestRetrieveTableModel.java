@@ -75,19 +75,19 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
-		b1.save();
+		appWithAccount.getStore().saveBulletin(b1);
 
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
-		b2.save();
+		appWithAccount.getStore().saveBulletin(b2);
 
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(true);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setSealed();
-		b3.save();
+		appWithAccount.getStore().saveBulletin(b3);
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
@@ -180,19 +180,19 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
-		b1.save();
+		appWithAccount.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
-		b2.save();
+		appWithAccount.getStore().saveBulletin(b2);
 		
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(true);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setDraft();
-		b3.save();
+		appWithAccount.getStore().saveBulletin(b3);
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
@@ -247,19 +247,19 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
-		b1.save();
+		appWithAccount.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
-		b2.save();
+		appWithAccount.getStore().saveBulletin(b2);
 				
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(true);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setSealed();
-		b3.save();
+		appWithAccount.getStore().saveBulletin(b3);
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
@@ -360,19 +360,19 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setDraft();
-		b1.save();
+		appWithAccount.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setDraft();
-		b2.save();
+		appWithAccount.getStore().saveBulletin(b2);
 		
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(true);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setSealed();
-		b3.save();
+		appWithAccount.getStore().saveBulletin(b3);
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
@@ -500,21 +500,21 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
 		appWithAccount.setHQKeyInBulletin(b1);
-		b1.save();
+		appWithAccount.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithAccount.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
 		appWithAccount.setHQKeyInBulletin(b2);
-		b2.save();
+		appWithAccount.getStore().saveBulletin(b2);
 		
 		Bulletin b3 = appWithAccount.createBulletin();
 		b3.setAllPrivate(false);
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setDraft();
 		appWithAccount.setHQKeyInBulletin(b3);
-		b3.save();
+		appWithAccount.getStore().saveBulletin(b3);
 
 		mockServer.allowUploads(appWithAccount.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));

@@ -151,7 +151,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			bulletin.setSealed();
 			getApp().setHQKeyInBulletin(bulletin);
-			bulletin.save();
+			store.saveBulletin(bulletin);
 			observer.bulletinContentsHaveChanged(bulletin);
 			store.moveBulletin(bulletin, store.getFolderDrafts(), store.getFolderOutbox());
 			store.removeBulletinFromFolder(bulletin, store.getFolderDraftOutbox());
@@ -161,7 +161,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 			bulletin.setDraft();
 			getApp().setHQKeyInBulletin(bulletin);
-			bulletin.save();
+			store.saveBulletin(bulletin);
 			observer.bulletinContentsHaveChanged(bulletin);
 			store.addBulletinToFolder(bulletin.getUniversalId(), store.getFolderDrafts());
 			store.addBulletinToFolder(bulletin.getUniversalId(), store.getFolderDraftOutbox());

@@ -532,8 +532,8 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		MockMartusApp app = MockMartusApp.create();
 		Bulletin b1 = app.createBulletin();
 		Bulletin b2 = app.createBulletin();
-		b1.save();
-		b2.save();
+		app.getStore().saveBulletin(b1);
+		app.getStore().saveBulletin(b2);
 
 		assertEquals("Found the bulletin already in a folder?", 0, app.findBulletinInAllVisibleFolders(b1).size());
 		BulletinFolder f1 = app.createUniqueFolder();
@@ -882,7 +882,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 			appWithAccount.shouldShowSealedUploadReminderOnExit());
 
 		Bulletin b = appWithAccount.createBulletin();
-		b.save();
+		appWithAccount.getStore().saveBulletin(b);
 		store.addBulletinToFolder(b.getUniversalId(), outbox);
 		assertEquals("File got created somehow on exit?", false, file.exists());
 		assertEquals("Outbox empty on exit", 1, outbox.getBulletinCount());
@@ -897,7 +897,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		assertEquals("already have orphans?", 0, appWithAccount.repairOrphans());
 		assertNull("Orphan Folder exists?", appWithAccount.getStore().findFolder(BulletinStore.RECOVERED_BULLETIN_FOLDER));
 		Bulletin b1 = appWithAccount.createBulletin();
-		b1.save();
+		appWithAccount.getStore().saveBulletin(b1);
 		assertEquals("didn't find the orphan?", 1, appWithAccount.repairOrphans());
 		assertEquals("didn't fix the orphan?", 0, appWithAccount.repairOrphans());
 

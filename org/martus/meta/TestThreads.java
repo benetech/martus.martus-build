@@ -117,7 +117,7 @@ public class TestThreads extends TestCaseEnhanced
 			for (int i = 0; i < 10; i++)
 			{
 				Bulletin b = store.createEmptyBulletin();
-				b.save();
+				store.saveBulletin(b);
 			}
 		}
 		
@@ -139,7 +139,7 @@ public class TestThreads extends TestCaseEnhanced
 			
 			store.setSignatureGenerator(security);
 			b = store.createEmptyBulletin();
-			b.save();
+			store.saveBulletin(b);
 		}
 		
 		TestingThread createThread(int copies) throws Exception
@@ -325,7 +325,7 @@ System.out.flush();
 			security = store.getSignatureVerifier();
 
 			Bulletin b = store.createEmptyBulletin();
-			b.save();
+			store.saveBulletin(b);
 			Database db = store.getDatabase();
 			headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
@@ -454,7 +454,7 @@ System.out.flush();
 			for (int i = 0; i < bulletins.length; i++)
 			{
 				bulletins[i] = store.createEmptyBulletin();
-				bulletins[i].save();
+				store.saveBulletin(bulletins[i]);
 			}
 		}
 		

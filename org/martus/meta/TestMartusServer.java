@@ -124,7 +124,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			b1.addPrivateAttachment(new AttachmentProxy(attachment));
 			b1.setHQPublicKey(hqSecurity.getPublicKeyString());
 			b1.setSealed();
-			b1.save();
+			store.saveBulletin(b1);
 			b1 = BulletinLoader.loadFromDatabase(store, DatabaseKey.createSealedKey(b1.getUniversalId()));
 	
 			b2 = store.createEmptyBulletin();
@@ -132,12 +132,12 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			b2.set(Bulletin.TAGPUBLICINFO, "Details2");
 			b2.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails2");
 			b2.setSealed();
-			b2.save();
+			store.saveBulletin(b2);
 			
 			draft = store.createEmptyBulletin();
 			draft.set(Bulletin.TAGPUBLICINFO, "draft public");
 			draft.setDraft();
-			draft.save();
+			store.saveBulletin(draft);
 
 
 			privateBulletin = store.createEmptyBulletin();
@@ -146,7 +146,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			privateBulletin.set(Bulletin.TAGPUBLICINFO, "DetailsPrivate");
 			privateBulletin.set(Bulletin.TAGPRIVATEINFO, "PrivateDetailsPrivate");
 			privateBulletin.setSealed();
-			privateBulletin.save();
+			store.saveBulletin(privateBulletin);
 
 			b1ZipString = MockBulletin.saveToZipString(store.getDatabase(), b1);
 			b1ZipBytes = Base64.decode(b1ZipString);
@@ -677,7 +677,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		draft.set(Bulletin.TAGPUBLICINFO, "Details1");
 		draft.set(Bulletin.TAGPRIVATEINFO, "PrivateDetails1");
 		draft.setHQPublicKey(hqSecurity.getPublicKeyString());
-		draft.save();
+		store.saveBulletin(draft);
 		draft = BulletinLoader.loadFromDatabase(store, new DatabaseKey(draft.getUniversalId()));
 		String draftZipString = MockBulletin.saveToZipString(store.getDatabase(),draft);
 		byte[] draftZipBytes = Base64.decode(draftZipString);
@@ -708,7 +708,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		b.addPublicAttachment(new AttachmentProxy(attachment));
 		b.setHQPublicKey(hqSecurity.getPublicKeyString());
 		b.setDraft();
-		b.save();
+		store.saveBulletin(b);
 		b = BulletinLoader.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		UniversalId attachmentUid1 = b.getPublicAttachments()[0].getUniversalId();
 		DatabaseKey draftHeader1 = new DatabaseKey(b.getUniversalId());
@@ -723,7 +723,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		out2.write(b1AttachmentBytes);
 		out2.close();
 		b.addPublicAttachment(new AttachmentProxy(attachment));
-		b.save();
+		store.saveBulletin(b);
 		b = BulletinLoader.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		UniversalId attachmentUid2 = b.getPublicAttachments()[0].getUniversalId();
 		DatabaseKey attachmentKey2 = new DatabaseKey(attachmentUid2);
@@ -739,7 +739,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		out3.close();
 		b.addPublicAttachment(new AttachmentProxy(attachment));
 		b.setSealed();
-		b.save();
+		store.saveBulletin(b);
 		b = BulletinLoader.loadFromDatabase(store, new DatabaseKey(b.getUniversalId()));
 		UniversalId attachmentUid3 = b.getPublicAttachments()[0].getUniversalId();
 		DatabaseKey attachmentKey3 = new DatabaseKey(attachmentUid3);
@@ -1300,18 +1300,18 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Bulletin bulletinSealed = store.createEmptyBulletin();
 		bulletinSealed.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletinSealed.setSealed();
-		bulletinSealed.save();
+		store.saveBulletin(bulletinSealed);
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinSealed.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), bulletinSealed));
 
 		Bulletin bulletinDraft = store.createEmptyBulletin();
 		bulletinDraft.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletinDraft.setDraft();
-		bulletinDraft.save();
+		store.saveBulletin(bulletinDraft);
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), bulletinDraft));
 
 		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		
-		privateBulletin.save();
+		store.saveBulletin(privateBulletin);
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), privateBulletin));
 				
 		Vector list2 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
@@ -1352,13 +1352,13 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		bulletinSealed.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletinSealed.setSealed();
 		bulletinSealed.setAllPrivate(true);
-		bulletinSealed.save();
+		store.saveBulletin(bulletinSealed);
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinSealed.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), bulletinSealed));
 
 		Bulletin bulletinDraft = store.createEmptyBulletin();
 		bulletinDraft.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletinDraft.setDraft();
-		bulletinDraft.save();
+		store.saveBulletin(bulletinDraft);
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), bulletinDraft.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), bulletinDraft));
 
 		Vector list2 = testServer.listFieldOfficeDraftBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString(), new Vector());
@@ -1408,11 +1408,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Bulletin bulletin = store.createEmptyBulletin();
 		bulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletin.setSealed();
-		bulletin.save();
+		store.saveBulletin(bulletin);
 		testServer.uploadBulletin(bulletin.getAccount(), bulletin.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), bulletin));
 
 		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
-		privateBulletin.save();
+		store.saveBulletin(privateBulletin);
 		testServer.uploadBulletin(privateBulletin.getAccount(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), privateBulletin));
 
 		testServer.security = myMock;
@@ -1441,7 +1441,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		b.set(Bulletin.TAGTITLE, "Tifdfssftle3");
 		b.set(Bulletin.TAGPUBLICINFO, "Detasdfsdfils1");
 		b.set(Bulletin.TAGPRIVATEINFO, "PrivasdfsdfteDetails1");
-		b.save();
+		nonFieldStore.saveBulletin(b);
 		testServer.uploadBulletin(nonFieldSecurity.getPublicKeyString(), b.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), b));
 
 		Vector list1 = testServer.listFieldOfficeAccounts(hqSecurity.getPublicKeyString());
@@ -1454,11 +1454,11 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.allowUploads(fieldSecurity1.getPublicKeyString());
 		Bulletin bulletin = store.createEmptyBulletin();
 		bulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
-		bulletin.save();
+		store.saveBulletin(bulletin);
 		testServer.uploadBulletin(fieldSecurity1.getPublicKeyString(), bulletin.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), bulletin));
 
 		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
-		privateBulletin.save();
+		store.saveBulletin(privateBulletin);
 		testServer.uploadBulletin(fieldSecurity1.getPublicKeyString(), privateBulletin.getLocalId(), MockBulletin.saveToZipString(store.getDatabase(), privateBulletin));
 				
 		Vector list2 = testServer.listFieldOfficeAccounts(hqSecurity.getPublicKeyString());

@@ -24,13 +24,13 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 
 		b0 = app.createBulletin();
 		b0.set(Bulletin.TAGTITLE, title1);
-		b0.save();
+		app.getStore().saveBulletin(b0);
 		b1 = app.createBulletin();
 		b1.set(Bulletin.TAGTITLE, title1);
-		b1.save();
+		app.getStore().saveBulletin(b1);
 		b2 = app.createBulletin();
 		b2.set(Bulletin.TAGTITLE, title2);
-		b2.save();
+		app.getStore().saveBulletin(b2);
 
 		testServer = new MockServer();
 		testServer.initialize();

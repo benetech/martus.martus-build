@@ -121,13 +121,13 @@ public class TestBulletinTableModel extends TestCase
 
 		Bulletin b = list.getBulletin(0);
 		b.set("title", "xyz");
-		b.save();
+		store.saveBulletin(b);
 
 		assertEquals(Bulletin.STATUSSEALED, b.getStatus());
 		assertEquals("Sealed", list.getValueAt(0,0));
 
 		b.set("eventdate", "1999-04-15");
-		b.save();
+		store.saveBulletin(b);
 		String displayDate = app.convertStoredToDisplay("1999-04-15");
 		assertEquals(displayDate, list.getValueAt(0,1));
 
@@ -135,10 +135,10 @@ public class TestBulletinTableModel extends TestCase
 		assertEquals("xyz", list.getValueAt(0,2));
 
 		b.setDraft();
-		b.save();
+		store.saveBulletin(b);
 		assertEquals("Draft", list.getValueAt(0,0));
 		b.setSealed();
-		b.save();
+		store.saveBulletin(b);
 		assertEquals("Sealed", list.getValueAt(0,0));
 
 	}
@@ -174,7 +174,7 @@ public class TestBulletinTableModel extends TestCase
 
 		Bulletin b = store.createEmptyBulletin();
 		assertEquals(-1, list.findBulletin(b.getUniversalId()));
-		b.save();
+		store.saveBulletin(b);
 		assertEquals(-1, list.findBulletin(b.getUniversalId()));
 	}
 

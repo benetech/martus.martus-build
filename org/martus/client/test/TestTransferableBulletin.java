@@ -180,7 +180,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		b.setSealed();
 		b.set(Bulletin.TAGTITLE, title);
-		b.save();
+		store.saveBulletin(b);
 		Bulletin[] bulletins = new Bulletin[] {b};
 		TransferableBulletinList localTB = new TransferableBulletinList(store.getDatabase(), bulletins, folder);
 		Bulletin[] got = localTB.getBulletins();

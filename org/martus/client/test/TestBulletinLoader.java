@@ -83,7 +83,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		original.set(Bulletin.TAGPUBLICINFO, "public info");
 		original.set(Bulletin.TAGPRIVATEINFO, "private info");
 		original.setSealed();
-		original.save();
+		store.saveBulletin(original);
 
 		Bulletin loaded = BulletinLoader.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not valid?", true, loaded.isValid());
@@ -106,7 +106,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		original.set(Bulletin.TAGPUBLICINFO, "public info");
 		original.set(Bulletin.TAGPRIVATEINFO, "private info");
 		original.setSealed();
-		original.save();
+		store.saveBulletin(original);
 
 		Bulletin loaded = BulletinLoader.loadFromDatabase(store, new DatabaseKey(original.getUniversalId()));
 		assertEquals("not valid?", true, loaded.isValid());
@@ -147,7 +147,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		original.set(Bulletin.TAGPUBLICINFO, "public info");
 		String key = security.getPublicKeyString();
 		original.setHQPublicKey(key);
-		original.save();
+		store.saveBulletin(original);
 		DatabaseKey dbKey = new DatabaseKey(original.getUniversalId());
 		Bulletin loaded = BulletinLoader.loadFromDatabase(store, dbKey);
 		assertEquals("Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded.getFieldDataPacket().getHQPublicKey());
@@ -272,7 +272,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 
 	void saveAndVerifyValid(String label, Bulletin b) throws Exception
 	{
-		b.save();
+		store.saveBulletin(b);
 		DatabaseKey headerKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
 		Bulletin stillValid = BulletinLoader.loadFromDatabase(store, headerKey, security);
 		assertEquals(label + " not valid after save?", true, stillValid.isValid());

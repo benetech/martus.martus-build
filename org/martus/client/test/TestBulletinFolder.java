@@ -52,11 +52,11 @@ public class TestBulletinFolder extends TestCaseEnhanced
 			testFolder = store.createFolder("something");
 
 			b = store.createEmptyBulletin();
-			b.save();
+    		store.saveBulletin(b);
 			testFolder.add(b);
 
 			b2 = store.createEmptyBulletin();
-			b2.save();
+    		store.saveBulletin(b2);
 			testFolder.add(b2);
     	}
     }
@@ -238,22 +238,22 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		b.set("eventdate","20010101");
 		b.set("author","billy bob");
-		b.save();
+		store.saveBulletin(b);
 		folder.add(b);
 		b = store.createEmptyBulletin();
 		b.set("eventdate","20010201");
 		b.set("author","tom tupa");
-		b.save();
+		store.saveBulletin(b);
 		folder.add(b);
 		b = store.createEmptyBulletin();
 		b.set("eventdate","20010301");
 		b.set("author","adam ant");
-		b.save();
+		store.saveBulletin(b);
 		folder.add(b);
 		b = store.createEmptyBulletin();
 		b.set("eventdate","20010401");
 		b.set("author","nervous nellie");
-		b.save();
+		store.saveBulletin(b);
 		folder.add(b);
 		assertEquals("initial count", 4, folder.getBulletinCount());
 		b = folder.getBulletinSorted(0);
@@ -292,7 +292,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		b = store.createEmptyBulletin();
 		b.set("eventdate","20010401");
 		b.set("author","zippy zorro");
-		b.save();
+		store.saveBulletin(b);
 		folder.add(b);
 		b = folder.getBulletinSorted(0);
 		assertEquals("zippy zorro", b.get("author"));
@@ -304,7 +304,7 @@ public class TestBulletinFolder extends TestCaseEnhanced
 		for(int i = 0; i < count; ++i)
 		{
 			Bulletin b = store.createEmptyBulletin();
-			b.save();
+			store.saveBulletin(b);
 			folder.add(b);
 		}
 	}

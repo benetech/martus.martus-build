@@ -305,7 +305,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		appWithServer.serverChunkSize = 100;
 		Bulletin b = appWithServer.createBulletin();
 		b.setSealed();
-		b.save();
+		appWithServer.getStore().saveBulletin(b);
 		assertEquals("result not ok?", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b, null));
 		assertTrue("count not > 1?", server.chunkCount > 1);
 
@@ -479,14 +479,14 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		Bulletin b1 = appWithServer.createBulletin();
 		b1.setSealed();
-		b1.save();
+		appWithServer.getStore().saveBulletin(b1);
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setSealed();
-		b2.save();
+		appWithServer.getStore().saveBulletin(b2);
 		Bulletin b3 = appWithServer.createBulletin();
 		b3.set(Bulletin.TAGAUTHOR, "author");
 		b3.setSealed();
-		b3.save();
+		appWithServer.getStore().saveBulletin(b3);
 		mockServer.allowUploads(appWithServer.getAccountId());
 		assertEquals("upload b1", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b1, null));
 		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
@@ -542,7 +542,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		Bulletin b1 = appWithServer.createBulletin();
 		b1.setSealed();
-		b1.save();
+		appWithServer.getStore().saveBulletin(b1);
 		Vector justB1 = new Vector();
 		justB1.add(b1.getUniversalId());
 		Retriever retriever = new Retriever(appWithServer, null);	
@@ -566,11 +566,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setSealed();
-		b2.save();
+		appWithServer.getStore().saveBulletin(b2);
 		Bulletin b3 = appWithServer.createBulletin();
 		b3.set(Bulletin.TAGAUTHOR, "author");
 		b3.setSealed();
-		b3.save();
+		appWithServer.getStore().saveBulletin(b3);
 		mockServer.allowUploads(appWithServer.getAccountId());
 		assertEquals("upload b1", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b1, null));
 		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
@@ -986,13 +986,13 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
-		b1.save();
+		appWithServer.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
-		b2.save();
+		appWithServer.getStore().saveBulletin(b2);
 
 		String accountId = appWithServer.getAccountId();
 		mockServer.allowUploads(accountId);
@@ -1080,19 +1080,19 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		b1.set(Bulletin.TAGTITLE, sampleSummary1);
 		b1.setSealed();
 		appWithServer.setHQKeyInBulletin(b1);
-		b1.save();
+		appWithServer.getStore().saveBulletin(b1);
 		
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setAllPrivate(false);
 		b2.set(Bulletin.TAGTITLE, sampleSummary2);
 		b2.setSealed();
 		appWithServer.setHQKeyInBulletin(b2);
-		b2.save();
+		appWithServer.getStore().saveBulletin(b2);
 		
 		Bulletin b3 = appWithServer.createBulletin();
 		b3.set(Bulletin.TAGTITLE, sampleSummary3);
 		b3.setSealed();
-		b3.save();
+		appWithServer.getStore().saveBulletin(b3);
 
 		mockServer.allowUploads(appWithServer.getAccountId());
 		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b1, null));
@@ -1128,7 +1128,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals("No file and draft outbox empty", false, appWithServer.shouldShowDraftUploadReminder());
 
 		Bulletin b = appWithServer.createBulletin();
-		b.save();
+		appWithServer.getStore().saveBulletin(b);
 		store.addBulletinToFolder(b.getUniversalId(), draftOutbox);
 		assertEquals("Draft file got created somehow?", false, file.exists());
 		assertEquals("Draft outbox empty", 1, draftOutbox.getBulletinCount());
@@ -1216,7 +1216,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Bulletin b = app.createBulletin();
 		b.setSealed();
 		b.set(Bulletin.TAGTITLE, "test title");
-		b.save();
+		app.getStore().saveBulletin(b);
 		app.getFolderOutbox().add(b);
 		return b;
 	}
@@ -1226,7 +1226,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		Bulletin b = app.createBulletin();
 		b.setDraft();
 		b.set(Bulletin.TAGTITLE, "test title");
-		b.save();
+		app.getStore().saveBulletin(b);
 		app.getFolderDraftOutbox().add(b);
 		return b;
 	}
@@ -1238,7 +1238,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockServer.allowUploads(appWithServer.getAccountId());
 		Bulletin b2 = appWithServer.createBulletin();
 		b2.setSealed();
-		b2.save();
+		store.saveBulletin(b2);
 		assertEquals("upload b2", NetworkInterfaceConstants.OK, appWithServer.uploadBulletin(b2, null));
 		store.destroyBulletin(b2);
 		return b2;
