@@ -111,7 +111,7 @@ public class MirroringRetriever
 				}
 			}
 		}
-		catch (Throwable e)
+		catch (Exception e)
 		{
 			// TODO: Better error handling
 			e.printStackTrace();
@@ -135,7 +135,7 @@ public class MirroringRetriever
 				accountsToRetrieve.addAll(response.getResultVector());
 			}
 		}
-		catch (Throwable e)
+		catch (Exception e)
 		{
 			// TODO: Better error handling
 			e.printStackTrace();
