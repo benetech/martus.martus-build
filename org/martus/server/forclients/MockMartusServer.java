@@ -301,6 +301,15 @@ public class MockMartusServer extends MartusServer
 		}
 		return super.getNews(accountId, versionLabel, versionBuildDate);
 	}
+	
+	public Vector getServerCompliance()
+	{
+		if(complianceResponse != null)
+		{	
+				return complianceResponse;
+		}
+		return super.getServerCompliance();
+	}	
 
 	public Vector getPacket(
 		String myAccountId,
@@ -331,6 +340,7 @@ public class MockMartusServer extends MartusServer
 	public Vector listMyResponse;
 	public Vector listFieldOfficeSummariesResponse;
 	public Vector listFieldOfficeAccountsResponse;
+	public Vector complianceResponse;
 	
 	public String lastClientId;
 	public String lastUploadedBulletinId;

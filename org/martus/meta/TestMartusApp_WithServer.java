@@ -8,6 +8,7 @@ import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
 import org.martus.client.core.MartusApp;
+import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.swingui.Retriever;
 import org.martus.client.swingui.UiConstants;
 import org.martus.client.test.MockMartusApp;
@@ -147,6 +148,54 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockServer.newsVersionBuildDateToCheck = "00/00/00";
 		Vector twoNewsResponseWithInvalidVersionInfo = appWithServer.getNewsFromServer();
 		assertEquals(0, twoNewsResponseWithInvalidVersionInfo.size());
+	}
+	
+	public void testGetServerCompliance() throws Exception
+	{
+		try
+		{
+			appWithoutServer.getServerCompliance();
+			fail("noServer should have thrown");
+		}
+		catch (ServerCallFailedException expectedException)
+		{
+		}
+		
+		String sampleCompliance = "This server is compliant";
+		Vector result = new Vector();
+		result.add(NetworkInterfaceConstants.OK);
+		Vector compliance = new Vector();
+		compliance.add(sampleCompliance);
+		result.add(compliance);
+		mockServer.complianceResponse = result;
+		String complianceResponse = appWithServer.getServerCompliance();
+		assertEquals(sampleCompliance, complianceResponse);
+
+		Vector failedCompliance = new Vector();
+		failedCompliance.add(NetworkInterfaceConstants.NOT_AUTHORIZED);
+		mockServer.complianceResponse = failedCompliance;
+		try
+		{
+			appWithServer.getServerCompliance();
+			fail("Should not have passed getServerCompliance request");
+		}
+		catch (ServerCallFailedException expectedException)
+		{
+		}
+
+		Vector invalidResult = new Vector();
+		invalidResult.add(NetworkInterfaceConstants.OK);
+		invalidResult.add("bad second parameter");
+		mockServer.complianceResponse = invalidResult;
+		try
+		{
+			appWithServer.getServerCompliance();
+			fail("Did not throw for invalid second parameter");
+		}
+		catch (ServerCallFailedException expectedException)
+		{
+		}
+
 	}
 
 	public void testSetServerInfo() throws Exception

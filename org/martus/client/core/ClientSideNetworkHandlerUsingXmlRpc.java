@@ -159,6 +159,12 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		params.add(signature);
 		return (Vector)callServer(server, cmdGetNews, params);
 	}
+	
+	public Vector getServerCompliance(String myAccountId, Vector parameters, String signature)
+	{
+		return null;
+	}
+	
 
 	public String ping()
 	{

@@ -1286,6 +1286,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return result;
 	}
 
+	public Vector getServerCompliance()
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}	
+
 	public File getContactInfoFileForAccount(String accountId) throws
 		IOException
 	{
@@ -2350,4 +2356,5 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
 	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
+
 }

@@ -105,6 +105,12 @@ class ServerSideNetworkHandlerNotAvailable implements NetworkInterface
 	{
 		return null;
 	}
+
+	public Vector getServerCompliance(String myAccountId, Vector parameters, String signature)
+	{
+		return null;
+	}
+	
 	public String ping()
 	{
 		return null;

@@ -41,12 +41,8 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
-import org
-	.martus
-	.client
-	.core
-	.ClientSideNetworkHandlerUsingXmlRpc
-	.SSLSocketSetupException;
+import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
+import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.swingui.DateUtilities;
 import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiProgressMeter;
@@ -858,6 +854,24 @@ public class MartusApp
 			System.out.println("MartusApp.sendContactInfoToServer :" + e);
 		}
 		return new Vector();
+	}
+
+	public String getServerCompliance() throws ServerCallFailedException
+	{
+		if(!isSSLServerAvailable())
+			throw new ServerCallFailedException();
+		try
+		{
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getServerCompliance(security);
+			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+				return (String)response.getResultVector().get(0);
+		}
+		catch (Exception e)
+		{
+			//System.out.println("MartusApp.getServerCompliance :" + e);
+			throw new ServerCallFailedException();
+		}		
+		throw new ServerCallFailedException();
 	}
 
 	private void sendContactInfoToServer()

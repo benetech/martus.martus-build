@@ -47,4 +47,9 @@ public class Exceptions
 	public static class PasswordTooShortException extends InvalidUserNameOrPassword
 	{
 	}
+	
+	public static class ServerCallFailedException extends Exception
+	{
+	}
+	
 }
