@@ -981,7 +981,7 @@ public class MartusApp
 
 	public boolean doesAnyAccountExist()
 	{
-		return getCurrentKeyPairFile().exists();
+		return getKeyPairFile(getMartusDataRootDirectory()).exists();
 	}
 
 	public void exportPublicInfo(File exportFile) throws
