@@ -533,6 +533,28 @@ public class MartusUtilities
 		return newFileName.equals(originalFileName);
 	}
 
+	public static String extractIpFromFileName(String fileName) throws 
+		MartusUtilities.InvalidPublicKeyFileException 
+	{
+		final String ipStartString = "ip=";
+		int ipStart = fileName.indexOf(ipStartString);
+		if(ipStart < 0)
+			throw new MartusUtilities.InvalidPublicKeyFileException();
+		ipStart += ipStartString.length();
+		int ipEnd = ipStart;
+		for(int i=0; i < 3; ++i)
+		{
+			ipEnd = fileName.indexOf(".", ipEnd+1);
+			if(ipEnd < 0)
+				throw new MartusUtilities.InvalidPublicKeyFileException();
+		}
+		++ipEnd;
+		while(ipEnd < fileName.length() && Character.isDigit(fileName.charAt(ipEnd)))
+			++ipEnd;
+		String ip = fileName.substring(ipStart, ipEnd);
+		return ip;
+	}
+
 	static final String PUBLIC_KEY_FILE_IDENTIFIER = "Martus Public Key:";
 	static final String PUBLIC_KEY_TYPE_SERVER = "Server";
 }

@@ -287,7 +287,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 			PublicInformationInvalidException, 
 			SSLSocketSetupException
 	{
-		String ip = extractIpFromFileName(publicKeyFile.getName());
+		String ip = MartusUtilities.extractIpFromFileName(publicKeyFile.getName());
 		CallerSideMirroringGateway gateway = createGatewayToCall(ip, publicKeyFile);
 		MirroringRetriever retriever = new MirroringRetriever(getDatabase(), gateway, ip, logger, getSecurity());
 		return retriever;
@@ -308,28 +308,6 @@ public class ServerForMirroring implements ServerSupplierInterface
 		return new CallerSideMirroringGateway(xmlRpcGateway);
 	}
 
-	static String extractIpFromFileName(String fileName) throws 
-		InvalidPublicKeyFileException 
-	{
-		final String ipStartString = "ip=";
-		int ipStart = fileName.indexOf(ipStartString);
-		if(ipStart < 0)
-			throw new InvalidPublicKeyFileException();
-		ipStart += ipStartString.length();
-		int ipEnd = ipStart;
-		for(int i=0; i < 3; ++i)
-		{
-			ipEnd = fileName.indexOf(".", ipEnd+1);
-			if(ipEnd < 0)
-				throw new InvalidPublicKeyFileException();
-		}
-		++ipEnd;
-		while(ipEnd < fileName.length() && Character.isDigit(fileName.charAt(ipEnd)))
-			++ipEnd;
-		String ip = fileName.substring(ipStart, ipEnd);
-		return ip;
-	}
-	
 	private class MirroringTask extends TimerTask
 	{
 		MirroringTask(Vector retrieversToUse)

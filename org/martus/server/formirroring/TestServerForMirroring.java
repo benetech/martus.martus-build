@@ -224,7 +224,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	{
 		try
 		{
-			ServerForMirroring.extractIpFromFileName("code=x.y.z");
+			MartusUtilities.extractIpFromFileName("code=x.y.z");
 			fail("Should have thrown missing ip=");
 		}
 		catch(InvalidPublicKeyFileException ignoreExpectedException)
@@ -233,16 +233,16 @@ public class TestServerForMirroring extends TestCaseEnhanced
 
 		try
 		{
-			ServerForMirroring.extractIpFromFileName("ip=1.2.3");
+			MartusUtilities.extractIpFromFileName("ip=1.2.3");
 			fail("Should have thrown not enough dots");
 		}
 		catch(InvalidPublicKeyFileException ignoreExpectedException)
 		{
 		}
 
-		assertEquals("1.2.3.4", ServerForMirroring.extractIpFromFileName("ip=1.2.3.4"));
-		assertEquals("2.3.4.5", ServerForMirroring.extractIpFromFileName("ip=2.3.4.5.txt"));
-		assertEquals("3.4.5.6", ServerForMirroring.extractIpFromFileName("code=x.y.z-ip=3.4.5.6.txt"));
+		assertEquals("1.2.3.4", MartusUtilities.extractIpFromFileName("ip=1.2.3.4"));
+		assertEquals("2.3.4.5", MartusUtilities.extractIpFromFileName("ip=2.3.4.5.txt"));
+		assertEquals("3.4.5.6", MartusUtilities.extractIpFromFileName("code=x.y.z-ip=3.4.5.6.txt"));
 	}
 
 	ServerForMirroring server;
