@@ -9,6 +9,7 @@ import java.io.InputStreamReader;
 
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
@@ -48,7 +49,10 @@ public class IsPassphraseValid
 
 			try
 			{
-				loadCurrentMartusSecurity(keyPairFile, passphrase);
+				MartusSecurity security = (MartusSecurity) loadCurrentMartusSecurity(keyPairFile, passphrase);
+				String publicCode = MartusUtilities.computePublicCode(security.getPublicKeyString());
+				System.out.println(MartusUtilities.formatPublicCode(publicCode));
+				System.exit(0);
 			}
 			catch(AuthorizationFailedException e)
 			{
@@ -62,15 +66,15 @@ public class IsPassphraseValid
 				System.err.flush();
 				System.exit(3);
 			}
-			System.exit(0);
 	}
 
-	private static void loadCurrentMartusSecurity(File keyPairFile, String passphrase)
+	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
 		throws CryptoInitializationException, FileNotFoundException, IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException
 	{
-		MartusCrypto security = new MartusSecurity();
+		MartusCrypto crypto = new MartusSecurity();
 		FileInputStream in = new FileInputStream(keyPairFile);
-		security.readKeyPair(in, passphrase);
+		crypto.readKeyPair(in, passphrase);
 		in.close();
+		return crypto;
 	}
 }
