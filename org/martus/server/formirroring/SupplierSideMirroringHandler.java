@@ -30,7 +30,6 @@ import java.util.Vector;
 
 import org.martus.common.MartusCrypto;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.Base64.InvalidBase64Exception;
 
 public class SupplierSideMirroringHandler implements MirroringInterface, NetworkInterfaceConstants
 {
@@ -96,6 +95,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			{
 				log("listAccounts");
 				Vector accounts = supplier.listAccountsForMirroring();
+				log("listAccounts -> " + accounts.size());
 	
 				result.add(OK);
 				result.add(accounts);
@@ -107,17 +107,16 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 				String publicCode;
 				try
 				{
-					publicCode = MartusCrypto.computePublicCode(authorAccountId);
-					log("listBulletins: " + publicCode);
+					publicCode = MartusCrypto.getFormattedPublicCode(authorAccountId);
 				}
-				catch (InvalidBase64Exception e)
+				catch (Exception e)
 				{
 					log("listBulletins: Bad account:" + authorAccountId);
 					result.add(INVALID_DATA);
 					return result;
 				}
-				log("listBulletins: " + MartusCrypto.formatPublicCode(publicCode));
 				Vector infos = supplier.listBulletinsForMirroring(authorAccountId);
+				log("listBulletins: " + publicCode + " -> " + infos.size());
 				
 				result.add(OK);
 				result.add(infos);

@@ -129,6 +129,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		File pubKeyFile2 = new File(mirrorsWhoWeCall, "code=2.3.4.5.6-ip=2.3.4.5.txt");
 		MartusUtilities.exportServerPublicKey(clientSecurity2, pubKeyFile2);
 		ServerForMirroring twoCallsToMake = new ServerForMirroring(twoCallsToMakeCore, logger);
+		twoCallsToMake.createGatewaysForServersWhoWeCall();
 		assertEquals(2, twoCallsToMake.retrieversWeWillCall.size());
 		mirrorsWhoWeCall.delete();
 		twoCallsToMakeCore.deleteAllFiles();

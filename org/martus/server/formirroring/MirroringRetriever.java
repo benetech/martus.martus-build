@@ -74,7 +74,7 @@ public class MirroringRetriever
 		try
 		{
 			String publicCode = MartusCrypto.getFormattedPublicCode(uid.getAccountId());
-			log("Get bulletin: " + publicCode + "->" + uid.getLocalId());
+			log("Getting bulletin: " + publicCode + "->" + uid.getLocalId());
 			String bur = retrieveBurFromMirror(uid);
 			File zip = File.createTempFile("$$$MirroringRetriever", null);
 			try
@@ -136,14 +136,15 @@ public class MirroringRetriever
 			if(nextAccountId == null)
 				return null;
 
-			//String publicCode = MartusUtilities.getPublicCode(nextAccountId);
-			//log("Get bulletin list: " + publicCode);
+			String publicCode = MartusCrypto.getFormattedPublicCode(nextAccountId);
+			//log("listBulletins: " + publicCode);
 			NetworkResponse response = gateway.listBulletinsForMirroring(security, nextAccountId);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
 				Vector infos = response.getResultVector();
-				
 				uidsToRetrieve = listOnlyPacketsThatWeWant(nextAccountId, infos);
+				log("listBulletins: " + publicCode + 
+						" -> " + infos.size() + " -> " + uidsToRetrieve.size());
 			}
 		}
 		catch (Exception e)
@@ -181,8 +182,8 @@ public class MirroringRetriever
 
 		if(shouldSleepNextCycle)
 		{
-			log("Sleeping for " + INACTIVE_SLEEP_MILLIS / 1000 / 60 + " minutes");
-			sleepUntil = System.currentTimeMillis() + INACTIVE_SLEEP_MILLIS;
+			log("Sleeping for " + ServerForMirroring.inactiveSleepMillis / 1000 / 60 + " minutes");
+			sleepUntil = System.currentTimeMillis() + ServerForMirroring.inactiveSleepMillis;
 			shouldSleepNextCycle = false;
 			return null;
 		}
@@ -196,6 +197,7 @@ public class MirroringRetriever
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
 				accountsToRetrieve.addAll(response.getResultVector());
+				log("Account count:" + accountsToRetrieve.size());
 			}
 		}
 		catch (Exception e)
@@ -216,7 +218,7 @@ public class MirroringRetriever
 	{
 		FileOutputStream out = new FileOutputStream(destFile);
 
-		int chunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
+		int chunkSize = MIRRORING_MAX_CHUNK_SIZE;
 		ProgressMeterInterface nullProgressMeter = null;
 		int totalLength = BulletinZipUtilities.retrieveBulletinZipToStream(uid, out, chunkSize, gateway, security, nullProgressMeter);
 
@@ -246,5 +248,5 @@ public class MirroringRetriever
 	public boolean shouldSleepNextCycle;
 	public long sleepUntil;
 	
-	static final long INACTIVE_SLEEP_MILLIS = 60 * 60 * 1000;
+	static final int MIRRORING_MAX_CHUNK_SIZE = 1024 * 1024;
 }

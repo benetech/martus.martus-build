@@ -49,8 +49,7 @@ import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSoc
 
 public class ServerForMirroring implements ServerSupplierInterface
 {
-	public ServerForMirroring(MartusServer coreServerToUse, LoggerInterface loggerToUse) throws 
-			IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
+	public ServerForMirroring(MartusServer coreServerToUse, LoggerInterface loggerToUse) throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException  
 	{
 		coreServer = coreServerToUse;
 		logger = loggerToUse;
@@ -61,7 +60,6 @@ public class ServerForMirroring implements ServerSupplierInterface
 		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
 
 		retrieversWeWillCall = new Vector();
-		createGatewaysForServersWhoWeCall();
 		log("Configured to call " + retrieversWeWillCall.size() + " Mirrors");
 	}
 
@@ -70,8 +68,38 @@ public class ServerForMirroring implements ServerSupplierInterface
 		logger.log(message);
 	}
 	
-	public void addListeners()
+	public File getMirrorConfigFile()
 	{
+		return new File(coreServer.getStartupConfigDirectory(), MIRRORCONFIGFILENAME);
+	}
+	
+	public void verifyConfigurationFiles()
+	{
+		// nothing to do yet
+	}
+	
+	public void loadConfigurationFiles() throws IOException
+	{
+		if(getMirrorConfigFile().exists())
+		{
+			long oneSecondOfMillis = 1000;
+			long oneMinuteOfMillis = 60 * oneSecondOfMillis;
+
+			mirroringIntervalMillis = oneSecondOfMillis;
+			inactiveSleepMillis = oneMinuteOfMillis;
+		}
+		log("MirroringInterval (millis): " + mirroringIntervalMillis);
+		log("InactiveSleep (millis): " + inactiveSleepMillis);
+	}
+	public void deleteConfigurationFiles()
+	{
+		getMirrorConfigFile().delete();
+	}
+
+	public void addListeners() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
+	{
+		createGatewaysForServersWhoWeCall();
+
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 		log("Opening port " + port + " for mirroring...");
 		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this, getSecurity());
@@ -326,6 +354,8 @@ public class ServerForMirroring implements ServerSupplierInterface
 	Vector authorizedCallers;
 	MirroringRetriever retriever;
 	Vector retrieversWeWillCall;
-	
-	private static final long mirroringIntervalMillis = 10 * 1000;	// TODO: Probably 60 seconds
+
+	static final String MIRRORCONFIGFILENAME = "mirrorConfig.txt";	
+	static long mirroringIntervalMillis = 10 * 1000;	// TODO: Probably 60 seconds
+	static long inactiveSleepMillis = 60 * 60 * 1000;
 }

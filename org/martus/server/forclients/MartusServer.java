@@ -70,6 +70,8 @@ import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
+import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
@@ -108,8 +110,8 @@ public class MartusServer implements NetworkInterfaceConstants
 			server.displayStatistics();
 
 			System.out.println("Setting up sockets (this may take up to a minute or longer)...");
-			server.createServerForClients();
-			server.createServerForMirroring();
+			server.initializeServerForClients();
+			server.initializeServerForMirroring();
 
 			server.startBackgroundTimers();
 			
@@ -135,13 +137,13 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 
 	MartusServer(File dir) throws 
-					MartusCrypto.CryptoInitializationException
+					CryptoInitializationException, IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
 	{
 		this(dir, new LoggerToConsole());
 	}
 
 	MartusServer(File dir, LoggerInterface loggerToUse) throws 
-					MartusCrypto.CryptoInitializationException
+					MartusCrypto.CryptoInitializationException, IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
 	{
 		dataDirectory = dir;
 		logger = loggerToUse;
@@ -150,6 +152,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		security = new MartusSecurity();
 		serverForClients = new ServerForClients(this);
+		serverForMirroring = new ServerForMirroring(this, logger);
 		failedUploadRequestsPerIp = new Hashtable();
 	}
 
@@ -201,11 +204,13 @@ public class MartusServer implements NetworkInterfaceConstants
 	public void verifyConfigurationFiles()
 	{
 		serverForClients.verifyConfigurationFiles();
+		serverForMirroring.verifyConfigurationFiles();
 	}
 
 	public void loadConfigurationFiles() throws IOException
 	{
 		serverForClients.loadConfigurationFiles();
+		serverForMirroring.loadConfigurationFiles();
 
 		//Tests will fail if compliance isn't last.
 		loadHiddenPacketsFile();
@@ -1265,6 +1270,8 @@ public class MartusServer implements NetworkInterfaceConstants
 		serverForClients.deleteMagicWordsFile();
 		serverForClients.deleteBannedFile();
 
+		serverForMirroring.deleteConfigurationFiles();
+		
 		if(!getKeyPairFile().delete())
 		{
 			System.out.println("Unable to delete keypair");
@@ -1658,13 +1665,12 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 
 
-	private void createServerForMirroring() throws Exception
+	private void initializeServerForMirroring() throws Exception
 	{
-		serverForMirroring = new ServerForMirroring(this, logger);
 		serverForMirroring.addListeners();
 	}
 
-	private void createServerForClients()
+	private void initializeServerForClients()
 	{
 		serverForClients.handleNonSSL(NetworkInterfaceXmlRpcConstants.defaultNonSSLPorts);
 		serverForClients.handleSSL(NetworkInterfaceXmlRpcConstants.defaultSSLPorts);
