@@ -1702,40 +1702,104 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		String clientId = clientSecurity.getPublicKeyString();
 		String hqId = hqSecurity.getPublicKeyString();
-		String emptyMagic = "";
-		File tempBanned = createTempFile();		
+		File tempBanned = createTempFile();
 		
 		UnicodeWriter writer = new UnicodeWriter(tempBanned);
 		writer.writeln(clientId);
 		writer.close();
+		
+		String bogusStringParameter = "this is never used in this call. right?";
 
+		testServer.allowUploads(clientId);
 		testServer.loadBannedClients(tempBanned);
-		
-		Vector vecResult;
-		String strResult;
-		
-		vecResult = testServer.listMySealedBulletinIds(clientId);
+
+		Vector vecResult = testServer.listMySealedBulletinIds(clientId);
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
 		
 		vecResult = testServer.listMyDraftBulletinIds(clientId);
 		verifyErrorResult("listMyDraftBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("listMyDraftBulletinIds", 0, testServer.getNumberActiveClients() );
 		
-		strResult = testServer.requestUploadRights(clientId, "");
+		String strResult = testServer.requestUploadRights(clientId, bogusStringParameter);
 		assertEquals("requestUploadRights", NetworkInterfaceConstants.REJECTED, strResult );
+		assertEquals("requestUploadRights", 0, testServer.getNumberActiveClients() );
 		
-		strResult = uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ChunkBytes0.length, b1ChunkData0, clientSecurity);
+		strResult = uploadBulletinChunk(testServerInterface, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter, clientSecurity);
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult );
-		
+		assertEquals("uploadBulletinChunk", 0, testServer.getNumberActiveClients() );
+
+		vecResult = downloadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), bogusStringParameter, 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
+		verifyErrorResult("downloadBulletinChunk", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("downloadBulletinChunk", 0, testServer.getNumberActiveClients() );
+
+		vecResult = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
+		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
+
+		vecResult = testServer.legacyDownloadAuthorizedPacket(clientId, bogusStringParameter, clientId, bogusStringParameter);
+		verifyErrorResult("legacyDownloadAuthorizedPacket", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("legacyDownloadAuthorizedPacket", 0, testServer.getNumberActiveClients() );
+
+		strResult = testServer.putBulletinChunk(clientId, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter);
+		assertEquals("putBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult);
+		assertEquals("putBulletinChunk", 0, testServer.getNumberActiveClients() );
+
+		vecResult = testServer.getBulletinChunk(clientId, clientId, bogusStringParameter, 0, 0);
+		verifyErrorResult("getBulletinChunk", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("getBulletinChunk", 0, testServer.getNumberActiveClients() );
+
+		vecResult = testServer.getPacket(clientId, bogusStringParameter, bogusStringParameter, bogusStringParameter);
+		verifyErrorResult("getPacket", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("getPacket", 0, testServer.getNumberActiveClients() );
+
+		strResult = testServer.deleteDraftBulletins(clientId, new String[] {bogusStringParameter} );
+		assertEquals("deleteDraftBulletins", NetworkInterfaceConstants.REJECTED, strResult);
+		assertEquals("deleteDraftBulletins", 0, testServer.getNumberActiveClients() );
+
+		strResult = testServer.putContactInfo(clientId, new Vector() );
+		assertEquals("putContactInfo", NetworkInterfaceConstants.REJECTED, strResult);		
+		assertEquals("putContactInfo", 0, testServer.getNumberActiveClients() );
+
+		vecResult = testServer.downloadFieldDataPacket(hqId, bogusStringParameter, bogusStringParameter, clientId, bogusStringParameter);
+		verifyErrorResult("downloadFieldDataPacket", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("downloadFieldDataPacket", 0, testServer.getNumberActiveClients() );		
+
 		vecResult = testServer.listFieldOfficeSealedBulletinIds(hqId, clientId);
-		assertEquals("listFieldOfficeSealedBulletinIds", NetworkInterfaceConstants.OK, vecResult.get(0) );
+		verifyErrorResult("listFieldOfficeSealedBulletinIds1", vecResult, NetworkInterfaceConstants.OK );
+		assertEquals("listFieldOfficeSealedBulletinIds1", 0, testServer.getNumberActiveClients() );
 		
 		vecResult = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId);
-		assertEquals("listFieldOfficeDraftBulletinIds", NetworkInterfaceConstants.OK, vecResult.get(0) );
+		verifyErrorResult("listFieldOfficeDraftBulletinIds1", vecResult, NetworkInterfaceConstants.OK );
+		assertEquals("listFieldOfficeDraftBulletinIds1", 0, testServer.getNumberActiveClients() );
+		
+		vecResult = testServer.listFieldOfficeAccounts(hqId);
+		verifyErrorResult("listFieldOfficeAccounts1", vecResult, NetworkInterfaceConstants.OK );
+		assertEquals("listFieldOfficeAccounts1", 0, testServer.getNumberActiveClients() );
+		
+		vecResult = testServer.listFieldOfficeSealedBulletinIds(clientId, clientId);
+		verifyErrorResult("listFieldOfficeSealedBulletinIds2", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("listFieldOfficeSealedBulletinIds2", 0, testServer.getNumberActiveClients() );
+		
+		vecResult = testServer.listFieldOfficeDraftBulletinIds(clientId, clientId);
+		verifyErrorResult("listFieldOfficeDraftBulletinIds2", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("listFieldOfficeDraftBulletinIds2", 0, testServer.getNumberActiveClients() );
+		
+		vecResult = testServer.listFieldOfficeAccounts(clientId);
+		verifyErrorResult("listFieldOfficeAccounts2", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("listFieldOfficeAccounts2", 0, testServer.getNumberActiveClients() );
+
+		vecResult = testServer.downloadFieldOfficeBulletinChunk(bogusStringParameter, bogusStringParameter, clientId, 0, 0, bogusStringParameter);
+		verifyErrorResult("downloadFieldOfficeBulletinChunk2", vecResult, NetworkInterfaceConstants.REJECTED );
+		assertEquals("downloadFieldOfficeBulletinChunk2", 0, testServer.getNumberActiveClients() );	
 	}
 	
 	public void testServerShutdown() throws Exception
 	{
 		boolean result;
+		String clientId = clientSecurity.getPublicKeyString();
+		String hqId = hqSecurity.getPublicKeyString();	
+		String bogusStringParameter = "this is never used in this call. right?";
 		
 		result = testServer.isShutdownRequested();
 		assertEquals("isShutdownRequested 1", false, result );
@@ -1744,10 +1808,62 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		File exitFile = new File(testServer.getDataDirectory(), "exit");
 		exitFile.createNewFile();
 		
+		testServer.allowUploads(clientId);
+
 		result = testServer.isShutdownRequested();
 		assertEquals("isShutdownRequested 2", true, result );
+
+		Vector vecResult = testServer.listMySealedBulletinIds(clientId);
+		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		
+		vecResult = testServer.listMyDraftBulletinIds(clientId);
+		verifyErrorResult("listMyDraftBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+		
+		String strResult = testServer.requestUploadRights(clientId, bogusStringParameter);
+		assertEquals("requestUploadRights", NetworkInterfaceConstants.SERVER_DOWN, strResult );
+		
+		strResult = uploadBulletinChunk(testServerInterface, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter, clientSecurity);
+		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.SERVER_DOWN, strResult );
+
+		vecResult = downloadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), bogusStringParameter, 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
+		verifyErrorResult("downloadBulletinChunk", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+
+		vecResult = testServer.listMySealedBulletinIds(clientSecurity.getPublicKeyString());
+		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+
+		vecResult = testServer.legacyDownloadAuthorizedPacket(clientId, bogusStringParameter, clientId, bogusStringParameter);
+		verifyErrorResult("legacyDownloadAuthorizedPacket", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+
+		strResult = testServer.putBulletinChunk(clientId, clientId, bogusStringParameter, 0, 0, 0, bogusStringParameter);
+		assertEquals("putBulletinChunk", NetworkInterfaceConstants.SERVER_DOWN, strResult);
+
+		vecResult = testServer.getBulletinChunk(clientId, clientId, bogusStringParameter, 0, 0);
+		verifyErrorResult("getBulletinChunk", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+
+		vecResult = testServer.getPacket(clientId, bogusStringParameter, bogusStringParameter, bogusStringParameter);
+		verifyErrorResult("getPacket", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+
+		strResult = testServer.deleteDraftBulletins(clientId, new String[] {bogusStringParameter} );
+		assertEquals("deleteDraftBulletins", NetworkInterfaceConstants.SERVER_DOWN, strResult);
+
+		strResult = testServer.putContactInfo(clientId, new Vector() );
+		assertEquals("putContactInfo", NetworkInterfaceConstants.SERVER_DOWN, strResult);		
+
+		vecResult = testServer.downloadFieldDataPacket(hqId, bogusStringParameter, bogusStringParameter, clientId, bogusStringParameter);
+		verifyErrorResult("downloadFieldDataPacket", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+
+		vecResult = testServer.listFieldOfficeSealedBulletinIds(hqId, clientId);
+		verifyErrorResult("listFieldOfficeSealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+		
+		vecResult = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId);
+		verifyErrorResult("listFieldOfficeDraftBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+		
+		vecResult = testServer.listFieldOfficeAccounts(clientId);
+		verifyErrorResult("listFieldOfficeAccounts", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
+				
 		testServer.decrementActiveClientsCounter();
+		assertEquals("testServerShutdown: clientCount", 0, testServer.getNumberActiveClients() );	
+
 		exitFile.delete();
 	}
 	
