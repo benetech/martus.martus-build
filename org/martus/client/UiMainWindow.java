@@ -135,7 +135,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		inactivityDetector = new InactivityDetector();
 
-		doUploadReminder();
+		doUploadReminderOnStartup();
 
 		uploader = new java.util.Timer(true);
 		uploader.schedule(new Tick(), 0, 5*1000);
@@ -1330,17 +1330,31 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private void doUploadReminder()
+	private void doUploadReminderOnStartup()
 	{
-		if(app.shouldShowUploadReminder())
+		if(app.shouldShowSealedUploadReminderOnStartup())
 		{
 			notifyDlg(this, "uploadreminder");
 			app.resetLastUploadRemindedTime();
 		}
 	}
 
+	private void doUploadReminderOnExit()
+	{
+		if(app.shouldShowSealedUploadReminderOnExit())
+		{
+			notifyDlg(this, "uploadreminder");
+			app.resetLastUploadRemindedTime();
+		}
+		else if(app.shouldShowDraftUploadReminder())
+		{
+			notifyDlg(this, "draftuploadreminder");
+		}			
+	}
+
 	private void Exit()
 	{
+		doUploadReminderOnExit();
 		saveState();
 		System.exit(0);
 	}

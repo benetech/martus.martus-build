@@ -430,9 +430,23 @@ public class MartusApp
 		return folders;	
 	}
 
-	public boolean shouldShowUploadReminder()
+	public boolean shouldShowDraftUploadReminder()
+	{
+		if(getFolderDraftOutbox().getBulletinCount() == 0)
+			return false;
+		return true;
+	}
+	
+	private boolean isSealedFolderOutboxEmpty()
 	{
 		if(getFolderOutbox().getBulletinCount() == 0)
+			return true;
+		return false;
+	}
+	
+	public boolean shouldShowSealedUploadReminderOnStartup()
+	{
+		if(isSealedFolderOutboxEmpty())
 			return false;
 
 		long now = System.currentTimeMillis();
@@ -444,7 +458,13 @@ public class MartusApp
 		Date reminded = getLastUploadRemindedTime();
 		if(reminded != null && now - reminded.getTime() < thresholdMillis )
 			return false;
+		return true;
+	}
 
+	public boolean shouldShowSealedUploadReminderOnExit()
+	{
+		if(isSealedFolderOutboxEmpty())
+			return false;
 		return true;
 	}
 

@@ -1501,24 +1501,24 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 	}
 
-	public void testShouldShowUploadReminder()
+	public void testShouldShowSealedUploadReminderOnStartup()
 	{
-		TRACE_BEGIN("testShouldShowUploadReminder");
+		TRACE_BEGIN("testShouldShowSealedUploadReminderOnStartup");
 		File file = appWithServer.getUploadInfoFile();
 		file.delete();
 		BulletinStore store = appWithServer.getStore();
 
 		store.deleteAllData();
 		BulletinFolder outbox = appWithServer.getFolderOutbox();
-		assertEquals("Outbox not empty", 0, outbox.getBulletinCount());
-		assertEquals("No file and outbox empty", false, appWithServer.shouldShowUploadReminder());
+		assertEquals("Outbox not empty on startup", 0, outbox.getBulletinCount());
+		assertEquals("No file and outbox empty on startup", false, appWithServer.shouldShowSealedUploadReminderOnStartup());
 
 		Bulletin b = appWithServer.createBulletin();
 		b.save();
 		store.addBulletinToFolder(b.getUniversalId(), outbox);
-		assertEquals("File got created somehow?", false, file.exists());
-		assertEquals("Outbox empty", 1, outbox.getBulletinCount());
-		assertEquals("No file and outbox contains data", true, appWithServer.shouldShowUploadReminder());
+		assertEquals("File got created somehow on startup?", false, file.exists());
+		assertEquals("Outbox empty on startup", 1, outbox.getBulletinCount());
+		assertEquals("No file and outbox contains data on startup", true, appWithServer.shouldShowSealedUploadReminderOnStartup());
 
 		final int ONEDAY = 24 * 60 * 60 * 1000;
 		Date nullDate = null;
@@ -1526,15 +1526,60 @@ public class TestMartusApp extends TestCaseEnhanced
 		Date recentDate = new Date(nowDate.getTime() - 3 * ONEDAY);
 		Date oldDate = new Date(nowDate.getTime() - 7 * ONEDAY);;
 
-		verifyShouldShowUploadReminder(appWithServer, "null,null", nullDate, nullDate, true);
-		verifyShouldShowUploadReminder(appWithServer, "null,recent", nullDate, recentDate, false);
-		verifyShouldShowUploadReminder(appWithServer, "null,old", nullDate, oldDate, true);
-		verifyShouldShowUploadReminder(appWithServer, "recent,null", recentDate, nullDate, false);
-		verifyShouldShowUploadReminder(appWithServer, "recent,recent", recentDate, recentDate, false);
-		verifyShouldShowUploadReminder(appWithServer, "recent,old", recentDate, oldDate, false);
-		verifyShouldShowUploadReminder(appWithServer, "oldDate,null", oldDate, nullDate, true);
-		verifyShouldShowUploadReminder(appWithServer, "oldDate,recent", oldDate, recentDate, false);
-		verifyShouldShowUploadReminder(appWithServer, "oldDate,oldDate", oldDate, oldDate, true);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "null,null", nullDate, nullDate, true);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "null,recent", nullDate, recentDate, false);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "null,old", nullDate, oldDate, true);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "recent,null", recentDate, nullDate, false);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "recent,recent", recentDate, recentDate, false);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "recent,old", recentDate, oldDate, false);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "oldDate,null", oldDate, nullDate, true);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "oldDate,recent", oldDate, recentDate, false);
+		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "oldDate,oldDate", oldDate, oldDate, true);
+		TRACE_END();
+	}
+
+	public void testShouldShowSealedUploadReminderOnExit()
+	{
+		TRACE_BEGIN("testShouldShowSealedUploadReminderOnExit");
+		File file = appWithServer.getUploadInfoFile();
+		file.delete();
+		BulletinStore store = appWithServer.getStore();
+
+		store.deleteAllData();
+		BulletinFolder outbox = appWithServer.getFolderOutbox();
+		assertEquals("Outbox not empty on exit", 0, outbox.getBulletinCount());
+		assertEquals("No file and outbox empty on exit", false, 
+			appWithServer.shouldShowSealedUploadReminderOnExit());
+
+		Bulletin b = appWithServer.createBulletin();
+		b.save();
+		store.addBulletinToFolder(b.getUniversalId(), outbox);
+		assertEquals("File got created somehow on exit?", false, file.exists());
+		assertEquals("Outbox empty on exit", 1, outbox.getBulletinCount());
+		assertEquals("No file and outbox contains data on exit", true, 
+						appWithServer.shouldShowSealedUploadReminderOnExit());
+
+		TRACE_END();
+	}
+
+	public void testShouldShowDraftUploadReminder()
+	{
+		TRACE_BEGIN("testShouldShowDraftUploadReminder");
+		File file = appWithServer.getUploadInfoFile();
+		file.delete();
+		BulletinStore store = appWithServer.getStore();
+
+		store.deleteAllData();
+		BulletinFolder draftOutbox = appWithServer.getFolderDraftOutbox();
+		assertEquals("Draft outbox not empty", 0, draftOutbox.getBulletinCount());
+		assertEquals("No file and draft outbox empty", false, appWithServer.shouldShowDraftUploadReminder());
+
+		Bulletin b = appWithServer.createBulletin();
+		b.save();
+		store.addBulletinToFolder(b.getUniversalId(), draftOutbox);
+		assertEquals("Draft file got created somehow?", false, file.exists());
+		assertEquals("Draft outbox empty", 1, draftOutbox.getBulletinCount());
+		assertEquals("No file and draft outbox contains data", true, appWithServer.shouldShowDraftUploadReminder());
 		TRACE_END();
 	}
 
@@ -1640,12 +1685,12 @@ public class TestMartusApp extends TestCaseEnhanced
 		return b;
 	}
 
-	private void verifyShouldShowUploadReminder(MartusApp app, String label,
+	private void verifyShouldShowSealedUploadReminderOnStartup(MartusApp app, String label,
 					Date uploaded, Date reminded, boolean expectedResult)
 	{
 		appWithServer.setLastUploadedTime(uploaded);
 		appWithServer.setLastUploadRemindedTime(reminded);
-		assertEquals(label, expectedResult, appWithServer.shouldShowUploadReminder());
+		assertEquals(label, expectedResult, appWithServer.shouldShowSealedUploadReminderOnStartup());
 	}
 
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler

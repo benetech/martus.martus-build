@@ -328,6 +328,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyPasswordMatchesUserName=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyincorrectsignin=Incorrect Signin");
 		addEnglishTranslation("wintitle:notifyuploadreminder=Upload Reminder");
+		addEnglishTranslation("wintitle:notifydraftuploadreminder=Draft Upload Reminder");
 		addEnglishTranslation("wintitle:notifyuploadrejected=Error Sending Bulletin");
 		addEnglishTranslation("wintitle:notifycorruptconfiginfo=Error Loading Configuration File");
 		addEnglishTranslation("wintitle:notifyservercodewrong=Incorrect Server Public Code");
@@ -571,6 +572,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyPasswordMatchesUserNamecause=Your password can not be your username");
 		addEnglishTranslation("field:notifyincorrectsignincause=Username or Password incorrect");
 		addEnglishTranslation("field:notifyuploadremindercause=Please Note: There are bulletins in your outbox that have not been sent to a server.");
+		addEnglishTranslation("field:notifydraftuploadremindercause=Please Note: There are draft bulletins that have been modified and not yet sent to a server.");
 		addEnglishTranslation("field:notifyuploadrejectedcause=The current Martus Server has refused to accept a bulletin");
 		addEnglishTranslation("field:notifycorruptconfiginfocause=The configuration file may be corrupted");
 		addEnglishTranslation("field:notifyservercodewrongcause=The Server Public Code does not match the one you entered.");
