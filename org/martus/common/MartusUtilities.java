@@ -428,32 +428,25 @@ public class MartusUtilities
 		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
 		
 		HashMap zipEntries = new HashMap();
-		
-		final String tempFileName = "$$$importZip";
-		
-		Enumeration entries = zip.entries();
-		while(entries.hasMoreElements())
+		StreamCopier copier = new StreamCopier();
+
+		DatabaseKey[] keys = getAllPacketKeys(header);
+		for (int i = 0; i < keys.length; i++)
 		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
+			String localId = keys[i].getLocalId();
+			ZipEntry entry = zip.getEntry(localId);
 			
 			InputStream in = new BufferedInputStream(zip.getInputStream(entry));
 
+			final String tempFileName = "$$$importZip";
 			File file = File.createTempFile(tempFileName, null);
 
 			FileOutputStream rawOut = new FileOutputStream(file);
-			BufferedOutputStream out = new BufferedOutputStream(rawOut);
-			
-			byte bytes[] = new byte[MartusConstants.streamBufferCopySize];
-			int nBytesRead;
-			while(in.available() > 0)
-			{
-				nBytesRead = in.read(bytes);
-				out.write(bytes, 0, nBytesRead);
-			}
-			out.flush();
-			out.close();
+			copyStreamWithFilter(in, rawOut, copier);
+			rawOut.close();
+			in.close();
 		
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, entry.getName());
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, keys[i].getLocalId());
 			DatabaseKey key = MartusUtilities.createKeyWithHeaderStatus(header, uid);
 
 			zipEntries.put(key,file);
