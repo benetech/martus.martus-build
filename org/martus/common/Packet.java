@@ -179,6 +179,7 @@ public class Packet
 		}
 		catch (Exception e)
 		{
+			e.printStackTrace();
 			throw new InvalidPacketException(e.getMessage());
 		}
 		if(!accountId.equals(handler.accountId))
