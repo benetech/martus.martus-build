@@ -968,10 +968,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		String dlgTitleTag = "DeleteServerDrafts";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
-		String retrieverProgressTag = "RetrieveMyDraftBulletinProgress";
 
 		RetrieveTableModel model = new DeleteMyServerDraftsTableModel(app);
-		deleteServerDrafts(model, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
+		deleteServerDrafts(model, dlgTitleTag, summariesProgressTag);
 	}
 
 	private void retrieveBulletins(RetrieveTableModel model, String folderName,
@@ -1011,7 +1010,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	}
 
 	private void deleteServerDrafts(RetrieveTableModel model, 
-						String dlgTitleTag, String summariesProgressTag, String retrieverProgressTag)
+						String dlgTitleTag, String summariesProgressTag)
 	{
 		String topMessageTag = "DeleteServerDraftsMessage";
 		String okButtonTag = "DeleteServerDrafts";
