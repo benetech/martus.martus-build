@@ -35,6 +35,8 @@ public class EnglishStrings
 "wintitle:options=Options",
 "wintitle:HelpDefaultDetails=Help on Bulletin Details Field Default Content",
 "wintitle:MartusSignIn=Martus SignIn",
+"wintitle:ServerCompliance=Server Compliance Statement",
+
 "wintitle:confirmsend=Confirm Send Bulletin",
 "wintitle:confirmretrieve=Confirm Retrieve Bulletins",
 "wintitle:confirmDiscardDraftBulletins=Confirm Delete Draft Bulletin",
@@ -62,6 +64,7 @@ public class EnglishStrings
 "wintitle:confirmResetDefaultDetails=Reset Contents",
 "wintitle:confirmNotYourBulletinViewAttachmentAnyways=View Attachment",
 "wintitle:confirmDoQuickErase=Quick Erase",
+"wintitle:confirmServerComplianceFailed=Server Compliance Statement",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -123,6 +126,7 @@ public class EnglishStrings
 "wintitle:notifyExportZeroBulletins=No Bulletins Selected",
 "wintitle:notifyQuickEraseWorked=Quick Erase",
 "wintitle:notifyQuickEraseFailed=Quick Erase Error",
+"wintitle:notifyUserRejectedServerCompliance=Server Compliance Statement",
 		
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -201,6 +205,8 @@ public class EnglishStrings
 "button:loadTemplateFromFile=Load From File",
 "button:Continue=Continue",
 "button:ResetContents=Reset Contents",
+"button:ServerComplianceAccept=Accept",
+"button:ServerComplianceReject=Reject",
 
 "menu:file=File",
 "menu:CreateNewBulletin=Create New Bulletin",
@@ -422,6 +428,8 @@ public class EnglishStrings
 "field:confirmNotYourBulletinViewAttachmentAnywayseffect=Clicking on Yes will display the attachment, clicking on No will not try to display the attachment.",
 "field:confirmDoQuickErasecause=This will delete all bulletins and folders on this computer.",
 "field:confirmDoQuickEraseeffect=Bulletins that have not been backed up will be permanently lost.",
+"field:confirmServerComplianceFailedcause=Unable to retrieve a compliance statement from this server.",
+"field:confirmServerComplianceFailedeffect=We recommend that you do not use this server.  Continuing will select this server.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
@@ -483,6 +491,8 @@ public class EnglishStrings
 "field:notifyExportZeroBulletinscause=To export bulletins, select them first, and then perform the export operation.",
 "field:notifyQuickEraseWorkedcause=All bulletins and folders were successfully deleted.",
 "field:notifyQuickEraseFailedcause=Errors prevented some bulletins or folders from being deleted.",
+"field:notifyUserRejectedServerCompliancecause=You have chosen not to use this server",
+
 	
 "field:messageServerNewscause=The current server has sent this message:",
 

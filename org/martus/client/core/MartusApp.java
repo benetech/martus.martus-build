@@ -654,24 +654,33 @@ public class MartusApp
 		return isSSLServerAvailable(getCurrentNetworkInterfaceGateway());
 	}
 
-	public boolean isSSLServerAvailable(String serverName)
+	public ClientSideNetworkGateway buildGateway(String serverName, String serverPublicKey)
+	{
+		NetworkInterface server = buildNetworkInterface(serverName, serverPublicKey);
+		if(server == null)
+			return null;
+		
+		return new ClientSideNetworkGateway(server);
+	}
+
+	NetworkInterface buildNetworkInterface(String serverName, String serverPublicKey)
 	{
 		if(serverName.length() == 0)
-			return false;
-
+			return null;
+	
 		int port = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
-		NetworkInterface server;
 		try
 		{
-			server = new ClientSideNetworkHandlerUsingXmlRpc(serverName, port);
+			ClientSideNetworkHandlerUsingXmlRpc handler = new ClientSideNetworkHandlerUsingXmlRpc(serverName, port);
+			handler.getSimpleX509TrustManager().setExpectedPublicKey(serverPublicKey);
+			return handler;
 		}
 		catch (SSLSocketSetupException e)
 		{
 			//TODO propagate to UI and needs a test.
 			e.printStackTrace();
-			return false;
+			return null;
 		}
-		return isSSLServerAvailable(new ClientSideNetworkGateway(server));
 	}
 
 	public boolean isSignedIn()
@@ -856,13 +865,13 @@ public class MartusApp
 		return new Vector();
 	}
 
-	public String getServerCompliance() throws ServerCallFailedException
+	public String getServerCompliance(ClientSideNetworkGateway gateway) throws ServerCallFailedException
 	{
-		if(!isSSLServerAvailable())
+		if(!isSSLServerAvailable(gateway))
 			throw new ServerCallFailedException();
 		try
 		{
-			NetworkResponse response = getCurrentNetworkInterfaceGateway().getServerCompliance(security);
+			NetworkResponse response = gateway.getServerCompliance(security);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 				return (String)response.getResultVector().get(0);
 		}
@@ -1377,7 +1386,7 @@ public class MartusApp
 		return true;
 	}
 
-	private boolean isSSLServerAvailable(ClientSideNetworkGateway server)
+	public boolean isSSLServerAvailable(ClientSideNetworkGateway server)
 	{
 		NetworkResponse response = server.getServerInfo();
 		if(!response.getResultCode().equals(NetworkInterfaceConstants.OK))
@@ -1420,19 +1429,8 @@ public class MartusApp
 	private NetworkInterface createXmlRpcNetworkInterfaceHandler()
 	{
 		String ourServer = getServerName();
-		int ourPort = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
-		try
-		{
-			ClientSideNetworkHandlerUsingXmlRpc handler = new ClientSideNetworkHandlerUsingXmlRpc(ourServer, ourPort);
-			handler.getSimpleX509TrustManager().setExpectedPublicKey(getConfigInfo().getServerPublicKey());
-			return handler;
-		}
-		catch (SSLSocketSetupException e)
-		{
-			//TODO propagate to UI and needs a test.
-			e.printStackTrace();
-			return null;
-		}
+		String ourServerPublicKey = getConfigInfo().getServerPublicKey();
+		return buildNetworkInterface(ourServer,ourServerPublicKey);
 	}
 
 	private void invalidateCurrentHandlerAndGateway()

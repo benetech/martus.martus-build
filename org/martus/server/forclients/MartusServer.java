@@ -1288,6 +1288,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	public Vector getServerCompliance()
 	{
+		if(serverMaxLogging)
+			logging("getServerCompliance");
 		Vector result = new Vector();
 		result.add(OK);
 		Vector compliance = new Vector();

@@ -70,10 +70,12 @@ import javax.swing.filechooser.FileFilter;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinHtmlGenerator;
 import org.martus.client.core.BulletinStore;
+import org.martus.client.core.ClientSideNetworkGateway;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.CurrentUiState;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
+import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.MartusApp.MartusAppInitializationException;
 import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
@@ -781,8 +783,16 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		if(serverInfoDlg.getResult())
 		{
 			String serverIPAddress = serverInfoDlg.getServerIPAddress();
+			String serverPublicKey = serverInfoDlg.getServerPublicKey();
+			ClientSideNetworkGateway gateway = app.buildGateway(serverIPAddress, serverPublicKey);
+
+			if(!confirmServerCompliance(gateway))
+			{
+				inConfigServer = false;
+				return;
+			}
 			boolean magicAccepted = false;
-			app.setServerInfo(serverIPAddress, serverInfoDlg.getServerPublicKey());
+			app.setServerInfo(serverIPAddress, serverPublicKey);
 			if(app.requestServerUploadRights(""))
 				magicAccepted = true;
 			else
@@ -818,6 +828,23 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				requestToUpdateContactInfoOnServerAndSaveInfo();
 			inConfigServer = false;
 		}
+	}
+
+	boolean confirmServerCompliance(ClientSideNetworkGateway gateway)
+	{
+		try
+		{
+			String newServerCompliance = app.getServerCompliance(gateway);
+			UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "ServerCompliance", "ServerComplianceAccept", "ServerComplianceReject", newServerCompliance);
+			if(dlg.getResult())
+				return true;
+		}
+		catch (ServerCallFailedException e)
+		{
+			 return confirmDlg(this,"ServerComplianceFailed");
+		}
+		notifyDlg(this, "UserRejectedServerCompliance");
+		return false;
 	}
 
 	private void requestToUpdateContactInfoOnServerAndSaveInfo()

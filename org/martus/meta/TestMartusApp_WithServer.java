@@ -154,7 +154,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		try
 		{
-			appWithoutServer.getServerCompliance();
+			appWithoutServer.getServerCompliance(appWithoutServer.getCurrentNetworkInterfaceGateway());
 			fail("noServer should have thrown");
 		}
 		catch (ServerCallFailedException expectedException)
@@ -168,7 +168,8 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		compliance.add(sampleCompliance);
 		result.add(compliance);
 		mockServer.complianceResponse = result;
-		String complianceResponse = appWithServer.getServerCompliance();
+
+		String complianceResponse = appWithServer.getServerCompliance(appWithServer.getCurrentNetworkInterfaceGateway());
 		assertEquals(sampleCompliance, complianceResponse);
 
 		Vector failedCompliance = new Vector();
@@ -176,7 +177,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockServer.complianceResponse = failedCompliance;
 		try
 		{
-			appWithServer.getServerCompliance();
+			appWithServer.getServerCompliance(appWithServer.getCurrentNetworkInterfaceGateway());
 			fail("Should not have passed getServerCompliance request");
 		}
 		catch (ServerCallFailedException expectedException)
@@ -189,7 +190,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockServer.complianceResponse = invalidResult;
 		try
 		{
-			appWithServer.getServerCompliance();
+			appWithServer.getServerCompliance(appWithServer.getCurrentNetworkInterfaceGateway());
 			fail("Did not throw for invalid second parameter");
 		}
 		catch (ServerCallFailedException expectedException)
@@ -236,8 +237,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertEquals(false, appWithoutServer.isSSLServerAvailable());
 		assertEquals(true, appWithServer.isSSLServerAvailable());
 		MockMartusApp appWithoutServerName = MockMartusApp.create();
-		assertEquals("Empty server name was available?", false, appWithoutServerName.isSSLServerAvailable(""));
 		assertEquals("uninitialized app server available?", false, appWithoutServerName.isSSLServerAvailable());
+
+		ClientSideNetworkGateway gateway = appWithoutServerName.buildGateway("","");
+		assertNull("Empty server name", gateway);
+
 		assertNull("No proxy?", appWithoutServerName.currentNetworkInterfaceHandler);
 		appWithoutServerName.deleteAllFiles();
 	}

@@ -289,7 +289,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 			//TODO throw IOExceptions so caller can decide what to do.
 			//This was added for connection refused: connect (no server connected)
 			//System.out.println("ServerInterfaceXmlRpcHandler:callServer Exception=" + e);
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		catch (Exception e)
 		{
