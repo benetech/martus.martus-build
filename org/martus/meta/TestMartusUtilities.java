@@ -67,10 +67,10 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, key, originalZipFile, security);
 		validateZipFile(accountId, originalZipFile);
 
-		File copiedZipFile = createCopyOfZipFile(originalZipFile, null);
+		File copiedZipFile = createCopyOfZipFile(originalZipFile, null, null);
 		validateZipFile(accountId, copiedZipFile);
 		
-		File zipWithoutHeaderPacket = createCopyOfZipFile(originalZipFile, "B-");
+		File zipWithoutHeaderPacket = createCopyOfZipFile(originalZipFile, "B-", null);
 		try
 		{
 			validateZipFile(accountId, zipWithoutHeaderPacket);
@@ -80,7 +80,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		{
 		}
 
-		File zipWithoutDataPackets = createCopyOfZipFile(originalZipFile, "F-");
+		File zipWithoutDataPackets = createCopyOfZipFile(originalZipFile, "F-", null);
 		try
 		{
 			validateZipFile(accountId, zipWithoutDataPackets);
@@ -90,7 +90,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		{
 		}
 
-		File zipWithoutAttachmentPackets = createCopyOfZipFile(originalZipFile, "A-");
+		File zipWithoutAttachmentPackets = createCopyOfZipFile(originalZipFile, "A-", null);
 		try
 		{
 			validateZipFile(accountId, zipWithoutAttachmentPackets);
@@ -100,7 +100,15 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		{
 		}
 		
-		// add an extra packet and make sure the validate fails
+		File zipWithExtraEntry = createCopyOfZipFile(originalZipFile, null, "unexpected");
+		try
+		{
+			validateZipFile(accountId, zipWithExtraEntry);
+			fail("Should have thrown for extra entry");
+		}
+		catch (IOException ignoreExpectedException)
+		{
+		}
 	}
 
 	private void validateZipFile(String accountId, File copiedZipFile)
@@ -117,7 +125,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		copiedZip.close();
 	}
 
-	private File createCopyOfZipFile(File tempZipFile, String excludeStartsWith)
+	private File createCopyOfZipFile(File tempZipFile, String excludeStartsWith, String entryToAdd)
 		throws IOException, FileNotFoundException, ZipException
 	{
 		File copiedZipFile = createTempFile();
@@ -136,6 +144,11 @@ public class TestMartusUtilities extends TestCaseEnhanced
 			byte[] data = new byte[dataLength];
 			in.read(data);
 			zipOut.write(data);
+		}
+		if(entryToAdd != null)
+		{
+			ZipEntry newEntry = new ZipEntry(entryToAdd);
+			zipOut.putNextEntry(newEntry);
 		}
 		zip.close();
 		zipOut.close();
