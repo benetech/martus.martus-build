@@ -23,13 +23,6 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			return result;
 		}
 
-		if(!isAuthorizedForMirroring(callerAccountId))
-		{
-			Vector result = new Vector();
-			result.add(NOT_AUTHORIZED);
-			return result;
-		}
-
 		Vector result = new Vector();
 		try
 		{
@@ -43,17 +36,24 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		}
 
 	}
-
+	
 	Vector executeCommand(String callerAccountId, Vector parameters)
 	{
 		Vector result = new Vector();
-
 		int cmd = extractCommand(parameters.get(0));
+
+		if(!isAuthorized(cmd, callerAccountId))
+		{
+			result.add(NOT_AUTHORIZED);
+			return result;
+		}
+
 		switch(cmd)
 		{
 			case cmdPing:
 			{
 				result.add(RESULT_OK);
+				result.add(supplier.getPublicInfo());
 				return result;
 			}
 			case cmdListAccountsForMirroring:
@@ -95,6 +95,14 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		}
 		
 		return result;
+	}
+
+	boolean isAuthorized(int cmd, String callerAccountId)
+	{
+		if(cmd == cmdPing)
+			return true;
+			
+		return isAuthorizedForMirroring(callerAccountId);
 	}
 
 	Vector getBulletinChunk(String authorAccountId, String bulletinLocalId, int offset, int maxChunkSize)
