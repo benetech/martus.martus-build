@@ -134,8 +134,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		inactivityDetector = new InactivityDetector();
 
-		doUploadReminderOnStartup();
-
 		uploader = new java.util.Timer(true);
 		uploader.schedule(new Tick(), 0, 5*1000);
 
@@ -1318,15 +1316,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		catch (InterruptedException e)
 		{
 			// We don't care if this gets interrupted
-		}
-	}
-
-	private void doUploadReminderOnStartup()
-	{
-		if(app.shouldShowSealedUploadReminderOnStartup())
-		{
-			notifyDlg(this, "uploadreminder");
-			app.resetLastUploadRemindedTime();
 		}
 	}
 

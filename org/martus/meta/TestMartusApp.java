@@ -1514,44 +1514,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_END();
 		
 	}
-
-	public void testShouldShowSealedUploadReminderOnStartup()
-	{
-		TRACE_BEGIN("testShouldShowSealedUploadReminderOnStartup");
-		File file = appWithServer.getUploadInfoFile();
-		file.delete();
-		BulletinStore store = appWithServer.getStore();
-
-		store.deleteAllData();
-		BulletinFolder outbox = appWithServer.getFolderOutbox();
-		assertEquals("Outbox not empty on startup", 0, outbox.getBulletinCount());
-		assertEquals("No file and outbox empty on startup", false, appWithServer.shouldShowSealedUploadReminderOnStartup());
-
-		Bulletin b = appWithServer.createBulletin();
-		b.save();
-		store.addBulletinToFolder(b.getUniversalId(), outbox);
-		assertEquals("File got created somehow on startup?", false, file.exists());
-		assertEquals("Outbox empty on startup", 1, outbox.getBulletinCount());
-		assertEquals("No file and outbox contains data on startup", true, appWithServer.shouldShowSealedUploadReminderOnStartup());
-
-		final int ONEDAY = 24 * 60 * 60 * 1000;
-		Date nullDate = null;
-		Date nowDate = new Date();
-		Date recentDate = new Date(nowDate.getTime() - 3 * ONEDAY);
-		Date oldDate = new Date(nowDate.getTime() - 7 * ONEDAY);;
-
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "null,null", nullDate, nullDate, true);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "null,recent", nullDate, recentDate, false);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "null,old", nullDate, oldDate, true);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "recent,null", recentDate, nullDate, false);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "recent,recent", recentDate, recentDate, false);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "recent,old", recentDate, oldDate, false);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "oldDate,null", oldDate, nullDate, true);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "oldDate,recent", oldDate, recentDate, false);
-		verifyShouldShowSealedUploadReminderOnStartup(appWithServer, "oldDate,oldDate", oldDate, oldDate, true);
-		TRACE_END();
-	}
-
+	
 	public void testShouldShowSealedUploadReminderOnExit()
 	{
 		TRACE_BEGIN("testShouldShowSealedUploadReminderOnExit");
@@ -1697,14 +1660,6 @@ public class TestMartusApp extends TestCaseEnhanced
 		b.save();
 		app.getFolderDraftOutbox().add(b.getUniversalId());
 		return b;
-	}
-
-	private void verifyShouldShowSealedUploadReminderOnStartup(MartusApp app, String label,
-					Date uploaded, Date reminded, boolean expectedResult)
-	{
-		appWithServer.setLastUploadedTime(uploaded);
-		appWithServer.setLastUploadRemindedTime(reminded);
-		assertEquals(label, expectedResult, appWithServer.shouldShowSealedUploadReminderOnStartup());
 	}
 
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler

@@ -453,23 +453,6 @@ public class MartusApp
 		return false;
 	}
 	
-	public boolean shouldShowSealedUploadReminderOnStartup()
-	{
-		if(isSealedFolderOutboxEmpty())
-			return false;
-
-		long now = System.currentTimeMillis();
-		long thresholdMillis = 5 * 24 * 60 * 60 * 1000;
-		Date uploaded = getLastUploadedTime();
-		if(uploaded != null && now - uploaded.getTime() < thresholdMillis )
-			return false;
-
-		Date reminded = getLastUploadRemindedTime();
-		if(reminded != null && now - reminded.getTime() < thresholdMillis )
-			return false;
-		return true;
-	}
-
 	public boolean shouldShowSealedUploadReminderOnExit()
 	{
 		if(isSealedFolderOutboxEmpty())
