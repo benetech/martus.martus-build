@@ -325,6 +325,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenothing=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenoserver=Retrieve Bulletins");
+		addEnglishTranslation("wintitle:notifyDeleteServerDraftsNone=Delete Drafts From Server");
 		addEnglishTranslation("wintitle:notifypasswordsdontmatch=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyusernamessdontmatch=Invalid Setup Information");
 		addEnglishTranslation("wintitle:notifyUserNameBlank=Invalid Setup Information");
@@ -371,6 +372,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:RetrieveDrafts=Retrieve Draft Bulletins");
 		addEnglishTranslation("wintitle:retrieveHQ=Retrieve Field Desk Sealed Bulletins");
 		addEnglishTranslation("wintitle:retrieveHQDrafts=Retrieve Field Desk Draft Bulletins");
+		addEnglishTranslation("wintitle:DeleteServerDrafts=Delete Drafts From Server");
 		addEnglishTranslation("wintitle:about=About Martus");
 		addEnglishTranslation("wintitle:AccountInfo=Account Information");
 		addEnglishTranslation("wintitle:Help=Help on Martus");
@@ -382,6 +384,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:RetrieveMyDraftBulletinSummaries=Retrieving Bulletin Summaries");
 		addEnglishTranslation("wintitle:RetrieveHQSealedBulletinSummaries=Retrieving Bulletin Summaries");
 		addEnglishTranslation("wintitle:RetrieveHQDraftBulletinSummaries=Retrieving Bulletin Summaries");
+		addEnglishTranslation("wintitle:DeleteServerDraftsBulletinSummaries=Retrieving Bulletin Summaries");
 		addEnglishTranslation("wintitle:ConfigServer=Server Configuration");
 		addEnglishTranslation("wintitle:ServerSelectionResults=Server Configuration Results");
 		
@@ -411,6 +414,7 @@ public class MartusLocalization
 		addEnglishTranslation("button:yes=Yes");
 		addEnglishTranslation("button:no=No");
 		addEnglishTranslation("button:retrieve=Retrieve");
+		addEnglishTranslation("button:DeleteServerDrafts=Delete");
 		addEnglishTranslation("button:checkall=Check All");
 		addEnglishTranslation("button:uncheckall=Uncheck All");
 		addEnglishTranslation("button:addattachment=Add Attachment");
@@ -440,6 +444,7 @@ public class MartusLocalization
 		addEnglishTranslation("menu:changeUserNamePassword=Change User Name or Password");
 		addEnglishTranslation("menu:retrieve=Retrieve Bulletins");
 		addEnglishTranslation("menu:RetrieveDrafts=Retrieve Draft Bulletins");
+		addEnglishTranslation("menu:DeleteServerDrafts=Delete Drafts From Server");
 		addEnglishTranslation("menu:retrieveHQ=Retrieve Field Desk Bulletins");
 		addEnglishTranslation("menu:retrieveHQDrafts=Retrieve Field Desk Draft Bulletins");
 		addEnglishTranslation("menu:exportPublicAccountInfo=Export Public Information");
@@ -500,6 +505,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:privatesection=Private Information");
 		addEnglishTranslation("field:MayBeDamaged=Warning: Portions may be missing or damaged");
 		addEnglishTranslation("field:retrieveflag=Retrieve?");
+		addEnglishTranslation("field:DeleteFlag=Delete?");
 		addEnglishTranslation("field:waitingForKeyPairGeneration=Please wait a minute while your account is being created...");
 		addEnglishTranslation("field:waitingForBulletinsToLoad=Loading Martus.  Please wait...");
 		addEnglishTranslation("field:HelpDefaultDetails=Enter questions, details, or other information your organization wants to have answered in future bulletins created.");
@@ -511,6 +517,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:NormalKeyboardMsg1=Remember: Entering your password using the regular keyboard may reduce security.");
 		addEnglishTranslation("field:NormalKeyboardMsg2=For maximum security switch to the on-screen keyboard.");
 		addEnglishTranslation("field:RetrieveSummariesMessage=All bulletins retrieved will still remain on the server.\nYou can only retrieve bulletins that are not currently on your computer.");
+		addEnglishTranslation("field:DeleteServerDraftsMessage=You can only delete draft bulletins from the server that are not currently on your computer.");
 		addEnglishTranslation("field:ContactInfoRequiredFields=This information identifies your organization.\nYou must enter either an Author or Organization, and both are shown in every bulletin you create.");
 		addEnglishTranslation("field:ContactInfoDescriptionOfFields=All other fields currently are stored on disk but are not used.");
 		addEnglishTranslation("field:ContactInfoFutureUseOfFields=In the future this information will be available to anyone who can view your public bulletin information.\nThis allows people to contact you for further information.");
@@ -576,6 +583,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
 		addEnglishTranslation("field:notifyretrievenothingcause=No bulletins were selected");
+		addEnglishTranslation("field:notifyDeleteServerDraftsNonecause=No bulletins were selected");
 		addEnglishTranslation("field:notifyretrievenoservercause=The current server is not responding");
 		addEnglishTranslation("field:notifypasswordsdontmatchcause=You must enter the same password twice");
 		addEnglishTranslation("field:notifyusernamessdontmatchcause=You must enter the same username twice");

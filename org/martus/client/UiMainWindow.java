@@ -447,6 +447,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		tools.add(new ActionMenuRetrieveHQ());
 		tools.add(new ActionMenuRetrieveHQDrafts());
 		tools.addSeparator();
+		tools.add(new ActionMenuDeleteServerDrafts());
+		tools.addSeparator();
 		tools.add(new ActionMenuExportPublicInfo());
 		tools.add(new ActionMenuImportPublicInfo());
 		tools.add(new ActionMenuClearPublicInfo());
@@ -989,6 +991,32 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
+	private void doDeleteServerDraftBulletins()
+	{
+		try 
+		{
+			UiProgressRetrieveSummariesDlg dlg = new UiProgressRetrieveSummariesDlg(this, "RetrieveMyDraftBulletinSummaries" );
+			RetrieveTableModel model = new DeleteMyServerDraftsTableModel(app, dlg);
+			model.Initalize();
+			Vector uidList = displayDeleteServerDraftsDlg(model);
+			if(uidList == null)
+				return;
+				
+//			Retriever retriever = createRetriever("DeleteMyServerDraftBulletinProgress");
+//			String result = getMyBulletins(retriever, uidList);
+//			if(!result.equals(NetworkInterfaceConstants.OK))
+//			{
+//				notifyDlg(this, "DeleteServerDraftsFailed");
+//				return;
+//			}
+		} 
+		catch(ServerErrorException e) 
+		{
+			notifyDlg(this, "ServerError");
+			return;
+		}
+	}
+
 	private void doRetrieveHQBulletins()
 	{
 		try 
@@ -1059,7 +1087,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			return null;
 		}
 		
-		UiRetrieveDlg retrieveDlg = new UiRetrieveDlg(this, getApp(), model, dlgTitleTag);
+		UiRetrieveDlg retrieveDlg = new UiRetrieveDlg(this, model, dlgTitleTag);
 		
 		// the following is required (for unknown reasons)
 		// to get the window to redraw after the dialog
@@ -1078,7 +1106,35 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		
 		return uidList;
 	}
-	
+
+	private Vector displayDeleteServerDraftsDlg(RetrieveTableModel model) 
+	{
+		if(!app.isSSLServerAvailable())
+		{
+			notifyDlg(this, "retrievenoserver");
+			return null;
+		}
+		
+		UiServerSummariesDlg dlg = new UiDeleteServerDraftsDlg(this, model);
+		
+		// the following is required (for unknown reasons)
+		// to get the window to redraw after the dialog
+		// is closed. Yuck! kbs.
+		repaint();
+		
+		if(!dlg.getResult())
+			return null;
+		
+		Vector uidList = dlg.getUniversalIdList();
+		if( uidList.size() == 0)
+		{
+			notifyDlg(this, "DeleteServerDraftsNone");
+			return null;
+		}
+		
+		return uidList;
+	}
+
 	private void doExportPublicAccountInfo()
 	{
 		try 
@@ -1722,7 +1778,19 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 			doRetrieveDraftBulletins();
 		}
 	}
-	
+	class ActionMenuDeleteServerDrafts extends AbstractAction
+	{
+		public ActionMenuDeleteServerDrafts()
+		{
+			super(app.getMenuLabel("DeleteServerDrafts"), null);
+		}
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			doDeleteServerDraftBulletins();
+		}
+	}
+
 	class ActionMenuRetrieveHQ extends AbstractAction
 	{
 		public ActionMenuRetrieveHQ()

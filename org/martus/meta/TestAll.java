@@ -36,6 +36,7 @@ public class TestAll extends java.lang.Object
 		suite.addTest(new TestSuite(TestRetrieveMyDraftsTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveHQTableModel.class));
 		suite.addTest(new TestSuite(TestRetrieveHQDraftsTableModel.class));
+		suite.addTest(new TestSuite(TestDeleteDraftsTableModel.class));
 		suite.addTest(new TestSuite(TestSimpleX509TrustManager.class));
 		
 		// shared stuff
