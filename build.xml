@@ -234,7 +234,7 @@
         <echo message="Release Built."/>
     </target>
 
-    <target name="test.release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass, check_keypass,jar,jarsign,zip-client-src,md5">
+    <target name="test.release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,test,zip-client-src,md5">
         <echo message="Release Built."/>
     </target>
 
