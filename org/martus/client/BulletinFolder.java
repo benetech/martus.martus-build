@@ -103,10 +103,10 @@ public class BulletinFolder
 
 	public synchronized void add(Bulletin b) 
 	{
-		add(b.getUniversalId(), "");		
+		add(b.getUniversalId());		
 	}
 	
-	synchronized void add(UniversalId id, String eventDate) 
+	synchronized void add(UniversalId id) 
 	{
 		if(rawIdList.contains(id))
 		{

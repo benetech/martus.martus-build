@@ -725,7 +725,7 @@ public class BulletinStore
 				try 
 				{
 					UniversalId bId = UniversalId.createFromString(buffer);
-					currentFolder.add(bId, "");
+					currentFolder.add(bId);
 				} 
 				catch(NotUniversalIdException e) 
 				{
