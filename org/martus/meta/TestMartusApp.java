@@ -412,15 +412,15 @@ public class TestMartusApp extends TestCaseEnhanced
 		Vector v2 = app.findBulletinInAllVisibleFolders(b2);
 		assertEquals("Wrong # of folders for b1?", 2, v1.size());
 		assertEquals("Wrong # of folders for b2?", 3, v2.size());
-		assertTrue("Doesn't contain f1 for bulletin b1?", v1.contains(f1.getName()));
-		assertEquals("Does contain f2 for bulletin b1?", false, v1.contains(f2.getName()));
-		assertTrue("Doesn't contain f3 for bulletin b1?", v1.contains(f3.getName()));
-		assertEquals("Does contain Discarded for bulletin b1?",false, v1.contains(discarded.getName()));
+		assertTrue("Doesn't contain f1 for bulletin b1?", v1.contains(f1));
+		assertEquals("Does contain f2 for bulletin b1?", false, v1.contains(f2));
+		assertTrue("Doesn't contain f3 for bulletin b1?", v1.contains(f3));
+		assertEquals("Does contain Discarded for bulletin b1?",false, v1.contains(discarded));
 
-		assertEquals("Does contain f1 for bulletin b2?", false, v2.contains(f1.getName()));
-		assertTrue("Doesn't contain f2 for bulletin b2?", v2.contains(f2.getName()));
-		assertTrue("Doesn't contain f3 for bulletin b2?", v2.contains(f3.getName()));
-		assertTrue("Doesn't contain Discarded for bulletin b2?", v2.contains(discarded.getName()));
+		assertEquals("Does contain f1 for bulletin b2?", false, v2.contains(f1));
+		assertTrue("Doesn't contain f2 for bulletin b2?", v2.contains(f2));
+		assertTrue("Doesn't contain f3 for bulletin b2?", v2.contains(f3));
+		assertTrue("Doesn't contain Discarded for bulletin b2?", v2.contains(discarded));
 		TRACE_END();
 	}
 

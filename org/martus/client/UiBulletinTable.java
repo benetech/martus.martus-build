@@ -59,8 +59,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		getTableHeader().setReorderingAllowed(false);
 		getTableHeader().addMouseListener(new TableHeaderMouseAdapter());
 
-		int mode = ListSelectionModel.SINGLE_SELECTION;
-//		int mode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
+		int mode = ListSelectionModel.MULTIPLE_INTERVAL_SELECTION;
 		getSelectionModel().setSelectionMode(mode);
 		getSelectionModel().addListSelectionListener(this);
 
@@ -434,7 +433,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 		else
 		{
-			okToDiscard = confirmDiscardBulletins();
+			okToDiscard = confirmDiscardMultipleBulletins();
 		}
 
 		if(okToDiscard)
@@ -471,17 +470,13 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			return true;
 
 		boolean okToDiscard = true;
-		BulletinFolder draftOutBox = mainWindow.getApp().getFolderDraftOutbox();
+		MartusApp app = mainWindow.getApp();
+		BulletinFolder draftOutBox = app.getFolderDraftOutbox();
 
-		Vector visibleFoldersContainingThisBulletin = mainWindow.getApp().findBulletinInAllVisibleFolders(b);
-		visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom.getName());
-		Vector localizedFoldersContainingThisBulletin = new Vector();
-		for(int i = 0 ; i < visibleFoldersContainingThisBulletin.size() ; ++i)
-		{
-			localizedFoldersContainingThisBulletin.add(mainWindow.getApp().getFolderLabel((String)(visibleFoldersContainingThisBulletin.get(i))));
-		}
+		Vector visibleFoldersContainingThisBulletin = app.findBulletinInAllVisibleFolders(b);
+		visibleFoldersContainingThisBulletin.remove(folderToDiscardFrom);
 
-		if(localizedFoldersContainingThisBulletin.size() == 0)
+		if(visibleFoldersContainingThisBulletin.size() == 0)
 		{
 			String dialogTag = "";
 			if (b.isSealed())
@@ -495,18 +490,18 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 		else
 		{
-			String title = mainWindow.getApp().getWindowTitle("confirmDeleteDiscardedBulletinWithCopies");
-			String cause = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopiescause");
-			String folders = localizedFoldersContainingThisBulletin.toString();
-			String effect = mainWindow.getApp().getFieldLabel("confirmDeleteDiscardedBulletinWithCopieseffect");
-			String question = mainWindow.getApp().getFieldLabel("confirmquestion");
+			String title = app.getWindowTitle("confirmDeleteDiscardedBulletinWithCopies");
+			String cause = app.getFieldLabel("confirmDeleteDiscardedBulletinWithCopiescause");
+			String folders = buildFolderNameList(visibleFoldersContainingThisBulletin);
+			String effect = app.getFieldLabel("confirmDeleteDiscardedBulletinWithCopieseffect");
+			String question = app.getFieldLabel("confirmquestion");
 			String[] contents = {cause, "", effect, folders, "", question};
 			okToDiscard = mainWindow.confirmDlg(mainWindow, title, contents);
 		}
 		return okToDiscard;
 	}
 
-	private boolean confirmDiscardBulletins()
+	private boolean confirmDiscardMultipleBulletins()
 	{
 		BulletinFolder folderToDiscardFrom = getFolder();
 		if(!isDiscardedFolder(folderToDiscardFrom))
@@ -515,6 +510,20 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		return false;
 	}
 	
+	private String buildFolderNameList(Vector visibleFoldersContainingThisBulletin)
+	{
+		MartusApp app = mainWindow.getApp();
+		String names = "";
+		for(int i = 0 ; i < visibleFoldersContainingThisBulletin.size() ; ++i)
+		{
+			BulletinFolder thisFolder = (BulletinFolder)visibleFoldersContainingThisBulletin.get(i);
+			String thisFolderInternalName = thisFolder.getName();
+			String thisFolderLocalizedName = app.getFolderLabel(thisFolderInternalName);
+			names += thisFolderLocalizedName + "\n";
+		}
+		return names;
+	}
+
 	private boolean isDiscardedFolder(BulletinFolder f)
 	{
 		return f.equals(f.getStore().getFolderDiscarded());

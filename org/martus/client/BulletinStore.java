@@ -491,7 +491,7 @@ public class BulletinStore
 		{
 			BulletinFolder folder = findFolder((String)allFolders.get(i));
 			if(folder != null && folder.contains(b))
-				foldersContainingBulletin.add(folder.getName());
+				foldersContainingBulletin.add(folder);
 		}
 		return foldersContainingBulletin;
 	}
