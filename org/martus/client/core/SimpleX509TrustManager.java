@@ -46,6 +46,7 @@ public class SimpleX509TrustManager implements X509TrustManager
 	public void checkClientTrusted(X509Certificate[] chain, String authType)
 		throws CertificateException
 	{
+		throw new CertificateException("checkClientTrusted: Client certificates are NEVER valid!");
 	}
 
 	public void checkServerTrusted(X509Certificate[] chain, String authType)
