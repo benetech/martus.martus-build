@@ -23,26 +23,9 @@ public class XmlWriterFilter
 
 	public void writeEncoded(String text) throws IOException
 	{
-		StringBuffer buf = new StringBuffer(text);
-		for(int i = 0; i < buf.length(); ++i)
-		{
-			char c = buf.charAt(i);
-			if(c == '&')
-			{
-				buf.replace(i, i+1, "&amp;");
-			}
-			else if(c == '<')
-			{
-				buf.replace(i, i+1, "&lt;");
-			}
-			else if(c == '>')
-			{
-				buf.replace(i, i+1, "&gt;");
-			}
-		}
-		writeDirect(new String(buf));
+		writeDirect(MartusUtilities.getXmlEncoded(text));
 	}
-	
+
 	public void writeDirect(String s) throws IOException
 	{
 		if(sigGen != null)
