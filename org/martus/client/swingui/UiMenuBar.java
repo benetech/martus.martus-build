@@ -105,7 +105,9 @@ public class UiMenuBar extends JMenuBar
 		options.add(UiActions.newActionMenuDefaultDetailsFieldContent(mainWindow));
 		options.add(UiActions.newActionMenuChangeUserNamePassword(mainWindow));
 
-
+		JMenu tools = new JMenu(app.getMenuLabel("tools"));
+		tools.add(new ActionMenuQuickErase(mainWindow));
+		
 		JMenu help = new JMenu(app.getMenuLabel("help"));
 		help.add(UiActions.newActionMenuHelp(mainWindow));
 		help.add(UiActions.newActionMenuAbout(mainWindow));
@@ -117,6 +119,7 @@ public class UiMenuBar extends JMenuBar
 		add(folders);
 		add(server);
 		add(options);
+		add(tools);
 		add(help);
 	}
 

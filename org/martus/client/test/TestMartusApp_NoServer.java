@@ -86,6 +86,25 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		assertNotNull("BulletinStore", store);
 		TRACE_END();
 	}
+	
+	public void testDeleteAllBulletins()
+	{
+		Bulletin b1 = appWithAccount.createBulletin();
+		Bulletin b2 = appWithAccount.createBulletin();
+		appWithAccount.getStore().saveBulletin(b1);
+		appWithAccount.getStore().saveBulletin(b2);
+
+		BulletinFolder f1 = appWithAccount.createUniqueFolder();
+		BulletinFolder f2 = appWithAccount.getFolderDraftOutbox();
+		f1.add(b1);
+		f2.add(b2);
+		assertEquals(2, appWithAccount.getStore().getBulletinCount());
+		appWithAccount.deleteAllBulletinsAndUserFolders();
+		assertEquals(0, appWithAccount.getStore().getBulletinCount());
+		assertNotNull("System Folder deleted?", appWithAccount.getFolderDraftOutbox());
+		assertNull("User Folder Not deleted?", appWithAccount.getStore().findFolder(f1.getName()));
+	}
+	
 
 	public void testDbInitializerExceptionForMissingAccountMap() throws Exception
 	{

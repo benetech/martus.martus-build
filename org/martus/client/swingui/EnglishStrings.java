@@ -61,7 +61,8 @@ public class EnglishStrings
 "wintitle:confirmExportPrivateData=Confirm Export Private Data",
 "wintitle:confirmResetDefaultDetails=Reset Contents",
 "wintitle:confirmNotYourBulletinViewAttachmentAnyways=View Attachment",
-		
+"wintitle:confirmDoQuickErase=Quick Erase",
+	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
 "wintitle:notifyPasteErrorNotAllowed=Cannot Paste Bulletin(s)",
@@ -120,7 +121,8 @@ public class EnglishStrings
 "wintitle:notifyErrorWritingFile=Error Writing File",
 "wintitle:notifyErrorReadingFile=Error Reading File",
 "wintitle:notifyExportZeroBulletins=No Bulletins Selected",
-		
+"wintitle:notifyQuickEraseWorked=Quick Erase",
+"wintitle:notifyQuickEraseFailed=Quick Erase Error",
 		
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -234,6 +236,8 @@ public class EnglishStrings
 "menu:contactinfo=Contact Information",
 "menu:DefaultDetailsFieldContent=Default Details Field Content",
 "menu:changeUserNamePassword=Change User Name or Password",
+"menu:tools=Tools",
+"menu:QuickErase=Quick Erase",
 "menu:help=Help",
 "menu:helpMessage=Help",
 "menu:about=About Martus",
@@ -416,6 +420,8 @@ public class EnglishStrings
 "field:confirmResetDefaultDetailseffect=After you review the contents, you can accept them, modify them, or press cancel to keep the existing default details.",
 "field:confirmNotYourBulletinViewAttachmentAnywayscause=Warning the bulletin you are currently viewing is not yours.  Attachments can contain viruses, or malicious programs harmful to your computer.",
 "field:confirmNotYourBulletinViewAttachmentAnywayseffect=Clicking on Yes will display the attachment, clicking on No will not try to display the attachment.",
+"field:confirmDoQuickErasecause=This will delete all bulletins and folders on this computer.",
+"field:confirmDoQuickEraseeffect=Bulletins that have not been backed up will be permanently lost.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
@@ -475,7 +481,9 @@ public class EnglishStrings
 "field:notifyErrorWritingFilecause=An error prevented the file from being written. Check to make sure the disk is not full or write protected.",
 "field:notifyErrorReadingFilecause=An error prevented the file from being read.",
 "field:notifyExportZeroBulletinscause=To export bulletins, select them first, and then perform the export operation.",
-		
+"field:notifyQuickEraseWorkedcause=All bulletins and folders were successfully deleted.",
+"field:notifyQuickEraseFailedcause=Errors prevented some bulletins or folders from being deleted.",
+	
 "field:messageServerNewscause=The current server has sent this message:",
 
 "field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:",

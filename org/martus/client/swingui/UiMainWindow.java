@@ -825,7 +825,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private boolean reSignIn()
+	boolean reSignIn()
 	{
 		boolean signedIn = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
