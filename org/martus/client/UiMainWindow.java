@@ -2,6 +2,7 @@ package org.martus.client;
 
 import java.awt.AWTEvent;
 import java.awt.BorderLayout;
+import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.GridLayout;
@@ -175,7 +176,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public void folderSelectionHasChanged(BulletinFolder f)
 	{
+		Cursor originalCursor = getCursor();
+		setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));
 		table.setFolder(f);
+		setCursor(originalCursor);
 	}
 
 	public void bulletinSelectionHasChanged(Bulletin b)
