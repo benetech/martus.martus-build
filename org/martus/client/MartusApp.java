@@ -744,6 +744,7 @@ public class MartusApp
 		{
 			e.printStackTrace();
 			System.out.println("MartusApp.uploadBulletin: " + e);
+			throw new InvalidPacketException(e.toString());
 		}
 		
 		if(tempFile != null)
@@ -752,7 +753,8 @@ public class MartusApp
 		return result;
 	}
 	
-	public String backgroundUpload(UiProgressMeter progressMeter)
+	public String backgroundUpload(UiProgressMeter progressMeter) throws 
+		DamagedBulletinException
 	{
 		if(getFolderOutbox().getBulletinCount() > 0)
 			return backgroundUploadOneSealedBulletin(progressMeter);
@@ -797,7 +799,8 @@ public class MartusApp
 		}
 	}		
 
-	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) 
+	String backgroundUploadOneSealedBulletin(UiProgressMeter progressMeter) throws 
+		DamagedBulletinException
 	{
 		if(!isSSLServerAvailable())
 		{
@@ -808,6 +811,7 @@ public class MartusApp
 		
 		BulletinFolder outbox = getFolderOutbox();
 		Bulletin b = outbox.getBulletinSorted(0);
+		String excpetionThrown = null;
 		try
 		{
 			String result = uploadBulletin(b, progressMeter);
@@ -843,6 +847,7 @@ public class MartusApp
 		}
 		catch (InvalidPacketException e)
 		{
+			excpetionThrown = e.toString();
 			System.out.println("MartusApp.backgroundUploadOneSealedBulletin: ");
 			System.out.println("  InvalidPacket. Moving from outbox to damaged");
 			BulletinFolder damaged = createOrFindFolder(store.getNameOfFolderDamaged());
@@ -852,10 +857,13 @@ public class MartusApp
 		
 		if(progressMeter != null)
 			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+		if(excpetionThrown != null)
+			throw new DamagedBulletinException(excpetionThrown);
 		return null;
 	}
 
-	String backgroundUploadOneDraftBulletin(UiProgressMeter progressMeter) 
+	String backgroundUploadOneDraftBulletin(UiProgressMeter progressMeter) throws
+		DamagedBulletinException
 	{
 		if(!isSSLServerAvailable())
 		{
@@ -866,6 +874,7 @@ public class MartusApp
 		
 		BulletinFolder draftOutbox = getFolderDraftOutbox();
 		Bulletin b = draftOutbox.getBulletinSorted(0);
+		String excpetionThrown = null;
 		try
 		{
 			String result = uploadBulletin(b, progressMeter);
@@ -882,17 +891,31 @@ public class MartusApp
 		}
 		catch (InvalidPacketException e)
 		{
+			excpetionThrown = e.toString();
 			System.out.println("MartusApp.backgroundUploadOneDraftBulletin: ");
 			System.out.println("  InvalidPacket. Removing from draftoutbox");
-			draftOutbox.remove(b.getUniversalId());
+			BulletinFolder damaged = createOrFindFolder(store.getNameOfFolderDamaged());
+			store.moveBulletin(b, draftOutbox, damaged);
 			store.saveFolders();
 		}
 
 		if(progressMeter != null)
 			progressMeter.setStatusMessageAndHideMeter(getFieldLabel("UploadFailedProgressMessage"));
+		if(excpetionThrown != null)
+			throw new DamagedBulletinException(excpetionThrown);
 		return null;
 	}
 
+	
+
+	public static class DamagedBulletinException extends Exception
+	{
+		public DamagedBulletinException(String message)
+		{
+			super(message);
+		}
+	}
+	
 	public static class ServerErrorException extends Exception 
 	{
 		public ServerErrorException(String message)

@@ -2031,7 +2031,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			{
 				if(!inConfigServer)
 				{
-					uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
+					try 
+					{
+						uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
+					} 
+					catch (MartusApp.DamagedBulletinException e) 
+					{
+						ThreadedNotify damagedBulletin = new ThreadedNotify("DamagedBulletinMovedToDiscarded");
+						SwingUtilities.invokeAndWait(damagedBulletin);
+						folderTreeContentsHaveChanged();
+						folderContentsHaveChanged(getStore().getFolderOutbox());
+						folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+						folderContentsHaveChanged(app.createOrFindFolder(getStore().getNameOfFolderDamaged()));
+					}
 					if(uploadResult != null)
 					{
 						System.out.println("UiMainWindow.Tick.run: " + uploadResult);
@@ -2046,6 +2058,20 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			{
 				e.printStackTrace();
 			}
+		}
+
+		class ThreadedNotify implements Runnable
+		{
+			public ThreadedNotify(String tag)
+			{
+				notifyTag = tag;	
+			}
+			
+			public void run()
+			{
+				notifyDlg(UiMainWindow.this, notifyTag);
+			}
+			String notifyTag;	
 		}
 	}
 
@@ -2093,7 +2119,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 					UiMainWindow.this.setVisible(true);
 				currentActiveFrame.setState(NORMAL);
 			}
-			
 		}
 	}
 
