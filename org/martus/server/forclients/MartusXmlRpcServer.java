@@ -19,12 +19,12 @@ public class MartusXmlRpcServer
 		}
 	}
 	
-	public static void createSSLXmlRpcServer(Object server, int port)
+	public static void createSSLXmlRpcServer(Object server, String destObjectName, int port)
 	{
 		try
 		{
 			MartusSecureWebServer secureWebServer = new MartusSecureWebServer(port);
-			secureWebServer.addHandler("MartusServer", server);
+			secureWebServer.addHandler(destObjectName, server);
 		}
 		catch (Exception e)
 		{

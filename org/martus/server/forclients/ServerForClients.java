@@ -122,7 +122,7 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 	{
 		ServerSideNetworkHandler serverHandler = new ServerSideNetworkHandler(this);
 		MartusSecureWebServer.security = getSecurity();
-		MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, port);
+		MartusXmlRpcServer.createSSLXmlRpcServer(serverHandler, "MartusServer", port);
 	}
 	
 	
