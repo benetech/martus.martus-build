@@ -15,6 +15,8 @@ import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.Timer;
@@ -1811,8 +1813,32 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		{
 			Timestamp stamp = new Timestamp(System.currentTimeMillis());
 			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z:");
-			System.out.println(formatDate.format(stamp) + " " + message);
+			String logEntry;
+			if(serverMaxLogging)
+			{
+				int threadId = Thread.currentThread().hashCode();
+				logEntry = getServerHostname() + " " + threadId + " " + message;
+			}
+			else
+			{
+				logEntry = message;
+			}
+			System.out.println(formatDate.format(stamp) + " " + logEntry);
 		}
+	}
+	
+	String getServerHostname()
+	{
+		String hostname;
+		try
+		{
+			hostname = InetAddress.getLocalHost().toString();
+		}
+		catch (UnknownHostException e)
+		{
+			hostname = "unknown-host";
+		}
+		return hostname;
 	}
 
 	BulletinHeaderPacket loadBulletinHeaderPacket(Database db, DatabaseKey key)
