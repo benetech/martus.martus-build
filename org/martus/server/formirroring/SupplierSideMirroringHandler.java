@@ -101,7 +101,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			{
 				String authorAccountId = (String)parameters.get(1);
 				String bulletinLocalId = (String)parameters.get(2);
-				supplier.log("Mirror: getBulletinUploadRecord" + bulletinLocalId);
+				supplier.log("Mirror: getBulletinUploadRecord: " + bulletinLocalId);
 				String bur = supplier.getBulletinUploadRecord(authorAccountId, bulletinLocalId);
 				if(bur == null)
 				{
