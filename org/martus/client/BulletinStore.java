@@ -228,6 +228,7 @@ public class BulletinStore
 		Bulletin foundBulletin = findBulletinByUniversalId(uid);
 		foundBulletin.removeBulletinFromDatabase(database, getSignatureVerifier());
 		bulletinCache.remove(uid);
+		cacheOfSortableFields.removeFieldData(uid);
 	}
 	
 	public Bulletin findBulletinByUniversalId(UniversalId uid)
@@ -248,7 +249,7 @@ public class BulletinStore
 		try
 		{
 			Bulletin b = Bulletin.loadFromDatabase(this, key);
-			addToCache(b);
+			addToCaches(b);
 			return b;
 		}
 		catch(NullPointerException e)
@@ -266,6 +267,9 @@ public class BulletinStore
 
 	public String getFieldData(UniversalId uid, String fieldTag)
 	{
+		String data = cacheOfSortableFields.getFieldData(uid, fieldTag);
+		if(data != null)
+			return data;
 		Bulletin b = findBulletinByUniversalId(uid);
 		return b.get(fieldTag);
 	}
@@ -277,6 +281,10 @@ public class BulletinStore
 		{
 			b.setStore(this);
 			b.saveToDatabase(database);
+			//We don't call addToCaches here because we are not sure
+			//that this bulletin object is still usable -- maybe 
+			//attachment proxies still point to disk files?
+			cacheOfSortableFields.setFieldData(b); 
 		}
 		catch(Exception e)
 		{
@@ -615,6 +623,7 @@ public class BulletinStore
 		database = db;
 		account = "";
 		bulletinCache = new TreeMap();
+		cacheOfSortableFields = new CacheOfSortableFields();
 		folders = new Vector();
 
 		createSystemFolders();
@@ -871,12 +880,13 @@ public class BulletinStore
 		return true;	
 	}
 
-	synchronized void addToCache(Bulletin b) 
+	synchronized void addToCaches(Bulletin b) 
 	{
 		if(bulletinCache.size() >= maxCachedBulletinCount)
 			bulletinCache.clear();
 			
 		bulletinCache.put(b.getUniversalId(), b);
+		cacheOfSortableFields.setFieldData(b);
 	}
 
 	public static int maxCachedBulletinCount = 100;
@@ -905,5 +915,6 @@ public class BulletinStore
 	private BulletinFolder folderDiscarded;
 	private BulletinFolder folderDraftOutbox;
 	Map bulletinCache;
+	CacheOfSortableFields cacheOfSortableFields;
 	private boolean encryptPublicDataFlag;
 }
