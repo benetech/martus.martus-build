@@ -39,7 +39,7 @@ public class TestFolderList extends TestCase
 		BulletinFolder folder = store.createFolder("test");
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
-		assertEquals(store.getFolder(0).getName(), list.getName(0));
+		assertNotNull("Not found?", store.findFolder(list.getName(0)));
 
 		node = list.getNode(baseCount);
 		assertEquals("test", node.toString());
@@ -73,7 +73,7 @@ public class TestFolderList extends TestCase
 		BulletinFolder folder = store.createFolder(app.getNameOfFolderRetrieved());
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
-		assertEquals(store.getFolder(0).getName(), list.getName(0));
+		assertNotNull("not Found?", store.findFolder(list.getName(0)));
 
 		FolderTreeNode node = list.getNode(baseCount);
 		assertEquals(app.getNameOfFolderRetrieved(), node.getInternalName());
@@ -101,14 +101,7 @@ public class TestFolderList extends TestCase
 
 	private int getVisibleFolderCount(BulletinStore store)
 	{
-		int folders = 0;	
-		for(int i = 0; i < store.getFolderCount(); ++i)
-		{
-			BulletinFolder f = store.getFolder(i);
-			if(f.isVisible())
-				++folders;
-		}
-		return folders;
+		return store.getVisibleFolderNames().size();
 	}
 
 	MockMartusApp app;

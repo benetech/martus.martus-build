@@ -345,23 +345,6 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	}
 
-	public void testGetFolder()
-	{
-		TRACE("testGetFolder");
-
-		int count = store.getFolderCount();
-
-		BulletinFolder f1 = store.createFolder("testing");
-		assertEquals(count+1, store.getFolderCount());
-
-		BulletinFolder f2 = store.getFolder(count);
-		assertEquals(f1, f2);
-
-		assertEquals(null, store.getFolder(-1));
-		assertEquals(null, store.getFolder(store.getFolderCount()));
-
-	}
-
 	public void testFindFolder()
 	{
 		TRACE("testFindFolder");
@@ -502,8 +485,12 @@ public class TestBulletinStore extends TestCaseEnhanced
 		String expected;
 
 		expected = MartusXml.getFolderListTagStart();
-		for(i = 0; i < store.getFolderCount(); ++i)
-			expected += store.folderToXml(store.getFolder(i));
+		Vector originalFolderNames = store.getAllFolderNames();
+		for(i = 0; i < originalFolderNames.size(); ++i)
+		{
+			BulletinFolder folder = store.findFolder((String)originalFolderNames.get(i));
+			expected += store.folderToXml(folder);
+		}
 		expected += MartusXml.getFolderListTagEnd();
 		assertEquals(expected, store.foldersToXml());
 
@@ -512,8 +499,12 @@ public class TestBulletinStore extends TestCaseEnhanced
 		f1.add(b.getUniversalId());
 
 		expected = MartusXml.getFolderListTagStart();
-		for(i = 0; i < store.getFolderCount(); ++i)
-			expected += store.folderToXml(store.getFolder(i));
+		Vector updatedFolderNames = store.getAllFolderNames();
+		for(i = 0; i < updatedFolderNames.size(); ++i)
+		{
+			BulletinFolder folder = store.findFolder((String)updatedFolderNames.get(i));
+			expected += store.folderToXml(folder);
+		}
 		expected += MartusXml.getFolderListTagEnd();
 		assertEquals(expected, store.foldersToXml());
 	}
@@ -527,7 +518,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		store.loadFolders(new StringReader(xml));
 		assertEquals(0, store.getBulletinCount());
 		assertEquals(count+1, store.getFolderCount());
-		assertEquals("fromxml", store.getFolder(count).getName());
+		assertNotNull("not found?", store.findFolder("fromxml"));
 	}
 
 	public void testLoadXmlFolders()

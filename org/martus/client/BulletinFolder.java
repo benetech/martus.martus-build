@@ -159,7 +159,7 @@ public class BulletinFolder
 		return  (UniversalId)rawIdList.get(index);
 	}
 
-	public boolean contains(Bulletin b)
+	public synchronized boolean contains(Bulletin b)
 	{
 		UniversalId id = b.getUniversalId();
 		return rawIdList.contains(id);

@@ -272,7 +272,7 @@ public class BulletinStore
 		}
 	}
 
-	public void discardBulletin(BulletinFolder f, Bulletin b)
+	public synchronized void discardBulletin(BulletinFolder f, Bulletin b)
 	{
 		getFolderDiscarded().add(b.getUniversalId());
 		removeBulletinFromFolder(b, f);
@@ -280,13 +280,13 @@ public class BulletinStore
 			destroyBulletin(b);
 	}
 
-	public BulletinFolder createFolder(String name)
+	public synchronized BulletinFolder createFolder(String name)
 	{
 		BulletinFolder folder = rawCreateFolder(name);
 		return folder;
 	}
 
-	public boolean renameFolder(String oldName, String newName)
+	public synchronized boolean renameFolder(String oldName, String newName)
 	{
 		if(!BulletinFolder.isNameVisible(newName))
 			return false;
@@ -344,7 +344,7 @@ public class BulletinStore
 		return folders.size();
 	}
 
-	public synchronized BulletinFolder getFolder(int index)
+	private synchronized BulletinFolder getFolder(int index)
 	{
 		if(index < 0 || index >= folders.size())
 			return null;
@@ -363,7 +363,19 @@ public class BulletinStore
 		return null;
 	}
 
-	public Vector getVisibleFolderNames()
+	public synchronized Vector getAllFolderNames()
+	{
+		Vector names = new Vector();
+		for(int f = 0; f < getFolderCount(); ++f)
+		{
+			BulletinFolder folder = getFolder(f);
+			String folderName = folder.getName();
+			names.add(folderName);
+		}
+		return names;
+	}
+	
+	public synchronized Vector getVisibleFolderNames()
 	{
 		Vector names = new Vector();
 		for(int f = 0; f < getFolderCount(); ++f)
@@ -448,7 +460,7 @@ public class BulletinStore
 		return folder;
 	}
 
-	public void moveBulletin(Bulletin b, BulletinFolder from, BulletinFolder to)
+	public synchronized void moveBulletin(Bulletin b, BulletinFolder from, BulletinFolder to)
 	{
 		if(from.equals(to))
 			return;
@@ -456,7 +468,7 @@ public class BulletinStore
 		removeBulletinFromFolder(b, from);
 	}
 
-	public void removeBulletinFromFolder(Bulletin b, BulletinFolder from)
+	public synchronized void removeBulletinFromFolder(Bulletin b, BulletinFolder from)
 	{
 		from.remove(b.getUniversalId());
 		saveFolders();
@@ -464,14 +476,15 @@ public class BulletinStore
 
 	public Vector findBulletinInAllVisibleFolders(Bulletin b)
 	{
-		Vector folders = new Vector();
-		for(int i = 0; i < getFolderCount(); ++i)
+		Vector allFolders= getVisibleFolderNames();
+		Vector foldersContainingBulletin = new Vector();
+		for(int i = 0; i < allFolders.size(); ++i)
 		{
-			BulletinFolder folder = getFolder(i);
-			if(folder.isVisible() && folder.contains(b))
-				folders.add(folder.getName());
+			BulletinFolder folder = findFolder((String)allFolders.get(i));
+			if(folder != null && folder.contains(b))
+				foldersContainingBulletin.add(folder.getName());
 		}
-		return folders;
+		return foldersContainingBulletin;
 	}
 	
 	public void deleteAllData()
@@ -537,7 +550,7 @@ public class BulletinStore
 		}
 		catch(Exception e)
 		{
-			// TODO: Improve error handling!!!
+			e.printStackTrace();
 			System.out.println("BulletinStore.saveFolders: " + e);
 		}
 	}
@@ -553,7 +566,7 @@ public class BulletinStore
 		return b;
 	}
 
-	public BulletinFolder createOrFindFolder(String name)
+	public synchronized BulletinFolder createOrFindFolder(String name)
 	{
 		BulletinFolder result = findFolder(name);
 		if(result != null)
@@ -561,7 +574,7 @@ public class BulletinStore
 		return createFolder(name);
 	}
 
-	public void addBulletinToFolder(UniversalId uId, BulletinFolder folder)
+	public synchronized void addBulletinToFolder(UniversalId uId, BulletinFolder folder)
 	{
 		Bulletin b = findBulletinByUniversalId(uId);
 		if(b == null)
@@ -613,12 +626,13 @@ public class BulletinStore
 		return visitor.quarantinedCount;
 	}
 	
-	boolean isOrphan(Bulletin b)
+	public synchronized boolean isOrphan(Bulletin b)
 	{
-		for(int f=0; f < getFolderCount(); ++f)
+		Vector allFolders= getVisibleFolderNames();
+		for(int i = 0; i < allFolders.size(); ++i)
 		{
-			BulletinFolder folder = getFolder(f);
-			if(folder.isVisible() && folder.contains(b))
+			BulletinFolder folder = findFolder((String)allFolders.get(i));
+			if(folder != null && folder.contains(b))
 				return false;
 		}
 
