@@ -29,19 +29,14 @@ public class VerifyAllPackets
 	}
 
 	public static void main(String[] args)
-	{
-		System.out.println("VerifyAllPackets Martus Database Integrity Checker");
-		System.out.println("  Runs a SAFE, non-destructive, read-only test");
-		
+	{		
 		File dir = null;
 		File keyPairFile = null;
-		
-		if(args.length < 2)
-		{
-			System.err.println("\nUsage: VerifyAllPackets --packet-directory=<directory> --keypair=<pathToKeyPairFile>");
-			System.exit(2);
-		}
-		
+		boolean prompt = true;
+
+		System.out.println("VerifyAllPackets Martus Database Integrity Checker");
+		System.out.println("  Runs a SAFE, non-destructive, read-only test");
+				
 		for (int i = 0; i < args.length; i++)
 		{
 			if(args[i].startsWith("--keypair"))
@@ -53,11 +48,16 @@ public class VerifyAllPackets
 			{
 				dir = new File(args[i].substring(args[i].indexOf("=")+1));
 			}
+
+			if( args[i].startsWith("--no-prompt") )
+			{
+				prompt = false;
+			}
 		}
 
 		if(dir == null || keyPairFile == null )
 		{
-			System.err.println("\nUsage: VerifyAllPackets --packet-directory=<directory> --keypair=<pathToKeyPairFile>");
+			System.err.println("\nUsage: VerifyAllPackets --packet-directory=<directory> --keypair=<pathToKeyPairFile> [--no-prompt]");
 			System.exit(2);
 		}
 		
@@ -67,10 +67,20 @@ public class VerifyAllPackets
 			System.exit(3);
 		}
 		
+		if(!keyPairFile.exists() || !keyPairFile.isFile())
+		{
+			System.err.println("Cannot find file: " + keyPairFile);
+			System.exit(3);
+		}
+		
 		MartusCrypto security = null;
 		
-		System.out.print("Enter server passphrase:");
-		System.out.flush();
+		if(prompt)
+		{
+			System.out.print("Enter server passphrase:");
+			System.out.flush();
+		}
+		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		try
 		{

@@ -12,16 +12,41 @@ public class CreateKeyPair
 {
 	public static void main(String[] args)
 	{
-		if( args.length != 1 || !args[0].startsWith("--keypair"))
+		File keyPairFile = null;
+		boolean prompt = true;
+		
+		for (int i = 0; i < args.length; i++)
 		{
-			System.err.println("CreateKeyPair.java --keypair=<pathToKeypair>\nThis program will create a keypair.dat file.");
+			if( args[i].startsWith("--keypair") )
+			{
+				keyPairFile = new File(args[i].substring(args[i].indexOf("=")+1));
+			}
+			
+			if( args[i].startsWith("--no-prompt") )
+			{
+				prompt = false;
+			}
+		}
+		
+		if( keyPairFile == null)
+		{
+			System.err.println("CreateKeyPair.java --keypair=<pathToKeypair> [--no-prompt]\nThis program will create a keypair.dat file.");
 			System.err.flush();
 			System.exit(2);
 		}
-		File keyPairFile = new File(args[0].substring(args[0].indexOf("=")+1));
 		
-		System.out.print("Enter passphrase: ");
-		System.out.flush();
+		if(!keyPairFile.isFile() || !keyPairFile.exists() )
+		{
+			System.err.println("Error: " + keyPairFile.getAbsolutePath() + " is not a file" );
+			System.err.flush();
+			System.exit(3);
+		}
+		
+		if(prompt)
+		{
+			System.out.print("Enter passphrase: ");
+			System.out.flush();
+		}
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		try
@@ -35,7 +60,7 @@ public class CreateKeyPair
 			out.close();
 			
 			String publicCode = MartusUtilities.computePublicCode(security.getPublicKeyString());
-			System.out.print("Public Code: " + MartusUtilities.formatPublicCode(publicCode));
+			System.out.println("Public Code: " + MartusUtilities.formatPublicCode(publicCode));
 			System.exit(0);
 		}
 		catch(Exception e)

@@ -24,12 +24,6 @@ public class FileSignerAndVerifier
 			File keyPairFile = null;
 			File fileForOperation = null;
 			
-			if( args.length != 2 )
-			{
-				System.err.println("\nUsage:\n FileSignerAndVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
-				System.exit(2);
-			}
-			
 			for (int i = 0; i < args.length; i++)
 			{
 				if(args[i].startsWith("--keypair"))
@@ -43,10 +37,24 @@ public class FileSignerAndVerifier
 				}
 			}
 			
-			if(keyPairFile == null || fileForOperation == null || !keyPairFile.isFile())
+			if(keyPairFile == null || fileForOperation == null)
 			{
 				System.err.println("\nUsage:\n FileSignerAndVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
 				System.exit(2);
+			}
+			
+			if(!keyPairFile.isFile() || !keyPairFile.exists())
+			{
+				System.err.println("Error: " + keyPairFile.getAbsolutePath() + " is not a file" );
+				System.err.flush();
+				System.exit(3);
+			}
+			
+			if(!fileForOperation.isFile() || !fileForOperation.exists())
+			{
+				System.err.println("Error: " + fileForOperation.getAbsolutePath() + " is not a file" );
+				System.err.flush();
+				System.exit(3);
 			}
 
 			System.out.print("Enter server passphrase:");
