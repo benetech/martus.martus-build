@@ -510,19 +510,19 @@ public class FileDatabase implements Database
 	synchronized void loadAccountMap() throws FileVerificationException
 	{
 
-		try
-		{
-			verifyAccountMap();
-		}
-		catch(FileNotFoundException e)
-		{
-			;
-		}
-		catch(Exception e)
-		{
-			System.out.println("FileDatabase.verifyAccountMap: " + e);
-			throw new FileVerificationException();
-		}
+//		try
+//		{
+//			verifyAccountMap();
+//		}
+//		catch(FileNotFoundException e)
+//		{
+//			;
+//		}
+//		catch(Exception e)
+//		{
+//			System.out.println("FileDatabase.verifyAccountMap: " + e);
+//			throw new FileVerificationException();
+//		}
 
 		accountMap.clear();
 		try
