@@ -2,7 +2,9 @@ package org.martus.server;
 
 import java.io.File;
 
-import org.martus.common.*;
+import org.martus.common.DatabaseKey;
+import org.martus.common.TestCaseEnhanced;
+import org.martus.common.UniversalId;
 
 public class TestServerFileDatabase extends TestCaseEnhanced 
 {
@@ -31,5 +33,8 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		File draftBucket = draftFile.getParentFile();
 		String draftBucketName = draftBucket.getName();
 		assertStartsWith("Wrong draft bucket name", "dpb", draftBucketName);
+		
+		db.deleteAllData();
+		dir.delete();
 	}
 }
