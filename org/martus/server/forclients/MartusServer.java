@@ -1650,7 +1650,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	private static void displayVersion()
 	{
 		System.out.println("MartusServer");
-		System.out.println("Version " + ServerConstants.version);
+		System.out.println("Version " + ServerConstants.internalVersionForScriptCompatibility);
 		String versionInfo = MartusUtilities.getVersionDate();
 		System.out.println("Build Date " + versionInfo);
 	}
