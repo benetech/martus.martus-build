@@ -1657,7 +1657,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		//MenuListener Interface
 		public void menuSelected(MenuEvent e)
 		{
-System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 			setEnabled(isEnabled());
 		}
 

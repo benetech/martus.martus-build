@@ -90,7 +90,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		int selectedRow = getSelectedRow();
 		if(selectedRow < 0)
 		{
-			System.out.println("There is no selected bulletin");
+			//System.out.println("There is no selected bulletin");
 			return null;
 		}
 
