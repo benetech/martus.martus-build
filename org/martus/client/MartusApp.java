@@ -135,9 +135,9 @@ public class MartusApp
 			System.out.println("MartusApp.setServerInfo: Unable to Save ConfigInfo" + e);
 		}
 		
-		createXmlrpcNetworkInterfaceHandler();
+		invalidateCurrentHandlerAndGateway();
 	}
-	
+
 	public void setHQKey(String hqKey) throws 
 		SaveConfigInfoException
 	{
@@ -568,7 +568,7 @@ public class MartusApp
 		if(currentNetworkInterfaceHandler == null && getServerName().length() == 0)
 			return false;
 			
-		return isSSLServerAvailable(getCurrentSSLServerProxy());
+		return isSSLServerAvailable(getCurrentNetworkInterfaceGateway());
 	}
 
 	public boolean isSSLServerAvailable(String serverName)
@@ -663,7 +663,7 @@ public class MartusApp
 	{
 		try
 		{
-			NetworkResponse response = getCurrentSSLServerProxy().getUploadRights(security, magicWord);
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getUploadRights(security, magicWord);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 				return true;
 		}
@@ -712,7 +712,7 @@ public class MartusApp
 				String bulletinLocalId = b.getLocalId();
 				String encoded = Base64.encode(chunkBytes);
 				
-				NetworkResponse response = getCurrentSSLServerProxy().putBulletinChunk(security, 
+				NetworkResponse response = getCurrentNetworkInterfaceGateway().putBulletinChunk(security, 
 									authorId, bulletinLocalId, offset, chunkSize, totalSize, encoded);
 				result = response.getResultCode();
 				if(!result.equals(NetworkInterfaceConstants.CHUNK_OK) && !result.equals(NetworkInterfaceConstants.OK))
@@ -897,7 +897,7 @@ public class MartusApp
 		String resultCode = "?";
 		try 
 		{
-			NetworkResponse response = getCurrentSSLServerProxy().getSealedBulletinIds(security, getAccountId());
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getSealedBulletinIds(security, getAccountId());
 			resultCode = response.getResultCode();
 			if(resultCode.equals(NetworkInterfaceConstants.OK))
 				return response.getResultVector();
@@ -915,7 +915,7 @@ public class MartusApp
 		String resultCode = "?";
 		try 
 		{
-			NetworkResponse response = getCurrentSSLServerProxy().getDraftBulletinIds(security, getAccountId());
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getDraftBulletinIds(security, getAccountId());
 			resultCode = response.getResultCode();
 			if(resultCode.equals(NetworkInterfaceConstants.OK))
 				return response.getResultVector();
@@ -967,7 +967,7 @@ public class MartusApp
 	{
 		try
 		{
-			NetworkResponse response = getCurrentSSLServerProxy().getFieldOfficeAccountIds(security, getAccountId());
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getFieldOfficeAccountIds(security, getAccountId());
 			String resultCode = response.getResultCode();
 			if(!resultCode.equals(NetworkInterfaceConstants.OK))
 				throw new ServerErrorException(resultCode);
@@ -982,7 +982,7 @@ public class MartusApp
 
 	public FieldDataPacket retrieveFieldDataPacketFromServer(String authorAccountId, String bulletinLocalId, String dataPacketLocalId) throws Exception
 	{
-		NetworkResponse response = getCurrentSSLServerProxy().getPacket(security, authorAccountId, bulletinLocalId, dataPacketLocalId);
+		NetworkResponse response = getCurrentNetworkInterfaceGateway().getPacket(security, authorAccountId, bulletinLocalId, dataPacketLocalId);
 		String resultCode = response.getResultCode();
 		if(!resultCode.equals(NetworkInterfaceConstants.OK))
 			throw new ServerErrorException(resultCode);
@@ -1012,7 +1012,7 @@ public class MartusApp
 		while(!lastResponse.equals(NetworkInterfaceConstants.OK))
 		{
 			
-			NetworkResponse response = getCurrentSSLServerProxy().getBulletinChunk(security, 
+			NetworkResponse response = getCurrentNetworkInterfaceGateway().getBulletinChunk(security, 
 								uid.getAccountId(), uid.getLocalId(), chunkOffset, serverChunkSize);
 								
 			lastResponse = response.getResultCode();
@@ -1072,14 +1072,14 @@ public class MartusApp
 				
 			localIds[i] = uid.getLocalId();
 		}
-		NetworkResponse response = getCurrentSSLServerProxy().deleteServerDraftBulletins(getSecurity(), getAccountId(), localIds);
+		NetworkResponse response = getCurrentNetworkInterfaceGateway().deleteServerDraftBulletins(getSecurity(), getAccountId(), localIds);
 		return response.getResultCode();
 	}
 	
 	public String putContactInfoOnServer(Vector info)  throws 
 			MartusCrypto.MartusSignatureException
 	{
-		NetworkResponse response = getCurrentSSLServerProxy().putContactInfo(getSecurity(), getAccountId(), info);
+		NetworkResponse response = getCurrentNetworkInterfaceGateway().putContactInfo(getSecurity(), getAccountId(), info);
 		return response.getResultCode();
 	}
 
@@ -1416,7 +1416,7 @@ public class MartusApp
 		return false;
 	}
 	
-	public ClientSideNetworkGateway getCurrentSSLServerProxy()
+	public ClientSideNetworkGateway getCurrentNetworkInterfaceGateway()
 	{
 		if(currentNetworkInterfaceGateway == null)
 		{
@@ -1430,13 +1430,13 @@ public class MartusApp
 	{
 		if(currentNetworkInterfaceHandler == null)
 		{
-			createXmlrpcNetworkInterfaceHandler();
+			currentNetworkInterfaceHandler = createXmlRpcNetworkInterfaceHandler();
 		}
 
 		return currentNetworkInterfaceHandler;
 	}
 
-	private void createXmlrpcNetworkInterfaceHandler() 
+	private NetworkInterface createXmlRpcNetworkInterfaceHandler() 
 	{
 		String ourServer = getServerName();
 		int ourPort = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_SSL;
@@ -1444,13 +1444,20 @@ public class MartusApp
 		{
 			ClientSideNetworkHandlerUsingXmlRpc handler = new ClientSideNetworkHandlerUsingXmlRpc(ourServer, ourPort);
 			handler.getSimpleX509TrustManager().setExpectedPublicKey(getConfigInfo().getServerPublicKey());
-			currentNetworkInterfaceHandler = handler;
+			return handler;
 		} 
 		catch (SSLSocketSetupException e) 
 		{
 			//TODO propagate to UI and needs a test.
 			e.printStackTrace();
+			return null;
 		}
+	}
+	
+	private void invalidateCurrentHandlerAndGateway()
+	{
+		currentNetworkInterfaceHandler = null;
+		currentNetworkInterfaceGateway = null;
 	}
 	
 	private String getServerName()

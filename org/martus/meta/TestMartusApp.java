@@ -436,13 +436,18 @@ public class TestMartusApp extends TestCaseEnhanced
 		app.setServerInfo(server1, key1);
 		assertEquals("Didn't set Configinfo name", server1, app.getConfigInfo().getServerName());
 		assertEquals("Didn't set Configinfo key", key1, app.getConfigInfo().getServerPublicKey());
-		NetworkInterface server1Interface = app.currentNetworkInterfaceHandler;
-		assertNotNull("Didn't create proxy?", server1Interface);
+		assertNull("Should have cleared handler", app.currentNetworkInterfaceHandler);
+		assertNull("Should have cleared gateway", app.currentNetworkInterfaceGateway);
+
+		app.getCurrentNetworkInterfaceGateway();
+		assertNotNull("Should have created handler", app.currentNetworkInterfaceHandler);
+		assertNotNull("Should have created gateway", app.currentNetworkInterfaceGateway);
 
 		app.setServerInfo(server2, key2);
 		assertEquals("Didn't update Configinfo name?", server2, app.getConfigInfo().getServerName());
 		assertEquals("Didn't update Configinfo key?", key2, app.getConfigInfo().getServerPublicKey());
-		assertNotEquals("Didn't update proxy", app.currentNetworkInterfaceHandler, server1Interface);
+		assertNull("Should have re-cleared handler", app.currentNetworkInterfaceHandler);
+		assertNull("Should have re-cleared gateway", app.currentNetworkInterfaceGateway);
 		
 		app.loadConfigInfo();
 		assertEquals("Didn't save Configinfo name?", server2, app.getConfigInfo().getServerName());
