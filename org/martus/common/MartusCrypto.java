@@ -106,6 +106,8 @@ public interface MartusCrypto
 		throws	DecryptionException;
 
 	public String createRandomToken();
+	
+	public byte[] getDigestOfPartOfPrivateKey() throws CreateDigestException;
 
 	public KeyManager [] createKeyManagers() throws Exception;
 
@@ -118,5 +120,7 @@ public interface MartusCrypto
 	public static class EncryptionException extends CryptoException {}
 	public static class DecryptionException extends CryptoException {}
 	public static class MartusSignatureException extends CryptoException {}
+	public static class CreateDigestException extends CryptoException {}
+	
 
 }

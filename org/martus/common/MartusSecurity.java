@@ -791,15 +791,57 @@ public class MartusSecurity implements MartusCrypto
 		return cert;
 	}
 
-	public static String createDigestString(String inputText) throws Exception
+	public static String createDigestString(String inputText) throws CreateDigestException 
+	{
+		try
+		{
+			byte[] bytesToDigest = inputText.getBytes("UTF-8");
+			byte[] result = createDigest(bytesToDigest);
+			return Base64.encode(result);
+		}
+		catch (Exception e)
+		{
+			throw new CreateDigestException();
+		}
+	}
+
+	public static byte[] createDigest(byte[] bytesToDigest)
+		throws NoSuchAlgorithmException, IOException
+	{
+		ByteArrayInputStream in = new ByteArrayInputStream(bytesToDigest);
+		byte[] result = createDigest(in);
+		in.close();
+		return result;
+	}
+
+	private static byte[] createDigest(ByteArrayInputStream in)
+		throws NoSuchAlgorithmException, IOException
 	{
 		MessageDigest digester = MessageDigest.getInstance(DIGEST_ALGORITHM);
 		digester.reset();
-		byte[] result = digester.digest(inputText.getBytes("UTF-8"));
-
-		return Base64.encode(result);
+		int got;
+		byte[] bytes = new byte[MartusConstants.digestBufferSize];
+		while( (got=in.read(bytes)) >= 0)
+			digester.update(bytes, 0, got);
+		return digester.digest();
 	}
 
+	public byte[] getDigestOfPartOfPrivateKey() throws CreateDigestException
+	{
+		byte[] privateKey = getPrivateKey().getEncoded();
+		byte[] quarter = new byte[privateKey.length / 4];
+		for(int i=0; i < quarter.length; ++i)
+			quarter[i] = privateKey[i*4];
+		try
+		{
+			return createDigest(quarter);
+		}
+		catch (Exception e)
+		{
+			throw new CreateDigestException();
+		}
+	}
+	
 	static public String getKeyString(Key key)
 	{
 		return Base64.encode(key.getEncoded());
