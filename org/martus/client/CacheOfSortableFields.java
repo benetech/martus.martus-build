@@ -11,6 +11,7 @@ import java.util.HashMap;
 import javax.crypto.CipherInputStream;
 import javax.crypto.CipherOutputStream;
 
+import org.martus.common.BulletinConstants;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.UniversalId;
@@ -36,10 +37,11 @@ public class CacheOfSortableFields
 	public void setFieldData(Bulletin b)
 	{
 		HashMap dataHash = new HashMap();
-		dataHash.put(b.TAGSTATUS, b.getStatus());
-		dataHash.put(b.TAGEVENTDATE, b.get(b.TAGEVENTDATE));
-		dataHash.put(b.TAGSUMMARY, b.get(b.TAGSUMMARY));
-		dataHash.put(b.TAGAUTHOR, b.get(b.TAGAUTHOR));
+		String[] tags = BulletinConstants.sortableFieldTags;
+		for(int i = 0 ; i < tags.length; ++i)
+		{
+			dataHash.put(tags[i], b.get(tags[i]));
+		}
 		bulletinIdsHashMap.put(b.getUniversalId(), dataHash);
 	}
 	

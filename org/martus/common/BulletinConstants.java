@@ -22,4 +22,9 @@ public interface BulletinConstants
 	public static final String TAGSUMMARY = "summary";
 	public static final String TAGPUBLICINFO = "publicinfo";
 	public static final String TAGPRIVATEINFO = "privateinfo";
+
+	public static final String[] sortableFieldTags =
+		{TAGSTATUS, TAGEVENTDATE, TAGTITLE, TAGAUTHOR};
+
+
 }

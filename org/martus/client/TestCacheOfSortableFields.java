@@ -25,34 +25,34 @@ public class TestCacheOfSortableFields extends TestCaseEnhanced
 	{
 		CacheOfSortableFields cache = new CacheOfSortableFields();
 		
-		String summary1 = "1 Summary";
+		String title1 = "1 Title";
 		String author1 = "1 Author";
 		String eventdate1 = "1 11-20-2002";
 		Bulletin b1 = new Bulletin((BulletinStore)null);
 		UniversalId uid1 = b1.getUniversalId();
 		b1.setDraft();
 		b1.set(b1.TAGEVENTDATE, eventdate1);
-		b1.set(b1.TAGSUMMARY, summary1);
+		b1.set(b1.TAGTITLE, title1);
 		b1.set(b1.TAGAUTHOR, author1);
 		cache.setFieldData(b1);
 		assertEquals("wrong status?",b1.get(b1.TAGSTATUS), cache.getFieldData(uid1, b1.TAGSTATUS));
 		assertEquals("event date not correct?",eventdate1, cache.getFieldData(uid1, b1.TAGEVENTDATE));
-		assertEquals("summary not correct?",summary1, cache.getFieldData(uid1, b1.TAGSUMMARY));
+		assertEquals("Title not correct?",title1, cache.getFieldData(uid1, b1.TAGTITLE));
 		assertEquals("author not correct?",author1, cache.getFieldData(uid1, b1.TAGAUTHOR));
 		
-		String summary2 = "2 Summary";
+		String title2 = "2 Title";
 		String author2 = "2 Author";
 		String eventdate2 = "2 11-20-2002";
 		Bulletin b2 = new Bulletin((BulletinStore)null);
 		UniversalId uid2 = b2.getUniversalId();
 		b2.setSealed();
 		b2.set(b2.TAGEVENTDATE, eventdate2);
-		b2.set(b2.TAGSUMMARY, summary2);
+		b2.set(b2.TAGTITLE, title2);
 		b2.set(b2.TAGAUTHOR, author2);
 		cache.setFieldData(b2);
 		assertEquals("2 wrong status?",b2.get(b2.TAGSTATUS), cache.getFieldData(uid2, b2.TAGSTATUS));
 		assertEquals("2 event date not correct?",eventdate2, cache.getFieldData(uid2, b2.TAGEVENTDATE));
-		assertEquals("2 summary not correct?",summary2, cache.getFieldData(uid2, b2.TAGSUMMARY));
+		assertEquals("2 title not correct?",title2, cache.getFieldData(uid2, b2.TAGTITLE));
 		assertEquals("2 author not correct?",author2, cache.getFieldData(uid2, b2.TAGAUTHOR));
 	}
 

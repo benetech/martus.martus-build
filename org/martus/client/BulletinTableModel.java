@@ -2,6 +2,7 @@ package org.martus.client;
 
 import javax.swing.table.AbstractTableModel;
 
+import org.martus.common.BulletinConstants;
 import org.martus.common.UniversalId;
 
 public class BulletinTableModel extends AbstractTableModel
@@ -37,7 +38,7 @@ public class BulletinTableModel extends AbstractTableModel
 
 	public int getColumnCount()
 	{
-		return fieldTags.length;
+		return BulletinConstants.sortableFieldTags.length;
 	}
 
 	public Bulletin getBulletin(int rowIndex)
@@ -64,7 +65,7 @@ public class BulletinTableModel extends AbstractTableModel
 		if(uid == null)
 			return "";
 
-		String fieldTag = fieldTags[columnIndex];
+		String fieldTag = BulletinConstants.sortableFieldTags[columnIndex];
 		String value = getFolder().getStore().getFieldData(uid, fieldTag);
 		if(fieldTag.equals(Bulletin.TAGSTATUS))
 		{
@@ -84,16 +85,13 @@ public class BulletinTableModel extends AbstractTableModel
 
 	public String getFieldName(int columnIndex)
 	{
-		return fieldTags[columnIndex];
+		return BulletinConstants.sortableFieldTags[columnIndex];
 	}
 
 	public void sortByColumn(int columnIndex)
 	{
 		folder.sortBy(getFieldName(columnIndex));
 	}
-
-	private final String[] fieldTags =
-		{Bulletin.TAGSTATUS, "eventdate", "title", "author"};
 
 	MartusApp app;
 	BulletinFolder folder;
