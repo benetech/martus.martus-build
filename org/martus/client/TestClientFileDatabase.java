@@ -47,7 +47,6 @@ public class TestClientFileDatabase extends TestCaseEnhanced
 		assertNotNull("legacy not found?", inLegacy);
 		inLegacy.close();
 		
-		DatabaseKey draftKey = DatabaseKey.createDraftKey(uid);
 		InputStream inDraft = db.openInputStream(legacyKey, security);
 		assertNotNull("draft not found?", inDraft);
 		inDraft.close();

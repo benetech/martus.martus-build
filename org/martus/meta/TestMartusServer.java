@@ -1192,7 +1192,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		bulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		bulletin.setSealed();
 		bulletin.save();
-		String result2 = testServer.uploadBulletin(bulletin.getAccount(), bulletin.getLocalId(), MockBulletin.saveToZipString(bulletin));
+		testServer.uploadBulletin(bulletin.getAccount(), bulletin.getLocalId(), MockBulletin.saveToZipString(bulletin));
 
 		privateBulletin.setHQPublicKey(hqSecurity.getPublicKeyString());
 		privateBulletin.save();
@@ -1330,7 +1330,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("Allowed download signed by wrong account?", NetworkInterfaceConstants.SIG_ERROR, result1.get(0));
 
 		String signature2 = MartusUtilities.createSignature(stringToSign+"x", hqSecurity);
-		Vector result2 = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, hqAccountId, signature1);
+		Vector result2 = testServer.downloadFieldDataPacket(authorId, headerPacketLocalId, fieldDataPacketLocalId, hqAccountId, signature2);
 		assertEquals("Allowed download signed wrong data?", NetworkInterfaceConstants.SIG_ERROR, result2.get(0));
 	}
 
@@ -1565,7 +1565,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		int newRecordCount = db.getRecordCount();
 		assertNotEquals("Didn't upload?", 1*3, newRecordCount);
 		String[] justSealed = new String[] {b1.getLocalId()};
-		String resultSealed = testServer.deleteDraftBulletins(store.getAccountId(), justSealed);
+		testServer.deleteDraftBulletins(store.getAccountId(), justSealed);
 		assertEquals("Sealed not ok?", OK, resultAllOk);
 		assertEquals("Deleted sealed?", newRecordCount, db.getRecordCount());
 	}
@@ -1574,13 +1574,13 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		assertEquals("db not empty?", 0, db.getRecordCount());
 		Bulletin draft1 = store.createEmptyBulletin();
-		String zip1 = uploadSampleDraftBulletin(draft1);
+		uploadSampleDraftBulletin(draft1);
 		assertEquals("Didn't save 1?", 1*3, db.getRecordCount());
 		Bulletin draft2 = store.createEmptyBulletin();
-		String zip2 = uploadSampleDraftBulletin(draft2);
+		uploadSampleDraftBulletin(draft2);
 		assertEquals("Didn't save 2?", 2*3, db.getRecordCount());
 		Bulletin draft3 = store.createEmptyBulletin();
-		String zip3 = uploadSampleDraftBulletin(draft3);
+		uploadSampleDraftBulletin(draft3);
 		assertEquals("Didn't save 3?", 3*3, db.getRecordCount());
 
 		return new String[] {draft1.getLocalId(), draft2.getLocalId(), draft3.getLocalId()};
@@ -1912,7 +1912,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	
 	public void testServerShutdown() throws Exception
 	{
-		boolean result;
 		String clientId = clientSecurity.getPublicKeyString();
 		String hqId = hqSecurity.getPublicKeyString();	
 		String bogusStringParameter = "this is never used in this call. right?";
@@ -2088,7 +2087,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	// after all those have been updated to newer software!
 	Vector legacyDownloadFieldOfficeBulletinChunkAsMyBulletin(NetworkInterface server, MartusCrypto hqSecurity, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
 	{
-		String hqAccountId = hqSecurity.getPublicKeyString();
 		String stringToSign = authorAccountId + "," + bulletinLocalId + "," + 
 					Integer.toString(chunkOffset) + "," + Integer.toString(maxChunkSize);
 		String signature = MartusUtilities.createSignature(stringToSign, hqSecurity);

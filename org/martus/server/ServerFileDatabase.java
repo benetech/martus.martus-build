@@ -16,7 +16,6 @@ public class ServerFileDatabase extends FileDatabase
 
 	protected String getBucketPrefix(DatabaseKey key) 
 	{
-		String bucketPrefix = defaultBucketPrefix;
 		if(key.isDraft())
 			return draftPrefix;
 		return super.getBucketPrefix(key);

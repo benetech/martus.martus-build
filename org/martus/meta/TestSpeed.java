@@ -114,7 +114,6 @@ public class TestSpeed extends TestCaseEnhanced
 		byte[] sig = security.createSignature(in);
 		print("Sign   " + data.length + " bytes of data", signer.stop());
 		
-		Stopwatch verifier = new Stopwatch();
 		security.verifySignature(in, sig);
 		print("Verify " + data.length + " bytes of data", signer.stop());
 	}
@@ -247,7 +246,6 @@ public class TestSpeed extends TestCaseEnhanced
 		print("Create " + fileLength + " byte file", fileCreateTimer.stop());
 		
 		AttachmentPacket ap = new AttachmentPacket(accountId, sessionKeyBytes, fileToAttach, security);
-		Stopwatch fileAttachTimer = new Stopwatch();
 		ap.writeXmlToDatabase(db, false, security);
 		print("Write " + fileLength + " byte attachment to db", fileCreateTimer.stop());
 

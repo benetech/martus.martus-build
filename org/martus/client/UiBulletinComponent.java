@@ -40,7 +40,6 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		fields = new UiField[numFields];
 		fieldTags = new String[numFields];
 		
-		int thisField = 0;
 		createLabelsAndFields(publicStuff, standardFieldTags, 0);
 		createLabelsAndFields(privateStuff, privateFieldTags, standardFieldTags.length);
 		

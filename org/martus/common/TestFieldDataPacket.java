@@ -2,7 +2,6 @@ package org.martus.common;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.StringReader;
 import java.util.Arrays;
 
 import org.martus.common.Packet.SignatureVerificationException;
@@ -319,8 +318,6 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		
 		assertTrue("uid after label?", attachmentUidAt < attachmentLabelAt);
 		assertTrue("key after label?", attachmentKeyAt < attachmentLabelAt);
-
-		StringReader reader = new StringReader(result);
 
 		UniversalId uid = UniversalId.createDummyUniversalId();
 		FieldDataPacket got = new FieldDataPacket(uid, fieldTags);

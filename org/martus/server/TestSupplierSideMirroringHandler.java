@@ -259,7 +259,6 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	
 	Vector writeSampleHeaderPacket(BulletinHeaderPacket bhp) throws Exception
 	{
-		String accountId = bhp.getAccountId();
 		StringWriter writer = new StringWriter();
 		byte[] sigBytes = bhp.writeXml(writer, authorSecurity);
 		DatabaseKey key = DatabaseKey.createDraftKey(bhp.getUniversalId());

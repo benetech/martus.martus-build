@@ -133,7 +133,7 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		long createRawEndedAt = System.currentTimeMillis();
 		assertTrue("Create file took too long", createRawEndedAt - createRawStartedAt < 2000);
 		
-		long writeXmlStartedAt = System.currentTimeMillis();
+		//long writeXmlStartedAt = System.currentTimeMillis();
 		String account = security.getPublicKeyString();
 		AttachmentProxy a = new AttachmentProxy(largeFile);
 		byte[] sessionKeyBytes = security.createSessionKey();
@@ -143,25 +143,25 @@ public class TestAttachmentPacket extends TestCaseEnhanced
 		largeXmlFile.deleteOnExit();
 		FileOutputStream dest = new FileOutputStream(largeXmlFile);
 		ap.writeXml(dest, security);
-		long writeXmlEndedAt = System.currentTimeMillis();
+		//long writeXmlEndedAt = System.currentTimeMillis();
 		//System.out.println("Write Xml Time = " + (writeXmlEndedAt - writeXmlStartedAt));
 		//assertTrue("Write Xml took too long", writeXmlEndedAt - writeXmlStartedAt < 10000);
 		
-		long verifySigStartedAt = System.currentTimeMillis();
+		//long verifySigStartedAt = System.currentTimeMillis();
 		FileInputStreamWithSeek verifyIn = new FileInputStreamWithSeek(largeXmlFile);
 		AttachmentPacket.verifyPacketSignature(verifyIn, security);
 		verifyIn.close();
-		long verifySigEndedAt = System.currentTimeMillis();
+		//long verifySigEndedAt = System.currentTimeMillis();
 		//System.out.println("Verify Sig Time = " + (verifySigEndedAt - verifySigStartedAt));
 		//assertTrue("verifySig took too long", verifySigEndedAt - verifySigStartedAt < 20000);
 
-		long readXmlStartedAt = System.currentTimeMillis();
+		//long readXmlStartedAt = System.currentTimeMillis();
 		File decryptedFile = File.createTempFile("$$$MartusDecryptedBufferedAtt", null);
 		decryptedFile.deleteOnExit();
 		FileInputStreamWithSeek xmlIn = new FileInputStreamWithSeek(largeXmlFile);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, security, decryptedFile);
 		xmlIn.close();
-		long readXmlEndedAt = System.currentTimeMillis();
+		//long readXmlEndedAt = System.currentTimeMillis();
 		//System.out.println("Read Xml Time = " + (readXmlEndedAt - readXmlStartedAt));
 		//assertTrue("Read Xml took too long", readXmlEndedAt - readXmlStartedAt < 30000);
 		

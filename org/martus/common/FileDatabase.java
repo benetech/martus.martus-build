@@ -151,7 +151,7 @@ public class FileDatabase implements Database
 			IOException,
 			MartusCrypto.CryptoException
 	{
-		int throwAwayFlagByte = in.read();
+		in.read(); //throwAwayFlagByte
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
 		decrypter.decrypt(in, out);
@@ -172,7 +172,7 @@ public class FileDatabase implements Database
 			if(!isEncryptedRecordStream(in))
 				return in;
 				
-			int throwAwayFlagByte = in.read();
+			in.read(); //throwAwayFlagByte
 			ByteArrayOutputStream decryptedOut = new ByteArrayOutputStream();
 			decrypter.decrypt(in, decryptedOut);
 			in.close();

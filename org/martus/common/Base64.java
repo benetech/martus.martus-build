@@ -33,7 +33,6 @@ public class Base64
 
 	public static String encodeLineWrapped(byte[] raw)
 	{
-		final int WRAPWIDTH = BYTESPERLINE * 4 / 3;
 		StringBuffer encoded = new StringBuffer();
 
 		for(int i = 0; i < raw.length; i += BYTESPERLINE)

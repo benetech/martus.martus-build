@@ -50,7 +50,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			result.add(SIG_ERROR);
 			return result;
 		}
-			
+
 		int index = 0;
 		String tryMagicWord = (String)parameters.get(index++);
 		

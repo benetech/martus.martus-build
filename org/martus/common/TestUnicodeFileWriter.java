@@ -21,7 +21,7 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 		File badFile = new File(BAD_FILENAME);
 		try
 		{
-			UnicodeWriter bad = new UnicodeWriter(badFile);
+			new UnicodeWriter(badFile);
 			assertTrue("bad file", false);
 		}
 		catch(IOException e)
@@ -31,7 +31,7 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 
 		try
 		{
-			UnicodeWriter bad = new UnicodeWriter((File)null);
+			new UnicodeWriter((File)null);
 			assertTrue("bad file", false);
 		}
 		catch(Exception e)
@@ -56,7 +56,7 @@ public class TestUnicodeFileWriter extends TestCaseEnhanced
 	{
 		try
 		{
-			UnicodeWriter shouldFail = new UnicodeWriter((OutputStream)null);
+			new UnicodeWriter((OutputStream)null);
 			fail("should not have been able to create");
 		}
 		catch(Exception e)

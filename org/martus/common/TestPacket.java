@@ -22,11 +22,6 @@ public class TestPacket extends TestCaseEnhanced
     	}
     }
     
-	public void testBasics()
-	{
-		Packet packet = new Packet();
-	}
-	
 	public void testIsValidVersion()
 	{
 		assertFalse("Valid null comment?", Packet.isValidStartComment(null));
@@ -82,8 +77,7 @@ public class TestPacket extends TestCaseEnhanced
 		assertEndsWith("bad sig end?", MartusXml.packetSignatureEnd, sigComment);
 		int sigIndex = MartusXml.packetSignatureStart.length();
 		int sigEndIndex = sigComment.length() - MartusXml.packetSignatureEnd.length();
-		String sig = sigComment.substring(sigIndex, sigEndIndex);
-		//System.out.println(sig);
+		sigComment.substring(sigIndex, sigEndIndex);
 	}
 	
 	public void testWriteXmlToWriter() throws Exception
@@ -116,8 +110,6 @@ public class TestPacket extends TestCaseEnhanced
 		
 		bhp.setFieldDataPacketId("");
 		byte[] bytes = out.toByteArray();
-		String s8859 = new String(bytes);
-		String sUtf8 = new String(bytes, "UTF-8");
 		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
 		bhp.loadFromXml(in, null, security);
 		

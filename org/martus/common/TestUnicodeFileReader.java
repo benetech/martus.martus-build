@@ -21,7 +21,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 		File badFile = new File(BAD_FILENAME);
 		try
 		{
-			UnicodeReader bad = new UnicodeReader(badFile);
+			new UnicodeReader(badFile);
 			assertTrue("bad file", false);
 		}
 		catch(IOException e)
@@ -31,7 +31,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 
 		try
 		{
-			UnicodeReader bad = new UnicodeReader((File)null);
+			new UnicodeReader((File)null);
 			assertTrue("null file", false);
 		}
 		catch(Exception e)
@@ -64,7 +64,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 	{
 		try
 		{
-			UnicodeReader shouldFail = new UnicodeReader((InputStream)null);
+			new UnicodeReader((InputStream)null);
 			fail("should not have been able to create");
 		}
 		catch(Exception e)
@@ -75,7 +75,7 @@ public class TestUnicodeFileReader extends TestCaseEnhanced
 		byte[] bytes = {'a', 'b', 'c', 'd'};
 		ByteArrayInputStream inputStream = new ByteArrayInputStream(bytes);
 		UnicodeReader reader = new UnicodeReader(inputStream);
-		String got = reader.readLine();
+		reader.readLine();
 		reader.close();
 	}
 

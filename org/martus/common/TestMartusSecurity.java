@@ -123,7 +123,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		byte[] plain = security.decryptKeyPair(inputStream, passPhrase);
 		ByteArrayInputStream inputStream2 = new ByteArrayInputStream(plain);
 		ObjectInputStream objectInputStream = new ObjectInputStream(inputStream2);
-		KeyPair keyPair = (KeyPair)objectInputStream.readObject();
+		objectInputStream.readObject();
 		TRACE_END();
 	}
 

@@ -190,7 +190,6 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		modelWithData.setValueAt(new Boolean(false), 1, 0);
 		Vector twoList = modelWithData.getUniversalIdList();
 
-		String summary = (String)modelWithData.getValueAt(0,1);
 		assertEquals(2, twoList.size());
 		assertEquals("b0 id", fullList.get(0), twoList.get(0));
 		assertEquals("b2 id", fullList.get(2), twoList.get(1));

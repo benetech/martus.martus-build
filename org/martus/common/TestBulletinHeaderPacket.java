@@ -1,7 +1,6 @@
 package org.martus.common;
 
 import java.io.ByteArrayOutputStream;
-import java.io.StringWriter;
 import java.util.Arrays;
 
 public class TestBulletinHeaderPacket extends TestCaseEnhanced
@@ -144,7 +143,6 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 	{
 		String dataId = "this data id";
 		String privateId = "this data id";
-		StringWriter writer = new StringWriter();
 		bhp.updateLastSavedTime();
 		bhp.setFieldDataPacketId(dataId);
 		bhp.setPrivateFieldDataPacketId(privateId);
@@ -156,7 +154,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		bhp.addPrivateAttachmentLocalId(attachmentId4);
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		byte[] sig = bhp.writeXml(out, security);
+		bhp.writeXml(out, security);
 		
 		String result = new String(out.toByteArray(), "UTF-8");
 		assertContains(MartusXml.getTagStart(MartusXml.BulletinHeaderPacketElementName), result);
@@ -201,7 +199,6 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		String dataId = "this data id";
 		String privateId = "this data id";
 		String hqKey = "hqkey123";
-		StringWriter writer = new StringWriter();
 		bhp.setHQPublicKey(hqKey);
 		bhp.setFieldDataPacketId(dataId);
 		bhp.setPrivateFieldDataPacketId(privateId);
@@ -209,7 +206,7 @@ public class TestBulletinHeaderPacket extends TestCaseEnhanced
 		bhp.setPrivateFieldDataSignature(sampleSig2);
 		
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		byte[] sig = bhp.writeXml(out, security);
+		bhp.writeXml(out, security);
 		
 		String result = new String(out.toByteArray(), "UTF-8");
 		assertContains(MartusXml.getTagStart(MartusXml.HQPublicKeyElementName), result);

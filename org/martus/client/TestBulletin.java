@@ -837,7 +837,6 @@ public class TestBulletin extends TestCaseEnhanced
 	void saveAndVerifyValid(String label, Bulletin b) throws Exception
 	{
 		b.save();
-		Database db = b.getStore().getDatabase();
 		DatabaseKey headerKey = new DatabaseKey(b.getBulletinHeaderPacket().getUniversalId());
 		Bulletin stillValid = Bulletin.loadFromDatabase(store, headerKey, security);
 		assertEquals(label + " not valid after save?", true, stillValid.isValid());
@@ -1245,7 +1244,6 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin original = store.createEmptyBulletin();
 		original.set(Bulletin.TAGPUBLICINFO, "public info");
 		original.set(Bulletin.TAGPRIVATEINFO, "private info");
-		String key = security.getPublicKeyString();
 		File tempFile = createTempFile();
 		
 		MartusSecurity otherSecurity = new MartusSecurity();

@@ -640,9 +640,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
 		FieldDataPacket fdp = b.getFieldDataPacket();
 		DatabaseKey headerKey = new DatabaseKey(b.getUniversalId());
-		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(b.getAccount(), fdp.getLocalId());
-		DatabaseKey dataKey = new DatabaseKey(dataUid);
-		int packetCount = db.getRecordCount();
+		UniversalId.createFromAccountAndLocalId(b.getAccount(), fdp.getLocalId());
 
 		security.fakeSigVerifyFailure = true;
 		store.loadFolders();
@@ -693,7 +691,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		{
 			store.deleteAllData();
 			Bulletin b = store.createEmptyBulletin();
-			BulletinFolder folder1 = store.createFolder("a");
+			store.createFolder("a");
 			store.saveFolders();
 			assertTrue("createFolder f ", store.getFoldersFile().exists());
 			DatabaseKey bulletinKey = new DatabaseKey(b.getUniversalId());
@@ -720,8 +718,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		{
 			store.deleteAllData();
 			Bulletin b = store.createEmptyBulletin();
-			BulletinFolder folder2 = store.createFolder("x");
-
+			store.createFolder("x");
 			db.discardRecord(foldersKey);
 			store.renameFolder("x", "b");
 			assertTrue("renameFolder f ", store.getFoldersFile().exists());
@@ -732,8 +729,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		{
 			store.deleteAllData();
 			Bulletin b = store.createEmptyBulletin();
-			BulletinFolder folder2 = store.createFolder("z");
-
+			store.createFolder("z");
 			db.discardRecord(foldersKey);
 			store.deleteFolder("z");
 			assertTrue("deleteFolder f ", store.getFoldersFile().exists());

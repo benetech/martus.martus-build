@@ -204,7 +204,6 @@ class UiFolderTreePane extends JScrollPane
 			if(!tree.isPathEditable(path))
 				return;
 
-			BulletinFolder folder = getFolderAt(path);
 			tree.startEditingAtPath(path);
 		}
 

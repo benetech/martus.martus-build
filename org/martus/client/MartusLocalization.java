@@ -200,10 +200,6 @@ public class MartusLocalization
 
 	public static String getMdyOrder(String format)
 	{
-		boolean foundM;
-		boolean foundD;
-		boolean foundY;
-
 		String result = "";
 		format = format.toLowerCase();
 		for(int i = 0; i < format.length(); ++i)
@@ -218,7 +214,7 @@ public class MartusLocalization
 
 	public Vector getAllTranslationStrings(String languageCode)
 	{
-		Map requestedMap = createStringMap(languageCode);
+		createStringMap(languageCode);
 
 		Vector strings = new Vector();
 		Map englishMap = getStringMap(ENGLISH);

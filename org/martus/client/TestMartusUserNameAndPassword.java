@@ -15,8 +15,6 @@ public class TestMartusUserNameAndPassword extends TestCaseEnhanced
 
 	public void testValidateUserNameAndPassword() throws MartusClientApplicationException
 	{
-		boolean threwRightException = false;
-		
 		try
 		{
 			MartusUserNameAndPassword.validateUserNameAndPassword("", "validPassword");

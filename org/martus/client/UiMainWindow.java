@@ -294,7 +294,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String[] contents = {cause};
 		String[] buttons = {ok};
 		
-		UiNotifyDlg notify = new UiNotifyDlg(this, parent, title, contents, buttons);
+		new UiNotifyDlg(this, parent, title, contents, buttons);
 	}
 
 	private void initializationErrorDlg(String message)
@@ -680,7 +680,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	
 	private void aboutMartus()
 	{
-		UiAboutDlg about = new UiAboutDlg(this);
+		new UiAboutDlg(this);
 	}
 	
 	private void showAccountInfo()
@@ -705,7 +705,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String[] contents = {userName, " ", keyDescription, keyContents," ", codeDescription, formattedCodeContents};
 		String[] buttons = {ok};
 		
-		UiNotifyDlg notify = new UiNotifyDlg(this, this, title, contents, buttons);
+		new UiNotifyDlg(this, this, title, contents, buttons);
 	}
 	
 	private void displayHelpMessage()
@@ -722,7 +722,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				helpStream = getClass().getResourceAsStream(helpFileShortName);
 			if(helpStream == null)
 				helpStream = getClass().getResourceAsStream(app.getEnglishHelpFilename());
-			UiDisplayFileDlg helpDlg = new UiDisplayFileDlg(this, "Help", helpStream);
+			new UiDisplayFileDlg(this, "Help", helpStream);
 		}
 		catch (IOException e)
 		{
@@ -839,7 +839,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private void doLocalize()
 	{
 		saveState();
-		UiLocalizeDlg dlg = new UiLocalizeDlg(this);
+		new UiLocalizeDlg(this);
 		initializeViews();
 		restoreState();
 		show();
@@ -902,7 +902,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String[] contents = {serverSelected, uploadGranted};
 			String[] buttons = {ok};
 			
-			UiNotifyDlg notify = new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
+			new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
 			if(magicAccepted)
 				requestToUpdateContactInfoOnServerAndSaveInfo();
 			inConfigServer = false;
@@ -1074,7 +1074,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String topMessageTag = "DeleteServerDraftsMessage";
 		String okButtonTag = "DeleteServerDrafts";
 		String noneSelectedTag = "DeleteServerDraftsNone";
-		String deleteProgressTag = "DeleteServerDraftsProgress";
 
 		try 
 		{
@@ -1159,7 +1158,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			String ok = app.getButtonLabel("ok");
 			String[] contents = {msg, export.getCanonicalPath()};
 			String[] buttons = {ok};
-			UiNotifyDlg notify = new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
+			new UiNotifyDlg(this, currentActiveFrame, title, contents, buttons);
 		} 
 		catch(Exception e) 
 		{
@@ -1366,7 +1365,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	boolean isValidScreenPosition(Dimension screenSize, Dimension objectSize, Point objectPosition)
 	{
 		int height = objectSize.height;
-		int width = objectSize.width;
 		if(height == 0 )
 			return false;
 		if(objectPosition.x > screenSize.width - 100)

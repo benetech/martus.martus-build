@@ -89,7 +89,6 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		dtde.acceptDrop(dtde.getDropAction());
 		//System.out.println("dropTransferableBulletin: accepted");
 
-		String resultMessageTag = null;
 		boolean worked = true;
 		try
 		{

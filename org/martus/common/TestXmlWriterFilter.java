@@ -69,7 +69,7 @@ public class TestXmlWriterFilter extends TestCaseEnhanced
 		try
 		{
 			XmlWriterFilter filter = new XmlWriterFilter(new StringWriter());
-			byte[] sig = filter.getSignature();
+			filter.getSignature();
 			fail("Should have thrown");
 		}
 		catch (MartusCrypto.MartusSignatureException e)

@@ -36,7 +36,7 @@ public class TestFolderList extends TestCase
 		FolderTreeNode node = list.findFolderByInternalName("lisjf;lisjef");
 		assertNull("Find folder that isn't there", node);
 
-		BulletinFolder folder = store.createFolder("test");
+		store.createFolder("test");
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
 		assertEquals("Outbox not first?", app.getFolderLabel(app.getFolderOutbox().getName()), list.getName(0));
@@ -70,7 +70,7 @@ public class TestFolderList extends TestCase
 		int baseCount = getVisibleFolderCount(store);
 		assertEquals("Initial count", baseCount, list.getCount());
 
-		BulletinFolder folder = store.createFolder(app.getNameOfFolderRetrievedSealed());
+		store.createFolder(app.getNameOfFolderRetrievedSealed());
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
 		assertEquals("Outbox not first?", app.getFolderLabel(app.getFolderOutbox().getName()), list.getName(0));

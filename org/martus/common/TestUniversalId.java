@@ -44,7 +44,6 @@ public class TestUniversalId extends TestCaseEnhanced
 		uid.setLocalId(sampleLocalId);
 		assertEquals("didn't set local?", sampleLocalId, uid.getLocalId());
 		
-		final String sampleLocalIdWithColons = "sample:with:colons";
 		uid.setLocalId("This:That");
 		assertEquals("setter didn't strip colons?", "This-That", uid.getLocalId());
 	}
@@ -93,7 +92,7 @@ public class TestUniversalId extends TestCaseEnhanced
 		
 		try
 		{
-			UniversalId uid3 = UniversalId.createFromString("lbisdjf");
+			UniversalId.createFromString("lbisdjf");
 			fail("Should have thrown!");
 		}
 		catch(UniversalId.NotUniversalIdException ignoreExpectedException)

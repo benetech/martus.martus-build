@@ -258,7 +258,7 @@ public class UiServerSummariesDlg extends JDialog
 			else if(row.length==1)
 			{
 				FieldDataPacket fdp = model.getBulletinSummary(row[0]).getFieldDataPacket();
-				UiBulletinPreviewDlg dlg = new UiBulletinPreviewDlg(mainWindow, fdp);
+				new UiBulletinPreviewDlg(mainWindow, fdp);
 			}
 			else
 			{

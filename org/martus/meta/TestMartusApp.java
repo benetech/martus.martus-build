@@ -820,7 +820,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
 
-		Bulletin toBeSent = createSealedBulletin(appWithAccount);
+		createSealedBulletin(appWithAccount);
 		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload(null));
 		assertEquals("It was sent", 0, outbox.getBulletinCount());
 		assertEquals("It was sent", 1, appWithAccount.getFolderSent().getBulletinCount());
@@ -839,8 +839,8 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		mockServer.allowUploads(appWithAccount.getAccountId());
 
-		Bulletin toBeSent1 = createDraftBulletin(appWithAccount);
-		Bulletin toBeSent2 = createDraftBulletin(appWithAccount);
+		createDraftBulletin(appWithAccount);
+		createDraftBulletin(appWithAccount);
 		assertEquals("first returned an error?", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload(null));
 		assertEquals("first didn't get removed?", 1, draftOutbox.getBulletinCount());
 		assertEquals("second returned an error?", NetworkInterfaceConstants.OK, appWithAccount.backgroundUpload(null));
@@ -894,7 +894,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		File logFile = new File(appWithServer.getUploadLogFilename());
 		logFile.delete();
 
-		Bulletin notLogged = createSealedBulletin(appWithServer);
+		createSealedBulletin(appWithServer);
 		mockServer.uploadResponse = NetworkInterfaceConstants.OK;
 		assertEquals("Should work", NetworkInterfaceConstants.OK, appWithServer.backgroundUpload(null));
 		assertEquals("Created a log?", false, logFile.exists());
@@ -1144,8 +1144,6 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_BEGIN("testRetrieveBulletinResponseIncorrectChunkSize");
 
 		Bulletin b = createAndUploadSampleBulletin();
-		byte[] bulletinBytes = getBulletinZipBytes(b);
-
 		byte[] sampleBytes = "Testing".getBytes();
 
 		Vector response = new Vector();
@@ -1174,8 +1172,6 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_BEGIN("testRetrieveBulletinResponseIncorrectTotalSize");
 
 		Bulletin b = createAndUploadSampleBulletin();
-		byte[] bulletinBytes = getBulletinZipBytes(b);
-		
 		byte[] sampleBytes = "Testing".getBytes();
 
 		Vector response = new Vector();
@@ -1286,7 +1282,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		gateway.throwSigError = true;
 		try
 		{
-			String shouldThrow = app.deleteServerDraftBulletins(uids);
+			app.deleteServerDraftBulletins(uids);
 			fail("Should have thrown for sig error (no key pair)");
 		}
 		catch (MartusSignatureException ignoreExpectedException)
@@ -1297,7 +1293,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		uids.add(BulletinHeaderPacket.createUniversalId(mockServer.getAccountId()));
 		try
 		{
-			String shouldThrow = app.deleteServerDraftBulletins(uids);
+			app.deleteServerDraftBulletins(uids);
 			fail("Should have thrown for wrong account");
 		}
 		catch (WrongAccountException ignoreExpectedException)
@@ -1315,7 +1311,6 @@ public class TestMartusApp extends TestCaseEnhanced
 		security.createKeyPair(512);
 		MockMartusApp app= MockMartusApp.create(security);
 		app.currentNetworkInterfaceGateway = gateway;
-		String accountId = app.getAccountId();
 		
 		Vector contact = new Vector();
 		contact.add("PublicKey");
@@ -1342,7 +1337,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		gateway.throwSigError = true;
 		try
 		{
-			String shouldThrow = app.putContactInfoOnServer(contact);
+			app.putContactInfoOnServer(contact);
 			fail("Should have thrown for sig error (no key pair)");
 		}
 		catch (MartusSignatureException ignoreExpectedException)
@@ -1357,7 +1352,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_BEGIN("testGetFieldOfficeAccountsNoServer");
 		try
 		{
-			Vector failed = appWithoutServer.getFieldOfficeAccounts();
+			appWithoutServer.getFieldOfficeAccounts();
 			fail("Got valid accounts?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -1378,7 +1373,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		mockSSLServerHandler.nullGetFieldOfficeAccountIds(true);
 		try
 		{
-			Vector failed = appWithServer.getFieldOfficeAccounts();
+			appWithServer.getFieldOfficeAccounts();
 			fail("null response didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -1392,7 +1387,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		mockServer.listFieldOfficeAccountsResponse = desiredResult;
 		try
 		{
-			Vector failed = appWithServer.getFieldOfficeAccounts();
+			appWithServer.getFieldOfficeAccounts();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -1624,7 +1619,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		writer.close();
 		try
 		{
-			String publicKey2 = appWithAccount.extractPublicInfo(temp);
+			appWithAccount.extractPublicInfo(temp);
 			fail("Should have thrown exception");
 		}
 		catch (Exception ignoreExpectedException)

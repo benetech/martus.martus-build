@@ -20,7 +20,6 @@ import java.text.SimpleDateFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-import java.util.zip.ZipFile;
 
 import org.martus.common.AttachmentPacket;
 import org.martus.common.Base64;
@@ -1622,7 +1621,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		String result = NetworkInterfaceConstants.OK;
 		
-		ZipFile zip = null;
 		try
 		{
 			MartusServerUtilities.saveZipFileToDatabase(getDatabase(), authorAccountId, zipFile, security);
@@ -1696,7 +1694,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			
 		byte[] rawData = new byte[chunkSize];
 		
-		StringWriter writer = new StringWriter();
 		FileInputStream in = new FileInputStream(tempFile);
 		in.skip(chunkOffset);
 		in.read(rawData);

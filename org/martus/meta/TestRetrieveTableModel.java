@@ -71,7 +71,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer);
 			model.initialize(null);
 			model.getMySummaries();
-			Vector failed = model.getDownloadableSummaries();
+			model.getDownloadableSummaries();
 			fail("Got valid summaries?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -91,7 +91,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer);
 			model.initialize(null);
-			Vector failed = model.getDownloadableSummaries();
+			model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -209,7 +209,6 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		BulletinSummary allS3 = (BulletinSummary)allResult.get(2);
 		Bulletin allBulletins[] = new Bulletin[] {b1, b2, b3};
 		BulletinSummary allSummaries[] = new BulletinSummary[] {allS1, allS2, allS3};
-		boolean allFound[] = new boolean[allBulletins.length];
 		
 		for(int i = 0; i < allBulletins.length; ++i)
 		{
@@ -270,7 +269,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer);
 			model.initialize(null);
-			Vector failed = model.getDownloadableSummaries();
+			model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -350,7 +349,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer);
 			model.initialize(null);
 			model.getFieldOfficeSealedSummaries("");
-			Vector failed = model.getDownloadableSummaries();
+			model.getDownloadableSummaries();
 			fail("Got valid sealed summaries?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -362,7 +361,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer);
 			model.initialize(null);
 			model.getFieldOfficeDraftSummaries("");
-			Vector failed = model.getDownloadableSummaries();
+			model.getDownloadableSummaries();
 			fail("Got valid draft summaries?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -383,7 +382,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer);
 			model.initialize(null);
 			model.getFieldOfficeSealedSummaries("");
-			Vector failed = model.getDownloadableSummaries();
+			model.getDownloadableSummaries();
 			fail("rejected sealed didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)
@@ -395,7 +394,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer);
 			model.initialize(null);
 			model.getFieldOfficeDraftSummaries("");
-			Vector failed = model.getDownloadableSummaries();
+			model.getDownloadableSummaries();
 			fail("rejected draft didn't throw?");
 		}
 		catch(MartusUtilities.ServerErrorException ignoreExpectedException)

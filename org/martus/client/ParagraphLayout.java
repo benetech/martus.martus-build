@@ -66,16 +66,14 @@ public class ParagraphLayout extends ConstraintLayout {
 		return maxWidth;
 	}
 
-	public void measureLayout(Container target, Dimension dimension, int type)  {
+	public void measureLayout(Container target, Dimension dimension, int type)  
+	{
 		int count = target.getComponentCount();
-		if (count > 0) {
-			Insets insets = target.getInsets();
-			Dimension size = target.getSize();
-			int x = 0;
+		if (count > 0) 
+		{
 			int y = 0;
 			int rowHeight = 0;
 			int colWidth = 0;
-			int numRows = 0;
 			boolean lastWasParagraph = false;
 
 			Dimension[] sizes = new Dimension[count];
@@ -98,7 +96,6 @@ public class ParagraphLayout extends ConstraintLayout {
 						rowHeight = 0;
 						lastWasParagraph = true;
 					} else if (n == NEW_LINE || lastWasParagraph) {
-						x = 0;
 						if (!lastWasParagraph)
 							y += rowHeight+vGapMinor;
 						colWidth = w;
@@ -124,7 +121,6 @@ public class ParagraphLayout extends ConstraintLayout {
 				dimension.width = colWidth1 + hGapMajor + colWidth2;
 				dimension.height = y + rowHeight;
 			} else {
-				x = 0;
 				y = 0;
 				lastWasParagraph = false;
 				int start = 0;
@@ -135,7 +131,6 @@ public class ParagraphLayout extends ConstraintLayout {
 					Component c = target.getComponent(i);
 					if (includeComponent(c)) {
 						Dimension d = sizes[i];
-						int w = d.width;
 						int h = d.height;
 						Integer n = (Integer)getConstraint(c);
 

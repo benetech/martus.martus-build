@@ -200,7 +200,6 @@ public class Packet
 			InvalidPacketException,
 			SignatureVerificationException
 	{
-		final long totalBytes = in.available();
 		UnicodeReader reader = new UnicodeReader(in);
 		
 		final String startComment = reader.readLine();

@@ -41,7 +41,6 @@ public class MartusUserNameAndPassword
 	private static final boolean containsEnoughNonAlphanumbericCharacters(String password)
 	{
 		int nonAlphanumericCounter = 0;
-		int placeholder = 0;
 		int passwordLength = password.length();
 		for (int i = 0; i < passwordLength; i++)
 		{

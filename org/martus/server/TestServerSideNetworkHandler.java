@@ -48,7 +48,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 			assertEquals("getUploadRights badSig length", 1, badSigResult.size());
 			assertEquals("getUploadRights badSig error", NetworkInterfaceConstants.SIG_ERROR, badSigResult.get(0));
 
-			Vector wrongSigResult = handler.getUploadRights(myAccountId, parameters, badSig);
+			Vector wrongSigResult = handler.getUploadRights(myAccountId, parameters, wrongSig);
 			assertEquals("getUploadRights wrongSig length", 1, wrongSigResult.size());
 			assertEquals("getUploadRights wrongSig error", NetworkInterfaceConstants.SIG_ERROR, wrongSigResult.get(0));
 		}
@@ -58,7 +58,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 			assertEquals("getSealedBulletinIds badSig length", 1, badSigResult.size());
 			assertEquals("getSealedBulletinIds badSig error", NetworkInterfaceConstants.SIG_ERROR, badSigResult.get(0));
 
-			Vector wrongSigResult = handler.getSealedBulletinIds(myAccountId, parameters, badSig);
+			Vector wrongSigResult = handler.getSealedBulletinIds(myAccountId, parameters, wrongSig);
 			assertEquals("getSealedBulletinIds wrongSig length", 1, wrongSigResult.size());
 			assertEquals("getSealedBulletinIds wrongSig error", NetworkInterfaceConstants.SIG_ERROR, wrongSigResult.get(0));
 		}
@@ -68,7 +68,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 			assertEquals("getFieldOfficeAccountIds badSig length", 1, badSigResult.size());
 			assertEquals("getFieldOfficeAccountIds badSig error", NetworkInterfaceConstants.SIG_ERROR, badSigResult.get(0));
 
-			Vector wrongSigResult = handler.getFieldOfficeAccountIds(myAccountId, parameters, badSig);
+			Vector wrongSigResult = handler.getFieldOfficeAccountIds(myAccountId, parameters, wrongSig);
 			assertEquals("getFieldOfficeAccountIds wrongSig length", 1, wrongSigResult.size());
 			assertEquals("getFieldOfficeAccountIds wrongSig error", NetworkInterfaceConstants.SIG_ERROR, wrongSigResult.get(0));
 		}
@@ -78,7 +78,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 			assertEquals("putBulletinChunk badSig length", 1, badSigResult.size());
 			assertEquals("putBulletinChunk badSig error", NetworkInterfaceConstants.SIG_ERROR, badSigResult.get(0));
 
-			Vector wrongSigResult = handler.putBulletinChunk(myAccountId, parameters, badSig);
+			Vector wrongSigResult = handler.putBulletinChunk(myAccountId, parameters, wrongSig);
 			assertEquals("putBulletinChunk wrongSig length", 1, wrongSigResult.size());
 			assertEquals("putBulletinChunk wrongSig error", NetworkInterfaceConstants.SIG_ERROR, wrongSigResult.get(0));
 		}
@@ -88,7 +88,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 			assertEquals("getBulletinChunk badSig length", 1, badSigResult.size());
 			assertEquals("getBulletinChunk badSig error", NetworkInterfaceConstants.SIG_ERROR, badSigResult.get(0));
 
-			Vector wrongSigResult = handler.getBulletinChunk(myAccountId, parameters, badSig);
+			Vector wrongSigResult = handler.getBulletinChunk(myAccountId, parameters, wrongSig);
 			assertEquals("getBulletinChunk wrongSig length", 1, wrongSigResult.size());
 			assertEquals("getBulletinChunk wrongSig error", NetworkInterfaceConstants.SIG_ERROR, wrongSigResult.get(0));
 		}
@@ -98,7 +98,7 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 			assertEquals("getPacket badSig length", 1, badSigResult.size());
 			assertEquals("getPacket badSig error", NetworkInterfaceConstants.SIG_ERROR, badSigResult.get(0));
 
-			Vector wrongSigResult = handler.getPacket(myAccountId, parameters, badSig);
+			Vector wrongSigResult = handler.getPacket(myAccountId, parameters, wrongSig);
 			assertEquals("getPacket wrongSig length", 1, wrongSigResult.size());
 			assertEquals("getPacket wrongSig error", NetworkInterfaceConstants.SIG_ERROR, wrongSigResult.get(0));
 		}

@@ -22,7 +22,6 @@ import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.TestCaseEnhanced;
-import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
@@ -159,8 +158,6 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	
 	public void testGetBulletinSize() throws Exception
 	{
-		DatabaseKey shortKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount" , "x"));
-		String testString = "This is a test";			
 		byte[] b1AttachmentBytes = {1,2,3,4,4,3,2,1};
 		MartusSecurity security = new MartusSecurity();
 		security.createKeyPair(512);

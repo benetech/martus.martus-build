@@ -891,8 +891,6 @@ public class BulletinStore
 		Packet.InvalidPacketException,
 		Packet.SignatureVerificationException
 	{
-		final MartusCrypto verifier = getSignatureVerifier();
-
 		ZipFile zip = new ZipFile(inputFile);
 		try
 		{
