@@ -176,13 +176,13 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		TRACE_BEGIN("testGetNews");
 
-		Vector noNews = testServer.getNews(clientAccountId);
+		Vector noNews = testServer.getNews(clientAccountId, "1.0.2", "03/03/03");
 		assertEquals(2, noNews.size());
 		assertEquals("ok", noNews.get(0));
 		assertEquals(0, ((Vector)noNews.get(1)).size());
 
 		testServer.clientsBanned.add(clientAccountId);
-		Vector bannedNews = testServer.getNews(clientAccountId);
+		Vector bannedNews = testServer.getNews(clientAccountId, "1.0.1", "01/01/03");
 		assertEquals(2, bannedNews.size());
 		assertEquals("ok", bannedNews.get(0));
 		Vector newsItems = (Vector)bannedNews.get(1);
@@ -195,6 +195,61 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		TRACE_END();
 	}
+
+
+	public void testGetNewsWithVersionInformation() throws Exception
+	{
+		TRACE_BEGIN("testGetNewsWithVersionInformation");
+
+		final String firstNewsItem = "first news item";
+		final String secondNewsItem = "second news item";
+		final String thridNewsItem = "third news item";
+		Vector twoNews = new Vector();
+		twoNews.add(NetworkInterfaceConstants.OK);
+		Vector resultNewsItems = new Vector();
+		resultNewsItems.add(firstNewsItem);
+		resultNewsItems.add(secondNewsItem);
+		twoNews.add(resultNewsItems);
+		testServer.newsResponse = twoNews;
+	
+
+		Vector noNewsForThisVersion = testServer.getNews(clientAccountId, "wrong version label" , "wrong version build date");
+		assertEquals(2, noNewsForThisVersion.size());
+		Vector noNewsItems = (Vector)noNewsForThisVersion.get(1);
+		assertEquals(0, noNewsItems.size());
+		
+
+		String versionToUse = "2.3.4";
+		testServer.newsVersionLabelToCheck = versionToUse;
+		testServer.newsVersionBuildDateToCheck = "";
+		Vector twoNewsItemsForThisClientsVersion = testServer.getNews(clientAccountId, versionToUse , "some version build date");
+		Vector twoNewsItems = (Vector)twoNewsItemsForThisClientsVersion.get(1);
+		assertEquals(2, twoNewsItems.size());
+		assertEquals(firstNewsItem, twoNewsItems.get(0));
+		assertEquals(secondNewsItem, twoNewsItems.get(1));
+
+
+		String versionBuildDateToUse = "02/01/03";
+		testServer.newsVersionLabelToCheck = "";
+		testServer.newsVersionBuildDateToCheck = versionBuildDateToUse;
+
+		Vector threeNews = new Vector();
+		threeNews.add(NetworkInterfaceConstants.OK);
+		resultNewsItems.add(thridNewsItem);
+		threeNews.add(resultNewsItems);
+		testServer.newsResponse = threeNews;
+
+		Vector threeNewsItemsForThisClientsBuildVersion = testServer.getNews(clientAccountId, "some version label" , versionBuildDateToUse);
+		Vector threeNewsItems = (Vector)threeNewsItemsForThisClientsBuildVersion.get(1);
+		assertEquals(3, threeNewsItems.size());
+		assertEquals(firstNewsItem, threeNewsItems.get(0));
+		assertEquals(secondNewsItem, threeNewsItems.get(1));
+		assertEquals(thridNewsItem, threeNewsItems.get(2));
+
+		TRACE_END();
+	}
+
+
 	
 	public void testLegacyApiMethodNamesNonSSL()
 	{

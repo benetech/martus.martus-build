@@ -28,6 +28,7 @@ package org.martus.client.core;
 
 import java.util.Vector;
 
+import org.martus.client.swingui.UiConstants;
 import org.martus.common.BulletinRetrieverGatewayInterface;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -150,6 +151,8 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 			MartusCrypto.MartusSignatureException
 	{
 		Vector parameters = new Vector();
+		parameters.add(UiConstants.versionLabel);
+		parameters.add(MartusUtilities.getVersionDate());
 		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(server.getNews(signer.getPublicKeyString(), parameters, signature));
 	}

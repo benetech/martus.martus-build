@@ -305,9 +305,18 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 			server.clientConnectionExit();
 			return result;
 		}
+		
+		String versionLabel = "";
+		String versionBuildDate = "";
+		
+		if(parameters.size() >= 2)
+		{
+			int index = 0;
+			versionLabel = (String)parameters.get(index++);
+			versionBuildDate = (String)parameters.get(index++);
+		}
 
-		result = server.getNews(myAccountId);
-
+		result = server.getNews(myAccountId, versionLabel, versionBuildDate);
 		server.clientConnectionExit();
 		return result;
 	}

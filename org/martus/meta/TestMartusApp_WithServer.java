@@ -9,6 +9,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
 import org.martus.client.core.MartusApp;
 import org.martus.client.swingui.Retriever;
+import org.martus.client.swingui.UiConstants;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
@@ -107,6 +108,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		noNews.add(NetworkInterfaceConstants.OK);
 		noNews.add(new Vector());
 		mockServer.newsResponse = noNews;
+		mockServer.newsVersionLabelToCheck = UiConstants.versionLabel;
 		Vector noNewsResponse = appWithServer.getNewsFromServer();
 		assertEquals(0, noNewsResponse.size());
 			
@@ -129,14 +131,23 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		twoNews.add(twoNewsItems);
 		mockServer.newsResponse = twoNews;
 		
-		Vector twoNewsResponse = appWithServer.getNewsFromServer();
-		assertEquals(2, twoNewsResponse.size());
-		assertEquals(firstNewsItem, twoNewsResponse.get(0));
-		assertEquals(secondNewsItem, twoNewsResponse.get(1));
+		Vector twoNewsResponseWithVersionLabelValid = appWithServer.getNewsFromServer();
+		assertEquals(2, twoNewsResponseWithVersionLabelValid.size());
+		assertEquals(firstNewsItem, twoNewsResponseWithVersionLabelValid.get(0));
+		assertEquals(secondNewsItem, twoNewsResponseWithVersionLabelValid.get(1));
 
+		mockServer.newsVersionLabelToCheck = "";
+		mockServer.newsVersionBuildDateToCheck = MartusUtilities.getVersionDate();
+		Vector twoNewsResponseWithBuildDateValid = appWithServer.getNewsFromServer();
+		assertEquals(2, twoNewsResponseWithBuildDateValid.size());
+		assertEquals(firstNewsItem, twoNewsResponseWithBuildDateValid.get(0));
+		assertEquals(secondNewsItem, twoNewsResponseWithBuildDateValid.get(1));
+
+		mockServer.newsVersionLabelToCheck = "0.0.0";
+		mockServer.newsVersionBuildDateToCheck = "00/00/00";
+		Vector twoNewsResponseWithInvalidVersionInfo = appWithServer.getNewsFromServer();
+		assertEquals(0, twoNewsResponseWithInvalidVersionInfo.size());
 	}
-
-
 
 	public void testSetServerInfo() throws Exception
 	{
@@ -1188,7 +1199,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		assertTrue("ResetLastUploadRemindedTime", currentTime2 - remindedTime <= 1000 );
 		TRACE_END();
 	}
-	
+
 	public class MockServerInterfaceHandler extends ServerSideNetworkHandler
 	{
 		MockServerInterfaceHandler(MartusServer serverToUse)

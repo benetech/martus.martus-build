@@ -1261,10 +1261,19 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return NetworkInterfaceConstants.OK;
 	}
 
-	public Vector getNews(String accountId)
+	public Vector getNews(String accountId, String versionLabel, String versionBuildDate)
 	{
 		Vector result = new Vector();
 		Vector items = new Vector();
+		if(serverMaxLogging)
+		{
+			String loggingData = "getNews: " + getClientAliasForLogging(accountId);
+			if(versionLabel.length() > 0 && versionBuildDate.length() > 0)
+				loggingData = loggingData +", " + versionLabel + ", " + versionBuildDate;
+
+			logging(loggingData);
+		}		
+
 		if(isClientBanned(accountId))
 		{
 			final String bannedText = "Your account has been blocked from accessing this server. " + 
