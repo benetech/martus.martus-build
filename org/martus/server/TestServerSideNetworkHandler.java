@@ -2,8 +2,8 @@ package org.martus.server;
 
 import java.util.Vector;
 
+import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.TestCaseEnhanced;
 
@@ -17,16 +17,16 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
-		mySecurity = new MockMartusSecurity();
-		mySecurity.createKeyPair();
+		mySecurity = new MartusSecurity();
+		mySecurity.createKeyPair(512);
 		
 		mockServer = new MockMartusServer();
 		mockServer.initialize();
 		mockServer.setSecurity(mySecurity);
 		handler = new ServerSideNetworkHandler(mockServer);
 
-		otherSecurity = new MockMartusSecurity();
-		otherSecurity.createKeyPair();
+		otherSecurity = new MartusSecurity();
+		otherSecurity.createKeyPair(512);
 	}
 	
 	public void tearDown() throws Exception
@@ -119,6 +119,6 @@ public class TestServerSideNetworkHandler extends TestCaseEnhanced
 	
 	ServerSideNetworkHandler handler;
 	MockMartusServer mockServer;
-	MockMartusSecurity mySecurity;
-	MockMartusSecurity otherSecurity;
+	MartusSecurity mySecurity;
+	MartusSecurity otherSecurity;
 }
