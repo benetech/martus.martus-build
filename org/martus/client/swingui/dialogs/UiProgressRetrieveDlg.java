@@ -74,7 +74,7 @@ public class UiProgressRetrieveDlg extends JDialog
 		}
 	}
 
-	private void requestExit()
+	void requestExit()
 	{
 		isExitRequested = true;
 		cancel.setEnabled(false);

@@ -286,7 +286,7 @@ public class UiFolderTreePane extends JScrollPane
 		return store.findFolder(name);
 	}
 
-	private TreePath getPathOfNode(FolderTreeNode node)
+	TreePath getPathOfNode(FolderTreeNode node)
 	{
 		TreePath rootPath = new TreePath(model.getRoot());
 		return rootPath.pathByAddingChild(node);

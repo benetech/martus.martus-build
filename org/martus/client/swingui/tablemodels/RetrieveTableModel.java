@@ -295,9 +295,9 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	UiLocalization localization;
 	
 	BulletinStore store;
-	private UiProgressRetrieveSummariesDlg retrieverDlg;
+	UiProgressRetrieveSummariesDlg retrieverDlg;
 	protected Vector currentSummaries;
 	private Vector downloadableSummaries;
-	private Vector allSummaries;
-	private ServerErrorException errorThrown;
+	Vector allSummaries;
+	ServerErrorException errorThrown;
 }

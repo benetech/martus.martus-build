@@ -1508,7 +1508,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	private int signIn(int mode)
+	int signIn(int mode)
 	{
 		int seconds = 0;
 		UiModelessBusyDlg busyDlg = null;
@@ -1617,7 +1617,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		exitWithoutSavingState();
 	}
 
-	private void exitWithoutSavingState()
+	void exitWithoutSavingState()
 	{
 		System.exit(0);
 	}
@@ -1777,17 +1777,17 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private java.util.Timer timeoutChecker;
 	private javax.swing.Timer errorChecker;
 	String uploadResult;
-	private UiInactivityDetector inactivityDetector;
+	UiInactivityDetector inactivityDetector;
 
 	private UiMenuBar menuBar;
 	private UiToolBar toolBar;
 	UiStatusBar statusBar;
 	UiLocalization localization;
 
-	private JFrame currentActiveFrame;
+	JFrame currentActiveFrame;
 	boolean inConfigServer;
 
-	private int timeoutInXSeconds;
+	int timeoutInXSeconds;
 	private static final int TIMEOUT_SECONDS = (10 * 60);
 	private static final int TESTING_TIMEOUT_60_SECONDS = 60;
 

@@ -109,8 +109,8 @@ public class UiVirtualKeyboard
 			handler.setPassword(password);
 		}
 	}
-	private VirtualKeyboardHandler handler;
-	private String password;
-	private String space;
-	private String delete;
+	VirtualKeyboardHandler handler;
+	String password;
+	String space;
+	String delete;
 }

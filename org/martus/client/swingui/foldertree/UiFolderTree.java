@@ -192,7 +192,7 @@ class UiFolderTree extends JTree implements TreeSelectionListener
 		return child;
 	}
 
-	private TreePath getPathOfNode(FolderTreeNode node)
+	TreePath getPathOfNode(FolderTreeNode node)
 	{
 		TreePath rootPath = new TreePath(getModel().getRoot());
 		return rootPath.pathByAddingChild(node);

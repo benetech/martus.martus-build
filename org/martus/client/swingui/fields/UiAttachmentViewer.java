@@ -221,13 +221,13 @@ public class UiAttachmentViewer extends JPanel
 		return fullName.substring(index, fullName.length());
 	}
 
-	private static void setLastAttachmentSaveDirectory(File lastAttachmentSaveDirectory)
+	static void setLastAttachmentSaveDirectory(File lastAttachmentSaveDirectory)
 	{
 		UiAttachmentViewer.lastAttachmentSaveDirectory =
 			lastAttachmentSaveDirectory;
 	}
 
-	private static File getLastAttachmentSaveDirectory()
+	static File getLastAttachmentSaveDirectory()
 	{
 		return lastAttachmentSaveDirectory;
 	}

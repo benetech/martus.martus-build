@@ -174,14 +174,14 @@ public class UiFlexiDateEditor extends UiField
 		}
 	}
 	
-	private void removeExactDatePanel()
+	void removeExactDatePanel()
 	{
 		component.remove(extDatePanel);						
 		component.add(buildFlexiDatePanel());																	
 		component.revalidate();		
 	}
 	
-	private void removeFlexidatePanel()
+	void removeFlexidatePanel()
 	{
 		Dimension d = component.getSize();									
 		component.remove(flexiDatePanel);						
@@ -209,12 +209,12 @@ public class UiFlexiDateEditor extends UiField
 		}		
 	}
 	
-	private boolean isFlexiDate()
+	boolean isFlexiDate()
 	{
 		return flexiDateRB.isSelected();
 	}
 	
-	private boolean isExactDate()
+	boolean isExactDate()
 	{
 		return exactDateRB.isSelected();
 	}

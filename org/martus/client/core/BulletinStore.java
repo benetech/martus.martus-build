@@ -1037,7 +1037,7 @@ public class BulletinStore
 	private MartusCrypto signer;
 	private String account;
 	private File dir;
-	private Database database;
+	Database database;
 	private Vector folders;
 	private BulletinFolder folderOutbox;
 	private BulletinFolder folderSent;

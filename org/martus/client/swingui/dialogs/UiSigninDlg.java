@@ -200,8 +200,8 @@ public class UiSigninDlg extends JDialog
 	UiSigninPanel signinPane;
 	JTabbedPane tabbedPane;
 	private UiMainWindow mainWindow;
-	private boolean okPressedForSignin;
-	private boolean okPressedForNewAccount;
+	boolean okPressedForSignin;
+	boolean okPressedForNewAccount;
 	private JButton ok;
 
 	public final static int INITIAL = 1;

@@ -103,7 +103,7 @@ public abstract class UiTextField extends UiField
 		getEditor().selectAll();
 	}
 	
-	private String getMenuLabel(String tag)
+	String getMenuLabel(String tag)
 	{
 		return localization.getMenuLabel(tag);
 	}

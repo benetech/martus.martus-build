@@ -738,7 +738,7 @@ abstract public class FileDatabase extends Database
 		return defaultBucketPrefix;
 	}
 
-	private static void deleteAllFilesInDirectory(File directory)
+	static void deleteAllFilesInDirectory(File directory)
 	{
 		File[] files = directory.listFiles();
 		if(files != null)

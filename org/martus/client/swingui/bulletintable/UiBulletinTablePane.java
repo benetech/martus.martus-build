@@ -179,7 +179,7 @@ public class UiBulletinTablePane extends JScrollPane
 		}
 	}
 
-	private UiMainWindow parent;
+	UiMainWindow parent;
 
 	private UiBulletinTable table;
 	private DropTarget dropTarget;

@@ -141,7 +141,7 @@ public class Retriever
 		private BulletinFolder retrievedFolder;
 	}
 
-	private String result;
-	private MartusApp app;
+	String result;
+	MartusApp app;
 	public UiProgressRetrieveBulletinsDlg progressDlg;
 }

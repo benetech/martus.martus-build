@@ -645,9 +645,9 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	}
 
 
-	private UiMainWindow mainWindow;
-	private BulletinTableModel model;
+	UiMainWindow mainWindow;
+	BulletinTableModel model;
 	private DragSource dragSource = DragSource.getDefaultDragSource();
 	private UiBulletinTableDropAdapter dropAdapter;
-	private TableKeyAdapter keyListener;
+	TableKeyAdapter keyListener;
 }
