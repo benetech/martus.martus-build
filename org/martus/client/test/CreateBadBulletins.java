@@ -97,7 +97,9 @@ public class CreateBadBulletins
 		MartusCrypto security = app.getSecurity();
 		BulletinStore store = app.getStore();
 		Bulletin b = new BulletinForTesting(security);
+		b.setAllPrivate(false);
 		b.set(BulletinConstants.TAGTITLE, title);
+		b.set("extra", "Data in custom field with unknown stuff");
 		BulletinSaver.saveToClientDatabase(b, store.getDatabase(), false, security);
 		store.createOrFindFolder("Bad Bulletins").add(b);
 		return store;
