@@ -317,7 +317,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmUploadReminder=Upload Reminder");
 		addEnglishTranslation("wintitle:confirmDraftUploadReminder=Draft Upload Reminder");
 		addEnglishTranslation("wintitle:confirmRedoWeakPassword=Weak Password Warning");
-
+		addEnglishTranslation("wintitle:confirmOverWriteWithBackupKeyPair=Confirm OverWrite Existing File");
+		
 		addEnglishTranslation("wintitle:notifyDropNotAllowed=Cannot Move Bulletin");
 		addEnglishTranslation("wintitle:notifyDropError=Error Moving Bulletin");
 		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
@@ -394,6 +395,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:ServerSelectionResults=Server Configuration Results");
 		addEnglishTranslation("wintitle:search=Search");
 		
+		addEnglishTranslation("wintitle:saveBackupKeyPair=Back up key pair file");
 
 		addEnglishTranslation("button:file=File");
 		addEnglishTranslation("button:edit=Edit");
@@ -470,7 +472,8 @@ public class MartusLocalization
 		addEnglishTranslation("menu:about=About Martus");
 		addEnglishTranslation("menu:account=Account Details");
 		addEnglishTranslation("menu:helpMessage=Help");
-
+		addEnglishTranslation("menu:backupKeyPair=Backup Key Pair");
+		
 		addEnglishTranslation("language:en=English");
 		addEnglishTranslation("language:ar=Arabic");
 		addEnglishTranslation("language:az=Azerbaijani");
@@ -596,7 +599,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmretrieveeffect=This will restore all the discarded bulletins that were sent to the server.  ");
 		addEnglishTranslation("field:confirmRemoveAttachmentcause=You have chosen to remove the selected attachments from this bulletin.");
 		addEnglishTranslation("field:confirmRemoveAttachmenteffect=The selected attachments will be permanently removed from this bulletin.");
-		addEnglishTranslation("field:confirmOverWriteExistingFilecause=This file already exists, do you wish to overwrite this file?");
+		addEnglishTranslation("field:confirmOverWriteExistingFilecause=This file already exists. Do you wish to overwrite this file?");
 		addEnglishTranslation("field:confirmOverWriteExistingFileeffect=The selected attachment will replace the file on your hard drive.");
 		addEnglishTranslation("field:confirmCancelBulletinEditcause=You have chosen to cancel editing this bulletin.");
 		addEnglishTranslation("field:confirmCancelBulletinEditeffect=Any changes you have made to this bulletin will be discarded.");
@@ -624,6 +627,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmDraftUploadRemindereffect=Clicking on Yes will exit Martus, but these bulletins will be sent to the server when you run Martus again.");
 		addEnglishTranslation("field:confirmRedoWeakPasswordcause=The password you chose has fewer than 15 characters and less than 2 non-alphanumeric characters. We recommend choosing a stronger password.");
 		addEnglishTranslation("field:confirmRedoWeakPasswordeffect=Clicking on Yes will continue with the password you just entered.");
+		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=This file already exists. Do you wish to overwrite this file?");
+		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=The backup keypair will replace the file.");
 
 		addEnglishTranslation("field:notifyDropNotAllowedcause=This bulletin cannot be moved to that folder. This may be because of its Draft/Sealed status, or its author.");
 		addEnglishTranslation("field:notifyDropErrorcause=An unexpected error occured while moving this bulletin. The file may be damaged.");
@@ -670,6 +675,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyServerCodeWrongcause=The Server Public Code does not match the one you entered.");
 		addEnglishTranslation("field:notifyRetrieveCanceledcause=Bulletin download cancelled.  Some bulletins may have already been downloaded.");
 		addEnglishTranslation("field:notifyRememberPasswordcause=Please remember your username and password. It cannot be recovered.");
+		addEnglishTranslation("field:notifyErrorBackingupKeyPaircause=Unable to back up the key pair.");
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
 		addEnglishTranslation("field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:");

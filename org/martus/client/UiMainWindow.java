@@ -23,6 +23,8 @@ import java.awt.print.PrinterException;
 import java.awt.print.PrinterJob;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Timestamp;
@@ -467,6 +469,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		options.add(new ActionMenuContactInfo());
 		options.add(new ActionMenuServerInfo());
 		options.add(new ActionMenuChangeUserNamePassword());
+		options.add(new ActionMenuBackupKeyPair());		
 		options.add(new ActionMenuBulletinDetails());
 		
 
@@ -1040,6 +1043,45 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		catch(Exception e) 
 		{
 			System.out.println("UiMainWindow.doExportPublicAccountInfo :" + e);
+		}
+	}
+	
+	private void doBackupKeyPair()
+	{
+		if(!reSignIn())
+			return;
+
+		File keypairFile = app.getKeyPairFile();
+		JFileChooser chooser = new JFileChooser();
+		chooser.setDialogTitle(app.getWindowTitle("saveBackupKeyPair"));
+		chooser.setFileSelectionMode(chooser.FILES_AND_DIRECTORIES);
+		chooser.setSelectedFile(app.getBackupFile(keypairFile));
+		if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+		{
+			File newBackupFile = chooser.getSelectedFile();
+			if(newBackupFile.exists())
+				if(!confirmDlg(this, "OverWriteExistingFile"))
+					return;
+			try
+			{
+				FileInputStream input = new FileInputStream(keypairFile);
+				FileOutputStream output = new FileOutputStream(newBackupFile); 
+				int originalKeyPairFileSize = new Long(keypairFile.length()).intValue();
+				byte[] inputArray = new byte[originalKeyPairFileSize];
+				
+				input.read(inputArray);
+				output.write(inputArray);
+				input.close();
+				output.close();
+			}
+			catch (FileNotFoundException fnfe)
+			{
+				notifyDlg(this, "ErrorBackingupKeyPair");
+			}
+			catch (IOException ioe)
+			{
+				notifyDlg(this, "ErrorBackingupKeyPair");
+			}
 		}
 	}
 	
@@ -1731,7 +1773,20 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			doRetrieveHQDraftsBulletins();
 		}
 	}
+	
+	class ActionMenuBackupKeyPair extends AbstractAction
+	{
+		public ActionMenuBackupKeyPair()
+		{
+			super(app.getMenuLabel("backupKeyPair"), null);
+		}
 
+		public void actionPerformed(ActionEvent ae)
+		{
+			doBackupKeyPair();
+		}
+	}
+			
 	class ActionMenuExportPublicInfo extends AbstractAction
 	{
 		public ActionMenuExportPublicInfo()
