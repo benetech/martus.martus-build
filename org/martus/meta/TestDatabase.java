@@ -82,30 +82,11 @@ public class TestDatabase extends TestCaseEnhanced
 
 	public void testGetRecordSize() throws Exception
 	{
-		DatabaseKey shortKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount" , "x"));
-		DatabaseKey shortKey2 = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount2" , "cvx"));
-		String testString = "This is a test";			
-		mockDb.writeRecord(shortKey, testString);
-		clientFileDb.writeRecord(shortKey, testString);
-		serverFileDb.writeRecord(shortKey, testString);
-
-		assertEquals("Mock Record size not correct?", testString.length(), mockDb.getRecordSize(shortKey));
-		try
-		{
-			int noKeyinDbSize = mockDb.getRecordSize(shortKey2);
-			fail("key doesn't exist didn't throw?");
-		}
-		catch (Exception expectedException)
-		{
-		}
-
-		assertEquals("Client Record size not correct?", testString.length(), clientFileDb.getRecordSize(shortKey));
-		assertEquals("Client Size not zero?", 0, clientFileDb.getRecordSize(shortKey2));
-
-		assertEquals("Server Record size not correct?", testString.length(), serverFileDb.getRecordSize(shortKey));
-		assertEquals("Server Size not zero?", 0, serverFileDb.getRecordSize(shortKey2));
+		TRACE("testGetRecordSize");
+		internalTestGetRecordSize(mockDb);
+		internalTestGetRecordSize(clientFileDb);
+		internalTestGetRecordSize(serverFileDb);
 	}
-	
 
 	public void testLargeWriteRecord() throws Exception
 	{
@@ -280,6 +261,18 @@ public class TestDatabase extends TestCaseEnhanced
 		assertNotNull(db.toString()+"read failed", gotBack);
 		assertEquals(db.toString()+"wrong data?", smallString, gotBack);
 	}
+
+	private void internalTestGetRecordSize(Database db) throws Exception
+	{
+		DatabaseKey shortKey = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount" , "x"));
+		DatabaseKey shortKey2 = new DatabaseKey(UniversalId.createFromAccountAndPrefix("myAccount2" , "cvx"));
+		String testString = "This is a test";			
+		db.writeRecord(shortKey, testString);
+		
+		assertEquals(db.toString()+" Mock Record size not correct?", testString.length(), db.getRecordSize(shortKey));
+		assertEquals(db.toString()+" Size not zero?", 0, db.getRecordSize(shortKey2));
+	}
+	
 
 	private void internalTestLargeWriteRecord(Database db) throws Exception
 	{

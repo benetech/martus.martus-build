@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -63,7 +64,14 @@ abstract public class MockDatabase implements Database
 	
 	public int getRecordSize(DatabaseKey key) throws IOException
 	{
-		return readRecord(key).getBytes("UTF-8").length;
+		try
+		{
+			return readRecord(key).getBytes("UTF-8").length;
+		}
+		catch (Exception e)
+		{
+			return 0;
+		}
 	}
 
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
