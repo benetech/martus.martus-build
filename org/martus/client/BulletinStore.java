@@ -291,7 +291,7 @@ public class BulletinStore
 		if(!BulletinFolder.isNameVisible(newName))
 			return false;
 
-		if(newName.charAt(0) < '0')
+		if(newName.length() == 0 || newName.charAt(0) < '0')
 			return false;
 
 		if(findFolder(newName) != null)
