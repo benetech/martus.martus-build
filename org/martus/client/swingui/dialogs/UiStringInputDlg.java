@@ -37,6 +37,7 @@ import javax.swing.JTextField;
 
 import org.martus.client.swingui.UiLocalization;
 import org.martus.swing.ParagraphLayout;
+import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
 
 public class UiStringInputDlg extends JDialog
@@ -60,7 +61,7 @@ public class UiStringInputDlg extends JDialog
 		if(descriptionTag.length() > 0)
 		{
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			getContentPane().add(new JLabel(localization.getFieldLabel(descriptionTag)));
+			getContentPane().add(new UiWrappedTextArea(localization.getFieldLabel(descriptionTag)));
 		}
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(label);

@@ -45,6 +45,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.TimerTask;
@@ -102,6 +103,7 @@ import org.martus.client.swingui.tablemodels.RetrieveHQTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveMyTableModel;
 import org.martus.client.swingui.tablemodels.RetrieveTableModel;
+import org.martus.common.MartusConstants;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.common.bulletin.Bulletin;
@@ -467,9 +469,9 @@ if(result == NEW_ACCOUNT)
 		System.exit(1);
 	}
 
-	public String getStringInput(String baseTag, String description, String defaultText)
+	public String getStringInput(String baseTag, String descriptionTag, String defaultText)
 	{
-		UiStringInputDlg inputDlg = new UiStringInputDlg(this, getLocalization(), baseTag, description, defaultText);
+		UiStringInputDlg inputDlg = new UiStringInputDlg(this, getLocalization(), baseTag, descriptionTag, defaultText);
 		inputDlg.show();
 		return inputDlg.getResult();
 	}
@@ -1310,7 +1312,83 @@ if(result == NEW_ACCOUNT)
 
 	private void doBackupKeyPairToMultipleUnencryptedFiles() 
 	{
+		UiLocalization localization = getLocalization();
+		String message = localization.getFieldLabel("BackupKeyPairToMultipleUnencryptedFilesInformation");
+		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "BackupKeyPairToMultipleUnencryptedFilesInformation", "Continue", "", "", message);
+		String defaultFileName = getStringInput("GetShareFileName","GetShareFileNameDescription","");
+		if(defaultFileName == null)
+			return;
 		
+		int maxFiles = MartusConstants.NumberOfFilesInShare;
+		String parent = "";
+		boolean saved;
+		for(int disk = 1; disk <= maxFiles; ++disk )
+		{
+			saved = false;
+			do
+			{
+				UiFileChooser chooser = new UiFileChooser();
+				String windowTitle = localization.getWindowTitle("SaveShareKeyPair");
+				windowTitle = windowTitle.concat(" ");
+				windowTitle = windowTitle.concat(Integer.toString(disk));
+				windowTitle = windowTitle.concat(" ");
+				windowTitle = windowTitle.concat(localization.getWindowTitle("SaveShareKeyPairOf"));
+				windowTitle = windowTitle.concat(" ");
+				windowTitle = windowTitle.concat(Integer.toString(maxFiles));
+				chooser.setDialogTitle(windowTitle);
+				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
+				String fileName = defaultFileName.concat(Integer.toString(disk)) + MartusApp.SHARE_KEYPAIR_FILENAME_EXTENSION;
+				chooser.setSelectedFile(new File(parent,fileName));
+				if (chooser.showSaveDialog(this) == JFileChooser.APPROVE_OPTION)
+				{
+					File newBackupFile = chooser.getSelectedFile();
+					parent = newBackupFile.getParent();
+
+					String[] otherBackupFiles = newBackupFile.getParentFile().list(new BackupShareFilenameFilter(defaultFileName, MartusApp.SHARE_KEYPAIR_FILENAME_EXTENSION));
+					if(otherBackupFiles != null && otherBackupFiles.length > 0)
+					{
+						notifyDlg(this, "ErrorPreviousBackupShareExists");
+						continue;
+					}
+
+					try
+					{
+						FileOutputStream output = new FileOutputStream(newBackupFile);
+						output.write(disk);
+						output.close();
+						saved = true;
+					}
+					catch (IOException ioe)
+					{
+						System.out.println(ioe.getMessage());
+						notifyDlg(this, "ErrorBackingupKeyPair");
+					}
+				}
+				else
+				{
+					if(confirmDlg(this, "CancelShareBackup"))
+						return;
+				}
+			}while(!saved);
+		}
+	}
+
+	public class BackupShareFilenameFilter implements FilenameFilter
+	{
+		BackupShareFilenameFilter(String name, String extension)
+		{
+			defaultName = name;
+			defaultExtension = extension;
+		}
+		
+		public boolean accept(File dir, String name)
+		{
+			if(name.startsWith(defaultName) && name.endsWith(defaultExtension))
+				return true;
+			return false;
+		}
+		String defaultName;
+		String defaultExtension;
 	}
 
 	class PublicInfoFileFilter extends FileFilter

@@ -70,6 +70,7 @@ public class EnglishStrings
 "wintitle:confirmBackupKeyPairSingle=Backing Up Keypair",
 "wintitle:confirmWarnMissingAccountMapSignatureFile=Accountmap Signature File Missing",
 "wintitle:confirmBackupKeyPairMultiple=Backing Up Keypair",
+"wintitle:confirmCancelShareBackup=Cancel Backup",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -134,9 +135,9 @@ public class EnglishStrings
 "wintitle:notifyUserRejectedServerCompliance=Server Compliance Statement",
 "wintitle:notifyExistingServerRemoved=Server Removed",
 "wintitle:notifyErrorSavingBulletin=Error Saving",
-"wintitle:notifyBackupKeyPairInformation=Backing Your Keypair",
+"wintitle:notifyBackupKeyPairInformation=Backing Up Your Keypair",
 "wintitle:notifyExportFolderEmpty=Error Exporting Folder",
-"wintitle:notifyBackupKeyPairInformationMultiple=Backing Your Keypair",
+"wintitle:notifyErrorPreviousBackupShareExists=Previous File Exists",
 				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -144,6 +145,7 @@ public class EnglishStrings
 "wintitle:inputExportMyPublicKey=Export My Public Key",
 "wintitle:inputImportPublicCode=Import Headquarter's Public Key",
 "wintitle:inputCustomFields=Customize Fields",
+"wintitle:inputGetShareFileName=Default File Share Name",
 
 "wintitle:ErrorDateInFuture=Date Invalid",
 
@@ -178,6 +180,10 @@ public class EnglishStrings
 "wintitle:LoadDefaultDetails=Load Default Details Field Content",
 "wintitle:ExportBulletins=Export Bulletins",
 "wintitle:ExportBulletinsSaveAs=Export Bulletins",
+"wintitle:BackupKeyPairToMultipleUnencryptedFilesInformation=Information on Sharing Your KeyPair",
+"wintitle:SaveShareKeyPair=Saving Share Disk",
+"wintitle:SaveShareKeyPairOf=of",
+
 "button:help=Help",
 "button:create=Create",
 "button:search=Search",
@@ -194,6 +200,8 @@ public class EnglishStrings
 "button:inputImportPublicCodeok=Import",
 "button:inputLoadDefaultDetailsok=Load",
 "button:inputCustomFieldsok=OK",
+"button:inputGetShareFileNameok=OK",
+
 
 "button:cancel=Cancel",
 "button:browse=Browse...",
@@ -387,6 +395,7 @@ public class EnglishStrings
 "field:DefaultDetailFiles=Default Details",
 "field:ServerComplianceDescription=The server you have selected has provided the following statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  You can accept or reject this server based on its compliance statement.",
 "field:ServerComplianceChangedDescription=The current server has updated its statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  The new statement appears below. You can accept or reject this server based on its compliance statement.",
+"field:BackupKeyPairToMultipleUnencryptedFilesInformation=This is where the information goes explaining how the plain text keypair sharing occures and what the user is going to be prompted to go through, by saving 8 files onto 8 floppy disks and then pass them out to friends.  It will also explain that they will need at least 3 of them to get back their keypair without the use of a user name or password",
 
 "field:VirtualUserNameDescription=(Enter using regular keyboard)",
 "field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below",
@@ -457,6 +466,8 @@ public class EnglishStrings
 "field:confirmWarnMissingAccountMapSignatureFileeffect=Clicking on Yes will exit Martus.  Clicking on No will try to generate a new accountmap.txt.sig file and continue to load Martus.",		
 "field:confirmBackupKeyPairMultiplecause=We recommend that you now create 8 separate files of which any 3 can be used to reconstruct your keypair without a user name or password being required.",
 "field:confirmBackupKeyPairMultipleeffect=By choosing Yes, you will be prompted to save 8 pieces of your keypair onto a removable disks.",
+"field:confirmCancelShareBackupcause=Do you wish to cancel this backup?",
+"field:confirmCancelShareBackupeffect=By choosing Yes, will exit this backup.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
@@ -524,6 +535,7 @@ public class EnglishStrings
 "field:notifyBackupKeyPairInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
 "field:notifyExportFolderEmptycause=The folder you are trying to export does not contain any bulletins.  Select a folder which has bulletins before exporting the folder.",		
 "field:notifyBackupKeyPairMultipleInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
+"field:notifyErrorPreviousBackupShareExistscause=A previous share file exists.  You must save each file on its own removable media disk.",		
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occurs in the future:",
@@ -531,7 +543,7 @@ public class EnglishStrings
 "field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:",
 "field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:",
 "field:inputExportMyPublicKeyentry=",
-
+"field:inputGetShareFileNameentry=Enter the name of the file you wish to export.",
 "field:inputCustomFieldsentry=Enter the list of field tags below, in the order you want them to appear",
 
 "field:username=Username",
@@ -569,6 +581,7 @@ public class EnglishStrings
 "field:ExportBulletinDetails=Information from the selected bulletins (listed below) will be exported to an XML file that you specify.\n\nPlease Note: This is a one way opperation, you will not be able to import the XML file saved back into Martus.  This opperation exists so you can bring Martus Bulletins into aother application that does import XML files.",
 "field:HowToCreateNewAccount=One or more accounts already exist on this computer. To create an additional account with a new username and passphrase, click OK.",
 "field:UntitledBulletin=Untitled Bulletin",
+"field:GetShareFileNameDescription=This file name should be unique and identifiable to you but we recommend not using your user name.  Each file will be generated with this name and its number sequence.",
 
 "folder:%OutBox=Outbox",
 "folder:%Sent=Sent Bulletins",

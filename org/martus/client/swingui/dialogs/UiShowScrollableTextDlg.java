@@ -54,8 +54,12 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 		setTitle(localization.getWindowTitle(titleTag));
 		ok = new JButton(localization.getButtonLabel(okButtonTag));
 		ok.addActionListener(this);
-		JButton cancel = new JButton(localization.getButtonLabel(cancelButtonTag));
-		cancel.addActionListener(this);
+		JButton cancel = null;
+		if(cancelButtonTag.length() != 0)
+		{
+			cancel = new JButton(localization.getButtonLabel(cancelButtonTag));
+			cancel.addActionListener(this);
+		}
 
 		details = new UiTextArea(15, 65);
 		details.setLineWrap(true);
@@ -73,7 +77,10 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(ok);
-		getContentPane().add(cancel);
+		if(cancelButtonTag.length() != 0)
+		{
+			getContentPane().add(cancel);
+		}
 
 		getRootPane().setDefaultButton(ok);
 		Utilities.centerDlg(this);
