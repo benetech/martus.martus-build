@@ -87,7 +87,6 @@ import org.logi.crypto.secretshare.SecretSharingException;
 import org.martus.common.MartusConstants;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;
-import org.martus.util.StringInputStream;
 import org.martus.util.UnicodeStringWriter;
 
 import com.isnetworks.provider.random.InfiniteMonkeyProvider;
@@ -202,9 +201,15 @@ public class MartusSecurity extends MartusCryptoImplementation
 	{
 		Vector shares = new Vector();
 		Crypto.initRandom();
+		byte[] paddedSecret = new byte[secretToShare.length + 1];
+		System.arraycopy(secretToShare,0,paddedSecret,1,secretToShare.length);
+		//We need to pad the secret beginning with a 1 because of a bug found 
+		//in the logi encryption algorithm that any secret
+		//beginning with a 0 or any byte > 127 will fail.
+		paddedSecret[0] = 1; 
 		int minNumber = MartusConstants.minNumberOfFilesNeededToRecreateSecret;
 		int numberShares = MartusConstants.numberOfFilesInShare;
-		PolySecretShare[] polyShares = PolySecretShare.share(minNumber, numberShares, secretToShare, 512);
+		PolySecretShare[] polyShares = PolySecretShare.share(minNumber, numberShares, paddedSecret, 512);
 		for (int i = 0 ; i < numberShares; ++i)
 		{
 			shares.add(polyShares[i].toString());
@@ -220,9 +225,16 @@ public class MartusSecurity extends MartusCryptoImplementation
 			PolySecretShare[] polyShares = new PolySecretShare[numShares];
 			for(int i = 0; i < numShares; ++i)
 			{
-				polyShares[i] = (PolySecretShare)PolySecretShare.fromString(shares.get(i).toString());
+				polyShares[i] = (PolySecretShare)PolySecretShare.fromString((String)shares.get(i));
 			}
-			return PolySecretShare.retrieve(polyShares);
+			byte[] recoveredSecret = PolySecretShare.retrieve(polyShares);
+			//We needed to pad the secret beginning with a 1 because of a bug found 
+			//in the logi encryption algorithm that any secret
+			//beginning with a 0 or any byte > 127 will fail.
+			int unpaddedLength = recoveredSecret.length - 1;
+			byte[] unpaddedSecret = new byte[unpaddedLength];
+			System.arraycopy(recoveredSecret,1,unpaddedSecret,0,unpaddedLength);
+			return unpaddedSecret;
 		} 
 		catch (Exception e) 
 		{
@@ -237,18 +249,18 @@ public class MartusSecurity extends MartusCryptoImplementation
 		{
 			byte[] sessionKey = createSessionKey();
 			Vector sessionKeyShares = buildShares(sessionKey);
-			StringInputStream in = new StringInputStream(getPrivateKeyString());
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			encrypt(in,out,sessionKey);	
-			out.close();		
+			ByteArrayInputStream in = new ByteArrayInputStream(getKeyPairData(getKeyPair()));
+			ByteArrayOutputStream encryptedKeypair = new ByteArrayOutputStream();
+			encrypt(in,encryptedKeypair,sessionKey);	
+			encryptedKeypair.close();		
 			for(int i = 0; i < sessionKeyShares.size(); ++i)
 			{
 				UnicodeStringWriter writer = UnicodeStringWriter.create();
-				writer.writeln(Base64.encode(MartusConstants.martusSecretShareFileID.getBytes()));
+				writer.writeln(MartusConstants.martusSecretShareFileID);
 				writer.writeln(getPublicKeyString());
-				String privateShare = (String)(sessionKeyShares.get(i));
-				writer.writeln(Base64.encode(privateShare.getBytes()));
-				writer.writeln(Base64.encode(out.toByteArray()));
+				String aPartOfSessionKeyShare = (String)(sessionKeyShares.get(i));
+				writer.writeln(aPartOfSessionKeyShare);
+				writer.writeln(Base64.encode(encryptedKeypair.toByteArray()));
 				writer.close();
 				shareBundles.add(writer.toString());
 			}			

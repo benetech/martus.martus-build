@@ -94,7 +94,7 @@ public class TestMartusSecurity extends TestCaseEnhanced
 	public void testSecretShare() throws Exception
 	{
 		MartusSecurity tempSecurity = new MartusSecurity();
-		byte[] secret = {2,3,4,0,8,5,6,7};
+		byte[] secret = {1,2,3,4,0,8,5,6,7,0};
 		Vector allShares = tempSecurity.buildShares(secret);
 		assertNotNull("Shares null?",allShares);
 		assertEquals("Incorrect number of Shares",  MartusConstants.numberOfFilesInShare, allShares.size());
@@ -137,63 +137,78 @@ public class TestMartusSecurity extends TestCaseEnhanced
 		catch (SecretSharingException expectedException) 
 		{
 		}
+
+		byte[] allZeroSecret = {0,0,0,0,0,0,0};
+		allShares = tempSecurity.buildShares(allZeroSecret);
+		assertNotNull("Shares null for zeroSecret?",allShares);
+		assertEquals("Incorrect number of Shares for zeroSecret",  MartusConstants.numberOfFilesInShare, allShares.size());
+		byte[] recoveredZeroSecret = tempSecurity.recoverShares(allShares);
+		assertNotNull("Recovered Zero Secret Null?", recoveredZeroSecret);
+		assertTrue("Zero Secret didn't match with allparts?", Arrays.equals(allZeroSecret,recoveredZeroSecret));
+
+		byte[] all255Secret = {(byte)255,(byte)255,(byte)255,(byte)255,(byte)255,(byte)255,(byte)255};
+		allShares = tempSecurity.buildShares(all255Secret);
+		assertNotNull("Shares null for zeroSecret?",allShares);
+		assertEquals("Incorrect number of Shares for zeroSecret",  MartusConstants.numberOfFilesInShare, allShares.size());
+		byte[] recovered255Secret = tempSecurity.recoverShares(allShares);
+		assertNotNull("Recovered 255 Secret Null?", recovered255Secret);
+		assertTrue("255 Secret didn't match with allparts?", Arrays.equals(all255Secret,recovered255Secret));
 	}
 	
 	public void testGetKeyShareBundles() throws Exception
 	{
-		MartusSecurity tempSecurity = new MartusSecurity();
-		tempSecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
+		MartusSecurity originalSecurity = new MartusSecurity();
+		originalSecurity.createKeyPair(SMALLEST_LEGAL_KEY_FOR_TESTING);
 		
-		Vector bundles = tempSecurity.getKeyShareBundles();
+		Vector bundles = originalSecurity.getKeyShareBundles();
 		assertNotNull("Got a null vector?", bundles);
 		assertEquals("Size of vector incorrect?", MartusConstants.numberOfFilesInShare, bundles.size());
-		InputStream in = new StringInputStream(bundles.get(0).toString());
+		InputStream in = new StringInputStream((String)bundles.get(0));
 		
 		UnicodeReader reader = new UnicodeReader(in);
-		String item1Encoded = reader.readLine();
-		String item1 = new String(Base64.decode(item1Encoded));
+		String item1 = reader.readLine();
 		assertTrue("First part of file not a MartusShare ID?",item1.equals(MartusConstants.martusSecretShareFileID));		
 
 		String item2 = reader.readLine();
-		assertTrue("Second part of file not our public key?",item2.equals(tempSecurity.getPublicKeyString()));		
+		assertTrue("Second part of file not our public key?",item2.equals(originalSecurity.getPublicKeyString()));		
 		
-		String item3Encoded = reader.readLine();
-		String share1 = new String(Base64.decode(item3Encoded));
+		String share1 = reader.readLine();
 
 		in.close();
 		reader.close();
-		in = new StringInputStream(bundles.get(2).toString());
+		in = new StringInputStream((String)bundles.get(2));
 		reader = new UnicodeReader(in);
 
-		item1Encoded = reader.readLine();
-		item1 = new String(Base64.decode(item1Encoded));
+		item1 = reader.readLine();
 		assertTrue("First part of 3rd file not a MartusShare ID?",item1.equals(MartusConstants.martusSecretShareFileID));		
 
 		item2 = reader.readLine();
-		assertTrue("Second part of 3rd file not our public key?",item2.equals(tempSecurity.getPublicKeyString()));		
+		assertTrue("Second part of 3rd file not our public key?",item2.equals(originalSecurity.getPublicKeyString()));		
 		
-		item3Encoded = reader.readLine();
-		String share2 = new String(Base64.decode(item3Encoded));
+		String share2 = reader.readLine();
 		
 		Vector twoShares = new Vector();
 		twoShares.add(share1);
 		twoShares.add(share2);
-		byte[] recoveredSessionKey = tempSecurity.recoverShares(twoShares);
-		
+		byte[] recoveredSessionKey = originalSecurity.recoverShares(twoShares);
 		String item4Encoded = reader.readLine();
 		byte[] encryptedPrivateKey = Base64.decode(item4Encoded);
 		in.close();
 		reader.close();
 		
-		MartusSecurity newSecurity = new MartusSecurity();
+		MartusSecurity recoveredSecurity = new MartusSecurity();
 		ByteArrayInputStreamWithSeek inEncryptedPrivateKey = new ByteArrayInputStreamWithSeek(encryptedPrivateKey);
 		ByteArrayOutputStream outDecryptedPrivateKey = new ByteArrayOutputStream();
-		newSecurity.decrypt( inEncryptedPrivateKey, outDecryptedPrivateKey, recoveredSessionKey);
+		recoveredSecurity.decrypt( inEncryptedPrivateKey, outDecryptedPrivateKey, recoveredSessionKey);
 		outDecryptedPrivateKey.close();
 		inEncryptedPrivateKey.close();
-		String recoveredPrivateKey = outDecryptedPrivateKey.toString();
-		String privateKeyString = tempSecurity.getPrivateKeyString();
-		assertEquals("Private Key was not decrypted correctly?",privateKeyString,recoveredPrivateKey);		
+
+		recoveredSecurity.clearKeyPair();
+		recoveredSecurity.setKeyPairFromData(outDecryptedPrivateKey.toByteArray());
+		
+		assertEquals("Public Keys don't match?",item2,recoveredSecurity.getPublicKeyString());		
+		assertEquals("Security Public Keys don't match?",originalSecurity.getPublicKeyString(),recoveredSecurity.getPublicKeyString());		
+		assertEquals("Security Private Keys don't match?",originalSecurity.getPrivateKeyString(),recoveredSecurity.getPrivateKeyString());		
 	}
 
 	public void testGetDigestOfPartOfPrivateKey() throws Exception
