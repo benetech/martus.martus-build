@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+    <classpathentry kind="src" path=""/>
+    <classpathentry kind="var" path="JRE_LIB" rootpath="JRE_SRCROOT" sourcepath="JRE_SRC"/>
+    <classpathentry kind="var" path="bccrypto"/>
+    <classpathentry kind="var" path="javajce"/>
+    <classpathentry kind="var" path="junit"/>
+    <classpathentry kind="var" path="xmlrpc"/>
+    <classpathentry kind="output" path=""/>
+</classpath>
