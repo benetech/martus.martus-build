@@ -49,6 +49,7 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.client.core.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
+import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.ByteArrayInputStreamWithSeek;

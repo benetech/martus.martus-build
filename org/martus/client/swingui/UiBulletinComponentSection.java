@@ -39,7 +39,6 @@ import javax.swing.border.LineBorder;
 import org.martus.client.core.Bulletin;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
-import org.martus.client.core.MartusLocalization;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.FieldDataPacket;
 

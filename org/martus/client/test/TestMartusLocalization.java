@@ -30,7 +30,7 @@ import java.util.Vector;
 
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
-import org.martus.client.core.MartusLocalization;
+import org.martus.client.swingui.MartusLocalization;
 
 
 import junit.framework.TestCase;

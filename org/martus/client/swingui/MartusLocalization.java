@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.core;
+package org.martus.client.swingui;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -39,6 +39,8 @@ import java.util.TreeMap;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import org.martus.client.core.ChoiceItem;
+import org.martus.client.core.MartusApp;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 

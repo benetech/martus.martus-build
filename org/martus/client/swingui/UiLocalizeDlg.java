@@ -36,7 +36,6 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import org.martus.client.core.MartusApp;
-import org.martus.client.core.MartusLocalization;
 
 
 

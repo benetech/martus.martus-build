@@ -1,4 +1,4 @@
-package org.martus.client.test;
+package org.martus.meta;
 
 import java.awt.Dimension;
 import java.awt.Point;
@@ -13,6 +13,7 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.ConfigInfo;
 import org.martus.client.core.MartusApp;
+import org.martus.client.test.MockMartusApp;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
