@@ -5,6 +5,11 @@ import java.io.DataOutputStream;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.util.Vector;
+
+import org.martus.common.MartusSecurity;
+import org.martus.common.MartusUtilities;
+import org.martus.common.MartusCrypto.MartusSignatureException;
 
 public class ConfigInfo implements Serializable
 {
@@ -65,6 +70,24 @@ public class ConfigInfo implements Serializable
 		hqKey = "";
 		sendContactInfoToServer = false;
 		mustAskUserToSendToServer = false;
+	}
+
+	public Vector getContactInfo(MartusSecurity signer) throws
+		MartusSignatureException
+	{
+		Vector contactInfo = new Vector();
+		contactInfo.add(signer.getPublicKeyString());
+		contactInfo.add(new Integer(6));
+		contactInfo.add(author);
+		contactInfo.add(organization);
+		contactInfo.add(email);
+		contactInfo.add(webPage);
+		contactInfo.add(phone);
+		contactInfo.add(address);
+		String signature;
+		signature = MartusUtilities.sign(contactInfo, signer);
+		contactInfo.add(signature);
+		return contactInfo;
 	}
 
 	public static ConfigInfo load(InputStream inputStream)

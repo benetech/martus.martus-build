@@ -6,7 +6,10 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Vector;
 
+import org.martus.common.MartusSecurity;
+import org.martus.common.MartusUtilities;
 import org.martus.common.TestCaseEnhanced;
 
 public class TestConfigInfo extends TestCaseEnhanced
@@ -59,7 +62,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 		ConfigInfo info = new ConfigInfo();
 		verifyEmptyInfo(info, "constructor");
 
-		info.setAuthor(sampleSource);
+		info.setAuthor(sampleAuthor);
 		info.setOrganization(sampleOrg);
 		info.setEmail(sampleEmail);
 		info.setWebPage(sampleWebPage);
@@ -89,7 +92,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 	public void verifySampleInfo(ConfigInfo info, String label) 
 	{
 		assertEquals(label + ": Full has contact info", true, info.hasContactInfo());
-		assertEquals(label + ": sampleSource", sampleSource, info.getAuthor());
+		assertEquals(label + ": sampleSource", sampleAuthor, info.getAuthor());
 		assertEquals(label + ": sampleOrg", sampleOrg, info.getOrganization());
 		assertEquals(label + ": sampleEmail", sampleEmail, info.getEmail());
 		assertEquals(label + ": sampleWebPage", sampleWebPage, info.getWebPage());
@@ -117,6 +120,28 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals(label + ": sampleTemplateDetails", "", info.getTemplateDetails());
 		assertEquals(label + ": sampleHQKey", "", info.getHQKey());
 		assertEquals(label + ": sampleSendContactInfoToServer", false, info.shouldContactInfoBeSentToServer());
+	}
+	
+	public void testGetContactInfo() throws Exception
+	{
+		ConfigInfo newInfo = new ConfigInfo();
+		newInfo.setAuthor(sampleAuthor);
+		newInfo.setAddress(sampleAddress);
+		newInfo.setPhone(samplePhone);
+		MartusSecurity signer = new MartusSecurity();
+		signer.createKeyPair(512);
+		Vector contactInfo = newInfo.getContactInfo(signer);
+		String publicKey = (String)contactInfo.get(0);
+
+		assertEquals("Not the publicKey?", signer.getPublicKeyString(), publicKey);
+		int contentSize = ((Integer)(contactInfo.get(1))).intValue();
+		assertEquals("Not the correct size?", contentSize + 3, contactInfo.size());
+		assertEquals("Author not correct?", sampleAuthor, contactInfo.get(2));
+		assertEquals("Address not correct?", sampleAddress, contactInfo.get(7));
+		assertEquals("phone not correct?", samplePhone, contactInfo.get(6));
+		String signature = (String)contactInfo.get(8);
+		contactInfo.remove(8);
+		assertTrue("Signature failed?", MartusUtilities.verifySignature(contactInfo, signer, publicKey, signature));
 	}
 
 	public void testStreamSaveAndLoadEmpty() throws Exception
@@ -169,7 +194,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 	}
 
 	File configFile;
-	final String sampleSource = "source";
+	final String sampleAuthor = "author";
 	final String sampleOrg = "org";
 	final String sampleEmail = "email";
 	final String sampleWebPage = "web";
