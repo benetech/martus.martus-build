@@ -111,7 +111,7 @@
 
     <echo message="${DSTAMP}" file="${BuildDateFile}"/>
     
-    <javac target="1.4" optimize="on" srcdir="${client-dir}" classpath="${common-dir}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${client-dir}" classpath="${common-jar}" failonerror="true">
     		<include name="**/*.java"/>
     </javac>
 
@@ -128,7 +128,7 @@
 
     <echo message="${DSTAMP}" file="${BuildDateFile}"/>
 
-    <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath="${common-dir}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath="${common-jar}" failonerror="true">
     		<include name="**/*.java"/>
     </javac>
 
@@ -143,7 +143,7 @@
 
     <echo message="${DSTAMP}" file="${BuildDateFile}"/>
 
-    <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true">
+    <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath="${client-jar};${server-jar}" failonerror="true">
     		<include name="**/*.java"/>
     </javac>
 
@@ -157,7 +157,7 @@
   </target>
   
   <!-- Build all (same as meta) -->
-  <target name="build" depends="init,build-common,build-server,build-client,build-meta"/>
+  <target name="build" depends="build-meta"/>
 
 <!-- ================================================================== -->
 <!-- T E S T S                                                          -->
@@ -375,5 +375,28 @@
        		excludes=""
 					/>
 	</target>
+	
+<!-- ================================================================== -->
+<!-- E X P O R T   L O C A L I Z A T I O N                              -->
+<!-- ================================================================== -->
+	<target name="check_export_lang" unless="export.lang">
+
+		<input
+			message="Please enter two letter language code (es = Spanish) :"
+			addproperty="export.lang"
+		/>
+
+	</target>
+	<target name="localize" depends="check_export_lang, build-client">
+       <java classname="org.martus.client.swingui.MartusLocalization">
+         <arg value="${export.lang}"/> 
+         <arg value="MartusLocalization_${export.lang}.mtf"/> 
+         <classpath>
+           <pathelement path="${dist}"/>
+           <pathelement path="${java.class.path}"/>
+         </classpath>
+       </java>
+	</target>
+	
 
 </project>
