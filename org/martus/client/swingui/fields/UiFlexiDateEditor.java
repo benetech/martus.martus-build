@@ -43,6 +43,7 @@ import org.martus.client.core.DateUtilities;
 import org.martus.client.swingui.UiLocalization;
 import org.martus.common.bulletin.Bulletin;
 import org.martus.swing.ParagraphLayout;
+import org.martus.util.MartusFlexidate;
 
 public class UiFlexiDateEditor extends UiField
 {
@@ -181,16 +182,30 @@ public class UiFlexiDateEditor extends UiField
 
 	public String getText()
 	{
-		DateFormat df = Bulletin.getStoredDateFormat();		
-		String dateText = null;
-		String bgDateText = df.format(getBeginDate());
+		DateFormat df = Bulletin.getStoredDateFormat();				
+		String dateText = df.format(getBeginDate());
 		
 		if (isFlexiDate())	
-			dateText = bgDateText + DateUtilities.DATE_RANGE_SEPARATER+	df.format(getEndDate());			
-		else
-			dateText = bgDateText;
-		
+//			dateText += DateUtilities.DATE_RANGE_SEPARATER+	df.format(getEndDate());
+			dateText += DateUtilities.DATE_RANGE_SEPARATER + toFlexidate();							
 		return dateText;
+	}	
+	
+	private String toFlexidate()
+	{
+		MartusFlexidate mf = new MartusFlexidate(getBeginDate(), getEndDate());
+		return mf.getMatusFlexidate();
+	}
+	
+	private String fromFlexidate(String date)
+	{
+		if (date.indexOf(MartusFlexidate.PLUS) <=0 )
+			return date;
+			
+		MartusFlexidate mf = new MartusFlexidate(date);				
+		DateFormat df = Bulletin.getStoredDateFormat();				
+					
+		return df.format(mf.getEndDate());	
 	}
 
 	private Date getBeginDate() 
@@ -199,7 +214,7 @@ public class UiFlexiDateEditor extends UiField
 	}
 	
 	private Date getEndDate() 
-	{		
+	{				
 		return UiDateEditor.getDate(endYearCombo, endMonthCombo, endDayCombo);
 	}	
 		
@@ -211,7 +226,9 @@ public class UiFlexiDateEditor extends UiField
 		{			
 			flexiDateRB.setSelected(true);
 			bgDateText = newText.substring(0,comma);
-			UiDateEditor.setDate(newText.substring(comma+1), endYearCombo, endMonthCombo, endDayCombo); 									
+			String endDateText = newText.substring(comma+1);
+			
+			UiDateEditor.setDate(fromFlexidate(endDateText), endYearCombo, endMonthCombo, endDayCombo); 									
 		}			
 		UiDateEditor.setDate(bgDateText, bgYearCombo, bgMonthCombo, bgDayCombo);			
 	}

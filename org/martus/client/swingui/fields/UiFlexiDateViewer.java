@@ -26,11 +26,15 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui.fields;
 
+import java.text.DateFormat;
+
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.martus.client.core.DateUtilities;
 import org.martus.client.swingui.UiLocalization;
+import org.martus.common.bulletin.Bulletin;
+import org.martus.util.MartusFlexidate;
 
 
 public class UiFlexiDateViewer extends UiField
@@ -58,12 +62,23 @@ public class UiFlexiDateViewer extends UiField
 		if (dateBreak > 0)			
 		{
 			String beginDate = newText.substring(0,dateBreak);
-			String endDate = newText.substring(dateBreak+1);			
+			String endDate = convertEndDate(newText.substring(dateBreak+1));						
 			label.setText("  "+localization.getFieldLabel("DateRangeFrom")+" "+ beginDate+ 
-					" "+localization.getFieldLabel("DateRangeTo")+" "+ endDate+"  ");				
+					" "+localization.getFieldLabel("DateRangeTo")+" "+ endDate +"  ");				
 		}
 		else
 			label.setText("  " + value + "  ");
+	}
+	
+	private String convertEndDate(String eDate)	
+	{
+		if (eDate.indexOf(MartusFlexidate.PLUS) <=0)
+			return eDate;
+			
+		MartusFlexidate mf = new MartusFlexidate(eDate);
+		DateFormat df = Bulletin.getStoredDateFormat();				
+
+		return df.format(mf.getEndDate());
 	}
 
 	public void disableEdits()

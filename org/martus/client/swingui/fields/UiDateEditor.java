@@ -154,7 +154,7 @@ public class UiDateEditor extends UiField
 		{
 			System.out.println(e);
 		}
-	}
+	}	
 
 	public void disableEdits()
 	{
