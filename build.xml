@@ -56,8 +56,7 @@
                 ${client-dir}/**/Martus.png,
                 ${client-dir}/**/MartusLogo.gif,
                 ${client-dir}/**/locked.jpg,
-                ${client-dir}/**/unlocked.jpg,
-                ${jars-dir}/common/**/*
+                ${client-dir}/**/unlocked.jpg
                 "/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
