@@ -31,6 +31,7 @@ import java.io.ByteArrayInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -101,10 +102,10 @@ public class MartusServer implements NetworkInterfaceConstants
 
 			String passphrase = getPassphraseFromConsole(server);
 			server.loadAccount(passphrase);
+			server.setDataDirectory(getDefaultDataDirectory());
 			server.verifyAndLoadConfigurationFiles();
 			server.deleteStartupFiles();
 			server.displayStatistics();
-			server.setDataDirectory(getDefaultDataDirectory());
 
 			System.out.println("Setting up sockets (this may take up to a minute or longer)...");
 			server.createServerForClients();
@@ -207,6 +208,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		serverForClients.loadConfigurationFiles();
 
 		//Tests will fail if compliance isn't last.
+		loadHiddenPacketsFile();
 		loadComplianceStatementFile();
 	}
 
@@ -1259,7 +1261,9 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(!isSecureMode())
 			return;
 
+		// TODO: Refactor these into serverForClients.deleteStartupFiles()
 		serverForClients.deleteMagicWordsFile();
+		serverForClients.deleteBannedFile();
 
 		if(!getKeyPairFile().delete())
 		{
@@ -1267,7 +1271,11 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.exit(5);
 		}
 
-		serverForClients.deleteBannedFile();
+		if(!getHiddenPacketsFile().delete())
+		{
+			System.out.println("Unable to delete isHidden");
+			System.exit(5);
+		}
 
 		if(getComplianceFile().exists())
 		{
@@ -1768,6 +1776,63 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 	}
 	
+	public void loadHiddenPacketsFile()
+	{
+		File isHiddenFile = getHiddenPacketsFile();
+		try
+		{
+			UnicodeReader reader = new UnicodeReader(isHiddenFile);
+			loadHiddenPacketsList(reader, database);
+		}
+		catch(FileNotFoundException nothingToWorryAbout)
+		{
+			log("Deleted packets file not found: " + isHiddenFile.getName());
+		}
+		catch (IOException e)
+		{
+			e.printStackTrace();
+			log("Error loading Deleted Packets file: " + isHiddenFile.getName());
+		}
+	}
+
+	private File getHiddenPacketsFile()
+	{
+		return new File(getStartupConfigDirectory(), HIDDENPACKETSFILENAME);
+	}
+	
+	public static void loadHiddenPacketsList(UnicodeReader reader, Database db) throws IOException
+	{
+		String accountId = null;
+		try
+		{
+			while(true)
+			{
+				String thisLine = reader.readLine();
+				if(thisLine == null)
+					return;
+				if(thisLine.startsWith(" "))
+					hidePackets(db, accountId, thisLine);
+				else
+					accountId = thisLine;
+			}
+		}
+		finally
+		{
+			reader.close();
+		}
+	}
+	
+	static void hidePackets(Database db, String accountId, String packetList)
+	{
+		String[] packetIds = packetList.trim().split("\\s+");
+		for (int i = 0; i < packetIds.length; i++)
+		{
+			String localId = packetIds[i].trim();
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localId);
+			db.hide(uid);
+		}
+	}
+	
 	private class UploadRequestsMonitor extends TimerTask
 	{
 		public void run()
@@ -1819,6 +1884,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	private boolean secureMode;
 	
 	private static final String KEYPAIRFILENAME = "keypair.dat";
+	private static final String HIDDENPACKETSFILENAME = "isHidden.txt";
 	private static final String COMPLIANCESTATEMENTFILENAME = "compliance.txt";
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	

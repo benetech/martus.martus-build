@@ -36,6 +36,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringReader;
+import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
 import java.lang.reflect.Method;
 import java.security.PublicKey;
@@ -191,6 +192,43 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		testServer.deleteAllFiles();
 
 		TRACE_END();
+	}
+	
+	public void testLoadHiddenPacketsList() throws Exception
+	{
+		String newline = "\n";
+		String[] accountIds = {"silly account", "another account", "last account"};
+		String[] localIds = {"local-1", "another-local", "third-local"};
+		StringWriter noTrailingNewline = new StringWriter();
+		noTrailingNewline.write(accountIds[0] + newline); 
+		noTrailingNewline.write("  " + localIds[0] + newline);
+		noTrailingNewline.write(" " + localIds[1] + newline);
+		noTrailingNewline.write(accountIds[1] + newline); 
+		noTrailingNewline.write(accountIds[2] + newline); 
+		noTrailingNewline.write("  " + localIds[0] + "   " + localIds[2]);
+
+		String noNewline = noTrailingNewline.toString();
+		verifyLoadHiddenPacketsList(noNewline, accountIds, localIds);
+		String oneNewline = noNewline + newline;
+		verifyLoadHiddenPacketsList(oneNewline, accountIds, localIds);
+		String twoNewlines = oneNewline + newline;
+		verifyLoadHiddenPacketsList(twoNewlines, accountIds, localIds);
+	}
+
+	private void verifyLoadHiddenPacketsList(
+		String isHiddenNoTrailingNewline,
+		String[] accountIds,
+		String[] localIds)
+		throws IOException
+	{
+		Database db = new MockServerDatabase();
+		byte[] bytes = isHiddenNoTrailingNewline.getBytes("UTF-8");
+		UnicodeReader reader = new UnicodeReader(new ByteArrayInputStream(bytes));
+		MartusServer.loadHiddenPacketsList(reader, db);
+		assertTrue(db.isHidden(UniversalId.createFromAccountAndLocalId(accountIds[0], localIds[0])));
+		assertTrue(db.isHidden(UniversalId.createFromAccountAndLocalId(accountIds[0], localIds[1])));
+		assertTrue(db.isHidden(UniversalId.createFromAccountAndLocalId(accountIds[2], localIds[0])));
+		assertTrue(db.isHidden(UniversalId.createFromAccountAndLocalId(accountIds[2], localIds[2])));
 	}
 	
 	public void testGetNews() throws Exception
