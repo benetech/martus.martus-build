@@ -82,7 +82,7 @@ public class Retriever
 					UniversalId uid = (UniversalId)uidList.get(i);
 					if(app.getStore().findBulletinByUniversalId(uid) != null)
 						continue;
-					app.retrieveOneBulletin(uid, retrievedFolder, progressMeter);
+					app.retrieveOneBulletinToFolder(uid, retrievedFolder, progressMeter);
 				}
 				catch(Exception e)
 				{

@@ -897,7 +897,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		appWithAccount.serverChunkSize = 100;
 		BulletinStore store = appWithAccount.getStore();
-		appWithAccount.retrieveOneBulletin(b.getUniversalId(), store.getFolderDiscarded(), null);
+		appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), store.getFolderDiscarded(), null);
 		
 		appWithAccount.serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
 		
@@ -920,7 +920,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		response.add(Base64.encode(bulletinBytes));
 		mockServer.downloadResponse = response;
 		
-		appWithAccount.retrieveOneBulletin(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
+		appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 		
 		mockServer.setDownloadResponseReal();
 		
@@ -945,7 +945,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		try
 		{
-			appWithAccount.retrieveOneBulletin(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
+			appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 			fail("Should have thrown");
 		}
 		catch(Exception ignoreExpectedException)
@@ -973,7 +973,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		try
 		{
-			appWithAccount.retrieveOneBulletin(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
+			appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 			fail("Should have thrown");
 		}
 		catch(Exception ignoreExpectedException)
@@ -1001,7 +1001,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		try
 		{
-			appWithAccount.retrieveOneBulletin(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
+			appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 			fail("Should have thrown");
 		}
 		catch(Exception ignoreExpectedException)
@@ -1031,7 +1031,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		try
 		{
-			appWithAccount.retrieveOneBulletin(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
+			appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 			fail("Should have thrown");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)
@@ -1061,7 +1061,7 @@ public class TestMartusApp extends TestCaseEnhanced
 		
 		try
 		{
-			appWithAccount.retrieveOneBulletin(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
+			appWithAccount.retrieveOneBulletinToFolder(b.getUniversalId(), appWithAccount.getFolderDiscarded(), null);
 			fail("Should have thrown");
 		}
 		catch(MartusApp.ServerErrorException ignoreExpectedException)

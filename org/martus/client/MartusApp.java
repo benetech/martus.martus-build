@@ -12,6 +12,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.OutputStream;
 import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
@@ -43,6 +44,7 @@ import org.martus.common.NetworkResponse;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
+import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.WrongAccountException;
@@ -1028,19 +1030,40 @@ public class MartusApp
 		return fdp;
 	}
 
-	public void retrieveOneBulletin(UniversalId uid, BulletinFolder retrievedFolder, UiProgressMeter progressMeter) throws
+	public void retrieveOneBulletinToFolder(UniversalId uid, BulletinFolder retrievedFolder, UiProgressMeter progressMeter) throws
 		Exception
 	{
 		File tempFile = File.createTempFile("$$$MartusApp", null);
 		tempFile.deleteOnExit();
 		FileOutputStream outputStream = new FileOutputStream(tempFile);
 
+		String progressTag = getFieldLabel("ChunkProgressStatusMessage");
+		int masterTotalSize = retrieveBulletinZipToStream(uid, outputStream, progressMeter, progressTag);
+
+		outputStream.close();
+
+		if(tempFile.length() != masterTotalSize)
+			throw new ServerErrorException("totalSize didn't match data length");
+			
+		store.importZipFileBulletin(tempFile, retrievedFolder, true);
+
+		tempFile.delete();
+	}
+
+	int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream, 
+			UiProgressMeter progressMeter, String progressTag)
+		throws
+			MartusSignatureException,
+			ServerErrorException,
+			IOException,
+			InvalidBase64Exception
+	{
 		int masterTotalSize = 0;
 		int totalSize = 0;
 		int chunkOffset = 0;
 		String lastResponse = "";
 		if(progressMeter != null)
-			progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), 0, 1);	
+			progressMeter.updateProgressMeter(progressTag, 0, 1);	
 		while(!lastResponse.equals(NetworkInterfaceConstants.OK))
 		{
 			
@@ -1072,27 +1095,19 @@ public class MartusApp
 			// TODO: validate that length of data == chunkSize that was returned
 			String data = (String)result.get(2);
 			StringReader reader = new StringReader(data);
-
+		
 			Base64.decode(reader, outputStream);
 			chunkOffset += chunkSize;
 			if(progressMeter != null)
 			{
 				if(progressMeter.shouldExit())
 					break;					
-				progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), chunkOffset, masterTotalSize);	
+				progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);	
 			}
 		}
 		if(progressMeter != null)
-			progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), chunkOffset, masterTotalSize);	
-
-		outputStream.close();
-
-		if(tempFile.length() != masterTotalSize)
-			throw new ServerErrorException("totalSize didn't match data length");
-			
-		store.importZipFileBulletin(tempFile, retrievedFolder, true);
-
-		tempFile.delete();
+			progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);	
+		return masterTotalSize;
 	}
 
 	public String deleteServerDraftBulletins(Vector uidList) throws 
