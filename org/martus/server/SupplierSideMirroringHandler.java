@@ -87,10 +87,21 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 			case cmdListBulletinsForMirroring:
 			{
 				String authorAccountId = (String)parameters.get(1);
-				Vector infos = listBulletinsForMirroring(callerAccountId, authorAccountId);
+				Vector infos = listBulletinsForMirroring(authorAccountId);
 				
 				result.add(OK);
 				result.add(infos);
+				return result;
+			}
+			case cmdGetBulletinChunkForMirroring:
+			{
+				String authorAccountId = (String)parameters.get(1);
+				String bulletinLocalId = (String)parameters.get(2);
+
+				Vector data = getBulletinChunk(authorAccountId, bulletinLocalId);
+				
+				result.add(OK);
+				result.add(data);
 				return result;
 			}
 			default:
@@ -120,7 +131,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return collector.accounts;
 	}
 	
-	Vector listBulletinsForMirroring(String callerAccountId, String authorAccountId)
+	Vector listBulletinsForMirroring(String authorAccountId)
 	{
 		class Collector implements Database.PacketVisitor
 		{
@@ -151,6 +162,12 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return collector.infos;
 	}
 	
+	Vector getBulletinChunk(String authorAccountId, String bulletinLocalId)
+	{
+		return null;
+	}
+	
+	
 	int extractCommand(Object possibleCommand)
 	{
 		String cmdString = (String)possibleCommand;
@@ -163,6 +180,9 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		if(cmdString.equals(CMD_LIST_BULLETINS_FOR_MIRRORING))
 			return cmdListBulletinsForMirroring;
 		
+		if(cmdString.equals(CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING))
+			return cmdGetBulletinChunkForMirroring;
+
 		return cmdUnknown;
 	}
 	
@@ -177,6 +197,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 	final static int cmdPing = 1;
 	final static int cmdListAccountsForMirroring = 2;
 	final static int cmdListBulletinsForMirroring = 3;
+	final static int cmdGetBulletinChunkForMirroring = 4;
 	
 	Database db;
 	MartusCrypto verifier;

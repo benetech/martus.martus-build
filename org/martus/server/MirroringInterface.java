@@ -4,9 +4,10 @@ import java.util.Vector;
 
 public interface MirroringInterface
 {
-	public final static String CMD_PING = "ping";
+	public final static String CMD_PING = "pingForMirroring";
 	public final static String CMD_LIST_ACCOUNTS_FOR_MIRRORING = "listAccountsForMirroring";
 	public final static String CMD_LIST_BULLETINS_FOR_MIRRORING = "listBulletinsForMirroring";
+	public final static String CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING = "getBulletinChunkForMirroring";
 
 	public static final String OK = "ok";
 	public static final String SIG_ERROR = "signature error";

@@ -190,6 +190,44 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertContains(result3, infos);
 	}
 
+	public void testGetBulletinChunkNotAuthorized() throws Exception
+	{
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add("account id to ignore");
+		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		Vector result = handler.request(callerAccountId, parameters, sig);
+		assertEquals(1, result.size());
+		assertEquals(MirroringInterface.NOT_AUTHORIZED, result.get(0));
+	}
+	
+	public void testGetBulletinChunkBadAuthorAccountId() throws Exception
+	{
+		handler.addAuthorizedCaller(callerAccountId);
+
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add(new Integer(3));
+		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		Vector result = handler.request(callerAccountId, parameters, sig);
+		assertEquals(1, result.size());
+		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
+	}
+	
+	public void testGetBulletinChunkBadBulletinLocal() throws Exception
+	{
+		handler.addAuthorizedCaller(callerAccountId);
+
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add("pretend account");
+		parameters.add(new Integer(3));
+		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		Vector result = handler.request(callerAccountId, parameters, sig);
+		assertEquals(1, result.size());
+		assertEquals(MirroringInterface.BAD_PARAMETER, result.get(0));
+	}
+	
 	Vector writeSampleHeaderPacket(BulletinHeaderPacket bhp) throws Exception
 	{
 		String accountId = bhp.getAccountId();
