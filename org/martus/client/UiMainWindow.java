@@ -126,6 +126,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		app.loadFolders();
 		int orphanCount = app.repairOrphans();
 
+		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
 		addWindowListener(new WindowEventHandler());
 
 		initializeViews();
