@@ -164,10 +164,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		inactivityDetector = new InactivityDetector();
 
 		uploader = new java.util.Timer(true);
-		uploader.schedule(new TickBackgroundUpload(), 0, BACKGROUND_UPLOAD_CHECK_SECONDS);
+		uploader.schedule(new TickBackgroundUpload(), 0, BACKGROUND_UPLOAD_CHECK_MILLIS);
 
 		timeoutChecker = new java.util.Timer(true);
-		timeoutChecker.schedule(new TickTimeout(), 0, BACKGROUND_TIMEOUT_CHECK_EVERY_X_SECONDS);
+		timeoutChecker.schedule(new TickTimeout(), 0, BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS);
 
 		errorChecker = new javax.swing.Timer(10*1000, new UploadErrorChecker());
 		errorChecker.start();
@@ -2209,8 +2209,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private static final int MAX_KEYPAIRFILE_SIZE = 32000;
 	private static final int TIMEOUT_SECONDS = (10 * 60);
-	private static final int BACKGROUND_UPLOAD_CHECK_SECONDS = 5*1000;
-	private static final int BACKGROUND_TIMEOUT_CHECK_EVERY_X_SECONDS = 5*1000;
+	private static final int BACKGROUND_UPLOAD_CHECK_MILLIS = 5*1000;
+	private static final int BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS = 5*1000;
 	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;
