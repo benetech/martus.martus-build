@@ -163,7 +163,7 @@ public class UiDisplayFileDlg extends JDialog
 	{
 		msgArea.setCaretPosition(message.length());
 		msgAreaScrollPane.getVerticalScrollBar().setValue(msgAreaScrollPane.getVerticalScrollBar().getMaximum());
-		int foundAt = message.indexOf((String)tocList.getSelectedValue());
+		int foundAt = message.indexOf("-\n" + (String)tocList.getSelectedValue());
 		if(foundAt < 0)
 			foundAt = 0;
 		msgArea.setCaretPosition(foundAt);
