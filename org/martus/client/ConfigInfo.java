@@ -84,8 +84,7 @@ public class ConfigInfo implements Serializable
 		contactInfo.add(webPage);
 		contactInfo.add(phone);
 		contactInfo.add(address);
-		String signature;
-		signature = MartusUtilities.sign(contactInfo, signer);
+		String signature = MartusUtilities.sign(contactInfo, signer);
 		contactInfo.add(signature);
 		return contactInfo;
 	}

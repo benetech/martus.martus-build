@@ -131,7 +131,11 @@ abstract public class MockDatabase implements Database
 
 	public String getFolderForAccount(String accountString)
 	{
-		return accountString;
+		UniversalId uid = UniversalId.createFromAccountAndLocalId(accountString, "");
+		DatabaseKey key = DatabaseKey.createSealedKey(uid);
+		File file = getInterimFile(key, incomingInterimMap);
+		file.delete();
+		return file.getPath();		
 	}
 
 	public File getIncomingInterimFile(DatabaseKey key)

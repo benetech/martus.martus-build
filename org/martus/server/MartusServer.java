@@ -2,6 +2,8 @@ package org.martus.server;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -906,6 +908,57 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 		}
 		return result;
+	}
+	
+	public String putContactInfo(String accountId, Vector contactInfo)
+	{
+		String result = NetworkInterfaceConstants.INVALID_DATA;
+		if(contactInfo == null)
+			return result;
+		if(contactInfo.size() <= 3)
+			return result;
+		String publicKey = (String)contactInfo.get(0);
+		if(!publicKey.equals(accountId))
+			return result;
+		int contentSize = ((Integer)(contactInfo.get(1))).intValue();
+		if(contentSize + 3 != contactInfo.size())
+			return result;
+
+		String signature = (String)contactInfo.get(contactInfo.size()-1);
+		contactInfo.remove(contactInfo.size()-1);
+		if(!MartusUtilities.verifySignature(contactInfo, security, publicKey, signature))
+			return NetworkInterfaceConstants.SIG_ERROR;
+		contactInfo.add(signature);
+
+		File contactInfoFile = getContactInfoFileForAccount(accountId);
+		contactInfoFile.getParentFile().mkdirs();
+		try 
+		{
+			FileOutputStream contactFileOutputStream = new FileOutputStream(contactInfoFile);
+			DataOutputStream out = new DataOutputStream(contactFileOutputStream);
+			out.writeUTF((String)contactInfo.get(0));
+			out.writeInt(((Integer)(contactInfo.get(1))).intValue());
+			for(int i = 2; i<contactInfo.size(); ++i)
+			{
+				out.writeUTF((String)contactInfo.get(i));
+			}
+			out.close();
+		} 
+		catch (IOException e) 
+		{
+			System.out.println(e);
+			e.printStackTrace();
+			return NetworkInterfaceConstants.SERVER_ERROR;
+		}
+		return NetworkInterfaceConstants.OK;
+	}
+
+
+	public File getContactInfoFileForAccount(String accountId) 
+	{
+		File contactInfoDir = new File(getFolderFromClientId(accountId), "ContactInfo");
+		File contactInfoFile = new File(contactInfoDir, "ContactInfo.dat");
+		return contactInfoFile;
 	}
 
 	public Vector legacyDownloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)

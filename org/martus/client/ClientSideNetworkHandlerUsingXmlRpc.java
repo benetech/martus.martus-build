@@ -116,6 +116,16 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		return (Vector)callServer(server, cmdDeleteDrafts, params);
 	}
 	
+	public Vector putContactInfo(String myAccountId, Vector parameters, String signature) 
+	{
+		Vector params = new Vector();
+		params.add(myAccountId);
+		params.add(parameters);
+		params.add(signature);
+		return (Vector)callServer(server, cmdPutContactInfo, params);
+	}
+
+
 	public String ping()
 	{
 		Vector params = new Vector();

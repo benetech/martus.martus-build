@@ -198,6 +198,69 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(NetworkInterfaceConstants.VERSION, testServer.ping());
 	}
 	
+	public void testPutContactInfo() throws Exception
+	{
+		Vector contactInfo = new Vector();
+		String clientId = store.getAccountId();
+		String resultIncomplete = testServer.putContactInfo(clientId, contactInfo);
+		assertEquals("Empty ok?", INVALID_DATA, resultIncomplete);
+
+		contactInfo.add("bogus data");
+		resultIncomplete = testServer.putContactInfo(clientId, contactInfo);
+		assertEquals("Incorrect not Incomplete?", INVALID_DATA, resultIncomplete);
+		
+		contactInfo.clear();
+		contactInfo.add(clientId);
+		contactInfo.add(new Integer(1));
+		contactInfo.add("Data");
+		contactInfo.add("invalid Signature");
+		String invalidSig = testServer.putContactInfo(clientId, contactInfo);
+		assertEquals("Invalid Signature", SIG_ERROR, invalidSig);		
+
+		contactInfo.clear();
+		contactInfo.add(clientId);
+		contactInfo.add(new Integer(1));
+		contactInfo.add("Data");
+		String signature = MartusUtilities.sign(contactInfo, clientSecurity);
+		contactInfo.add(signature);
+		String incorrectAccoutResult = testServer.putContactInfo("differentAccountID", contactInfo);
+		assertEquals("Incorrect Accout ", INVALID_DATA, incorrectAccoutResult);		
+
+		File contactFile = testServer.getContactInfoFileForAccount(clientId);
+		assertFalse("Contact File already exists?", contactFile.exists());		
+		String correctResult = testServer.putContactInfo(clientId, contactInfo);
+		assertEquals("Correct Signature", OK, correctResult);		
+
+		assertTrue("File Doesn't exist?", contactFile.exists());
+		System.out.println(contactFile.length());
+		assertTrue("Size too small", contactFile.length() > 200);
+
+		contactFile.delete();
+		contactFile.getParentFile().delete();
+	}
+	
+	public void testPutContactInfoThroughHandler() throws Exception
+	{
+		Vector parameters = new Vector();
+		parameters.add(store.getAccountId());
+		parameters.add(new Integer(1));
+		parameters.add("Data");
+		String signature = MartusUtilities.sign(parameters, clientSecurity);
+		parameters.add(signature);
+
+		String sig = MartusUtilities.sign(parameters, clientSecurity);
+		String clientId = store.getAccountId();
+		
+		Vector result = testServerInterface.putContactInfo(clientId, parameters, sig);
+		File contactFile = testServer.getContactInfoFileForAccount(clientId);
+		assertEquals("Result size?", 1, result.size());
+		assertEquals("Result not ok?", OK, result.get(0));
+
+		contactFile.delete();
+		contactFile.getParentFile().delete();
+	}
+
+
 	public void testGetAccountInformation() throws Exception
 	{
 		testServer.setSecurity(serverSecurity);
@@ -1384,7 +1447,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("Sealed not ok?", OK, resultAllOk);
 		assertEquals("Deleted sealed?", newRecordCount, db.getRecordCount());
 	}
-	
+
 	String[] uploadSampleDrafts() throws Exception
 	{
 		assertEquals("db not empty?", 0, db.getRecordCount());

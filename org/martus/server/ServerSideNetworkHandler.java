@@ -238,6 +238,23 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return result;
 	}
 	
+	public Vector putContactInfo(String myAccountId, Vector parameters, String signature) 
+	{
+		if(server.serverSSLLogging)
+			server.logging("putContactInfo");
+		Vector result = new Vector();
+		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		{
+			if(server.serverSSLLogging)
+				server.logging("Signature Error");
+			result.add(SIG_ERROR);
+			return result;
+		}
+		result.add(server.putContactInfo(myAccountId, parameters));
+		return result;
+	}
+
+
 	// begin legacy!
 	public String ping()
 	{
@@ -322,5 +339,4 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	final static String defaultReservedResponse = "";
 
 	MartusServer server;
-
 }

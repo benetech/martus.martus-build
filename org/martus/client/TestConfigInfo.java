@@ -139,8 +139,8 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals("Author not correct?", sampleAuthor, contactInfo.get(2));
 		assertEquals("Address not correct?", sampleAddress, contactInfo.get(7));
 		assertEquals("phone not correct?", samplePhone, contactInfo.get(6));
-		String signature = (String)contactInfo.get(8);
-		contactInfo.remove(8);
+		String signature = (String)contactInfo.get(contactInfo.size()-1);
+		contactInfo.remove(contactInfo.size()-1);
 		assertTrue("Signature failed?", MartusUtilities.verifySignature(contactInfo, signer, publicKey, signature));
 	}
 
