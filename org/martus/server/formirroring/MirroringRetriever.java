@@ -95,7 +95,7 @@ public class MirroringRetriever
 				return null;
 
 			String publicCode = MartusUtilities.getPublicCode(nextAccountId);
-			log("Mirroring: List bulletins: " + publicCode);
+			//log("Mirroring: List bulletins: " + publicCode);
 			NetworkResponse response = gateway.listBulletinsForMirroring(security, nextAccountId);
 			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
 			{
