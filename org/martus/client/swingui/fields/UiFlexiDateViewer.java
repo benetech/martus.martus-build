@@ -26,13 +26,10 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui.fields;
 
-import java.text.DateFormat;
-
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
 import org.martus.client.swingui.UiLocalization;
-import org.martus.common.bulletin.Bulletin;
 import org.martus.util.MartusFlexidate;
 
 
@@ -56,28 +53,25 @@ public class UiFlexiDateViewer extends UiField
 
 	public void setText(String newText)
 	{
-		value = localization.convertStoredDateToDisplay(newText);
-		int dateBreak = newText.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);
-		int datePlus = newText.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER);
+		MartusFlexidate mfd = MartusFlexidate.createFromMartusDateString(newText);
 		
-		if (dateBreak > 0 && newText.charAt(datePlus+1) != '0')			
-		{
-			String beginDate = newText.substring(0,dateBreak);
-			String endDate = convertEndDate(newText.substring(dateBreak+1));						
-			label.setText("  "+localization.getFieldLabel("DateRangeFrom")+" "+ beginDate+ 
-					" "+localization.getFieldLabel("DateRangeTo")+" "+ endDate +"  ");				
-		}
+		String rawBeginDate = MartusFlexidate.toStoredDateFormat(mfd.getBeginDate());
+		String rawEndDate = MartusFlexidate.toStoredDateFormat(mfd.getEndDate());
+		
+		String beginDate = localization.convertStoredDateToDisplay(rawBeginDate);
+		String endDate = localization.convertStoredDateToDisplay(rawEndDate);
+				
+		String display = "";
+		
+		if (mfd.hasDateRange())
+			display = localization.getFieldLabel("DateRangeFrom")+ SPACE + 
+				beginDate + SPACE + localization.getFieldLabel("DateRangeTo")+
+				SPACE + endDate;		
 		else
-			label.setText("  " + value + "  ");
-	}
-	
-	private String convertEndDate(String endDate)	
-	{		
-		MartusFlexidate mf = new MartusFlexidate(endDate);
-		DateFormat df = Bulletin.getStoredDateFormat();				
-
-		return df.format(mf.getEndDate());
-	}
+			display = beginDate;
+				
+		label.setText(SPACE + display + SPACE);
+	}	
 
 	public void disableEdits()
 	{
@@ -85,5 +79,5 @@ public class UiFlexiDateViewer extends UiField
 
 	UiLocalization localization;
 	JLabel label;
-	String value;	
+	private static String	SPACE = " ";	
 }

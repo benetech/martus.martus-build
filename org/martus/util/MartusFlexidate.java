@@ -26,10 +26,12 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.util;
 
-import java.util.Calendar;
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.util.Date;
 
 import org.hrvd.util.date.Flexidate;
+import org.martus.common.bulletin.Bulletin;
 
 public class MartusFlexidate
 {
@@ -76,20 +78,50 @@ public class MartusFlexidate
 	}	
 	
 	public Date getBeginDate()
-	{	
-		Calendar cal = flexiDate.getCalendarLow();							
-		return (Date)cal.getTime();		
+	{		
+		return flexiDate.getCalendarLow().getTime();
+	}
+	
+	public static MartusFlexidate createFromMartusDateString(String dateStr)
+	{
+		DateFormat df = Bulletin.getStoredDateFormat();
+		Date d = null;
+		int comma = dateStr.indexOf(DATE_RANGE_SEPARATER);
+		if (comma >= 0)
+		{
+			String beginDate = dateStr.substring(comma+1);
+			return new MartusFlexidate(beginDate);
+		}
+		
+		try
+		{
+			d = df.parse(dateStr);			
+		}
+		catch(ParseException e)
+		{			
+			return new MartusFlexidate("19000101+0");
+		}				
+		return new MartusFlexidate(d,d);
 	}
 	
 	public Date getEndDate()
-	{			
-		Calendar cal = flexiDate.getCalendarHigh();		
-		return (Date) ((hasDateRange())? cal.getTime(): getBeginDate());
+	{					
+		return ((hasDateRange())? flexiDate.getCalendarHigh().getTime(): getBeginDate());
 	}	
 	
-	private boolean hasDateRange()
+	public boolean hasDateRange()
 	{
 		return (flexiDate.getRange() > 0)? true:false;
+	}
+
+	public static String toStoredDateFormat(Date date)
+	{		
+		return Bulletin.getStoredDateFormat().format(date);				
+	}
+
+	public static String toFlexidateFormat(Date beginDate, Date endDate)
+	{		
+		return new MartusFlexidate(beginDate, endDate).getMatusFlexidate();
 	}		
 		
 	Flexidate flexiDate;

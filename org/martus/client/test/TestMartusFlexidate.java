@@ -49,10 +49,9 @@ public class TestMartusFlexidate extends TestCaseEnhanced
 		
 		DateFormat df = Bulletin.getStoredDateFormat();						
 		assertEquals("2003-01-05", df.format(mf.getBeginDate()));
-		assertEquals("2003-01-07", df.format(mf.getEndDate()));			
-										
+		assertEquals("2003-01-07", df.format(mf.getEndDate()));																
 	}
-	
+		
 	public void testFlexiDateOverMonths()
 	{
 		MartusFlexidate mf = new MartusFlexidate("20030105+120");		
@@ -134,6 +133,30 @@ public class TestMartusFlexidate extends TestCaseEnhanced
 		assertEquals("1999-01-15", df.format(mf.getBeginDate()));
 		assertEquals("2000-01-10", df.format(mf.getEndDate()));	
 	}
+	
+	public void testCreateFromMartusString()
+	{
+		MartusFlexidate mfd = MartusFlexidate.createFromMartusDateString("2000-01-10");
+		DateFormat df = Bulletin.getStoredDateFormat();										
+		assertEquals("2000-01-10", df.format(mfd.getBeginDate()));	
+		
+		mfd = MartusFlexidate.createFromMartusDateString("2000-01-10,20000101+0");
+		df = Bulletin.getStoredDateFormat();										
+		assertEquals("single begin", "2000-01-01", df.format(mfd.getBeginDate()));
+		assertEquals("single end", "2000-01-01", df.format(mfd.getEndDate()));
+		
+		mfd = MartusFlexidate.createFromMartusDateString("2000-01-10,20001203+5");
+		df = Bulletin.getStoredDateFormat();										
+		assertEquals("range begin","2000-12-03", df.format(mfd.getBeginDate()));
+		assertEquals("range end","2000-12-08", df.format(mfd.getEndDate()));						
+	}
+	
+	public void testCreateInvalidDateFromMartusString()
+	{
+		MartusFlexidate mfd = MartusFlexidate.createFromMartusDateString("185[01-10");
+		DateFormat df = Bulletin.getStoredDateFormat();										
+		assertEquals("1900-01-01", df.format(mfd.getBeginDate()));					
+	}
 
 	private Date getDate(int year, int month, int day)
 	{			
@@ -141,5 +164,5 @@ public class TestMartusFlexidate extends TestCaseEnhanced
 		cal.set(year,month,day);		
 						
 		return (Date) cal.getTime();
-	}
+	}	
 }

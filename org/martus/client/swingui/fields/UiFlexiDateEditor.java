@@ -105,32 +105,32 @@ public class UiFlexiDateEditor extends UiField
 	}
 				
 	private Box buildBeginDateBox()
-	{		
-		Box bgDateBox = Box.createHorizontalBox();
-		if (bgDayCombo  == null)
-		{									
+	{				
+		if (bgDateBox  == null)
+		{	
+			bgDateBox = Box.createHorizontalBox();								
 			bgDayCombo = new JComboBox();	
 			bgMonthCombo = new JComboBox(localizationToUse.getMonthLabels());
-			bgYearCombo = new JComboBox();
-		}
-		UiDateEditor.buildDate(bgDateBox, localizationToUse, bgYearCombo, bgMonthCombo, bgDayCombo);
+			bgYearCombo = new JComboBox();					
+			UiDateEditor.buildDate(bgDateBox, localizationToUse, bgYearCombo, bgMonthCombo, bgDayCombo);
+		}		
+		
 		return bgDateBox;											
 	}
 
 	private Box buildEndDateBox()
-	{
-		Box endDateBox = Box.createHorizontalBox();
-		boolean needToSetDefaultValue=false;
-		
-		if (endDayCombo == null)
-		{		
+	{		
+		boolean needToSetDefaultValue=false;		
+		if (endDateBox == null)
+		{
+			endDateBox = Box.createHorizontalBox();		
 			endDayCombo = new JComboBox();	
 			endMonthCombo = new JComboBox(localizationToUse.getMonthLabels());
 			endYearCombo = new JComboBox();
-			needToSetDefaultValue=true;																		
-		}		
+			needToSetDefaultValue=true;						
+			UiDateEditor.buildDate(endDateBox, localizationToUse, endYearCombo, endMonthCombo, endDayCombo);
+		}
 		
-		UiDateEditor.buildDate(endDateBox, localizationToUse, endYearCombo, endMonthCombo, endDayCombo);
 		if (needToSetDefaultValue)
 		{				
 			endYearCombo.setSelectedItem((String) bgYearCombo.getSelectedItem());
@@ -148,32 +148,46 @@ public class UiFlexiDateEditor extends UiField
 
 	public JComponent[] getFocusableComponents()
 	{
-		return (flexiDateRB.isSelected())?
-			new JComponent[]{exactDateRB, flexiDateRB, bgDayCombo, bgMonthCombo, bgYearCombo,
-							endDayCombo, endMonthCombo, endYearCombo}:
-			new JComponent[]{exactDateRB, flexiDateRB, bgDayCombo, bgMonthCombo, bgYearCombo,};
+		return (flexiDateRB.isSelected())? loadFlexidatePanelComponents():loadExactDatePanelComponents();				
+	}
+	
+	private JComponent[] loadFlexidatePanelComponents()
+	{
+		return new JComponent[]{exactDateRB, flexiDateRB, bgDayCombo, bgMonthCombo, bgYearCombo,
+		endDayCombo, endMonthCombo, endYearCombo};
+	}
+	
+	private JComponent[] loadExactDatePanelComponents()
+	{
+		return new JComponent[]{exactDateRB, flexiDateRB, bgDayCombo, bgMonthCombo, bgYearCombo,};
 	}
 
 	private final class RadioItemListener implements ItemListener
 	{
 		public void itemStateChanged(ItemEvent e)
 		{
-			if (isFlexiDate())
-			{												
-				component.remove(extDatePanel);						
-				component.add(buildFlexiDatePanel());																	
-				component.revalidate();								
-			}
+			if (isFlexiDate())														
+				removeExactDatePanel();									
 			
-			if (isExactDate())
-			{		
-				Dimension d = component.getSize();									
-				component.remove(flexiDatePanel);						
-				component.add(buildExactDatePanel());
-				component.setPreferredSize(d);									
-				component.revalidate();				
-			}			
+			if (isExactDate())				
+				removeFlexidatePanel();					
 		}
+	}
+	
+	private void removeExactDatePanel()
+	{
+		component.remove(extDatePanel);						
+		component.add(buildFlexiDatePanel());																	
+		component.revalidate();		
+	}
+	
+	private void removeFlexidatePanel()
+	{
+		Dimension d = component.getSize();									
+		component.remove(flexiDatePanel);						
+		component.add(buildExactDatePanel());
+		component.setPreferredSize(d);									
+		component.revalidate();		
 	}
 
 	public void validate() throws UiField.DataInvalidException 
@@ -208,30 +222,11 @@ public class UiFlexiDateEditor extends UiField
 	public String getText()
 	{
 		DateFormat df = Bulletin.getStoredDateFormat();				
-		String dateText = df.format(getBeginDate())+ MartusFlexidate.DATE_RANGE_SEPARATER;
-		
-		if (isFlexiDate())	
-			dateText += toFlexidate(getBeginDate(), getEndDate());
-		else
-			dateText += toFlexidate(getBeginDate(), getBeginDate());
-				
+		String dateText = df.format(getBeginDate())+ MartusFlexidate.DATE_RANGE_SEPARATER+
+						MartusFlexidate.toFlexidateFormat(getBeginDate(), (isFlexiDate())? getEndDate():getBeginDate());						
 		return dateText;
 	}	
 	
-	private String toFlexidate(Date beginDate, Date endDate)
-	{
-		MartusFlexidate mf = new MartusFlexidate(beginDate, endDate);
-		return mf.getMatusFlexidate();
-	}
-	
-	private String fromFlexidate(String date)
-	{		
-		MartusFlexidate mf = new MartusFlexidate(date);				
-		DateFormat df = Bulletin.getStoredDateFormat();				
-					
-		return df.format(mf.getEndDate());	
-	}
-
 	private Date getBeginDate() 
 	{		
 		return UiDateEditor.getDate(bgYearCombo, bgMonthCombo, bgDayCombo);
@@ -244,19 +239,14 @@ public class UiFlexiDateEditor extends UiField
 		
 	public void setText(String newText)
 	{		
-		String bgDateText = newText;
-		int comma = newText.indexOf(MartusFlexidate.DATE_RANGE_SEPARATER);
-		int plus = newText.indexOf(MartusFlexidate.FLEXIDATE_RANGE_DELIMITER);			
-							
-		if (newText.charAt(plus+1) != '0' && comma > 0)
-		{			
-			flexiDateRB.setSelected(true);
-			bgDateText = newText.substring(0,comma);
-			String endDateText = newText.substring(comma+1);
+		MartusFlexidate mfd = MartusFlexidate.createFromMartusDateString(newText);
+		UiDateEditor.setDate(MartusFlexidate.toStoredDateFormat(mfd.getBeginDate()), bgYearCombo, bgMonthCombo, bgDayCombo);
 			
-			UiDateEditor.setDate(fromFlexidate(endDateText), endYearCombo, endMonthCombo, endDayCombo); 									
-		}			
-		UiDateEditor.setDate(bgDateText, bgYearCombo, bgMonthCombo, bgDayCombo);			
+		if (mfd.hasDateRange())
+		{
+			flexiDateRB.setSelected(true);
+			UiDateEditor.setDate(MartusFlexidate.toStoredDateFormat(mfd.getEndDate()), endYearCombo, endMonthCombo, endDayCombo);
+		}		
 	}
 		
 	public void disableEdits()
@@ -290,5 +280,7 @@ public class UiFlexiDateEditor extends UiField
 	private JRadioButton 		exactDateRB;
 	private JRadioButton 		flexiDateRB;
 	private JPanel 				flexiDatePanel;
-	private JPanel 				extDatePanel;	
+	private JPanel 				extDatePanel;
+	private Box					bgDateBox = null;
+	private Box					endDateBox = null;	
 }
