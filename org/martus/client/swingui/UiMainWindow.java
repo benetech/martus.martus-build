@@ -1307,7 +1307,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private boolean confirmPublicCode(String publicCode, String baseTag, String errorBaseTag)
 	{
 		String userEnteredPublicCode = "";
-		//TODO remove prints before release
 		//System.out.println("Public code required:" + publicCode);
 		while(true)
 		{
