@@ -6,7 +6,6 @@ import java.awt.Cursor;
 import java.awt.Dimension;
 import java.awt.Event;
 import java.awt.GridLayout;
-import java.awt.KeyboardFocusManager;
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Toolkit;
@@ -55,7 +54,6 @@ import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
-import org.martus.client.Exceptions.MartusClientRuntimeException;
 import org.martus.client.MartusApp.ServerErrorException;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
