@@ -173,10 +173,10 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 
 	public Object callServer(String serverName, String method, Vector params)
 	{
-		for(int i=0; i < ports.length; ++i)
+		int numPorts = ports.length;
+		for(int i=0; i < numPorts; ++i)
 		{
-			// TODO: cache a successful port for the whole session
-			int port = ports[i];
+			int port = ports[indexOfPortThatWorkedLast];
 
 			try
 			{
@@ -185,7 +185,10 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 			catch (IOException e)
 			{
 				if(e.getMessage().startsWith("Connection"))
+				{
+					indexOfPortThatWorkedLast = (indexOfPortThatWorkedLast+1)%numPorts;
 					continue;
+				}
 				//TODO throw IOExceptions so caller can decide what to do.
 				//This was added for connection refused: connect (no server connected)
 				//System.out.println("ServerInterfaceXmlRpcHandler:callServer Exception=" + e);
@@ -211,7 +214,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		return null;
 	}
 	
-	Object callServerAtPort(String serverName, String method,
+	public Object callServerAtPort(String serverName, String method,
 									Vector params, int port)
 		throws MalformedURLException, XmlRpcException, IOException 
 	{
@@ -236,6 +239,7 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		System.out.println(stamp + " " + message);
 	}
 
+	static int indexOfPortThatWorkedLast = 0;
 	SimpleX509TrustManager tm;
 	String server;
 	int[] ports;

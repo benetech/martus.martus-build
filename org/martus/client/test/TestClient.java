@@ -60,6 +60,7 @@ public class TestClient
 		suite.addTest(new TestSuite(TestClientFileDatabase.class));
 		suite.addTest(new TestSuite(TestMartusUserNameAndPassword.class));
 		suite.addTest(new TestSuite(TestCacheOfSortableFields.class));
+		suite.addTest(new TestSuite(TestClientSideNetworkHandler.class));
 
 	    return suite;
 	}

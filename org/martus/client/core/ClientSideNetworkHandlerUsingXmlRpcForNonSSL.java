@@ -43,8 +43,13 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 {
 	public ClientSideNetworkHandlerUsingXmlRpcForNonSSL(String serverName)
 	{
+		this(serverName, NetworkInterfaceXmlRpcConstants.defaultNonSSLPorts);
+	}
+
+	public ClientSideNetworkHandlerUsingXmlRpcForNonSSL(String serverName, int[] portsToUse)
+	{
 		server = serverName;
-		ports = NetworkInterfaceXmlRpcConstants.defaultNonSSLPorts;
+		ports = portsToUse;
 	}
 
 	// begin MartusXmlRpc interface
@@ -65,15 +70,17 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 
 	public Object callServer(String serverName, String method, Vector params)
 	{
-		for(int i=0; i < ports.length; ++i)
+		int numPorts = ports.length;
+		for(int i=0; i < numPorts; ++i)
 		{
-			int port = ports[i];
+			int port = ports[indexOfPortThatWorkedLast];
 			try
 			{
 				return callServerAtPort(serverName, method, params, port);
 			}
 			catch(ConnectException e)
 			{
+				indexOfPortThatWorkedLast = (indexOfPortThatWorkedLast+1)%numPorts;
 				continue;
 			}
 			catch(Exception e)
@@ -86,7 +93,7 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 		return null;
 	}
 	
-	Object callServerAtPort(String serverName, String method, Vector params, int port)
+	public Object callServerAtPort(String serverName, String method, Vector params, int port)
 		throws MalformedURLException, XmlRpcException, IOException
 	{
 		final String serverUrl = "http://" + serverName + ":" + port + "/RPC2";
@@ -107,5 +114,6 @@ public class ClientSideNetworkHandlerUsingXmlRpcForNonSSL implements NetworkInte
 
 	String server;
 	int[] ports;
+	static int indexOfPortThatWorkedLast = 0;
 	boolean debugMode;
 }
