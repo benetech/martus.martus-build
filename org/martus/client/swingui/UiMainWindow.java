@@ -1360,7 +1360,7 @@ if(result == NEW_ACCOUNT)
 								Integer.toString(minNumber);
 				chooser.setDialogTitle(windowTitle);
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-				chooser.setSelectedFile(new File(parent,""));
+				chooser.setSelectedFile(new File(parent," "));
 				if (chooser.showOpenDialog(this) == JFileChooser.APPROVE_OPTION)
 				{
 					File shareFile = chooser.getSelectedFile();
