@@ -1,17 +1,44 @@
-Installing Martus
-Uninstalling Martus
-Creating a username and password
-Contact information
+What is Martus(tm)?
+Why is security so important when using Martus?
+How does Martus keep the data secure?
+What does an individual need to do to keep data secure?
+What are the limitations to Martus security?
+Why send bulletins to the server?
+Getting Started
+Installing
+Choosing a password
 Setting up a server connection
-Changing the user interface language
-Changing the date format
-Creating a bulletin
-About the fields in a bulletin
-Editing a draft
+Setting your preferences
+Creating a Bulletin
+Completing fields in a bulletin
 Using a template in the Details field
+Saving and modifying Bulletins
 Saving a draft
-Sending a bulletin
-Discarding the draft
-About using folders in Martus
-About the default folders
-About special folders Martus creates
+Modifying a copy of a sealed bulletin
+Modifying a draft
+Discarding a draft
+Managing Bulletins
+Default folders
+Other folders created by Martus
+Creating folders
+Discarding and deleting bulletins
+Organizing bulletins
+Dragging bulletins to the Windows desktop
+Retrieving sealed bulletins
+Retrieving draft bulletins
+Retrieving bulletins created by field desks
+Viewing and saving attachments
+Viewing damaged bulletins
+Searching for specific bulletins
+Printing bulletins
+Keeping Your Data Secure
+How Martus security works
+Back up your key pair file
+Restoring your key pair file
+Use your password wisely
+Use safe computing practices
+Sharing your private data with your organization 
+Instructions for Headquarters users
+Instructions for field users who want to provide access to Headquarters users
+Instructions for field users who want to deny future access to Headquarters users
+Frequently Asked Questions
