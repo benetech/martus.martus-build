@@ -21,7 +21,7 @@ public interface ServerForClientsInterface
 	public Vector getPacket(String myAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId);
 	public Vector getServerCompliance();
 	public Vector listMySealedBulletinIds(String authorAccountId, Vector retrieveTags);
-	public String putBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int chunkSize, int totalSize, int chunkOffset, String data);
+	public String putBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data);
 	public String putContactInfo(String myAccountId, Vector parameters);
 	public String requestUploadRights(String authorAccountId, String tryMagicWord);
 	public String uploadBulletinChunk(String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data, String signature);

@@ -97,7 +97,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 	}
 
 	public String putBulletinChunk(String uploaderAccountId, String authorAccountId, String bulletinLocalId,
-								int chunkOffset, int chunkSize, int totalSize, String data) 
+			int totalSize, int chunkOffset, int chunkSize, String data) 
 	{
 		lastClientId = authorAccountId;
 		lastUploadedBulletinId = bulletinLocalId;				
@@ -106,7 +106,7 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 			return new String(uploadResponse);
 
 		return "" + super.putBulletinChunk(uploaderAccountId, authorAccountId, bulletinLocalId,
-										chunkOffset, chunkSize, totalSize, data);
+										totalSize, chunkOffset, chunkSize, data);
 	}
 
 	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)

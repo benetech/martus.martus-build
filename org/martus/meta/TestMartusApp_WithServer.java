@@ -353,11 +353,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		}
 
 		public String putBulletinChunk(String uploaderAccountId, String authorAccountId, String bulletinLocalId,
-				int chunkOffset, int chunkSize, int totalSize, String data) 
+			int totalSize, int chunkOffset, int chunkSize, String data) 
 		{
 			++chunkCount;
 			return super.putBulletinChunk(uploaderAccountId, authorAccountId, bulletinLocalId,
-				chunkOffset, chunkSize, totalSize, data);
+				totalSize, chunkOffset, chunkSize, data);
 		}
 
 		int chunkCount;

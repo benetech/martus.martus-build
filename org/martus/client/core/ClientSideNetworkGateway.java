@@ -87,7 +87,7 @@ public class ClientSideNetworkGateway implements BulletinRetrieverGatewayInterfa
 	}
 
 	public NetworkResponse putBulletinChunk(MartusCrypto signer, String authorAccountId, String bulletinLocalId,
-					int chunkOffset, int chunkSize, int totalSize, String data) throws
+			int totalSize, int chunkOffset, int chunkSize, String data) throws
 			MartusCrypto.MartusSignatureException
 	{
 		Vector parameters = new Vector();

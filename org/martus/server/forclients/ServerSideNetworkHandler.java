@@ -166,13 +166,13 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		int index = 0;
 		String authorAccountId = (String)parameters.get(index++);
 		String bulletinLocalId= (String)parameters.get(index++);
+		int totalSize = ((Integer)parameters.get(index++)).intValue();
 		int chunkOffset = ((Integer)parameters.get(index++)).intValue();
 		int chunkSize = ((Integer)parameters.get(index++)).intValue();
-		int totalSize = ((Integer)parameters.get(index++)).intValue();
 		String data = (String)parameters.get(index++);
 
 		String legacyResult = server.putBulletinChunk(myAccountId, authorAccountId, bulletinLocalId, 
-					chunkSize, totalSize, chunkOffset, data);
+					totalSize, chunkOffset, chunkSize, data);
 		result.add(legacyResult);
 		
 		server.clientConnectionExit();

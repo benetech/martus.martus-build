@@ -172,9 +172,9 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.listMySealedBulletinIds(authorAccountId, retrieveTags);
 	}
 
-	public String putBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int chunkSize, int totalSize, int chunkOffset, String data)
+	public String putBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int totalSize, int chunkOffset, int chunkSize, String data)
 	{
-		return coreServer.putBulletinChunk(myAccountId, authorAccountId, bulletinLocalId, chunkOffset, chunkSize, totalSize, data);
+		return coreServer.putBulletinChunk(myAccountId, authorAccountId, bulletinLocalId, totalSize, chunkOffset, chunkSize, data);
 	}
 
 	public String putContactInfo(String myAccountId, Vector parameters)

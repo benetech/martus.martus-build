@@ -800,7 +800,7 @@ public class MartusApp
 				String encoded = Base64.encode(chunkBytes);
 
 				NetworkResponse response = getCurrentNetworkInterfaceGateway().putBulletinChunk(security,
-									authorId, bulletinLocalId, offset, chunkSize, totalSize, encoded);
+									authorId, bulletinLocalId, totalSize, offset, chunkSize, encoded);
 				result = response.getResultCode();
 				if(!result.equals(NetworkInterfaceConstants.CHUNK_OK) && !result.equals(NetworkInterfaceConstants.OK))
 					break;
