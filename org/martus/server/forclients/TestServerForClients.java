@@ -227,10 +227,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		verifyErrorResult("listFieldOfficeAccounts2", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listFieldOfficeAccounts2", 0, testServer.getNumberActiveClients() );
 
-		vecResult = testServer.downloadFieldOfficeBulletinChunk(bogusStringParameter, bogusStringParameter, clientId, 0, 0, bogusStringParameter);
-		verifyErrorResult("downloadFieldOfficeBulletinChunk2", vecResult, NetworkInterfaceConstants.REJECTED );
-		assertEquals("downloadFieldOfficeBulletinChunk2", 0, testServer.getNumberActiveClients() );	
-
 		TRACE_END();
 	}
 

@@ -171,19 +171,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	}
 	
 
-	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature)
-	{
-		logging("ServerInterfaceXmlRpcHandler:downloadFieldOfficeBulletinChunk authorId=" + authorAccountId + "bulletinId=" + bulletinLocalId);
-		Vector params = new Vector();
-		params.add(authorAccountId);
-		params.add(bulletinLocalId);
-		params.add(hqAccountId);
-		params.add(new Integer(chunkOffset));
-		params.add(new Integer(maxChunkSize));
-		params.add(signature);
-		return (Vector)callServer(server, CMD_DOWNLOAD_FIELD_OFFICE_CHUNK, params);
-	}
-
 	public Vector downloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)
 	{
 		logging("ServerInterfaceXmlRpcHandler:downloadAuthorizedPacket authorAccountId=" + authorAccountId + "packetLocalId=" + packetLocalId);

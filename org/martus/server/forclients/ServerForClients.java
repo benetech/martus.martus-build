@@ -142,11 +142,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.downloadFieldDataPacket(authorAccountId, bulletinLocalId, packetLocalId, myAccountId, signature);
 	}
 
-	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature)
-	{
-		return coreServer.downloadFieldOfficeBulletinChunk(authorAccountId, bulletinLocalId, hqAccountId, chunkOffset, maxChunkSize, signature);
-	}
-
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize)
 	{
 		return coreServer.getBulletinChunk(myAccountId, authorAccountId, bulletinLocalId, chunkOffset, maxChunkSize);

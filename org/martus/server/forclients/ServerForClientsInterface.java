@@ -14,7 +14,6 @@ public interface ServerForClientsInterface
 	public String ping();
 	public String deleteDraftBulletins(String myAccountId, String[] idList);
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature);
-	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature);
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize);
 	public Vector getNews(String myAccountId, String versionLabel, String versionBuildDate);
 	public Vector getPacket(String myAccountId, String authorAccountId, String bulletinLocalId, String packetLocalId);

@@ -343,7 +343,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotContains("uploadBulletinChunk", names);
 		assertNotContains("downloadMyBulletinChunk", names);
 		assertContains("listMyBulletinSummaries", names);
-		assertContains("downloadFieldOfficeBulletinChunk", names);
+		assertNotContains("downloadFieldOfficeBulletinChunk", names);
 		assertContains("listFieldOfficeBulletinSummaries", names);
 		assertContains("listFieldOfficeAccounts", names);
 		assertContains("downloadFieldDataPacket", names);
@@ -1010,64 +1010,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 	
-	public void testDownloadFieldOfficeBulletinChunkBadId() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkBadId");
-
-		Vector result = downloadFieldOfficeBulletinChunk(testServerInterface, hqSecurity, clientSecurity.getPublicKeyString(), "bulletinid", 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		assertNotNull("result null", result);
-		assertEquals(1, result.size());
-		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
-
-		TRACE_END();
-	}
 	
-	public void testDownloadFieldOfficeBulletinChunkBadRequestSignature() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkBadId");
-
-		testServer.serverForClients.clearCanUploadList();
-		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
-		
-		Vector result1 = testServer.downloadFieldOfficeBulletinChunk(b1.getAccount(), b1.getLocalId(), hqSecurity.getPublicKeyString(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE, "123");
-		assertNotNull("result null", result1);
-		assertEquals(1, result1.size());
-		assertEquals(NetworkInterfaceConstants.SIG_ERROR, result1.get(0));
-
-		String stringToSign = b1.getAccount() + "," + b1.getLocalId() + "," + hqSecurity.getPublicKeyString() + "," +
-					Integer.toString(0) + "," + Integer.toString(NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		String signature = MartusUtilities.createSignature(stringToSign, serverSecurity);
-
-		Vector result2 = testServer.downloadFieldOfficeBulletinChunk(b1.getAccount(), b1.getLocalId(), hqSecurity.getPublicKeyString(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE, signature);
-		assertNotNull("result2 null", result2);
-		assertEquals(1, result2.size());
-		assertEquals(NetworkInterfaceConstants.SIG_ERROR, result2.get(0));
-
-		TRACE_END();
-	}
-	
-	
-	public void testDownloadFieldOfficeBulletinChunkNotAuthorized() throws Exception
-	{
-		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkNotAuthorized");
-
-		testServer.serverForClients.clearCanUploadList();
-		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
-
-		String notMineStringToSign = b1.getAccount() + "," + b1.getLocalId() + "," + clientSecurity.getPublicKeyString() + "," +
-					Integer.toString(0) + "," + Integer.toString(NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		String notMineSignature = MartusUtilities.createSignature(notMineStringToSign, clientSecurity);
-
-		Vector notMineResult = testServer.downloadFieldOfficeBulletinChunk(b1.getAccount(), b1.getLocalId(), clientSecurity.getPublicKeyString(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE, notMineSignature);
-		assertNotNull("result2 null", notMineResult);
-		assertEquals(1, notMineResult.size());
-		assertEquals(NetworkInterfaceConstants.NOTYOURBULLETIN, notMineResult.get(0));
-
-		TRACE_END();
-	}
-
 	public void testExtractPacketsToZipStream() throws Exception
 	{
 		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkNotAuthorized");
@@ -1164,41 +1107,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
-	public void testDownloadFieldOfficeBulletinThreeChunks() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinThreeChunks");
-
-		uploadSampleBulletin();
-
-		int chunkSize = b1ZipBytes.length / 5 * 2;
-		Vector result1 = downloadFieldOfficeBulletinChunk(testServerInterface, hqSecurity, b1.getAccount(), b1.getLocalId(), 0, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result1.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result1.get(1));
-		assertEquals("wrong chunk size?", new Integer(chunkSize), result1.get(2));
-		
-		Vector result2 = downloadFieldOfficeBulletinChunk(testServerInterface, hqSecurity, b1.getAccount(), b1.getLocalId(), chunkSize, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result2.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result2.get(1));
-		assertEquals("wrong chunk size?", new Integer(chunkSize), result2.get(2));
-
-		Vector result3 = downloadFieldOfficeBulletinChunk(testServerInterface, hqSecurity, b1.getAccount(), b1.getLocalId(), 2*chunkSize, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.OK, result3.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result3.get(1));
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		Base64.decode(new StringReader((String)result1.get(3)), out);
-		Base64.decode(new StringReader((String)result2.get(3)), out);
-		Base64.decode(new StringReader((String)result3.get(3)), out);
-		assertEquals("wrong amount of data?", b1ZipBytes.length, out.toByteArray().length);
-		String zipString = Base64.encode(out.toByteArray());
-		
-		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
-		Bulletin loaded = new Bulletin(clientSecurity);
-		MockBulletin.loadFromZipString(loaded, zipString, clientSecurity);
-
-		TRACE_END();
-	}
-	
 	public void testListFieldOfficeSealedBulletinIds() throws Exception
 	{
 		TRACE_BEGIN("testListFieldOfficeSealedBulletinIds");
@@ -2238,15 +2146,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		byte[] sigBytes = signer.createSignature(new ByteArrayInputStream(bytesToSign));
 		String signature = Base64.encode(sigBytes);
 		return testServer.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
-	}
-	
-	Vector downloadFieldOfficeBulletinChunk(NetworkInterface server, MartusCrypto hqSecurity, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
-	{
-		String hqAccountId = hqSecurity.getPublicKeyString();
-		String stringToSign = authorAccountId + "," + bulletinLocalId + "," + hqAccountId + "," +
-					Integer.toString(chunkOffset) + "," + Integer.toString(maxChunkSize);
-		String signature = MartusUtilities.createSignature(stringToSign, hqSecurity);
-		return server.downloadFieldOfficeBulletinChunk(authorAccountId, bulletinLocalId, hqAccountId, chunkOffset, maxChunkSize, signature);
 	}
 	
 	public int TESTSERVERTESTPORT = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL + 35;

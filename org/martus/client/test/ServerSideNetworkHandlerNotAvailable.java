@@ -111,16 +111,6 @@ class ServerSideNetworkHandlerNotAvailable implements NetworkInterface
 		return null;
 	}
 	
-	public Vector downloadFieldOfficeBulletinChunk(
-		String authorAccountId,
-		String bulletinLocalId,
-		String hqAccountId,
-		int chunkOffset,
-		int maxChunkSize,
-		String signature)
-	{
-		return null;
-	}
 	public Vector listMyBulletinSummaries(String authorAccountId)
 	{
 		return null;

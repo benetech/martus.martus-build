@@ -538,66 +538,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		return result;
 	}
 
-	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature)
-	{
-		if(serverMaxLogging)
-		{
-			StringBuffer logMsg = new StringBuffer();
-			logMsg.append("downloadFieldOfficeBulletinChunk ");
-			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + " HQ: " + getClientAliasForLogging(hqAccountId));
-			logging(logMsg.toString());
-		}
-		
-		if(isClientBanned(hqAccountId) )
-			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
-		
-		if( isShutdownRequested() )
-			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
-		
-		Vector result = new Vector();
-		
-		String signedString = authorAccountId + "," + bulletinLocalId + "," + hqAccountId + "," + 
-					Integer.toString(chunkOffset) + "," +
-					Integer.toString(maxChunkSize);
-		if(!isSignatureCorrect(signedString, signature, hqAccountId))
-		{
-			result.add(NetworkInterfaceConstants.SIG_ERROR);
-			return result;
-		}
-
-		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
-		DatabaseKey headerKey = new DatabaseKey(uid);
-		if(!getDatabase().doesRecordExist(headerKey))
-		{
-			logging("  NOT_FOUND");
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-			return result;
-		}
-		
-		try
-		{
-			String bulletinHqAccountId = getBulletinHQAccountId(headerKey);
-			if(!bulletinHqAccountId.equals(hqAccountId))
-			{
-				logging("  WRONG HQ (NOTYOURBULLETIN)");
-				result.add(NetworkInterfaceConstants.NOTYOURBULLETIN);
-				return result;
-			}
-
-			result = buildBulletinChunkResponse(headerKey, chunkOffset, maxChunkSize);
-		}
-		catch(Exception e)
-		{
-			logging("  SERVER_ERROR " + e);
-			//System.out.println("MartusServer.download: " + e);
-			result.add(NetworkInterfaceConstants.SERVER_ERROR);
-		}
-		
-		return result;
-	}
-
-
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId,
 		int chunkOffset, int maxChunkSize) 
 	{

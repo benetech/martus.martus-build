@@ -44,7 +44,6 @@ public interface NetworkInterface
 	public Vector getServerCompliance(String myAccountId, Vector parameters, String signature);
 	
 	// TODO: Delete everything below this line after all clients have been upgraded to 2002-08-28 or later
-	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature);
 	public Vector listMyBulletinSummaries(String authorAccountId);
 	public Vector downloadFieldDataPacket(String authorAccountId, String bulletinLocalId, String packetLocalId, String myAccountId, String signature);
 	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId);
