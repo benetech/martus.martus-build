@@ -95,7 +95,7 @@
 	<!-- Build common -->
   <target name="build-common" depends="init">
   
-    <replace file="${common-dir}/MartusUtilities.java" token="#{BUILDDATE}" value="${DSTAMP}"/>
+    <replace file="${common-dir}/MartusUtilities.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
     
     <javac target="1.4" optimize="on" srcdir="${common-dir}" classpath="." failonerror="true">
     		<include name="**/*.java"/>
