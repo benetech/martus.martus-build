@@ -1746,7 +1746,14 @@ public class TestMartusApp extends TestCaseEnhanced
 	public void testButtonLabels()
 	{
 		TRACE_BEGIN("testButtonLabels");
-		assertEquals("File", appWithServer.getButtonLabel("file"));
+		assertEquals("Help", appWithServer.getButtonLabel("help"));
+		TRACE_END();
+	}
+	
+	public void testMenuLabels()
+	{
+		TRACE_BEGIN("testMenuLabels");
+		assertEquals("File", appWithServer.getMenuLabel("file"));
 		TRACE_END();
 	}
 
