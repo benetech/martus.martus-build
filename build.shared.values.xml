@@ -1,5 +1,5 @@
 <!-- Ant build file - Needs Ant v1.6.x or later -->
-<project name="martus-jarverifier" default="notify-jarverifier" basedir=".">
+<project name="martus-defines" basedir=".">
     <description>
         Martus Build file containing shared values accross projects
     </description>
