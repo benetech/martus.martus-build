@@ -307,6 +307,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmCancelBulletinEdit=Cancel Bulletin Edit");
 		addEnglishTranslation("wintitle:confirmSetImportPublicKey=Confirm Import of Public Key");
 		addEnglishTranslation("wintitle:confirmWarningSwitchToNormalKeyboard=Security Warning");
+		addEnglishTranslation("wintitle:confirmDeleteMultipleDiscardedBulletins=Confirm Delete Bulletins");
+		addEnglishTranslation("wintitle:confirmDeleteMultipleDiscardedBulletinsWithCopies=Confirm Delete Bulletins");
 		addEnglishTranslation("wintitle:confirmDeleteDiscardedBulletinWithCopies=Confirm Delete Bulletin");
 		addEnglishTranslation("wintitle:confirmClearHQInformation=Confirm Removal of Headquarters");
 		addEnglishTranslation("wintitle:confirmCloneMySealedAsDraft=Confirm Create Copy of Sealed Bulletin");
@@ -609,6 +611,10 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmSetImportPublicKeyeffect=By clicking on Yes you are authorizing this client to view all portions of your bulletins.");
 		addEnglishTranslation("field:confirmWarningSwitchToNormalKeyboardcause=Warning! Using the regular keyboard to enter your password greatly reduces the security of the Martus system, and could make it easier for an attacker to view your private data.");
 		addEnglishTranslation("field:confirmWarningSwitchToNormalKeyboardeffect=If this is a headquarters computer, it is especially important to use the on-screen keyboard, because an attacker could gain access to all the private data that you are authorized to view.");
+		addEnglishTranslation("field:confirmDeleteMultipleDiscardedBulletinscause=You have chosen to delete bulletins from the Discarded Bulletins folder.");
+		addEnglishTranslation("field:confirmDeleteMultipleDiscardedBulletinseffect=Some of these bulletins may have been modified since they were last backed up or sent to a server. If you delete them, you may permanently lose that information.");
+		addEnglishTranslation("field:confirmDeleteMultipleDiscardedBulletinsWithCopiescause=You have chosen to delete bulletins from the Discarded Bulletins folder. Copies of some of these bulletins exist in other folders, and those copies will not be removed.");
+		addEnglishTranslation("field:confirmDeleteMultipleDiscardedBulletinsWithCopieseffect=Information in bulletins that are not in other folders, and which have not been backed up since they were last modified, may be permanently lost. Copies of some of these bulletins exist in these folders:");
 		addEnglishTranslation("field:confirmDeleteDiscardedBulletinWithCopiescause=You have chosen to delete a bulletin from the Discarded Bulletins folder.");
 		addEnglishTranslation("field:confirmDeleteDiscardedBulletinWithCopieseffect=Deleting this copy will not remove the other copies of this bulletin from these folders:");
 		addEnglishTranslation("field:confirmDeleteDiscardedDraftBulletinWithOutboxCopycause=You have chosen to delete a bulletin from the Discarded Bulletins folder.");

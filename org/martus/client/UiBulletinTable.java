@@ -447,7 +447,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		if(visibleFoldersContainingAnyBulletin.size() > 0)
 			dialogTag = "confirmDeleteMultipleDiscardedBulletinsWithCopies";
 		else
-			return false;
+			dialogTag = "confirmDeleteMultipleDiscardedBulletins";
 
 		return confirmDeleteBulletins(dialogTag, visibleFoldersContainingAnyBulletin);
 	}
