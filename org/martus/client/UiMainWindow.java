@@ -1092,25 +1092,27 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		folderSplitter.setDividerLocation(uiState.getCurrentFolderSplitterPosition());
 		
 		getContentPane().add(folderSplitter);
+		statusBar = new UiStatusBar();
+		getContentPane().add(statusBar, BorderLayout.SOUTH );
 
 		Toolkit toolkit = Toolkit.getDefaultToolkit();
 		Dimension screenSize = toolkit.getScreenSize();
 		Dimension appDimension = uiState.getCurrentAppDimension();
 		Point appPosition = uiState.getCurrentAppPosition();
-		setVisible(true);//required for setting maximized
+		boolean showMaximized = false;
 		if(isValidScreenPosition(screenSize, appDimension, appPosition))
 		{
 			setLocation(appPosition);
 			setSize(appDimension);
 			if(uiState.isCurrentAppMaximized())
-			{
-				setSize(750, 550);
-				setExtendedState(MAXIMIZED_BOTH);
-			}
+				showMaximized = true;
 		}
 		else
+			showMaximized = true;
+		if(showMaximized)
 		{
-			setSize(screenSize.width -50 , screenSize.height - 50);
+			setSize(screenSize.width - 50 , screenSize.height - 50);
+			setVisible(true);//required for setting maximized
 			setExtendedState(MAXIMIZED_BOTH);	
 		}
 	}
@@ -1779,6 +1781,7 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
 	private ActionMenuPaste actionMenuPaste;
+	private UiStatusBar statusBar;
 
 	private JFrame currentActiveFrame;	
 	private boolean timedOutInDialog;
