@@ -65,7 +65,7 @@ public class MockBulletin extends Bulletin
 		try
 		{
 			tempFile = Base64.decodeToTempFile(zipString);
-			b.loadFromFile(tempFile, b.getStore().getSignatureVerifier());
+			b.loadFromFile(tempFile, b.getSignatureVerifier());
 		}
 		finally
 		{
@@ -132,13 +132,13 @@ public class MockBulletin extends Bulletin
 		IOException, 
 		CryptoException 
 	{
-		Database db = b.getStore().getDatabase();
+		Database db = b.getDatabase();
 		for(int i = 0 ; i < attachments.length ; ++i)
 		{
 			UniversalId uid = attachments[i].getUniversalId();
 			ZipEntry attachmentEntry = new ZipEntry(uid.getLocalId());
 			zipOut.putNextEntry(attachmentEntry);
-			InputStream in = new BufferedInputStream(db.openInputStream(new DatabaseKey(uid), b.getStore().getSignatureVerifier()));
+			InputStream in = new BufferedInputStream(db.openInputStream(new DatabaseKey(uid), b.getSignatureVerifier()));
 
 			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 			int got;
@@ -157,7 +157,7 @@ public class MockBulletin extends Bulletin
 		ZipEntry entry = new ZipEntry(packet.getLocalId());
 		zipOut.putNextEntry(entry);
 		
-		MartusCrypto signer = b.getStore().getSignatureGenerator();
+		MartusCrypto signer = b.getSignatureGenerator();
 		UnicodeWriter writer = new UnicodeWriter(zipOut);
 		byte[] sig = packet.writeXml(writer, signer);
 		writer.flush();

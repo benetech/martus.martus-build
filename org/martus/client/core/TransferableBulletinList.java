@@ -69,9 +69,9 @@ public class TransferableBulletinList implements Transferable
 				File file = File.createTempFile(summary, BULLETIN_FILE_EXTENSION);
 				file.deleteOnExit();
 				files.add(file);
-				Database db = bulletin.getStore().getDatabase();
+				Database db = bulletin.getDatabase();
 				DatabaseKey headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
-				MartusCrypto security = bulletin.getStore().getSignatureGenerator();
+				MartusCrypto security = bulletin.getSignatureGenerator();
 				MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 			}
 		}

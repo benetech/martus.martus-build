@@ -141,7 +141,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		}
 		
 		
-		BulletinStore store = bulletin.getStore();
+		BulletinStore store = getApp().getStore();
 
 		Cursor originalCursor = getCursor();
 		if(ae.getSource() == send)

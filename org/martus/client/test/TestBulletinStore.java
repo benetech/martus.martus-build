@@ -1146,7 +1146,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	{
 		UniversalId uid = b.getUniversalId();
 		DatabaseKey key = new DatabaseKey(uid);
-		Database db = b.getStore().getDatabase();
+		Database db = b.getDatabase();
 		String goodData = db.readRecord(key, security);
 		String badData = "x" + goodData;
 		db.writeRecord(key, badData);

@@ -45,7 +45,7 @@ public class BulletinSaver
 			IOException,
 			MartusCrypto.CryptoException
 	{
-		MartusCrypto signer = b.getStore().getSignatureGenerator();
+		MartusCrypto signer = b.getSignatureGenerator();
 		
 		UniversalId uid = b.getUniversalId();
 		BulletinHeaderPacket oldBhp = new BulletinHeaderPacket(uid);

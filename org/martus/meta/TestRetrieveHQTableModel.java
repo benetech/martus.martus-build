@@ -86,9 +86,9 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	void importBulletinFromFieldOfficeToHq(Bulletin b) throws Exception
 	{
 		File tempFile = createTempFile();
-		Database db = b.getStore().getDatabase();
+		Database db = b.getDatabase();
 		DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
-		MartusCrypto security = b.getStore().getSignatureGenerator();
+		MartusCrypto security = b.getSignatureGenerator();
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
 		hqApp.getStore().importZipFileToStoreWithSameUids(tempFile);
 	}

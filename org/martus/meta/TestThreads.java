@@ -286,8 +286,8 @@ System.out.flush();
 			bulletin = bulletinToExport;
 			file = createTempFile();
 			copies = copiesToExport;
-			db = bulletin.getStore().getDatabase();
-			security = bulletin.getStore().getSignatureVerifier();
+			db = bulletin.getDatabase();
+			security = bulletin.getSignatureVerifier();
 			headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
 		}
 		
@@ -325,7 +325,7 @@ System.out.flush();
 
 			Bulletin b = store.createEmptyBulletin();
 			b.save();
-			Database db = b.getStore().getDatabase();
+			Database db = b.getDatabase();
 			headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 			store.destroyBulletin(b);

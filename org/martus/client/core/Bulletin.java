@@ -109,6 +109,21 @@ public class Bulletin implements BulletinConstants
 		store = newStore;
 	}
 	
+	public MartusCrypto getSignatureGenerator()
+	{
+		return getStore().getSignatureGenerator();
+	}
+	
+	public MartusCrypto getSignatureVerifier()
+	{
+		return getStore().getSignatureVerifier();
+	}
+	
+	public Database getDatabase()
+	{
+		return getStore().getDatabase();
+	}
+	
 	public UniversalId getUniversalId()
 	{
 		return getBulletinHeaderPacket().getUniversalId();
@@ -204,7 +219,7 @@ public class Bulletin implements BulletinConstants
 		File rawFile = a.getFile();
 		if(rawFile != null)
 		{
-			byte[] sessionKeyBytes = getStore().getSignatureGenerator().createSessionKey();
+			byte[] sessionKeyBytes = getSignatureGenerator().createSessionKey();
 			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, store.getSignatureVerifier());
 			bhp.addPublicAttachmentLocalId(ap.getLocalId());
 			pendingPublicAttachments.add(ap);
@@ -226,7 +241,7 @@ public class Bulletin implements BulletinConstants
 		File rawFile = a.getFile();
 		if(rawFile != null)
 		{
-			byte[] sessionKeyBytes = getStore().getSignatureGenerator().createSessionKey();
+			byte[] sessionKeyBytes = getSignatureGenerator().createSessionKey();
 			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, store.getSignatureVerifier());
 			bhp.addPrivateAttachmentLocalId(ap.getLocalId());
 			getPendingPrivateAttachments().add(ap);
@@ -261,7 +276,7 @@ public class Bulletin implements BulletinConstants
 		UniversalId uid = a.getUniversalId();
 		byte[] sessionKeyBytes = a.getSessionKeyBytes();
 		DatabaseKey key = new DatabaseKey(uid);
-		Database db = getStore().getDatabase();
+		Database db = getDatabase();
 		InputStreamWithSeek xmlIn = db.openInputStream(key, verifier);
 		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, destFile);
 	}
@@ -417,7 +432,7 @@ public class Bulletin implements BulletinConstants
 		packet.setUniversalId(key.getUniversalId());
 		try
 		{
-			Database db = getStore().getDatabase();
+			Database db = getDatabase();
 			InputStreamWithSeek in = db.openInputStream(key, verifier);
 			if(in == null)
 			{
