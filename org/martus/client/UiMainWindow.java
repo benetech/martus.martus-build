@@ -1832,34 +1832,41 @@ System.out.println("ActionMenuPaste.menuSelected: " + isEnabled());
 
 		public void run()
 		{
-			if(hasTimedOut())
+			try
 			{
-				if(inDialog())
+				if(hasTimedOut())
 				{
-					timedOutInDialog = true;
-					return;
+					if(inDialog())
+					{
+						timedOutInDialog = true;
+						return;
+					}
+					
+					System.out.println("Inactive");
+					
+					currentActiveFrame.setEnabled(false);
+					if(!signIn(UiSigninDlg.TIMED_OUT))
+						Exit();
+					currentActiveFrame.setEnabled(true);
 				}
-				
-				System.out.println("Inactive");
-				
-				currentActiveFrame.setEnabled(false);
-				if(!signIn(UiSigninDlg.TIMED_OUT))
-					Exit();
-				currentActiveFrame.setEnabled(true);
+				timedOutInDialog = false;
+				if(--clearStatusMessage < 0)
+				{
+					clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
+					statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(app.getFieldLabel("StatusReady"));
+				}
+				uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
+				if(uploadResult != null)
+				{
+					System.out.println("UiMainWindow.Tick.run: " + uploadResult);
+					folderContentsHaveChanged(getStore().getFolderSent());
+					folderContentsHaveChanged(getStore().getFolderOutbox());
+					folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+				}
 			}
-			timedOutInDialog = false;
-			if(--clearStatusMessage < 0)
+			catch(Exception e)
 			{
-				clearStatusMessage = TICKS_TO_CLEAR_STATUS_MESSAGE;
-				statusBar.getBackgroundProgressMeter().setStatusMessageAndHideMeter(app.getFieldLabel("StatusReady"));
-			}
-			uploadResult = app.backgroundUpload(statusBar.getBackgroundProgressMeter());
-			if(uploadResult != null)
-			{
-				System.out.println("UiMainWindow.Tick.run: " + uploadResult);
-				folderContentsHaveChanged(getStore().getFolderSent());
-				folderContentsHaveChanged(getStore().getFolderOutbox());
-				folderContentsHaveChanged(getStore().getFolderDraftOutbox());
+				e.printStackTrace();
 			}
 		}
 		
