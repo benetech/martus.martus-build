@@ -1021,6 +1021,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		int result = signIn(UiSigninDlg.SECURITY_VALIDATE);
 		if(!app.isSignedIn())
 			exitWithoutSavingState();
+		try
+		{
+			app.loadConfigInfo();
+			app.doAfterSigninInitalization();
+		}
+		catch (Exception e)
+		{
+			initializationErrorDlg(e.getMessage());
+		}
 		if(result == SIGNED_IN)
 			return true;
 		return false;
