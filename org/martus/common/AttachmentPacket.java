@@ -117,7 +117,7 @@ public class AttachmentPacket extends Packet
 		dest.writeStartTag(MartusXml.AttachmentBytesElementName);
 		
 		UnicodeReader reader = new UnicodeReader(base64File);
-		char[] buffer = new char[1024];
+		char[] buffer = new char[MartusConstants.streamBufferCopySize];
 		int count = 0;
 		while( (count = reader.read(buffer)) >= 0)
 		{

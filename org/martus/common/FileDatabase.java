@@ -599,7 +599,7 @@ public class FileDatabase implements Database
 			if(in == null)
 				throw new IOException("Null InputStream");
 			int got;
-			byte[] bytes = new byte[1024];
+			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 			while( (got=in.read(bytes)) >= 0)
 				out.write(bytes, 0, got);
 		}

@@ -264,7 +264,7 @@ public class Packet
 			verifier.signatureInitializeVerify(publicKey);
 			int got;
 			long remaining = dataLength;
-			byte[] bytes = new byte[1024];
+			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 			while(remaining >= bytes.length)
 			{
 				got = bufferedInputStream.read(bytes);

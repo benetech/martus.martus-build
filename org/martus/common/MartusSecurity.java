@@ -208,7 +208,7 @@ public class MartusSecurity implements MartusCrypto
 		
 			BufferedInputStream bufferedPlainStream = new BufferedInputStream(plainStream);
 			
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[MartusConstants.streamBufferCopySize];
 			int count = 0;
 			while( (count = bufferedPlainStream.read(buffer)) >= 0)
 			{
@@ -309,7 +309,7 @@ public class MartusSecurity implements MartusCrypto
 			CipherInputStream cis = new CipherInputStream(dis, sessionCipherEngine);
 			BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
 			
-			final int SIZE = 1024;
+			final int SIZE = MartusConstants.streamBufferCopySize;
 			byte[] chunk = new byte[SIZE];
 			int count = 0;
 			while((count = cis.read(chunk)) != -1)

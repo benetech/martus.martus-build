@@ -259,7 +259,7 @@ public class MartusUtilities
 				InputStream in = db.openInputStream(key, security);
 
 				int got;
-				byte[] bytes = new byte[1024];
+				byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 				while( (got=in.read(bytes)) >= 0)
 					zipOut.write(bytes, 0, got);
 					

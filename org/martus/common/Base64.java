@@ -126,7 +126,7 @@ public class Base64
 	public static void encode(InputStream rawInput, Writer encodedOut) throws
 		IOException
 	{
-		final int chunkSize = 3 * 1024;
+		final int chunkSize = 3 * MartusConstants.streamBufferCopySize;
 		BufferedWriter writer = new BufferedWriter(encodedOut);
 		BufferedInputStream in = new BufferedInputStream(rawInput);
 		byte[] data = new byte[chunkSize];

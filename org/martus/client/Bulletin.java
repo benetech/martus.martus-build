@@ -27,6 +27,7 @@ import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
+import org.martus.common.MartusConstants;
 import org.martus.common.MartusCrypto;
 import org.martus.common.Packet;
 import org.martus.common.UnicodeWriter;
@@ -601,7 +602,7 @@ public class Bulletin implements BulletinConstants
 			zipOut.putNextEntry(attachmentEntry);
 			InputStream in = new BufferedInputStream(db.openInputStream(new DatabaseKey(uid), store.getSignatureVerifier()));
 
-			byte[] bytes = new byte[1024];
+			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 			int got;
 			while((got = in.read(bytes)) != -1)
 			{
