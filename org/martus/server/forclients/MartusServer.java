@@ -1181,7 +1181,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		File tempFile = createInterimBulletinFile(headerKey);
 		//log("createInterimBulletinFile done");
 		int totalLength = MartusUtilities.getCappedFileLength(tempFile);
-		log("Total Length=" + totalLength);
 		
 		int chunkSize = totalLength - chunkOffset;
 		if(chunkSize > maxChunkSize)
@@ -1234,7 +1233,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();
-//		log("    Total file size =" + tempFile.length());
+		log("    Total file size =" + tempFile.length());
 		
 		return tempFile;
 	}
