@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -32,7 +32,7 @@ import java.io.IOException;
 public class BulletinSaver
 {
 
-	public static void saveToDatabase(Bulletin b, Database db, boolean mustEncryptPublicData, MartusCrypto signer) throws 
+	public static void saveToDatabase(Bulletin b, Database db, boolean mustEncryptPublicData, MartusCrypto signer) throws
 			IOException,
 			MartusCrypto.CryptoException
 	{
@@ -54,9 +54,9 @@ public class BulletinSaver
 			//e.printStackTrace();
 			//System.out.println("Bulletin.saveToDatabase: " + e);
 		}
-		
+
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
-	
+
 		FieldDataPacket publicDataPacket = b.getFieldDataPacket();
 		boolean shouldEncryptPublicData = (b.isDraft() || b.isAllPrivate());
 		publicDataPacket.setEncrypted(shouldEncryptPublicData);
@@ -64,17 +64,17 @@ public class BulletinSaver
 		boolean encryptPublicData = mustEncryptPublicData;
 		Database db1 = db;
 		MartusCrypto signer1 = signer;
-			
+
 		byte[] dataSig = packet1.writeXmlToDatabase(db1, encryptPublicData, signer1);
 		bhp.setFieldDataSignature(dataSig);
 		Packet packet2 = b.getPrivateFieldDataPacket();
 		boolean encryptPublicData1 = mustEncryptPublicData;
 		Database db2 = db;
 		MartusCrypto signer2 = signer;
-	
+
 		byte[] privateDataSig = packet2.writeXmlToDatabase(db2, encryptPublicData1, signer2);
 		bhp.setPrivateFieldDataSignature(privateDataSig);
-	
+
 		for(int i = 0; i < b.getPendingPublicAttachments().size(); ++i)
 		{
 			// TODO: Should the bhp also remember attachment sigs?
@@ -84,7 +84,7 @@ public class BulletinSaver
 			MartusCrypto signer3 = signer;
 			packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
 		}
-	
+
 		for(int i = 0; i < b.getPendingPrivateAttachments().size(); ++i)
 		{
 			// TODO: Should the bhp also remember attachment sigs?
@@ -95,21 +95,21 @@ public class BulletinSaver
 			MartusCrypto signer3 = signer;
 			packet3.writeXmlToDatabase(db3, encryptPublicData2, signer3);
 		}
-	
+
 		bhp.updateLastSavedTime();
 		Packet packet = bhp;
 		boolean encryptPublicData2 = mustEncryptPublicData;
 		Database db3 = db;
 		MartusCrypto signer3 = signer;
 		packet.writeXmlToDatabase(db3, encryptPublicData2, signer3);
-	
+
 		if(bulletinAlreadyExisted)
 		{
 			String accountId = b.getAccount();
 			String[] oldPublicAttachmentIds = oldBhp.getPublicAttachmentIds();
 			String[] newPublicAttachmentIds = bhp.getPublicAttachmentIds();
 			BulletinSaver.deleteRemovedPackets(db, accountId, oldPublicAttachmentIds, newPublicAttachmentIds);
-	
+
 			String[] oldPrivateAttachmentIds = oldBhp.getPrivateAttachmentIds();
 			String[] newPrivateAttachmentIds = bhp.getPrivateAttachmentIds();
 			BulletinSaver.deleteRemovedPackets(db, accountId, oldPrivateAttachmentIds, newPrivateAttachmentIds);
@@ -117,7 +117,7 @@ public class BulletinSaver
 	}
 
 
-	protected static void deleteRemovedPackets(Database db, String accountId, String[] oldIds, String[] newIds) 
+	protected static void deleteRemovedPackets(Database db, String accountId, String[] oldIds, String[] newIds)
 	{
 		for(int oldIndex = 0; oldIndex < oldIds.length; ++oldIndex)
 		{

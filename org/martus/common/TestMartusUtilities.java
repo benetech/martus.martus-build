@@ -1,3 +1,29 @@
+/*
+
+The Martus(tm) free, social justice documentation and
+monitoring software. Copyright (C) 2001-2003, Beneficent
+Technology, Inc. (Benetech).
+
+Martus is free software; you can redistribute it and/or
+modify it under the terms of the GNU General Public License
+as published by the Free Software Foundation; either
+version 2 of the License, or (at your option) any later
+version with the additions and exceptions described in the
+accompanying Martus license file entitled "license.txt".
+
+It is distributed WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, including warranties of fitness of purpose or
+merchantability.  See the accompanying Martus License and
+GPL license for more details on the required license terms
+for this software.
+
+You should have received a copy of the GNU General Public
+License along with this program; if not, write to the Free
+Software Foundation, Inc., 59 Temple Place - Suite 330,
+Boston, MA 02111-1307, USA.
+
+*/
+
 package org.martus.common;
 
 import java.io.BufferedInputStream;
@@ -19,13 +45,13 @@ import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
 
 
-public class TestMartusUtilities extends TestCaseEnhanced 
+public class TestMartusUtilities extends TestCaseEnhanced
 {
-	public TestMartusUtilities(String name) 
+	public TestMartusUtilities(String name)
 	{
 		super(name);
 	}
-	
+
 	public void setUp() throws Exception
     {
     	if(security == null)
@@ -39,7 +65,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	public void testBasics()
 	{
 	}
-	
+
 	public void testValidateIntegrityOfZipFilePackets() throws Exception
 	{
 		Database db = new MockClientDatabase();
@@ -59,7 +85,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 		File copiedZipFile = createCopyOfZipFile(originalZipFile, null, null);
 		validateZipFile(accountId, copiedZipFile);
-		
+
 		File zipWithoutHeaderPacket = createCopyOfZipFile(originalZipFile, "B-", null);
 		try
 		{
@@ -89,7 +115,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		catch (IOException ignoreExpectedException)
 		{
 		}
-		
+
 		File zipWithExtraEntry = createCopyOfZipFile(originalZipFile, null, "unexpected");
 		try
 		{
@@ -99,7 +125,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		catch (IOException ignoreExpectedException)
 		{
 		}
-		
+
 		File zipWithRelativePathInformation = createCopyOfZipFile(originalZipFile, null, "../../../acctmap.txt");
 		try
 		{
@@ -109,7 +135,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		catch(InvalidPacketException ignoreExpectedException)
 		{
 		}
-		
+
 		File zipWithAbsolutePathInformation = createCopyOfZipFile(originalZipFile, null, "c:/MartusServer/packets/acctmap.txt");
 		try
 		{
@@ -140,7 +166,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 	{
 		File copiedZipFile = createTempFile();
 		ZipOutputStream zipOut = new ZipOutputStream(new FileOutputStream(copiedZipFile));
-		
+
 		ZipFile zip = new ZipFile(tempZipFile);
 		Enumeration entries = zip.entries();
 		while(entries.hasMoreElements())
@@ -164,7 +190,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		zipOut.close();
 		return copiedZipFile;
 	}
-	
+
 	public void testGetBulletinSize() throws Exception
 	{
 		byte[] b1AttachmentBytes = {1,2,3,4,4,3,2,1};
@@ -192,25 +218,25 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		BulletinSaver.saveToDatabase(b1, db, true, security);
 		int size2 = MartusUtilities.getBulletinSize(db, bhp);
 		assertTrue("Size too small?", size > 4000);
-		assertNotEquals("Sizes match?", size, size2);		
+		assertNotEquals("Sizes match?", size, size2);
 	}
-	
+
 	public void testCreateSignatureFromFile()
 		throws Exception
 	{
 		MartusSecurity otherSecurity = new MartusSecurity();
 		otherSecurity.createKeyPair(512);
-		
+
 		String string1 = "The string to write into the file to sign.";
 		String string2 = "The other string to write to another file to sign.";
-		
+
 		File normalFile = createTempFile(string1);
 		File anotherFile = createTempFile(string2);
 
 		File normalFileSigBySecurity = MartusUtilities.createSignatureFileFromFile(normalFile, security);
 
 		MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security, security.getPublicKeyString());
-		
+
 		try
 		{
 			MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security, "this would be a different public key");
@@ -232,7 +258,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		normalFileSigBySecurity.delete();
 		normalFile.delete();
 		anotherFile.delete();
-		
+
 		try
 		{
 			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security, security.getPublicKeyString());
@@ -242,7 +268,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		{
 		}
 	}
-	
+
 	public void testDoesPacketNeedLocalEncryption() throws Exception
 	{
 		final String accountId = "dummy";
@@ -255,25 +281,25 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		byte[] tagEncryptedData = new String("blah blah blah\n<Encrypted> blah blah").getBytes();
 		byte[] plainTextData = new String("There is nothing here\nto indicate that it is Encrypted!").getBytes();
 
-		verifyDoesPacketNeedLocalEncryption("headerSaysPublic, binary encrypted", 
+		verifyDoesPacketNeedLocalEncryption("headerSaysPublic, binary encrypted",
 						false, bhpWithFlagPublic, binaryEncryptedData);
-		verifyDoesPacketNeedLocalEncryption("headerSaysPublic, tag encrypted", 
+		verifyDoesPacketNeedLocalEncryption("headerSaysPublic, tag encrypted",
 						false, bhpWithFlagPublic, tagEncryptedData);
-		verifyDoesPacketNeedLocalEncryption("headerSaysPublic, plain text", 
+		verifyDoesPacketNeedLocalEncryption("headerSaysPublic, plain text",
 						true, bhpWithFlagPublic, plainTextData);
-			
-		verifyDoesPacketNeedLocalEncryption("headerDoesntKnow, binary encrypted", 
+
+		verifyDoesPacketNeedLocalEncryption("headerDoesntKnow, binary encrypted",
 						false, bhpWithoutFlag, binaryEncryptedData);
-		verifyDoesPacketNeedLocalEncryption("headerDoesntKnow, tag encrypted", 
+		verifyDoesPacketNeedLocalEncryption("headerDoesntKnow, tag encrypted",
 						false, bhpWithoutFlag, tagEncryptedData);
-		verifyDoesPacketNeedLocalEncryption("headerDoesntKnow, plain text", 
+		verifyDoesPacketNeedLocalEncryption("headerDoesntKnow, plain text",
 						true, bhpWithoutFlag, plainTextData);
 
-		verifyDoesPacketNeedLocalEncryption("headerSaysPrivate, binary encrypted", 
+		verifyDoesPacketNeedLocalEncryption("headerSaysPrivate, binary encrypted",
 						false, bhpWithFlagPrivate, binaryEncryptedData);
-		verifyDoesPacketNeedLocalEncryption("headerSaysPrivate, tag encrypted", 
+		verifyDoesPacketNeedLocalEncryption("headerSaysPrivate, tag encrypted",
 						false, bhpWithFlagPrivate, tagEncryptedData);
-		verifyDoesPacketNeedLocalEncryption("headerSaysPrivate, plain text", 
+		verifyDoesPacketNeedLocalEncryption("headerSaysPrivate, plain text",
 						false, bhpWithFlagPrivate, plainTextData);
 	}
 
@@ -284,10 +310,10 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		InputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes1);
 		int firstByte = in.read();
 		in.seek(0);
-		assertEquals(label, expected, 
+		assertEquals(label, expected,
 				MartusUtilities.doesPacketNeedLocalEncryption(bhp, in));
 		assertEquals(label + " didn't reset?", firstByte, in.read());
 	}
-	
+
 	static MartusSecurity security;
 }

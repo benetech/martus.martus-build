@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ public class MockBulletin extends Bulletin
 	{
 		super(securityToUse);
 	}
-	
+
 	public static void loadFromZipString(Bulletin b, String zipString, MartusCrypto sigVerifier) throws IOException, Base64.InvalidBase64Exception
 	{
 		File tempFile = null;

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -122,28 +122,28 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("missing 1?", two.contains(b.getUniversalId()));
 		assertTrue("missing 2?", two.contains(b2.getUniversalId()));
 	}
-	
+
 	public void testVisitAllBulletins()
 	{
 		TRACE("testGetAllBulletinUids");
-		
+
 		class BulletinUidCollector implements Database.PacketVisitor
 		{
 			BulletinUidCollector(BulletinStore store)
 			{
 				store.visitAllBulletins(this);
 			}
-			
+
 			public void visit(DatabaseKey key)
 			{
 				uids.add(key.getUniversalId());
 			}
-			
+
 			Vector uids = new Vector();
 		}
-		
+
 		assertEquals("not empty?", 0, new BulletinUidCollector(store).uids.size());
-		
+
 		Bulletin b = store.createEmptyBulletin();
 		store.saveBulletin(b);
 		Vector one = new BulletinUidCollector(store).uids;
@@ -159,7 +159,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("missing 1?", two.contains(b.getUniversalId()));
 		assertTrue("missing 2?", two.contains(b2.getUniversalId()));
 	}
-	
+
 	public void testCaching()
 	{
 		int numBulletins = BulletinStore.maxCachedBulletinCount + 1;
@@ -169,7 +169,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			store.saveBulletin(b);
 			store.findBulletinByUniversalId(b.getUniversalId());
 		}
-		
+
 		assertEquals("cache too large?", true, store.bulletinCache.size() <= BulletinStore.maxCachedBulletinCount);
 	}
 
@@ -186,7 +186,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		b.addPrivateAttachment(a2);
 		assertEquals("added 4", 1, b.getPrivateAttachments().length);
-		
+
 		store.saveBulletin(b);
 		BulletinFolder f = store.createFolder("test");
 		f.add(b);
@@ -211,7 +211,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("Wrong summary?", sampleSummary, store.getFieldData(uId, Bulletin.TAGSUMMARY));
 		assertEquals("Wrong event date?", sampleEventDate, store.getFieldData(uId, Bulletin.TAGEVENTDATE));
 		assertEquals("Wrong status?", b.getStatus(), store.getFieldData(uId, Bulletin.TAGSTATUS));
-		
+
 	}
 	public void testSaveBulletin() throws Exception
 	{
@@ -247,7 +247,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		store.saveBulletin(b);
 		assertEquals(oldCount+1, store.getBulletinCount());
 		assertEquals("b uid?", uid, b.getBulletinHeaderPacket().getUniversalId());
-		
+
 		b = store.findBulletinByUniversalId(uid);
 		assertEquals("store uid?", uid, b.getBulletinHeaderPacket().getUniversalId());
 
@@ -279,11 +279,11 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertNotNull("Need Sent folder", f);
 		BulletinFolder discarded = store.getFolderDiscarded();
 		assertNotNull("Need Discarded folder", f);
-		
+
 		Bulletin start1 = store.createEmptyBulletin();
 		store.saveBulletin(start1);
 		f.add(start1);
-		
+
 		Bulletin b = f.getBulletinSorted(0);
 		assertNotNull("Sent folder should have bulletins", b);
 
@@ -418,7 +418,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(false, store.renameFolder("a", "b"));
 		assertEquals(folder, store.findFolder("b"));
 		assertEquals(f2, store.findFolder("a"));
-		
+
 		assertEquals("allowed rename to *?", false, store.renameFolder("a", "*a"));
 		for(char c = ' '; c < '0'; ++c)
 		{
@@ -517,7 +517,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertStartsWith(MartusClientXml.getFolderTagStart("Test"), xml);
 		assertContains(MartusXml.getIdTag(folder.getBulletinSorted(0).getUniversalIdString()), xml);
 		assertEndsWith(MartusClientXml.getFolderTagEnd(), xml);
-		
+
 	}
 
 	public void testFoldersToXml()
@@ -580,7 +580,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	public void testLoadXmlLegacyFolders()
 	{
 		TRACE("testLoadXmlFolders");
-		
+
 		int count = store.getFolderCount();
 		String xml = "<FolderList><Folder name='Outbox'></Folder><Folder name='new two'></Folder></FolderList>";
 		assertTrue("Legacy folder didn't return true on load", store.loadFolders(new StringReader(xml)));
@@ -611,7 +611,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	public void testDatabaseBulletins() throws Exception
 	{
 		TRACE("testDatabaseBulletins");
-		
+
 		assertEquals("empty", 0, store.getBulletinCount());
 
 		Bulletin b = store.createEmptyBulletin();
@@ -657,7 +657,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("bulletins in folder", 1, f2.getBulletinCount());
 		assertEquals("contains", true, f2.contains(b));
 	}
-	
+
 	public void testLoadAllDataWithErrors() throws Exception
 	{
 		Bulletin b = store.createEmptyBulletin();
@@ -699,7 +699,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testSave()
 	{
-		//TODO: This was moved in from TestBulletin, and it may 
+		//TODO: This was moved in from TestBulletin, and it may
 		//not be needed--compare with testSaveBulletin
 		int oldCount = store.getBulletinCount();
 		Bulletin b = store.createEmptyBulletin();
@@ -802,7 +802,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			assertNull("deleteFolder b ", store.getDatabase().readRecord(bulletinKey, security));
 		}
 	}
-	
+
 	public void testImportZipFileWithAttachmentSealed() throws Exception
 	{
 		Bulletin original = store.createEmptyBulletin();
@@ -821,10 +821,10 @@ public class TestBulletinStore extends TestCaseEnhanced
 		MockBulletin.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getRecordCount());
-		
+
 		store.importZipFileToStoreWithSameUids(zipFile);
-		assertEquals("Packet count incorrect", 5, db.getRecordCount());		
-		
+		assertEquals("Packet count incorrect", 5, db.getRecordCount());
+
 		DatabaseKey headerKey = new DatabaseKey(loaded.getBulletinHeaderPacket().getUniversalId());
 		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());;
 		DatabaseKey privateKey = new DatabaseKey(loaded.getPrivateFieldDataPacket().getUniversalId());;
@@ -838,11 +838,11 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("Private Packet missing", db.doesRecordExist(privateKey));
 		assertTrue("Attachment Packet missing", db.doesRecordExist(attachmentKey));
 		assertTrue("Attachment Private Packet missing", db.doesRecordExist(attachmentPrivateKey));
-		
+
 		Bulletin reloaded = store.loadFromDatabase(originalKey);
 		assertEquals("public?", original.get(Bulletin.TAGTITLE), reloaded.get(Bulletin.TAGTITLE));
 		assertEquals("private?", original.get(Bulletin.TAGPRIVATEINFO), reloaded.get(Bulletin.TAGPRIVATEINFO));
-		
+
 		File tempRawFilePublic = File.createTempFile("$$$MartusTestImpSealedZipRawPublic",null);
 		tempRawFilePublic.deleteOnExit();
 		BulletinSaver.extractAttachmentToFile(db, reloaded.getPublicAttachments()[0], security, tempRawFilePublic);
@@ -868,7 +868,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		Bulletin b = store.createEmptyBulletin();
 		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
-		
+
 		BulletinFolder folder = store.createFolder("test");
 		folder.setStatusAllowed(Bulletin.STATUSSEALED);
 		try
@@ -880,13 +880,13 @@ public class TestBulletinStore extends TestCaseEnhanced
 		{
 		}
 		assertEquals("imported even though the folder prevented it?", 0, store.getBulletinCount());
-		
+
 		folder.setStatusAllowed(null);
 		store.importZipFileBulletin(tempFile, folder, false);
 		assertEquals("not imported to store?", 1, store.getBulletinCount());
 		assertEquals("not imported to folder?", 1, folder.getBulletinCount());
 		assertNull("resaved with draft id?", store.findBulletinByUniversalId(b.getUniversalId()));
-		
+
 		store.deleteAllData();
 		folder = store.createFolder("test2");
 
@@ -897,13 +897,13 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("not imported to folder count?", 1, folder.getBulletinCount());
 		assertEquals("not imported to folder uid?", 0, folder.find(b.getUniversalId()));
 		assertNotNull("not saved with sealed id?", store.findBulletinByUniversalId(b.getUniversalId()));
-		
+
 		BulletinFolder folder2 = store.createFolder("another");
 		store.importZipFileBulletin(tempFile, folder2, false);
 		assertEquals("imported to store again?", 1, store.getBulletinCount());
 		assertEquals("not imported to another folder uid?", 0, folder2.find(b.getUniversalId()));
 	}
-	
+
 	public void testImportZipFileBulletinNotMine() throws Exception
 	{
 		File tempFile = createTempFile();
@@ -914,25 +914,25 @@ public class TestBulletinStore extends TestCaseEnhanced
 		BulletinStore importer = createTempStore();
 		BulletinFolder folder = importer.createFolder("test");
 		importer.importZipFileBulletin(tempFile, folder, false);
-		
+
 		Bulletin imported = folder.getBulletinSorted(0);
 		assertEquals("changed uid?", original.getUniversalId(), imported.getUniversalId());
 	}
-	
+
 	public void testImportZipFileFieldOffice() throws Exception
 	{
 		File tempFile = createTempFile();
 
 		BulletinStore hqStore = createTempStore();
-		
+
 		Bulletin original = store.createEmptyBulletin();
 		original.setHQPublicKey(hqStore.getAccountId());
 		original.setSealed();
 		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
-		
+
 		BulletinFolder folder = hqStore.createFolder("test");
 		hqStore.importZipFileBulletin(tempFile, folder, false);
-		
+
 		Bulletin imported = folder.getBulletinSorted(0);
 		assertEquals("changed uid?", original.getUniversalId(), imported.getUniversalId());
 	}
@@ -946,10 +946,10 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempFile = File.createTempFile("$$$MartusTestStoreImportZip", null);
 		tempFile.deleteOnExit();
 		MockBulletin.saveToFile(db,b, tempFile, creator.getSignatureVerifier());
-		
+
 		creator.importZipFileBulletin(tempFile, creator.getFolderOutbox(), false);
 		assertEquals("Didn't fully import?", 1, creator.getBulletinCount());
-		
+
 		MockMartusApp thisApp = MockMartusApp.create();
 		try
 		{
@@ -969,7 +969,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin b = store.createEmptyBulletin();
 		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 		UniversalId originalUid = b.getUniversalId();
-		
+
 		BulletinFolder folder = store.createFolder("test");
 		store.importZipFileBulletin(tempFile, folder, true);
 		assertEquals("Didn't fully import?", 1, store.getBulletinCount());
@@ -977,7 +977,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		store.importZipFileBulletin(tempFile, folder, false);
 		assertEquals("Not different IDs?", 2, store.getBulletinCount());
-		
+
 	}
 
 	public void testImportZipFileWithAttachmentDraft() throws Exception
@@ -991,19 +991,19 @@ public class TestBulletinStore extends TestCaseEnhanced
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
-		
+
 		Bulletin loaded = store.loadFromDatabase(originalKey);
 
 		File zipFile = File.createTempFile("$$$MartusTestZipDraft", null);
 		zipFile.deleteOnExit();
 		MockBulletin.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
-		
+
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getRecordCount());
-		
+
 		UniversalId savedAsId = store.importZipFileToStoreWithNewUids(zipFile);
-		assertEquals("record count not 5?", 5, db.getRecordCount());		
-		
+		assertEquals("record count not 5?", 5, db.getRecordCount());
+
 		DatabaseKey headerKey = new DatabaseKey(loaded.getBulletinHeaderPacket().getUniversalId());
 		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());;
 		DatabaseKey privateKey = new DatabaseKey(loaded.getPrivateFieldDataPacket().getUniversalId());;
@@ -1019,16 +1019,16 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("Attachment Private Packet present?", false, db.doesRecordExist(attachmentPrivateKey));
 
 		Bulletin reloaded = store.loadFromDatabase(new DatabaseKey(savedAsId));
-		
+
 		assertEquals("public?", original.get(Bulletin.TAGTITLE), reloaded.get(Bulletin.TAGTITLE));
 		assertEquals("private?", original.get(Bulletin.TAGPRIVATEINFO), reloaded.get(Bulletin.TAGPRIVATEINFO));
 		assertEquals("attachment", true, db.doesRecordExist(new DatabaseKey(reloaded.getPublicAttachments()[0].getUniversalId())));
 		assertEquals("attachment Private", true, db.doesRecordExist(new DatabaseKey(reloaded.getPrivateAttachments()[0].getUniversalId())));
-		
+
 		File tempRawFile = File.createTempFile("$$$MartusTestImpDraftZipRaw",null);
 		tempRawFile.deleteOnExit();
 		BulletinSaver.extractAttachmentToFile(db, reloaded.getPublicAttachments()[0], security, tempRawFile);
-		
+
 		byte[] rawBytes = new byte[sampleBytes1.length];
 		FileInputStream in = new FileInputStream(tempRawFile);
 		in.read(rawBytes);
@@ -1038,14 +1038,14 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempRawFilePrivate = File.createTempFile("$$$MartusTestImpDraftZipRawPrivate",null);
 		tempRawFilePrivate.deleteOnExit();
 		BulletinSaver.extractAttachmentToFile(db, reloaded.getPrivateAttachments()[0], security, tempRawFilePrivate);
-		
+
 		byte[] rawBytesPrivate = new byte[sampleBytes2.length];
 		FileInputStream in2 = new FileInputStream(tempRawFilePrivate);
 		in2.read(rawBytesPrivate);
 		in2.close();
 		assertEquals("wrong bytes Private", true, Arrays.equals(sampleBytes2, rawBytesPrivate));
 	}
-	
+
 	public void testCanPutBulletinInFolder() throws Exception
 	{
 		Bulletin b1 = store.createEmptyBulletin();
@@ -1064,7 +1064,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 	{
 		Set emptySet = store.getSetOfAllBulletinUniversalIds();
 		assertTrue("not empty to start?", emptySet.isEmpty());
-		
+
 		Bulletin b1 = store.createEmptyBulletin();
 		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
@@ -1074,7 +1074,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertTrue("Missing b1?", two.contains(b1.getUniversalId()));
 		assertTrue("Missing b2?", two.contains(b2.getUniversalId()));
 	}
-	
+
 	public void testGetSetOfBulletinUniversalIdsInFolders()
 	{
 		Set emptySet = store.getSetOfBulletinUniversalIdsInFolders();
@@ -1091,12 +1091,12 @@ public class TestBulletinStore extends TestCaseEnhanced
 		store.getFolderDiscarded().add(b1);
 		store.getFolderDiscarded().add(b2);
 		Set two = store.getSetOfBulletinUniversalIdsInFolders();
-		
+
 		assertEquals("not two?", 2, two.size());
 		assertTrue("Missing b1?", two.contains(b1.getUniversalId()));
 		assertTrue("Missing b2?", two.contains(b2.getUniversalId()));
 	}
-	
+
 	public void testGetSetOfOrphanedBulletinUniversalIds()
 	{
 		Set emptySet = store.getSetOfOrphanedBulletinUniversalIds();
@@ -1117,20 +1117,20 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Set one = store.getSetOfOrphanedBulletinUniversalIds();
 		assertEquals("not one?", 1, one.size());
 		assertTrue("one Missing b2?", one.contains(b2.getUniversalId()));
-		
+
 		store.getFolderDiscarded().add(b2);
 		Set emptyAgain = store.getSetOfOrphanedBulletinUniversalIds();
 		assertTrue("not empty again?", emptyAgain.isEmpty());
 
 	}
-	
+
 	public void testOrphansInHiddenFolders()
 	{
 		Bulletin b1 = store.createEmptyBulletin();
 		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
 		store.saveBulletin(b2);
-		
+
 		store.getFolderDraftOutbox().add(b1);
 		assertEquals("hidden-only not an orphan?", true, store.isOrphan(b1));
 
@@ -1150,12 +1150,12 @@ public class TestBulletinStore extends TestCaseEnhanced
 		DatabaseKey key = new DatabaseKey(b1.getUniversalId());
 		assertTrue("didn't actually quarantine our record?", store.getDatabase().isInQuarantine(key));
 	}
-	
+
 	public void testQuarantineUnreadableBulletinsMany() throws Exception
 	{
 		final int totalCount = 20;
 		Bulletin bulletins[] = new Bulletin[totalCount];
-		for (int i = 0; i < bulletins.length; i++) 
+		for (int i = 0; i < bulletins.length; i++)
 		{
 			bulletins[i] = store.createEmptyBulletin();
 			store.saveBulletin(bulletins[i]);
@@ -1163,7 +1163,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		final int badCount = 4;
 		DatabaseKey badKeys[] = new DatabaseKey[badCount];
-		for (int i = 0; i < badKeys.length; i++) 
+		for (int i = 0; i < badKeys.length; i++)
 		{
 			int bulletinIndex = i * (totalCount/badCount);
 			Bulletin b = bulletins[bulletinIndex];
@@ -1172,10 +1172,10 @@ public class TestBulletinStore extends TestCaseEnhanced
 		}
 
 		assertEquals("wrong quarantine count?", badCount, store.quarantineUnreadableBulletins());
-		for (int i = 0; i < badKeys.length; i++) 
+		for (int i = 0; i < badKeys.length; i++)
 			assertTrue("didn't quarantine " + i, store.getDatabase().isInQuarantine(badKeys[i]));
 	}
-	
+
 	private void corruptBulletinHeader(Bulletin b) throws Exception
 	{
 		UniversalId uid = b.getUniversalId();
@@ -1185,8 +1185,8 @@ public class TestBulletinStore extends TestCaseEnhanced
 		String badData = "x" + goodData;
 		db.writeRecord(key, badData);
 	}
-		
-	private BulletinStore createTempStore() throws Exception 
+
+	private BulletinStore createTempStore() throws Exception
 	{
 		MartusSecurity tempSecurity = new MockMartusSecurity();
 		tempSecurity.createKeyPair();
@@ -1194,7 +1194,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		tempStore.setSignatureGenerator(tempSecurity);
 		return tempStore;
 	}
-	
+
 	private String getFieldEntity(Bulletin b, String fieldName)
 	{
 		return MartusXml.getFieldTagStart(fieldName) + b.get(fieldName) + MartusXml.getFieldTagEnd();

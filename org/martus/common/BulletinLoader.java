@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -40,28 +40,28 @@ public class BulletinLoader
 		Bulletin b = new Bulletin(verifier);
 		b.clear();
 		b.setIsValid(false);
-	
+
 		BulletinHeaderPacket headerPacket = b.getBulletinHeaderPacket();
 		DatabaseKey headerKey = key;
 		boolean isHeaderValid = BulletinLoader.loadAnotherPacket(headerPacket, db, headerKey, null, verifier);
-	
+
 		if(isHeaderValid)
 		{
 			FieldDataPacket dataPacket = b.getFieldDataPacket();
 			FieldDataPacket privateDataPacket = b.getPrivateFieldDataPacket();
-	
+
 			DatabaseKey dataKey = b.getDatabaseKeyForLocalId(headerPacket.getFieldDataPacketId());
-	
+
 			byte[] dataSig = headerPacket.getFieldDataSignature();
 			boolean isDataValid = BulletinLoader.loadAnotherPacket(dataPacket, db, dataKey, dataSig, verifier);
-	
+
 			DatabaseKey privateDataKey = b.getDatabaseKeyForLocalId(headerPacket.getPrivateFieldDataPacketId());
 			byte[] privateDataSig = headerPacket.getPrivateFieldDataSignature();
 			boolean isPrivateDataValid = BulletinLoader.loadAnotherPacket(privateDataPacket, db, privateDataKey, privateDataSig, verifier);
-	
+
 			b.setIsValid(isDataValid && isPrivateDataValid);
 		}
-	
+
 		if(b.isValid())
 		{
 			b.setHQPublicKey(headerPacket.getHQPublicKey());
@@ -75,7 +75,7 @@ public class BulletinLoader
 				throw new Bulletin.DamagedBulletinException();
 			}
 		}
-	
+
 		return b;
 	}
 

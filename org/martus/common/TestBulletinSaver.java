@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -84,7 +84,7 @@ public class TestBulletinSaver extends TestCaseEnhanced
 		assertEquals("resaved 1 header key", true,db.doesRecordExist(headerKey1));
 		assertEquals("resaved 1 data key", true,db.doesRecordExist(dataKey1));
 
-		Bulletin b3 = BulletinLoader.loadFromDatabase(db, headerKey1, security); 
+		Bulletin b3 = BulletinLoader.loadFromDatabase(db, headerKey1, security);
 		assertEquals("id", b.getLocalId(), b3.getLocalId());
 		assertEquals("summary", b.get("summary"), b3.get("summary"));
 

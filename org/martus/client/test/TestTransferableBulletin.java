@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -47,7 +47,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 	final static String ICKYTITLE = "w*o:r+k'e`d";
 	final static String LONGTITLE = "This wonderful title is longer than twenty characters";
 
-	public TestTransferableBulletin(String name) 
+	public TestTransferableBulletin(String name)
 	{
 		super(name);
 	}
@@ -77,7 +77,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		Bulletin b2 = store.createEmptyBulletin();
 		Bulletin[] bulletins = {b1, b2};
 		TransferableBulletinList list = new TransferableBulletinList(store, bulletins, folder);
-		
+
 		Bulletin[] got = list.getBulletins();
 		assertEquals("wrong count?", 2, got.length);
 		assertEquals("missing b1?", b1.getUniversalId(), got[0].getUniversalId());
@@ -118,7 +118,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		file = getFile(longName, "longname");
 		at = file.getName().indexOf("This wonderful title");
 		assertEquals("long", 0, at);
-		assertEndsWith("wrong extension for long?", ".mba", file.getName());	
+		assertEndsWith("wrong extension for long?", ".mba", file.getName());
 		file.delete();
 	}
 
@@ -129,7 +129,7 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		TransferableBulletinList tb = (TransferableBulletinList)data;
 		assertEquals("bad folder?", folder, tb.getFromFolder());
 		assertEquals("bad id?", dragId, tb.getBulletins()[0].getLocalId());
-		
+
 		Bulletin[] bulletins = tb.getBulletins();
 		assertNotNull("null bulletins?", bulletins);
 		assertEquals("bad id?", dragId, bulletins[0].getLocalId());

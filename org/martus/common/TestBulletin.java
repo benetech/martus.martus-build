@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -289,7 +289,7 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("again private attachment count", 1, b2.getPrivateAttachments().length);
 		assertEquals("again public attachment1 data", a1, clonedPublicAttachment);
 		assertEquals("again private attachment data", a2, clonedPrivateAttachment);
-		
+
 		b1.setAllPrivate(false);
 		b2.createDraftCopyOf(b1, db);
 		assertEquals("didn't pull private false?", b1.isAllPrivate(), b2.isAllPrivate());
@@ -297,7 +297,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.setAllPrivate(true);
 		b2.createDraftCopyOf(b1, db);
 		assertEquals("didn't pull private true?", b1.isAllPrivate(), b2.isAllPrivate());
-		
+
 		BulletinSaver.saveToDatabase(b1,db,false,security);
 
 		b2.createDraftCopyOf(b1,db);

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -86,7 +86,7 @@ public class Bulletin implements BulletinConstants
 	{
 		return getBulletinHeaderPacket().getLocalId();
 	}
-	
+
 	public void setIsValid(boolean isValid)
 	{
 		isValidFlag = isValid;
@@ -420,12 +420,12 @@ public class Bulletin implements BulletinConstants
 			return ap;
 		if(otherDatabase == null)
 			return ap;
-			
+
 		DatabaseKey key = DatabaseKey.createKey(ap.getUniversalId(),status);
 		InputStreamWithSeek packetIn = otherDatabase.openInputStream(key, security);
 		if(packetIn == null)
 			return ap;
-			
+
 		try
 		{
 			return MartusUtilities.createFileProxyFromAttachmentPacket(packetIn, ap, security);

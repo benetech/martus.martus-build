@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -899,11 +899,11 @@ public class BulletinStore
 
 	public void importZipFileBulletin(File zipFile, BulletinFolder toFolder, boolean forceSameUids) throws
 			StatusNotAllowedException,
-			InvalidPacketException, 
-			SignatureVerificationException, 
-			WrongPacketTypeException, 
-			CryptoException, 
-			IOException, 
+			InvalidPacketException,
+			SignatureVerificationException,
+			WrongPacketTypeException,
+			CryptoException,
+			IOException,
 			InvalidBase64Exception
 	{
 		ZipFile zip = new ZipFile(zipFile);
@@ -975,11 +975,11 @@ public class BulletinStore
 	}
 
 	public UniversalId importZipFileToStoreWithNewUids(File inputFile) throws
-		InvalidPacketException, 
-		SignatureVerificationException, 
-		WrongPacketTypeException, 
-		CryptoException, 
-		IOException, 
+		InvalidPacketException,
+		SignatureVerificationException,
+		WrongPacketTypeException,
+		CryptoException,
+		IOException,
 		InvalidBase64Exception
 	{
 		final MartusCrypto security = getSignatureGenerator();

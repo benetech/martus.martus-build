@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -55,7 +55,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 	{
 		observer = observerToUse;
 		cancelHandler = cancelHandlerToUse;
-		
+
 		MartusApp app = getApp();
 		setTitle(app.getWindowTitle("create"));
 		observer.updateIcon(this);
@@ -174,7 +174,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 		setCursor(originalCursor);
 		wasBulletinSavedFlag = true;
 	}
-	
+
 	public boolean wasBulletinSaved()
 	{
 		return wasBulletinSavedFlag;
@@ -258,7 +258,7 @@ class UiModifyBulletinDlg extends JFrame implements ActionListener, WindowListen
 			// do nothing
 		}
 	}
-	
+
 	public static class DeleteBulletinOnCancel implements CancelHandler
 	{
 		public void onCancel(BulletinStore store, Bulletin b)
@@ -277,7 +277,7 @@ System.out.println("Destroying cancelled bulletin");
 	JButton send;
 	JButton draft;
 	JButton cancel;
-	
+
 	boolean wasBulletinSavedFlag;
 	CancelHandler cancelHandler;
 }

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -48,9 +48,9 @@ public class BulletinZipImporter
 		ZipFile zip = new ZipFile(inputFile);
 		try
 		{
-	
+
 			BulletinHeaderPacket header = b.getBulletinHeaderPacket();
-	
+
 			ZipEntry headerEntry = null;
 			Enumeration entries = zip.entries();
 			while(entries.hasMoreElements())
@@ -70,9 +70,9 @@ public class BulletinZipImporter
 			{
 				headerIn.close();
 			}
-	
+
 			FieldDataPacket data = b.getFieldDataPacket();
-	
+
 			entries = zip.entries();
 			ZipEntry dataEntry = zip.getEntry(header.getFieldDataPacketId());
 			if(dataEntry == null)
@@ -94,9 +94,9 @@ public class BulletinZipImporter
 			{
 				dataIn.close();
 			}
-	
+
 			FieldDataPacket privateData = b.getPrivateFieldDataPacket();
-	
+
 			entries = zip.entries();
 			ZipEntry privateDataEntry = zip.getEntry(header.getPrivateFieldDataPacketId());
 			if(privateDataEntry == null)
@@ -120,7 +120,7 @@ public class BulletinZipImporter
 			{
 				privateDataIn.close();
 			}
-	
+
 			AttachmentProxy[] attachments = b.getPublicAttachments();
 			b.clearPublicAttachments();
 			for(int i=0; i < attachments.length; ++i)
@@ -128,7 +128,7 @@ public class BulletinZipImporter
 				final AttachmentProxy ap = BulletinZipImporter.extractZipAttachmentToFileProxy(verifier, zip, attachments[i]);
 				b.addPublicAttachment(ap);
 			}
-	
+
 			AttachmentProxy[] attachmentsPrivate = b.getPrivateAttachments();
 			b.clearPrivateAttachments();
 			for(int i=0; i < attachmentsPrivate.length; ++i)
@@ -136,7 +136,7 @@ public class BulletinZipImporter
 				final AttachmentProxy ap = BulletinZipImporter.extractZipAttachmentToFileProxy(verifier, zip, attachmentsPrivate[i]);
 				b.addPrivateAttachment(ap);
 			}
-			
+
 			b.setHQPublicKey(header.getHQPublicKey());
 		}
 		catch(Exception e)

@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -103,7 +103,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		return dropAdapter;
 	}
-	
+
 	public BulletinStore getStore()
 	{
 		return mainWindow.getStore();

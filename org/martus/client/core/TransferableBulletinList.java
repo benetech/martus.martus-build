@@ -1,7 +1,7 @@
 /*
 
 The Martus(tm) free, social justice documentation and
-monitoring software. Copyright (C) 2003, Beneficent
+monitoring software. Copyright (C) 2001-2003, Beneficent
 Technology, Inc. (Benetech).
 
 Martus is free software; you can redistribute it and/or
@@ -52,8 +52,8 @@ public class TransferableBulletinList implements Transferable
 		bulletins = bulletinsToUse;
 		folder = fromFolder;
 	}
-	
-	boolean createTransferableZipFile() 
+
+	boolean createTransferableZipFile()
 	{
 		if(files == null)
 			files = new Vector();
@@ -83,7 +83,7 @@ public class TransferableBulletinList implements Transferable
 	{
 		if(files == null)
 			return;
-			
+
 		try
 		{
 			for(int i =0 ; i < files.size(); ++i)
@@ -140,7 +140,7 @@ public class TransferableBulletinList implements Transferable
 //					DataFlavor.stringFlavor,
 //					mimeTextDataFlavor,
 // TODO remove all trace of mime and string flavors
-// Warning: adding when there was String and mimeText flavors 
+// Warning: adding when there was String and mimeText flavors
 //			dragging to the desktop failed silently.
 					};
 		return flavorArray;
@@ -160,22 +160,22 @@ public class TransferableBulletinList implements Transferable
 	{
 		return bulletinListDataFlavor;
 	}
-	
+
 	static public File extractFileFrom(Transferable t)
 	{
 		if(!t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
 			return null;
-		try 
+		try
 		{
 			Collection fileList = (Collection)t.getTransferData(DataFlavor.javaFileListFlavor);
 			if(fileList.size() != 1)
 				return null;
 
 			Iterator iterator = fileList.iterator();
-			File file = (File)iterator.next();	
+			File file = (File)iterator.next();
 			return file;
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			System.out.println("extractFileFrom :" + e);
 			return null;
