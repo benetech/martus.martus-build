@@ -1830,15 +1830,25 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	String getServerHostname()
 	{
 		String hostname;
+		String address;
 		try
 		{
-			hostname = InetAddress.getLocalHost().toString();
+			hostname = InetAddress.getLocalHost().getHostName();
 		}
-		catch (UnknownHostException e)
+		catch(Exception e)
 		{
-			hostname = "unknown-host";
+			hostname = "hostname";
 		}
-		return hostname;
+		
+		try
+		{
+			address = InetAddress.getLocalHost().getHostAddress();
+		}
+		catch(Exception e)
+		{
+			address = "address";
+		}
+		return hostname + "/" + address;
 	}
 
 	BulletinHeaderPacket loadBulletinHeaderPacket(Database db, DatabaseKey key)
