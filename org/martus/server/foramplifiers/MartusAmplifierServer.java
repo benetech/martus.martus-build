@@ -42,14 +42,12 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
-import org.martus.server.forclients.MartusXmlRpcServer;
-import org.martus.server.formirroring.ServerSupplierInterface;
 import org.martus.server.shared.MartusSecureWebServer;
 import org.martus.server.shared.ServerConstants;
 import org.martus.server.shared.ServerFileDatabase;
 import org.martus.server.shared.XmlRpcThread;
 
-public class MartusAmplifierServer implements NetworkInterfaceConstants, ServerSupplierInterface
+public class MartusAmplifierServer implements NetworkInterfaceConstants
 {
 
 	public static void main(String[] args)
@@ -103,10 +101,6 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants, ServerS
 
 		System.out.print("Enter passphrase: ");
 		System.out.flush();
-
-		File waitingFile = new File(server.triggerDirectory, "waiting");
-		waitingFile.delete();
-		writeSyncFile(waitingFile);
 
 		InputStreamReader rawReader = new InputStreamReader(System.in);	
 		BufferedReader reader = new BufferedReader(rawReader);
@@ -178,15 +172,9 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants, ServerS
 		}
 		
 		server.setDatabase(diskDatabase);
-		
-		File runningFile = new File(server.triggerDirectory, "running");
-		runningFile.delete();
 				
-		System.out.println();
-
 		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
 		server.createAmplifierXmlRpcServer();
-		writeSyncFile(runningFile);
 		System.out.println("Waiting for connection...");
 	}
 
@@ -251,14 +239,6 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants, ServerS
 		return keyPairFile.exists();
 	}
 	
-	void createAccount(String passphrase) throws IOException
-	{
-		security.createKeyPair();
-		FileOutputStream out = new FileOutputStream(keyPairFile);
-		writeKeyPair(out, passphrase);
-		out.close();
-	}
-	
 	void loadAccount(String passphrase) throws Exception
 	{
 		FileInputStream in = new FileInputStream(keyPairFile);
@@ -282,14 +262,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants, ServerS
 		if(MartusSecureWebServer.security == null)
 			MartusSecureWebServer.security = security;
 
-		MartusXmlRpcServer.createSSLXmlRpcServer(getAmplifierHandler(), port);
-	}
-	
-	public String ping()
-	{
-		if(serverMaxLogging)
-			logging("ping request");		
-		return NetworkInterfaceConstants.VERSION;
+		MartusAmplifierXmlRpcServer.createSSLXmlRpcServer(getAmplifierHandler(), port);
 	}
 
 	public Vector getServerInformation()
@@ -434,32 +407,6 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants, ServerS
 		{
 		}
 		return formattedCode;
-	}
-	
-	public synchronized void loadListFromFile(BufferedReader readerInput, Vector result)
-		throws IOException
-	{
-		try
-		{
-			while(true)
-			{
-				String currentLine = readerInput.readLine();
-				if(currentLine == null)
-					break;
-				if(currentLine.length() == 0)
-					continue;
-					
-				if( result.contains(currentLine) )
-					continue;
-
-				result.add(currentLine);
-				//System.out.println("MartusAmplifierServer.loadListFromFile: " + currentLine);
-			}
-		}
-		catch(IOException e)
-		{
-			throw new IOException(e.getMessage());
-		}
 	}
 
 	public static boolean keyBelongsToClient(DatabaseKey key, String clientId)
