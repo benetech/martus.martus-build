@@ -215,6 +215,29 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return result;
 	}
 
+	public Vector deleteDraftBulletins(String myAccountId, Vector parameters, String signature)
+	{
+		if(server.serverSSLLogging)
+			server.logging("deleteDraftBulletins");
+
+		Vector result = new Vector();
+		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		{
+			result.add(SIG_ERROR);
+			return result;
+		}
+
+		int idCount = ((Integer)parameters.get(0)).intValue();
+		String[] idList = new String[idCount];
+		for (int i = 0; i < idList.length; i++)
+		{
+			idList[i] = (String)parameters.get(1+i);
+		}
+
+		result.add(server.deleteDraftBulletins(myAccountId, idList));
+		return result;
+	}
+	
 	// begin legacy!
 	public String ping()
 	{

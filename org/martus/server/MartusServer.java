@@ -53,7 +53,7 @@ import org.martus.common.Packet.InvalidPacketException;
 import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongPacketTypeException;
 
-public class MartusServer
+public class MartusServer implements NetworkInterfaceConstants
 {
 
 	public static void main(String[] args)
@@ -878,6 +878,31 @@ public class MartusServer
 		if(serverMaxLogging)
 			logging("listFieldOfficeAccounts : Exit");
 		return visitor.getAccounts();	
+	}
+	
+	public String deleteDraftBulletins(String accountId, String[] localIds)
+	{
+		String result = OK;
+		for (int i = 0; i < localIds.length; i++)
+		{
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, localIds[i]);
+			try
+			{
+				DatabaseKey key = DatabaseKey.createDraftKey(uid);
+				BulletinHeaderPacket bhp = new BulletinHeaderPacket(uid);
+				InputStreamWithSeek in = getDatabase().openInputStream(key, security);
+				bhp.loadFromXml(in, null, security);
+				in.close();
+
+				MartusUtilities.deleteBulletinFromDatabase(bhp, getDatabase(), security);			
+			}
+			catch (Exception e)
+			{
+				logging("deleteDraftBulletins: " + e);
+				result = INCOMPLETE;
+			}
+		}
+		return result;
 	}
 
 	public Vector legacyDownloadAuthorizedPacket(String authorAccountId, String packetLocalId, String myAccountId, String signature)

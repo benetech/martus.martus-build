@@ -50,7 +50,7 @@ import org.martus.server.ServerSideNetworkHandler;
 import org.martus.server.ServerSideNetworkHandlerForNonSSL;
 
 
-public class TestMartusServer extends TestCaseEnhanced
+public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfaceConstants
 {
 	public TestMartusServer(String name) throws Exception
 	{
@@ -145,13 +145,11 @@ public class TestMartusServer extends TestCaseEnhanced
 			b1ChunkData0 = Base64.encode(b1ChunkBytes0);
 			b1ChunkData1 = Base64.encode(b1ChunkBytes1);
 			
-			draftZipString = MockBulletin.saveToZipString(draft);
-			draftZipBytes = Base64.decode(draftZipString);
-
 		}
 		
 		testServer = new MockMartusServer();
 		testServerInterface = new ServerSideNetworkHandler(testServer);
+		db = (MockServerDatabase)testServer.getDatabase();
 
 	}
 	
@@ -753,7 +751,9 @@ public class TestMartusServer extends TestCaseEnhanced
 		
 	public void testDownloadBulletinChunkDraftWholeBulletin() throws Exception
 	{
-		uploadSampleDraftBulletin();
+		String draftZipString = uploadSampleDraftBulletin(draft);
+		byte[] draftZipBytes = Base64.decode(draftZipString);
+		
 		Vector result = downloadBulletinChunk(testServerInterface, draft.getAccount(), draft.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
 		assertEquals("failed?", NetworkInterfaceConstants.OK, result.get(0));
 		assertEquals("wrong total size?", new Integer(draftZipBytes.length), result.get(1));
@@ -1342,6 +1342,65 @@ public class TestMartusServer extends TestCaseEnhanced
 		assertEquals("didn't return invalid data?", NetworkInterfaceConstants.INVALID_DATA, result.get(0));
 	}
 
+	public void testDeleteDraftBulletinsEmptyList() throws Exception
+	{
+		String[] allIds = {};
+		String resultAllOk = testServer.deleteDraftBulletins(store.getAccountId(), allIds);
+		assertEquals("Empty not ok?", OK, resultAllOk);
+	}
+	
+	public void testDeleteDraftBulletinsThroughHandler() throws Exception
+	{
+		String[] allIds = uploadSampleDrafts();
+		Vector parameters = new Vector();
+		parameters.add(new Integer(allIds.length));
+		for (int i = 0; i < allIds.length; i++)
+			parameters.add(allIds[i]);
+
+		String sig = MartusUtilities.sign(parameters, clientSecurity);
+		Vector result = testServerInterface.deleteDraftBulletins(store.getAccountId(), parameters, sig);
+		assertEquals("Result size?", 1, result.size());
+		assertEquals("Result not ok?", OK, result.get(0));
+	}
+		
+	public void testDeleteDraftBulletins() throws Exception
+	{
+		String[] allIds = uploadSampleDrafts();
+		String resultAllOk = testServer.deleteDraftBulletins(store.getAccountId(), allIds);
+		assertEquals("Good 3 not ok?", OK, resultAllOk);
+		assertEquals("Didn't delete all?", 0, db.getRecordCount());
+		
+		String[] twoGoodOneBad = uploadSampleDrafts();
+		twoGoodOneBad[1] = "Not a valid local id";
+		String resultOneBad = testServer.deleteDraftBulletins(store.getAccountId(), twoGoodOneBad);
+		assertEquals("Two good one bad not incomplete?", INCOMPLETE, resultOneBad);
+		assertEquals("Didn't delete two?", 1*3, db.getRecordCount());
+		
+		uploadSampleBulletin();
+		int newRecordCount = db.getRecordCount();
+		assertNotEquals("Didn't upload?", 1*3, newRecordCount);
+		String[] justSealed = new String[] {b1.getLocalId()};
+		String resultSealed = testServer.deleteDraftBulletins(store.getAccountId(), justSealed);
+		assertEquals("Sealed not ok?", OK, resultAllOk);
+		assertEquals("Deleted sealed?", newRecordCount, db.getRecordCount());
+	}
+	
+	String[] uploadSampleDrafts() throws Exception
+	{
+		assertEquals("db not empty?", 0, db.getRecordCount());
+		Bulletin draft1 = store.createEmptyBulletin();
+		String zip1 = uploadSampleDraftBulletin(draft1);
+		assertEquals("Didn't save 1?", 1*3, db.getRecordCount());
+		Bulletin draft2 = store.createEmptyBulletin();
+		String zip2 = uploadSampleDraftBulletin(draft2);
+		assertEquals("Didn't save 2?", 2*3, db.getRecordCount());
+		Bulletin draft3 = store.createEmptyBulletin();
+		String zip3 = uploadSampleDraftBulletin(draft3);
+		assertEquals("Didn't save 3?", 3*3, db.getRecordCount());
+
+		return new String[] {draft1.getLocalId(), draft2.getLocalId(), draft3.getLocalId()};
+	}
+
 	public void testKeyBelongsToClient()
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId("a", "b");
@@ -1599,12 +1658,16 @@ public class TestMartusServer extends TestCaseEnhanced
 		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipString);
 	}
 	
-	void uploadSampleDraftBulletin() 
+	String uploadSampleDraftBulletin(Bulletin draft) throws Exception
 	{
 		testServer.security = serverSecurity;
 		testServer.clientsThatCanUpload.clear();
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		testServer.uploadBulletin(clientSecurity.getPublicKeyString(), draft.getLocalId(), draftZipString);
+		
+		String draftZipString = MockBulletin.saveToZipString(draft);
+		String result = testServer.uploadBulletin(clientSecurity.getPublicKeyString(), draft.getLocalId(), draftZipString);
+		assertEquals("upload failed?", OK, result);
+		return draftZipString;
 	}
 	
 	String uploadBulletinChunk(NetworkInterface server, String authorId, String localId, int totalLength, int offset, int chunkLength, String data, MartusCrypto signer) throws Exception
@@ -1663,8 +1726,6 @@ public class TestMartusServer extends TestCaseEnhanced
 	static Bulletin privateBulletin;
 
 	static Bulletin draft;
-	static String draftZipString;
-	static byte[] draftZipBytes;
 
 	static MartusSecurity clientSecurity;
 	static MartusSecurity serverSecurity;
@@ -1675,4 +1736,5 @@ public class TestMartusServer extends TestCaseEnhanced
 	
 	MockMartusServer testServer;
 	NetworkInterface testServerInterface;
+	MockServerDatabase db;
 }

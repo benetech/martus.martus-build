@@ -13,7 +13,11 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Enumeration;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -29,6 +33,7 @@ import org.martus.common.Database.AccountVisitor;
 import org.martus.common.Database.PacketVisitor;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.DecryptionException;
+import org.martus.common.MartusCrypto.EncryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.common.Packet.InvalidPacketException;
@@ -248,28 +253,20 @@ public class MartusUtilities
 		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
 		UniversalId privateDataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getPrivateFieldDataPacketId());
 
-		keys[next++] = new DatabaseKey(dataUid);
-		keys[next++] = new DatabaseKey(privateDataUid);
+		keys[next++] = createKeyWithHeaderStatus(bhp, dataUid);
+		keys[next++] = createKeyWithHeaderStatus(bhp, privateDataUid);
 		for(int i=0; i < publicAttachmentIds.length; ++i)
 		{
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
-			keys[next++] = new DatabaseKey(uid);
+			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
 		}
 		for(int i=0; i < privateAttachmentIds.length; ++i)
 		{
 			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, privateAttachmentIds[i]);
-			keys[next++] = new DatabaseKey(uid);
+			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
 		}
-		keys[next++] = new DatabaseKey(bhp.getUniversalId());
+		keys[next++] = createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
 		
-		boolean isDraft = (bhp.getStatus().equals(BulletinConstants.STATUSDRAFT));
-		for(int i=0; i < keys.length; ++i)
-		{
-			if(isDraft)
-				keys[i].setDraft();
-			else
-				keys[i].setSealed();
-		}
 		return keys;
 	}
 	
@@ -474,4 +471,21 @@ public class MartusUtilities
 			return DatabaseKey.createSealedKey(uid);
 	}
 
+	public static void deleteBulletinFromDatabase(BulletinHeaderPacket bhp, Database db, MartusCrypto crypto)
+		throws
+			IOException,
+			MartusCrypto.CryptoException,
+			UnsupportedEncodingException,
+			Packet.InvalidPacketException,
+			Packet.WrongPacketTypeException,
+			Packet.SignatureVerificationException,
+			MartusCrypto.DecryptionException,
+			MartusCrypto.NoKeyPairException
+	{
+		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
+		for (int i = 0; i < keys.length; i++)
+		{
+			db.discardRecord(keys[i]);
+		}
+	}
 }

@@ -11,8 +11,9 @@ import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import org.apache.xmlrpc.XmlRpcClient;
-import org.martus.client.*;
-import org.martus.common.*;
+import org.martus.common.NetworkInterface;
+import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.NetworkInterfaceXmlRpcConstants;
 
 public class ClientSideNetworkHandlerUsingXmlRpc
 	implements NetworkInterfaceConstants, NetworkInterfaceXmlRpcConstants, NetworkInterface
@@ -106,6 +107,15 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		return (Vector)callServer(server, cmdGetPacket, params);
 	}
 
+	public Vector deleteDraftBulletins(String myAccountId, Vector parameters, String signature)
+	{
+		Vector params = new Vector();
+		params.add(myAccountId);
+		params.add(parameters);
+		params.add(signature);
+		return (Vector)callServer(server, cmdDeleteDrafts, params);
+	}
+	
 	public String ping()
 	{
 		Vector params = new Vector();

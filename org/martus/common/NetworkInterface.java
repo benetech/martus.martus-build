@@ -12,6 +12,7 @@ public interface NetworkInterface
 	public Vector putBulletinChunk(String myAccountId, Vector parameters, String signature);
 	public Vector getBulletinChunk(String myAccountId, Vector parameters, String signature);
 	public Vector getPacket(String myAccountId, Vector parameters, String signature);
+	public Vector deleteDraftBulletins(String myAccountId, Vector parameters, String signature);
 
 	// TODO: Delete everything below this line after all clients have been upgraded to 2002-08-28 or later
 	public String ping();

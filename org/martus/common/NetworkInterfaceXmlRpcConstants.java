@@ -12,6 +12,7 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final String cmdPutBulletinChunk = "putBulletinChunk";
 	public static final String cmdGetBulletinChunk = "getBulletinChunk";
 	public static final String cmdGetPacket = "getPacket";
+	public static final String cmdDeleteDrafts = "deleteDraftBulletins";
 
 	// legacy!
 	public static final String CMD_PING = "ping";

@@ -2,7 +2,6 @@ package org.martus.client;
 
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,12 +16,12 @@ import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
 import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
 import org.martus.common.ZipEntryInputStream;
@@ -431,47 +430,9 @@ public class Bulletin implements BulletinConstants
 	
 	void removeBulletinFromDatabase(Database db, MartusCrypto crypto)
 	{
-		DatabaseKey key = new DatabaseKey(getUniversalId());
-		if(!db.doesRecordExist(key))
-			return;
-			
 		try
 		{
-			String xml = db.readRecord(key, crypto);
-			byte[] bytes = xml.getBytes("UTF-8");
-			ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
-	
-			BulletinHeaderPacket oldHeader = new BulletinHeaderPacket("");
-			oldHeader.loadFromXml(in, store.getSignatureVerifier());
-			
-			String oldDataId = oldHeader.getFieldDataPacketId();
-			if(oldDataId != null)
-			{
-				UniversalId uid = UniversalId.createFromAccountAndLocalId(getAccount(), oldDataId);
-				db.discardRecord(new DatabaseKey(uid));
-			}
-				
-			String oldPrivateDataId = oldHeader.getPrivateFieldDataPacketId();
-			if(oldPrivateDataId != null)
-			{
-				UniversalId uid = UniversalId.createFromAccountAndLocalId(getAccount(), oldPrivateDataId);
-				db.discardRecord(new DatabaseKey(uid));
-			}
-			AttachmentProxy[] attachments = getPublicAttachments();
-			for(int i = 0 ; i < attachments.length ; ++i)
-			{
-				UniversalId uid = attachments[i].getUniversalId();
-				db.discardRecord(new DatabaseKey(uid));
-			}
-
-			AttachmentProxy[] privateAttachments = getPrivateAttachments();
-			for(int i = 0 ; i < privateAttachments.length ; ++i)
-			{
-				UniversalId uid = privateAttachments[i].getUniversalId();
-				db.discardRecord(new DatabaseKey(uid));
-			}
-
-			db.discardRecord(key);
+			MartusUtilities.deleteBulletinFromDatabase(getBulletinHeaderPacket(), db, crypto);
 		}
 		catch(Exception e)
 		{
