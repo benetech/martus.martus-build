@@ -191,7 +191,7 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	public Vector getPacket(String myAccountId, Vector parameters, String signature)
 	{
 		if(server.serverSSLLogging)
-			server.logging("getServerInfo");
+			server.logging("getPacket");
 
 		Vector result = new Vector();
 		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
