@@ -8,11 +8,11 @@ import java.util.zip.ZipFile;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.common.Bulletin;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.Packet;
@@ -291,7 +291,7 @@ System.out.flush();
 			try 
 			{
 				for(int i=0; i < copies; ++i)
-					MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
+					BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 				} 
 			catch (Exception e) 
 			{
@@ -322,7 +322,7 @@ System.out.flush();
 			store.saveBulletin(b);
 			Database db = store.getDatabase();
 			headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
-			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
+			BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, security);
 			store.destroyBulletin(b);
 		}
 		
@@ -333,7 +333,7 @@ System.out.flush();
 				for(int i=0; i < copies; ++i)
 				{
 					ZipFile zip = new ZipFile(file);
-					MartusUtilities.importBulletinPacketsFromZipFileToDatabase(db, null, zip, security);
+					BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase(db, null, zip, security);
 					zip.close();
 
 					Bulletin b = store.findBulletinByUniversalId(headerKey.getUniversalId());

@@ -34,13 +34,13 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FileDatabase;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
@@ -183,7 +183,7 @@ public class VerifyAllPackets
 					bhp.loadFromXml(inForLoad, security);
 					inForLoad.close();
 					
-					DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
+					DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(bhp);
 					for (int i = 0; i < keys.length; i++)
 					{
 						if(!db.doesRecordExist(keys[i]))

@@ -32,10 +32,10 @@ import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.NetworkResponse;
 import org.martus.common.UniversalId;
@@ -207,7 +207,7 @@ public class MirroringRetriever
 		FileOutputStream out = new FileOutputStream(destFile);
 
 		int chunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
-		int totalLength = MartusUtilities.retrieveBulletinZipToStream(uid, out, chunkSize, gateway, security, null, null);
+		int totalLength = BulletinZipUtilities.retrieveBulletinZipToStream(uid, out, chunkSize, gateway, security, null, null);
 
 		out.close();
 

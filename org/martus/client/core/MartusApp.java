@@ -49,6 +49,7 @@ import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinSearcher;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.FileInputStreamWithSeek;
@@ -930,7 +931,7 @@ public class MartusApp
 		FileOutputStream outputStream = new FileOutputStream(tempFile);
 
 		String progressTag = getLocalization().getFieldLabel("ChunkProgressStatusMessage");
-		int masterTotalSize = MartusUtilities.retrieveBulletinZipToStream(uid, outputStream,
+		int masterTotalSize = BulletinZipUtilities.retrieveBulletinZipToStream(uid, outputStream,
 						serverChunkSize, getCurrentNetworkInterfaceGateway(),  security,
 						progressMeter, progressTag);
 

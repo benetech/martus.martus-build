@@ -230,7 +230,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		DatabaseKey key = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
 
 		File originalZipFile = createTempFile();
-		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, key, originalZipFile, security);
+		BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, key, originalZipFile, security);
 		validateZipFile(accountId, originalZipFile);
 
 		File copiedZipFile = createCopyOfZipFile(originalZipFile, null, null);
@@ -309,7 +309,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		ZipFile copiedZip = new ZipFile(copiedZipFile);
 		try
 		{
-			MartusUtilities.validateIntegrityOfZipFilePackets(accountId, copiedZip, security);
+			BulletinZipUtilities.validateIntegrityOfZipFilePackets(accountId, copiedZip, security);
 		}
 		finally
 		{
@@ -474,7 +474,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		File tempFile = createTempFile();
 		try
 		{
-			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, wrongKey, tempFile, client1);
+			BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, wrongKey, tempFile, client1);
 			fail("should have thrown");
 		}
 		catch(InvalidPacketException ignoreExpectedException)

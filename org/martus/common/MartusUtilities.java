@@ -31,37 +31,23 @@ import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.io.StringReader;
 import java.io.UnsupportedEncodingException;
 import java.security.SecureRandom;
-import java.util.Enumeration;
-import java.util.HashMap;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
-import java.util.zip.ZipOutputStream;
 
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 
 import org.martus.common.Base64.InvalidBase64Exception;
-import org.martus.common.MartusCrypto.CryptoException;
-import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
-import org.martus.common.MartusCrypto.NoKeyPairException;
-import org.martus.common.Packet.InvalidPacketException;
-import org.martus.common.Packet.SignatureVerificationException;
-import org.martus.common.Packet.WrongAccountException;
-import org.martus.common.Packet.WrongPacketTypeException;
 
 public class MartusUtilities
 {
@@ -281,111 +267,6 @@ public class MartusUtilities
 		}
 	}
 
-	public static void exportPublicBulletinPacketsFromDatabaseToZipFile(Database db, DatabaseKey headerKey, File destZipFile, MartusCrypto security) throws
-			IOException,
-			CryptoException,
-			UnsupportedEncodingException,
-			InvalidPacketException,
-			WrongPacketTypeException,
-			SignatureVerificationException,
-			DecryptionException,
-			NoKeyPairException,
-			FileNotFoundException
-	{
-		BulletinHeaderPacket bhp;
-		String headerXml = "";
-
-		bhp = new BulletinHeaderPacket("");
-		try
-		{
-			headerXml = db.readRecord(headerKey, security);
-
-			byte[] headerBytes = headerXml.getBytes("UTF-8");
-
-			ByteArrayInputStreamWithSeek headerIn = new ByteArrayInputStreamWithSeek(headerBytes);
-
-			MartusCrypto doNotCheckSigDuringDownload = null;
-			bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
-			DatabaseKey[] packetKeys = getPublicPacketKeys(bhp);
-
-			FileOutputStream outputStream = new FileOutputStream(destZipFile);
-			extractPacketsToZipStream(headerKey.getAccountId(), db, packetKeys, outputStream, security);
-		}
-		catch(Exception e)
-		{
-			e.printStackTrace();
-		}
-
-		// TODO: REMOVE THIS! IT IS ONLY FOR DEBUGGING! SLOW SLOW SLOW!
-		try
-		{
-			ZipFile zip = new ZipFile(destZipFile);
-			validateIntegrityOfZipFilePublicPackets(headerKey.getAccountId(), zip, security);
-			zip.close();
-		}
-		catch (InvalidPacketException e)
-		{
-			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile:");
-			System.out.println("  InvalidPacket in bulletin: " + bhp.getLocalId());
-			throw e;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile: validation failed!");
-			throw new IOException("Zip validation exception: " + e.getMessage());
-		}
-	}
-
-	public static void exportBulletinPacketsFromDatabaseToZipFile(Database db, DatabaseKey headerKey, File destZipFile, MartusCrypto security) throws
-			IOException,
-			CryptoException,
-			UnsupportedEncodingException,
-			InvalidPacketException,
-			WrongPacketTypeException,
-			SignatureVerificationException,
-			DecryptionException,
-			NoKeyPairException,
-			FileNotFoundException
-	{
-		String headerXml = db.readRecord(headerKey, security);
-		byte[] headerBytes = headerXml.getBytes("UTF-8");
-
-		ByteArrayInputStreamWithSeek headerIn = new ByteArrayInputStreamWithSeek(headerBytes);
-		BulletinHeaderPacket bhp = new BulletinHeaderPacket("");
-
-		MartusCrypto doNotCheckSigDuringDownload = null;
-		bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
-		UniversalId loadedUid = bhp.getUniversalId();
-		if(!loadedUid.equals(headerKey.getUniversalId()))
-			throw new InvalidPacketException("Loaded uid doesn't match key uid");
-
-		DatabaseKey[] packetKeys = getAllPacketKeys(bhp);
-
-		FileOutputStream outputStream = new FileOutputStream(destZipFile);
-		extractPacketsToZipStream(headerKey.getAccountId(), db, packetKeys, outputStream, security);
-
-		// TODO: REMOVE THIS! IT IS ONLY FOR DEBUGGING! SLOW SLOW SLOW!
-		try
-		{
-			ZipFile zip = new ZipFile(destZipFile);
-			validateIntegrityOfZipFilePackets(headerKey.getAccountId(), zip, security);
-			zip.close();
-		}
-		catch (InvalidPacketException e)
-		{
-			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile:");
-			System.out.println("  InvalidPacket in bulletin: " + bhp.getLocalId());
-			throw e;
-		}
-		catch (Exception e)
-		{
-			e.printStackTrace();
-			System.out.println("MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile: validation failed!");
-			throw new IOException("Zip validation exception: " + e.getMessage());
-		}
-	}
-
 	public static Vector getRetrieveBulletinSummaryTags()
 	{
 		Vector tags = new Vector();
@@ -417,43 +298,10 @@ public class MartusUtilities
 		return keys;
 	}
 
-	public static DatabaseKey[] getAllPacketKeys(BulletinHeaderPacket bhp)
-	{
-		String accountId = bhp.getAccountId();
-		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
-		String[] privateAttachmentIds = bhp.getPrivateAttachmentIds();
-
-		int corePacketCount = 3;
-		int publicAttachmentCount = publicAttachmentIds.length;
-		int privateAttachmentCount = privateAttachmentIds.length;
-		int totalPacketCount = corePacketCount + publicAttachmentCount + privateAttachmentCount;
-		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
-		int next = 0;
-
-		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
-		UniversalId privateDataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getPrivateFieldDataPacketId());
-
-		keys[next++] = createKeyWithHeaderStatus(bhp, dataUid);
-		keys[next++] = createKeyWithHeaderStatus(bhp, privateDataUid);
-		for(int i=0; i < publicAttachmentIds.length; ++i)
-		{
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
-			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
-		}
-		for(int i=0; i < privateAttachmentIds.length; ++i)
-		{
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, privateAttachmentIds[i]);
-			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
-		}
-		keys[next++] = createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
-
-		return keys;
-	}
-
 	public static int getBulletinSize(Database db, BulletinHeaderPacket bhp)
 	{
 		int size = 0;
-		DatabaseKey[] bulletinPacketKeys  = getAllPacketKeys(bhp);
+		DatabaseKey[] bulletinPacketKeys  = BulletinZipUtilities.getAllPacketKeys(bhp);
 		for(int i = 0 ; i < bulletinPacketKeys.length ; ++i)
 		{
 			try
@@ -469,93 +317,7 @@ public class MartusUtilities
 		return size;
 	}
 
-	public static void extractPacketsToZipStream(String clientId, Database db, DatabaseKey[] packetKeys, OutputStream outputStream, MartusCrypto security) throws
-		IOException,
-		UnsupportedEncodingException
-	{
-		ZipOutputStream zipOut = new ZipOutputStream(outputStream);
-// TODO: Setting the method to STORED seems like it should dramatically
-// speed up writing and reading zip files. The javadocs say it is supported.
-// But every time I try it, the zip file ends up empty. kbs.
-//		zipOut.setMethod(zipOut.STORED);
-
-		try
-		{
-			for(int i = 0; i < packetKeys.length; ++i)
-			{
-				DatabaseKey key = packetKeys[i];
-				ZipEntry entry = new ZipEntry(key.getLocalId());
-				zipOut.putNextEntry(entry);
-
-				InputStream in = db.openInputStream(key, security);
-
-				int got;
-				byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
-				while( (got=in.read(bytes)) >= 0)
-					zipOut.write(bytes, 0, got);
-
-				in.close();
-				zipOut.flush();
-			}
-		}
-		catch(CryptoException e)
-		{
-			throw new IOException("CryptoException " + e);
-		}
-		finally
-		{
-			zipOut.close();
-		}
-	}
-
-	public static void importBulletinPacketsFromZipFileToDatabase(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
-		throws IOException,
-		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException,
-		Packet.WrongAccountException,
-		MartusCrypto.DecryptionException
-	{
-		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);
-		if(authorAccountId == null)
-			authorAccountId = header.getAccountId();
-
-		validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
-		deleteDraftBulletinPackets(db, header.getUniversalId(), security);
-
-		HashMap zipEntries = new HashMap();
-		StreamCopier copier = new StreamCopier();
-		StreamEncryptor encryptor = new StreamEncryptor(security);
-
-		DatabaseKey[] keys = getAllPacketKeys(header);
-		for (int i = 0; i < keys.length; i++)
-		{
-			String localId = keys[i].getLocalId();
-			ZipEntry entry = zip.getEntry(localId);
-
-			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
-
-			final String tempFileName = "$$$importZip";
-			File file = File.createTempFile(tempFileName, null);
-			FileOutputStream rawOut = new FileOutputStream(file);
-
-			StreamFilter filter = copier;
-			if(db.mustEncryptLocalData() && doesPacketNeedLocalEncryption(header, in))
-				filter = encryptor;
-
-			copyStreamWithFilter(in, rawOut, filter);
-
-			rawOut.close();
-			in.close();
-
-			UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, keys[i].getLocalId());
-			DatabaseKey key = MartusUtilities.createKeyWithHeaderStatus(header, uid);
-
-			zipEntries.put(key,file);
-		}
-		db.importFiles(zipEntries);
-	}
-
-	private static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws
+	static void deleteDraftBulletinPackets(Database db, UniversalId bulletinUid, MartusCrypto security) throws
 		IOException
 	{
 		DatabaseKey headerKey = DatabaseKey.createDraftKey(bulletinUid);
@@ -597,112 +359,6 @@ public class MartusUtilities
 		db.discardRecord(key);
 	}
 
-	public static void validateIntegrityOfZipFilePublicPackets(String authorAccountId, ZipFile zip, MartusCrypto security)
-		throws
-			InvalidPacketException,
-			IOException,
-			SignatureVerificationException,
-			WrongAccountException,
-			DecryptionException
-	{
-		BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
-		DatabaseKey[] keys = getPublicPacketKeys(bhp);
-		Vector localIds = new Vector();
-		for (int i = 0; i < keys.length; i++)
-			localIds.add(keys[i].getLocalId());
-
-		//TODO validate Header Packet matches other packets
-		Enumeration entries = zip.entries();
-		if(!entries.hasMoreElements())
-		{
-			throw new Packet.InvalidPacketException("Empty zip file");
-		}
-
-		while(entries.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-
-			if(entry.isDirectory())
-			{
-				throw new Packet.InvalidPacketException("Directory entry");
-			}
-
-			if(entry.getName().startsWith(".."))
-			{
-				throw new Packet.InvalidPacketException("Relative path in name");
-			}
-
-			if(entry.getName().indexOf("\\") >= 0 ||
-				entry.getName().indexOf("/") >= 0 )
-			{
-				throw new Packet.InvalidPacketException("Path in name");
-			}
-
-			String thisLocalId = entry.getName();
-			if(!localIds.contains(thisLocalId))
-				throw new IOException("Extra packet");
-			localIds.remove(thisLocalId);
-			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
-			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
-		}
-
-		if(localIds.size() > 0)
-			throw new IOException("Missing packets");
-	}
-
-	public static void validateIntegrityOfZipFilePackets(String authorAccountId, ZipFile zip, MartusCrypto security)
-		throws
-			InvalidPacketException,
-			IOException,
-			SignatureVerificationException,
-			WrongAccountException,
-			DecryptionException
-	{
-		BulletinHeaderPacket bhp = BulletinHeaderPacket.loadFromZipFile(zip, security);
-		DatabaseKey[] keys = getAllPacketKeys(bhp);
-		Vector localIds = new Vector();
-		for (int i = 0; i < keys.length; i++)
-			localIds.add(keys[i].getLocalId());
-
-		//TODO validate Header Packet matches other packets
-		Enumeration entries = zip.entries();
-		if(!entries.hasMoreElements())
-		{
-			throw new Packet.InvalidPacketException("Empty zip file");
-		}
-
-		while(entries.hasMoreElements())
-		{
-			ZipEntry entry = (ZipEntry)entries.nextElement();
-
-			if(entry.isDirectory())
-			{
-				throw new Packet.InvalidPacketException("Directory entry");
-			}
-
-			if(entry.getName().startsWith(".."))
-			{
-				throw new Packet.InvalidPacketException("Relative path in name");
-			}
-
-			if(entry.getName().indexOf("\\") >= 0 ||
-				entry.getName().indexOf("/") >= 0 )
-			{
-				throw new Packet.InvalidPacketException("Path in name");
-			}
-
-			String thisLocalId = entry.getName();
-			if(!localIds.contains(thisLocalId))
-				throw new IOException("Extra packet");
-			localIds.remove(thisLocalId);
-			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
-			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
-		}
-
-		if(localIds.size() > 0)
-			throw new IOException("Missing packets");
-	}
-
 	public static DatabaseKey createKeyWithHeaderStatus(BulletinHeaderPacket header, UniversalId uid)
 	{
 		if(header.getStatus().equals(BulletinConstants.STATUSDRAFT))
@@ -722,71 +378,11 @@ public class MartusUtilities
 			MartusCrypto.DecryptionException,
 			MartusCrypto.NoKeyPairException
 	{
-		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
+		DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(bhp);
 		for (int i = 0; i < keys.length; i++)
 		{
 			db.discardRecord(keys[i]);
 		}
-	}
-
-	public static int retrieveBulletinZipToStream(UniversalId uid, OutputStream outputStream,
-			int chunkSize, BulletinRetrieverGatewayInterface gateway, MartusCrypto security,
-			ProgressMeterInterface progressMeter, String progressTag)
-		throws
-			MartusCrypto.MartusSignatureException,
-			ServerErrorException,
-			IOException,
-			Base64.InvalidBase64Exception
-	{
-		int masterTotalSize = 0;
-		int totalSize = 0;
-		int chunkOffset = 0;
-		String lastResponse = "";
-		if(progressMeter != null)
-			progressMeter.updateProgressMeter(progressTag, 0, 1);
-		while(!lastResponse.equals(NetworkInterfaceConstants.OK))
-		{
-			NetworkResponse response = gateway.getBulletinChunk(security,
-								uid.getAccountId(), uid.getLocalId(), chunkOffset, chunkSize);
-
-			lastResponse = response.getResultCode();
-			if(!lastResponse.equals(NetworkInterfaceConstants.OK) &&
-				!lastResponse.equals(NetworkInterfaceConstants.CHUNK_OK))
-			{
-				//System.out.println((String)result.get(0));
-				throw new ServerErrorException("result=" + lastResponse);
-			}
-
-			Vector result = response.getResultVector();
-			totalSize = ((Integer)result.get(0)).intValue();
-			if(masterTotalSize == 0)
-				masterTotalSize = totalSize;
-
-			if(totalSize != masterTotalSize)
-				throw new ServerErrorException("totalSize not consistent");
-			if(totalSize < 0)
-				throw new ServerErrorException("totalSize negative");
-
-			int thisChunkSize = ((Integer)result.get(1)).intValue();
-			if(thisChunkSize < 0 || thisChunkSize > totalSize - chunkOffset)
-				throw new ServerErrorException("chunkSize out of range: " + thisChunkSize);
-
-			// TODO: validate that length of data == chunkSize that was returned
-			String data = (String)result.get(2);
-			StringReader reader = new StringReader(data);
-
-			Base64.decode(reader, outputStream);
-			chunkOffset += thisChunkSize;
-			if(progressMeter != null)
-			{
-				if(progressMeter.shouldExit())
-					break;
-				progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);
-			}
-		}
-		if(progressMeter != null)
-			progressMeter.updateProgressMeter(progressTag, chunkOffset, masterTotalSize);
-		return masterTotalSize;
 	}
 
 	public static String getXmlEncoded(String text)

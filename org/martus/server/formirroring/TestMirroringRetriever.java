@@ -34,12 +34,12 @@ import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.BulletinSaver;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
@@ -205,8 +205,8 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 	{
 		String accountId = b.getAccount();
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		DatabaseKey[] packetKeys = MartusUtilities.getAllPacketKeys(b.getBulletinHeaderPacket());
-		MartusUtilities.extractPacketsToZipStream(accountId, dbToExportFrom, packetKeys, out, signer);
+		DatabaseKey[] packetKeys = BulletinZipUtilities.getAllPacketKeys(b.getBulletinHeaderPacket());
+		BulletinZipUtilities.extractPacketsToZipStream(accountId, dbToExportFrom, packetKeys, out, signer);
 		String zipString = Base64.encode(out.toByteArray());
 		return zipString;
 	}

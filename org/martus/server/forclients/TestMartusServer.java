@@ -52,6 +52,7 @@ import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.BulletinLoader;
 import org.martus.common.BulletinSaver;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
@@ -932,9 +933,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkNotAuthorized");
 
 		uploadSampleBulletin();
-		DatabaseKey[] packetKeys = MartusUtilities.getAllPacketKeys(b1.getBulletinHeaderPacket());
+		DatabaseKey[] packetKeys = BulletinZipUtilities.getAllPacketKeys(b1.getBulletinHeaderPacket());
 		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		MartusUtilities.extractPacketsToZipStream(b1.getAccount(), testServer.getDatabase(), packetKeys, out, serverSecurity);
+		BulletinZipUtilities.extractPacketsToZipStream(b1.getAccount(), testServer.getDatabase(), packetKeys, out, serverSecurity);
 		assertEquals("wrong length?", b1ZipBytes.length, out.toByteArray().length);
 		
 		String zipString = Base64.encode(out.toByteArray());
@@ -1460,7 +1461,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testGetAllPacketKeysSealed");
 
 		BulletinHeaderPacket bhp = b1.getBulletinHeaderPacket();
-		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
+		DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(bhp);
 		
 		assertNotNull("null ids?", keys);
 		assertEquals("count?", 5, keys.length);
@@ -1499,7 +1500,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testGetAllPacketKeysDraft");
 
 		BulletinHeaderPacket bhp = draft.getBulletinHeaderPacket();
-		DatabaseKey[] keys = MartusUtilities.getAllPacketKeys(bhp);
+		DatabaseKey[] keys = BulletinZipUtilities.getAllPacketKeys(bhp);
 		
 		assertNotNull("null ids?", keys);
 		assertEquals("count?", 3, keys.length);

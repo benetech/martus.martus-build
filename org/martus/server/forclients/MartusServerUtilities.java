@@ -46,6 +46,7 @@ import java.util.zip.ZipFile;
 
 import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
@@ -80,7 +81,7 @@ public class MartusServerUtilities
 		{
 			zip = new ZipFile(zipFile);
 			BulletinHeaderPacket header = MartusServerUtilities.validateZipFilePacketsForServerImport(db, authorAccountId, zip, verifier);
-			MartusUtilities.importBulletinPacketsFromZipFileToDatabase(db, authorAccountId, zip, verifier);
+			BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase(db, authorAccountId, zip, verifier);
 			return header;
 		}
 		finally
@@ -100,7 +101,7 @@ public class MartusServerUtilities
 			Packet.WrongAccountException,
 			MartusCrypto.DecryptionException 
 	{
-		MartusUtilities.validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
+		BulletinZipUtilities.validateIntegrityOfZipFilePackets(authorAccountId, zip, security);
 
 		Enumeration entries = zip.entries();
 		BulletinHeaderPacket header = BulletinHeaderPacket.loadFromZipFile(zip, security);

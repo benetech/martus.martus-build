@@ -37,10 +37,10 @@ import java.util.LinkedList;
 import java.util.Vector;
 
 import org.martus.common.Bulletin;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusUtilities;
 
 
 public class TransferableBulletinList implements Transferable
@@ -67,7 +67,7 @@ public class TransferableBulletinList implements Transferable
 				file.deleteOnExit();
 				files.add(file);
 				DatabaseKey headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
-				MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, sigVerifier);
+				BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, file, sigVerifier);
 			}
 		}
 		catch(Exception e)

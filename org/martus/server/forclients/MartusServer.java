@@ -46,6 +46,7 @@ import java.util.Vector;
 
 import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
@@ -1210,7 +1211,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				return tempFile;
 		}
 		MartusUtilities.deleteInterimFileAndSignature(tempFile);
-		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
+		BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();

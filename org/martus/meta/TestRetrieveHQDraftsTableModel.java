@@ -9,6 +9,7 @@ import org.martus.client.swingui.MartusLocalization;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
@@ -91,7 +92,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	{
 		File tempFile = createTempFile();
 		DatabaseKey headerKey = DatabaseKey.createKey(b.getUniversalId(), b.getStatus());
-		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, sigVerifier);
+		BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, sigVerifier);
 		hqApp.getStore().importZipFileToStoreWithSameUids(tempFile);
 	}
 	

@@ -39,6 +39,7 @@ import org.martus.client.swingui.UiProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinConstants;
+import org.martus.common.BulletinZipUtilities;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
@@ -94,7 +95,7 @@ public class BackgroundUploader
 			Database db = app.getStore().getDatabase();
 			DatabaseKey headerKey = DatabaseKey.createKey(uid, b.getStatus());
 			MartusCrypto security = app.getSecurity();
-			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
+			BulletinZipUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, headerKey, tempFile, security);
 			
 			String message = getUploadProgressMessage(b);
 			return uploadBulletinZipFile(uid, tempFile, message);
