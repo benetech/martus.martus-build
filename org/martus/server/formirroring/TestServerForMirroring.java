@@ -117,6 +117,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	{
 		MockMartusServer noCallsToMakeCore = new MockMartusServer();
 		ServerForMirroring noCallsToMake = new ServerForMirroring(noCallsToMakeCore, logger);
+		noCallsToMake.createGatewaysWeWillCall();
 		assertEquals(0, noCallsToMake.retrieversWeWillCall.size());
 		noCallsToMakeCore.deleteAllFiles();
 		
@@ -129,7 +130,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		File pubKeyFile2 = new File(mirrorsWhoWeCall, "code=2.3.4.5.6-ip=2.3.4.5.txt");
 		MartusUtilities.exportServerPublicKey(clientSecurity2, pubKeyFile2);
 		ServerForMirroring twoCallsToMake = new ServerForMirroring(twoCallsToMakeCore, logger);
-		twoCallsToMake.createGatewaysForServersWhoWeCall();
+		twoCallsToMake.createGatewaysWeWillCall();
 		assertEquals(2, twoCallsToMake.retrieversWeWillCall.size());
 		mirrorsWhoWeCall.delete();
 		twoCallsToMakeCore.deleteAllFiles();
@@ -139,6 +140,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 	{
 		MockMartusServer nobodyAuthorizedCore = new MockMartusServer();
 		ServerForMirroring nobodyAuthorized = new ServerForMirroring(nobodyAuthorizedCore, logger);
+		nobodyAuthorized.loadConfigurationFiles();
 		assertFalse("client already authorized?", nobodyAuthorized.isAuthorizedForMirroring(clientSecurity1.getPublicKeyString()));
 		nobodyAuthorizedCore.deleteAllFiles();
 		
@@ -151,6 +153,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		File pubKeyFile2 = new File(mirrorsWhoCallUs, "code=2.3.4.5.6-ip=2.3.4.5.txt");
 		MartusUtilities.exportServerPublicKey(clientSecurity2, pubKeyFile2);
 		ServerForMirroring twoAuthorized = new ServerForMirroring(twoAuthorizedCore, logger);
+		twoAuthorized.loadConfigurationFiles();
 		assertTrue("client1 not authorized?", twoAuthorized.isAuthorizedForMirroring(clientSecurity1.getPublicKeyString()));
 		assertTrue("client2 not authorized?", twoAuthorized.isAuthorizedForMirroring(clientSecurity2.getPublicKeyString()));
 		assertFalse("ourselves authorized?", twoAuthorized.isAuthorizedForMirroring(coreServer.getAccountId()));

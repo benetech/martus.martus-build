@@ -70,7 +70,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 		// nothing to do yet
 	}
 	
-	public void loadConfigurationFiles() throws IOException
+	public void loadConfigurationFiles() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
 	{
 		if(getMirrorConfigFile().exists())
 		{
@@ -82,24 +82,21 @@ public class ServerForMirroring implements ServerSupplierInterface
 		}
 		log("MirroringInterval (millis): " + mirroringIntervalMillis);
 		log("InactiveSleep (millis): " + inactiveSleepMillis);
+
+		authorizedCallers = new Vector();
+		loadServersWhoAreAuthorizedToCallUs();
+		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
 	}
+
 	public void deleteConfigurationFiles()
 	{
 		getMirrorConfigFile().delete();
 	}
 
-	public void addListeners() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
+	public void addListeners() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
 	{
 		log("Initializing ServerForMirroring");
 		
-		authorizedCallers = new Vector();
-		loadServersWhoAreAuthorizedToCallUs();
-		log("Authorized " + authorizedCallers.size() + " Mirrors to call us");
-
-		retrieversWeWillCall = new Vector();
-		createGatewaysForServersWhoWeCall();
-		log("Configured to call " + retrieversWeWillCall.size() + " Mirrors");
-
 		int port = MirroringInterface.MARTUS_PORT_FOR_MIRRORING;
 		log("Opening port " + port + " for mirroring...");
 		SupplierSideMirroringHandler supplierHandler = new SupplierSideMirroringHandler(this, getSecurity());
@@ -260,10 +257,10 @@ public class ServerForMirroring implements ServerSupplierInterface
 		return new File(coreServer.getStartupConfigDirectory(), "mirrorsWhoWeCall");		
 	}
 	
-	void createGatewaysForServersWhoWeCall() throws 
+	public void createGatewaysWeWillCall() throws 
 			IOException, InvalidPublicKeyFileException, PublicInformationInvalidException, SSLSocketSetupException
 	{
-		retrieversWeWillCall.clear();
+		retrieversWeWillCall = new Vector();
 
 		File toCallDir = getMirrorsWeWillCallDirectory();
 		File[] toCallFiles = toCallDir.listFiles();
@@ -281,6 +278,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 			}
 			log("We will call: " + toCallFile.getName());
 		}
+		log("Configured to call " + retrieversWeWillCall.size() + " Mirrors");
 	}
 	
 	MirroringRetriever createRetrieverToCall(File publicKeyFile) throws

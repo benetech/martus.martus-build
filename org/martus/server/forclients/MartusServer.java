@@ -207,7 +207,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		serverForMirroring.verifyConfigurationFiles();
 	}
 
-	public void loadConfigurationFiles() throws IOException
+	public void loadConfigurationFiles() throws Exception
 	{
 		serverForClients.loadConfigurationFiles();
 		serverForMirroring.loadConfigurationFiles();
@@ -1667,6 +1667,7 @@ public class MartusServer implements NetworkInterfaceConstants
 
 	private void initializeServerForMirroring() throws Exception
 	{
+		serverForMirroring.createGatewaysWeWillCall();
 		serverForMirroring.addListeners();
 	}
 
