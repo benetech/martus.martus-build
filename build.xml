@@ -14,8 +14,9 @@
   <property name="swing-dir" value="${martus-dir}/swing"/>
   <property name="hrvd-dir" value="org/hrvd"/>
   <property name="amplifier-dir" value="${martus-dir}/amplifier"/>
-  <property name="buildfiles-dir" value="${env.MARTUSBUILDFILES}"/>
-  <property name="htdocs-dir" value="${amplifier-dir}/presentation"/>
+
+  <property name="jars-dir" value="martus-third-party-jars"/>
+  <property name="htdocs-dir" value="htdocs"/>
 
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
@@ -33,7 +34,7 @@
   <property name="server-files" value="${server-dir}/*.class,
                     ${server-dir}/**/*.class,
                     ${amplifier-dir}/**/*.class,
-                    ${buildfiles-dir}/Jars/*.jar,
+                    ${jars-dir}/**/*.jar,
                     ${htdocs-dir}/**/*
                     "/>
 
