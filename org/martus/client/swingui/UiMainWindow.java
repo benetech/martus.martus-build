@@ -136,6 +136,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			initializationErrorDlg(e.getMessage());
 		}
 		UiUtilities.updateIcon(this);
+		
+		timeoutInXSeconds = TIMEOUT_SECONDS;
+		File timeoutDebug = new File("C:/Martus/timeout.1min");
+		if(timeoutDebug !=null & timeoutDebug.exists())
+			timeoutInXSeconds = TESTING_TIMEOUT_60_SECONDS;
 
 		initalizeUiState();
 	}
@@ -1721,7 +1726,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		boolean hasTimedOut()
 		{
-			if(inactivityDetector.secondsSinceLastActivity() > TIMEOUT_SECONDS)
+			if(inactivityDetector.secondsSinceLastActivity() > timeoutInXSeconds)
 				return true;
 
 			return false;
@@ -1782,13 +1787,15 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private JFrame currentActiveFrame;
 	boolean inConfigServer;
 
-	private static final int MAX_KEYPAIRFILE_SIZE = 32000;
+	private int timeoutInXSeconds;
 	private static final int TIMEOUT_SECONDS = (10 * 60);
+	private static final int TESTING_TIMEOUT_60_SECONDS = 60;
+
+	private static final int MAX_KEYPAIRFILE_SIZE = 32000;
 	private static final int BACKGROUND_UPLOAD_CHECK_MILLIS = 5*1000;
 	private static final int BACKGROUND_TIMEOUT_CHECK_EVERY_X_MILLIS = 5*1000;
 	private boolean modifyingBulletin;
 	private boolean mainWindowInitalizing;
-
 	public final static int CANCELLED = 10;
 	public final static int SIGNED_IN = 11;
 	public final static int NEW_ACCOUNT = 12;
