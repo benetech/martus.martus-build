@@ -121,40 +121,12 @@ abstract public class MockDatabase implements Database
 
 	public File getIncomingInterimFile(DatabaseKey key)
 	{
-		if(incomingInterimMap.containsKey(key))
-			return (File)incomingInterimMap.get(key);
-			
-		try 
-		{
-			File interimFile = File.createTempFile("$$$MockDbInterim", null);
-			interimFile.deleteOnExit();
-			interimFile.delete();
-			incomingInterimMap.put(key, interimFile);
-			return interimFile;	
-		} 
-		catch (IOException e) 
-		{
-			return null;
-		}
+		return getInterimFile(key, incomingInterimMap);
 	}
 
 	public File getOutgoingInterimFile(DatabaseKey key)
 	{
-		if(outgoingInterimMap.containsKey(key))
-			return (File)outgoingInterimMap.get(key);
-			
-		try 
-		{
-			File interimFile = File.createTempFile("$$$MockDbInterim", null);
-			interimFile.deleteOnExit();
-			interimFile.delete();
-			outgoingInterimMap.put(key, interimFile);
-			return interimFile;	
-		} 
-		catch (IOException e) 
-		{
-			return null;
-		}
+		return getInterimFile(key, outgoingInterimMap);
 	}
 	
 	public boolean isInQuarantine(DatabaseKey key)
@@ -182,7 +154,7 @@ abstract public class MockDatabase implements Database
 		return map;
 	}
 
-	abstract public Set getAllKeys();
+	public abstract Set getAllKeys();
 	
 	public int getRecordCount()
 	{
@@ -194,6 +166,25 @@ abstract public class MockDatabase implements Database
 	{
 		Map map = getPacketMapFor(key);
 		return (String)map.get(key);
+	}
+
+	private File getInterimFile(DatabaseKey key, Map map) 
+	{
+		if(map.containsKey(key))
+			return (File)map.get(key);
+			
+		try 
+		{
+			File interimFile = File.createTempFile("$$$MockDbInterim", null);
+			interimFile.deleteOnExit();
+			interimFile.delete();
+			map.put(key, interimFile);
+			return interimFile;	
+		} 
+		catch (IOException e) 
+		{
+			return null;
+		}
 	}
 
 	abstract Map getPacketMapFor(DatabaseKey key);
