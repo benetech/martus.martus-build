@@ -343,9 +343,11 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 		{
-			logging("getBulletinChunk request by " + getClientAliasForLogging(myAccountId));
-			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
+			StringBuffer logMsg = new StringBuffer();
+			logMsg.append("getBulletinChunk request by " + getClientAliasForLogging(myAccountId));
+			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
+			logging(logMsg.toString());
 		}
 	
 		if( isShutdownRequested() )

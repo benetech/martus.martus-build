@@ -368,11 +368,14 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 		{
-			logging("putBulletinChunk");
-			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			logging("  Total Size=" + totalSize + ", Offset=" + chunkOffset);
+			StringBuffer logMsg = new StringBuffer();
+			logMsg.append("putBulletinChunk");
+			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+			logMsg.append("  Total Size=" + totalSize + ", Offset=" + chunkOffset);
 			if(chunkSize != NetworkInterfaceConstants.MAX_CHUNK_SIZE)
-				logging("Last Chunk = " + chunkSize);
+				logMsg.append(" Last Chunk = " + chunkSize);
+			
+			logging(logMsg.toString());
 		}
 		
 		if(isClientBanned(authorAccountId) || !canClientUpload(authorAccountId))
@@ -539,9 +542,11 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 		{
-			logging("downloadFieldOfficeBulletinChunk ");
-			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + " HQ: " + getClientAliasForLogging(hqAccountId));
+			StringBuffer logMsg = new StringBuffer();
+			logMsg.append("downloadFieldOfficeBulletinChunk ");
+			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + " HQ: " + getClientAliasForLogging(hqAccountId));
+			logging(logMsg.toString());
 		}
 		
 		if(isClientBanned(hqAccountId) )
@@ -596,9 +601,11 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 		{
-			logging("downloadMyBulletinChunk ");
-			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
+			StringBuffer logMsg = new StringBuffer();
+			logMsg.append("downloadMyBulletinChunk ");
+			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
+			logging(logMsg.toString());
 		}
 		
 		if(isClientBanned(authorAccountId) )
@@ -687,9 +694,11 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		if(serverMaxLogging)
 		{
-			logging("getBulletinChunk request by " + getClientAliasForLogging(myAccountId));
-			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
+			StringBuffer logMsg = new StringBuffer();
+			logMsg.append("getBulletinChunk request by " + getClientAliasForLogging(myAccountId));
+			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
+			logging(logMsg.toString());
 		}
 		
 		if(isClientBanned(myAccountId) )
