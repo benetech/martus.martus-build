@@ -83,9 +83,9 @@ System.out.println("UiBulletinTablePane.folderContentsHaveChanged");
 		table.bulletinContentsHaveChanged(b);
 	}
 
-	public void doEditBulletin()
+	public void doModifyBulletin()
 	{
-		table.doEditBulletin();
+		table.doModifyBulletin();
 	}
 
 	public void doCutBulletins()

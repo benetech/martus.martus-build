@@ -351,7 +351,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private void createActions()
 	{
 		actionCreate = new ActionCreate();
-		actionEdit = new ActionEdit();
+		actionEdit = new ActionModify();
 		actionSearch = new ActionSearch();
 		actionPrint = new ActionPrint();
 	}
@@ -584,9 +584,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	}
 
 	
-	private void doEditBulletin()
+	private void doModifyBulletin()
 	{
-		table.doEditBulletin();
+		table.doModifyBulletin();
 	}
 	
 	private void doCutBulletins()
@@ -1442,26 +1442,26 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	public void createBulletin() 
 	{
 		Bulletin b = app.createBulletin();
-		editBulletin(b);
+		modifyBulletin(b);
 	}
 
-	public void editBulletin(Bulletin b) 
+	public void modifyBulletin(Bulletin b) 
 	{
-		editingBulletin = true;
+		modifyingBulletin = true;
 		setEnabled(false);
-		currentActiveFrame = new UiBulletinEditDlg(b, this);
+		currentActiveFrame = new UiModifyBulletinDlg(b, this);
 	}
 	
-	public void stopEditing()
+	public void doneModifyingBulletin()
 	{
-		editingBulletin = false;
+		modifyingBulletin = false;
 		setEnabled(true);
 		currentActiveFrame = this;
 	}
 	
-	public boolean isEditingBulletin()
+	public boolean isModifyingBulletin()
 	{
-		return editingBulletin;	
+		return modifyingBulletin;	
 	}
 
 	public File getLastAttachmentLoadDirectory() 
@@ -1529,16 +1529,16 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
-	class ActionEdit extends AbstractAction
+	class ActionModify extends AbstractAction
 	{
-		public ActionEdit()
+		public ActionModify()
 		{
 			super(app.getButtonLabel("edit"), null);
 		}
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doEditBulletin();
+			doModifyBulletin();
 		}
 	}
 
@@ -1683,7 +1683,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			doEditBulletin();
+			doModifyBulletin();
 		}
 
 		public boolean isEnabled()
@@ -2183,7 +2183,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private MartusApp app;
 	private CurrentUiState uiState;
 	private ActionCreate actionCreate;
-	private ActionEdit actionEdit;
+	private ActionModify actionEdit;
 	private ActionSearch actionSearch;
 	private ActionPrint actionPrint;
 	private UiBulletinPreview preview;
@@ -2214,6 +2214,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private int clearStatusMessage;
 	private File lastAttachmentLoadDirectory;
 	private File lastAttachmentSaveDirectory;
-	private boolean editingBulletin;
+	private boolean modifyingBulletin;
 	private boolean mainWindowInitalizing;
 }

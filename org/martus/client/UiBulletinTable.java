@@ -173,7 +173,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	public void dropActionChanged(DragSourceDragEvent DragSourceDragEvent)	{}
 	public void dragDropEnd(DragSourceDropEvent dsde)						{}
 
-	public void doEditBulletin() 
+	public void doModifyBulletin() 
 	{
 		Bulletin b = getSingleSelectedBulletin();
 		if(b == null)
@@ -213,7 +213,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				return;
 			}
 		}	
-		mainWindow.editBulletin(b);
+		mainWindow.modifyBulletin(b);
 	}
 
 	public void doCutBulletins()
@@ -412,7 +412,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 		private void handleDoubleClick(MouseEvent e)
 		{
-			doEditBulletin();
+			doModifyBulletin();
 		}
 	}
 

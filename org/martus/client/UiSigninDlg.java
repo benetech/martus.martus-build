@@ -46,7 +46,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 			JLabel timedOutNote1 = new JLabel(app.getFieldLabel("timedout1"));
 			getContentPane().add(timedOutNote1);
-			if(window.isEditingBulletin())
+			if(window.isModifyingBulletin())
 			{
 				getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
 				JLabel timedOutNote2 = new JLabel(app.getFieldLabel("timedout2"));
