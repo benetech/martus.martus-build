@@ -26,12 +26,26 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
+import java.awt.Toolkit;
+
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 
 class Martus
 {
     public static void main (String args[])
 	{
+		final String javaVersion = System.getProperty("java.version");
+		final String minimumJavaVersion = "1.4";
+		if(javaVersion.compareTo(minimumJavaVersion) < 0)
+		{
+			final String errorMessage = "Requires Java version " + minimumJavaVersion + " or later!";
+			System.out.println(errorMessage);
+			Toolkit.getDefaultToolkit().beep();
+			JOptionPane.showMessageDialog(null, errorMessage, "Error", JOptionPane.ERROR_MESSAGE);
+			System.exit(2);
+		}
+
 		if(args.length >0)
 		{
 			if(args.length == 1 && args[0].compareToIgnoreCase("-testall")==0)
