@@ -600,7 +600,7 @@ public class EnglishStrings
 "field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:",
 "field:inputExportMyPublicKeyentry=",
 "field:inputGetShareFileNameentry=Enter the name of the file you wish to export.",
-"field:inputCustomFieldsentry=Enter the list of field tags below, in the order you want them to appear. To revert to the original standard fields, blank out the line and press OK.",
+"field:inputCustomFieldsentry=Enter the list of field tags below, in the order you want them to appear.\n\nTo add a new custom field enter a unique tag followed by a comma and then the label of the tag you want to appear in the bulletin.\n\nFor example VictimsName,Name of Victim\nNote fields are separated by ;'s.\nTo revert to the original standard fields, blank out the line and press OK.",
 
 "field:username=Username",
 "field:password1=Password",
