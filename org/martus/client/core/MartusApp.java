@@ -75,20 +75,9 @@ import org.martus.util.InputStreamWithSeek;
 
 public class MartusApp
 {
-	public class SaveConfigInfoException extends Exception {}
-	public class LoadConfigInfoException extends Exception {}
-
-	public static class MartusAppInitializationException extends Exception
-	{
-		MartusAppInitializationException(String message)
-		{
-			super(message);
-		}
-	}
-
 	public MartusApp(Localization localizationToUse) throws MartusAppInitializationException
 	{
-		this(null, determineDataDirectory(), localizationToUse);
+		this(null, determineMartusDataRootDirectory(), localizationToUse);
 	}
 
 	public MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse, Localization localizationToUse) throws MartusAppInitializationException
@@ -99,13 +88,14 @@ public class MartusApp
 			if(cryptoToUse == null)
 				cryptoToUse = new MartusSecurity();
 
-			dataDirectory = dataDirectoryToUse.getPath() + "/";
 			security = cryptoToUse;
-			store = new BulletinStore(dataDirectoryToUse, cryptoToUse);
 			configInfo = new ConfigInfo();
-
 			currentUserName = "";
 			maxNewFolders = MAXFOLDERS;
+			martusDataRootDirectory = dataDirectoryToUse;
+
+			currentAccountDirectory = martusDataRootDirectory; 
+			store = new BulletinStore(currentAccountDirectory, security);
 		}
 		catch(MartusCrypto.CryptoInitializationException e)
 		{
@@ -117,7 +107,7 @@ public class MartusApp
 
 	private void initializeCurrentLanguage(Localization localization)
 	{
-		File languageFlag = new File(getDataDirectory(),"lang.es");
+		File languageFlag = new File(getCurrentAccountDirectoryName(),"lang.es");
 		if(languageFlag.exists())
 		{
 			languageFlag.delete();
@@ -289,39 +279,44 @@ public class MartusApp
 			}
 	}
 
-	public String getDataDirectory()
+	public File getCurrentAccountDirectory()
 	{
-		return dataDirectory;
+		return currentAccountDirectory;
+	}
+
+	public String getCurrentAccountDirectoryName()
+	{
+		return getCurrentAccountDirectory().getPath() + "/";
 	}
 
 	public String getConfigInfoFilename()
 	{
-		return getDataDirectory() + "MartusConfig.dat";
+		return getCurrentAccountDirectoryName() + "MartusConfig.dat";
 	}
 
 	public String getConfigInfoSignatureFilename()
 	{
-		return getDataDirectory() + "MartusConfig.sig";
+		return getCurrentAccountDirectoryName() + "MartusConfig.sig";
 	}
 
 	public File getUploadInfoFile()
 	{
-		return new File(getDataDirectory() + "MartusUploadInfo.dat");
+		return new File(getCurrentAccountDirectoryName() + "MartusUploadInfo.dat");
 	}
 
 	public File getUiStateFile()
 	{
-		return new File(getDataDirectory() + "UiState.dat");
+		return new File(getCurrentAccountDirectoryName() + "UiState.dat");
 	}
 
 	public File getDefaultDetailsFile()
 	{
-		return new File(getDataDirectory(), "DefaultDetails" + DEFAULT_DETAILS_EXTENSION);
+		return new File(getCurrentAccountDirectoryName(), "DefaultDetails" + DEFAULT_DETAILS_EXTENSION);
 	}
 
 	public String getUploadLogFilename()
 	{
-		return  getDataDirectory() + "MartusUploadLog.txt";
+		return  getCurrentAccountDirectoryName() + "MartusUploadLog.txt";
 	}
 
 	public String getHelpFilename(String languageCode)
@@ -343,12 +338,12 @@ public class MartusApp
 
 	public static File getTranslationsDirectory()
 	{
-		return determineDataDirectory();
+		return determineMartusDataRootDirectory();
 	}
 
 	public File getKeyPairFile()
 	{
-		return new File(getDataDirectory() + KEYPAIR_FILENAME);
+		return new File(getCurrentAccountDirectoryName() + KEYPAIR_FILENAME);
 	}
 
 	public static File getBackupFile(File original)
@@ -975,7 +970,7 @@ public class MartusApp
 		writeKeyPairFileWithBackup(getKeyPairFile(), userName, userPassPhrase);
 	}
 
-	public boolean doesAccountExist()
+	public boolean doesAnyAccountExist()
 	{
 		return getKeyPairFile().exists();
 	}
@@ -1004,7 +999,7 @@ public class MartusApp
 	{
 		fileName = MartusUtilities.toFileName(fileName);
 		String completeFileName = fileName + PUBLIC_INFO_EXTENSION;
-		return(new File(getDataDirectory(), completeFileName));
+		return(new File(getCurrentAccountDirectoryName(), completeFileName));
 	}
 
 	public boolean attemptSignIn(String userName, String userPassPhrase)
@@ -1041,7 +1036,7 @@ public class MartusApp
 		try
 		{
 			writeKeyPairFileWithBackup(keyPairFile, userName, userPassPhrase);
-			currentUserName = userName;
+			setCurrentAccount(userName);
 		}
 		catch(IOException e)
 		{
@@ -1118,9 +1113,14 @@ public class MartusApp
 		}
 
 		if(worked)
-			currentUserName = userName;
+			setCurrentAccount(userName);
 
 		return worked;
+	}
+
+	private void setCurrentAccount(String userName)
+	{
+		currentUserName = userName;
 	}
 
 	public String getCombinedPassPhrase(String userName, String userPassPhrase)
@@ -1208,7 +1208,7 @@ public class MartusApp
 		return configInfo.getServerName();
 	}
 
-	private static File determineDataDirectory()
+	private static File determineMartusDataRootDirectory()
 	{
 		String dir;
 		if(System.getProperty("os.name").indexOf("Windows") >= 0)
@@ -1229,7 +1229,19 @@ public class MartusApp
 		return file;
 	}
 
-	protected String dataDirectory;
+	public class SaveConfigInfoException extends Exception {}
+	public class LoadConfigInfoException extends Exception {}
+
+	public static class MartusAppInitializationException extends Exception
+	{
+		MartusAppInitializationException(String message)
+		{
+			super(message);
+		}
+	}
+
+	File martusDataRootDirectory;
+	protected File currentAccountDirectory;
 	private Localization localization;
 	public BulletinStore store;
 	private ConfigInfo configInfo;

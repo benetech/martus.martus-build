@@ -148,18 +148,22 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		notifyClientCompliance(hiddenFrame);
 		hiddenFrame.setTitle(UiSigninDlg.getTextForTitle(localization, UiSigninDlg.INITIAL));
 		mainWindowInitalizing = true;
-		boolean newAccount = false;
-		if(app.doesAccountExist())
+		boolean wantsNewAccount = true;
+		if(app.doesAnyAccountExist())
 		{
 			int result = signIn(UiSigninDlg.INITIAL); 
-			if(result != SIGNED_IN)
+			if(result == CANCELLED)
 				return false;
+			if(result == SIGNED_IN)
+				wantsNewAccount = false;
 		}
-		else
+
+		boolean createdNewAccount = false;
+		if(wantsNewAccount)
 		{
 			if(!createAccount())
 				return false;
-			newAccount = true;
+			createdNewAccount = true;
 		}
 		currentActiveFrame = this;
 		hiddenFrame.dispose();
@@ -175,7 +179,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 
 		ConfigInfo info = app.getConfigInfo();
-		if(newAccount)
+		if(createdNewAccount)
 		{
 			File defaultDetailsFile = app.getDefaultDetailsFile();
 			if(defaultDetailsFile.exists())
@@ -1318,7 +1322,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		chooser.setApproveButtonText(getLocalization().getButtonLabel("inputImportPublicCodeok"));
 		chooser.setFileFilter(new PublicInfoFileFilter());
 		chooser.setDialogTitle(getLocalization().getWindowTitle("ImportHQPublicKey"));
-    	chooser.setCurrentDirectory(new File(app.getDataDirectory()));
+    	chooser.setCurrentDirectory(new File(app.getCurrentAccountDirectoryName()));
 		int returnVal = chooser.showOpenDialog(this);
 		if(returnVal == JFileChooser.APPROVE_OPTION)
 		{

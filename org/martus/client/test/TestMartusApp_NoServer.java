@@ -517,13 +517,13 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 		File keyPairFile = appWithAccount.getKeyPairFile();
 		keyPairFile.delete();
-		assertEquals("account exists without a file?", false, appWithAccount.doesAccountExist());
+		assertEquals("account exists without a file?", false, appWithAccount.doesAnyAccountExist());
 
 		FileOutputStream out = new FileOutputStream(keyPairFile);
 		out.write(0);
 		out.close();
 
-		assertEquals("account doesn't exist with a file?", true, appWithAccount.doesAccountExist());
+		assertEquals("account doesn't exist with a file?", true, appWithAccount.doesAnyAccountExist());
 
 		keyPairFile.delete();
 

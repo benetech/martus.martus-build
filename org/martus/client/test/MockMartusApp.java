@@ -48,7 +48,7 @@ public class MockMartusApp extends MartusApp
 		fakeDataDirectory.mkdir();
 
 		MockMartusApp app = new MockMartusApp(crypto, fakeDataDirectory);
-		app.dataDirectory = fakeDataDirectory.getPath() + "/";
+		app.currentAccountDirectory = fakeDataDirectory;
 
 		app.store = new BulletinStore(new MockClientDatabase());
 		app.store.setSignatureGenerator(crypto);
@@ -97,7 +97,7 @@ public class MockMartusApp extends MartusApp
 		if(logFile.exists())
 			throw new IOException("logFile");
 
-		File dir = new File(getDataDirectory());
+		File dir = new File(getCurrentAccountDirectoryName());
 		dir.delete();
 		if(dir.exists())
 			throw new IOException("dataDirectory");
