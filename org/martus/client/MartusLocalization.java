@@ -321,8 +321,10 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:confirmRedoWeakPassword=Weak Password Warning");
 		addEnglishTranslation("wintitle:confirmOverWriteWithBackupKeyPair=Confirm OverWrite Existing File");
 		
-		addEnglishTranslation("wintitle:notifyDropNotAllowed=Cannot Move Bulletin");
-		addEnglishTranslation("wintitle:notifyDropError=Error Moving Bulletin");
+		addEnglishTranslation("wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)");
+		addEnglishTranslation("wintitle:notifyDropErrors=Error Moving Bulletin(s)");
+		addEnglishTranslation("wintitle:notifyPasteErrorNotAllowed=Cannot Pasting Bulletin(s)");
+		addEnglishTranslation("wintitle:notifyPasteError=Error Pasting Bulletin(s)");
 		addEnglishTranslation("wintitle:notifyretrieveworked=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievefailed=Retrieve Bulletins");
 		addEnglishTranslation("wintitle:notifyretrievenothing=Retrieve Bulletins");
@@ -638,8 +640,10 @@ public class MartusLocalization
 		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=This file already exists. Do you wish to overwrite this file?");
 		addEnglishTranslation("field:confirmOverWriteWithBackupKeyPair=The backup keypair will replace the file.");
 
-		addEnglishTranslation("field:notifyDropNotAllowedcause=This bulletin cannot be moved to that folder. This may be because of its Draft/Sealed status, or its author.");
-		addEnglishTranslation("field:notifyDropErrorcause=An unexpected error occured while moving this bulletin. The file may be damaged.");
+		addEnglishTranslation("field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or thier author.");
+		addEnglishTranslation("field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.");
+		addEnglishTranslation("field:notifyPasteErrorNotAllowedcause=One or more bulletins cannot be pasted in that folder. This may be because of their Draft/Sealed status, or thier author.");
+		addEnglishTranslation("field:notifyPasteErrorcause=An unexpected error occured while pasting the bulletin(s). One or more files may be damaged.");
 		addEnglishTranslation("field:notifyretrieveworkedcause=All of the selected bulletins were successfully retrieved from the server");
 		addEnglishTranslation("field:notifyretrievefailedcause=Error: Unable to retrieve bulletins from the server");
 		addEnglishTranslation("field:notifyretrievenothingcause=No bulletins were selected");

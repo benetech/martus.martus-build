@@ -252,6 +252,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		TransferableBulletinList tb = mainWindow.getClipboardTransferableBulletin();
 	
 		boolean worked = false;
+		String resultMessageTag = null;
 		if(tb == null)
 		{
 			File file = mainWindow.getClipboardTransferableFile();
@@ -263,10 +264,23 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			} 
 			catch (InvalidPacketException e) 
 			{
-			} catch (SignatureVerificationException e) {
-			} catch (IOException e) {
-			} catch (CryptoException e) {
-			} catch (StatusNotAllowedException e) {
+				resultMessageTag = "PasteError";
+			} 
+			catch (SignatureVerificationException e) 
+			{
+				resultMessageTag = "PasteError";
+			} 
+			catch (IOException e) 
+			{
+				resultMessageTag = "PasteError";
+			} 
+			catch (CryptoException e) 
+			{
+				resultMessageTag = "PasteError";
+			} 
+			catch (StatusNotAllowedException e) 
+			{
+				resultMessageTag = "PasteErrorNotAllowed";
 			}
 		}
 		else
@@ -278,11 +292,15 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			}
 			catch (StatusNotAllowedException e)
 			{
+				resultMessageTag = "PasteErrorNotAllowed";
 			}
 		}
 		
 		if(!worked)
+		{
 			Toolkit.getDefaultToolkit().beep();
+			mainWindow.notifyDlg(mainWindow, resultMessageTag);
+		}
 	}
 
 

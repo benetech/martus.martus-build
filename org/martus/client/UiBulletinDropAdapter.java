@@ -2,6 +2,7 @@ package org.martus.client;
 
 import java.awt.Cursor;
 import java.awt.Point;
+import java.awt.Toolkit;
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
 import java.awt.dnd.DropTargetDragEvent;
@@ -125,9 +126,9 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		dtde.dropComplete(worked);
 		if(!worked)
 		{
-			observer.notifyDlg(observer, "DropNotAllowed");
+			Toolkit.getDefaultToolkit().beep();
+			observer.notifyDlg(observer, "DropErrorNotAllowed");
 		}
-		
 	}
 
 	private void dropFile(DropTargetDropEvent dtde)
@@ -174,31 +175,31 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		} 
 		catch (StatusNotAllowedException e) 
 		{
-			resultMessageTag = "DropNotAllowed";
+			resultMessageTag = "DropErrorNotAllowed";
 		}
 		catch(IOException e)
 		{
 			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
-			resultMessageTag = "DropError";
+			resultMessageTag = "DropErrors";
 		}
 		catch(MartusCrypto.CryptoException e)
 		{
 			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
-			resultMessageTag = "DropError";
+			resultMessageTag = "DropErrors";
 		}
 		catch(Packet.InvalidPacketException e)
 		{
 			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
-			resultMessageTag = "DropError";
+			resultMessageTag = "DropErrors";
 		}
 		catch(Packet.SignatureVerificationException e)
 		{
 			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
-			resultMessageTag = "DropError";
+			resultMessageTag = "DropErrors";
 		}
 
 		boolean worked = (resultMessageTag == null);
@@ -206,6 +207,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 
 		if(!worked)
 		{
+			Toolkit.getDefaultToolkit().beep();
 			observer.notifyDlg(observer, resultMessageTag);
 		}
 	}
