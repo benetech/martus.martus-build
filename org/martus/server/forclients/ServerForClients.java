@@ -308,23 +308,22 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return new File(coreServer.getStartupConfigDirectory(), MAGICWORDSFILENAME);
 	}
 
-	void loadMagicWordsFile()
+	void loadMagicWordsFile() throws IOException
 	{
 		try
 		{
 			UnicodeReader reader = new UnicodeReader(getMagicWordsFile());
 			String line = null;
 			while( (line = reader.readLine()) != null)
+			{
+				if(line.trim().length() == 0)
+					throw new IOException(getMagicWordsFile() + " cannot contain a blank line!");
 				addMagicWord(normalizeMagicWord(line));
+			}
 			reader.close();
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
-		}
-		catch(IOException e)
-		{
-			// TODO: Log this so the administrator knows
-			System.out.println("MartusServer constructor: " + e);
 		}
 	}
 
@@ -359,11 +358,8 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		
 		try
 		{
-			UnicodeWriter writer = new UnicodeWriter(getAllowUploadFile());
-			for(int i = 0; i < clientsThatCanUpload.size(); ++i)
-			{
-				writer.writeln((String)clientsThatCanUpload.get(i));
-			}
+			UnicodeWriter writer = new UnicodeWriter(getAllowUploadFile(), UnicodeWriter.APPEND);
+			writer.writeln(clientId);
 			writer.close();
 			MartusCrypto security = getSecurity();
 			MartusServerUtilities.createSignatureFileFromFileOnServer(getAllowUploadFile(), security);
@@ -373,6 +369,9 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		{
 			log("allowUploads " + e);
 			//System.out.println("MartusServer.allowUploads: " + e);
+			
+			//TODO: Should report error back to user. Shouldn't update in-memory list
+			// (clientsThatCanUpload) until AFTER the file has been written
 		}
 	}
 
