@@ -176,8 +176,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	}
 
 
-	MartusAmplifierServer(File dir) throws 
-					MartusCrypto.CryptoInitializationException
+	MartusAmplifierServer(File dir) throws MartusCrypto.CryptoInitializationException
 	{
 		security = new MartusSecurity();
 		
@@ -229,7 +228,6 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	{
 		return false;
 	}
-
 	
 	boolean hasAccount()
 	{
@@ -561,7 +559,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 				return tempFile;
 		}
 		MartusUtilities.deleteInterimFileAndSignature(tempFile);
-		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
+		MartusUtilities.exportPublicBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();

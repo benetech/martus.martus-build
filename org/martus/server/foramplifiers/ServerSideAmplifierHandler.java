@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.martus.common.AmplifierNetworkInterface;
 import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
+import org.martus.common.ByteArrayInputStreamWithSeek;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
@@ -33,7 +34,11 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	
 			public void visit(String accountString)
 			{
-				if(!accounts.contains(accountString))
+				PublicDataCollector collector = new PublicDataCollector();
+				Database db = server.getDatabase();
+				db.visitAllRecordsForAccount(collector, accountString);
+				
+				if(collector.infos.size() > 0 && ! accounts.contains(accountString))
 					accounts.add(accountString);
 			}
 	
@@ -69,31 +74,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			return result;
 		}
 		
-		class Collector implements Database.PacketVisitor
-		{
-			public void visit(DatabaseKey key)
-			{
-				try
-				{
-					InputStreamWithSeek in = server.getDatabase().openInputStream(key, null);
-					byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, server.security);
-					in.close();
-					String sigString = Base64.encode(sigBytes);
-					Vector info = new Vector();
-					info.add(key.getLocalId());
-					info.add(sigString);
-					infos.add(info);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-
-			Vector infos = new Vector();
-		}
-
-		Collector collector = new Collector();
+		PublicDataCollector collector = new PublicDataCollector();
 		String parameter = (String) parameters.get(0);
 		Database db = server.getDatabase();
 		db.visitAllRecordsForAccount(collector, parameter);
@@ -131,6 +112,45 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	}
 	
 	/// End Interface //
+	
+	class PublicDataCollector implements Database.PacketVisitor
+	{
+		public void visit(DatabaseKey key)
+		{
+			try
+			{
+				if(! key.getLocalId().startsWith("B-") )
+				{
+					return;
+				}
+				
+				InputStreamWithSeek in = server.getDatabase().openInputStream(key, null);
+				byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, server.security);
+				in.close();
+				String sigString = Base64.encode(sigBytes);
+				
+				String headerXml = server.getDatabase().readRecord(key, server.security);
+				byte[] headerBytes = headerXml.getBytes("UTF-8");
+				
+				ByteArrayInputStreamWithSeek headerIn = new ByteArrayInputStreamWithSeek(headerBytes);
+				BulletinHeaderPacket bhp = new BulletinHeaderPacket("");
+				bhp.loadFromXml(headerIn, null);
+				if(! bhp.isAllPrivate())
+				{
+					Vector info = new Vector();
+					info.add(key.getLocalId());
+					info.add(sigString);
+					infos.add(info);
+				}
+			}
+			catch (Exception e)
+			{
+				e.printStackTrace();
+			}
+		}
+
+		Vector infos = new Vector();
+	}
 
 	private boolean isSignatureOk(String myAccountId, Vector parameters, String signature, MartusCrypto verifier)
 	{
