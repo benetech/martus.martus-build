@@ -55,6 +55,9 @@ public class Localization
 	public String currentLanguageCode;
 	public String currentDateFormat;
 
+	public static final String MARTUS_LANGUAGE_FILE_PREFIX = "Martus-";
+	public static final String MARTUS_LANGUAGE_FILE_SUFFIX = ".mtf";
+	
 	public static final String ENGLISH = "en";
 	public static final String[] ALL_LANGUAGE_CODES = {
 				"?", "en", "ar",
@@ -140,15 +143,13 @@ public class Localization
 
 	protected static boolean isLanguageFile(String filename)
 	{
-		return (filename.startsWith("Martus-") && filename.endsWith(".mtf"));
+		return (filename.startsWith(MARTUS_LANGUAGE_FILE_PREFIX) && filename.endsWith(MARTUS_LANGUAGE_FILE_SUFFIX));
 	}
-
-
 
 	public void loadTranslationFile(String languageCode)
 	{
 		InputStream transStream = null;
-		String fileShortName = "Martus-" + languageCode + ".mtf";
+		String fileShortName = MARTUS_LANGUAGE_FILE_PREFIX + languageCode + MARTUS_LANGUAGE_FILE_SUFFIX;
 		File file = new File(MartusApp.getTranslationsDirectory(), fileShortName);
 		try
 		{

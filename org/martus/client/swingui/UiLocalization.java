@@ -50,6 +50,7 @@ import org.martus.util.UnicodeWriter;
 
 public class UiLocalization extends Localization
 {
+	public static final String[] AVAILABLE_MTF_LANGUAGE_RESOURCES = {"es", "ru"};
     public static void main (String args[])
 	{
 		if(args.length != 2)
@@ -178,11 +179,9 @@ public class UiLocalization extends Localization
 	{
 		Vector languages = new Vector();
 		languages.addElement(new ChoiceItem(ENGLISH, getLabel(ENGLISH, "language", ENGLISH, "English")));
-		String spanishFileName = "Martus-es.mtf";
-		if(getClass().getResource(spanishFileName) != null)
-		{
-			languages.addElement(getLanguageChoiceItem(spanishFileName));
-		}
+		
+		addCompiledLanguageResources(languages);
+
 		String[] languageFiles = directory.list(new LanguageFilenameFilter());
 
 		for(int i=0;i<languageFiles.length;++i)
@@ -191,6 +190,20 @@ public class UiLocalization extends Localization
 		}
 
 		return (ChoiceItem[])(languages.toArray((Object[])(new ChoiceItem[0])));
+	}
+	
+	Vector addCompiledLanguageResources(Vector languages)
+	{
+		String filename = null;
+		for(int i = 0; i < AVAILABLE_MTF_LANGUAGE_RESOURCES.length; ++i)
+		{
+			filename = MARTUS_LANGUAGE_FILE_PREFIX + AVAILABLE_MTF_LANGUAGE_RESOURCES[i] + MARTUS_LANGUAGE_FILE_SUFFIX;
+			if(getClass().getResource(filename) != null)
+			{
+				languages.addElement(getLanguageChoiceItem(filename));
+			}
+		}
+		return languages;
 	}
 
 	public String getLocalizedFolderName(String folderName)
