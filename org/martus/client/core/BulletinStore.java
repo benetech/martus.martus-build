@@ -1013,7 +1013,7 @@ public class BulletinStore
 	
 			BulletinConstants.TAGAUTHOR, BulletinConstants.TAGORGANIZATION,
 			BulletinConstants.TAGTITLE, BulletinConstants.TAGLOCATION, BulletinConstants.TAGKEYWORDS,
-			BulletinConstants.TAGEVENTDATERANGE, BulletinConstants.TAGEVENTDATE, BulletinConstants.TAGENTRYDATE,
+			BulletinConstants.TAGEVENTDATE, BulletinConstants.TAGENTRYDATE,
 			BulletinConstants.TAGSUMMARY, BulletinConstants.TAGPUBLICINFO,
 		};
 	}
