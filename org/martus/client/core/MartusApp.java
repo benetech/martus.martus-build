@@ -1248,11 +1248,6 @@ public class MartusApp
 		return localization.getMenuLabel(code);
 	}
 
-	public String getMonthLabel(String code)
-	{
-		return localization.getMonthLabel(code);
-	}
-
 	public String getMessageLabel(String code)
 	{
 		return localization.getMessageLabel(code);
@@ -1266,20 +1261,6 @@ public class MartusApp
 	public String getKeyword(String code)
 	{
 		return localization.getKeyword(code);
-	}
-
-	public String[] getMonthLabels()
-	{
-		final String[] tags = {"jan","feb","mar","apr","may","jun",
-							"jul","aug","sep","oct","nov","dec"};
-
-		String[] labels = new String[tags.length];
-		for(int i = 0; i < labels.length; ++i)
-		{
-			labels[i] = getMonthLabel(tags[i]);
-		}
-
-		return labels;
 	}
 
 	public ChoiceItem[] getUiLanguages()

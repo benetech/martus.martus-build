@@ -328,11 +328,6 @@ public class MartusLocalization
 		return getLabel(getCurrentLanguageCode(), "menu", code, "???");
 	}
 
-	public String getMonthLabel(String code)
-	{
-		return getLabel(getCurrentLanguageCode(), "month", code, "???");
-	}
-
 	public String getMessageLabel(String code)
 	{
 		return getLabel(getCurrentLanguageCode(), "message", code, "???");
@@ -346,6 +341,25 @@ public class MartusLocalization
 	public String getKeyword(String code)
 	{
 		return getLabel(getCurrentLanguageCode(), "keyword", code, "???");
+	}
+
+	public String getMonthLabel(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "month", code, "???");
+	}
+
+	public String[] getMonthLabels()
+	{
+		final String[] tags = {"jan","feb","mar","apr","may","jun",
+							"jul","aug","sep","oct","nov","dec"};
+
+		String[] labels = new String[tags.length];
+		for(int i = 0; i < labels.length; ++i)
+		{
+			labels[i] = getMonthLabel(tags[i]);
+		}
+
+		return labels;
 	}
 
 

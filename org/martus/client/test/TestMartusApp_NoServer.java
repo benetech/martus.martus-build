@@ -856,13 +856,17 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testMonthLabels()
 	{
 		TRACE_BEGIN("testMonthLabels");
-		assertEquals("Mar", appWithAccount.getMonthLabel("mar"));
-		String[] months = appWithAccount.getMonthLabels();
+
+		MartusLocalization localization = appWithAccount.getLocalization();
+
+		assertEquals("Mar", localization.getMonthLabel("mar"));
+		String[] months = localization.getMonthLabels();
 		assertEquals("Jan", months[0]);
 		appWithAccount.setCurrentLanguage("es");
-		months = appWithAccount.getMonthLabels();
+		months = localization.getMonthLabels();
 		assertEquals("Ene", months[0]);
 		appWithAccount.setCurrentLanguage("en");
+
 		TRACE_END();
 	}
 

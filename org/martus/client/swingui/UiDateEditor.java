@@ -53,7 +53,7 @@ public class UiDateEditor extends UiField
 		for(int day=1; day <= 31; ++day)
 			dayCombo.addItem(new Integer(day).toString());
 
-		monthCombo = new JComboBox(app.getMonthLabels());
+		monthCombo = new JComboBox(app.getLocalization().getMonthLabels());
 
 		yearCombo = new JComboBox();
 		Calendar cal = new GregorianCalendar();
