@@ -46,17 +46,29 @@ public class TestSSL extends TestCaseEnhanced
 	
 	public void testBasics()
 	{
-		proxy1.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
-
-		assertEquals(NetworkInterfaceConstants.VERSION, proxy1.ping());
-		
-		NetworkResponse response = new NetworkResponse(proxy1.getServerInfo(new Vector()));
-		assertEquals(NetworkInterfaceConstants.OK, response.getResultCode());
-		assertEquals(NetworkInterfaceConstants.VERSION, response.getResultVector().get(0));
+		verifyBadCertBeforeGoodCertHasBeenAccepted();
+		verifyGoodCertAndItWillNotBeReverifiedThisSession();
 
 // TODO: After the callerSide of mirroring is available, hook up this test!
 //		proxy2.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
 //		assertEquals(NetworkInterfaceConstants.VERSION, proxy2.pingForMirroring());
+	}
+	
+	public void verifyBadCertBeforeGoodCertHasBeenAccepted()
+	{
+		proxy1.getSimpleX509TrustManager().setExpectedPublicCode("Not a valid code");
+		assertNull("accepted bad cert?", proxy1.getServerInfo(new Vector()));
+	}
+	
+	public void verifyGoodCertAndItWillNotBeReverifiedThisSession()
+	{
+		proxy1.getSimpleX509TrustManager().setExpectedPublicKey(mockSecurityForServer.getPublicKeyString());
+
+		assertEquals(NetworkInterfaceConstants.VERSION, proxy1.ping());
+
+		NetworkResponse response = new NetworkResponse(proxy1.getServerInfo(new Vector()));
+		assertEquals(NetworkInterfaceConstants.OK, response.getResultCode());
+		assertEquals(NetworkInterfaceConstants.VERSION, response.getResultVector().get(0));
 	}
 	
 	static MockMartusSecurity mockSecurityForServer;
