@@ -17,6 +17,8 @@
   <property name="logi-dir" value="${cvs.home}/martus-logi/source/org/logi"/>
   <property name="amplifier-dir" value="${cvs.home}/martus-amplifier/source/${martus-dir}/amplifier"/>
   <property name="thirdparty-jar-dir" value="${cvs.home}/martus-thirdparty"/>
+  <property name="relative-jar-verifier-dir" value ="${martus-dir}/jarverifier"/>
+  <property name="jar-verifier-dir" value="${cvs.home}/martus-jar-verifier/source/${relative-jar-verifier-dir}"/>
 
   <property name="jars-dir" value="ThirdPartyJars"/>
   <property name="htdocs-dir" value="www"/>
@@ -43,6 +45,10 @@
                                             ${mspa-dir}/main/**/*.class,
                                             ${mspa-dir}/common/**/*.class,
                                             ${mspa-dir}/main/main-class.txt"/>
+
+  <property name="jar-verifier-jar" value= "${dist}/JarVerifier.jar"/>
+  <property name="jar-verifier-files" value="${relative-jar-verifier-dir}/*.class,
+                                            ${relative-jar-verifier-dir}/ssmartusclientks"/>
 
   <property name="server-dir" value="${cvs.home}/martus-server/source/${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
@@ -189,6 +195,40 @@
 
   </target>
   
+   <!-- Build JarVerifier -->
+  <target name="build-jar-verifier" depends="init">
+    <mkdir dir="${bin}"/>
+	<copy file="${jar-verifier-dir}/main-class.txt" todir="${bin}/${relative-jar-verifier-dir}"/>
+	<copy file="${jar-verifier-dir}/ssmartusclientks" todir="${bin}/${relative-jar-verifier-dir}"/>
+	
+     <javac destdir="bin" target="1.4" optimize="on"
+    	srcdir="${jar-verifier-dir};"
+    	classpath="."
+    	failonerror="true">
+            <include name="**/*.java"/>
+     </javac>
+
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${jar-verifier-jar}" basedir="${bin}" 
+	    manifest="${bin}/${relative-jar-verifier-dir}/main-class.txt"
+	    includes="${jar-verifier-files}"/>
+    
+    <!-- clean up -->
+    <delete dir="${bin}"/>
+
+  </target>
+
+   <!-- Build TestMLPK -->
+  <target name="build-test-mlpk" depends="init">
+	
+    <mkdir dir="${dist}"/>
+
+    <jar jarfile="${dist}/Martus-xx.mlpk" basedir="mtf" 
+	    manifest="mtf/main-class"
+	    includes="**/*.txt **/*.mtf"/>
+   </target>
+
 
   <!-- Build client -->
   <target name="build-client" depends="init,build-common">
@@ -330,7 +370,6 @@
     </target>
 
     <target name="check_storepass" unless="sign.storepass">
-
         <input
             message="Please enter store pw:"
             addproperty="sign.storepass"
@@ -379,6 +418,18 @@
                         />
     </target>
 
+    <!-- Sign jarverifier jar -->
+    <target name="jarsign-jarverifier" depends="check_storepass, check_keypass, check_keystore">
+		
+        <signjar jar="${jar-verifier-jar}"
+                        keystore="${sign.keystore}"
+                        storepass="${sign.storepass}"
+                        keypass="${sign.keypass}"
+                        alias="ssmtsjar"
+                        />
+    </target>
+
+
     <!-- Sign server jar -->
     <target name="jarsign-server" depends="check_storepass, check_keypass, check_keystore, build">
 
@@ -419,10 +470,10 @@
     </target>
 
     <!-- Sign all jars -->
-    <target name="jarsigner" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta, testall"/>
+    <target name="jarsigner" depends="jarsign-client,jarsign-jarverifier,jarsign-server,jarsign-common,jarsign-meta, testall"/>
 
     <!-- Sign all jars, skip the tests -->
-    <target name="jarsigner-no-tests" depends="jarsign-client,jarsign-server,jarsign-common,jarsign-meta"/>
+    <target name="jarsigner-no-tests" depends="jarsign-client,jarsign-jarverifier,jarsign-server,jarsign-common,jarsign-meta"/>
 
 <!-- ================================================================== -->
 <!-- M D 5                                                              -->
