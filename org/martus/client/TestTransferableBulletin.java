@@ -81,14 +81,14 @@ public class TestTransferableBulletin extends TestCaseEnhanced
 		file = getFile(icky, "ickyname");
 		at = file.getName().indexOf("w o r k e d");
 		assertEquals("icky", 0, at);
-		assertEndsWith("wrong extension?", ".mba", file.getName());
+		assertEndsWith("wrong extension for icky?", ".mba", file.getName());
 		file.delete();
 
 		TransferableBulletinList longName = createTransferableBulletin(LONGTITLE);
 		file = getFile(longName, "longname");
 		at = file.getName().indexOf("This wonderful title");
 		assertEquals("long", 0, at);
-		assertEndsWith("wrong extension?", ".mba", file.getName());	
+		assertEndsWith("wrong extension for long?", ".mba", file.getName());	
 		file.delete();
 	}
 
