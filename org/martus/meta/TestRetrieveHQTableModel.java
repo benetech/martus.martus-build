@@ -141,9 +141,9 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	public void testGetAndSetValueAt()
 	{
 		Vector authors = new Vector();
-		authors.add((String)modelWithData.getValueAt(0,2));
-		authors.add((String)modelWithData.getValueAt(1,2));
-		authors.add((String)modelWithData.getValueAt(2,2));
+		authors.add(modelWithData.getValueAt(0,2));
+		authors.add(modelWithData.getValueAt(1,2));
+		authors.add(modelWithData.getValueAt(2,2));
 		assertContains("Author 0 missing?", b0.get(Bulletin.TAGAUTHOR), authors);
 		assertContains("Author 1 missing?", b1.get(Bulletin.TAGAUTHOR), authors);
 		assertContains("Author 2 missing?", b2.get(Bulletin.TAGAUTHOR), authors);

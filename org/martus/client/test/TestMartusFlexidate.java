@@ -163,6 +163,6 @@ public class TestMartusFlexidate extends TestCaseEnhanced
 		Calendar cal = new GregorianCalendar();
 		cal.set(year,month,day);		
 						
-		return (Date) cal.getTime();
+		return cal.getTime();
 	}	
 }

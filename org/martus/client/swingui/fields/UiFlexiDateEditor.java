@@ -133,9 +133,9 @@ public class UiFlexiDateEditor extends UiField
 		
 		if (needToSetDefaultValue)
 		{				
-			endYearCombo.setSelectedItem((String) bgYearCombo.getSelectedItem());
-			endMonthCombo.setSelectedItem((String) bgMonthCombo.getSelectedItem());
-			endDayCombo.setSelectedItem((String) bgDayCombo.getSelectedItem());			
+			endYearCombo.setSelectedItem(bgYearCombo.getSelectedItem());
+			endMonthCombo.setSelectedItem(bgMonthCombo.getSelectedItem());
+			endDayCombo.setSelectedItem(bgDayCombo.getSelectedItem());			
 		}
 			
 		return endDateBox;		

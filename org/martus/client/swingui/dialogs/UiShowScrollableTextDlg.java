@@ -51,7 +51,7 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 {
 	public UiShowScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text)
 	{
-		this(owner, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text, (Map)(new HashMap()));
+		this(owner, titleTag, okButtonTag, cancelButtonTag, descriptionTag, text, new HashMap());
 	}
 	
 	public UiShowScrollableTextDlg(UiMainWindow owner, String titleTag, String okButtonTag, String cancelButtonTag, String descriptionTag, String text, Map tokenReplacement)

@@ -181,7 +181,7 @@ public class UiLocalization extends Localization
 		languages.addElement(new ChoiceItem(ENGLISH, getLabel(ENGLISH, "language", ENGLISH, "English")));
 		languages.addAll(getAllCompiledLanguageResources());
 		languages.addAll(getNonDuplicateLanguageResourcesInDirectory(languages, directory));
-		return (ChoiceItem[])(languages.toArray((Object[])(new ChoiceItem[0])));
+		return (ChoiceItem[])(languages.toArray(new ChoiceItem[0]));
 	}
 	
 	Vector getAllCompiledLanguageResources()
