@@ -1017,6 +1017,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 				
 			notifyDlg(this, "retrieveworked");
 			folders.folderHasChanged(retrievedFolder);
+			folders.selectFolder(folderName);
 		} 
 		catch(ServerErrorException e) 
 		{

@@ -28,9 +28,9 @@ class UiFolderTreePane extends JScrollPane
 		getViewport().add(tree);
 	}
 
-	public boolean selectFolder(String folderName)
+	public boolean selectFolder(String InternalFolderName)
 	{
-		TreePath path = getPathOfFolder(folderName);
+		TreePath path = getPathOfFolder(InternalFolderName);
 		if(path == null)
 			return false;
 
@@ -64,7 +64,8 @@ class UiFolderTreePane extends JScrollPane
 	{
 		String selectedName = tree.getSelectedFolderName();
 		model.loadFolders(store);
-		selectFolder(selectedName);
+		if(!selectFolder(selectedName))
+			parent.selectSentFolder();
 	}
 	
 	public void folderContentsHaveChanged(BulletinFolder f)
@@ -216,9 +217,9 @@ class UiFolderTreePane extends JScrollPane
 		return rootPath.pathByAddingChild(node);
 	}
 
-	private TreePath getPathOfFolder(String folderName)
+	private TreePath getPathOfFolder(String internalFolderName)
 	{
-		FolderTreeNode node = model.findFolderByLocalizedName(folderName);
+		FolderTreeNode node = model.findFolderByInternalName(internalFolderName);
 		if(node == null)
 			return null;
 		return getPathOfNode(node);

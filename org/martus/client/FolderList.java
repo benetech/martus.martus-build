@@ -54,7 +54,17 @@ public class FolderList extends DefaultTreeModel
 			if(folderName.equals(node.getLocalizedName()))
 				return node;
 		}
+		return null;
+	}
 
+	public FolderTreeNode findFolderByInternalName(String folderName)
+	{
+		for(int i = 0; i < getCount(); ++i)
+		{
+			FolderTreeNode node = getNode(i);
+			if(folderName.equals(node.getInternalName()))
+				return node;
+		}
 		return null;
 	}
 
