@@ -551,8 +551,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals(2, errorInfo.size());
 		assertEquals(NetworkInterfaceConstants.SERVER_ERROR, errorInfo.get(0));
 
-		serverWithoutKeypair.deleteAllData();
-
+		serverWithoutKeypair.deleteAllFiles();
 		TRACE_END();
 	}
 
@@ -1468,7 +1467,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		writer.writeln(sampleMagicWord2);
 		writer.writeln(sampleMagicWord3);
 		writer.close();
-		
+
 		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
 		other.verifyAndLoadConfigurationFiles();
 		other.setSecurity(otherServerSecurity);
