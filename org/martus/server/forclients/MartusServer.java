@@ -68,42 +68,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public static void main(String[] args)
 	{
 		System.out.println("MartusServer");
+		processCommandLine(args);
 		
-		boolean secureMode = false;
-		String servername = null;
-		for(int arg = 0; arg < args.length; ++arg)
-		{
-			if (args[arg].indexOf("logging")>=0)
-			{
-				serverLogging = true;
-				if (args[arg].indexOf("max")>=0)
-				{
-					serverMaxLogging = true;
-					serverSSLLogging = true;
-					System.out.println("Server Error Logging set to Max");
-				}
-				else
-					System.out.println("Server Error Logging Enabled");
-			}
-			
-			if(args[arg].equals("secure"))
-				secureMode = true;
-
-			if(args[arg].startsWith("--server-name="))
-			{
-				servername = args[arg].substring(args[arg].indexOf("=")+1);
-			}
-		}
-		
-		if(secureMode)
-			System.out.println("Running in SECURE mode");
-		else
-			System.out.println("***RUNNING IN INSECURE MODE***");
-		
-		System.out.println("Initializing...this will take a few seconds...");
 		MartusServer server = null;
 		try
 		{
+			System.out.println("Initializing...this will take a few seconds...");
 			server = new MartusServer(getDefaultDataDirectory());
 		} 
 		catch(CryptoInitializationException e) 
@@ -112,13 +82,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			System.exit(1);			
 		}
 		
-		server.setServerName(servername);
-		
-		
-		System.out.println("Version " + ServerConstants.version);
-		
-		String versionInfo = MartusUtilities.getVersionDate();
-		System.out.println("Build Date " + versionInfo);
+		displayVersion();
 
 		if(!server.hasAccount())
 		{
@@ -126,87 +90,33 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			System.exit(2);
 		}
 		
-		System.out.print("Enter passphrase: ");
-		System.out.flush();
-
-		File waitingFile = new File(server.triggerDirectory, "waiting");
-		waitingFile.delete();
-		writeSyncFile(waitingFile);
-
-		InputStreamReader rawReader = new InputStreamReader(System.in);	
-		BufferedReader reader = new BufferedReader(rawReader);
+		String passphrase = getPassphraseFromConsole(server);
+		
 		try
 		{
-			String passphrase = reader.readLine();
-			try
-			{
-				server.loadAccount(passphrase);
-			}
-			catch (Exception e1)
-			{
-				System.out.println("Invalid password: " + e1);
-				System.exit(73);
-			}
+			server.loadAccount(passphrase);
+		}
+		catch (Exception e1)
+		{
+			System.out.println("Invalid password: " + e1);
+			System.exit(73);
+		}
 			
+		try
+		{
 			server.initialize();
 		}
-		catch(Exception e)
+		catch (Exception e2)
 		{
-			System.out.println("MartusServer.main: " + e);
+			System.out.println("MartusServer.main: " + e2);
 			System.exit(3);
 		}
-		
-		server.setDataDirectory(getDefaultDataDirectory());
-		
-		File runningFile = new File(server.triggerDirectory, "running");
-		runningFile.delete();
-		if(secureMode)
-			server.deleteStartupFiles();
-				
-		System.out.println();
-		System.out.println(server.clientsThatCanUpload.size() + " client(s) currently allowed to upload");
-		System.out.println(server.clientsBanned.size() + " client(s) are currently banned");
-		System.out.println(server.magicWords.size() + " active magic word(s)");
 
-		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
-		server.createNonSSLXmlRpcServer();
-		server.createSSLXmlRpcServer();
-		server.createMirroringSupplierXmlRpcServer();
-		writeSyncFile(runningFile);
+		server.setDataDirectory(getDefaultDataDirectory());
+		server.displayClientStatistics();
+		server.createListeners();
 		System.out.println("Waiting for connection...");
 	}
-
-
-	private void setDataDirectory(File dataDirectory)
-	{
-		File packetsDirectory = new File(dataDirectory, "packets");
-		Database diskDatabase = new ServerFileDatabase(packetsDirectory, getSecurity());
-		try
-		{
-			diskDatabase.initialize();
-		}
-		catch(FileDatabase.MissingAccountMapException e)
-		{
-			e.printStackTrace();
-			System.out.println("Missing Account Map File");
-			System.exit(7);
-		}
-		catch(FileDatabase.MissingAccountMapSignatureException e)
-		{
-			e.printStackTrace();
-			System.out.println("Missing Account Map Signature File");
-			System.exit(7);
-		}
-		catch(FileVerificationException e)
-		{
-			e.printStackTrace();
-			System.out.println("Account Map did not verify against signature file");
-			System.exit(7);
-		}
-		
-		setDatabase(diskDatabase);
-	}
-
 
 	MartusServer(File dir) throws 
 					MartusCrypto.CryptoInitializationException
@@ -255,6 +165,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
  		Timer failedUploadRequestsTimer = new Timer(true);
  		TimerTask uploadRequestTask = new UploadRequestsMonitor();
  		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, getUploadRequestTimerInterval());
+
+		setServerName(servername);
 	}
 	
 
@@ -399,14 +311,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	boolean hasAccount()
 	{
 		return keyPairFile.exists();
-	}
-	
-	void createAccount(String passphrase) throws IOException
-	{
-		security.createKeyPair();
-		FileOutputStream out = new FileOutputStream(keyPairFile);
-		writeKeyPair(out, passphrase);
-		out.close();
 	}
 	
 	void loadAccount(String passphrase) throws Exception
@@ -2330,6 +2234,127 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	}
 
 
+	private static String getPassphraseFromConsole(MartusServer server)
+	{
+		System.out.print("Enter passphrase: ");
+		System.out.flush();
+		
+		File waitingFile = new File(server.triggerDirectory, "waiting");
+		waitingFile.delete();
+		writeSyncFile(waitingFile);
+		
+		InputStreamReader rawReader = new InputStreamReader(System.in);	
+		BufferedReader reader = new BufferedReader(rawReader);
+		String passphrase = null;
+		try
+		{
+			passphrase = reader.readLine();
+		}
+		catch(Exception e)
+		{
+			System.out.println("MartusServer.main: " + e);
+			System.exit(3);
+		}
+		return passphrase;
+	}
+
+
+	private void createListeners()
+	{
+		File runningFile = new File(triggerDirectory, "running");
+		runningFile.delete();
+		if(secureMode)
+			deleteStartupFiles();
+				
+		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
+		createNonSSLXmlRpcServer();
+		createSSLXmlRpcServer();
+		createMirroringSupplierXmlRpcServer();
+		writeSyncFile(runningFile);
+	}
+
+
+	private static void displayVersion()
+	{
+		System.out.println("Version " + ServerConstants.version);
+		String versionInfo = MartusUtilities.getVersionDate();
+		System.out.println("Build Date " + versionInfo);
+	}
+
+
+	private void displayClientStatistics()
+	{
+		System.out.println();
+		System.out.println(clientsThatCanUpload.size() + " client(s) currently allowed to upload");
+		System.out.println(clientsBanned.size() + " client(s) are currently banned");
+		System.out.println(magicWords.size() + " active magic word(s)");
+	}
+
+
+	private static void processCommandLine(String[] args)
+	{
+		for(int arg = 0; arg < args.length; ++arg)
+		{
+			if (args[arg].indexOf("logging")>=0)
+			{
+				serverLogging = true;
+				if (args[arg].indexOf("max")>=0)
+				{
+					serverMaxLogging = true;
+					serverSSLLogging = true;
+					System.out.println("Server Error Logging set to Max");
+				}
+				else
+					System.out.println("Server Error Logging Enabled");
+			}
+			
+			if(args[arg].equals("secure"))
+				secureMode = true;
+		
+			if(args[arg].startsWith("--server-name="))
+			{
+				servername = args[arg].substring(args[arg].indexOf("=")+1);
+			}
+		}
+		
+		if(secureMode)
+			System.out.println("Running in SECURE mode");
+		else
+			System.out.println("***RUNNING IN INSECURE MODE***");
+	}
+
+
+	private void setDataDirectory(File dataDirectory)
+	{
+		File packetsDirectory = new File(dataDirectory, "packets");
+		Database diskDatabase = new ServerFileDatabase(packetsDirectory, getSecurity());
+		try
+		{
+			diskDatabase.initialize();
+		}
+		catch(FileDatabase.MissingAccountMapException e)
+		{
+			e.printStackTrace();
+			System.out.println("Missing Account Map File");
+			System.exit(7);
+		}
+		catch(FileDatabase.MissingAccountMapSignatureException e)
+		{
+			e.printStackTrace();
+			System.out.println("Missing Account Map Signature File");
+			System.exit(7);
+		}
+		catch(FileVerificationException e)
+		{
+			e.printStackTrace();
+			System.out.println("Account Map did not verify against signature file");
+			System.exit(7);
+		}
+		
+		setDatabase(diskDatabase);
+	}
+
+
 	private class BannedClientsMonitor extends TimerTask
 	{
 		public void run()
@@ -2408,6 +2433,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private int activeClientsCounter;
 	private String complianceStatement; 
 
+	private static boolean secureMode;
+	private static String servername;
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
