@@ -370,6 +370,8 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyRememberPassword=Remember Your Password");
 		addEnglishTranslation("wintitle:notifyErrorBackingupKeyPair=Error");
 		addEnglishTranslation("wintitle:notifyDamagedBulletinMovedToDiscarded=Moved Damaged Bulletin");
+		addEnglishTranslation("wintitle:notifyPreviewOneBulletinOnly=Preview One Bulletin Only");
+		addEnglishTranslation("wintitle:notifyPreviewNoBulletinsSelected=No Bulletin Selected");
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
@@ -691,6 +693,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyRememberPasswordcause=Please remember your username and password. It cannot be recovered.");
 		addEnglishTranslation("field:notifyErrorBackingupKeyPaircause=Unable to back up the key pair.");
 		addEnglishTranslation("field:notifyDamagedBulletinMovedToDiscardedcause=An error occured during upload, and the damaged bulletin has been moved to the damaged bulletin folder.");
+		addEnglishTranslation("field:notifyPreviewOneBulletinOnlycause=You may only preview one bulletin at a time.  Please only select one bulletin to preview.");
+		addEnglishTranslation("field:notifyPreviewNoBulletinsSelectedcause=No bulletin selected.  Please select the bulletin you wish to preview.");
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
 		addEnglishTranslation("field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:");
