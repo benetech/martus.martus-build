@@ -123,11 +123,6 @@ public class NoServerNetworkInterfaceHandler implements NetworkInterface
 		return null;
 	}
 
-	public String ping()
-	{
-		return null;
-	}
-
 	public String requestUploadRights(
 		String authorAccountId,
 		String tryMagicWord)

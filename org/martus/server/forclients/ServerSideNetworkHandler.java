@@ -341,16 +341,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 	}
 
 	// begin legacy!
-	public String ping()
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-Ping");
-		String response = server.ping();
-		server.clientConnectionExit();
-		return response;
-	}
-
 	public String requestUploadRights(String authorAccountId, String tryMagicWord)
 	{
 		server.clientConnectionStart();

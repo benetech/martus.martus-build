@@ -171,12 +171,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 	}
 	
 
-	public String ping()
-	{
-		Vector params = new Vector();
-		return (String)callServer(server, CMD_PING, params);
-	}
-
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
 		logging("ServerInterfaceXmlRpcHandler:requestUploadRights clientId=" + clientId + "tryMagicWord=" + tryMagicWord);

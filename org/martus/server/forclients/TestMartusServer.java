@@ -338,7 +338,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			names.add(methods[i].getName());
 
 		// Note: These strings are legacy and can NEVER change
-		assertContains("ping", names);
 		assertContains("requestUploadRights", names);
 		assertContains("uploadBulletinChunk", names);
 		assertContains("downloadMyBulletinChunk", names);
