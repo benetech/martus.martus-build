@@ -129,20 +129,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			else
 			{
 				System.out.println("***** Key pair file not found *****");
-				System.out.print("Create a new account now (y/N)?");
-				System.out.flush();
-				String response = reader.readLine();
-				if(response.toLowerCase().startsWith("y"))
-				{
-					System.out.println("Creating account (this will take a while)...");
-					server.createAccount(passphrase);
-					System.out.println("Account created");
-				}
-				else
-				{
-					System.out.println("Account not created.");
-					System.exit(2);
-				}
+				System.exit(2);
 			}
 
 			String accountId = server.getAccountId();
@@ -186,7 +173,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		{
 			e.printStackTrace();
 			System.out.println("Account Map did not verify against signature file");
-			System.exit(8);
+			System.exit(7);
 		}
 		
 		server.setDatabase(diskDatabase);
