@@ -1262,12 +1262,26 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		try
 		{
-			String fileName = getStringInput("ExportMyPublicKey", "NameOfExportedFile", "");
-			if(fileName == null)
-				return;
-			File export = app.getPublicInfoFile(fileName);
-
-			//TODO check file exists and ask to over write.
+			File export;
+			while(true)
+			{
+				String fileName = getStringInput("ExportMyPublicKey", "NameOfExportedFile", "");
+				if(fileName == null)
+					return;
+				export = app.getPublicInfoFile(fileName);
+				if(export.exists())
+				{
+					if(confirmDlg(this, "OverWriteExistingFile"))
+					{
+						export.delete();
+						break;
+					}
+				}
+				else
+				{
+					break;
+				}
+			}
 			app.exportPublicInfo(export);
 			String title = getApp().getWindowTitle("notifyExportMyPublicKey");
 			String msg = getApp().getFieldLabel("notifyExportMyPublicKeycause");
