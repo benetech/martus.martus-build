@@ -44,9 +44,12 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
 import org.martus.common.Bulletin;
-import org.martus.common.MartusCrypto;
-import org.martus.common.Packet;
 import org.martus.common.UniversalId;
+import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongPacketTypeException;
 
 abstract class UiBulletinDropAdapter implements DropTargetListener
 {
@@ -206,25 +209,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 		{
 			resultMessageTag = "DropErrorNotAllowed";
 		}
-		catch(IOException e)
-		{
-			e.printStackTrace();
-			System.out.println("dropFile Exception:" + e);
-			resultMessageTag = "DropErrors";
-		}
-		catch(MartusCrypto.CryptoException e)
-		{
-			e.printStackTrace();
-			System.out.println("dropFile Exception:" + e);
-			resultMessageTag = "DropErrors";
-		}
-		catch(Packet.InvalidPacketException e)
-		{
-			e.printStackTrace();
-			System.out.println("dropFile Exception:" + e);
-			resultMessageTag = "DropErrors";
-		}
-		catch(Packet.SignatureVerificationException e)
+		catch(Exception e)
 		{
 			e.printStackTrace();
 			System.out.println("dropFile Exception:" + e);
@@ -242,11 +227,13 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 	}
 
 	public void attemptDropFile(File file, BulletinFolder toFolder) throws
-		IOException,
-		MartusCrypto.CryptoException,
-		Packet.InvalidPacketException,
-		Packet.SignatureVerificationException,
-		BulletinStore.StatusNotAllowedException
+		InvalidPacketException, 
+		SignatureVerificationException, 
+		WrongPacketTypeException, 
+		StatusNotAllowedException, 
+		CryptoException, 
+		IOException, 
+		InvalidBase64Exception
 	{
 		Cursor originalCursor = observer.getCursor();
 		observer.setCursor(Cursor.getPredefinedCursor(Cursor.WAIT_CURSOR));

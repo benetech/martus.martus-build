@@ -57,10 +57,15 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusXml;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
+import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.FileDatabase.MissingAccountMapException;
 import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
+import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
 import org.martus.common.Packet.WrongAccountException;
+import org.martus.common.Packet.WrongPacketTypeException;
 import org.martus.common.UniversalId.NotUniversalIdException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
@@ -893,11 +898,13 @@ public class BulletinStore
 	public static class StatusNotAllowedException extends Exception {}
 
 	public void importZipFileBulletin(File zipFile, BulletinFolder toFolder, boolean forceSameUids) throws
-			IOException,
 			StatusNotAllowedException,
-			MartusCrypto.CryptoException,
-			Packet.InvalidPacketException,
-			Packet.SignatureVerificationException
+			InvalidPacketException, 
+			SignatureVerificationException, 
+			WrongPacketTypeException, 
+			CryptoException, 
+			IOException, 
+			InvalidBase64Exception
 	{
 		ZipFile zip = new ZipFile(zipFile);
 		try
@@ -968,9 +975,12 @@ public class BulletinStore
 	}
 
 	public UniversalId importZipFileToStoreWithNewUids(File inputFile) throws
-		IOException,
-		MartusCrypto.EncryptionException,
-		MartusCrypto.CryptoException
+		InvalidPacketException, 
+		SignatureVerificationException, 
+		WrongPacketTypeException, 
+		CryptoException, 
+		IOException, 
+		InvalidBase64Exception
 	{
 		final MartusCrypto security = getSignatureGenerator();
 		Bulletin imported = BulletinZipImporter.loadFromFile(security, inputFile);

@@ -34,6 +34,12 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Vector;
 
+import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongPacketTypeException;
+
 
 
 public class Bulletin implements BulletinConstants
@@ -351,13 +357,18 @@ public class Bulletin implements BulletinConstants
 		getBulletinHeaderPacket().setAllPrivate(newValue);
 	}
 
-	public void pullDataFrom(Bulletin other) throws
-		IOException,
-		MartusCrypto.EncryptionException
+	public void pullDataFrom(Bulletin other, Database otherDatabase) throws
+		CryptoException, 
+		InvalidPacketException, 
+		SignatureVerificationException, 
+		WrongPacketTypeException, 
+		IOException, 
+		InvalidBase64Exception
 	{
 		this.clear();
 
-		setStatus(other.getStatus());
+		String status = other.getStatus();
+		setStatus(status);
 		setAllPrivate(other.isAllPrivate());
 
 		{
@@ -376,20 +387,54 @@ public class Bulletin implements BulletinConstants
 			}
 		}
 
+		MartusCrypto security = getSignatureGenerator();
 		AttachmentProxy[] attachmentPublicProxies = other.getPublicAttachments();
 		for(int aIndex = 0; aIndex < attachmentPublicProxies.length; ++aIndex)
 		{
-			addPublicAttachment(attachmentPublicProxies[aIndex]);
+			AttachmentProxy ap = attachmentPublicProxies[aIndex];
+			ap = getAsFileProxy(ap, otherDatabase, status, security);
+			addPublicAttachment(ap);
 		}
 
 		AttachmentProxy[] attachmentPrivateProxies = other.getPrivateAttachments();
 		for(int aIndex = 0; aIndex < attachmentPrivateProxies.length; ++aIndex)
 		{
-			addPrivateAttachment(attachmentPrivateProxies[aIndex]);
+			AttachmentProxy ap = attachmentPrivateProxies[aIndex];
+			ap = getAsFileProxy(ap, otherDatabase, status, security);
+			addPrivateAttachment(ap);
 		}
 
 		pendingPublicAttachments.addAll(other.pendingPublicAttachments);
 		getPendingPrivateAttachments().addAll(other.getPendingPrivateAttachments());
+	}
+
+	public AttachmentProxy getAsFileProxy(AttachmentProxy ap, Database otherDatabase, String status, MartusCrypto security)
+		throws
+			IOException,
+			CryptoException,
+			InvalidPacketException,
+			SignatureVerificationException,
+			WrongPacketTypeException,
+			InvalidBase64Exception
+	{
+		if(ap.getFile() != null) 
+			return ap;
+		if(otherDatabase == null)
+			return ap;
+			
+		DatabaseKey key = DatabaseKey.createKey(ap.getUniversalId(),status);
+		InputStreamWithSeek packetIn = otherDatabase.openInputStream(key, security);
+		if(packetIn == null)
+			return ap;
+			
+		try
+		{
+			return MartusUtilities.createFileProxyFromAttachmentPacket(packetIn, ap.getSessionKeyBytes(), security);
+		}
+		finally
+		{
+			packetIn.close();
+		}
 	}
 
 	static String getFirstOfThisYear()

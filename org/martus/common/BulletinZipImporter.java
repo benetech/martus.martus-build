@@ -32,6 +32,12 @@ import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 
+import org.martus.common.Base64.InvalidBase64Exception;
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+import org.martus.common.Packet.WrongPacketTypeException;
+
 
 public class BulletinZipImporter
 {
@@ -144,13 +150,17 @@ public class BulletinZipImporter
 	}
 
 	public static Bulletin loadFromFile(MartusCrypto security, File inputFile) throws 
-		IOException,
-		MartusCrypto.EncryptionException
+		InvalidPacketException, 
+		SignatureVerificationException, 
+		WrongPacketTypeException, 
+		CryptoException, 
+		IOException, 
+		InvalidBase64Exception
 	{
 		Bulletin original = new Bulletin(security);
 		BulletinZipImporter.loadFromFile(original, inputFile, security);
 		Bulletin imported = new Bulletin(security);
-		imported.pullDataFrom(original);
+		imported.pullDataFrom(original, null);
 		return imported;
 	}
 
@@ -165,11 +175,7 @@ public class BulletinZipImporter
 		InputStreamWithSeek attachmentIn = new ZipEntryInputStream(zip, attachmentEntry);
 		try
 		{
-			File tempFile = File.createTempFile("$$$MartusImportAttachment", null);
-			tempFile.deleteOnExit();
-			AttachmentPacket.exportRawFileFromXml(attachmentIn, sessionKeyBytes, verifier, tempFile);
-			AttachmentProxy ap = new AttachmentProxy(tempFile);
-			return ap;
+			return MartusUtilities.createFileProxyFromAttachmentPacket(attachmentIn, sessionKeyBytes, verifier);
 		}
 		catch(Exception e)
 		{
@@ -180,4 +186,5 @@ public class BulletinZipImporter
 			attachmentIn.close();
 		}
 	}
+
 }

@@ -44,7 +44,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
-import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.JComponent;
@@ -66,9 +65,6 @@ import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
 import org.martus.common.Bulletin;
 import org.martus.common.UniversalId;
-import org.martus.common.MartusCrypto.CryptoException;
-import org.martus.common.Packet.InvalidPacketException;
-import org.martus.common.Packet.SignatureVerificationException;
 
 
 public class UiBulletinTable extends JTable implements ListSelectionListener, DragGestureListener, DragSourceListener
@@ -240,7 +236,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			Bulletin clone = store.createEmptyBulletin();
 			try
 			{
-				clone.pullDataFrom(b);
+				clone.pullDataFrom(b, store.getDatabase());
 				b = clone;
 			}
 			catch (Exception e)
@@ -290,25 +286,13 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				if(confirmDeletionOfFile(file.getPath()))
 					file.delete();
 			}
-			catch (InvalidPacketException e)
-			{
-				resultMessageTag = "PasteError";
-			}
-			catch (SignatureVerificationException e)
-			{
-				resultMessageTag = "PasteError";
-			}
-			catch (IOException e)
-			{
-				resultMessageTag = "PasteError";
-			}
-			catch (CryptoException e)
-			{
-				resultMessageTag = "PasteError";
-			}
 			catch (StatusNotAllowedException e)
 			{
 				resultMessageTag = "PasteErrorNotAllowed";
+			}
+			catch (Exception e)
+			{
+				resultMessageTag = "PasteError";
 			}
 		}
 		else

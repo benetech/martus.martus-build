@@ -262,7 +262,7 @@ public class TestBulletin extends TestCaseEnhanced
 		b1.setSealed();
 		BulletinSaver.saveToDatabase(b1, db, true, security);
 		Bulletin b2 = new Bulletin(security);
-		b2.pullDataFrom(b1);
+		b2.pullDataFrom(b1, db);
 		assertEquals("signer", b1.getSignatureGenerator(), b2.getSignatureGenerator());
 		assertEquals("id unchanged", false, b2.getLocalId().equals(b1.getLocalId()));
 		assertEquals("public info", b1.get(Bulletin.TAGPUBLICINFO), b2.get(Bulletin.TAGPUBLICINFO));
@@ -276,32 +276,30 @@ public class TestBulletin extends TestCaseEnhanced
 		AttachmentProxy a2 = new AttachmentProxy(tempFile2);
 		b1.addPrivateAttachment(a2);
 
-		UniversalId uid = UniversalId.createDummyUniversalId();
-		AttachmentProxy proxyInDatabase = new AttachmentProxy(uid, "blah", sampleBytes1);
-		b1.addPublicAttachment(proxyInDatabase);
-
-		b2.pullDataFrom(b1);
-		assertEquals("public attachment count", 2, b2.getPublicAttachments().length);
+		b2.pullDataFrom(b1, db);
+		assertEquals("public attachment count", 1, b2.getPublicAttachments().length);
 		assertEquals("private attachment count", 1, b2.getPrivateAttachments().length);
 		assertEquals("public attachment1 data", a1, b2.getPublicAttachments()[0]);
 		assertEquals("private attachment data", a2, b2.getPrivateAttachments()[0]);
-		assertNotEquals("didn't clone the attachment?", proxyInDatabase.getUniversalId().getLocalId(), b2.getPublicAttachments()[1].getUniversalId().getLocalId());
-		b2.pullDataFrom(b1);
-		assertEquals("again public attachment count", 2, b2.getPublicAttachments().length);
+		b2.pullDataFrom(b1, db);
+		assertEquals("again public attachment count", 1, b2.getPublicAttachments().length);
 		assertEquals("again private attachment count", 1, b2.getPrivateAttachments().length);
 		assertEquals("again public attachment1 data", a1, b2.getPublicAttachments()[0]);
 		assertEquals("again private attachment data", a2, b2.getPrivateAttachments()[0]);
-		assertNotEquals("again didn't clone the attachment?", proxyInDatabase.getUniversalId().getLocalId(), b2.getPublicAttachments()[1].getUniversalId().getLocalId());
-
+		
 		b1.setAllPrivate(false);
-		b2.pullDataFrom(b1);
+		b2.pullDataFrom(b1, db);
 		assertEquals("didn't pull private false?", b1.isAllPrivate(), b2.isAllPrivate());
 
 		b1.setAllPrivate(true);
-		b2.pullDataFrom(b1);
+		b2.pullDataFrom(b1, db);
 		assertEquals("didn't pull private true?", b1.isAllPrivate(), b2.isAllPrivate());
 		
-		
+		BulletinSaver.saveToDatabase(b1,db,false,security);
+
+		b2.pullDataFrom(b1,db);
+		assertNotEquals("didn't clone the public attachment?", a1.getUniversalId().getLocalId(), b2.getPublicAttachments()[0].getUniversalId().getLocalId());
+		assertNotEquals("didn't clone the private attachment?", a2.getUniversalId().getLocalId(), b2.getPrivateAttachments()[0].getUniversalId().getLocalId());
 	}
 
 	public void testIsStringInArray()
