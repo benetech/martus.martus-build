@@ -60,15 +60,26 @@
         </cvs>
     </target>
 
-    <!-- run martus build file -->
-    <target name="build.martus" depends="cvs.checkout">
+    <!-- run martus build file with signing of jars -->
+    <target name="build.martus.and.sign" depends="cvs.checkout">
         <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="release.and.checkin"/>
+        <!-- notify via email of success -->
     </target>
 
-    <target name="build.martus.and.installer" depends="cvs.checkout,cvs">
+    <!-- run martus build file without signing of jars -->
+    <target name="build.martus" depends="cvs.checkout">
+        <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="release.and.checkin"/>
+        <!-- notify via email of success -->
+    </target>
+
+<!--
+    <target name="build.martus.and.installer" depends="cvs.checkout,cvs.checkout.installers">
+        <!-- run martus build file and installer build file -->
         <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="release.and.checkin"/>
         <ant antfile="${cvs.home}/${martus-module}/installer.build.xml" dir="${cvs.home}" target="build.installers"/>
+        <!-- notify via email of success -->
     </target>
+-->
 
 
 </project>

@@ -54,9 +54,12 @@
     <!-- ================================================================== -->
     <!-- B U I L D                                                          -->
     <!-- ================================================================== -->
-    <target depends="init" name="make.release" description="Executes subproject that builds martus">
-        <!-- TODO: CHANGE THIS SO THAT IT IS NOT A TEST RELEASE -->
+    <target depends="init" name="make.release.nosign" description="Executes subproject that builds martus without signing jars">
         <ant antfile="build.xml" dir="." target="test.release"/>
+    </target>
+
+    <target depends="init" name="make.release" description="Executes subproject that builds martus">
+        <ant antfile="build.xml" dir="." target="release"/>
     </target>
 
     <!-- ================================================================== -->
@@ -144,6 +147,7 @@
             <arg line="martus-mspa-client-${DSTAMP}.${build.number}.jar.md5"/>
         </exec>
 
+        <!-- commit cvs changes -->
         <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="false">
             <commandline>
                 <argument value="commit"/>
