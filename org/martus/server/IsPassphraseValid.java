@@ -74,6 +74,12 @@ public class IsPassphraseValid
 			System.out.println("Public Code: " + MartusUtilities.formatPublicCode(publicCode));
 			System.exit(0);
 		}
+		catch (AuthorizationFailedException e)
+		{
+			System.err.println("Error: " + e.toString() );
+			System.err.flush();
+			System.exit(1);
+		}
 		catch(Exception e)
 		{
 			System.err.println("Error: " + e.toString() );
