@@ -1,5 +1,9 @@
 package org.martus.client;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.StringReader;
+
 import org.martus.common.AttachmentProxy;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusUtilities;
@@ -14,31 +18,40 @@ public class BulletinHtmlGenerator
 	
 	public String getHtmlString(Bulletin b)
 	{
-		String html = "<html>";
-		html += "<table width='" + width + "'>";
+		StringBuffer html = new StringBuffer(1000);
+		html.append("<html>");
+		html.append("<table width='");
+		html.append(Integer.toString(width));
+		html.append("'>");
 
 		String publicSectionTitle = app.getFieldLabel("publicsection");
-		html += "<tr><td colspan='2'><u><b>" + publicSectionTitle + "</b></u></td></tr>";
+		html.append("<tr><td colspan='2'><u><b>");
+		html.append(publicSectionTitle);
+		html.append("</b></u></td></tr>");
+		html.append("\n");
 
 		String allPrivateValueTag = "no";
 		if(b.isAllPrivate())
 			allPrivateValueTag = "yes";
-		html += getFieldHtmlString("allprivate", app.getButtonLabel(allPrivateValueTag));
+		html.append(getFieldHtmlString("allprivate", app.getButtonLabel(allPrivateValueTag)));
 
 		String[] standardFieldTags = Bulletin.getStandardFieldNames();
-		html += getSectionHtmlString(b, standardFieldTags);
-		html += getAttachmentsHtmlString(b.getFieldDataPacket());
+		html.append(getSectionHtmlString(b, standardFieldTags));
+		html.append(getAttachmentsHtmlString(b.getFieldDataPacket()));
 
-		html += "<tr></tr>";
+		html.append("<tr></tr>");
 		String privateSectionTitle = app.getFieldLabel("privatesection");
-		html += "<tr><td colspan='2'><u><b>" + privateSectionTitle + "</b></u></td></tr>";
+		html.append("<tr><td colspan='2'><u><b>");
+		html.append(privateSectionTitle);
+		html.append("</b></u></td></tr>");
+		html.append("\n");
 		String[] privateFieldTags = Bulletin.getPrivateFieldNames();
-		html += getSectionHtmlString(b, privateFieldTags);
-		html += getAttachmentsHtmlString(b.getPrivateFieldDataPacket());
+		html.append(getSectionHtmlString(b, privateFieldTags));
+		html.append(getAttachmentsHtmlString(b.getPrivateFieldDataPacket()));
 
-		html += "</table>";
-		html += "</html>";
-		return html;
+		html.append("</table>");
+		html.append("</html>");
+		return new String(html);
 	}
 
 	private String getSectionHtmlString(Bulletin b, String[] standardFieldTags)
@@ -52,6 +65,8 @@ public class BulletinHtmlGenerator
 				value = app.convertStoredToDisplay(value);
 			else if(b.getFieldType(tag) == b.CHOICE)
 				value = app.getLanguageName(value);
+			else if(b.getFieldType(tag) == b.MULTILINE)
+				value = insertNewlines(value);
 				
 			String fieldHtml = getFieldHtmlString(tag, value);
 			sectionHtml += fieldHtml;
@@ -73,10 +88,42 @@ public class BulletinHtmlGenerator
 
 	private String getFieldHtmlString(String tag, String value)
 	{
-		String fieldHtml = "<tr><td width='15%' align='right' valign='top'>" + 
-						app.getFieldLabel(tag) + 
-						"</td><td valign='top'>" + value + "</td></tr>";
-		return fieldHtml;
+		StringBuffer fieldHtml = new StringBuffer(value.length() + 100);
+		fieldHtml.append("<tr><td width='15%' align='right' valign='top'>");
+		fieldHtml.append(app.getFieldLabel(tag));
+		fieldHtml.append("</td>");
+		fieldHtml.append("<td valign='top'>");
+		fieldHtml.append(value);
+		fieldHtml.append("</td></tr>");
+		fieldHtml.append("\n");
+		return new String(fieldHtml);
+	}
+	
+	private String insertNewlines(String value)
+	{
+		final String P_TAG_BEGIN = "<p>";
+		final String P_TAG_END = "</p>";
+		StringBuffer html = new StringBuffer(value.length() + 100);
+		html.append(P_TAG_BEGIN);
+
+		try
+		{
+			BufferedReader reader = new BufferedReader(new StringReader(value));
+			String thisParagraph = null;
+			while((thisParagraph = reader.readLine()) != null)
+			{
+				html.append(thisParagraph);
+				html.append(P_TAG_END);
+				html.append(P_TAG_BEGIN);
+			}
+		}
+		catch (IOException e)
+		{
+			html.append("...?");
+		}
+
+		html.append(P_TAG_END);
+		return new String(html);
 	}
 	
 	int width;
