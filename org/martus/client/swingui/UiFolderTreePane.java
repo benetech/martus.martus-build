@@ -157,6 +157,7 @@ class UiFolderTreePane extends JScrollPane
 		}
 	}
 
+	// TODO: Consider merging these with the menubar and/or toolbar actions
 	class ActionNewFolder extends AbstractAction
 	{
 		public ActionNewFolder()

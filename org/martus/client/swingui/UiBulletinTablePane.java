@@ -30,6 +30,7 @@ import java.awt.dnd.DropTarget;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
+import javax.swing.JPopupMenu;
 import javax.swing.JScrollPane;
 import javax.swing.JViewport;
 
@@ -172,7 +173,8 @@ public class UiBulletinTablePane extends JScrollPane
 		{
 			if(!e.isPopupTrigger())
 				return;
-			table.doPopupMenu(UiBulletinTablePane.this, e.getX(), e.getY());
+			JPopupMenu menu = parent.getPopupMenu();
+			menu.show(UiBulletinTablePane.this, e.getX(), e.getY());
 		}
 	}
 

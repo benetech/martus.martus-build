@@ -62,6 +62,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JPopupMenu;
 import javax.swing.JSplitPane;
 import javax.swing.SwingUtilities;
 import javax.swing.filechooser.FileFilter;
@@ -363,35 +364,25 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return inputDlg.getResult();
 	}
 
-	public AbstractAction getActionMenuEdit()
+	public JPopupMenu getPopupMenu()
 	{
-		return menuBar.actionMenuModifyBulletin;
+		JPopupMenu menu = new JPopupMenu();
+		menu.add(menuBar.actionMenuModifyBulletin);
+		menu.addSeparator();
+		menu.add(menuBar.actionMenuCutBulletins);
+		menu.add(menuBar.actionMenuCopyBulletins);
+		menu.add(menuBar.actionMenuPasteBulletins);
+		menu.add(menuBar.actionMenuSelectAllBulletins);
+		menu.addSeparator();
+		menu.add(menuBar.actionMenuDiscardBulletins);
+		return menu;
 	}
-
-	public AbstractAction getActionMenuSelectAll()
-	{
-		return menuBar.actionMenuSelectAllBulletins;
-	}
-
-	public AbstractAction getActionMenuCut()
-	{
-		return menuBar.actionMenuCutBulletins;
-	}
-
-	public AbstractAction getActionMenuCopy()
-	{
-		return menuBar.actionMenuCopyBulletins;
-	}
-
-	public AbstractAction getActionMenuPaste()
+	
+	AbstractAction getActionMenuPaste()
 	{
 		return menuBar.actionMenuPasteBulletins;
 	}
 
-	public AbstractAction getActionMenuDiscard()
-	{
-		return menuBar.actionMenuDiscardBulletins;
-	}
 
 	//ClipboardOwner Interface
 	//TODO: This doesn't seem to be called right now--can we delete it?

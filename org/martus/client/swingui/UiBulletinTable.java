@@ -47,7 +47,6 @@ import java.awt.event.MouseEvent;
 import java.io.File;
 import java.util.Vector;
 
-import javax.swing.JComponent;
 import javax.swing.JPopupMenu;
 import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
@@ -64,9 +63,9 @@ import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
 import org.martus.client.core.TransferableBulletinList;
 import org.martus.client.core.BulletinStore.StatusNotAllowedException;
+import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.client.swingui.UiModifyBulletinDlg.DeleteBulletinOnCancel;
 import org.martus.client.swingui.UiModifyBulletinDlg.DoNothingOnCancel;
-import org.martus.client.swingui.UiModifyBulletinDlg.CancelHandler;
 import org.martus.common.Bulletin;
 import org.martus.common.DatabaseKey;
 import org.martus.common.UniversalId;
@@ -355,20 +354,6 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		return false;
 	}
 
-	public void doPopupMenu(JComponent component, int x, int y)
-	{
-		JPopupMenu menu = new JPopupMenu();
-		menu.add(mainWindow.getActionMenuEdit());
-		menu.addSeparator();
-		menu.add(mainWindow.getActionMenuCut());
-		menu.add(mainWindow.getActionMenuCopy());
-		menu.add(mainWindow.getActionMenuPaste());
-		menu.add(mainWindow.getActionMenuSelectAll());
-		menu.addSeparator();
-		menu.add(mainWindow.getActionMenuDiscard());
-		menu.show(component, x, y);
-	}
-
 	class TableHeaderMouseAdapter extends MouseAdapter
 	{
 		public void mouseClicked(MouseEvent e)
@@ -462,7 +447,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			if(!isInsideSelection && !e.isShiftDown() && !e.isControlDown())
 				selectRow(thisRow);
 
-			doPopupMenu(UiBulletinTable.this, e.getX(), e.getY());
+			JPopupMenu menu = mainWindow.getPopupMenu();
+			menu.show(UiBulletinTable.this, e.getX(), e.getY());
 		}
 
 		private void handleDoubleClick(MouseEvent e)
