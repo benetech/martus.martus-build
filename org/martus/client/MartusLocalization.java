@@ -642,7 +642,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:ServerPublicCodeEntry=Server Public Identification Code:");
 		addEnglishTranslation("field:ServerMagicWordEntry=Server Magic Word:");
 		addEnglishTranslation("field:ServerSelectionResults=The following server has been selected :");
-		addEnglishTranslation("field:ServerAcceptsUploads=You will be allowed up upload bulletins to this server.");
+		addEnglishTranslation("field:ServerAcceptsUploads=You will be allowed to upload bulletins to this server.");
 		addEnglishTranslation("field:ServerDeclinesUploads=You will not be allowed to upload bulletins to this server.");
 
 		addEnglishTranslation("folder:%RetrievedMyBulletin=Retrieved Bulletins");
