@@ -51,6 +51,7 @@ import org.martus.client.swingui.UiMainWindow;
 import org.martus.swing.ParagraphLayout;
 import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
+import org.martus.util.UnicodeReader;
 
 
 
@@ -120,7 +121,7 @@ public class UiDisplayFileDlg extends JDialog
 		}
 		try
 		{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
+			UnicodeReader reader = new UnicodeReader(fileStream);
 			while(true)
 			{
 				String lineIn = reader.readLine();
@@ -149,7 +150,7 @@ public class UiDisplayFileDlg extends JDialog
 		}
 		try
 		{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(fileStream));
+			UnicodeReader reader = new UnicodeReader(fileStream);
 			while(true)
 			{
 				String lineIn = reader.readLine();
