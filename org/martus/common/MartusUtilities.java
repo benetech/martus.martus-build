@@ -666,6 +666,30 @@ public class MartusUtilities
 		}
 		return new String(buf);
 	}
+
+	public static void copyStreamWithFilter(InputStream in, OutputStream rawOut, 
+									StreamFilter filter) throws IOException
+	{
+		BufferedOutputStream out = (new BufferedOutputStream(rawOut));
+		try
+		{
+			filter.copyStream(in, out);
+		}
+		finally
+		{
+			out.flush();
+			rawOut.flush();
+			
+			// TODO: We really want to do a sync here, so the server does not 
+			// have to journal all written data. But under Windows, the unit 
+			// tests pass, but the actual app throws an exception here. We 
+			// can't figure out why.
+			//rawOut.getFD().sync();
+			out.close();
+		}
+	}
+
+
 	
 
 

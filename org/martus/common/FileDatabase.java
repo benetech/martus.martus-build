@@ -1,6 +1,5 @@
 package org.martus.common;
 
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -8,7 +7,6 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -107,12 +105,13 @@ public class FileDatabase implements Database
 		if(encrypter == null)
 			throw new IOException("Null encrypter");
 
-		writeRecordUsingCopier(key, new StringToStreamCopierWithEncryption(record, encrypter));
+		InputStream in = new StringInputStream(record);
+		writeRecordUsingCopier(key, in, new StreamEncryptor(encrypter));
 	}
 
-	public void writeRecord(DatabaseKey key, InputStream record) throws IOException
+	public void writeRecord(DatabaseKey key, InputStream in) throws IOException
 	{
-		writeRecordUsingCopier(key, new StreamToStreamCopier(record));
+		writeRecordUsingCopier(key, in, new StreamCopier());
 	}
 	
 	public String readRecord(DatabaseKey key, MartusCrypto decrypter) throws 
@@ -629,89 +628,17 @@ public class FileDatabase implements Database
 		return null;
 	}
 
-	private interface ToStreamCopier
-	{
-		public void copyToStream(OutputStream out) throws IOException;
-	}
-	
-	private static class StringToStreamCopierWithEncryption implements ToStreamCopier
-	{
-		StringToStreamCopierWithEncryption(String dataToCopy, MartusCrypto cryptoToUse)
-		{
-			data = dataToCopy;
-			crypto = cryptoToUse;
-		}
-		
-		public void copyToStream(OutputStream out) throws IOException
-		{
-			try
-			{
-				out.write(0);
-				crypto.encrypt(new StringInputStream(data), out);
-			}
-			catch(MartusCrypto.CryptoException e)
-			{
-				throw new IOException("MartusCrypto exception");
-			}
-		}
-
-		String data;
-		MartusCrypto crypto;
-	}
-	
-	private static class StreamToStreamCopier implements ToStreamCopier
-	{
-		StreamToStreamCopier(InputStream source)
-		{
-			in = source;
-		}
-		
-		public void copyToStream(OutputStream out) throws IOException
-		{
-			if(in == null)
-				throw new IOException("Null InputStream");
-			int got;
-			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
-			while( (got=in.read(bytes)) >= 0)
-				out.write(bytes, 0, got);
-		}
-		
-		InputStream in;
-	}
-
-	private synchronized void writeRecordUsingCopier(DatabaseKey key, ToStreamCopier copier)
+	private synchronized void writeRecordUsingCopier(DatabaseKey key, InputStream in, StreamFilter copier)
 		throws IOException 
 	{
 		if(key == null)
 			throw new IOException("Null key");
 
-		FileOutputStream rawOut = openRecordOutputStream(key);
-		BufferedOutputStream out = (new BufferedOutputStream(rawOut));
-		try
-		{
-			copier.copyToStream(out);
-		}
-		finally
-		{
-			out.flush();
-			rawOut.flush();
-			
-			// TODO: We really want to do a sync here, so the server does not 
-			// have to journal all written data. But under Windows, the unit 
-			// tests pass, but the actual app throws an exception here. We 
-			// can't figure out why.
-			//rawOut.getFD().sync();
-			out.close();
-		}
-	}
-
-	private FileOutputStream openRecordOutputStream(DatabaseKey key) throws 
-			IOException 
-	{
 		try
 		{
 			File file = getFileForRecord(key);
-			return new FileOutputStream(file);
+			FileOutputStream rawOut = new FileOutputStream(file);
+			MartusUtilities.copyStreamWithFilter(in, rawOut, copier);
 		}
 		catch(TooManyAccountsException e)
 		{
@@ -720,7 +647,7 @@ public class FileDatabase implements Database
 			throw new IOException("Too many accounts");
 		}
 	}
-
+	
 	public boolean isDraftPacketBucket(String folderName)
 	{
 		return false;
