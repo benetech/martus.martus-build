@@ -21,6 +21,7 @@ import org.martus.common.UniversalId;
 import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.core.ServerFileDatabase;
+import org.martus.server.forclients.MartusServerUtilities;
 
 
 
@@ -133,11 +134,9 @@ public class TestDatabase extends TestCaseEnhanced
 		writer.writeln("anacct=string");
 		writer.close();
 		
-		File accountMapSig = new File(dir, "acctmap.txt.sig");
-		writer = new UnicodeWriter(accountMapSig);
-		writer.writeln("noacct=123456789");
-		writer.close();
-
+		MockMartusSecurity otherSecurity = MockMartusSecurity.createOtherClient();
+		MartusServerUtilities.createSignatureFileFromFileOnServer(accountMap, otherSecurity);
+		
 		try
 		{
 			sfdb.initialize();
@@ -149,10 +148,10 @@ public class TestDatabase extends TestCaseEnhanced
 		}
 		finally
 		{
+			MartusServerUtilities.deleteSignaturesForFile(accountMap);
+			
 			if(accountMap.exists())
 				accountMap.delete();
-			if(accountMapSig.exists())
-				accountMapSig.delete();
 			if(contents.exists())
 				contents.delete();
 			if(packets.exists())

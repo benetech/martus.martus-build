@@ -12,6 +12,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.Vector;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipException;
@@ -341,6 +342,20 @@ public class MartusServerUtilities
 			}
 		}
 		return signatureFiles;
+	}
+	
+	public static void deleteSignaturesForFile(File originalFile)
+	{
+		Vector sigFiles = MartusServerUtilities.getSignaturesForFile(originalFile);
+
+		for (Iterator iter = sigFiles.iterator(); iter.hasNext();)
+		{
+			File signature = (File) iter.next();
+			signature.delete();
+		}
+		
+		File sigDir = MartusServerUtilities.getSignatureDirectoryForFile(originalFile);
+		sigDir.delete();
 	}
 	
 	public static byte [] getFileContents(File plainTextFile) throws IOException

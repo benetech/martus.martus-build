@@ -60,11 +60,19 @@ public class FileDatabase extends Database
 		deleteAllPackets();
 
 		accountMapFile.delete();
-		if(accountMapSignatureFile.exists())
-			accountMapSignatureFile.delete();
+		deleteSignaturesForFile(accountMapFile);
 
-			loadAccountMap();
+		loadAccountMap();
+	}
+	
+	public void deleteSignaturesForFile(File origFile)
+	{
+		File signature = MartusUtilities.getSignatureFileFromFile(origFile);
+		if(signature.exists())
+		{
+			signature.delete();
 		}
+	}
 
 	public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException
 	{
@@ -705,6 +713,11 @@ public class FileDatabase extends Database
 		}
 
 		MartusUtilities.verifyFileAndSignature(accountMapFile, accountMapSignatureFile, security, security.getPublicKeyString());
+	}
+	
+	public File getAccountMapFile()
+	{
+		return accountMapFile;
 	}
 
 	protected static final String defaultBucketPrefix = "p";
