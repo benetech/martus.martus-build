@@ -35,7 +35,7 @@ public class UiServerSummariesDlg extends JDialog
 	void initialize(String topMessageTag, String okButtonTag)
 	{
 		disabledBackgroundColor = getBackground();
-		JLabel label = new JLabel(getApp().getFieldLabel(""));
+		JLabel label = new JLabel("");
 		String topMessageText = getApp().getFieldLabel(topMessageTag);
 		UiWrappedTextArea retrieveMessage = new UiWrappedTextArea(mainWindow, topMessageText);
 		Box tableBox = Box.createVerticalBox();
