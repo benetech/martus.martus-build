@@ -81,8 +81,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	
  	public JLabel createLabel(String fieldTag)
 	{
-		//Extra spaces added for correct printing.
-		return new JLabel("      " + app.getFieldLabel(fieldTag)+ " ");
+		return new JLabel(app.getFieldLabel(fieldTag));
 	}
 
 	private UiField createField(String fieldName)
