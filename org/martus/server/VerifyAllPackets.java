@@ -25,17 +25,25 @@ public class VerifyAllPackets
 		System.out.println("VerifyAllPackets Martus Database Integrity Checker");
 		System.out.println("  Runs a SAFE, non-destructive, read-only test");
 		
-		if(args.length != 1)
+		File dir = null;
+		if( args.length == 0 )
 		{
-			System.out.println("  Usage: VerifyAllPackets <directory>");
+			dir = new File(MartusServer.getDefaultDataDirectory(), "packets");
+		}
+		else if(!args[0].startsWith("--packet-directory="))
+		{
+			System.out.println("  Usage: VerifyAllPackets [--packet-directory=<directory>]");
 			System.exit(1);
 		}
+		else
+		{
+			dir = new File(args[0].substring(args[0].indexOf("=")+1));
+		}
 		
-		File dir = new File(args[0]);
 		if(!dir.exists() || !dir.isDirectory())
 		{
 			System.out.println();
-			System.out.println("Cannot find directory: " + args[0]);
+			System.out.println("Cannot find directory: " + dir);
 			System.exit(2);
 		}
 		
