@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Vector;
 
+import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
@@ -14,11 +15,13 @@ import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.common.MartusUtilities.ServerErrorException;
+import org.martus.server.forclients.MartusServerUtilities;
 
 public class MirroringRetriever
 {
 	public MirroringRetriever(Database databaseToUse, CallerSideMirroringGatewayInterface gatewayToUse, MartusCrypto securityToUse)
 	{
+		db = databaseToUse;
 		gateway = gatewayToUse;
 		security = securityToUse;
 		
@@ -28,23 +31,45 @@ public class MirroringRetriever
 	
 	public void tick()
 	{
-		//UniversalId uid = getNextUidToRetrieve();
+		UniversalId uid = getNextUidToRetrieve();
+		if(uid == null)
+			return;
+			
+		try
+		{
+			File zip = retrieveOneBulletin(uid);
+			BulletinHeaderPacket bhp = MartusServerUtilities.saveZipFileToDatabase(db, uid.getAccountId(), zip, security);
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		
 	}
 	
 	UniversalId getNextUidToRetrieve()
 	{
-		if(uidsToRetrieve.size() > 0)
-			return (UniversalId)uidsToRetrieve.remove(0);
-
 		try
 		{
-			String nextAccountId = getNextAccountToRetrieve();
-			if(nextAccountId != null)
+			if(uidsToRetrieve.size() > 0)
 			{
-				NetworkResponse response = gateway.listBulletinsForMirroring(security, nextAccountId);
-				if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+				return (UniversalId)uidsToRetrieve.remove(0);
+			}
+
+			String nextAccountId = getNextAccountToRetrieve();
+			if(nextAccountId == null)
+				return null;
+
+			NetworkResponse response = gateway.listBulletinsForMirroring(security, nextAccountId);
+			if(response.getResultCode().equals(NetworkInterfaceConstants.OK))
+			{
+				Vector infos = response.getResultVector();
+				for(int i=0; i < infos.size(); ++i)
 				{
-					uidsToRetrieve.addAll(response.getResultVector());
+					Vector info = (Vector)infos.get(i);
+					String localId = (String)info.get(0);
+					UniversalId uid = UniversalId.createFromAccountAndLocalId(nextAccountId, localId);
+					uidsToRetrieve.add(uid);
 				}
 			}
 		}
@@ -98,7 +123,8 @@ public class MirroringRetriever
 
 		return tempFile;
 	}
-	
+
+	Database db;	
 	CallerSideMirroringGatewayInterface gateway;
 	MartusCrypto security;
 	

@@ -266,6 +266,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		final int offset = 123;
 		final int maxChunkSize = 456;
 		
+		supplier.returnResultTag = NetworkInterfaceConstants.CHUNK_OK;
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
@@ -299,7 +300,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.addBulletinToMirror(key, sigString);
 		
 		Vector info = new Vector();
-		info.add(key.getLocalId());
+		info.add(bhp.getLocalId());
 		info.add(sigString);
 		return info;
 	}

@@ -9,6 +9,7 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.UniversalId;
 
 class FakeServerSupplier implements ServerSupplierInterface
 {
@@ -29,8 +30,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 	void addBulletinToMirror(DatabaseKey key, String sig)
 	{
 		Vector data = new Vector();
-		data.add(key.getAccountId());
-		data.add(key.getLocalId());
+		data.add(key.getUniversalId());
 		data.add(sig);
 		bulletinsToMirror.add(data);
 	}
@@ -84,11 +84,12 @@ class FakeServerSupplier implements ServerSupplierInterface
 		for (Iterator b = bulletinsToMirror.iterator(); b.hasNext();)
 		{
 			Vector data = (Vector)b.next();
-			if(authorAccountId.equals(data.get(0)))
+			UniversalId uid = (UniversalId)data.get(0);
+			if(authorAccountId.equals(uid.getAccountId()))
 			{
 				Vector info = new Vector();
+				info.add(uid.getLocalId());
 				info.add(data.get(1));
-				info.add(data.get(2));
 				bulletins.add(info);
 			}
 		}
@@ -120,7 +121,7 @@ class FakeServerSupplier implements ServerSupplierInterface
 
 	String authorizedCaller;
 	String returnZipData;
-	String returnResultTag = NetworkInterfaceConstants.CHUNK_OK;
+	String returnResultTag;
 
 	MartusCrypto security;
 	Vector accountsToMirror;
