@@ -1,14 +1,14 @@
 package org.martus.server.tools;
 
 import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.PublicKey;
 
 import org.martus.common.Base64;
@@ -61,31 +61,32 @@ public class EncryptFile
 		}
 		
 		InputStream plainStream = null;
-		OutputStream cipherStream = null;
 		ByteArrayOutputStream cipherByteArrayOutputStream = null;
 		try
 		{
 			plainStream = new BufferedInputStream(new FileInputStream(plainTextFile));
-			cipherStream = new BufferedOutputStream(new FileOutputStream(cryptoFile));
+			cipherByteArrayOutputStream = new ByteArrayOutputStream();
 			
 			String publicKeyString = (String) MartusUtilities.importServerPublicKeyFromFile(publicKeyFile, security).get(0);
 			PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
-			String encodedPubKey = Base64.encode(publicKeyString.getBytes());
 			
-			cipherByteArrayOutputStream = new ByteArrayOutputStream();
 			security.encrypt(plainStream, cipherByteArrayOutputStream, security.createSessionKey(), publicKey);
 			String encodedEncryptedFile = Base64.encode(cipherByteArrayOutputStream.toByteArray());
 			
 			String fileContents = MartusServerUtilities.getFileContents(plainTextFile);
 			String digest = MartusSecurity.createDigestString(fileContents);
 			
-			byte[] buffer = (MartusSecurity.geEncryptedFileIdentifier() + "\n").getBytes();
-			int len = buffer.length;
-			cipherStream.write(buffer, 0, len);
-			cipherStream.write((encodedPubKey + "\n").getBytes());
-			cipherStream.write((digest + "\n").getBytes());
-
-			cipherStream.write((encodedEncryptedFile + "\n").getBytes());
+			StringBuffer sbuffer = new StringBuffer();
+			sbuffer.append(MartusSecurity.geEncryptedFileIdentifier());
+			sbuffer.append("\n");
+			sbuffer.append(publicKeyString);
+			sbuffer.append("\n");
+			sbuffer.append(digest);
+			sbuffer.append("\n");
+			sbuffer.append(encodedEncryptedFile);
+			sbuffer.append("\n");
+			
+			writeEncryptedFile(cryptoFile, sbuffer.toString());
 		}
 		catch (Exception e)
 		{
@@ -98,7 +99,6 @@ public class EncryptFile
 			try
 			{
 				cipherByteArrayOutputStream.close();
-				cipherStream.close();
 				plainStream.close();
 			}
 			catch(IOException ignoredException)
@@ -106,5 +106,13 @@ public class EncryptFile
 		}
 
 		System.exit(0);
+	}
+	
+	public static void writeEncryptedFile(File cryptoFile, String fileContent)
+		throws FileNotFoundException, IOException, UnsupportedEncodingException
+	{
+		FileOutputStream cipherStream = new FileOutputStream(cryptoFile);
+		cipherStream.write(fileContent.getBytes("UTF-8"));
+		cipherStream.close();
 	}
 }

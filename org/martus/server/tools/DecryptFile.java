@@ -7,15 +7,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
-import java.util.Arrays;
 
 import org.martus.common.Base64;
 import org.martus.common.ByteArrayInputStreamWithSeek;
-import org.martus.common.FileInputStreamWithSeek;
-import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusSecurity;
 import org.martus.common.UnicodeReader;
+import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
+import org.martus.common.MartusCrypto.DecryptionException;
+import org.martus.common.MartusCrypto.NoKeyPairException;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class DecryptFile
@@ -80,48 +80,35 @@ public class DecryptFile
 			System.exit(3);
 		}
 
-		InputStreamWithSeek encryptedFileInput = null;
 		UnicodeReader encryptedFileReader = null;
 		OutputStream plainTextOutput = null;
-		ByteArrayInputStreamWithSeek inEncrypted = null;
 		try
 		{
 			security = (MartusSecurity) MartusServerUtilities.loadCurrentMartusSecurity(keyPairFile, passphrase);
 			
-			encryptedFileInput = new FileInputStreamWithSeek(cryptoFile);
-			encryptedFileReader = new UnicodeReader(encryptedFileInput);
-			plainTextOutput = new BufferedOutputStream(new FileOutputStream(plainTextFile));
-
-			byte[] identifierBytesExpected = MartusSecurity.geEncryptedFileIdentifier().getBytes();
-			byte[] identifierBytesRetrieved = encryptedFileReader.readLine().getBytes();
-
-			if(! Arrays.equals(identifierBytesExpected, identifierBytesRetrieved))
-			{
-				throw new IncorrectEncryptedFileIdentifierException();
-			}
-			
-			String RetrievedPublicKeyString = encryptedFileReader.readLine();
-			byte[] rpbByteArray = Base64.decode(RetrievedPublicKeyString);
+			encryptedFileReader = new UnicodeReader(cryptoFile);
+			String identifierBytesRetrieved = encryptedFileReader.readLine();
+			String retrievedPublicKeyString = encryptedFileReader.readLine();
+			String retrievedDigest = encryptedFileReader.readLine();
+			String retrievedEncryptedText = encryptedFileReader.readLine();
 			
 			String publicKeyString = security.getPublicKeyString();
-			byte[] pbByteArray = publicKeyString.getBytes();
-			
-			if(! Arrays.equals(rpbByteArray, pbByteArray))
+			if(publicKeyString.compareTo(retrievedPublicKeyString) != 0)
 			{
 				throw new IncorrectPublicKeyException();
 			}
 			
-			String retrievedDigest = encryptedFileReader.readLine();
+			String identifierBytesExpected =  MartusSecurity.geEncryptedFileIdentifier();
+			if(identifierBytesExpected.compareTo(identifierBytesRetrieved) != 0)
+			{
+				throw new IncorrectEncryptedFileIdentifierException();
+			}
 			
-			String retrievedEncryptedText = encryptedFileReader.readLine();
-			byte[] encryptedBytes = Base64.decode(retrievedEncryptedText);
-			inEncrypted = new ByteArrayInputStreamWithSeek(encryptedBytes);
-
-			security.decrypt(inEncrypted, plainTextOutput);
+			plainTextOutput = new BufferedOutputStream(new FileOutputStream(plainTextFile));
+			decryptToFile(security, plainTextOutput, retrievedEncryptedText);
 			
 			String plainText = MartusServerUtilities.getFileContents(plainTextFile);			
 			String calculatedDigest = MartusSecurity.createDigestString(plainText);
-
 			if(calculatedDigest.compareTo(retrievedDigest) != 0)
 			{
 				throw new DigestFailedException();
@@ -141,13 +128,19 @@ public class DecryptFile
 		{
 			plainTextOutput.close();
 			encryptedFileReader.close();
-			encryptedFileInput.close();
-			inEncrypted.close();
 		}
 		if(prompt)
 		{
 			System.out.println("File " + cryptoFile + " was decrypted to " + plainTextFile);
 		}
 		System.exit(0);
+	}
+
+	public static void decryptToFile(MartusSecurity security, OutputStream plainTextOutput, String retrievedEncryptedText)
+		throws InvalidBase64Exception, NoKeyPairException, DecryptionException
+	{
+		byte[] encryptedBytes = Base64.decode(retrievedEncryptedText);
+		ByteArrayInputStreamWithSeek inEncrypted = new ByteArrayInputStreamWithSeek(encryptedBytes);
+		security.decrypt(inEncrypted, plainTextOutput);
 	}
 }

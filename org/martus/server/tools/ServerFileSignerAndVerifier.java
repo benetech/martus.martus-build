@@ -87,13 +87,21 @@ public class ServerFileSignerAndVerifier
 				reader.close();
 			}
 			
-			if(isSigningOperation)
+			try
 			{
-				signFile(fileForOperation, security);
+				if(isSigningOperation)
+				{
+					signFile(fileForOperation, security);
+				}
+				else
+				{
+					verifyFile(fileForOperation, signatureFile, security);
+				}
 			}
-			else
+			catch(Exception e)
 			{
-				verifyFile(fileForOperation, signatureFile, security);
+				System.out.println(e.toString());
+				System.exit(3);
 			}
 			System.exit(0);
 	}
@@ -107,30 +115,13 @@ public class ServerFileSignerAndVerifier
 	}
 	
 	public static void verifyFile(File fileForOperation, File signatureFile, MartusCrypto security)
-		throws IOException, ParseException
+		throws IOException, ParseException, MartusSignatureFileDoesntExistsException, FileVerificationException
 	{
-		try
+		if(signatureFile == null)
 		{
-			if(signatureFile == null)
-			{
-				signatureFile = MartusServerUtilities.getLatestSignatureFileFromFile(fileForOperation);
-			}
-			MartusServerUtilities.verifyFileAndSignatureOnServer(fileForOperation, signatureFile, security, security.getPublicKeyString());
+			signatureFile = MartusServerUtilities.getLatestSignatureFileFromFile(fileForOperation);
 		}
-		catch (FileVerificationException e)
-		{
-			System.err.println("File " + fileForOperation.getAbsolutePath()
-								+ " did not verify against signature file "
-								+ signatureFile.getAbsolutePath() + ".");
-			System.exit(3);
-		}
-		catch(MartusSignatureFileDoesntExistsException e)
-		{
-			System.err.println("Error: unable to locate a signature file for " +  fileForOperation.getAbsolutePath());
-			System.err.println("You need to indicate the path to the signature file on the command-line.");
-			System.err.flush();
-			System.exit(3);
-		}
+		MartusServerUtilities.verifyFileAndSignatureOnServer(fileForOperation, signatureFile, security, security.getPublicKeyString());
 		System.out.println("File " + fileForOperation.getAbsolutePath()
 							+ " verified successfully against signature file "
 							+ signatureFile.getAbsolutePath() + ".");
