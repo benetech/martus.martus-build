@@ -39,7 +39,7 @@ public class UiBulletinView extends UiBulletinComponent
 		super(mainWindowToUse);
 		mainWindow = mainWindowToUse;
 		bulletinViewSections = new Vector();
-		Initalize();
+		initalize();
 		disableEdits();
 		// ensure that attachmentViewer gets initialized
 	}

@@ -42,7 +42,7 @@ public class UiBulletinEditor extends UiBulletinComponent
 	{
 		super(mainWindowToUse);
 		owner = mainWindowToUse;
-		Initalize();
+		initalize();
 		// ensure that attachmentEditor gets initialized
 	}
 

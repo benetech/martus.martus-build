@@ -53,7 +53,7 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		mainWindow = mainWindowToUse;
 	}
 
-	public void Initalize()
+	public void initalize()
 	{
 		setLayout(new BorderLayout());
 
