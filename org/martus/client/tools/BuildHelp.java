@@ -122,7 +122,7 @@ public class BuildHelp
 		out.close();
 
 		
-		
+		System.out.println("Done!");
 		System.exit(0);
 	}
 }
