@@ -1520,9 +1520,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			seconds = seconds * 2 + 1;
 			if(mode == UiSigninDlg.TIMED_OUT)
 			{
-				//Forces this dialog to the top of all windows in system by switching from iconified to normal, then just make the main window not visible	
-				currentActiveFrame.setState(NORMAL);
-				currentActiveFrame.setVisible(false);
+				//Forces this dialog to the top of all windows in system by switching from iconified to normal, then just make the main window not visible
+				//cml caused problem when retrieving bulletin summaries when it times out	
+				//currentActiveFrame.setState(NORMAL);
+				//currentActiveFrame.setVisible(false);
 			}
 			UiSigninDlg signinDlg = new UiSigninDlg(this, currentActiveFrame, mode);
 			switch(signinDlg.getUserChoice())
@@ -1537,7 +1538,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 						continue;
 					}
 					if(mode == UiSigninDlg.TIMED_OUT)
-						currentActiveFrame.setVisible(true);
+						currentActiveFrame.setState(NORMAL);
 					return SIGNED_IN;
 				default:
 					return CANCELLED;
