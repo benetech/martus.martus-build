@@ -1021,8 +1021,8 @@ public class MartusApp
 		} 
 		catch(Exception e) 
 		{
-			System.out.println("MartusApp.createSummaryFromString: " + e);
-			e.printStackTrace();
+			//System.out.println("MartusApp.createSummaryFromString: " + e);
+			//e.printStackTrace();
 			throw new ServerErrorException();
 		}
 		BulletinSummary bulletinSummary = new BulletinSummary(accountId, bulletinLocalId, fdp, size);

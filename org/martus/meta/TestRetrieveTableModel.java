@@ -14,6 +14,7 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.TestCaseEnhanced;
+import org.martus.common.MartusUtilities.ServerErrorException;
 import org.martus.server.MartusServer;
 import org.martus.server.MockMartusServer;
 import org.martus.server.ServerSideNetworkHandler;
@@ -63,6 +64,80 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.deleteAllFiles();
 		mockServer.deleteAllFiles();
 	}
+	
+	public void testGetMyBulletinSummariesWithServerError() throws Exception
+	{
+		String sampleSummary1 = "this is a basic summary";
+		String sampleSummary2 = "another silly summary";
+		String sampleSummary3 = "yet another!";
+
+		Bulletin b1 = appWithAccount.createBulletin();
+		b1.setAllPrivate(true);
+		b1.set(Bulletin.TAGTITLE, sampleSummary1);
+		b1.setSealed();
+		b1.save();
+
+		Bulletin b2 = appWithAccount.createBulletin();
+		b2.setAllPrivate(false);
+		b2.set(Bulletin.TAGTITLE, sampleSummary2);
+		b2.setSealed();
+		b2.save();
+
+		Bulletin b3 = appWithAccount.createBulletin();
+		b3.setAllPrivate(true);
+		b3.set(Bulletin.TAGTITLE, sampleSummary3);
+		b3.setSealed();
+		b3.save();
+
+		mockServer.allowUploads(appWithAccount.getAccountId());
+		assertEquals("failed upload1?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b1, null));
+		assertEquals("failed upload2?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b2, null));
+		assertEquals("failed upload3?", NetworkInterfaceConstants.OK, appWithAccount.uploadBulletin(b3, null));
+
+		BulletinStore store = appWithAccount.getStore();
+		store.destroyBulletin(b1);
+		store.destroyBulletin(b2);
+		store.destroyBulletin(b3);
+
+		mockServer.countDownToGetPacketFailure = 2;
+
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount);
+		try
+		{
+			model.initialize(null);
+			model.checkIfErrorOccurred();
+			fail("Didn't throw");
+		}
+		catch (ServerErrorException expectedExceptionToIgnore)
+		{
+		}
+		Vector result = model.getDownloadableSummaries();
+		assertEquals("wrong count?", 2, result.size());
+
+		BulletinSummary s1 = (BulletinSummary)result.get(0);
+		BulletinSummary s2 = (BulletinSummary)result.get(1);
+
+		Bulletin bulletins[] = new Bulletin[] {b1, b3};
+		BulletinSummary summaries[] = new BulletinSummary[] {s1, s2};
+		boolean found[] = new boolean[bulletins.length];
+
+		for(int i = 0; i < bulletins.length; ++i)
+		{
+			for(int j = 0; j < summaries.length; ++j)
+			{
+				Bulletin b = bulletins[i];
+				BulletinSummary s = summaries[j];
+				if(b.getLocalId().equals(s.getLocalId()))
+				{
+					assertEquals(b.get(Bulletin.TAGTITLE), s.getTitle());
+					found[i] = true;
+				}
+			}
+		}
+
+		assertTrue("Missing 1?", found[0]);
+		assertTrue("Missing 3?", found[1]);
+	}
 
 	public void testGetMyBulletinSummariesNoServer() throws Exception
 	{
@@ -71,6 +146,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer);
 			model.initialize(null);
 			model.getMySummaries();
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("Got valid summaries?");
 		}
@@ -83,6 +159,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithoutServer);
 			model.initialize(null);
 			model.getMyDraftSummaries();
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("Got valid draft summaries?");
 		}
@@ -103,6 +180,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer);
 			model.initialize(null);
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
@@ -148,6 +226,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount);
 		model.initialize(null);
+		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
@@ -212,7 +291,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount);
 		model.initialize(null);
-
+		model.checkIfErrorOccurred();
 		Vector allResult = model.getAllSummaries();
 		assertEquals("wrong all summaries count?", 3, allResult.size());
 
@@ -239,7 +318,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 				}
 			}
 		}
-
+		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
@@ -281,6 +360,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		{
 			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer);
 			model.initialize(null);
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("rejected didn't throw?");
 		}
@@ -326,6 +406,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount);
 		model.initialize(null);
+		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
 		assertEquals("wrong count?", 2, result.size());
 		
@@ -361,6 +442,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer);
 			model.initialize(null);
 			model.getFieldOfficeSealedSummaries("");
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("Got valid sealed summaries?");
 		}
@@ -373,6 +455,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer);
 			model.initialize(null);
 			model.getFieldOfficeDraftSummaries("");
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("Got valid draft summaries?");
 		}
@@ -394,6 +477,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer);
 			model.initialize(null);
 			model.getFieldOfficeSealedSummaries("");
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("rejected sealed didn't throw?");
 		}
@@ -406,6 +490,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer);
 			model.initialize(null);
 			model.getFieldOfficeDraftSummaries("");
+			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
 			fail("rejected draft didn't throw?");
 		}
@@ -466,6 +551,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp);
 		model.initialize(null);
+		model.checkIfErrorOccurred();
 		Vector returnedSealedResults = model.getDownloadableSummaries();
 		assertEquals("Wrong size?", 2, returnedSealedResults.size());
 		BulletinSummary s1 = (BulletinSummary)returnedSealedResults.get(0);
@@ -490,6 +576,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp);
 		model2.initialize(null);
+		model2.checkIfErrorOccurred();
 		Vector returnedDraftResults = model2.getDownloadableSummaries();
 		assertEquals("Wrong draft size?", 1, returnedDraftResults.size());
 		BulletinSummary s3 = (BulletinSummary)returnedDraftResults.get(0);

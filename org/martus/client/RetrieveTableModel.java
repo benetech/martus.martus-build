@@ -152,7 +152,6 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	}
 
 	public void createSummariesFromStrings(String accountId, Vector summaryStrings)
-		throws ServerErrorException 
 	{
 		RetrieveThread worker = new RetrieveThread(accountId, summaryStrings);
 		worker.start();
@@ -161,7 +160,6 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 			waitForThreadToTerminate(worker);
 		else
 			retrieverDlg.beginRetrieve();
-		checkIfErrorOccurred();
 	}
 
 	public void waitForThreadToTerminate(RetrieveThread worker) 
@@ -185,6 +183,12 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		
 		public void run()
 		{
+			retrieveAllSummaries();
+			finishedRetrieve();
+		}
+
+		public void retrieveAllSummaries()
+		{
 			try 
 			{
 				Iterator iterator = summaryStrings.iterator();
@@ -206,7 +210,6 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 			{
 				errorThrown = e;
 			}
-			finishedRetrieve();
 		}
 
 		public void finishedRetrieve()
@@ -219,21 +222,19 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 		private Vector summaryStrings;	
 	}
 
-	private void checkIfErrorOccurred() throws ServerErrorException 
+	public void checkIfErrorOccurred() throws ServerErrorException 
 	{
 		if(errorThrown != null)
 			throw (errorThrown);
 	}
 	
-	public Vector getDownloadableSummaries() throws ServerErrorException
+	public Vector getDownloadableSummaries()
 	{
-		checkIfErrorOccurred();
 		return downloadableSummaries;	
 	}
 
-	public Vector getAllSummaries() throws ServerErrorException
+	public Vector getAllSummaries()
 	{
-		checkIfErrorOccurred();
 		return allSummaries;	
 	}
 	

@@ -282,6 +282,26 @@ public class MockMartusServer extends MartusServer
 		return super.getNews(accountId);
 	}
 
+	public Vector getPacket(
+		String myAccountId,
+		String authorAccountId,
+		String bulletinLocalId,
+		String packetLocalId)
+	{
+		if(countDownToGetPacketFailure == 1)
+		{
+			countDownToGetPacketFailure = 0;
+			Vector result = new Vector();
+			result.add(SERVER_ERROR);		
+			return result;
+		}
+		if (countDownToGetPacketFailure > 0)
+			--countDownToGetPacketFailure;
+		
+		return super.getPacket(myAccountId, authorAccountId, bulletinLocalId, packetLocalId);
+	}
+
+	public int countDownToGetPacketFailure;
 	public Vector newsResponse;
 	public Vector infoResponse;
 	public String uploadResponse;
