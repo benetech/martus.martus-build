@@ -128,11 +128,6 @@ public class UiActions
 		return new ActionMenuExportBulletins(mainWindowToUse);
 	}
 	
-	static public UiMartusAction newActionMenuBackupMyKeyPair(UiMainWindow mainWindowToUse)
-	{
-		return new ActionMenuBackupMyKeyPair(mainWindowToUse);
-	}
-	
 	static public UiMartusAction newActionMenuExportMyPublicKey(UiMainWindow mainWindowToUse)
 	{
 		return new ActionMenuExportMyPublicKey(mainWindowToUse);
@@ -692,20 +687,6 @@ public class UiActions
 		}
 	}
 
-	private static class ActionMenuBackupMyKeyPair extends UiMenuAction
-	{
-		public ActionMenuBackupMyKeyPair(UiMainWindow mainWindowToUse)
-		{
-			super(mainWindowToUse, "BackupMyKeyPair");
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			if(!mainWindow.reSignIn())
-				return;
-			mainWindow.askToBackupKeyPair();
-		}
-	}
 
 	private static class ActionMenuExportMyPublicKey extends UiMenuAction
 	{

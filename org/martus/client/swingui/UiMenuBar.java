@@ -32,6 +32,7 @@ import javax.swing.JMenuBar;
 import javax.swing.event.MenuEvent;
 import javax.swing.event.MenuListener;
 
+import org.martus.client.swingui.actions.ActionMenuBackupMyKeyPair;
 import org.martus.client.swingui.actions.ActionMenuCustomFields;
 import org.martus.client.swingui.actions.ActionMenuQuickErase;
 import org.martus.client.swingui.actions.UiActions;
@@ -107,7 +108,7 @@ public class UiMenuBar extends JMenuBar
 		JMenu tools = new JMenu(localization.getMenuLabel("tools"));
 		tools.add(new ActionMenuQuickErase(mainWindow));
 		tools.addSeparator();
-		tools.add(UiActions.newActionMenuBackupMyKeyPair(mainWindow));
+		tools.add(new ActionMenuBackupMyKeyPair(mainWindow));
 		tools.add(UiActions.newActionMenuExportMyPublicKey(mainWindow));
 		tools.addSeparator();
 		tools.add(UiActions.newActionMenuImportHeadquarterPublicKey(mainWindow));
