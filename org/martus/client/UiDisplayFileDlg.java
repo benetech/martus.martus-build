@@ -87,11 +87,8 @@ public class UiDisplayFileDlg extends JDialog
 		getRootPane().setDefaultButton(ok);
 		ok.requestFocus();
 
-		pack();
-		setResizable(false);
-		Dimension size = getSize();
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
+		owner.centerDlg(this);
+		setResizable(true);
 		show();
 	}
 

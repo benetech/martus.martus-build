@@ -25,7 +25,6 @@ import java.util.Set;
 import java.util.Vector;
 
 import org.martus.client.ClientSideNetworkHandlerUsingXmlRpc.SSLSocketSetupException;
-import org.martus.common.*;
 import org.martus.common.Base64;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.FileDatabase;
@@ -41,7 +40,6 @@ import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
-import sun.security.krb5.internal.crypto.e;
 
 
 public class MartusApp
@@ -773,28 +771,6 @@ public class MartusApp
 		return result;
 	}
 
-	public String retrieveMyBulletins(Vector uidList, Retriever retriever)
-	{
-		BulletinFolder retrievedFolder = createFolderRetrieved();
-		store.saveFolders();
-
-		return retrieveBulletins(uidList, retrievedFolder, retriever);
-	}
-
-	public String retrieveFieldOfficeBulletins(Vector uidList, Retriever retriever)
-	{
-		BulletinFolder retrievedFolder = createFolderRetrieved();
-		store.saveFolders();
-
-		return retrieveBulletins(uidList, retrievedFolder, retriever);
-	}
-
-	private String retrieveBulletins(Vector uidList, BulletinFolder retrievedFolder, Retriever retriever) 
-	{
-		retriever.retrieveBulletins(uidList, retrievedFolder);
-		return retriever.getResult();
-	}
-	
 	public static class ServerErrorException extends Exception 
 	{
 		ServerErrorException(String message)

@@ -42,10 +42,7 @@ public class UiStringInputDlg extends JDialog
 
 		getRootPane().setDefaultButton(ok);
 
-		pack();
-		Dimension size = getSize();
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
+		owner.centerDlg(this);
 		setResizable(false);
 	}
 

@@ -95,8 +95,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		getRootPane().setDefaultButton(ok);
 		if(username.length() > 0)
 			passwordField.requestFocus();
-		pack();
-		centerDlg();
+		mainWindow.centerDlg(this);
 		setResizable(true);
 		show();
 	}
@@ -185,8 +184,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.setText(app.getButtonLabel("VirtualKeyboardSwitchToNormal"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
-		pack();
-		centerDlg();
+		mainWindow.centerDlg((JDialog)this);
 	}
 	
 	public void displayPasswordAreaUsingNormalKeyboard()
@@ -213,8 +211,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		switchToNormalKeyboard.setText(app.getButtonLabel("VirtualKeyboardSwitchToVirtual"));
 		passwordArea.add(switchToNormalKeyboard);
 		updateUI();
-		pack();
-		centerDlg();
+		mainWindow.centerDlg(this);
 	}
 	public void updateUI() 
 	{
@@ -222,12 +219,6 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 		userNameDescription.updateUI();
 		getRootPane().setDefaultButton(ok);
 		nameField.requestFocus();
-	}
-	public void centerDlg()
-	{
-		Dimension size = getSize();
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
 	}
 
 	class OkHandler implements ActionListener

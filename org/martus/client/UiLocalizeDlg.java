@@ -43,12 +43,8 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 
 		getRootPane().setDefaultButton(ok);
 
-		pack();
-		Dimension size = getSize();
-
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
-		setResizable(false);
+		owner.centerDlg(this);
+		setResizable(true);
 		show();
 	}
 

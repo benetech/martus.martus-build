@@ -81,10 +81,7 @@ public class UiContactInfoDlg extends JDialog implements ActionListener
 
 		getRootPane().setDefaultButton(ok);
 
-		pack();
-		Dimension size = getSize();
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
+		mainWindow.centerDlg(this);
 		setResizable(true);
 		show();
 	}

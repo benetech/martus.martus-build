@@ -7,6 +7,7 @@ import java.awt.Event;
 import java.awt.GridLayout;
 import java.awt.KeyboardFocusManager;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.Toolkit;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.ClipboardOwner;
@@ -43,9 +44,9 @@ import javax.swing.event.MenuListener;
 import javax.swing.filechooser.FileFilter;
 
 import org.martus.client.MartusApp.ServerErrorException;
-import org.martus.common.*;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
+import org.martus.common.Retriever;
 import org.martus.common.Base64.InvalidBase64Exception;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
@@ -311,6 +312,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		uiState.setCurrentEditorMaximized(maximized);	
 	}
 	
+	public void centerDlg(JDialog dlg)
+	{
+		dlg.pack();
+		Dimension size = dlg.getSize();
+		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
+		dlg.setLocation(MartusApp.center(size, screen));
+	}
+
 	
 	public void saveCurrentUiState() throws IOException
 	{
@@ -819,8 +828,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-			Retriever retriever = new Retriever(app);	
-			String result = app.retrieveMyBulletins(uidList, retriever);
+			Retriever retriever = createRetriever();
+			String result = retriever.retrieveMyBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -847,8 +856,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(uidList == null)
 				return;
 				
-			Retriever retriever = new Retriever(app);	
-			String result = app.retrieveMyBulletins(uidList, retriever);
+			Retriever retriever = createRetriever();
+			String result = retriever.retrieveMyBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -874,8 +883,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-			Retriever retriever = new Retriever(app);	
-			String result = app.retrieveFieldOfficeBulletins(uidList, retriever);
+			Retriever retriever = createRetriever();
+			String result = retriever.retrieveFieldOfficeBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -901,9 +910,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			Vector uidList = displayRetrieveDlg(dlgTitleTag, model);
 			if(uidList == null)
 				return;
-				
-			Retriever retriever = new Retriever(app);	
-			String result = app.retrieveFieldOfficeBulletins(uidList, retriever);
+			Retriever retriever = createRetriever();
+			String result = retriever.retrieveFieldOfficeBulletins(uidList);
 			if(!result.equals(NetworkInterfaceConstants.OK))
 			{
 				notifyDlg(this, "retrievefailed");
@@ -918,6 +926,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			notifyDlg(this, "ServerError");
 			return;
 		}
+	}
+
+	private Retriever createRetriever() 
+	{
+		UiProgressRetrieveDlg retrieveDlg = new UiProgressRetrieveDlg(this);	
+		return new Retriever(app, retrieveDlg);
 	}
 
 	private Vector displayRetrieveDlg(String dlgTitleTag, RetrieveTableModel model) 

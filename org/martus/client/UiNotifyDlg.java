@@ -51,10 +51,7 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 		vbox.add(new JLabel(" "));
 		
 		getContentPane().add(vbox, BorderLayout.CENTER);
-		pack();
-		Dimension size = getSize();
-		Rectangle screen = new Rectangle(new Point(0, 0), getToolkit().getScreenSize());
-		setLocation(MartusApp.center(size, screen));
+		main.centerDlg(this);
 		setResizable(true);
 		getRootPane().setDefaultButton(ok);
 		ok.requestFocus(true);
