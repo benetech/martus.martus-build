@@ -27,7 +27,6 @@ Boston, MA 02111-1307, USA.
 package org.martus.swing;
 
 import java.awt.BorderLayout;
-import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -53,7 +52,7 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 		this(owner, title, contents, buttons, new HashMap());
 	}
 	
-	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons, Map tokenReplacement) throws HeadlessException
+	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
 	{
 		super(owner, title , true);
 		try
