@@ -39,6 +39,7 @@ import org.martus.common.bulletin.BulletinConstants;
 import org.martus.common.bulletin.BulletinSaver;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
+import org.martus.common.test.*;
 
 public class CreateBadBulletins
 {

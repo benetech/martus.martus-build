@@ -34,7 +34,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
-import org.martus.client.test.BulletinForTesting;
 import org.martus.common.FieldSpec;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.AttachmentProxy;
