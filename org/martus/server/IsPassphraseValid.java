@@ -17,26 +17,13 @@ public class IsPassphraseValid
 {
 	public static void main(String[] args)// throws Exception
 	{
-			File dataDirectory = null;
-			if( args.length == 1 )
-			{
-				if( !args[0].startsWith("--data-directory") )
-				{
-					System.err.println("could not find keypair");
-					System.exit(2);
-				}
-				dataDirectory = new File(args[0].substring(args[0].indexOf("=")+1));
-			}
-			else
-			{
-				System.err.println("could not find keypair");
-				System.exit(2);
-			}
+			if( !args[0].startsWith("--file") ) error("incorrect argument");
 
-			String keyPairFilename = MartusServer.getKeypairFilename();
-			File keyPairFile = new File(dataDirectory, keyPairFilename);
+			File keyPairFile = new File(args[0].substring(args[0].indexOf("=")+1));
+			
+			if(!keyPairFile.isFile() || !keyPairFile.exists() ) error(keyPairFile.toString() + " is not a file");
 
-			BufferedReader stdin = new BufferedReader( new InputStreamReader(System.in));
+			BufferedReader stdin = new BufferedReader(new InputStreamReader(System.in));
 			String passphrase = null;
 			try
 			{
@@ -44,8 +31,7 @@ public class IsPassphraseValid
 			}
 			catch (IOException e)
 			{
-				System.err.println("error: " + e);
-				System.exit(2);
+				error(e.toString());
 			}
 
 			try
@@ -59,12 +45,16 @@ public class IsPassphraseValid
 			}
 			catch(Exception e)
 			{
-				System.err.println(e.toString());
-				System.exit(2);
+				error(e.toString());
 			}
-
-			System.out.flush();
 			System.exit(0);
+	}
+	
+	private static void error(String msg)
+	{
+		System.err.println(msg);
+		System.err.flush();
+		System.exit(2);
 	}
 
 	private static void loadCurrentMartusSecurity(File keyPairFile, String passphrase)
