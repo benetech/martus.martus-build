@@ -104,17 +104,15 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 		if(bulletin != null && bulletin.isAllPrivate())
 			isAllPrivate = allPrivateField.TRUESTRING;
 		allPrivateField.setText(isAllPrivate);
-		
-		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
+		if(bulletin != null)
 		{
-			String text = "";
-			if(bulletin != null)
-				text = bulletin.get(fieldTags[fieldNum]);
-			fields[fieldNum].setText(text);
+			publicStuff.copyDataFromPacket(bulletin.getFieldDataPacket());
+			privateStuff.copyDataFromPacket(bulletin.getPrivateFieldDataPacket());
 		}
 		
 		clearPublicAttachments();
 		clearPrivateAttachments();
+
 		if(bulletin != null)
 		{
 			AttachmentProxy[] publicAttachments = bulletin.getPublicAttachments();
@@ -157,9 +155,9 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			encryptionListener.encryptionChanged(newState);
 	}
 
-	void createLabelsAndFields(JPanel target, String[] tags, int startIndex)
+	void createLabelsAndFields(UiBulletinComponentSection target, String[] tags, int startIndex)
 	{
-		UiField[] fieldsInThisSection = publicStuff.createLabelsAndFields(target, tags);
+		UiField[] fieldsInThisSection = target.createLabelsAndFields(target, tags);
 		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
 		{
 			int thisField = startIndex + fieldNum;

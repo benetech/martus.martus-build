@@ -10,6 +10,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
+import org.martus.common.FieldDataPacket;
+
 abstract public class UiBulletinComponentSection extends JPanel
 {
 	UiBulletinComponentSection(MartusApp appToUse, boolean encrypted)
@@ -43,7 +45,9 @@ abstract public class UiBulletinComponentSection extends JPanel
 
 	UiField[] createLabelsAndFields(JPanel target, String[] tags)
 	{
-		UiField[] fields = new UiField[tags.length];
+		fieldTags = tags;
+
+		fields = new UiField[tags.length];
 		for(int fieldNum = 0; fieldNum < tags.length; ++fieldNum)
 		{
 			fields[fieldNum] = createField(tags[fieldNum]);
@@ -52,6 +56,18 @@ abstract public class UiBulletinComponentSection extends JPanel
 			target.add(fields[fieldNum].getComponent());
 		}
 		return fields;
+	}
+	
+	public void copyDataFromPacket(FieldDataPacket fdp)
+	{
+		if(fdp == null)
+			return;
+		for(int fieldNum = 0; fieldNum < fields.length; ++fieldNum)
+		{
+			String text = "";
+			text = fdp.get(fieldTags[fieldNum]);
+			fields[fieldNum].setText(text);
+		}
 	}
 	
  	public JLabel createLabel(String fieldTag)
@@ -126,6 +142,8 @@ abstract public class UiBulletinComponentSection extends JPanel
 	MartusApp app;
 	JLabel encryptedIndicator;
 	JLabel damagedIndicator;
+	UiField[] fields;
+	String[] fieldTags;
 	
 	public final static boolean ENCRYPTED = true;
 	public final static boolean NOT_ENCRYPTED = false;
