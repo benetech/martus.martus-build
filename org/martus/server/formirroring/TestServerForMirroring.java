@@ -1,5 +1,6 @@
 package org.martus.server.formirroring;
 
+import java.io.File;
 import java.util.Vector;
 
 import org.martus.common.BulletinHeaderPacket;
@@ -61,6 +62,30 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		String serverPublicKeyString = server.getSecurity().getPublicKeyString();
 		MartusUtilities.validatePublicInfo(publicKey, gotSig, clientSecurity1);
 		assertEquals(serverPublicKeyString, publicInfo.get(0));
+		
+	}
+	
+	public void testIsAuthorizedForMirroring() throws Exception
+	{
+		MockMartusServer nobodyAuthorizedCore = new MockMartusServer();
+		ServerForMirroring nobodyAuthorized = new ServerForMirroring(nobodyAuthorizedCore);
+		assertFalse("client already authorized?", nobodyAuthorized.isAuthorizedForMirroring(clientSecurity1.getPublicKeyString()));
+		nobodyAuthorizedCore.deleteAllFiles();
+		
+		MockMartusServer twoAuthorizedCore = new MockMartusServer();
+		twoAuthorizedCore.enterSecureMode();
+		File mirrorsWhoCallUs = new File(twoAuthorizedCore.getStartupConfigDirectory(), "mirrorsWhoCallUs");
+		mirrorsWhoCallUs.mkdirs();
+		File pubKeyFile1 = new File(mirrorsWhoCallUs, "code=1.2.3.4.5-ip=1.2.3.4.txt");
+		MartusUtilities.exportServerPublicKey(clientSecurity1, pubKeyFile1);
+		File pubKeyFile2 = new File(mirrorsWhoCallUs, "code=2.3.4.5.6-ip=2.3.4.5.txt");
+		MartusUtilities.exportServerPublicKey(clientSecurity2, pubKeyFile2);
+		ServerForMirroring twoAuthorized = new ServerForMirroring(twoAuthorizedCore);
+		assertTrue("client1 not authorized?", twoAuthorized.isAuthorizedForMirroring(clientSecurity1.getPublicKeyString()));
+		assertTrue("client2 not authorized?", twoAuthorized.isAuthorizedForMirroring(clientSecurity2.getPublicKeyString()));
+		assertFalse("ourselves authorized?", twoAuthorized.isAuthorizedForMirroring(coreServer.getAccountId()));
+		mirrorsWhoCallUs.delete();
+		twoAuthorizedCore.deleteAllFiles();
 		
 	}
 

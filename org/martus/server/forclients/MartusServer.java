@@ -198,6 +198,16 @@ public class MartusServer implements NetworkInterfaceConstants
 		return security;
 	}
 	
+	public boolean isSecureMode()
+	{
+		return secureMode;
+	}
+	
+	public void enterSecureMode()
+	{
+		secureMode = true;
+	}
+	
 	
 	boolean hasAccount()
 	{
@@ -1582,7 +1592,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	
 	public void deleteStartupFiles()
 	{
-		if(!secureMode)
+		if(!isSecureMode())
 			return;
 
 		serverForClients.deleteMagicWordsFile();
@@ -1989,7 +1999,7 @@ public class MartusServer implements NetworkInterfaceConstants
 	}
 
 
-	private void createServerForMirroring()
+	private void createServerForMirroring() throws Exception
 	{
 		serverForMirroring = new ServerForMirroring(this);
 		serverForMirroring.addListeners();
@@ -2041,7 +2051,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 			
 			if(args[arg].equals("secure"))
-				secureMode = true;
+				enterSecureMode();
 		
 			if(args[arg].startsWith("--server-name="))
 			{
@@ -2049,7 +2059,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			}
 		}
 		
-		if(secureMode)
+		if(isSecureMode())
 			System.out.println("Running in SECURE mode");
 		else
 			System.out.println("***RUNNING IN INSECURE MODE***");

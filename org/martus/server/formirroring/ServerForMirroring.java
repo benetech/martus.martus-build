@@ -1,5 +1,7 @@
 package org.martus.server.formirroring;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 import org.martus.common.Base64;
@@ -9,14 +11,21 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
+import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
 
 public class ServerForMirroring implements ServerSupplierInterface
 {
-	public ServerForMirroring(MartusServer coreServerToUse)
+	public ServerForMirroring(MartusServer coreServerToUse) throws 
+			IOException, 
+			InvalidPublicKeyFileException, 
+			PublicInformationInvalidException
 	{
+		authorizedCallers = new Vector();
 		coreServer = coreServerToUse;
+		loadServersWhoAreAuthorizedToCallUs();
 	}
 
 	public void addListeners()
@@ -45,7 +54,7 @@ public class ServerForMirroring implements ServerSupplierInterface
 	
 	public boolean isAuthorizedForMirroring(String callerAccountId)
 	{
-		return false;
+		return authorizedCallers.contains(callerAccountId);
 	}
 
 	public Vector listAccountsForMirroring()
@@ -113,7 +122,40 @@ public class ServerForMirroring implements ServerSupplierInterface
 	{
 		return coreServer.getDatabase();
 	}
+	
+	boolean isSecureMode()
+	{
+		return coreServer.isSecureMode();
+	}
 
+	void loadServersWhoAreAuthorizedToCallUs() throws IOException, InvalidPublicKeyFileException, PublicInformationInvalidException
+	{
+		authorizedCallers.clear();
 
+		File authorizedCallersDir = getAuthorizedCallersDirectory();
+		File[] callersFiles = authorizedCallersDir.listFiles();
+		if(callersFiles == null)
+			return;
+		for (int i = 0; i < callersFiles.length; i++)
+		{
+			File callerFile = callersFiles[i];
+			Vector publicInfo = MartusUtilities.importServerPublicKeyFromFile(callerFile, getSecurity());
+			addAuthorizedCaller((String)publicInfo.get(0));
+			if(isSecureMode())
+				callerFile.delete();
+		}
+	}
+
+	File getAuthorizedCallersDirectory()
+	{
+		return new File(coreServer.getStartupConfigDirectory(), "mirrorsWhoCallUs");
+	}
+	
+	void addAuthorizedCaller(String publicKey)
+	{
+		authorizedCallers.add(publicKey);
+	}
+	
 	MartusServer coreServer;
+	Vector authorizedCallers;
 }
