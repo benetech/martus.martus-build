@@ -1,6 +1,11 @@
 package org.martus.server;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
@@ -11,6 +16,9 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
+import org.martus.common.MartusCrypto.AuthorizationFailedException;
+import org.martus.common.MartusCrypto.CryptoInitializationException;
+import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
 
 public class VerifyAllPackets
 {
@@ -26,18 +34,31 @@ public class VerifyAllPackets
 		System.out.println("  Runs a SAFE, non-destructive, read-only test");
 		
 		File dir = null;
-		if( args.length == 0 )
+		File keyPairFile = null;
+		
+		if(args.length < 2)
 		{
-			dir = new File(MartusServer.getDefaultDataDirectory(), "packets");
-		}
-		else if(!args[0].startsWith("--packet-directory="))
-		{
-			System.err.println("  Usage: VerifyAllPackets [--packet-directory=<directory>]");
+			System.err.println("\nUsage: VerifyAllPackets --packet-directory=<directory> --keypair=<pathToKeyPairFile>");
 			System.exit(2);
 		}
-		else
+		
+		for (int i = 0; i < args.length; i++)
 		{
-			dir = new File(args[0].substring(args[0].indexOf("=")+1));
+			if(args[i].startsWith("--keypair"))
+			{
+				keyPairFile = new File(args[i].substring(args[i].indexOf("=")+1));
+			}
+			
+			if(args[i].startsWith("--packet-directory="))
+			{
+				dir = new File(args[i].substring(args[i].indexOf("=")+1));
+			}
+		}
+
+		if(dir == null || keyPairFile == null )
+		{
+			System.err.println("\nUsage: VerifyAllPackets --packet-directory=<directory> --keypair=<pathToKeyPairFile>");
+			System.exit(2);
 		}
 		
 		if(!dir.exists() || !dir.isDirectory())
@@ -46,16 +67,31 @@ public class VerifyAllPackets
 			System.exit(3);
 		}
 		
+		MartusCrypto security = null;
+		
+		System.out.print("Enter server passphrase:");
+		System.out.flush();
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		try
 		{
-			MartusSecurity security = new MartusSecurity();
+			String passphrase = reader.readLine();
+			security = loadCurrentMartusSecurity(keyPairFile, passphrase);
+		}
+		catch(Exception e)
+		{
+			System.err.println("FileSignerAndVerifier.main: " + e);
+			System.exit(3);
+		}
+		
+		try
+		{
 			ServerFileDatabase db = new ServerFileDatabase(dir,security);
 			db.initialize();
 			verifyAllPackets(db, security);
 		}
 		catch (Exception e)
 		{
-			System.err.println("Error: " + e.getMessage());
+			System.err.println("Error: " + e);
 			System.exit(3);
 		}
 		
@@ -68,6 +104,16 @@ public class VerifyAllPackets
 		db.visitAllRecords(verifier);
 		System.out.println();
 		System.out.println("DONE");
+	}
+	
+	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
+		throws CryptoInitializationException, FileNotFoundException, IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException
+	{
+		MartusCrypto security = new MartusSecurity();
+		FileInputStream in = new FileInputStream(keyPairFile);
+		security.readKeyPair(in, passphrase);
+		in.close();
+		return security;
 	}
 
 	static class PacketVerifier implements Database.PacketVisitor
@@ -125,6 +171,5 @@ public class VerifyAllPackets
 
 		Database db;
 		MartusCrypto security;
-
 	}
 }
