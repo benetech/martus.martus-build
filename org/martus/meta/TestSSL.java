@@ -24,6 +24,7 @@ public class TestSSL extends TestCaseEnhanced
 			int testPort2 = 1986;
 			mockSecurityForServer = new MockMartusSecurity();
 			mockServer = new MockMartusServer();
+			mockServer.initialize();
 			mockServer.setSecurity(mockSecurityForServer);
 			mockServer.createSSLXmlRpcServerOnPort(testport);
 			mockServer.createMirroringSupplierXmlRpcServer(testPort2);

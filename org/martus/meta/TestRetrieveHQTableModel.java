@@ -56,6 +56,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b2Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b2.getBulletinHeaderPacket());
 	
 		testServer = new MockServer();
+		testServer.initialize();
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 		modelWithData = new RetrieveHQTableModel(hqApp);

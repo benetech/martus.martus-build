@@ -84,6 +84,12 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 			serverSecurity = new MartusSecurity();
 			serverSecurity.createKeyPair(512);
 		}
+		
+		if(testServerSecurity == null)
+		{
+			testServerSecurity = new MartusSecurity();
+			testServerSecurity.createKeyPair(512);
+		}
 
 		if(hqSecurity == null)
 		{
@@ -151,12 +157,15 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		}
 		
 		testServer = new MockMartusServer();
+		testServer.setSecurity(testServerSecurity);
+		testServer.initialize();
 		testServerInterface = new ServerSideNetworkHandler(testServer);
 		db = (MockServerDatabase)testServer.getDatabase();
 	}
 	
 	public void tearDown() throws Exception
 	{
+		testServerSecurity = null;
 		assertEquals("isShutdownRequested", false, testServer.isShutdownRequested());
 		testServer.deleteAllFiles();
 	}
@@ -1667,15 +1676,14 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	
 	public void testAllowUploadsPersistToNextSession() throws Exception
 	{
-		String dataDirectory = testServer.dataDirectoryString;
-
 		testServer.clientsThatCanUpload.clear();
 		
 		String sampleId = "2345235";
 		
 		testServer.allowUploads(sampleId);
 		
-		MockMartusServer other = new MockMartusServer(new File(dataDirectory));
+		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
+		other.initialize();
 		assertEquals("didn't get saved/loaded?", true, other.canClientUpload(sampleId));
 		other.deleteAllFiles();
 	}
@@ -1696,9 +1704,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	}
 	
 	public void testLoadingMagicWords() throws Exception
-	{
-		String dataDirectory = testServer.dataDirectoryString;
-		
+	{		
 		String sampleMagicWord1 = "kef7873n2";
 		String sampleMagicWord2 = "fjk5dlkg8";
 		String nonExistentMagicWord = "ThisIsNotAMagicWord";
@@ -1709,7 +1715,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		writer.writeln(sampleMagicWord2);
 		writer.close();
 		
-		MockMartusServer other = new MockMartusServer(new File(dataDirectory));
+		MockMartusServer other = new MockMartusServer(testServer.dataDirectory);
+		other.initialize();
+		other.setSecurity(testServerSecurity);
 		
 		String worked = other.requestUploadRights("whatever", sampleMagicWord1);
 		assertEquals("didn't work?", NetworkInterfaceConstants.OK, worked);
@@ -2106,6 +2114,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	static MartusSecurity clientSecurity;
 	static MartusSecurity serverSecurity;
+	static MartusSecurity testServerSecurity;
 	static MartusSecurity hqSecurity;
 	static BulletinStore store;
 

@@ -48,7 +48,7 @@ public class FileDatabase implements Database
 	{
 		accountMap = new TreeMap();
 		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
-		accountMapSignatureFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME + ".sig");
+		accountMapSignatureFile = MartusUtilities.getSignatureFileFromFile(accountMapFile);
 		loadAccountMap();
 		if(isAccountMapExpected() && !accountMapFile.exists())
 		{

@@ -131,6 +131,8 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				System.out.println("***** Key pair file not found *****");
 				System.exit(2);
 			}
+			
+			server.initialize();
 
 			String accountId = server.getAccountId();
 			System.out.println("Server Account: " + accountId);
@@ -210,10 +212,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	}
 
 
-	MartusServer(File dataDirectory) throws 
+	MartusServer(File dir) throws 
 					MartusCrypto.CryptoInitializationException
 	{
 		security = new MartusSecurity();
+		
+		dataDirectory = dir;
 		
 		triggerDirectory = new File(dataDirectory, ADMINTRIGGERDIRECTORY);
 		if(!triggerDirectory.exists())
@@ -253,7 +257,34 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		Timer mirroringTimer = new Timer(true);
  		TimerTask mirroringTask = new MirroringTask();
  		mirroringTimer.schedule(mirroringTask, IMMEDIATELY, mirroringIntervalMillis);
+	}
+	
+	public void initialize()
+	{
+		verifyConfigurationFiles();
+		loadConfigurationFiles();
+	}
+	
+	public void verifyConfigurationFiles()
+	{
+		File allowUploadFileSignature = MartusUtilities.getSignatureFileFromFile(allowUploadFile);
+		if(allowUploadFile.exists() || allowUploadFileSignature.exists())
+		{
+			try
+			{
+				MartusUtilities.verifyFileAndSignature(allowUploadFile, allowUploadFileSignature, security, security.getPublicKeyString());
+			}
+			catch(FileVerificationException e)
+			{
+				e.printStackTrace();
+				System.out.println(UPLOADSOKFILENAME + " did not verify against signature file");
+				System.exit(7);
+			}
+		}
+	}
 
+	public void loadConfigurationFiles()
+	{
 		try
 		{
 			BufferedReader reader = new BufferedReader(new FileReader(allowUploadFile));
@@ -262,6 +293,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
+			;
 		}
 		catch(IOException e)
 		{
@@ -1390,6 +1422,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				writer.writeln((String)clientsThatCanUpload.get(i));
 			}
 			writer.close();
+			MartusUtilities.createSignatureFileFromFile(allowUploadFile, security);
 			if(serverMaxLogging)
 				logging("allowUploads : Exit OK");
 		}
@@ -1397,6 +1430,11 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		{
 			logging("allowUploads " + e);
 			//System.out.println("MartusServer.allowUploads: " + e);
+		}
+		catch(MartusSignatureException e)
+		{
+			logging("allowUploads: " + e);
+			System.out.println("MartusServer.allowUploads: " + e);
 		}
 	}
 
@@ -2062,6 +2100,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public Vector clientsBanned;
 	public MartusCrypto security;
 	File keyPairFile;
+	public File dataDirectory;
 	public File allowUploadFile;
 	public File magicWordsFile;
 	public File bannedClientsFile;

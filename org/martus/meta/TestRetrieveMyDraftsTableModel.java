@@ -34,6 +34,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		b2.save();
 
 		testServer = new MockServer();
+		testServer.initialize();
 		testServer.setSecurity(new MockMartusSecurity());
 		
 		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);

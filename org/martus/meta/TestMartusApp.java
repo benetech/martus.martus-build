@@ -66,6 +66,7 @@ public class TestMartusApp extends TestCaseEnhanced
 			mockSecurityForServer = new MockMartusSecurity();
 
 		mockServer = new MockMartusServer();
+		mockServer.initialize();
 		mockServer.setSecurity(mockSecurityForServer);
 		mockNonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(mockServer);
 		mockSSLServerHandler = new MockServerInterfaceHandler(mockServer);
@@ -758,6 +759,7 @@ public class TestMartusApp extends TestCaseEnhanced
 	{
 		NetworkInterface oldSSLServer = appWithAccount.currentNetworkInterfaceHandler;
 		MockMartusServerChunks server = new MockMartusServerChunks();
+		server.initialize();
 		server.setSecurity(mockSecurityForServer);
 		server.clientsThatCanUpload.clear();
 		server.allowUploads(appWithAccount.getAccountId());

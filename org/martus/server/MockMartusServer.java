@@ -6,6 +6,7 @@ import java.util.Vector;
 
 import org.martus.common.Database;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusUtilities;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.NetworkInterfaceConstants;
 
@@ -20,7 +21,6 @@ public class MockMartusServer extends MartusServer
 	{
 		super(dataDir);
 		setDatabase(new MockServerDatabase());
-		dataDirectoryString = dataDir.getPath();
 	}
 	
 	public void setSecurity(MartusCrypto securityToUse)
@@ -31,6 +31,11 @@ public class MockMartusServer extends MartusServer
 	public void setDatabase(Database databaseToUse)
 	{
 		database = databaseToUse;
+	}
+	
+	public void initialize()
+	{
+		loadConfigurationFiles();
 	}
 	
 	public String ping()
@@ -241,13 +246,22 @@ public class MockMartusServer extends MartusServer
 		keyPairFile.delete();
 		if(keyPairFile.exists())
 			throw new IOException("keyPairFile");
+			
+		File uploadSig = MartusUtilities.getSignatureFileFromFile(allowUploadFile);
+		if(uploadSig.exists())
+			uploadSig.delete();
+			
+		File magicSig = MartusUtilities.getSignatureFileFromFile(magicWordsFile);
+		if(magicSig.exists())
+			magicSig.delete();
 
-		new File(triggerDirectory.getAbsolutePath()).delete();
-		new File(startupConfigDirectory.getAbsolutePath()).delete();
-		File dataDir = new File(dataDirectoryString);
-		dataDir.delete();
-		
-		if(dataDir.exists())
+		if(triggerDirectory.exists())
+			triggerDirectory.delete();
+		if(startupConfigDirectory.exists())
+			startupConfigDirectory.delete();
+
+		dataDirectory.delete();
+		if(dataDirectory.exists())
 			throw new IOException("dataDirectory");
 	}
 
@@ -265,6 +279,4 @@ public class MockMartusServer extends MartusServer
 	private boolean listFieldOfficeAccountsResponseNull;
 	
 	private String authenticateResponse;
-	
-	public String dataDirectoryString;
 }
