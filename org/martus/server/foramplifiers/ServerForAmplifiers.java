@@ -1,17 +1,11 @@
 package org.martus.server.foramplifiers;
 
-import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringWriter;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
@@ -21,15 +15,12 @@ import org.martus.common.MartusUtilities.FileTooLargeException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
-import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MartusCrypto.CryptoException;
-import org.martus.common.crypto.MartusCrypto.CryptoInitializationException;
 import org.martus.common.crypto.MartusCrypto.DecryptionException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.crypto.MartusCrypto.NoKeyPairException;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
-import org.martus.common.database.FileDatabase;
 import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.BulletinHeaderPacket;
@@ -38,22 +29,21 @@ import org.martus.common.packet.Packet.InvalidPacketException;
 import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.server.core.MartusSecureWebServer;
-import org.martus.server.core.ServerConstants;
-import org.martus.server.core.ServerFileDatabase;
+import org.martus.server.forclients.MartusServer;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;
 import org.martus.util.Base64.InvalidBase64Exception;
 
-public class MartusAmplifierServer implements NetworkInterfaceConstants
+public class ServerForAmplifiers implements NetworkInterfaceConstants
 {
-
+/*
 	public static void main(String[] args)
 	{
 		System.out.println("MartusAmplifierServer");
 		
 		File dataDirectory = getDefaultDataDirectory();
 		
-		MartusAmplifierServer server = null;
+		ServerForAmplifiers server = null;
 
 		String servername = null;
 		for(int arg = 0; arg < args.length; ++arg)
@@ -80,7 +70,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		System.out.println("Initializing...this will take a few seconds...");
 		try
 		{
-			server = new MartusAmplifierServer(dataDirectory);
+			server = new ServerForAmplifiers(dataDirectory);
 		} 
 		catch(CryptoInitializationException e) 
 		{
@@ -174,49 +164,18 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		server.createAmplifierXmlRpcServer();
 		System.out.println("Waiting for connection...");
 	}
+*/
 
-
-	MartusAmplifierServer(File dir) throws MartusCrypto.CryptoInitializationException
+	public ServerForAmplifiers(MartusServer coreServerToUse) throws MartusCrypto.CryptoInitializationException
 	{
-		security = new MartusSecurity();
+		coreServer = coreServerToUse;
 		
-		dataDirectory = dir;
-		
-		triggerDirectory = new File(dataDirectory, ADMINTRIGGERDIRECTORY);
-		if(!triggerDirectory.exists())
-		{
-			triggerDirectory.mkdirs();
-		}
-
-		startupConfigDirectory = new File(dataDirectory,ADMINSTARTUPCONFIGDIRECTORY);
-		if(!startupConfigDirectory.exists())
-		{
-			startupConfigDirectory.mkdirs();
-		}
-
 		amplifierHandler = new ServerSideAmplifierHandler(this);
-		keyPairFile = new File(startupConfigDirectory, getKeypairFilename());
-		
-		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);
-		
-		Timer shutdownRequestTimer = new Timer(true);
- 		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
- 		shutdownRequestTimer.schedule(shutdownRequestTaskMonitor, IMMEDIATELY, shutdownRequestIntervalMillis);
 	}
 	
 	public Database getDatabase()
 	{
-		return database;
-	}
-	
-	public void setDatabase(Database databaseToUse)
-	{
-		database = databaseToUse;
-	}
-	
-	public MartusCrypto getSecurity()
-	{
-		return security;
+		return coreServer.getDatabase();
 	}
 	
 	AmplifierNetworkInterface getAmplifierHandler()
@@ -229,21 +188,9 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		return false;
 	}
 	
-	boolean hasAccount()
-	{
-		return keyPairFile.exists();
-	}
-	
-	void loadAccount(String passphrase) throws Exception
-	{
-		FileInputStream in = new FileInputStream(keyPairFile);
-		readKeyPair(in, passphrase);
-		in.close();
-	}
-	
 	public String getAccountId()
 	{
-		return security.getPublicKeyString();
+		return getSecurity().getPublicKeyString();
 	}
 	
 	public void createAmplifierXmlRpcServer()
@@ -255,38 +202,37 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	public void createAmplifierXmlRpcServerOnPort(int port)
 	{
 		if(MartusSecureWebServer.security == null)
-			MartusSecureWebServer.security = security;
+			MartusSecureWebServer.security = getSecurity();
 
+		log("Opening port " + port + " for amplifiers...");
 		MartusAmplifierXmlRpcServer.createSSLXmlRpcServer(getAmplifierHandler(), port);
 	}
 
 	public Vector getServerInformation()
 	{
-		if(serverMaxLogging)
-			logging("getServerInformation");
+		log("getServerInformation");
 			
-		if( isShutdownRequested() )
+		if( coreServer.isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 				
 		Vector result = new Vector();
 		try
 		{
-			String publicKeyString = security.getPublicKeyString();
+			String publicKeyString = getSecurity().getPublicKeyString();
 			byte[] publicKeyBytes = Base64.decode(publicKeyString);
 			ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-			byte[] sigBytes = security.createSignatureOfStream(in);
+			byte[] sigBytes = getSecurity().createSignatureOfStream(in);
 			
 			result.add(NetworkInterfaceConstants.OK);
 			result.add(publicKeyString);
 			result.add(Base64.encode(sigBytes));
-			if(serverMaxLogging)
-				logging("getServerInformation : Exit OK");
+			log("getServerInformation : Exit OK");
 		}
 		catch(Exception e)
 		{
 			result.add(NetworkInterfaceConstants.SERVER_ERROR);
 			result.add(e.toString());
-			logging("getServerInformation SERVER ERROR" + e);			
+			log("getServerInformation SERVER ERROR" + e);			
 		}
 		return result;
 	}
@@ -294,10 +240,9 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 
 	public Vector downloadBulletin(String authorAccountId, String bulletinLocalId)
 	{
-		if(serverMaxLogging)
-			logging("downloadBulletin " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
+		log("downloadBulletin " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
 			
-		if( isShutdownRequested() )
+		if( coreServer.isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 
 		Vector result = new Vector();
@@ -306,7 +251,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		DatabaseKey headerKey = DatabaseKey.createSealedKey(uid);
 		if(!getDatabase().doesRecordExist(headerKey))
 		{
-			logging("downloadBulletin NOT_FOUND");
+			log("downloadBulletin NOT_FOUND");
 			result.add(NetworkInterfaceConstants.NOT_FOUND);
 		}
 		else
@@ -325,12 +270,11 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 				MartusUtilities.deleteInterimFileAndSignature(tempFile);
 				result.add(NetworkInterfaceConstants.OK);
 				result.add(zipString);
-				if(serverMaxLogging)
-					logging("downloadBulletin : Exit OK");
+				log("downloadBulletin : Exit OK");
 			}
 			catch(Exception e)
 			{
-				logging("downloadBulletin SERVER_ERROR " + e);
+				log("downloadBulletin SERVER_ERROR " + e);
 				//System.out.println("MartusAmplifierServer.download: " + e);
 				result.add(NetworkInterfaceConstants.SERVER_ERROR);
 			}
@@ -341,16 +285,15 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId,
 		int chunkOffset, int maxChunkSize) 
 	{
-		if(serverMaxLogging)
 		{
 			StringBuffer logMsg = new StringBuffer();
 			logMsg.append("getBulletinChunk request by " + getClientAliasForLogging(myAccountId));
 			logMsg.append("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
 			logMsg.append("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
-			logging(logMsg.toString());
+			log(logMsg.toString());
 		}
 	
-		if( isShutdownRequested() )
+		if( coreServer.isShutdownRequested() )
 			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
 
 		DatabaseKey headerKey =	findHeaderKeyInDatabase(authorAccountId, bulletinLocalId);
@@ -361,31 +304,27 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 					authorAccountId, bulletinLocalId,
 					chunkOffset, maxChunkSize);
 		
-		if(serverMaxLogging)
-			logging("  exit: " + result.get(0));
+		log("  exit: " + result.get(0));
 		return result;
 	}
 
 	public String authenticateServer(String tokenToSign)
 	{
-		if(serverMaxLogging)
-			logging("authenticateServer");
+		log("authenticateServer");
 		try 
 		{
 			InputStream in = new ByteArrayInputStream(Base64.decode(tokenToSign));
-			byte[] sig = security.createSignatureOfStream(in);
+			byte[] sig = getSecurity().createSignatureOfStream(in);
 			return Base64.encode(sig);
 		} 
 		catch(MartusSignatureException e) 
 		{
-			if(serverMaxLogging)
-				logging("SERVER_ERROR: " + e);
+			log("SERVER_ERROR: " + e);
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		} 
 		catch(InvalidBase64Exception e) 
 		{
-			if(serverMaxLogging)
-				logging("INVALID_DATA: " + e);
+			log("INVALID_DATA: " + e);
 			return NetworkInterfaceConstants.INVALID_DATA;
 		}
 	}
@@ -416,38 +355,13 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		MartusCrypto.AuthorizationFailedException,
 		MartusCrypto.InvalidKeyPairFileVersionException
 	{
-		security.readKeyPair(in, passphrase);
-	}
-	
-	public static File getDefaultDataDirectory()
-	{
-		String dataDirectory = null;
-		if(System.getProperty("os.name").indexOf("Windows") >= 0)
-		{
-			dataDirectory = "C:/MartusServer/";
-		}
-		else
-		{
-			dataDirectory = "/var/MartusServer/";
-		}
-		File file = new File(dataDirectory);
-		if(!file.exists())
-		{
-			file.mkdirs();
-		}
-		
-		return file;
-	}
-	
-	public static String getKeypairFilename()
-	{
-		return KEYPAIRFILENAME;
+		getSecurity().readKeyPair(in, passphrase);
 	}
 	
 	private Vector returnSingleResponseAndLog( String message, String responseCode )
 	{
 		if( message.length() > 0 )
-			logging( message.toString());
+			log( message.toString());
 		
 		Vector response = new Vector();
 		response.add( responseCode );
@@ -502,11 +416,9 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 			RecordHiddenException 
 	{
 		Vector result = new Vector();
-		if(serverMaxLogging)
-			logging("entering createInterimBulletinFile");
+		log("entering createInterimBulletinFile");
 		File tempFile = createInterimBulletinFile(headerKey);
-		if(serverMaxLogging)
-			logging("createInterimBulletinFile done");
+		log("createInterimBulletinFile done");
 		int totalLength = MartusUtilities.getCappedFileLength(tempFile);
 		
 		int chunkSize = totalLength - chunkOffset;
@@ -535,8 +447,7 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		result.add(new Integer(totalLength));
 		result.add(new Integer(chunkSize));
 		result.add(zipString);
-		if(serverMaxLogging)
-			logging("downloadBulletinChunk : Exit " + result.get(0));
+		log("downloadBulletinChunk : Exit " + result.get(0));
 		return result;
 	}
 
@@ -553,16 +464,15 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
 		if(tempFile.exists() && tempFileSignature.exists())
 		{
-			if(verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
+			if(verifyBulletinInterimFile(tempFile, tempFileSignature, getSecurity().getPublicKeyString()))
 				return tempFile;
 		}
 		MartusUtilities.deleteInterimFileAndSignature(tempFile);
-		BulletinZipUtilities.exportPublicBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
-		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
-		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
+		BulletinZipUtilities.exportPublicBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, getSecurity());
+		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, getSecurity());
+		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, getSecurity().getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();
-		if(serverMaxLogging)
-			logging("    Total file size =" + tempFile.length());
+		log("    Total file size =" + tempFile.length());
 		
 		return tempFile;
 	}
@@ -571,12 +481,12 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 	{
 			try 
 			{
-				MartusUtilities.verifyFileAndSignature(bulletinZipFile, bulletinSignatureFile, security, accountId);
+				MartusUtilities.verifyFileAndSignature(bulletinZipFile, bulletinSignatureFile, getSecurity(), accountId);
 				return true;
 			} 
 			catch (MartusUtilities.FileVerificationException e) 
 			{
-				logging("    verifyBulletinInterimFile: " + e);
+				log("    verifyBulletinInterimFile: " + e);
 			}
 		return false;	
 	}
@@ -586,36 +496,14 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		return getDatabase().getFolderForAccount(clientId);
 	}
 	
-	public boolean isShutdownRequested()
-	{
-		return(shutdownFile.exists());
-	}
-	
 	public synchronized void clientConnectionStart()
 	{
 		//logging("start");
-		incrementActiveClientsCounter();
 	}
 	
 	public synchronized void clientConnectionExit()
 	{
 		//logging("exit");
-		decrementActiveClientsCounter();
-	}
-	
-	public synchronized int getNumberActiveClients()
-	{
-		return activeClientsCounter;
-	}
-	
-	public synchronized void incrementActiveClientsCounter()
-	{
-		activeClientsCounter++;
-	}
-	
-	public synchronized void decrementActiveClientsCounter()
-	{
-		activeClientsCounter--;
 	}
 	
 	protected String getCurrentClientIp()
@@ -634,31 +522,11 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 		return ip;
 	}
 
-	public synchronized void logging(String message)
+	public synchronized void log(String message)
 	{
-		if(serverLogging)
-		{
-			Timestamp stamp = new Timestamp(System.currentTimeMillis());
-			SimpleDateFormat formatDate = new SimpleDateFormat("EE MM/dd HH:mm:ss z");
-			String threadId = getCurrentClientIp();
-			
-			String logEntry = formatDate.format(stamp) + " " + getServerName() + ": " + threadId + ": " + message;
-			System.out.println(logEntry);
-		}
+		coreServer.log(message);
 	}
 	
-	public void setServerName(String servername)
-	{
-		serverName = servername;
-	}
-	
-	String getServerName()
-	{
-		if(serverName == null)
-			return "host/address";
-		return serverName;
-	}
-
 	BulletinHeaderPacket loadBulletinHeaderPacket(Database db, DatabaseKey key)
 		throws
 			IOException,
@@ -669,66 +537,18 @@ public class MartusAmplifierServer implements NetworkInterfaceConstants
 			DecryptionException
 	{
 		BulletinHeaderPacket bhp = new BulletinHeaderPacket(key.getAccountId());
-		InputStreamWithSeek in = db.openInputStream(key, security);
-		bhp.loadFromXml(in, security);
+		InputStreamWithSeek in = db.openInputStream(key, getSecurity());
+		bhp.loadFromXml(in, getSecurity());
 		in.close();
 		return bhp;
 	}
 
-	public void serverExit(int exitCode) throws Exception
+	public MartusCrypto getSecurity()
 	{
-		System.exit(exitCode);
+		return coreServer.getSecurity();
 	}
-	
-	private class ShutdownRequestMonitor extends TimerTask
-	{
-		public void run()
-		{
-			if( isShutdownRequested() && getNumberActiveClients() == 0 )
-			{
-				logging("Shutdown request received.");
 
-				shutdownFile.delete();
-				logging("Server has exited.");
-				try
-				{
-					serverExit(0);
-				}
-				catch(Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-		}
-	}
-	
-
-	Database database;
+	MartusServer coreServer;
 
 	ServerSideAmplifierHandler amplifierHandler;
-	
-	public MartusCrypto security;
-	File keyPairFile;
-	String serverName;
-	public File dataDirectory;
-
-	public File shutdownFile;
-	public File triggerDirectory;
-	public File startupConfigDirectory;
-
-	private int activeClientsCounter;
-	private static boolean serverLogging;
-	private static boolean serverMaxLogging;
-	public static boolean serverSSLLogging;
-
-	
-	private static final String KEYPAIRFILENAME = "keypair.dat";
-	private static final String MARTUSSHUTDOWNFILENAME = "amp-exit";
-	
-	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
-	private static final String ADMINSTARTUPCONFIGDIRECTORY = "deleteOnStartup";
-	
-	private final long IMMEDIATELY = 0;
-	private static final long shutdownRequestIntervalMillis = 1000;
-
 }

@@ -76,6 +76,7 @@ import org.martus.common.packet.Packet.SignatureVerificationException;
 import org.martus.common.packet.Packet.WrongPacketTypeException;
 import org.martus.server.core.ServerConstants;
 import org.martus.server.core.ServerFileDatabase;
+import org.martus.server.foramplifiers.ServerForAmplifiers;
 import org.martus.server.formirroring.ServerForMirroring;
 import org.martus.util.Base64;
 import org.martus.util.InputStreamWithSeek;
@@ -112,6 +113,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.out.println("Setting up sockets (this may take up to a minute or longer)...");
 			server.initializeServerForClients();
 			server.initializeServerForMirroring();
+			server.initializeServerForAmplifiers();
 
 			server.startBackgroundTimers();
 			
@@ -153,6 +155,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		security = new MartusSecurity();
 		serverForClients = new ServerForClients(this);
 		serverForMirroring = new ServerForMirroring(this, logger);
+		serverForAmplifiers = new ServerForAmplifiers(this);
 		failedUploadRequestsPerIp = new Hashtable();
 	}
 
@@ -1677,6 +1680,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		serverForClients.handleSSL(NetworkInterfaceXmlRpcConstants.defaultSSLPorts);
 		serverForClients.displayClientStatistics();
 	}
+	
+	private void initializeServerForAmplifiers()
+	{
+		serverForAmplifiers.createAmplifierXmlRpcServer();
+	}
 
 	private void deleteRunningFile()
 	{
@@ -1867,8 +1875,11 @@ public class MartusServer implements NetworkInterfaceConstants
 
 
 	public MartusCrypto security;
+
 	ServerForMirroring serverForMirroring;
 	public ServerForClients serverForClients;
+	ServerForAmplifiers serverForAmplifiers;
+	
 	public File dataDirectory;
 	Database database;
 	private String complianceStatement; 

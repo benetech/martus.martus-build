@@ -4,15 +4,17 @@ import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
 import org.martus.common.crypto.MartusCrypto;
+import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.network.NetworkInterfaceConstants;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.util.ByteArrayInputStreamWithSeek;
+import org.martus.util.Base64.InvalidBase64Exception;
 
 public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 {
-	public ServerSideAmplifierHandler(MartusAmplifierServer serverToUse)
+	public ServerSideAmplifierHandler(ServerForAmplifiers serverToUse)
 	{
 		server = serverToUse;
 	}
@@ -46,25 +48,38 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 		}
 		
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		try
 		{
-			result.add(NetworkInterfaceConstants.SIG_ERROR);
+			String publicCode = MartusSecurity.getFormattedPublicCode(myAccountId); 
+			if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
+			{
+				result.add(NetworkInterfaceConstants.SIG_ERROR);
+				log("Amp getAccountIds bad sig: " + publicCode);
+				return result;
+			}
+			
+			log("Amp getAccountIds: " + publicCode);
+			AccountVisitor visitor = new AccountVisitor();
+			server.getDatabase().visitAllAccounts(visitor);
+			
+			result.add(NetworkInterfaceConstants.OK);
+			result.add(visitor.getAccounts());
+			log("Amp getAccountIds exit OK");
 			return result;
 		}
-		
-		AccountVisitor visitor = new AccountVisitor();
-		server.getDatabase().visitAllAccounts(visitor);
-
-		result.add(NetworkInterfaceConstants.OK);
-		result.add(visitor.getAccounts());
-
-		return result;
+		catch (InvalidBase64Exception e)
+		{
+			log("Amp getAccountIds ERROR");
+			e.printStackTrace();
+			result.add(NetworkInterfaceConstants.SERVER_ERROR);
+			return result;
+		}
 	}
 	
 	public Vector getPublicBulletinUniversalIds(String myAccountId, Vector parameters, String signature)
 	{
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(NetworkInterfaceConstants.SIG_ERROR);
 			return result;
@@ -84,7 +99,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 	public Vector getAmplifierBulletinChunk(String myAccountId, Vector parameters, String signature)
 	{
 		Vector result = new Vector();
-		if(!isSignatureOk(myAccountId, parameters, signature, server.security))
+		if(!isSignatureOk(myAccountId, parameters, signature, server.getSecurity()))
 		{
 			result.add(NetworkInterfaceConstants.SIG_ERROR);
 			return result;
@@ -120,7 +135,7 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 					return;
 				}
 							
-				String headerXml = server.getDatabase().readRecord(key, server.security);
+				String headerXml = server.getDatabase().readRecord(key, server.getSecurity());
 				byte[] headerBytes = headerXml.getBytes("UTF-8");
 				
 				ByteArrayInputStreamWithSeek headerIn = new ByteArrayInputStreamWithSeek(headerBytes);
@@ -145,5 +160,10 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 		return verifier.verifySignatureOfVectorOfStrings(parameters, myAccountId, signature);
 	}
 	
-	MartusAmplifierServer server;
+	void log(String message)
+	{
+		server.log(message);
+	}
+	
+	ServerForAmplifiers server;
 }
