@@ -321,6 +321,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertNotNull("Should have created Outbox folder", fOutbox);
 		assertEquals("Outbox/Draft", false, fOutbox.canAdd(Bulletin.STATUSDRAFT));
 		assertEquals("Outbox/Sealed", true, fOutbox.canAdd(Bulletin.STATUSSEALED));
+//		assertEquals("Incorrect Outbox Name", BulletinStore.OUTBOX_FOLDER, fOutbox.getName());
 
 		BulletinFolder fSent = store.getFolderSent();
 		assertNotNull("Should have created Sent folder", fSent);
