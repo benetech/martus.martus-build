@@ -60,8 +60,6 @@ public class MartusFlexidate
 		int plus = flexiDateStr.indexOf(FLEXIDATE_RANGE_DELIMITER);
 		String dateStr = flexiDateStr;
 		int range =0;
-		Date date = null;
-			
 		if (plus > 0)
 		{
 			dateStr = flexiDateStr.substring(0, plus);

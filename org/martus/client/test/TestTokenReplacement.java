@@ -93,7 +93,7 @@ public class TestTokenReplacement extends TestCaseEnhanced
 		
 		try
 		{
-			String[] arrayResult = TokenReplacement.replaceTokens(stringOriginalArray, tokens);
+			TokenReplacement.replaceTokens(stringOriginalArray, tokens);
 			fail("Should have thrown since token is not a reg expression");
 		}
 		catch (TokenInvalidException expected)

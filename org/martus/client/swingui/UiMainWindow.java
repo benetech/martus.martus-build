@@ -1371,7 +1371,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	
 	void displayScrollableMessage(String titleTag, String message, String okButtonTag, Map tokenReplacement) 
 	{
-		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, "", "", message, tokenReplacement);
+		new UiShowScrollableTextDlg(this, titleTag, okButtonTag, "", "", message, tokenReplacement);
 	}
 
 	class PublicInfoFileFilter extends FileFilter

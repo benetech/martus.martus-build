@@ -252,7 +252,6 @@ public final class Flexidate implements java.lang.Comparable {
     public Calendar getCalendarHigh( ) {
         if ( calendarHigh == null ) {
             int context = getRangeContext();
-            Calendar calendar = new GregorianCalendar( );
             switch ( context ) {
                 case NO_CONTEXT:
                     // Need to define better highest unknown
@@ -384,6 +383,9 @@ public final class Flexidate implements java.lang.Comparable {
 /*=============================================================================
  *
  *  $Log$
+ *  Revision 1.1  2003/08/15 16:28:52  uid528
+ *  added new package for hrvd (AAAS flexidate source and proportiy files) and added a new martus flexidate class for wrapping the flexidate.
+ *
  *  Revision 1.3  2003/06/18 20:57:43  rkaplan
  *  Stupendous merge from other branches.
  *  Seperated biography from case.

@@ -114,7 +114,6 @@ abstract public class UiBulletinComponentSection extends JPanel
 
 	private UiField createField(FieldSpec fieldSpec)
 	{
-		String fieldName = fieldSpec.getTag();
 		UiField field = null;
 
 		switch(fieldSpec.getType())
