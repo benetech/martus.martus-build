@@ -22,9 +22,9 @@ public class ChangeServerPassphrase
 				+ "\nWe strongly recommend that you make sure you have a backup copy before running this program. "
 				+ "\nAlso, after successfully changing the password, we strongly recommend that you create a backup of the new keypair.dat file.\n");
 
-			if( args.length == 0 || !args[0].startsWith("--file"))
+			if( args.length == 0 || !args[0].startsWith("--keypair"))
 			{
-					System.err.println("Error: Incorrect argument.\nChangeServerPassphrase --file=/path/keypair.dat" );
+					System.err.println("Error: Incorrect argument.\nChangeServerPassphrase --keypair=/path/keypair.dat" );
 					System.err.flush();
 					System.exit(2);				
 			}

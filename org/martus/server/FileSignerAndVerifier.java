@@ -19,32 +19,34 @@ public class FileSignerAndVerifier
 {
 	public static void main(String[] args) throws Exception
 	{
-			System.out.println("FileSignerVerifier:\nUse this program to create a signature file of a specified file with the server key"
-								+ "or to verify a server file against it's signature file.");
-			boolean isSigningOperation = true;
-			File fileToSign = null;
-			File fileToVerify = null;
-			File fileSignature = null;
+			System.out.println("FileSignerVerifier:\nUse this program to create a signature file of a specified file"
+								+ " or to verify a file against it's signature file.");
 			File keyPairFile = null;
-			if( args.length == 3 )
+			File fileForOperation = null;
+			
+			if( args.length != 2 )
 			{
-				if( args[0].compareToIgnoreCase("-sign") != 0 ) usage();
-				fileToSign = new File(args[1]);
-				keyPairFile = new File(args[2]);
-				if(!fileToSign.exists() || !keyPairFile.exists()) usage();
+				System.err.println("\nUsage:\n FileSignerVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
+				System.exit(2);
 			}
-			else if(args.length == 4 )
+			
+			for (int i = 0; i < args.length; i++)
 			{
-				if( args[0].compareToIgnoreCase("-verify") != 0 ) usage();
-				fileToVerify = new File(args[1]);
-				fileSignature = new File(args[2]);
-				keyPairFile = new File(args[3]);
-				if(!fileToVerify.exists() || !fileSignature.exists() || !keyPairFile.exists()) usage();
-				isSigningOperation = false;
+				if(args[i].startsWith("--keypair"))
+				{
+					keyPairFile = new File(args[i].substring(args[i].indexOf("=")+1));
+				}
+				
+				if(args[i].startsWith("--file"))
+				{
+					fileForOperation = new File(args[i].substring(args[i].indexOf("=")+1));
+				}
 			}
-			else
+			
+			if(keyPairFile == null || fileForOperation == null || !keyPairFile.isFile())
 			{
-				usage();
+				System.err.println("\nUsage:\n FileSignerVerifier --keypair=<pathOfKeyFile> --file=<pathToFileToSignOrVerify>");
+				System.exit(2);
 			}
 
 			System.out.print("Enter server passphrase:");
@@ -55,47 +57,42 @@ public class FileSignerAndVerifier
 			try
 			{
 				String passphrase = reader.readLine();
-
 				security = loadCurrentMartusSecurity(keyPairFile, passphrase);
-
 			}
 			catch(Exception e)
 			{
-				System.out.println("FileSignerVerifier.main: " + e);
+				System.err.println("FileSignerVerifier.main: " + e);
 				System.exit(3);
 			}
 			
-			if(isSigningOperation)
+			if(fileForOperation.getName().endsWith(".sig"))
 			{
-				File signatureFile = MartusUtilities.createSignatureFileFromFile(fileToSign, security);
-
-				System.out.println("Signature file created at " + signatureFile.getAbsolutePath());
-			}
-			else
-			{
+				File fileToVerify = null;
 				try
 				{
-					MartusUtilities.verifyFileAndSignature(fileToVerify, fileSignature, security, security.getPublicKeyString());
+					String filename = fileForOperation.getAbsolutePath();
+					filename = filename.substring(0, filename.indexOf(".sig"));
+					fileToVerify = new File(filename);
+					MartusUtilities.verifyFileAndSignature(fileToVerify, fileForOperation, security, security.getPublicKeyString());
 				}
 				catch(FileVerificationException e)
 				{
-					System.out.println("File " + fileToVerify.getAbsolutePath()
+					System.err.println("File " + fileToVerify.getAbsolutePath()
 										+ " did not verify against signature file "
-										+ fileSignature.getAbsolutePath() + ".");
-					throw new FileVerificationException();
+										+ fileForOperation.getAbsolutePath() + ".");
+					System.exit(3);
 				}
 				
 				System.out.println("File " + fileToVerify.getAbsolutePath()
 									+ " verified successfully against signature file "
-									+ fileSignature.getAbsolutePath() + ".");
+									+ fileForOperation.getAbsolutePath() + ".");
 			}
-			System.out.flush();
-	}
-	
-	private static void usage()
-	{
-		System.out.println("\nUsage:\n FileSignerVerifier [-sign <pathOfFileToSign> || -verify <pathOfFileToVerify> <pathOfSignatureFile>] <pathOfKeyFile>");
-		System.exit(1);
+			else
+			{
+				File signatureFile = MartusUtilities.createSignatureFileFromFile(fileForOperation, security);
+				System.out.println("Signature file created at " + signatureFile.getAbsolutePath());
+			}
+			System.exit(0);
 	}
 	
 	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)

@@ -17,9 +17,9 @@ public class IsPassphraseValid
 {
 	public static void main(String[] args)
 	{
-			if( args.length == 0 || !args[0].startsWith("--file") )
+			if( args.length == 0 || !args[0].startsWith("--keypair") )
 			{
-					System.err.println("Error: Incorrect argument.\nIsPassphraseValid --file=/path/keypair.dat" );
+					System.err.println("Error: Incorrect argument.\nIsPassphraseValid --keypair=/path/keypair.dat" );
 					System.err.flush();
 					System.exit(2);
 			}
