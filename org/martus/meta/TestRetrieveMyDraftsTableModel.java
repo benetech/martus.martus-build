@@ -55,12 +55,13 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	{
 		assertEquals(app.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(app.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
+		assertEquals(app.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
 	}
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(2, modelWithoutData.getColumnCount());
-		assertEquals(2, modelWithData.getColumnCount());
+		assertEquals(3, modelWithoutData.getColumnCount());
+		assertEquals(3, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()
@@ -73,12 +74,14 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	{
 		assertEquals("flag", true, modelWithData.isCellEditable(1,0));
 		assertEquals("title", false, modelWithData.isCellEditable(1,1));
+		assertEquals("size", false, modelWithData.isCellEditable(1,2));
 	}
 	
 	public void testGetColumnClass()
 	{
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
+		assertEquals(String.class, modelWithData.getColumnClass(2));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -90,6 +93,8 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		assertEquals("start title", title2, modelWithData.getValueAt(1,1));
 		modelWithData.setValueAt(title2+title2, 1,1);
 		assertEquals("keep title", title2, modelWithData.getValueAt(1,1));
+
+		assertEquals("b2 size", new Integer(b2Size).toString(), modelWithData.getValueAt(1,2));
 	}
 	
 	public void testSetAllFlags()
@@ -131,8 +136,8 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
 			Vector list = new Vector();
-			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
-			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE) + "=" + b0Size);
+			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE) + "=" + b2Size);
 			result.add(list);
 			return result;
 		}
@@ -149,6 +154,9 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;
+	int b0Size = 3000;
+	int b1Size = 5000;
+	int b2Size = 8000;
 
 	RetrieveMyDraftsTableModel modelWithData;
 	RetrieveMyDraftsTableModel modelWithoutData;

@@ -37,6 +37,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b0.setAllPrivate(true);
 		b0.setHQPublicKey(hqApp.getAccountId());
 		b0.save();
+		b0Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b0.getBulletinHeaderPacket());
 
 		b1 = fieldApp1.createBulletin();
 		b1.set(b1.TAGTITLE, title1);
@@ -44,6 +45,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b1.setAllPrivate(false);
 		b1.setHQPublicKey(hqApp.getAccountId());
 		b1.save();
+		b1Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b1.getBulletinHeaderPacket());
 
 		b2 = fieldApp2.createBulletin();
 		b2.set(b2.TAGTITLE, title2);
@@ -51,6 +53,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		b2.setAllPrivate(true);
 		b2.setHQPublicKey(hqApp.getAccountId());
 		b2.save();
+		b2Size = MartusUtilities.getBulletinSize(fieldApp1.getStore().getDatabase(), b2.getBulletinHeaderPacket());
 	
 		testServer = new MockServer();
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
@@ -87,12 +90,13 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals(fieldApp1.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(fieldApp1.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(fieldApp1.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
+		assertEquals(fieldApp1.getFieldLabel("BulletinSize"), modelWithData.getColumnName(3));
 	}
 	
 	public void testGetColumnCount()
 	{
-		assertEquals(3, modelWithoutData.getColumnCount());
-		assertEquals(3, modelWithData.getColumnCount());
+		assertEquals(4, modelWithoutData.getColumnCount());
+		assertEquals(4, modelWithData.getColumnCount());
 	}
 	
 	public void testGetRowCount()
@@ -106,6 +110,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals("flag", true, modelWithData.isCellEditable(1,0));
 		assertEquals("title", false, modelWithData.isCellEditable(1,1));
 		assertEquals("author", false, modelWithData.isCellEditable(1,2));
+		assertEquals("size", false, modelWithData.isCellEditable(1,3));
 	}
 	
 	public void testGetColumnClass()
@@ -113,6 +118,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
 		assertEquals(String.class, modelWithData.getColumnClass(2));
+		assertEquals(String.class, modelWithData.getColumnClass(3));
 	}
 	
 	public void testGetAndSetValueAt()
@@ -132,6 +138,10 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		assertEquals("start title", title2, modelWithData.getValueAt(2,1));
 		modelWithData.setValueAt(title2+title2, 2,1);
 		assertEquals("keep title", title2, modelWithData.getValueAt(2,1));
+		
+		assertTrue("B0 Size too small", Integer.parseInt((String)(modelWithData.getValueAt(0,3))) > 2000);
+		assertTrue("B1 Size too small", Integer.parseInt((String)(modelWithData.getValueAt(1,3))) > 2000);
+		assertTrue("B2 Size too small", Integer.parseInt((String)(modelWithData.getValueAt(2,3))) > 2000);
 	}
 	
 	public void testSetAllFlags()
@@ -189,11 +199,11 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 			result.add(NetworkInterfaceConstants.OK);
 			Vector list = new Vector();
 			if(authorAccountId.equals(b0.getAccount()))
-				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId());
+				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId() + "=" + b0Size);
 			if(authorAccountId.equals(b1.getAccount()))
-				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId());
+				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId() + "=" + b0Size);
 			if(authorAccountId.equals(b2.getAccount()))
-				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
+				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId() + "=" + b0Size);
 			result.add(list);
 			return result;
 		}
@@ -257,6 +267,9 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;
+	int b0Size;
+	int b1Size;
+	int b2Size;
 
 	RetrieveHQTableModel modelWithData;
 	RetrieveHQTableModel modelWithoutData;

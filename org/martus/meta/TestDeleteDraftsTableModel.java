@@ -59,20 +59,22 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 
 	public void testGetColumnCount()
 	{
-		assertEquals(2, modelWithoutData.getColumnCount());
-		assertEquals(2, modelWithData.getColumnCount());
+		assertEquals(3, modelWithoutData.getColumnCount());
+		assertEquals(3, modelWithData.getColumnCount());
 	}
 	
 	public void testGetColumnName()
 	{
 		assertEquals(app.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(0));
 		assertEquals(app.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
+		assertEquals(app.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
 	}
 	
 	public void testGetColumnClass()
 	{
 		assertEquals(Boolean.class, modelWithData.getColumnClass(0));
 		assertEquals(String.class, modelWithData.getColumnClass(1));
+		assertEquals(String.class, modelWithData.getColumnClass(2));
 	}
 	
 	public void testRowCount()
@@ -106,9 +108,9 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 			Vector list = new Vector();
 			if(hasData)
 			{
-				list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
-				list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE));
-				list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+				list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE)+"=3000");
+				list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE)+"=3100");
+				list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE)+"=3200");
 			}
 			result.add(list);
 			return result;

@@ -944,10 +944,14 @@ public class MartusApp
 		int at = pair.indexOf("=");
 		if(at < 0)
 			throw new ServerErrorException("MartusApp.createSummaryFromString: " + pair);
-			
+		int at2 = pair.lastIndexOf("=");
+		if(at == at2)
+			throw new ServerErrorException("MartusApp.createSummaryFromString: " + pair);
+				
 		String bulletinLocalId = pair.substring(0, at);
-		String summary = pair.substring(at + 1);
+		String summary = pair.substring(at + 1, at2);
 		String author = "";
+		int size = Integer.parseInt(pair.substring(at2+1));
 		if(FieldDataPacket.isValidLocalId(summary))
 		{
 			String packetlocalId = summary;
@@ -969,7 +973,7 @@ public class MartusApp
 			if(summary.length() > 0)
 				summary = summary.substring(1);
 		}
-		BulletinSummary bulletinSummary = new BulletinSummary(accountId, bulletinLocalId, summary, author);
+		BulletinSummary bulletinSummary = new BulletinSummary(accountId, bulletinLocalId, summary, author, size);
 		return bulletinSummary;
 	}
 	

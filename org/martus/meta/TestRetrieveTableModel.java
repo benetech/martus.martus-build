@@ -447,8 +447,8 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Vector desiredSealedResult = new Vector();
 		desiredSealedResult.add(NetworkInterfaceConstants.OK);
 		Vector list = new Vector();
-		list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId());
-		list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
+		list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId()+"=2000");
+		list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId()+"=2000");
 		desiredSealedResult.add(list);
 		mockServer.listFieldOfficeSummariesResponse = desiredSealedResult;	
 
@@ -472,7 +472,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		Vector desiredDraftResult = new Vector();
 		desiredDraftResult.add(NetworkInterfaceConstants.OK);
 		Vector list2 = new Vector();
-		list2.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId());
+		list2.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId()+"=3400");
 		desiredDraftResult.add(list2);
 		mockServer.listFieldOfficeSummariesResponse = desiredDraftResult;	
 
@@ -503,9 +503,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
 			Vector list = new Vector();
-			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
-			list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE));
-			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE) + "=3000");
+			list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE) + "=3200");
+			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE) + "=3100");
 			result.add(list);
 			return result;
 		}

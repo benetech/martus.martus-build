@@ -2,13 +2,13 @@
 package org.martus.client;
 public class BulletinSummary
 {
-	public BulletinSummary(String accountIdToUse, String localIdToUse, String titleToUse, String authorToUse)
+	public BulletinSummary(String accountIdToUse, String localIdToUse, String titleToUse, String authorToUse, int sizeToUse)
 	{
 		accountId = accountIdToUse;
 		localId = localIdToUse;
 		title = titleToUse;
 		author = authorToUse;
-		size = 0;
+		size = sizeToUse;
 	}
 	
 	public void setChecked(boolean newValue)
