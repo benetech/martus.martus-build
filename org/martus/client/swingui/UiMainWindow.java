@@ -118,6 +118,7 @@ import org.martus.swing.UiFileChooser;
 import org.martus.swing.UiNotifyDlg;
 import org.martus.swing.Utilities;
 import org.martus.swing.Utilities.Delay;
+import org.martus.util.UnicodeWriter;
 import org.martus.util.Base64.InvalidBase64Exception;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
@@ -1372,8 +1373,8 @@ if(result == NEW_ACCOUNT)
 	{
 		try
 		{
-			FileOutputStream output = new FileOutputStream(newBackupFile);
-			output.write(dataToSave.getBytes());
+			UnicodeWriter output = new UnicodeWriter(newBackupFile);
+			output.write(dataToSave);
 			output.close();
 			return true;
 		}
