@@ -368,7 +368,7 @@ public class FileDatabase extends Database
 			}
 			catch (RuntimeException nothingWeCanDoAboutIt)
 			{
-				// nothing we can do, so ignore it
+				// TODO: nothing we can do, so ignore it
 			}
 		}
 	}
