@@ -454,11 +454,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		file.add(new ActionMenuExit());
 
 		JMenu edit = new JMenu(app.getButtonLabel("edit"));
-		edit.add(new ActionMenuEdit());
+		actionMenuEdit = new ActionMenuEdit();
+		edit.add(actionMenuEdit);
 
 		edit.addSeparator();
-		edit.add(new ActionMenuCut());
-		edit.add(new ActionMenuCopy());
+		actionMenuCut = new ActionMenuCut();
+		edit.add(actionMenuCut);
+		actionMenuCopy = new ActionMenuCopy();
+		edit.add(actionMenuCopy);
 		actionMenuPaste = new ActionMenuPaste();
 		edit.add(actionMenuPaste);
 
@@ -1584,6 +1587,10 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
+	static private boolean isAnyBulletinSelected(UiMainWindow window)
+	{
+		return (window.table.getSelectedBulletins().length > 0);
+	}
 	
 	class ActionMenuEdit extends AbstractAction
 	{
@@ -1595,6 +1602,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public void actionPerformed(ActionEvent ae)
 		{
 			doEditBulletin();
+		}
+
+		public boolean isEnabled()
+		{
+			return (table.getSingleSelectedBulletin() != null);
 		}
 	}
 	
@@ -1609,6 +1621,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			doCutBulletin();
 		}
+
+		public boolean isEnabled()
+		{
+			return isAnyBulletinSelected(UiMainWindow.this);
+		}
 	}
 
 	class ActionMenuCopy extends AbstractAction
@@ -1621,6 +1638,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public void actionPerformed(ActionEvent ae)
 		{
 			doCopyBulletin();
+		}
+
+		public boolean isEnabled()
+		{
+			return isAnyBulletinSelected(UiMainWindow.this);
 		}
 	}
 
@@ -1639,7 +1661,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public boolean isEnabled()
 		{
 			updateName();
-			return (table.getSelectedBulletins().length > 0);
+			return isAnyBulletinSelected(UiMainWindow.this);
 		}
 
 		public void updateName() 
@@ -1672,13 +1694,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public void menuSelected(MenuEvent e)
 		{
-			actionMenuDiscard.setEnabled(actionMenuDiscard.isEnabled());
+			actionMenuEdit.setEnabled(actionMenuEdit.isEnabled());
+			actionMenuCut.setEnabled(actionMenuCut.isEnabled());
+			actionMenuCopy.setEnabled(actionMenuCopy.isEnabled());
 			actionMenuPaste.setEnabled(actionMenuPaste.isEnabled());
+			actionMenuDiscard.setEnabled(actionMenuDiscard.isEnabled());
 		}
 		
 		public void initalize()
 		{
 			//Java Bug, menu items need to be disabled before correct behavior occures.
+			actionMenuEdit.setEnabled(false);
+			actionMenuCut.setEnabled(false);
+			actionMenuCopy.setEnabled(false);
 			actionMenuPaste.setEnabled(false);
 			actionMenuDiscard.setEnabled(false);
 		}
@@ -2056,6 +2084,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private javax.swing.Timer errorChecker;
 	private String uploadResult;
 	private InactivityDetector inactivityDetector;
+	private ActionMenuEdit actionMenuEdit;
+	private ActionMenuCut actionMenuCut;
+	private ActionMenuCopy actionMenuCopy;
 	private ActionMenuPaste actionMenuPaste;
 	private ActionMenuDiscard actionMenuDiscard;
 	private UiStatusBar statusBar;
