@@ -116,6 +116,15 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 			BulletinSaver.saveToClientDatabase(b3, clientDatabase, true, clientSecurity);
 			b3 = BulletinLoader.loadFromDatabase(clientDatabase, DatabaseKey.createSealedKey(b3.getUniversalId()), clientSecurity);
 			b3ZipString = BulletinForTesting.saveToZipString(clientDatabase, b3, clientSecurity);
+
+			b4 = new Bulletin(clientSecurity);
+			b4.setAllPrivate(false);
+			b4.set(Bulletin.TAGTITLE, "Title4");
+			b4.set(Bulletin.TAGPUBLICINFO, "Details4");
+			b4.setDraft();
+			BulletinSaver.saveToClientDatabase(b4, clientDatabase, true, clientSecurity);
+			b4 = BulletinLoader.loadFromDatabase(clientDatabase, DatabaseKey.createDraftKey(b4.getUniversalId()), clientSecurity);
+			b4ZipString = BulletinForTesting.saveToZipString(clientDatabase, b4, clientSecurity);
 		}
 	}
 
@@ -175,8 +184,11 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 		pubKeyFile1.delete();
 		ampsWhoCallUs.delete();
 		
+		// a draft should be ignored by the rest of this test
+		uploadSampleBulletin(coreServer, b4.getLocalId(), b4ZipString);
 		
-		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
+		String ampAccountId = amplifier.getPublicKeyString();
+		Vector response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(ampAccountId, parameters, signature);
 		assertEquals("Authorized amp requested data failed?", ServerForAmplifiers.OK, response.get(0));
 
 		assertEquals("Failed to get list of public bulletin ids?", ServerForAmplifiers.OK, response.get(0));
@@ -185,21 +197,21 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 
 		uploadSampleBulletin(coreServer, b1.getLocalId(), b1ZipString);
 		uploadSampleBulletin(coreServer, b2.getLocalId(), b2ZipString);
-		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(ampAccountId, parameters, signature);
 		uIds = (Vector)response.get(1);
 		assertEquals("incorect # of bulletins found after uploading?", 1, uIds.size());
 		assertEquals("B1 should had been returned", b1.getLocalId(), uIds.get(0));
 
 		uploadSampleBulletin(otherServer, b3.getLocalId(), b3ZipString);
 		uploadSampleBulletin(coreServer, b3.getLocalId(), b3ZipString);
-		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(ampAccountId, parameters, signature);
 		uIds = (Vector)response.get(1);
 		assertEquals("Currently B3 is a bulletin not mirrored?", 2, uIds.size());
 		
 		String bulletin3LocalId = b3.getLocalId();
 		String burFromOtherDatabase = MartusServerUtilities.createBulletinUploadRecord(bulletin3LocalId, otherServer.getSecurity());
 		MartusServerUtilities.writeSpecificBurToDatabase(coreServer.getDatabase(), b3.getBulletinHeaderPacket(), burFromOtherDatabase);
-		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(amplifier.getPublicKeyString(), parameters, signature);
+		response = coreServer.serverForAmplifiers.getAmplifierHandler().getPublicBulletinLocalIds(ampAccountId, parameters, signature);
 		uIds = (Vector)response.get(1);
 		assertEquals("incorect # of bulletins found after mirroring, should only amplify own bulletins?", 1, uIds.size());
 	}
@@ -222,6 +234,9 @@ public class TestServerForAmplifiers extends TestCaseEnhanced
 
 	private static Bulletin b3;
 	private static String b3ZipString;
+
+	private static Bulletin b4;
+	private static String b4ZipString;
 
 	private static MartusSecurity clientSecurity;
 	private static MockClientDatabase clientDatabase;

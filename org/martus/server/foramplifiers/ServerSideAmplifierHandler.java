@@ -139,9 +139,9 @@ public class ServerSideAmplifierHandler implements AmplifierNetworkInterface
 			try
 			{
 				if(! key.getLocalId().startsWith("B-") )
-				{
 					return;
-				}
+				if(key.isDraft())
+					return;
 				
 				DatabaseKey burKey = MartusServerUtilities.getBurKey(key);
 				String burInDatabase = server.getDatabase().readRecord(burKey, server.getSecurity());
