@@ -690,6 +690,7 @@ public class BulletinStore
 		{
 			Bulletin b = folder.getBulletinSorted(index);
 			xml += MartusXml.getIdTag(b.getUniversalIdString());
+			xml += MartusClientXml.getBulletinTag(b);
 		}
 		xml += MartusClientXml.getFolderTagEnd();
 		return xml;
@@ -708,25 +709,11 @@ public class BulletinStore
 		{
 			if(qName.equals(MartusClientXml.tagFolder))
 			{
-				String name = attrs.getValue(MartusClientXml.attrFolder);
-				if(startLoadingFolders)
-				{
-					startLoadingFolders = false;	
-					if(name.equals("Outbox"))
-						legacyFolders = true;
-				}
-				if(legacyFolders)
-				{
-					if(name.equals("Outbox"))
-						name = OUTBOX_FOLDER;
-					if(name.equals("Sent Bulletins"))
-						name = SENT_FOLDER;
-					if(name.equals("Draft Bulletins"))
-						name = DRAFT_FOLDER;
-					if(name.equals("Discarded Bulletins"))
-						name = DISCARDED_FOLDER;
-				}
-				currentFolder = store.createOrFindFolder(name);
+				handleFolderStartTag(attrs);
+			}
+			else if(qName.equals(MartusClientXml.tagBulletin))
+			{
+				handleBulletinStartTag(attrs);
 			}
 
 			buffer = "";
@@ -738,18 +725,6 @@ public class BulletinStore
 			{
 				currentFolder = null;
 			}
-			else if(qName.equals(MartusClientXml.tagId))
-			{
-				try 
-				{
-					UniversalId bId = UniversalId.createFromString(buffer);
-					currentFolder.add(bId, "");
-				} 
-				catch(NotUniversalIdException e) 
-				{
-					System.out.println("BulletinStore::endElement : " + e);
-				}
-			}
 
 			buffer = "";
 		}
@@ -757,6 +732,43 @@ public class BulletinStore
 		public void characters(char buf[], int offset, int len) throws SAXException
 		{
 			buffer += new String(buf, offset, len);
+		}
+
+		void handleBulletinStartTag(Attributes attrs)
+		{
+			String uidString = attrs.getValue(MartusClientXml.attrBulletinId);
+			String eventDate = attrs.getValue(MartusClientXml.attrBulletinEventDate);
+			try
+			{
+				currentFolder.add(UniversalId.createFromString(uidString), "");
+			}
+			catch(NotUniversalIdException e) 
+			{
+				System.out.println("BulletinStore::startElement : " + e);
+			}
+		}
+
+		void handleFolderStartTag(Attributes attrs)
+		{
+			String name = attrs.getValue(MartusClientXml.attrFolder);
+			if(startLoadingFolders)
+			{
+				startLoadingFolders = false;	
+				if(name.equals("Outbox"))
+					legacyFolders = true;
+			}
+			if(legacyFolders)
+			{
+				if(name.equals("Outbox"))
+					name = OUTBOX_FOLDER;
+				if(name.equals("Sent Bulletins"))
+					name = SENT_FOLDER;
+				if(name.equals("Draft Bulletins"))
+					name = DRAFT_FOLDER;
+				if(name.equals("Discarded Bulletins"))
+					name = DISCARDED_FOLDER;
+			}
+			currentFolder = store.createOrFindFolder(name);
 		}
 
 		BulletinStore store;

@@ -16,19 +16,15 @@ public class MartusClientXml
 		return MartusXml.getTagEnd(MartusClientXml.tagFolderList);
 	}
 
-	public static String getBulletinTagStart(Bulletin b)
+	public static String getBulletinTag(Bulletin b)
 	{
-		return MartusXml.getTagStart(
-			MartusClientXml.tagBulletin,
-			MartusClientXml.attrBulletinId,
-			b.getUniversalIdString(),
-			MartusClientXml.attrBulletinEventDate,
-			b.get(BulletinConstants.TAGEVENTDATE));
-	}
+		
+		String tagStart = MartusXml.getTagStart(MartusClientXml.tagBulletin,
+					MartusClientXml.attrBulletinId, b.getUniversalIdString(),
+					MartusClientXml.attrBulletinEventDate, b.get(BulletinConstants.TAGEVENTDATE));
+		String tagEnd = MartusXml.getTagEnd(MartusClientXml.tagBulletin);
 
-	public static String getBulletinTagEnd()
-	{
-		return MartusXml.getTagEnd(MartusClientXml.tagBulletin);
+		return tagStart + tagEnd;
 	}
 
 	public static String getFolderTagStart(String name)

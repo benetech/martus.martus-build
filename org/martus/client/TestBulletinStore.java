@@ -474,8 +474,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		xml = store.folderToXml(folder);
 		assertStartsWith(MartusClientXml.getFolderTagStart("Test"), xml);
 		assertContains(MartusXml.getIdTag(folder.getBulletinSorted(0).getUniversalIdString()), xml);
-//		assertContains(MartusClientXml.getBulletinTagStart(b), xml);
-//		assertContains(MartusClientXml.getBulletinTagEnd(), xml);
+		assertContains(MartusClientXml.getBulletinTag(b), xml);
 		assertEndsWith(MartusClientXml.getFolderTagEnd(), xml);
 		
 	}
