@@ -53,6 +53,8 @@ public class UiDisplayFileDlg extends JDialog
 			JScrollPane tocMsgAreaScrollPane = new JScrollPane(tocList, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
 					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 			tocMsgAreaScrollPane.setPreferredSize(new Dimension(580, 100));
+			getContentPane().add(new JLabel(" "), ParagraphLayout.NEW_PARAGRAPH);
+			getContentPane().add(new JLabel(app.getFieldLabel(tagTOCMessage+"Description")));
 			getContentPane().add(new JLabel(app.getFieldLabel(tagTOCMessage)), ParagraphLayout.NEW_PARAGRAPH);
 			getContentPane().add(tocMsgAreaScrollPane);
 			tocList.setSelectedIndex(0);

@@ -590,7 +590,8 @@ public class MartusLocalization
 		addEnglishTranslation("field:DeleteBulletinFileMsg2=Do you want to delete the original file, or leave it in place?");
 		addEnglishTranslation("field:OnlineHelpMessage=Details:");
 		addEnglishTranslation("field:OnlineHelpTOCMessage=Topics:");
-
+		addEnglishTranslation("field:OnlineHelpTOCMessageDescription=Click on topic to display details.");
+		
 		addEnglishTranslation("field:VirtualUserNameDescription=(Enter using regular keyboard)");
 		addEnglishTranslation("field:VirtualPasswordDescription=Enter Password using mouse with on-screen keyboard below");
 		addEnglishTranslation("field:VirtualKeyboardKeys=ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890-+=!@#$%^&*()_,.[]{}<>\\/?|;:~");
