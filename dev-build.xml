@@ -16,6 +16,7 @@
   <property name="hrvd-dir" value="${cvs.home}/martus-hrdag/source/org/hrvd"/>
   <property name="logi-dir" value="${cvs.home}/martus-logi/source/org/logi"/>
   <property name="amplifier-dir" value="${cvs.home}/martus-amplifier/source/${martus-dir}/amplifier"/>
+  <property name="thirdparty-jar-dir" value="${cvs.home}/martus-thirdparty"/>
 
   <property name="jars-dir" value="ThirdPartyJars"/>
   <property name="htdocs-dir" value="www"/>
@@ -139,7 +140,15 @@
 
     <replace file="${common-dir}/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
 
-    <javac destdir="bin" target="1.4" optimize="on" srcdir="${hrvd-dir};${logi-dir};${util-dir};${swing-dir};${common-dir}" classpath="." failonerror="true">
+    <javac destdir="bin" target="1.4" optimize="on"
+    	srcdir="${hrvd-dir};${logi-dir};${util-dir};${swing-dir};${common-dir}"
+    	classpath=".;
+    		${thirdparty-jar-dir}/common/XMLRPC/bin/xmlrpc-1.2-b1.jar;
+    		${thirdparty-jar-dir}/common/InfiniteMonkey/bin/InfiniteMonkey.jar;
+    		${thirdparty-jar-dir}/libext/JUnit/bin/junit.jar;
+    		${thirdparty-jar-dir}/libext/BouncyCastle/bin/bcprov-jdk14-120.jar;
+    		"
+    	failonerror="true">
             <include name="**/*.java"/>
     </javac>
 
