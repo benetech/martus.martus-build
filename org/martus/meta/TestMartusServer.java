@@ -1645,6 +1645,37 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("listFieldOfficeDraftBulletinIds", NetworkInterfaceConstants.OK, result.get(0) );
 	}
 	
+	public void testServerShutdown() throws Exception
+	{
+		boolean result;
+		
+		result = testServer.isShutdownRequested();
+		assertEquals("isShutdownRequested 1", false, result );
+		
+		testServer.incrementActiveClientsCounter();
+		File exitFile = new File(testServer.getDataDirectory(), "exit");
+		exitFile.createNewFile();
+		
+		result = testServer.isShutdownRequested();
+		assertEquals("isShutdownRequested 2", true, result );
+		
+		testServer.decrementActiveClientsCounter();
+		exitFile.delete();
+	}
+	
+	public void testClientCounter()
+	{
+		assertEquals("getNumberActiveClients 1", 0, testServer.getNumberActiveClients());
+		
+		testServer.incrementActiveClientsCounter();
+		testServer.incrementActiveClientsCounter();
+		assertEquals("getNumberActiveClients 2", 2, testServer.getNumberActiveClients());
+		
+		testServer.decrementActiveClientsCounter();
+		testServer.decrementActiveClientsCounter();
+		assertEquals("getNumberActiveClients 3", 0, testServer.getNumberActiveClients());
+	}
+	
 	void verifyErrorResult(String label, Vector vector, String expected )
 	{
 		assertEquals( label + " error size not 1?", 1, vector.size());

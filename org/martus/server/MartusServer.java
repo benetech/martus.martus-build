@@ -226,10 +226,13 @@ public class MartusServer implements NetworkInterfaceConstants
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(dataDirectory, getKeypairFilename());
 
-		loadNotAuthorizedClients();
-		timer = new Timer(true);
-		TimerTask task = new BackgroundTask();
-		timer.schedule(task, IMMEDIATELY, bannedCheckIntervalMillis);
+		moderateTimer = new Timer(true);
+		TimerTask bannedClientsTaskMonitor = new BannedClientsMonitor();
+		moderateTimer.schedule(bannedClientsTaskMonitor, IMMEDIATELY, bannedCheckIntervalMillis);
+		
+ 		frequentTimer = new Timer(true);
+ 		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
+ 		frequentTimer.schedule(shutdownRequestTaskMonitor, IMMEDIATELY, shutdownRequestIntervalMillis);
 
 		try
 		{
@@ -1407,6 +1410,31 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		return getDatabase().getFolderForAccount(clientId);
 	}
+	
+	public boolean isShutdownRequested()
+	{
+			File shutdownFile = new File(getDataDirectory(), MARTUSSHUTDOWNFILENAME);
+			if( shutdownFile.exists() )
+			{
+				return true;
+			}
+			return false;
+	}
+	
+	public int getNumberActiveClients()
+	{
+		return activeClientsCounter;
+	}
+	
+	public synchronized void incrementActiveClientsCounter()
+	{
+		activeClientsCounter++;
+	}
+	
+	public synchronized void decrementActiveClientsCounter()
+	{
+		activeClientsCounter--;
+	}
 
 	public synchronized void logging(String message)
 	{
@@ -1609,11 +1637,28 @@ public class MartusServer implements NetworkInterfaceConstants
 		String hqAccountId;
 	}
 	
-	private class BackgroundTask extends TimerTask
+	private class BannedClientsMonitor extends TimerTask
 	{
 		public void run()
 		{
 			loadNotAuthorizedClients();
+		}
+	}
+	
+	private class ShutdownRequestMonitor extends TimerTask
+	{
+		public void run()
+		{
+			if( isShutdownRequested() && getNumberActiveClients() == 0 )
+			{
+				logging("Shutdown request received.");
+				
+				clientsThatCanUpload.clear();				
+				File shutdownFile = new File(getDataDirectory(), MARTUSSHUTDOWNFILENAME);
+				shutdownFile.delete();
+				logging("Server has exited.");
+				System.exit(0);
+			}
 		}
 	}
 
@@ -1628,9 +1673,11 @@ public class MartusServer implements NetworkInterfaceConstants
 	public File allowUploadFile;
 	public File magicWordsFile;
 	public File bannedClientsFile;
-	private Timer timer;
+	private Timer moderateTimer;
+	private Timer frequentTimer;
 	private String magicWord;
 	private long bannedClientsFileLastModified;
+	private static int activeClientsCounter;
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
@@ -1639,6 +1686,8 @@ public class MartusServer implements NetworkInterfaceConstants
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 	private static final String NOTAUTHORIZEDCLIENTSFILENAME = "notauthorized.txt";
+	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	private final long IMMEDIATELY = 0;
 	private static final long bannedCheckIntervalMillis = 60000;
+	private static final long shutdownRequestIntervalMillis = 1000;
 }
