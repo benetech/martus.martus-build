@@ -1181,6 +1181,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		File tempFile = createInterimBulletinFile(headerKey);
 		//log("createInterimBulletinFile done");
 		int totalLength = MartusUtilities.getCappedFileLength(tempFile);
+		log("Total Length=" + totalLength);
 		
 		int chunkSize = totalLength - chunkOffset;
 		if(chunkSize > maxChunkSize)
