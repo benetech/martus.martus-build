@@ -176,7 +176,7 @@ public class MartusUtilities
 		return existingSig;
 	}
 	
-	public static void verifyFileAndSignature(File fileToVerify, File signatureFile, MartusSecurity verifier)
+	public static void verifyFileAndSignature(File fileToVerify, File signatureFile, MartusSecurity verifier, String accountId)
 		throws FileVerificationException
 	{
 		FileInputStream inData = null;
@@ -186,6 +186,9 @@ public class MartusUtilities
 			String key = reader.readLine();
 			String signature = reader.readLine();
 			reader.close();
+			
+			if(!key.equals(accountId))
+				throw new FileVerificationException();				
 			
 			inData = new FileInputStream(fileToVerify);
 			if( !verifier.isSignatureValid(key, inData, Base64.decode(signature)) )
@@ -481,7 +484,6 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
-			localIds.remove(entry.getName());
 			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}

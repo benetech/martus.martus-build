@@ -156,25 +156,33 @@ public class TestMartusUtilities extends TestCaseEnhanced
 
 		File normalFileSigBySecurity = MartusUtilities.createSignatureFileFromFile(normalFile, security);
 
-		MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security);
+		MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security, security.getPublicKeyString());
 		
 		try
 		{
-			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security);
+			MartusUtilities.verifyFileAndSignature(normalFile, normalFileSigBySecurity, security, "this would be a different public key");
+			fail("signature file's public key is not the verifiers public key should have thrown.");
+		}
+		catch (FileVerificationException ignoreExpectedException)
+		{
+		}
+
+		try
+		{
+			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security, security.getPublicKeyString());
 			fail("testCreateSignatureFromFile 1: Should have thrown FileVerificationException.");
 		}
 		catch (FileVerificationException ignoreExpectedException)
 		{
-			;
 		}
-		
+
 		normalFileSigBySecurity.delete();
 		normalFile.delete();
 		anotherFile.delete();
 		
 		try
 		{
-			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security);
+			MartusUtilities.verifyFileAndSignature(anotherFile, normalFileSigBySecurity, security, security.getPublicKeyString());
 			fail("testCreateSignatureFromFile 2: Should have thrown FileVerificationException.");
 		}
 		catch (FileVerificationException ignoreExpectedException)

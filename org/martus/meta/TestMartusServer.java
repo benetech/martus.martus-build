@@ -197,35 +197,35 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void testPing() throws Exception
 	{
-		testServer.setSecurity(serverSecurity);
 		assertEquals(NetworkInterfaceConstants.VERSION, testServer.ping());
 	}
 	
 	public void testCreateInterimBulletinFile() throws Exception
 	{
+		testServer.setSecurity(serverSecurity);
 		File nullZipFile = createTempFile("$$$MartusServerBulletinZip");
 		File nullZipSignatureFile = MartusUtilities.getSignatureFileFromFile(nullZipFile);
 		nullZipSignatureFile.deleteOnExit();
-		assertFalse("Both zip & sig Null files verified?", testServer.verifyBulletinInterimFile(nullZipFile, nullZipSignatureFile));
+		assertFalse("Both zip & sig Null files verified?", testServer.verifyBulletinInterimFile(nullZipFile, nullZipSignatureFile, serverSecurity.getPublicKeyString()));
 		
 		File validZipFile = createTempFile();
 		FileOutputStream out = new FileOutputStream(validZipFile);
 		out.write(file1Bytes);
 		out.close();
-		assertFalse("Valid zip Null sig files verified?", testServer.verifyBulletinInterimFile(validZipFile, nullZipSignatureFile));
+		assertFalse("Valid zip Null sig files verified?", testServer.verifyBulletinInterimFile(validZipFile, nullZipSignatureFile, serverSecurity.getPublicKeyString()));
 
 		File ZipSignatureFile = MartusUtilities.createSignatureFileFromFile(validZipFile, serverSecurity);
 		ZipSignatureFile.deleteOnExit();
 		File nullFile = createTempFile();
-		assertFalse("Null zip Valid sig file verified?", testServer.verifyBulletinInterimFile(nullFile, ZipSignatureFile));
+		assertFalse("Null zip Valid sig file verified?", testServer.verifyBulletinInterimFile(nullFile, ZipSignatureFile, serverSecurity.getPublicKeyString()));
 		
 		File invalidSignatureFile = createTempFile();
 		FileOutputStream outInvalidSig = new FileOutputStream(invalidSignatureFile);
 		outInvalidSig.write(file2Bytes);
 		outInvalidSig.close();
-		assertFalse("Valid zip, invalid signature file verified?", testServer.verifyBulletinInterimFile(validZipFile, invalidSignatureFile));
+		assertFalse("Valid zip, invalid signature file verified?", testServer.verifyBulletinInterimFile(validZipFile, invalidSignatureFile, serverSecurity.getPublicKeyString()));
 
-		assertTrue("Valid zip with cooresponding signature file did not verify?", testServer.verifyBulletinInterimFile(validZipFile, ZipSignatureFile));
+		assertTrue("Valid zip with cooresponding signature file did not verify?", testServer.verifyBulletinInterimFile(validZipFile, ZipSignatureFile, serverSecurity.getPublicKeyString()));
 	
 	}
 	
@@ -731,7 +731,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 	public void testDownloadBulletinOk() throws Exception
 	{
-		testServer.setSecurity(serverSecurity);
+		testServer.setSecurity(clientSecurity);
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
 		Bulletin bulletin = store.createEmptyBulletin();
 		bulletin.set(bulletin.TAGPUBLICINFO, "public info");

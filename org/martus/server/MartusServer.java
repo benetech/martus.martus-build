@@ -1543,13 +1543,13 @@ public class MartusServer implements NetworkInterfaceConstants
 		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
 		if(tempFile.exists() && tempFileSignature.exists())
 		{
-			if(verifyBulletinInterimFile(tempFile, tempFileSignature))
+			if(verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
 				return tempFile;
 		}
 		MartusUtilities.deleteInterimFileAndSignature(tempFile);
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
-		if(!verifyBulletinInterimFile(tempFile, tempFileSignature))
+		if(!verifyBulletinInterimFile(tempFile, tempFileSignature, security.getPublicKeyString()))
 			throw new MartusUtilities.FileVerificationException();
 		if(serverMaxLogging)
 			logging("    Total file size =" + tempFile.length());
@@ -1557,11 +1557,11 @@ public class MartusServer implements NetworkInterfaceConstants
 		return tempFile;
 	}
 
-	public boolean verifyBulletinInterimFile(File bulletinZipFile, File bulletinSignatureFile)
+	public boolean verifyBulletinInterimFile(File bulletinZipFile, File bulletinSignatureFile, String accountId)
 	{
 			try 
 			{
-				MartusUtilities.verifyFileAndSignature(bulletinZipFile, bulletinSignatureFile, (MartusSecurity)security);
+				MartusUtilities.verifyFileAndSignature(bulletinZipFile, bulletinSignatureFile, (MartusSecurity)security, accountId);
 				return true;
 			} 
 			catch (MartusUtilities.FileVerificationException e) 
