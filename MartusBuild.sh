@@ -27,7 +27,7 @@ error() { echo "ERROR: $*" >&2; exit 1; }
 # usage fn
 usage()
 {
-	echo "Usage: $0 -cdt"
+	echo "Usage: $0 -cb [-s | -t]"
 	echo -e "\t-s: Simple build. No tagging. Overrides -t"
 	echo -e "\t-t: Tag CVS. Run TestAll, checks-in successful builds"
 	echo -e "\t-c: Client Installers built"
@@ -158,22 +158,16 @@ downloadMartusVerifyFromCvsAndSetup()
 {
 	cd $CVS_HOME || error "unable to cd: err $?"
 	
-	SRC_VERIFY=$MARTUSSOURCES/verify
+	SRC_VERIFY=$CVS_HOME/martus-jar-verifier/source/org/martus/jarverifier
 	export SRC_VERIFY
 	
 	cvs -q checkout martus-jar-verifier || error "cvs martus-jar-verifier returned $?"
-	mkdir $SRC_VERIFY
-	mkdir $SRC_VERIFY/source
-	mkdir $SRC_VERIFY/source/org
-	mkdir $SRC_VERIFY/source/org/martus/
-	mkdir $SRC_VERIFY/source/org/martus/jarverifier
 	
-	cp -r martus-jar-verifier/* $SRC_VERIFY//source/org/martus/jarverifier/
-	rm -f $SRC_VERIFY/*.bat
-	rm -f $SRC_VERIFY/*.txt
+	rm -f martus-jar-verifier/*.bat
+	rm -f martus-jar-verifier/*.txt
 	echo
 	echo "Building Server JarVerifier...";
-	cd $SRC_VERIFY/source/org/martus/jarverifier || exit
+	cd $SRC_VERIFY/ || exit
 	if [ -f "JarVerifier.class" ]; then
 		rm -f JarVerifier.class
 	fi
@@ -581,29 +575,19 @@ zipSources()
 	find . -name "gpl.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "main-class.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	
-	#english
-	find . -name "MartusHelpTOC-en.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "MartusHelp-en.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	
-	#spanish
-	find . -name "MartusHelpTOC-es.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "MartusHelp-es.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "Martus-es.mtf" -print | zip $MARTUS_ZIP_PATH -q@
+	#NOTE: Add additional language codes here
+	martus_languages="en es ru ar fr th"
 	
-	#russian
-	find . -name "MartusHelpTOC-ru.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "MartusHelp-ru.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "Martus-ru.mtf" -print | zip $MARTUS_ZIP_PATH -q@
-	
-	#arabic
-	find . -name "MartusHelpTOC-ar.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "MartusHelp-ar.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "Martus-ar.mtf" -print | zip $MARTUS_ZIP_PATH -q@
-
-	#french
-	find . -name "MartusHelpTOC-fr.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "MartusHelp-fr.txt" -print | zip $MARTUS_ZIP_PATH -q@
-	find . -name "Martus-fr.mtf" -print | zip $MARTUS_ZIP_PATH -q@
+	echo
+	echo "zipping up language files...";
+	for martus_lang in $martus_languages
+		do
+		echo -e "\tzipping language: ${martus_lang}"
+		find . -name "MartusHelpTOC-${martus_lang}.txt" -print | zip $MARTUS_ZIP_PATH -q@
+		find . -name "MartusHelp-${martus_lang}.txt" -print | zip $MARTUS_ZIP_PATH -q@
+		find . -name "Martus-${martus_lang}.mtf" -print | zip $MARTUS_ZIP_PATH -q@
+	done
 
 	#unofficial
 	find . -name "UnofficialTranslationMessage.txt" -print | zip $MARTUS_ZIP_PATH -q@
@@ -664,20 +648,20 @@ createClientInstallers()
 	
 	# moving installer scripts
 	INSTALLER_SRC_FILES="$BUILDFILES_SRC_FILES/Installer/NSIS Scripts"
-	if [ ! -d $INSTALLER_SRC_FILES ]; then
+	if [ ! -d "$INSTALLER_SRC_FILES" ]; then
 		echo
 		echo "Creating $INSTALLER_SRC_FILES..."
-		mkdir "$INSTALLER_SRC_FILES"
+		mkdir -p "$INSTALLER_SRC_FILES"
 	fi
 	
-	cp -v $MARTUSNSISPROJECTDIR/*.nsi "$INSTALLER_SRC_FILES/"
+	cp -v $MARTUSNSISPROJECTDIR/*.nsi "$INSTALLER_SRC_FILES/" || error "Unable to copy *.nsi files"
 	mkdir "$INSTALLER_SRC_FILES/locallang"
 	
 	# NOTE: Language specific items below
-	cp -v $MARTUSNSISPROJECTDIR/locallang/English.* "$INSTALLER_SRC_FILES/locallang/"
-	cp -v $MARTUSNSISPROJECTDIR/locallang/Spanish.* "$INSTALLER_SRC_FILES/locallang/"
-	cp -v $MARTUSNSISPROJECTDIR/locallang/Russian.* "$INSTALLER_SRC_FILES/locallang/"
-	cp -v $MARTUSNSISPROJECTDIR/locallang/Arabic.* "$INSTALLER_SRC_FILES/locallang/"
+	cp -v $MARTUSNSISPROJECTDIR/locallang/English.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
+	cp -v $MARTUSNSISPROJECTDIR/locallang/Spanish.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
+	cp -v $MARTUSNSISPROJECTDIR/locallang/Russian.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
+	cp -v $MARTUSNSISPROJECTDIR/locallang/Arabic.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
 	
 	find $CVS_HOME -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 	find $MARTUSSOURCES -type "f" -name "*.class" -exec rm -fR '{}' \; > /dev/null
@@ -704,7 +688,7 @@ createInstallerCdImage()
 	cp -v $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
 	
 	mkdir -p $CD_IMAGE_DIR/verify/
-	cp -v $MARTUSBUILDFILES/Verify/* $CD_IMAGE_DIR/verify/
+	cp -vr $MARTUSBUILDFILES/Verify/* $CD_IMAGE_DIR/verify/
 	rm $CD_IMAGE_DIR/verify/*_th.txt
 	
 	cp -v $MARTUSBUILDFILES/ProgramFiles/autorun.inf $CD_IMAGE_DIR
