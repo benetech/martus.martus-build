@@ -1,0 +1,35 @@
+<project name="martus" default="test" basedir=".">
+
+  <!-- set global properties for this build -->
+  <property name="dist"  value="dist"/>
+  <property name="common-dir"  value="org/martus/common"/>
+  <property name="common-jar" value= "${dist}/martus-common.jar"/>
+  <property name="common-package"  value="org.martus.common"/>
+
+  <target name="init">
+    <!-- tstamp task initializes ${DSTAMP} etc -->
+    <tstamp/>
+  </target>
+
+  <target name="clean">
+     <delete file="${common-dir}/*.class"/>
+    <delete file="${common-jar}"/>
+    <delete file="version.txt"/>
+  </target>
+
+  <target name="build" depends="init">
+    <javac srcdir="${common-dir}" destdir="${common-dir}" failonerror="true" excludes="obsolete/*"/>
+    <echo message="${DSTAMP}" file="version.txt"/>
+    <mkdir dir="${dist}"/>
+    <jar jarfile="${common-jar}" basedir="." includes="${common-dir}/*.class"/>
+  </target>
+
+  <target name="test" depends="build">
+	<!-- Run the unit test suite -->
+	<java classname="${common-package}.TestAll" 
+		fork="true"
+		classpath = "${common-jar}"/>
+  </target>
+
+</project>
+
