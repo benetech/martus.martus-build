@@ -117,6 +117,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 			dtde.rejectDrop();
 			return;
 		}
+		Cursor originalCursor = observer.setWaitingCursor();
 		dtde.acceptDrop(dtde.getDropAction());
 		//System.out.println("dropTransferableBulletin: accepted");
 
@@ -154,6 +155,7 @@ abstract class UiBulletinDropAdapter implements DropTargetListener
 
 		tb.dispose();
 		dtde.dropComplete(worked);
+		observer.resetCursor(originalCursor);
 		if(!worked)
 		{
 			Toolkit.getDefaultToolkit().beep();
