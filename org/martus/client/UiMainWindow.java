@@ -60,6 +60,7 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 import org.martus.common.Packet;
+import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 
 public class UiMainWindow extends JFrame implements ClipboardOwner
@@ -452,6 +453,14 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		uiState.load(app.getUiStateFile());
 		uiState.setCurrentLanguage(app.getCurrentLanguage());
 		uiState.setCurrentDateFormat(app.getCurrentDateFormatCode());
+	}
+	
+	public void selectBulletinInCurrentFolderIfExists(UniversalId id)
+	{
+		BulletinFolder currentFolder = app.getStore().findFolder(folders.getSelectedFolderName());
+		int position = currentFolder.find(id);
+		if(position != -1)
+			table.setCurrentBulletinIndex(position);
 	}
 
 	private JComponent createTopStuff()
