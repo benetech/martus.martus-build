@@ -100,7 +100,8 @@ public class BulletinTableModel extends AbstractTableModel
 		{
 			value = localization.getStatusLabel(value);
 		}
-	 	if(Bulletin.getFieldType(fieldTag) == Bulletin.DATE)
+	 	if(Bulletin.getFieldType(fieldTag) == Bulletin.DATE || 
+				Bulletin.getFieldType(fieldTag) == Bulletin.DATERANGE)
 		{
 			value = localization.convertStoredDateToDisplay(value);
 		}
