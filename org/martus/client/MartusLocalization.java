@@ -737,4 +737,9 @@ public class MartusLocalization
 	private static final String ENGLISH = "en";
 
 	private Map languageTranslationsMap;
+	public static final String[] ALL_LANGUAGE_CODES = {
+				"en", "ar", 
+				"az", "bn", "my","zh", "nl", "eo", "fr", "de","gu","ha","he","hi","hu", 
+				"it", "ja","jv","kn","ko","ml","mr","or","pa","pl","pt","ro","ru","sr", 
+				"sr", "sd","si","es","ta","te", "th","tr","uk","ur","vi"};
 }

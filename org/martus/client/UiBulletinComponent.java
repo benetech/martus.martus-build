@@ -184,17 +184,9 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 			case Bulletin.DATE:
 				field = createDateField();
 				break;
-			case Bulletin.CHOICE:
-				ChoiceItem[] languages =
-				{
-					new ChoiceItem("en", getApp().getLanguageName("en")),
-					new ChoiceItem("es", getApp().getLanguageName("es")),
-					new ChoiceItem("ru", getApp().getLanguageName("ru")),
-					new ChoiceItem("fr", getApp().getLanguageName("fr")),
-					new ChoiceItem("de", getApp().getLanguageName("de")),
-					new ChoiceItem("ta", getApp().getLanguageName("ta")),
-					new ChoiceItem("si", getApp().getLanguageName("si"))
-				};
+			case Bulletin.CHOICE: 
+				ChoiceItem[] languages = 
+					getApp().getLanguageNameChoices(MartusLocalization.ALL_LANGUAGE_CODES);
 				field = createChoiceField(languages);
 				break;
 			case Bulletin.NORMAL:

@@ -1240,7 +1240,18 @@ public class MartusApp
 		currentDateFormat = code;
 	}
 
-
+	public ChoiceItem[] getLanguageNameChoices(String[] languageCodes)
+	{
+		if(languageCodes == null)
+			return null;
+		ChoiceItem[] tempChoicesArray = new ChoiceItem[languageCodes.length];
+		for(int i = 0; i < languageCodes.length; i++)
+		{
+			tempChoicesArray[i] = 
+				new ChoiceItem(languageCodes[i], getLanguageName(languageCodes[i]));	
+		}
+		return tempChoicesArray;
+	}
 	
 	
 	public String convertStoredToDisplay(String storedDate)

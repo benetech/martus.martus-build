@@ -11,6 +11,7 @@ import java.util.Vector;
 import org.martus.client.Bulletin;
 import org.martus.client.BulletinFolder;
 import org.martus.client.BulletinStore;
+import org.martus.client.ChoiceItem;
 import org.martus.client.ClientSideNetworkGateway;
 import org.martus.client.ConfigInfo;
 import org.martus.client.MartusApp;
@@ -1598,6 +1599,17 @@ public class TestMartusApp extends TestCaseEnhanced
 		TRACE_END();
 	}
 
+	public void testGetLanguageNameChoices()
+	{
+		TRACE_BEGIN("testWindowTitles");
+		String[] testLanguageCodes = {"en", "es", "si"};
+		ChoiceItem[] languageChoicesTest = appWithServer.getLanguageNameChoices(testLanguageCodes);
+		assertEquals(languageChoicesTest[0].toString(), appWithServer.getLanguageName("en"));
+		assertEquals(languageChoicesTest[1].toString(), appWithServer.getLanguageName("es"));
+		assertEquals(languageChoicesTest[2].toString(), appWithServer.getLanguageName("si"));
+		TRACE_END();
+	}
+	
 	public void testWindowTitles()
 	{
 		TRACE_BEGIN("testWindowTitles");
