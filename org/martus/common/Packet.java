@@ -256,10 +256,12 @@ public class Packet
 
 	public static boolean isValidStartComment(final String startComment)
 	{
-		if( startComment == null ||
-			!startComment.startsWith(MartusXml.packetStartCommentStart) ||
-			!startComment.endsWith(MartusXml.packetStartCommentEnd))
-				return false;
+		if( startComment == null )
+			return false;
+		if (!startComment.startsWith(MartusXml.packetStartCommentStart))
+			return false;
+		if (!startComment.endsWith(MartusXml.packetStartCommentEnd))
+			return false;
 		return true;
 	}
 

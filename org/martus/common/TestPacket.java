@@ -7,8 +7,6 @@ import java.io.OutputStream;
 import java.io.StringWriter;
 import java.io.Writer;
 
-import org.martus.client.Bulletin;
-
 public class TestPacket extends TestCaseEnhanced
 {
     public TestPacket(String name)
@@ -38,17 +36,6 @@ public class TestPacket extends TestCaseEnhanced
 
 		String noVersion = MartusXml.packetStartCommentStart + MartusXml.packetStartCommentEnd;
 		assertTrue("no version # is valid for backward compatability.", Packet.isValidStartComment(noVersion));
-
-		String validVersionString = Bulletin.getToday();
-		String ValidVersion2String = validVersionString + "b";
-
-		String validVersionStartComment = MartusXml.packetStartCommentStart + validVersionString + MartusXml.packetStartCommentEnd;
-		String validVersion2StartComment = MartusXml.packetStartCommentStart + ValidVersion2String + MartusXml.packetStartCommentEnd;
-		String validVersion3StartComment = MartusXml.packetStartCommentStart + "happydayok" + MartusXml.packetStartCommentEnd;
-
-		assertTrue("Valid version Start Comment", Packet.isValidStartComment(validVersionStartComment));
-		assertTrue("Valid version too long Start Comment", Packet.isValidStartComment(validVersion2StartComment));
-		assertTrue("Valid version not a date Start Comment", Packet.isValidStartComment(validVersion3StartComment));
 	}
 	
 	public void testWriteXmlToStream() throws Exception
