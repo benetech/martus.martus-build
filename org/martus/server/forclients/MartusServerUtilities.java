@@ -107,7 +107,7 @@ public class MartusServerUtilities
 	}
 	
 	public static Date getDateForSignatureFile(File signatureFile)
-		throws IOException, ParseException
+		throws IOException
 	{
 		UnicodeReader reader = new UnicodeReader(signatureFile);
 		String timestampDate = reader.readLine();
@@ -116,7 +116,15 @@ public class MartusServerUtilities
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMdd-HHmmss");
 		formatDate.setCalendar(Calendar.getInstance());
 		
-		Date date = formatDate.parse(timestampDate);
+		Date date;
+		try
+		{
+			date = formatDate.parse(timestampDate);
+		}
+		catch (ParseException e)
+		{
+			return null;
+		}
 		
 		return date;
 		
@@ -143,13 +151,17 @@ public class MartusServerUtilities
 				{
 					latestSignatureFilename = signatureFilenames[x];
 					latestSigDate = getDateForSignatureFile(new File(sigDir, latestSignatureFilename));
+					if(latestSigDate == null)
+					{
+						latestSignatureFilename = null;
+					}
 				}
 				else
 				{
 					nextSignatureFilename = signatureFilenames[x];
 					nextSigDate = getDateForSignatureFile(new File(sigDir, nextSignatureFilename));
 			
-					if(nextSigDate.after(latestSigDate))
+					if(nextSigDate != null && nextSigDate.after(latestSigDate))
 					{
 						latestSigDate = nextSigDate;
 						latestSignatureFilename = nextSignatureFilename;
@@ -177,8 +189,9 @@ public class MartusServerUtilities
 	}
 
 	public static File createSignatureFileFromFileOnServer(File fileToSign, MartusCrypto signer)
-		throws IOException, MartusSignatureException
+		throws IOException, MartusSignatureException, InterruptedException
 	{
+		Thread.sleep(1000);
 		Timestamp stamp = new Timestamp(System.currentTimeMillis());
 		SimpleDateFormat formatDate = new SimpleDateFormat("yyyyMMdd-HHmmss");
 		String tstamp = formatDate.format(stamp);
