@@ -87,7 +87,6 @@ public class ShowContactInfo
 		}
 		catch(EOFException ignored)
 		{
-			;
 		}
 		catch(Exception e)
 		{
@@ -107,7 +106,6 @@ public class ShowContactInfo
 			}
 			catch(IOException ignored)
 			{
-				;
 			}
 		}
 		

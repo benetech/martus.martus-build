@@ -110,7 +110,6 @@ public class Utilities
 			}
 			catch(InterruptedException e)
 			{
-				;
 			}
 		}
 

@@ -399,7 +399,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
-			;
 		}
 		catch(IOException e)
 		{

@@ -97,7 +97,6 @@ public class TestDatabase extends TestCaseEnhanced
 		}
 		catch(MissingAccountMapSignatureException ignoreExpectedException)
 		{
-			;
 		}
 		finally
 		{
@@ -144,7 +143,6 @@ public class TestDatabase extends TestCaseEnhanced
 		}
 		catch(FileVerificationException ignoreExpectedException)
 		{
-			;
 		}
 		finally
 		{

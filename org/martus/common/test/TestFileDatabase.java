@@ -115,7 +115,6 @@ public class TestFileDatabase extends TestCaseEnhanced
 		}
 		catch(FileDatabase.MissingAccountMapException ignoreExpectedException)
 		{
-			;
 		}
 	}
 	
@@ -463,7 +462,6 @@ public class TestFileDatabase extends TestCaseEnhanced
 		}
 		catch(FileVerificationException expectedException)
 		{
-			;
 		}
 
 		mapSigFile.delete();
@@ -474,7 +472,6 @@ public class TestFileDatabase extends TestCaseEnhanced
 		}
 		catch (FileVerificationException expectedException)
 		{
-			;
 		}
 
 		fileDb.deleteAllData();

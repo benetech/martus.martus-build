@@ -217,8 +217,7 @@ public class TestConfigInfo extends TestCaseEnhanced
 			assertEquals(label + ": sampleSendContactInfoToServer", false, info.shouldContactInfoBeSentToServer());
 		if(VERSION >= 3)
 			; // Version 3 added no data fields
-		else
-			; // Version 3 added no data fields
+
 		if(VERSION >= 4)
 			assertEquals(label + ": sampleServerComplicance", sampleServerCompliance, info.getServerCompliance());
 		else

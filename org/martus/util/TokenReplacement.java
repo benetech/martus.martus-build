@@ -31,7 +31,7 @@ import java.util.Map;
 public class TokenReplacement 
 {
 
-	public static class TokenInvalidException extends Exception {};
+	public static class TokenInvalidException extends Exception {}
 
 	public static String replaceTokens(String original, Map tokenReplacement) throws TokenInvalidException 
 	{

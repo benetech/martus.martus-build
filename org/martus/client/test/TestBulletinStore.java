@@ -870,12 +870,12 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("Packet count incorrect", 5, db.getRecordCount());
 
 		DatabaseKey headerKey = new DatabaseKey(loaded.getBulletinHeaderPacket().getUniversalId());
-		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());;
-		DatabaseKey privateKey = new DatabaseKey(loaded.getPrivateFieldDataPacket().getUniversalId());;
+		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());
+		DatabaseKey privateKey = new DatabaseKey(loaded.getPrivateFieldDataPacket().getUniversalId());
 		AttachmentProxy gotAttachment = loaded.getPublicAttachments()[0];
-		DatabaseKey attachmentKey = new DatabaseKey(gotAttachment.getUniversalId());;
+		DatabaseKey attachmentKey = new DatabaseKey(gotAttachment.getUniversalId());
 		AttachmentProxy gotPrivateAttachment = loaded.getPrivateAttachments()[0];
-		DatabaseKey attachmentPrivateKey = new DatabaseKey(gotPrivateAttachment.getUniversalId());;
+		DatabaseKey attachmentPrivateKey = new DatabaseKey(gotPrivateAttachment.getUniversalId());
 
 		assertTrue("Header Packet missing", db.doesRecordExist(headerKey));
 		assertTrue("Data Packet missing", db.doesRecordExist(dataKey));
@@ -1056,12 +1056,12 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals("record count not 5?", 5, db.getRecordCount());
 
 		DatabaseKey headerKey = new DatabaseKey(loaded.getBulletinHeaderPacket().getUniversalId());
-		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());;
-		DatabaseKey privateKey = new DatabaseKey(loaded.getPrivateFieldDataPacket().getUniversalId());;
+		DatabaseKey dataKey = new DatabaseKey(loaded.getFieldDataPacket().getUniversalId());
+		DatabaseKey privateKey = new DatabaseKey(loaded.getPrivateFieldDataPacket().getUniversalId());
 		AttachmentProxy gotAttachment = loaded.getPublicAttachments()[0];
 		AttachmentProxy gotAttachmentPrivate = loaded.getPrivateAttachments()[0];
-		DatabaseKey attachmentKey = new DatabaseKey(gotAttachment.getUniversalId());;
-		DatabaseKey attachmentPrivateKey = new DatabaseKey(gotAttachmentPrivate.getUniversalId());;
+		DatabaseKey attachmentKey = new DatabaseKey(gotAttachment.getUniversalId());
+		DatabaseKey attachmentPrivateKey = new DatabaseKey(gotAttachmentPrivate.getUniversalId());
 
 		assertEquals("Header Packet present?", false, db.doesRecordExist(headerKey));
 		assertEquals("Data Packet present?", false, db.doesRecordExist(dataKey));

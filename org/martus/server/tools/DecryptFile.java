@@ -45,9 +45,9 @@ import org.martus.util.Base64.InvalidBase64Exception;
 
 public class DecryptFile
 {
-	public static class IncorrectEncryptedFileIdentifierException extends Exception {};
-	public static class IncorrectPublicKeyException extends Exception {};
-	public static class DigestFailedException extends Exception {};
+	public static class IncorrectEncryptedFileIdentifierException extends Exception {}
+	public static class IncorrectPublicKeyException extends Exception {}
+	public static class DigestFailedException extends Exception {}
 	
 	public static void main(String[] args) throws IOException
 	{
