@@ -36,7 +36,7 @@ public class ShowServerAccountList
 				dataDir = new File(args[i].substring(args[i].indexOf("=")+1));
 			}
 			
-			if(args[i].startsWith("--no-prompt="))
+			if(args[i].startsWith("--no-prompt"))
 			{
 				prompt = false;
 			}
