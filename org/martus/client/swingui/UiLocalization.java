@@ -39,8 +39,8 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Vector;
 
-import org.martus.client.core.*;
 import org.martus.client.core.ChoiceItem;
+import org.martus.client.core.DateUtilities;
 import org.martus.client.core.Localization;
 import org.martus.client.core.MartusApp;
 import org.martus.common.UnicodeWriter;
@@ -115,7 +115,7 @@ public class UiLocalization extends Localization
 		reader.close();
 	}
 
-    public UiLocalization(String directoryToUse)
+    public UiLocalization(File directoryToUse)
     {
     	super(directoryToUse);
 		loadEnglishTranslations();

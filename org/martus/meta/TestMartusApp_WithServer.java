@@ -17,6 +17,7 @@ import org.martus.client.swingui.UiConstants;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceForNonSSLHandler;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
+import org.martus.client.test.NullProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.BulletinHeaderPacket;
@@ -80,7 +81,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		new File(appWithServer.getConfigInfoFilename()).delete();
 		new File(appWithServer.getConfigInfoSignatureFilename()).delete();
 
-		ProgressMeterInterface nullProgressMeter = null;
+		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploaderWithServer = new BackgroundUploader(appWithServer, nullProgressMeter);		
 		uploaderWithoutServer = new BackgroundUploader(appWithoutServer, nullProgressMeter);		
 		mockServer.deleteAllData();
@@ -840,7 +841,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		mockResponse.add(NetworkInterfaceConstants.OK);
 		gateway.response = mockResponse;
 
-		ProgressMeterInterface nullProgressMeter = null;
+		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		BackgroundUploader uploader = new BackgroundUploader(app, nullProgressMeter);
 		String result = uploader.putContactInfoOnServer(contact);
 		assertEquals("wrong result?", mockResponse.get(0), result);

@@ -11,6 +11,7 @@ import org.martus.client.swingui.RetrieveHQTableModel;
 import org.martus.client.swingui.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.RetrieveMyTableModel;
 import org.martus.client.test.MockMartusApp;
+import org.martus.client.test.NullProgressMeter;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
@@ -53,7 +54,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.setServerInfo("mock", mockServer.getAccountId(), "");
 		appWithAccount.setSSLNetworkInterfaceHandlerForTesting(mockSSLServerHandler);
 		
-		ProgressMeterInterface nullProgressMeter = null;
+		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploader = new BackgroundUploader(appWithAccount, nullProgressMeter);
 
 		mockServer.deleteAllData();

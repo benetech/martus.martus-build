@@ -83,7 +83,8 @@ class UiFolderTreePane extends JScrollPane
 	{
 		tree.stopEditing();
 
-		BulletinFolder newFolder = parent.getApp().createUniqueFolder();
+		String originalFolderName = parent.getLocalization().getFieldLabel("defaultFolderName");
+		BulletinFolder newFolder = parent.getApp().createUniqueFolder(originalFolderName);
 		if(newFolder == null)
 			return;
 		parent.folderTreeContentsHaveChanged();

@@ -86,13 +86,14 @@ public class MartusApp
 		}
 	}
 
-	public MartusApp() throws MartusAppInitializationException
+	public MartusApp(UiLocalization localizationToUse) throws MartusAppInitializationException
 	{
-		this(null, determineDataDirectory());
+		this(null, determineDataDirectory(), localizationToUse);
 	}
 
-	public MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse) throws MartusAppInitializationException
+	public MartusApp(MartusCrypto cryptoToUse, File dataDirectoryToUse, UiLocalization localizationToUse) throws MartusAppInitializationException
 	{
+		localization = localizationToUse;
 		try
 		{
 			if(cryptoToUse == null)
@@ -100,7 +101,6 @@ public class MartusApp
 
 			dataDirectory = dataDirectoryToUse.getPath() + "/";
 			security = cryptoToUse;
-			localization = new UiLocalization(getTranslationsDirectory());
 			store = new BulletinStore(dataDirectoryToUse, cryptoToUse);
 			configInfo = new ConfigInfo();
 
@@ -341,9 +341,9 @@ public class MartusApp
 		return helpFile;
 	}
 
-	public static String getTranslationsDirectory()
+	public static File getTranslationsDirectory()
 	{
-		return determineDataDirectory().getPath();
+		return determineDataDirectory();
 	}
 
 	public File getKeyPairFile()
@@ -451,12 +451,11 @@ public class MartusApp
 		maxNewFolders = numFolders;
 	}
 
-	public BulletinFolder createUniqueFolder()
+	public BulletinFolder createUniqueFolder(String originalFolderName)
 	{
 		BulletinFolder newFolder = null;
 		String uniqueFolderName = null;
 		int folderIndex = 0;
-		String originalFolderName = getLocalization().getFieldLabel("defaultFolderName");
 		while (newFolder == null && folderIndex < maxNewFolders)
 		{
 			uniqueFolderName = originalFolderName;
@@ -625,10 +624,9 @@ public class MartusApp
 		setLastUploadRemindedTime(new Date());
 	}
 
-	public void search(String searchFor, String startDate, String endDate)
+	public void search(String searchFor, String startDate, String endDate, String andKeyword, String orKeyword)
 	{
-		UiLocalization localization = getLocalization();
-		SearchParser parser = new SearchParser(localization.getKeyword("and"), localization.getKeyword("or"));
+		SearchParser parser = new SearchParser(andKeyword, orKeyword);
 		SearchTreeNode searchNode = parser.parse(searchFor);
 		BulletinSearcher matcher = new BulletinSearcher(searchNode, startDate, endDate);
 

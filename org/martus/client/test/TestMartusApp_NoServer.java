@@ -101,7 +101,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		appWithAccount.getStore().saveBulletin(b2);
 		appWithAccount.getStore().saveBulletin(b3);
 
-		BulletinFolder f1 = appWithAccount.createUniqueFolder();
+		BulletinFolder f1 = appWithAccount.createUniqueFolder("testFolder");
 		f1.add(b1);
 		f1.add(b2);
 		f1.add(b3);
@@ -132,7 +132,7 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		appWithAccount.getStore().saveBulletin(b1);
 		appWithAccount.getStore().saveBulletin(b2);
 
-		BulletinFolder f1 = appWithAccount.createUniqueFolder();
+		BulletinFolder f1 = appWithAccount.createUniqueFolder("testFolder");
 		BulletinFolder f2 = appWithAccount.getFolderDraftOutbox();
 		f1.add(b1);
 		f2.add(b2);
@@ -163,7 +163,8 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 			try
 			{
-				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
+				UiLocalization localization = new UiLocalization(fakeDataDirectory);
+				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
 				app.doAfterSigninInitalization();
 				fail("Should have thrown because map is missing");
 			}
@@ -217,7 +218,8 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 			try
 			{
-				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
+				UiLocalization localization = new UiLocalization(fakeDataDirectory);
+				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
 				app.doAfterSigninInitalization();
 			}
 			catch(MartusApp.MartusAppInitializationException unExpectedException)
@@ -279,7 +281,8 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 			try
 			{
-				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory);
+				UiLocalization localization = new UiLocalization(fakeDataDirectory);
+				MartusApp app = new MartusApp(mockSecurityForApp, fakeDataDirectory, localization);
 				app.doAfterSigninInitalization();
 			}
 			catch(MartusApp.MartusAppInitializationException unExpectedException)
@@ -580,22 +583,24 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 
 		appWithAccount.loadSampleData(); //SLOW!!!
 		Bulletin b = store.findBulletinByUniversalId((UniversalId)store.getAllBulletinUids().get(0));
-		appWithAccount.search(b.get("title"), startDate, endDate);
+		String andKeyword = "and";
+		String orKeyword = "or";
+		appWithAccount.search(b.get("title"), startDate, endDate, andKeyword, orKeyword);
 		assertNotNull("Search results should have been created", store.getSearchFolderName());
 
-		appWithAccount.search("--not in any bulletin--", startDate, endDate);
+		appWithAccount.search("--not in any bulletin--", startDate, endDate, andKeyword, orKeyword);
 		assertEquals("search should clear results folder", 0, store.findFolder(store.getSearchFolderName()).getBulletinCount());
 
 		assertTrue("not enough bulletins?", appWithAccount.getStore().getBulletinCount() >= 5);
 		assertTrue("too many bulletins?", appWithAccount.getStore().getBulletinCount() <= 15);
-		appWithAccount.search(b.get("author"), startDate, endDate);
+		appWithAccount.search(b.get("author"), startDate, endDate, andKeyword, orKeyword);
 		assertEquals(1, store.findFolder(store.getSearchFolderName()).getBulletinCount());
-		appWithAccount.search(b.get(""), startDate, endDate);
+		appWithAccount.search(b.get(""), startDate, endDate, andKeyword, orKeyword);
 		assertEquals(10, store.findFolder(store.getSearchFolderName()).getBulletinCount());
 
 		startDate = "1999-01-19";
 		endDate = startDate;
-		appWithAccount.search(b.get(""), startDate, endDate);
+		appWithAccount.search(b.get(""), startDate, endDate, andKeyword, orKeyword);
 		assertEquals(1, store.findFolder(store.getSearchFolderName()).getBulletinCount());
 
 		TRACE_END();
@@ -611,9 +616,9 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		app.getStore().saveBulletin(b2);
 
 		assertEquals("Found the bulletin already in a folder?", 0, app.findBulletinInAllVisibleFolders(b1).size());
-		BulletinFolder f1 = app.createUniqueFolder();
-		BulletinFolder f2 = app.createUniqueFolder();
-		BulletinFolder f3 = app.createUniqueFolder();
+		BulletinFolder f1 = app.createUniqueFolder("testFolder");
+		BulletinFolder f2 = app.createUniqueFolder("testFolder");
+		BulletinFolder f3 = app.createUniqueFolder("testFolder");
 		BulletinFolder f4 = app.getFolderDraftOutbox();
 		f1.add(b1);
 		f2.add(b2);
@@ -929,16 +934,17 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		TRACE_BEGIN("testCreateFolders");
 		final int MAXFOLDERS = 10;
 		appWithAccount.setMaxNewFolders(MAXFOLDERS);
-		assertNotNull("New Folder is null?", appWithAccount.createUniqueFolder());
-		assertNotNull("Could not find first new folder", appWithAccount.store.findFolder("New Folder"));
+		String baseName = "testing";
+		assertNotNull("New Folder is null?", appWithAccount.createUniqueFolder(baseName));
+		assertNotNull("Could not find first new folder", appWithAccount.store.findFolder(baseName));
 
 		for(int i = 1; i < MAXFOLDERS; ++i)
 		{
-			assertNotNull("Folder"+i+" is null?", appWithAccount.createUniqueFolder());
-			assertNotNull("Could not find new folder"+i, appWithAccount.store.findFolder("New Folder"+i));
+			assertNotNull("Folder"+i+" is null?", appWithAccount.createUniqueFolder(baseName));
+			assertNotNull("Could not find new folder"+i, appWithAccount.store.findFolder(baseName+i));
 		}
-		assertNull("Max Folders reached, why is this not null?", appWithAccount.createUniqueFolder());
-		assertNull("Found this folder"+MAXFOLDERS, appWithAccount.store.findFolder("New Folder"+MAXFOLDERS));
+		assertNull("Max Folders reached, why is this not null?", appWithAccount.createUniqueFolder(baseName));
+		assertNull("Found this folder"+MAXFOLDERS, appWithAccount.store.findFolder(baseName+MAXFOLDERS));
 		TRACE_END();
 	}
 

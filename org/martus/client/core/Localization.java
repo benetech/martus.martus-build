@@ -42,9 +42,9 @@ import org.martus.common.UnicodeReader;
 
 public class Localization
 {
-	public Localization(String directoryToUse)
+	public Localization(File directoryToUse)
 	{
-		directory = new File(directoryToUse);
+		directory = directoryToUse;
 		languageTranslationsMap = new TreeMap();
 	}
 	

@@ -36,6 +36,7 @@ import org.martus.client.core.MartusApp;
 import org.martus.client.core.ProgressMeterInterface;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
+import org.martus.client.test.NullProgressMeter;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
 import org.martus.common.MockBulletin;
@@ -89,7 +90,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		new File(appWithServer.getConfigInfoFilename()).delete();
 		new File(appWithServer.getConfigInfoSignatureFilename()).delete();
 
-		ProgressMeterInterface nullProgressMeter = null;
+		ProgressMeterInterface nullProgressMeter = new NullProgressMeter();
 		uploaderWithServer = new BackgroundUploader(appWithServer, nullProgressMeter);		
 		uploaderWithoutServer = new BackgroundUploader(appWithoutServer, nullProgressMeter);		
 		mockServer.deleteAllData();

@@ -92,7 +92,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		currentActiveFrame = this;
 		try
 		{
-			app = new MartusApp();
+			localization = new UiLocalization(MartusApp.getTranslationsDirectory());
+			app = new MartusApp(localization);
 		}
 		catch(MartusApp.MartusAppInitializationException e)
 		{
@@ -254,7 +255,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	
 	public UiLocalization getLocalization()
 	{
-		return getApp().getLocalization();
+		return localization;
 	}
 
 	public BulletinStore getStore()
@@ -637,7 +638,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			return;
 		Cursor originalCursor = setWaitingCursor();
 
-		app.search(searchDlg.getSearchString(), searchDlg.getStartDate(), searchDlg.getEndDate());
+		String andKeyword = getLocalization().getKeyword("and");
+		String orKeyword = getLocalization().getKeyword("or");
+		app.search(searchDlg.getSearchString(), searchDlg.getStartDate(), searchDlg.getEndDate(), andKeyword, orKeyword);
 		BulletinStore store = getStore();
 		BulletinFolder searchFolder = store.findFolder(store.getSearchFolderName());
 		folders.folderTreeContentsHaveChanged();
@@ -1609,6 +1612,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private UiMenuBar menuBar;
 	private UiToolBar toolBar;
 	UiStatusBar statusBar;
+	UiLocalization localization;
 
 	private JFrame currentActiveFrame;
 	boolean inConfigServer;

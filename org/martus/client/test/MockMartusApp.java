@@ -32,6 +32,7 @@ import java.io.IOException;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MockClientDatabase;
@@ -62,7 +63,7 @@ public class MockMartusApp extends MartusApp
 
 	MockMartusApp(MartusCrypto crypto, File dataDirectoryToUse) throws MartusAppInitializationException
 	{
-		super(crypto, dataDirectoryToUse);
+		super(crypto, dataDirectoryToUse, new UiLocalization(dataDirectoryToUse));
 	}
 
 	public void deleteAllFiles() throws Exception
