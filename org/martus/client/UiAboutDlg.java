@@ -38,7 +38,7 @@ public class UiAboutDlg extends JDialog implements ActionListener
 		getContentPane().add(new JLabel("   "), BorderLayout.EAST);
 		
 		String versionInfo = app.getFieldLabel("aboutDlgVersionInfo");
-		versionInfo += MartusUtilities.getVersionDate(getClass());
+		versionInfo += MartusUtilities.getVersionDate();
 		
 		Container info = new Container();
 		info.setLayout(new GridLayout(10,1));

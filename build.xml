@@ -8,14 +8,13 @@
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
   <property name="common-package" value="${martus-package}.common"/>
-  <property name="common-files" value="${common-dir}/*.class,
-    			${common-dir}/version.txt"/>
+  <property name="BuildDateFile" value="${common-dir}/BuildDate.txt"/>
+  <property name="common-files" value="${common-dir}/*.class, ${BuildDateFile}/>
 
   <property name="server-dir" value="${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
   <property name="server-package" value="${martus-package}.server"/>
-  <property name="server-files" value="${server-dir}/*.class,
-    			${server-dir}/version.txt"/>
+  <property name="server-files" value="${server-dir}/*.class/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
   <property name="client-jar" value= "${dist}/martus.jar"/>
@@ -30,14 +29,12 @@
     			${client-dir}/locked.jpg,
     			${client-dir}/unlocked.jpg,
     			${client-dir}/Martus.png,
-    			${client-dir}/version.txt,
     			main-class.txt"/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
   <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
   <property name="meta-package" value="${martus-package}.meta"/>
-  <property name="meta-files" value="${meta-dir}/*.class,
-    			${meta-dir}/version.txt"/>
+  <property name="meta-files" value="${meta-dir}/*.class/>
 
   <target name="init">
     <!-- tstamp task initializes ${DSTAMP} etc -->
@@ -48,35 +45,30 @@
   	<delete file="${dist}/*"/>
   	<delete dir="${dist}"/>
 
+    <delete file="${BuildDateFile}/>
+
     <delete file="${common-dir}/*.class"/>
     <delete file="${common-jar}"/>
-    <delete file="${common-jar}/version.txt"/>
 
     <delete file="${server-dir}/*.class"/>
     <delete file="${server-jar}"/>
-    <delete file="${server-jar}/version.txt"/>
 
     <delete file="${client-dir}/*.class"/>
     <delete file="${client-jar}"/>
-    <delete file="${client-jar}/version.txt"/>
 
     <delete file="${meta-dir}/*.class"/>
     <delete file="${meta-jar}"/>
-    <delete file="${meta-jar}/version.txt"/>
   </target>
 
   <target name="build" depends="init">
 
-    <echo message="${DSTAMP}" file="${common-dir}/version.txt"/>
+    <echo message="${DSTAMP}" file={BuildDateFile}/>
     <javac srcdir="${common-dir}" failonerror="true"/>
 
-    <echo message="${DSTAMP}" file="${server-dir}/version.txt"/>
     <javac srcdir="${server-dir}" classpath="${common-dir}" failonerror="true"/>
 
-    <echo message="${DSTAMP}" file="${client-dir}/version.txt"/>
     <javac srcdir="${client-dir}" classpath="${common-dir}" failonerror="true"/>
 
-    <echo message="${DSTAMP}" file="${meta-dir}/version.txt"/>
     <javac srcdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true"/>
 
     <mkdir dir="${dist}"/>

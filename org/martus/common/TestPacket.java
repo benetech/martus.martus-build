@@ -57,7 +57,7 @@ public class TestPacket extends TestCaseEnhanced
 		int endCommentPosition = result.indexOf(MartusXml.packetStartCommentEnd);
 		assertTrue("No end startComment?", endCommentPosition >= startCommentLength);
 		String version = result.substring(startCommentLength, endCommentPosition);
-		assertEquals("Invalid Version", MartusUtilities.getVersionDate(getClass()) , version);
+		assertEquals("Invalid Version", MartusUtilities.getVersionDate() , version);
 		
 		assertContains(packet.getLocalId(), result);
 		assertContains(packet.getAccountId(), result);
