@@ -105,7 +105,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		System.out.print("Enter passphrase: ");
 		System.out.flush();
 
-		File waitingFile = new File(dataDirectory, "waiting");
+		File waitingFile = new File(getTriggersDirectory(), "waiting");
 		waitingFile.delete();
 		writeSyncFile(waitingFile);
 
@@ -185,7 +185,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		server.setDatabase(diskDatabase);
 		
-		File runningFile = new File(dataDirectory, "running");
+		File runningFile = new File(getTriggersDirectory(), "running");
 		runningFile.delete();
 		if(secureMode)
 		{
@@ -231,7 +231,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(dataDirectory, getKeypairFilename());
-		shutdownFile = new File(dataDirectory, MARTUSSHUTDOWNFILENAME);		
+		shutdownFile = new File(getTriggersDirectory(), MARTUSSHUTDOWNFILENAME);
 		bannedClientsFile = new File(dataDirectory, BANNEDCLIENTSFILENAME);
 		
 		if(!bannedClientsFile.exists())
@@ -1531,6 +1531,17 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return file;
 	}
 	
+	public static File getTriggersDirectory()
+	{
+		File dir = new File(getDefaultDataDirectory(), ADMINTRIGGERDIRECTORY);
+		
+		if(!dir.exists())
+		{
+			dir.mkdirs();
+		}
+		return dir;
+	}
+	
 	public static String getKeypairFilename()
 	{
 		return KEYPAIRFILENAME;
@@ -2079,8 +2090,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 	private static final String DEPRECATED_BANNEDCLIENTSFILENAME = "notauthorized.txt";
 	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
-	
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
+	
+	private static final String ADMINTRIGGERDIRECTORY = "adminTriggers";
+	
 	private final long IMMEDIATELY = 0;
 	private static final long bannedCheckIntervalMillis = 60 * 1000;
 	private static final long shutdownRequestIntervalMillis = 1000;
