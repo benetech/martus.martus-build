@@ -54,7 +54,10 @@ public class FieldSpec
 		label = extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
 		String unknownStuff = extractFieldSpecElement(thisFieldDescription, UNKNOWN_ELEMENT_NUMBER);
 		if(!unknownStuff.equals(""))
+		{
+			//System.out.println("FieldSpec.initializeFromDescription unknown: " + tag + ": " + unknownStuff);
 			hasUnknown = true;
+		}
 	}
 	
 	public String getTag()
