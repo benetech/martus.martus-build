@@ -1044,7 +1044,11 @@ public class MartusApp
 			Base64.decode(reader, outputStream);
 			chunkOffset += chunkSize;
 			if(progressMeter != null)
+			{
+				if(progressMeter.shouldExit())
+					break;					
 				progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), chunkOffset, masterTotalSize);	
+			}
 		}
 		if(progressMeter != null)
 			progressMeter.updateProgressMeter(getFieldLabel("ChunkProgressStatusMessage"), chunkOffset, masterTotalSize);	

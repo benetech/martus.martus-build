@@ -13,7 +13,7 @@ public class UiStatusBar extends JPanel
 		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
 		
 		statusBarBox = Box.createHorizontalBox();
-		backgroundProgressMeter = new UiProgressMeter();
+		backgroundProgressMeter = new UiProgressMeter(null);
 		statusBarBox.add(backgroundProgressMeter);
 		statusBarBox.add(Box.createHorizontalGlue());
 		add(statusBarBox);

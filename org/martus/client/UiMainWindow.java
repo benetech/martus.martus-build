@@ -1005,18 +1005,21 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			BulletinFolder retrievedFolder = app.createOrFindFolder(folderName);
 			app.getStore().saveFolders();
 		
-			UiProgressRetrieveDlg progressDlg = new UiProgressRetrieveDlg(this, retrieverProgressTag);	
+			UiProgressRetrieveBulletinsDlg progressDlg = new UiProgressRetrieveBulletinsDlg(this, retrieverProgressTag);	
 			Retriever retriever = new Retriever(app, progressDlg);
 			retriever.retrieveBulletins(uidList, retrievedFolder);
 			retriever.progressDlg.show();
-			String result = retriever.getResult();
-			if(!result.equals(NetworkInterfaceConstants.OK))
+			if(progressDlg.shouldExit())
+				notifyDlg(this, "RetrieveCanceled");
+			else
 			{
-				notifyDlg(this, "retrievefailed");
-				return;
+				String result = retriever.getResult();
+				if(!result.equals(NetworkInterfaceConstants.OK))
+					notifyDlg(this, "retrievefailed");
+				else
+					notifyDlg(this, "retrieveworked");
 			}
 				
-			notifyDlg(this, "retrieveworked");
 			folders.folderHasChanged(retrievedFolder);
 			folders.selectFolder(folderName);
 		} 

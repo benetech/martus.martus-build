@@ -8,7 +8,7 @@ import org.martus.common.UniversalId;
 public class Retriever 
 {
 
-	public Retriever(MartusApp appToUse, UiProgressRetrieveDlg retrieve) 
+	public Retriever(MartusApp appToUse, UiProgressRetrieveBulletinsDlg retrieve) 
 	{
 		super();
 		app = appToUse;
@@ -74,7 +74,11 @@ public class Retriever
 				try
 				{
 					if(progressDlg != null)
+					{
+						if(progressDlg.shouldExit())
+							break;
 						progressDlg.updateBulletinCountMeter(i, size);
+					}
 					UniversalId uid = (UniversalId)uidList.get(i);
 					if(app.getStore().findBulletinByUniversalId(uid) != null)
 						continue;
@@ -99,5 +103,5 @@ public class Retriever
 		
 	private String result;
 	private MartusApp app;
-	public UiProgressRetrieveDlg progressDlg;
+	public UiProgressRetrieveBulletinsDlg progressDlg;
 }

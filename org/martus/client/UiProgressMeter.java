@@ -10,11 +10,11 @@ import javax.swing.border.BevelBorder;
 
 public class UiProgressMeter extends JPanel
 {
-	public UiProgressMeter() 
+	public UiProgressMeter(UiProgressRetrieveDlg dlg) 
 	{
 		super();
 		setLayout( new BoxLayout( this, BoxLayout.X_AXIS) );
-
+		parentDlg = dlg;
 		statusMessage = new JLabel("     ", JLabel.LEFT );
 		statusMessage.setMinimumSize(new Dimension(60, 25));
 
@@ -53,7 +53,16 @@ public class UiProgressMeter extends JPanel
 	{
 		progressMeter.setVisible(false);
 	}
-
+	
+	public boolean shouldExit()
+	{
+		if(parentDlg != null)
+			return parentDlg.shouldExit();
+		return
+			false;
+	}
+	
 	private JLabel statusMessage;
 	private JProgressBar progressMeter;
+	private UiProgressRetrieveDlg parentDlg;
 }

@@ -360,6 +360,7 @@ public class MartusLocalization
 		addEnglishTranslation("wintitle:notifyServerInfoInvalid=Server Response Invalid");
 		addEnglishTranslation("wintitle:notifyConfigNoServer=Unable to Connect to Server");
 		addEnglishTranslation("wintitle:notifyServerCodeWrong=Incorrect Server Public Code");
+		addEnglishTranslation("wintitle:notifyRetrieveCanceled=Bulletin Download Canceled");
 
 		addEnglishTranslation("wintitle:inputservername=Server Name");
 		addEnglishTranslation("wintitle:inputserverpubliccode=Server Identification");
@@ -662,6 +663,7 @@ public class MartusLocalization
 		addEnglishTranslation("field:notifyServerInfoInvalidcause=The Server has responded with invalid account information.");
 		addEnglishTranslation("field:notifyConfigNoServercause=The selected server is not responding. Before you choose a server, you must be connected to the internet, and that server must be available.");
 		addEnglishTranslation("field:notifyServerCodeWrongcause=The Server Public Code does not match the one you entered.");
+		addEnglishTranslation("field:notifyRetrieveCanceledcause=Bulletin download cancelled.  Some bulletins may have already been downloaded.");
 		
 		addEnglishTranslation("field:inputservermagicwordentry=If you want to request permission to upload to this server, enter the 'magic word' now:");
 		addEnglishTranslation("field:inputImportPublicCodeentry=Enter the Public Identification Code for this account:");

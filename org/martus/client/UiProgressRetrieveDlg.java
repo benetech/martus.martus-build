@@ -1,55 +1,73 @@
 package org.martus.client;
 
-import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
-import javax.swing.Box;
+import javax.swing.JButton;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 
-public class UiProgressRetrieveDlg extends JDialog
+public class UiProgressRetrieveDlg extends JDialog 
 {
-
 	public UiProgressRetrieveDlg(UiMainWindow window, String tag)
 	{
 		super(window, window.getApp().getWindowTitle(tag), true);
 		setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-		mainWindow = window;
-		bulletinCountMeter = new UiProgressMeter();
-		//RIGHT_ALIGNMENT causes ... in text presentation for some reason
-		//bulletinCountMeter.setAlignmentX(bulletinCountMeter.RIGHT_ALIGNMENT);
-		chunkCountMeter = new UiProgressMeter();
-		//chunkCountMeter.setAlignmentX(chunkCountMeter.RIGHT_ALIGNMENT);
+		addWindowListener(new WindowEventHandler());
+		cancel = new JButton(window.getApp().getButtonLabel("cancel"));
+		cancel.addActionListener(new CancelHandler());
+		cancel.setAlignmentX(JButton.CENTER_ALIGNMENT);
+		bulletinCountMeter = new UiProgressMeter(this);
 		statusMessage = window.getApp().getFieldLabel(tag);
 		updateBulletinCountMeter(0, 1);	
-		chunkCountMeter.updateProgressMeter(mainWindow.getApp().getFieldLabel("ChunkProgressStatusMessage"), 0, 1);			
-		Box vBox = Box.createVerticalBox();
-		vBox.add(new JLabel("    "));
-		vBox.add(bulletinCountMeter);
-		vBox.add(chunkCountMeter);
-		vBox.add(new JLabel("    "));
-		getContentPane().add(vBox);
-		getContentPane().add(new JLabel("    "), BorderLayout.EAST);
-		getContentPane().add(new JLabel("    "), BorderLayout.WEST);
-		window.centerDlg(this);
+	}
+
+	class WindowEventHandler extends WindowAdapter
+	{
+		public void windowClosing(WindowEvent event)
+		{
+			requestExit();
+		}
+	}
+
+	class CancelHandler implements ActionListener
+	{
+		public void actionPerformed(ActionEvent ae)
+		{
+				requestExit();
+		}
 	}
 	
-	public void updateBulletinCountMeter(int currentValue, int maxValue)
+	private void requestExit()
 	{
-		bulletinCountMeter.updateProgressMeter(statusMessage, currentValue, maxValue);	
+		isExitRequested = true;
+		cancel.setEnabled(false);
 	}
-	
-	public UiProgressMeter getChunkCountMeter()
+
+	public void beginRetrieve()
 	{
-		return chunkCountMeter;	
+		show();
 	}
 	
 	public void finishedRetrieve()
 	{
 		dispose();	
 	}
+	
+	public boolean shouldExit()
+	{
+		return isExitRequested;	
+	}
 
-	private UiProgressMeter bulletinCountMeter;
-	private UiProgressMeter chunkCountMeter;
-	private UiMainWindow mainWindow;
+	public void updateBulletinCountMeter(int currentValue, int maxValue)
+	{
+		bulletinCountMeter.updateProgressMeter(statusMessage, currentValue, maxValue);	
+	}
+	
+	public UiProgressMeter bulletinCountMeter;
+	public JButton cancel;
+
 	private String statusMessage;
+	private boolean isExitRequested;
 }
