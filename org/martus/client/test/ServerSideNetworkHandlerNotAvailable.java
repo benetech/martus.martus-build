@@ -120,12 +120,6 @@ class ServerSideNetworkHandlerNotAvailable implements NetworkInterface
 	{
 		return null;
 	}
-	public Vector listFieldOfficeBulletinSummaries(
-		String hqAccountId,
-		String authorAccountId)
-	{
-		return null;
-	}
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
 		return null;

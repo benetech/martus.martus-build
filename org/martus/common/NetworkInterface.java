@@ -44,7 +44,6 @@ public interface NetworkInterface
 	public Vector getServerCompliance(String myAccountId, Vector parameters, String signature);
 	
 	// TODO: Delete everything below this line after all clients have been upgraded to 2002-08-28 or later
-	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId);
 	public Vector listFieldOfficeAccounts(String hqAccountId);
 
 	// TODO: Delete this after all clients have been upgraded to 2002-08-24 or later

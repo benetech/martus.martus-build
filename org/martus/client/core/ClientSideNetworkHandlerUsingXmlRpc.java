@@ -195,15 +195,6 @@ public class ClientSideNetworkHandlerUsingXmlRpc
 		return (Vector)callServer(server, CMD_DOWNLOAD_FIELD_DATA_PACKET, params);
 	}
 
-	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
-	{
-		logging("ServerInterfaceXmlRpcHandler:listFieldOfficeBulletinSummaries hqAccountId=" + hqAccountId);
-		Vector params = new Vector();
-		params.add(hqAccountId);
-		params.add(authorAccountId);
-		return (Vector)callServer(server, CMD_FIELD_OFFICE_SUMMARIES, params);
-	}
-
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
 		logging("ServerInterfaceXmlRpcHandler:listFieldOfficeAccounts hqAccountId=" + hqAccountId);

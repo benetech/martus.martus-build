@@ -343,7 +343,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotContains("downloadMyBulletinChunk", names);
 		assertNotContains("listMyBulletinSummaries", names);
 		assertNotContains("downloadFieldOfficeBulletinChunk", names);
-		assertContains("listFieldOfficeBulletinSummaries", names);
+		assertNotContains("listFieldOfficeBulletinSummaries", names);
 		assertContains("listFieldOfficeAccounts", names);
 		assertContains("downloadFieldDataPacket", names);
 

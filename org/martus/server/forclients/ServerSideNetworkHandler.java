@@ -370,17 +370,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return response;
 	}
 	
-	public Vector listFieldOfficeBulletinSummaries(String hqAccountId, String authorAccountId)
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-listFieldOfficeBulletinSummaries");
-		server.logging("request for client " + server.getPublicCode(hqAccountId));
-		Vector response = server.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId);
-		server.clientConnectionExit();
-		return response;
-	}
-	
 	public Vector listFieldOfficeAccounts(String hqAccountId)
 	{
 		server.clientConnectionStart();
