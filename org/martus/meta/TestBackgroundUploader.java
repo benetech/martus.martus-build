@@ -33,6 +33,7 @@ import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.MartusApp;
+import org.martus.client.core.BackgroundUploader.UploadResult;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NoServerNetworkInterfaceHandler;
 import org.martus.client.test.NullProgressMeter;
@@ -111,7 +112,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		TRACE_BEGIN("testBackgroundUploadSealedWithBadPort");
 
 		createSealedBulletin(appWithoutServer);
-		assertNull("No server", uploaderWithoutServer.backgroundUpload());
+		UploadResult result = uploaderWithoutServer.backgroundUpload();
+		assertNull("No server", result.result);
 		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderOutbox().getBulletinCount());
 		TRACE_END();
 	}
@@ -121,7 +123,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		TRACE_BEGIN("testBackgroundUploadDraftWithBadPort");
 
 		createDraftBulletin(appWithoutServer);
-		assertNull("No server", uploaderWithoutServer.backgroundUpload());
+		UploadResult result = uploaderWithoutServer.backgroundUpload();
+		assertNull("No server", result.result);
 		assertEquals("Bulletin disappeared?", 1, appWithoutServer.getFolderDraftOutbox().getBulletinCount());
 		TRACE_END();
 	}
@@ -133,7 +136,8 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		BulletinFolder outbox = appWithServer.getFolderOutbox();
 
 		assertEquals("Empty outbox", 0, outbox.getBulletinCount());
-		assertNull("Empty outbox", uploaderWithServer.backgroundUpload());
+		UploadResult result = uploaderWithServer.backgroundUpload();
+		assertEquals("Empty outbox", NetworkInterfaceConstants.OK, result.result);
 		TRACE_END();
 	}
 
@@ -147,11 +151,12 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		mockServer.allowUploads(appWithServer.getAccountId());
 
 		createSealedBulletin(appWithServer);
-		assertEquals("Should work", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload());
+		UploadResult result = uploaderWithServer.backgroundUpload();
+		assertEquals("Should work", NetworkInterfaceConstants.OK, result.result);
 		assertEquals("It was sent", 0, outbox.getBulletinCount());
 		assertEquals("It was sent", 1, appWithServer.getFolderSent().getBulletinCount());
 
-		assertNull("Again Empty outbox", uploaderWithServer.backgroundUpload());
+		assertEquals("Again Empty outbox", NetworkInterfaceConstants.OK, result.result);
 		mockServer.serverForClients.clearCanUploadList();
 		TRACE_END();
 	}
@@ -167,9 +172,9 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 		createDraftBulletin(appWithServer);
 		createDraftBulletin(appWithServer);
-		assertEquals("first returned an error?", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload());
+		assertEquals("first returned an error?", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload().result);
 		assertEquals("first didn't get removed?", 1, draftOutbox.getBulletinCount());
-		assertEquals("second returned an error?", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload());
+		assertEquals("second returned an error?", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload().result);
 		assertEquals("second didn't get removed?", 0, draftOutbox.getBulletinCount());
 
 		mockServer.serverForClients.clearCanUploadList();
@@ -186,7 +191,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		createSealedBulletin(appWithServer);
 		String FAILRESULT = "Some error tag would go here";
 		mockServer.uploadResponse = FAILRESULT;
-		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload());
+		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload().result);
 		assertEquals("Still in outbox", 1, outbox.getBulletinCount());
 		assertEquals("Not in sent folder", 0, appWithServer.getFolderSent().getBulletinCount());
 		Bulletin stillSealed = outbox.getBulletinSorted(0);
@@ -205,7 +210,7 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 		createDraftBulletin(appWithServer);
 		String FAILRESULT = "Some error tag would go here";
 		mockServer.uploadResponse = FAILRESULT;
-		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload());
+		assertEquals("Should fail", FAILRESULT, uploaderWithServer.backgroundUpload().result);
 		assertEquals("Still in draft outbox", 1, draftOutbox.getBulletinCount());
 		mockServer.uploadResponse = null;
 		TRACE_END();
@@ -222,12 +227,12 @@ public class TestBackgroundUploader extends TestCaseEnhanced
 
 		createSealedBulletin(appWithServer);
 		mockServer.uploadResponse = NetworkInterfaceConstants.OK;
-		assertEquals("Should work", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload());
+		assertEquals("Should work", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload().result);
 		assertEquals("Created a log?", false, logFile.exists());
 
 		appWithServer.enableUploadLogging();
 		Bulletin logged = createSealedBulletin(appWithServer);
-		assertEquals("Should work", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload());
+		assertEquals("Should work", NetworkInterfaceConstants.OK, uploaderWithServer.backgroundUpload().result);
 		assertEquals("No log?", true, logFile.exists());
 		mockServer.uploadResponse = null;
 

@@ -27,7 +27,7 @@ public class TestMeta extends TestCaseEnhanced
 	{
 		TestSuite suite= new TestSuite("Meta Tests");
 
-//		suite.addTest(new TestSuite(TestBackgroundUploader.class));
+		suite.addTest(new TestSuite(TestBackgroundUploader.class));
 		suite.addTest(new TestSuite(TestDatabase.class));
 		suite.addTest(new TestSuite(TestDatabaseHiddenRecords.class));
 		suite.addTest(new TestSuite(TestDeleteDraftsTableModel.class));
