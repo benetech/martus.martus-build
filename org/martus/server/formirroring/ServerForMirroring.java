@@ -302,5 +302,5 @@ public class ServerForMirroring implements ServerSupplierInterface
 	MirroringRetriever retriever;
 	Vector retrieversWeWillCall;
 	
-	private static final long mirroringIntervalMillis = 1 * 1000;	// TODO: Probably 60 seconds
+	private static final long mirroringIntervalMillis = 10 * 1000;	// TODO: Probably 60 seconds
 }
