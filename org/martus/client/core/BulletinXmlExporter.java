@@ -28,6 +28,7 @@ package org.martus.client.core;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.Vector;
 
 import org.martus.common.AttachmentProxy;
 import org.martus.common.MartusUtilities;
@@ -35,16 +36,22 @@ import org.martus.common.MartusXml;
 
 public class BulletinXmlExporter
 {
-	public BulletinXmlExporter()
-	{
-		super();
-	}
-
-	public static void export(Bulletin b, Writer dest) throws IOException
+	public static void exportBulletins(Vector bulletins, Writer dest)
+		throws IOException
 	{
 		dest.write(MartusXml.getTagStart(ExportedBulletinsElementName));
 		dest.write("\n\n");
 
+		for (int i = 0; i < bulletins.size(); i++)
+		{
+			Bulletin b = (Bulletin)bulletins.get(i);
+			exportOneBulletin(b, dest);
+		}
+		dest.write(MartusXml.getTagEnd(ExportedBulletinsElementName));
+	}
+
+	static void exportOneBulletin(Bulletin b, Writer dest) throws IOException
+	{
 		dest.write(MartusXml.getTagStart(BulletinElementName));
 		dest.write("\n");
 
@@ -60,8 +67,6 @@ public class BulletinXmlExporter
 
 		dest.write(MartusXml.getTagEnd(BulletinElementName));
 		dest.write("\n");
-
-		dest.write(MartusXml.getTagEnd(ExportedBulletinsElementName));
 	}
 
 	static void writeAttachments(Writer dest, AttachmentProxy[] publicAttachments)

@@ -27,7 +27,9 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.test;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.StringWriter;
+import java.util.Vector;
 
 import org.martus.client.core.Bulletin;
 import org.martus.client.core.BulletinStore;
@@ -37,6 +39,7 @@ import org.martus.common.BulletinConstants;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
+import org.martus.common.MartusCrypto.EncryptionException;
 
 public class TestBulletinXmlExporter extends TestCaseEnhanced
 {
@@ -44,33 +47,90 @@ public class TestBulletinXmlExporter extends TestCaseEnhanced
 	{
 		super(name);
 	}
-
-	public void testBasics() throws Exception
+	
+	public void setUp() throws Exception
 	{
-		BulletinStore store = new BulletinStore(new MockClientDatabase());
-		store.setSignatureGenerator(new MockMartusSecurity());
+		if(store==null)
+		{
+			store = new BulletinStore(new MockClientDatabase());
+			store.setSignatureGenerator(new MockMartusSecurity());
+		}
+	}
+
+	public void testExportOneBulletin() throws Exception
+	{
 		Bulletin b = new Bulletin(store);
 		
 		final String sampleAuthor = "someone special";
 		final String samplePrivateInfo = "this should not appear in the xml";
-		final File sampleAttachmentFile = createTempFile();
 
 		b.set(BulletinConstants.TAGAUTHOR, sampleAuthor);
 		b.set(BulletinConstants.TAGPRIVATEINFO, samplePrivateInfo);
-		AttachmentProxy ap = new AttachmentProxy(sampleAttachmentFile);
-		b.addPublicAttachment(ap);
 		
-		StringWriter writer = new StringWriter();
-		BulletinXmlExporter.export(b, writer);
-		String result = writer.toString();
+		Vector list = new Vector();
+		list.add(b);
+		String result = doExport(list);
 
 		assertContains("<ExportedMartusBulletins>", result);
 		assertContains("<MartusBulletin>", result);
 		assertContains(b.getAccount(), result);
 		assertContains(b.getLocalId(), result);
 		assertContains(sampleAuthor, result);
-		assertContains(sampleAttachmentFile.getName(), result);
 		
 		//System.out.println(result);
 	}
+
+	public void testExportWithPublicAttachments() throws Exception
+	{
+		Bulletin b = new Bulletin(store);
+		final File sampleAttachmentFile1 = addNewSampleAttachment(b);
+		final File sampleAttachmentFile2 = addNewSampleAttachment(b);
+
+		Vector list = new Vector();
+		list.add(b);
+		String result = doExport(list);
+
+		assertContains(sampleAttachmentFile1.getName(), result);
+		assertContains(sampleAttachmentFile2.getName(), result);
+	}
+
+	public void testExportMultipleBulletins() throws Exception
+	{
+		Bulletin b1 = new Bulletin(store);
+		Bulletin b2 = new Bulletin(store);
+		
+		final String sampleTitle1 = "a big event took place!";
+		final String sampleTitle2 = "watch this space";
+		b1.set(BulletinConstants.TAGTITLE, sampleTitle1);
+		b2.set(BulletinConstants.TAGTITLE, sampleTitle2);
+
+		StringWriter writer = new StringWriter();
+		Vector list = new Vector();
+		list.add(b1);
+		list.add(b2);
+		BulletinXmlExporter.exportBulletins(list, writer);
+		String result = writer.toString();
+
+		assertContains(sampleTitle1, result);
+		assertContains(sampleTitle2, result);
+	}
+
+	String doExport(Vector list) throws IOException
+	{
+		StringWriter writer = new StringWriter();
+		BulletinXmlExporter.exportBulletins(list, writer);
+		String result = writer.toString();
+		return result;
+	}
+
+	File addNewSampleAttachment(Bulletin b)
+		throws IOException, EncryptionException
+	{
+		final File sampleAttachmentFile = createTempFile();
+		AttachmentProxy ap = new AttachmentProxy(sampleAttachmentFile);
+		b.addPublicAttachment(ap);
+		return sampleAttachmentFile;
+	}
+
+	static BulletinStore store;
 }
