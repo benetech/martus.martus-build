@@ -8,7 +8,6 @@ import org.martus.client.core.BackgroundUploader;
 import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.BulletinStore;
 import org.martus.client.core.ClientSideNetworkGateway;
-import org.martus.client.core.MartusApp;
 import org.martus.client.core.Exceptions.ServerCallFailedException;
 import org.martus.client.core.Exceptions.ServerNotAvailableException;
 import org.martus.client.swingui.Retriever;

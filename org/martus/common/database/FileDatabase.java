@@ -43,8 +43,6 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.StreamEncryptor;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.database.Database.AccountVisitor;
-import org.martus.common.database.Database.PacketVisitor;
 import org.martus.common.packet.UniversalId;
 import org.martus.util.FileInputStreamWithSeek;
 import org.martus.util.InputStreamWithSeek;
