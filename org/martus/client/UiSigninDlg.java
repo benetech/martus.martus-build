@@ -72,8 +72,7 @@ public class UiSigninDlg extends JDialog implements VirtualKeyboardHandler
 			getContentPane().add(createNewUserNamePassword);
 			
 			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(window, app.getFieldLabel("HelpOnCreatingNewPassword"), 45);
-			helpOnCreatingPassword.setFont(createNewUserNamePassword.getFont());
+			UiWrappedTextArea helpOnCreatingPassword = new UiWrappedTextArea(window, app.getFieldLabel("HelpOnCreatingNewPassword"));
 			getContentPane().add(helpOnCreatingPassword);
 			
 		}
