@@ -658,8 +658,14 @@ public class MartusLocalization
 		addEnglishTranslation("field:SearchStartDate=Starting on:");
 		addEnglishTranslation("field:SearchEndDate=Ending on:");
 
+		addEnglishTranslation("folder:%OutBox=Outbox");
+		addEnglishTranslation("folder:%Sent=Sent Bulletins");
+		addEnglishTranslation("folder:%Draft=Draft Bulletins");
+		addEnglishTranslation("folder:%Discarded=Discarded Bulletins");
 		addEnglishTranslation("folder:%RetrievedMyBulletin=Retrieved Bulletins");
 		addEnglishTranslation("folder:%RetrievedFieldOfficeBulletin=Field Desk Bulletins");
+		addEnglishTranslation("folder:%SearchResults=Search Results");
+		addEnglishTranslation("folder:%RecoveredBulletins=Recovered Bulletins");
 
 		addEnglishTranslation("month:jan=Jan");
 		addEnglishTranslation("month:feb=Feb");

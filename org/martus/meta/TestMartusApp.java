@@ -1616,18 +1616,18 @@ public class TestMartusApp extends TestCaseEnhanced
 	public void testRepairOrphans()
 	{
 		assertEquals("already have orphans?", 0, appWithAccount.repairOrphans());
-		assertNull("Orphan Folder exists?", appWithAccount.getStore().findFolder("Recovered Bulletins"));
+		assertNull("Orphan Folder exists?", appWithAccount.getStore().findFolder(BulletinStore.RECOVERED_BULLETIN_FOLDER));
 		Bulletin b1 = appWithAccount.createBulletin();
 		b1.save();
 		assertEquals("didn't find the orphan?", 1, appWithAccount.repairOrphans());
 		assertEquals("didn't fix the orphan?", 0, appWithAccount.repairOrphans());
 		
-		BulletinFolder orphanFolder = appWithAccount.getStore().findFolder("Recovered Bulletins");
+		BulletinFolder orphanFolder = appWithAccount.getStore().findFolder(BulletinStore.RECOVERED_BULLETIN_FOLDER);
 		assertEquals("where did the orphan go?", 1, orphanFolder.getBulletinCount());
 		assertTrue("wrong bulletin?", orphanFolder.contains(b1));
 		
 		appWithAccount.loadFolders();
-		BulletinFolder orphanFolder2 = appWithAccount.getStore().findFolder("Recovered Bulletins");
+		BulletinFolder orphanFolder2 = appWithAccount.getStore().findFolder(BulletinStore.RECOVERED_BULLETIN_FOLDER);
 		assertEquals("forgot to save folders?", 1, orphanFolder2.getBulletinCount());
 	}
 	

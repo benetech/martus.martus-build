@@ -363,12 +363,12 @@ public class MartusApp
 
 	public String getNameOfFolderRetrieved()
 	{
-		return RETRIEVE_BULLETIN_FOLDER;
+		return store.getNameOfFolderRetrieved();
 	}
 	
 	public String getNameOfFolderRetrievedFieldOffice()
 	{
-		return RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER;
+		return store.getNameOfFolderRetrievedFieldOffice();
 	}
 	
 	public BulletinFolder createOrFindFolder(String name)
@@ -1457,9 +1457,6 @@ public class MartusApp
 	public MartusCrypto security;
 	private String currentUserName;
 	private int maxNewFolders;
-
-	public static final String RETRIEVE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
-	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletin";
 
 	public static final String PUBLIC_INFO_EXTENSION = ".mpi";
 	public static final String AUTHENTICATE_SERVER_FAILED = "Failed to Authenticate Server";

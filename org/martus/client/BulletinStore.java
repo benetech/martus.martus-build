@@ -365,13 +365,24 @@ public class BulletinStore
 
 	public String getSearchFolderName()
 	{
-		return "Search Results";
+		return SEARCH_RESULTS_BULLETIN_FOLDER;
 	}
 	
 	public String getOrphanFolderName()
 	{
-		return "Recovered Bulletins";
+		return RECOVERED_BULLETIN_FOLDER;
 	}
+
+	public String getNameOfFolderRetrieved()
+	{
+		return RETRIEVE_BULLETIN_FOLDER;
+	}
+	
+	public String getNameOfFolderRetrievedFieldOffice()
+	{
+		return RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER;
+	}
+
 
 	public BulletinFolder getFolderOutbox()
 	{
@@ -407,7 +418,7 @@ public class BulletinStore
 		folderDrafts = createSystemFolder("Draft Bulletins");
 		folderDrafts.setStatusAllowed(Bulletin.STATUSDRAFT);
 		folderDiscarded = createSystemFolder("Discarded Bulletins");
-		folderDraftOutbox = createSystemFolder("*DraftOutbox");
+		folderDraftOutbox = createSystemFolder(DRAFT_OUTBOX);
 		folderDraftOutbox.setStatusAllowed(Bulletin.STATUSDRAFT);
 	}
 
@@ -782,6 +793,16 @@ public class BulletinStore
 	}
 
 	static final int maxCachedBulletinCount = 100;
+	
+	public static final String OUTBOX_FOLDER = "%OutBox";
+	public static final String SENT_FOLDER = "%Sent";
+	public static final String DRAFT_FOLDER = "%Draft";
+	public static final String DISCARDED_FOLDER = "%Discarded";
+	public static final String SEARCH_RESULTS_BULLETIN_FOLDER = "%SearchResults";
+	public static final String RECOVERED_BULLETIN_FOLDER = "%RecoveredBulletins";
+	public static final String RETRIEVE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
+	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletin";
+	private static final String DRAFT_OUTBOX = "*DraftOutbox";
 	
 	private MartusCrypto signer;
 	private String account;
