@@ -33,6 +33,7 @@ public class VerifyAllPackets
 		File dir = null;
 		File keyPairFile = null;
 		boolean prompt = true;
+		int exitStatus = 0;
 
 		System.out.println("VerifyAllPackets Martus Database Integrity Checker");
 		System.out.println("  Runs a SAFE, non-destructive, read-only test");
@@ -97,7 +98,7 @@ public class VerifyAllPackets
 		{
 			ServerFileDatabase db = new ServerFileDatabase(dir,security);
 			db.initialize();
-			verifyAllPackets(db, security);
+			exitStatus = verifyAllPackets(db, security);
 		}
 		catch (Exception e)
 		{
@@ -105,15 +106,16 @@ public class VerifyAllPackets
 			System.exit(3);
 		}
 		
-		System.exit(0);
+		System.exit(exitStatus);
 	}
 	
-	static void verifyAllPackets(Database db, MartusCrypto security)
+	static int verifyAllPackets(Database db, MartusCrypto security)
 	{
 		PacketVerifier verifier = new PacketVerifier(db, security);
 		db.visitAllRecords(verifier);
 		System.out.println();
-		System.out.println("DONE");
+		
+		return verifier.getExitStatus();
 	}
 	
 	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
@@ -132,6 +134,7 @@ public class VerifyAllPackets
 		{
 			db = databaseToUse;
 			security = securityToUse;
+			exitStatus = 0;
 		}
 		
 		public void visit(DatabaseKey visitingKey)
@@ -158,14 +161,15 @@ public class VerifyAllPackets
 					{
 						if(!db.doesRecordExist(keys[i]))
 						{
-							System.out.println();
-							System.out.println("Missing packet: " + keys[i].getLocalId());
-							System.out.println("  for header: " + visitingLocalId);
+							exitStatus = 1;
+							System.err.println();
+							System.err.println("Missing packet: " + keys[i].getLocalId());
+							System.err.println("  for header: " + visitingLocalId);
 							
 							FileDatabase fdb = (FileDatabase) db;
 							File bucket = fdb.getFileForRecord(keys[i]);
 							String path = bucket.getParent().substring(bucket.getParent().indexOf("packets"));
-							System.out.println("      for account bucket: " + path);
+							System.err.println("      for account bucket: " + path);
 						}
 					}
 				}
@@ -178,8 +182,14 @@ public class VerifyAllPackets
 			}
 			
 		}
+		
+		public int getExitStatus()
+		{
+			return exitStatus;
+		}
 
 		Database db;
 		MartusCrypto security;
+		int exitStatus;
 	}
 }
