@@ -30,6 +30,7 @@ import java.util.HashMap;
 
 import org.martus.common.test.TestCaseEnhanced;
 import org.martus.util.TokenReplacement;
+import org.martus.util.TokenReplacement.TokenInvalidException;
 
 public class TestTokenReplacement extends TestCaseEnhanced
 {
@@ -80,7 +81,23 @@ public class TestTokenReplacement extends TestCaseEnhanced
 		String[] expectedArray = {"1", "#unknown#", "3"};
 		assertEquals("Replace Tokens for an array[0] of strings not replaced?", expectedArray[0], arrayResult[0]);
 		assertEquals("an unknown token in array[1] of strings was replaced?", expectedArray[1], arrayResult[1]);
-		assertEquals("Replace Tokens for an array[3] of strings not replaced?", expectedArray[2], arrayResult[2]);
+		assertEquals("Replace Tokens for an array[2] of strings not replaced?", expectedArray[2], arrayResult[2]);
 	}
 
+	public void testReplaceTokensRegExpression() throws Exception
+	{
+		
+		String[] stringOriginalArray = {"*a*","#unknown#","'c*"};
+		HashMap tokens = new HashMap();
+		tokens.put("*a*","1");
+		
+		try
+		{
+			String[] arrayResult = TokenReplacement.replaceTokens(stringOriginalArray, tokens);
+			fail("Should have thrown since token is not a reg expression");
+		}
+		catch (TokenInvalidException expected)
+		{
+		}
+	}
 }

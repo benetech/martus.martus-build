@@ -27,6 +27,7 @@ Boston, MA 02111-1307, USA.
 package org.martus.swing;
 
 import java.awt.BorderLayout;
+import java.awt.HeadlessException;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
@@ -42,6 +43,7 @@ import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
 import org.martus.util.TokenReplacement;
+import org.martus.util.TokenReplacement.TokenInvalidException;
 
 public class UiNotifyDlg extends JDialog implements ActionListener
 {
@@ -51,41 +53,50 @@ public class UiNotifyDlg extends JDialog implements ActionListener
 		this(owner, title, contents, buttons, new HashMap());
 	}
 	
-	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons, Map tokenReplacement)
+	public UiNotifyDlg(JFrame owner, String title, String[] contents, String[] buttons, Map tokenReplacement) throws HeadlessException
 	{
-		super(owner, TokenReplacement.replaceTokens(title, tokenReplacement) , true);
-		contents = TokenReplacement.replaceTokens(contents, tokenReplacement);
-		buttons = TokenReplacement.replaceTokens(buttons, tokenReplacement);
-
-		getContentPane().add(new JLabel("      "), BorderLayout.WEST);
-		getContentPane().add(new JLabel("      "), BorderLayout.EAST);
-
-		Box vbox = Box.createVerticalBox();
-		vbox.add(new JLabel(" "));
-		for(int i = 0 ; i < contents.length ; ++i)
-			vbox.add(createWrappedTextArea(contents[i]));
-		vbox.add(new JLabel(" "));
-
-		ok = new JButton(buttons[0]);
-		ok.addActionListener(this);
-		Box hbox = Box.createHorizontalBox();
-		hbox.add(ok);
-		JButton button = null;
-		for(int j = 1 ; j < buttons.length; ++j)
+		super(owner, title , true);
+		try
 		{
-			button = new JButton(buttons[j]);
-			button.addActionListener(this);
-			hbox.add(button);
+			title = TokenReplacement.replaceTokens(title, tokenReplacement);
+			contents = TokenReplacement.replaceTokens(contents, tokenReplacement);
+			buttons = TokenReplacement.replaceTokens(buttons, tokenReplacement);
+			
+			setTitle(title);
+			getContentPane().add(new JLabel("      "), BorderLayout.WEST);
+			getContentPane().add(new JLabel("      "), BorderLayout.EAST);
+			
+			Box vbox = Box.createVerticalBox();
+			vbox.add(new JLabel(" "));
+			for(int i = 0 ; i < contents.length ; ++i)
+				vbox.add(createWrappedTextArea(contents[i]));
+			vbox.add(new JLabel(" "));
+			
+			ok = new JButton(buttons[0]);
+			ok.addActionListener(this);
+			Box hbox = Box.createHorizontalBox();
+			hbox.add(ok);
+			JButton button = null;
+			for(int j = 1 ; j < buttons.length; ++j)
+			{
+				button = new JButton(buttons[j]);
+				button.addActionListener(this);
+				hbox.add(button);
+			}
+			vbox.add(hbox);
+			vbox.add(new JLabel(" "));
+			
+			getContentPane().add(vbox, BorderLayout.CENTER);
+			Utilities.centerDlg(this);
+			setResizable(true);
+			getRootPane().setDefaultButton(ok);
+			ok.requestFocus(true);
+			show();
 		}
-		vbox.add(hbox);
-		vbox.add(new JLabel(" "));
-
-		getContentPane().add(vbox, BorderLayout.CENTER);
-		Utilities.centerDlg(this);
-		setResizable(true);
-		getRootPane().setDefaultButton(ok);
-		ok.requestFocus(true);
-		show();
+		catch (TokenInvalidException e)
+		{
+			e.printStackTrace();
+		}
 	}
 
 	private JTextArea createWrappedTextArea(String message)

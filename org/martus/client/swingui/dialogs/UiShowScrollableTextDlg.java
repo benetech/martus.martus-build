@@ -43,6 +43,7 @@ import org.martus.swing.UiTextArea;
 import org.martus.swing.UiWrappedTextArea;
 import org.martus.swing.Utilities;
 import org.martus.util.TokenReplacement;
+import org.martus.util.TokenReplacement.TokenInvalidException;
 
 
 
@@ -58,46 +59,53 @@ public class UiShowScrollableTextDlg extends JDialog implements ActionListener
 		super(owner, "", true);
 		mainWindow = owner;
 
-		UiLocalization localization = mainWindow.getLocalization();
-		String windowTitle = localization.getWindowTitle(titleTag);
-		setTitle(TokenReplacement.replaceTokens(windowTitle, tokenReplacement));
-		String buttonLabel = localization.getButtonLabel(okButtonTag);
-		ok = new JButton(TokenReplacement.replaceTokens(buttonLabel, tokenReplacement));
-		ok.addActionListener(this);
-		JButton cancel = null;
-		if(cancelButtonTag.length() != 0)
+		try 
 		{
-			buttonLabel = localization.getButtonLabel(cancelButtonTag);
-			cancel = new JButton(TokenReplacement.replaceTokens(buttonLabel, tokenReplacement));
-			cancel.addActionListener(this);
-		}
-
-		details = new UiTextArea(15, 65);
-		details.setLineWrap(true);
-		details.setWrapStyleWord(true);
-		details.setEditable(false);
-		JScrollPane detailScrollPane = new JScrollPane(details, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-		details.setText(TokenReplacement.replaceTokens(text, tokenReplacement));
-
-		getContentPane().setLayout(new ParagraphLayout());
-		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		String fieldLabel = localization.getFieldLabel(descriptionTag);
-		fieldLabel = TokenReplacement.replaceTokens(fieldLabel, tokenReplacement);
-		getContentPane().add(new UiWrappedTextArea(fieldLabel));
-		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(detailScrollPane);
-
-		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(ok);
-		if(cancelButtonTag.length() != 0)
+			UiLocalization localization = mainWindow.getLocalization();
+			String windowTitle = localization.getWindowTitle(titleTag);
+			setTitle(TokenReplacement.replaceTokens(windowTitle, tokenReplacement));
+			String buttonLabel = localization.getButtonLabel(okButtonTag);
+			ok = new JButton(TokenReplacement.replaceTokens(buttonLabel, tokenReplacement));
+			ok.addActionListener(this);
+			JButton cancel = null;
+			if(cancelButtonTag.length() != 0)
+			{
+				buttonLabel = localization.getButtonLabel(cancelButtonTag);
+				cancel = new JButton(TokenReplacement.replaceTokens(buttonLabel, tokenReplacement));
+				cancel.addActionListener(this);
+			}
+			
+			details = new UiTextArea(15, 65);
+			details.setLineWrap(true);
+			details.setWrapStyleWord(true);
+			details.setEditable(false);
+			JScrollPane detailScrollPane = new JScrollPane(details, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+					JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+			details.setText(TokenReplacement.replaceTokens(text, tokenReplacement));
+			
+			getContentPane().setLayout(new ParagraphLayout());
+			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
+			String fieldLabel = localization.getFieldLabel(descriptionTag);
+			fieldLabel = TokenReplacement.replaceTokens(fieldLabel, tokenReplacement);
+			getContentPane().add(new UiWrappedTextArea(fieldLabel));
+			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
+			getContentPane().add(detailScrollPane);
+			
+			getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
+			getContentPane().add(ok);
+			if(cancelButtonTag.length() != 0)
+			{
+				getContentPane().add(cancel);
+			}
+			
+			getRootPane().setDefaultButton(ok);
+			Utilities.centerDlg(this);
+			show();
+		} 
+		catch (TokenInvalidException e) 
 		{
-			getContentPane().add(cancel);
+			e.printStackTrace();
 		}
-
-		getRootPane().setDefaultButton(ok);
-		Utilities.centerDlg(this);
-		show();
 	}
 
 	public void actionPerformed(ActionEvent ae)

@@ -31,30 +31,41 @@ import java.util.Map;
 public class TokenReplacement 
 {
 
-	public static String replaceTokens(String original, Map tokenReplacement)
+	public static class TokenInvalidException extends Exception {};
+
+	public static String replaceTokens(String original, Map tokenReplacement) throws TokenInvalidException 
 	{
-		if(tokenReplacement.isEmpty())
-			return original;
-	
 		String revised = original;
 		for (Iterator keys = tokenReplacement.keySet().iterator(); keys.hasNext();)
 		{
 			String token = (String) keys.next();
+			checkToken(token);
 			String replacement = (String)tokenReplacement.get(token);
 			revised = revised.replaceAll(token, replacement);
 		}
 		return revised;		
 	}
-	public static String[] replaceTokens(String[] original, Map tokenReplacement)
-	{
-		if(tokenReplacement.isEmpty())
-			return original;
 	
+	public static String[] replaceTokens(String[] original, Map tokenReplacement) throws TokenInvalidException
+	{
 		String[] revised = new String[original.length];
 		for (int i = 0; i < original.length; ++i)
 		{
 			revised[i] = replaceTokens(original[i], tokenReplacement);
 		}
 		return revised;		
+	}
+	
+	private static void checkToken(String token) throws TokenInvalidException
+	{
+		for(int i = 0; i<token.length(); ++i)
+		{
+			char singleChar = token.charAt(i);
+			if(singleChar == '#')
+				continue;
+			if(!Character.isLetterOrDigit(singleChar))
+				throw new TokenInvalidException();
+		}
+		
 	}
 }
