@@ -709,10 +709,6 @@ createInstallerCdImage()
 	mkdir -p $CD_IMAGE_DIR/Win95
 	cp -v $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
 	
-	mkdir -p $CD_IMAGE_DIR/verify/
-	cp -vr $MARTUSBUILDFILES/Verify/* $CD_IMAGE_DIR/verify/
-	rm $CD_IMAGE_DIR/verify/*_th.txt
-	
 	cp -v $MARTUSBUILDFILES/ProgramFiles/autorun.inf $CD_IMAGE_DIR
 	
 	mkdir -p $CD_IMAGE_DIR/Martus
@@ -720,6 +716,12 @@ createInstallerCdImage()
 	rm -f $CD_IMAGE_DIR/Martus/autorun.inf
 	cp -v $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR/Martus/
 	cp -v $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR/Martus/
+	
+	mkdir -p $CD_IMAGE_DIR/verify/
+	cp -v $MARTUSBUILDFILES/Verify/readme_verify.txt $CD_IMAGE_DIR/verify/
+	cp -v $MARTUSBUILDFILES/Verify/gpl.txt $CD_IMAGE_DIR/verify/
+	cp -v $MARTUSBUILDFILES/Verify/license.txt $CD_IMAGE_DIR/verify/
+	cp -v $MARTUSBUILDFILES/Verify/*.bat $CD_IMAGE_DIR/verify/
 	
 	mkdir -p $CD_IMAGE_DIR/Martus/Docs
 	cp -v $MARTUSBUILDFILES/Documents/README.txt $CD_IMAGE_DIR
@@ -731,6 +733,7 @@ createInstallerCdImage()
 		echo -e "\tcopying docs for language: ${martus_lang}"
 		cp -v $MARTUSBUILDFILES/Documents/README_${martus_lang}.txt $CD_IMAGE_DIR || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/README_${martus_lang}.txt"
 		cp -v $MARTUSBUILDFILES/Documents/*_${martus_lang}.pdf $CD_IMAGE_DIR/Martus/Docs || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/*_${martus_lang}.pdf"
+		cp -v $MARTUSBUILDFILES/Verify/readme_verify_${martus_lang}.txt $CD_IMAGE_DIR/verify/ || message "ERROR: Unable to copy $CD_IMAGE_DIR/readme_verify_${martus_lang}.txt"
 	done
 	
 	cp -v $MARTUSBUILDFILES/Documents/LinuxJavaInstall.txt $CD_IMAGE_DIR/Martus/Docs/
