@@ -85,7 +85,6 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
 import org.logi.crypto.Crypto;
 import org.logi.crypto.secretshare.PolySecretShare;
 import org.logi.crypto.secretshare.SecretSharingException;
-import org.martus.client.core.Exceptions.KeyShareException;
 import org.martus.common.MartusConstants;
 import org.martus.util.Base64;
 import org.martus.util.ByteArrayInputStreamWithSeek;

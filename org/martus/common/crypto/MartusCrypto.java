@@ -33,8 +33,8 @@ import java.util.Vector;
 
 import javax.net.ssl.KeyManager;
 
-import org.martus.client.core.Exceptions.KeyShareException;
-import org.martus.util.*;
+import org.martus.util.Base64;
+import org.martus.util.InputStreamWithSeek;
 
 public abstract class MartusCrypto
 {
@@ -182,6 +182,6 @@ public abstract class MartusCrypto
 	public static class DecryptionException extends CryptoException {}
 	public static class MartusSignatureException extends CryptoException {}
 	public static class CreateDigestException extends CryptoException {}
-	
+	public static class KeyShareException extends Exception	{}
 
 }

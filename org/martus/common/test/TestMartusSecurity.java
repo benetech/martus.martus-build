@@ -39,11 +39,11 @@ import java.util.Arrays;
 import java.util.Vector;
 
 import org.logi.crypto.secretshare.SecretSharingException;
-import org.martus.client.core.Exceptions.KeyShareException;
 import org.martus.common.MartusConstants;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.crypto.MartusCrypto.KeyShareException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.util.Base64;
 import org.martus.util.ByteArrayInputStreamWithSeek;
