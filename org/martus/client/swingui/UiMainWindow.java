@@ -301,20 +301,30 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean confirmDlg(JFrame parent, String baseTag)
 	{
-		String title = getApp().getWindowTitle("confirm" + baseTag);
-		String cause = getApp().getFieldLabel("confirm" + baseTag + "cause");
-		String effect = getApp().getFieldLabel("confirm" + baseTag + "effect");
-		String question = getApp().getFieldLabel("confirmquestion");
-		String[] contents = {cause, "", effect, "", question};
-		return confirmDlg(parent, title, contents);
+		return confirmDlg(getApp(), parent, baseTag);
 	}
 
 	public boolean confirmDlg(JFrame parent, String title, String[] contents)
 	{
+		return confirmDlg(getApp(), parent, title, contents);
+	}
+
+	private boolean confirmDlg(MartusApp app, JFrame parent, String baseTag)
+	{
+		String title = app.getWindowTitle("confirm" + baseTag);
+		String cause = app.getFieldLabel("confirm" + baseTag + "cause");
+		String effect = app.getFieldLabel("confirm" + baseTag + "effect");
+		String question = app.getFieldLabel("confirmquestion");
+		String[] contents = {cause, "", effect, "", question};
+		return confirmDlg(app, parent, title, contents);
+	}
+
+	private boolean confirmDlg(MartusApp app, JFrame parent, String title, String[] contents)
+	{
 		String yes = app.getButtonLabel("yes");
 		String no = app.getButtonLabel("no");
 		String[] buttons = {yes, no};
-
+		
 		UiNotifyDlg notify = new UiNotifyDlg(this, parent, title, contents, buttons);
 		String result = notify.getResult();
 		if(result == null)
@@ -371,34 +381,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public boolean canPaste()
 	{
-		if(getClipboardTransferableBulletin() != null)
+		if(UiClipboardUtilities.getClipboardTransferableBulletin() != null)
 			return true;
 			
-		if(getClipboardTransferableFile() != null)
+		if(UiClipboardUtilities.getClipboardTransferableFile() != null)
 			return true;
 			
 		return false;
-	}
-
-	public TransferableBulletinList getClipboardTransferableBulletin()
-	{
-		Transferable t = getTransferableFromClipboard();
-		TransferableBulletinList tb = TransferableBulletinList.extractFrom(t);
-		return tb;
-	}
-
-	public File getClipboardTransferableFile()
-	{
-		Transferable t = getTransferableFromClipboard();
-		File file = TransferableBulletinList.extractFileFrom(t);
-		return file;
-	}
-
-	public Transferable getTransferableFromClipboard()
-	{
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Clipboard clipboard = toolkit.getSystemClipboard();
-		return clipboard.getContents(this);
 	}
 
 	public AbstractAction getActionMenuEdit()
@@ -406,7 +395,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		return actionMenuModifyBulletin;
 	}
 
-	
 	public AbstractAction getActionMenuSelectAll()
 	{
 		return actionMenuSelectAllBulletins;
@@ -435,6 +423,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	//ClipboardOwner Interface
 	public void lostOwnership(Clipboard clipboard, Transferable contents)
 	{
+		System.out.println("UiMainWindow: ClipboardOwner.lostOwnership");
 		TransferableBulletinList tb = TransferableBulletinList.extractFrom(contents);
 		if(tb != null)
 			tb.dispose();

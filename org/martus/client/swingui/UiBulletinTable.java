@@ -292,13 +292,13 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	public void doPasteBulletins()
 	{
 		BulletinFolder folder = getFolder();
-		TransferableBulletinList tb = mainWindow.getClipboardTransferableBulletin();
+		TransferableBulletinList tb = UiClipboardUtilities.getClipboardTransferableBulletin();
 
 		boolean worked = false;
 		String resultMessageTag = null;
 		if(tb == null)
 		{
-			File file = mainWindow.getClipboardTransferableFile();
+			File file = UiClipboardUtilities.getClipboardTransferableFile();
 			try
 			{
 				if(file != null)
