@@ -17,7 +17,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 	public NetworkResponse ping(MartusCrypto signer) throws MartusSignatureException
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_PING_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_PING);
 		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
 	}
@@ -25,7 +25,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 	public NetworkResponse listAccountsForMirroring(MartusCrypto signer) throws MartusSignatureException
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
 		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
 	}
@@ -33,7 +33,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 	public NetworkResponse listBulletinsForMirroring(MartusCrypto signer, String authorAccountId) throws MartusSignatureException
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_BULLETINS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add(authorAccountId);
 		String signature = MartusUtilities.sign(parameters, signer);
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
@@ -44,7 +44,7 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 			MartusCrypto.MartusSignatureException
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
 		parameters.add(authorAccountId);
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(chunkOffset));

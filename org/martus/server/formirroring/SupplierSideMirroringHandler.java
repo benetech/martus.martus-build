@@ -107,16 +107,16 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 	int extractCommand(Object possibleCommand)
 	{
 		String cmdString = (String)possibleCommand;
-		if(cmdString.equals(CMD_PING_FOR_MIRRORING))
+		if(cmdString.equals(CMD_MIRRORING_PING))
 			return cmdPing;
 
-		if(cmdString.equals(CMD_LIST_ACCOUNTS_FOR_MIRRORING))
+		if(cmdString.equals(CMD_MIRRORING_LIST_ACCOUNTS))
 			return cmdListAccountsForMirroring;
 		
-		if(cmdString.equals(CMD_LIST_BULLETINS_FOR_MIRRORING))
+		if(cmdString.equals(CMD_MIRRORING_LIST_SEALED_BULLETINS))
 			return cmdListBulletinsForMirroring;
 		
-		if(cmdString.equals(CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING))
+		if(cmdString.equals(CMD_MIRRORINT_GET_BULLETIN_CHUNK))
 			return cmdGetBulletinChunkForMirroring;
 
 		return cmdUnknown;

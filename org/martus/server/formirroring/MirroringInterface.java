@@ -10,10 +10,10 @@ public interface MirroringInterface
 
 	public final static String RESULT_OK = NetworkInterfaceConstants.OK;
 
-	public final static String CMD_PING_FOR_MIRRORING = "pingForMirroring";
-	public final static String CMD_LIST_ACCOUNTS_FOR_MIRRORING = "listAccountsForMirroring";
-	public final static String CMD_LIST_BULLETINS_FOR_MIRRORING = "listBulletinsForMirroring";
-	public final static String CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING = "getBulletinChunkForMirroring";
+	public final static String CMD_MIRRORING_PING = "mirroringPing";
+	public final static String CMD_MIRRORING_LIST_ACCOUNTS = "mirroringListAccounts";
+	public final static String CMD_MIRRORING_LIST_SEALED_BULLETINS = "mirroringListSealedBulletins";
+	public final static String CMD_MIRRORINT_GET_BULLETIN_CHUNK = "mirrorintGetBulletinChunk";
 
 
 	public Vector request(String callerAccountId, Vector parameters, String signature);

@@ -76,7 +76,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 
 		String accountId = callerSecurity.getPublicKeyString();
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_PING_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_PING);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(accountId, parameters, sig);
 		assertEquals(1, result.size());
@@ -86,7 +86,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	public void testGetAllAccountsNotAuthorized() throws Exception
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(1, result.size());
@@ -98,7 +98,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 		
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(2, result.size());
@@ -117,7 +117,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.addAccountToMirror(accountId2);
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_ACCOUNTS);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
 		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
@@ -130,7 +130,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	public void testListBulletinsNotAuthorized() throws Exception
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_BULLETINS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add("account id to ignore");
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
@@ -143,7 +143,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_BULLETINS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add(new Integer(3));
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
@@ -170,7 +170,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_LIST_BULLETINS_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORING_LIST_SEALED_BULLETINS);
 		parameters.add(authorAccountId);
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
@@ -185,7 +185,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	public void testGetBulletinChunkNotAuthorized() throws Exception
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
 		parameters.add("account id to ignore");
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
@@ -198,7 +198,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
 		parameters.add(new Integer(3));
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
@@ -211,7 +211,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
 		parameters.add("pretend account");
 		parameters.add("pretend localid");
 		parameters.add(new Integer(3));
@@ -232,7 +232,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_GET_BULLETIN_CHUNK_FOR_MIRRORING);
+		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
 		parameters.add(authorAccountId);
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(offset));
