@@ -145,6 +145,15 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestVisitAllAccounts(serverFileDb);
 	}
 
+	public void testVisitAllRecordsForAccount() throws Exception
+	{
+		TRACE("testVisitAllRecordsForAccount");
+
+		internalTestVisitAllRecordsForAccount(mockDb);
+		internalTestVisitAllRecordsForAccount(clientFileDb);
+		internalTestVisitAllRecordsForAccount(serverFileDb);
+	}
+
 	public void testVisitAllRecordsWithNull() throws Exception
 	{
 		TRACE("testVisitAllRecordsWithNull");
@@ -159,6 +168,14 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestVisitAllAccountsWithNull(mockDb);
 		internalTestVisitAllAccountsWithNull(clientFileDb);
 		internalTestVisitAllAccountsWithNull(serverFileDb);
+	}
+	
+	public void testVisitAllRecordsForAccountWithNull() throws Exception
+	{
+		TRACE("testVisitAllRecordsForAccountWithNull");
+		internalTestVisitAllRecordsForAccountWithNull(mockDb);
+		internalTestVisitAllRecordsForAccountWithNull(clientFileDb);
+		internalTestVisitAllRecordsForAccountWithNull(serverFileDb);
 	}
 	
 	public void testDeleteAllData() throws Exception
@@ -443,6 +460,29 @@ public class TestDatabase extends TestCaseEnhanced
 		assertEquals(db.toString() + "dupe accounts?", 2, counter.count);
 	}
 	
+	private void internalTestVisitAllRecordsForAccount(Database db) throws Exception
+	{
+		PacketCounter counter = new PacketCounter(db);
+
+		UniversalId smallUid2 = UniversalId.createFromAccountAndPrefix(smallKey.getAccountId(), "x");
+		DatabaseKey smallKey2 = DatabaseKey.createSealedKey(smallUid2);
+		db.writeRecord(smallKey, smallString);
+		db.writeRecord(smallKey2, smallString);
+		db.writeRecord(largeKey, largeString);
+
+		counter.clear();
+		db.visitAllRecordsForAccount(counter, "none found");
+		assertEquals(db.toString()+" found for account with none?", 0, counter.count);
+
+		counter.clear();
+		db.visitAllRecordsForAccount(counter, smallKey.getAccountId());
+		assertEquals(db.toString()+" wrong for first account?", 2, counter.count);
+
+		counter.clear();
+		db.visitAllRecordsForAccount(counter, largeKey.getAccountId());
+		assertEquals(db.toString()+" wrong for second account?", 1, counter.count);
+	}
+
 	private void internalTestVisitAllRecordsWithNull(Database db) throws Exception
 	{
 		class PacketNullThrower implements Database.PacketVisitor
@@ -480,6 +520,26 @@ public class TestDatabase extends TestCaseEnhanced
 		
 		AccountNullThrower ac = new AccountNullThrower();
 		db.visitAllAccounts(ac);
+		assertEquals("count?", 0, ac.list.size());
+	}
+	
+	private void internalTestVisitAllRecordsForAccountWithNull(Database db) throws Exception
+	{
+		class PacketNullThrower implements Database.PacketVisitor
+		{
+			public void visit(DatabaseKey key)
+			{
+				key = null;
+				key.getAccountId();
+				list.add(key);
+			}
+			Vector list = new Vector();
+		}
+		
+		db.writeRecord(smallKey, smallString);
+		
+		PacketNullThrower ac = new PacketNullThrower();
+		db.visitAllRecordsForAccount(ac, smallKey.getAccountId());
 		assertEquals("count?", 0, ac.list.size());
 	}
 	

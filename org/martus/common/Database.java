@@ -18,6 +18,7 @@ public interface Database
 	public boolean doesRecordExist(DatabaseKey key);
 	public void visitAllRecords(PacketVisitor visitor);
 	public void visitAllAccounts(AccountVisitor visitor);
+	public void visitAllRecordsForAccount(PacketVisitor visitor, String accountString);
 	public String getFolderForAccount(String accountString);
 	public File getIncomingInterimFile(DatabaseKey key) throws IOException;
 	public File getOutgoingInterimFile(DatabaseKey key) throws IOException;

@@ -175,6 +175,30 @@ abstract public class MockDatabase implements Database
 		}
 	}
 	
+	public void visitAllRecordsForAccount(PacketVisitor visitor, String accountString)
+	{
+		class FilterByAccount implements PacketVisitor
+		{
+			FilterByAccount(PacketVisitor realVisitorToUse, String accountIdToVisit)
+			{
+				realVisitor = realVisitorToUse;
+				accountId = accountIdToVisit;
+			}
+			
+			public void visit(DatabaseKey key)
+			{
+				if(key.getAccountId().equals(accountId))
+					realVisitor.visit(key);
+			}
+			
+			String accountId;
+			PacketVisitor realVisitor;
+		}
+		
+		FilterByAccount filter = new FilterByAccount(visitor, accountString);
+		visitAllRecords(filter);
+	}
+
 	public String getFolderForAccount(String accountString)
 	{
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(accountString, "");

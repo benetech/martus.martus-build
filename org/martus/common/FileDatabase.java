@@ -224,7 +224,7 @@ public class FileDatabase implements Database
 			
 			public void visit(String accountString)
 			{
-				visitAllPacketsForAccount(packetVisitor, accountString);
+				visitAllRecordsForAccount(packetVisitor, accountString);
 			}
 			PacketVisitor packetVisitor;
 		}
@@ -335,7 +335,7 @@ public class FileDatabase implements Database
 		}
 	}
 	
-	public void visitAllPacketsForAccount(PacketVisitor visitor, String accountString)
+	public void visitAllRecordsForAccount(PacketVisitor visitor, String accountString)
 	{
 		File accountDir = null;
 		try 
@@ -606,7 +606,7 @@ public class FileDatabase implements Database
 		}
 		
 		PacketDeleter deleter = new PacketDeleter();
-		visitAllPacketsForAccount(deleter, getAccountString(accountDir));
+		visitAllRecordsForAccount(deleter, getAccountString(accountDir));
 		
 		accountDir.delete();
 	}

@@ -413,7 +413,7 @@ public class TestFileDatabase extends TestCaseEnhanced
 		db.writeRecord(shortKey2, sampleString2);
 		
 		PacketCollector ac = new PacketCollector();
-		db.visitAllPacketsForAccount(ac, accountString1);
+		db.visitAllRecordsForAccount(ac, accountString1);
 		assertEquals("count?", 2, ac.list.size());
 		assertContains("missing 1?", shortKey, ac.list);
 		assertContains("missing 2?", shortKey2, ac.list);
