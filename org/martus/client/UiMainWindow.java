@@ -399,18 +399,21 @@ System.out.println("UiMainWindow.bulletinSeletionHasChanged: " + b.get(b.TAGTITL
 	public void restoreState()
 	{
 		String folderName = uiState.getCurrentFolder();
-		if(!folders.selectFolder(folderName))
+		BulletinFolder folder = getStore().findFolder(folderName);
+
+		if(folder == null)
 		{
 			selectSentFolder();
 			return;
 		}
-		BulletinFolder folder = getStore().findFolder(folderName);
+		
 		try
 		{
 			String sortTag = uiState.getCurrentSortTag();
 			folder.sortBy(sortTag);
 			if(folder.getSortDirection() != uiState.getCurrentSortDirection())
 				folder.sortBy(sortTag);
+			folders.selectFolder(folderName);
 			table.setCurrentBulletinIndex(uiState.getCurrentBulletinPosition());
 		}
 		catch(Exception e)
