@@ -330,18 +330,18 @@ public class Bulletin implements BulletinConstants
 		if(lookFor.equals(TAGSUMMARY) ||
 				lookFor.equals(TAGPUBLICINFO) ||
 				lookFor.equals(TAGPRIVATEINFO) )
-			return MULTILINE;
+			return FieldSpec.TYPE_MULTILINE;
 
 		if(lookFor.equals(TAGENTRYDATE))
-			return DATE;
+			return FieldSpec.TYPE_DATE;
 			
 		if(lookFor.equals(TAGEVENTDATE))
-			return DATERANGE;
+			return FieldSpec.TYPE_DATERANGE;
 					
 		if(lookFor.equals(TAGLANGUAGE))
-			return CHOICE;
+			return FieldSpec.TYPE_CHOICE;
 
-		return NORMAL;
+		return FieldSpec.TYPE_NORMAL;
 	}
 
 	public boolean isAllPrivate()

@@ -114,7 +114,7 @@ abstract public class UiBulletinComponentSection extends JPanel
  	public JLabel createLabel(FieldSpec spec)
 	{
 		String labelText = spec.getLabel();
-		if(labelText == null)
+		if(labelText.equals(""))
 			labelText = localization.getFieldLabel(spec.getTag());
 		return new JLabel(labelText);
 	}
@@ -126,21 +126,21 @@ abstract public class UiBulletinComponentSection extends JPanel
 
 		switch(Bulletin.getFieldType(fieldName))
 		{
-			case Bulletin.MULTILINE:
+			case FieldSpec.TYPE_MULTILINE:
 				field = createMultilineField();
 				break;
-			case Bulletin.DATE:
+			case FieldSpec.TYPE_DATE:
 				field = createDateField();
 				break;
-			case Bulletin.DATERANGE:
+			case FieldSpec.TYPE_DATERANGE:
 				field = createFlexiDateField();
 				break;
-			case Bulletin.CHOICE:
+			case FieldSpec.TYPE_CHOICE:
 				ChoiceItem[] languages =
 					localization.getLanguageNameChoices();
 				field = createChoiceField(languages);
 				break;						
-			case Bulletin.NORMAL:
+			case FieldSpec.TYPE_NORMAL:
 			default:
 				field = createNormalField();
 				break;

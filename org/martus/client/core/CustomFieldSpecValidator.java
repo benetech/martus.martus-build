@@ -118,7 +118,7 @@ public class CustomFieldSpecValidator
 		{
 			FieldSpec spec = specsToCheck[i]; 
 			String tag = spec.getTag();
-			if(isCustomFieldTag(tag) && spec.getLabel() == null)
+			if(isCustomFieldTag(tag) && spec.getLabel().equals(""))
 				customTagsWithoutLabels.add(tag);
 		}
 	}
@@ -130,7 +130,7 @@ public class CustomFieldSpecValidator
 		{
 			FieldSpec spec = specsToCheck[i]; 
 			String tag = spec.getTag();
-			if(!isCustomFieldTag(tag) && spec.getLabel() != null)
+			if(!isCustomFieldTag(tag) && !spec.getLabel().equals(""))
 				standardTagsWithLabels.add(tag);
 		}
 	}

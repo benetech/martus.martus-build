@@ -256,7 +256,7 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		assertEquals("entrydate", tags[3].getTag());
 		assertEquals("language", tags[4].getTag());
 
-		assertNull("standard label not null?", tags[0].getLabel());
+		assertEquals("standard label not empty?", "", tags[0].getLabel());
 		assertEquals("custom label", label, tags[2].getLabel());
 
 		assertEquals("custom data", data1, loaded.get("custom1"));
@@ -610,5 +610,5 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 	int SHORTEST_LEGAL_KEY_SIZE = 512;
 	static MartusSecurity security;
 	static MartusSecurity securityHQ;
-	static final String fieldListForTesting = "<FieldList>" + aTag + ";" + bTag + ";" + cTag + "</FieldList>";
+	static final String fieldListForTesting = "<FieldList>" + aTag + ",;" + bTag + ",;" + cTag + ",</FieldList>";
 }

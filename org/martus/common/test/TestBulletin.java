@@ -34,6 +34,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 
+import org.martus.common.FieldSpec;
 import org.martus.common.MartusUtilities;
 import org.martus.common.bulletin.AttachmentProxy;
 import org.martus.common.bulletin.Bulletin;
@@ -204,13 +205,13 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testGetFieldType()
 	{
-		assertEquals(Bulletin.NORMAL, Bulletin.getFieldType("author"));
-		assertEquals(Bulletin.MULTILINE, Bulletin.getFieldType("summary"));
-		assertEquals(Bulletin.MULTILINE, Bulletin.getFieldType("publicinfo"));
-		assertEquals(Bulletin.MULTILINE, Bulletin.getFieldType("privateinfo"));
-		assertEquals(Bulletin.DATERANGE, Bulletin.getFieldType("eventdate"));
-		assertEquals(Bulletin.DATE, Bulletin.getFieldType("entrydate"));
-		assertEquals(Bulletin.CHOICE, Bulletin.getFieldType("language"));
+		assertEquals(FieldSpec.TYPE_NORMAL, Bulletin.getFieldType("author"));
+		assertEquals(FieldSpec.TYPE_MULTILINE, Bulletin.getFieldType("summary"));
+		assertEquals(FieldSpec.TYPE_MULTILINE, Bulletin.getFieldType("publicinfo"));
+		assertEquals(FieldSpec.TYPE_MULTILINE, Bulletin.getFieldType("privateinfo"));
+		assertEquals(FieldSpec.TYPE_DATERANGE, Bulletin.getFieldType("eventdate"));
+		assertEquals(FieldSpec.TYPE_DATE, Bulletin.getFieldType("entrydate"));
+		assertEquals(FieldSpec.TYPE_CHOICE, Bulletin.getFieldType("language"));
 
 	}
 

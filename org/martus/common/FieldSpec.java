@@ -28,6 +28,12 @@ package org.martus.common;
 
 public class FieldSpec
 {
+	public FieldSpec(String thisFieldDescription, int typeToUse)
+	{
+		this(thisFieldDescription);
+		type = typeToUse;
+	}
+
 	public FieldSpec(String thisFieldDescription)
 	{
 		tag = extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
@@ -105,13 +111,14 @@ public class FieldSpec
 				fieldList += FIELD_SPEC_DELIMITER;
 			FieldSpec spec = fieldSpecs[i];
 			fieldList += spec.getTag();
-			if(spec.getLabel() != null)
+			if(spec.getLabel().length() != 0)
 				fieldList += FIELD_SPEC_ELEMENT_DELIMITER + spec.getLabel();
 		}
 		return fieldList;
 	}
 
 	String tag;
+	int type;
 	String label;
 	boolean hasUnknown;
 
@@ -120,4 +127,12 @@ public class FieldSpec
 	private static final int TAG_ELEMENT_NUMBER = 0;
 	private static final int LABEL_ELEMENT_NUMBER = 1;
 	private static final int UNKNOWN_ELEMENT_NUMBER = 2;
+
+	public static final int TYPE_NORMAL = 0;
+	public static final int TYPE_MULTILINE = 1;
+	public static final int TYPE_DATE = 2;
+	public static final int TYPE_CHOICE = 4;
+	public static final int TYPE_DATERANGE = 5;
+	public static final int TYPE_UNKNOWN = 6;
+
 }

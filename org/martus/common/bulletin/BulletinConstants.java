@@ -31,12 +31,6 @@ public interface BulletinConstants
 	public static final String STATUSDRAFT = "draft";
 	public static final String STATUSSEALED = "sealed";
 
-	public static final int NORMAL = 0;
-	public static final int MULTILINE = 1;
-	public static final int DATE = 2;
-	public static final int CHOICE = 4;
-	public static final int DATERANGE = 5;
-
 	public static final String TAGSTATUS = "status";
 	public static final String TAGLANGUAGE = "language";
 	public static final String TAGAUTHOR = "author";
