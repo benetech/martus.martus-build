@@ -590,6 +590,11 @@ zipSources()
 	find . -name "MartusHelp-ru.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "Martus-ru.mtf" -print | zip $MARTUS_ZIP_PATH -q@
 	
+	#arabic
+	find . -name "MartusHelpTOC-ar.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "MartusHelp-ar.txt" -print | zip $MARTUS_ZIP_PATH -q@
+	find . -name "Martus-ar.mtf" -print | zip $MARTUS_ZIP_PATH -q@
+
 	echo
 	echo "zipping third party items..."
 	cd $BUILDFILES_SRC_FILES
@@ -659,6 +664,7 @@ createClientInstallers()
 	cp -v $MARTUSNSISPROJECTDIR/locallang/English.* "$INSTALLER_SRC_FILES/locallang/"
 	cp -v $MARTUSNSISPROJECTDIR/locallang/Spanish.* "$INSTALLER_SRC_FILES/locallang/"
 	cp -v $MARTUSNSISPROJECTDIR/locallang/Russian.* "$INSTALLER_SRC_FILES/locallang/"
+	cp -v $MARTUSNSISPROJECTDIR/locallang/Arabic.* "$INSTALLER_SRC_FILES/locallang/"
 	
 	find $CVS_HOME -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 	find $MARTUSSOURCES -type "f" -name "*.class" -exec rm -fR '{}' \; > /dev/null
