@@ -70,7 +70,7 @@
                 <argument value="commit"/>
                 <argument value="-m"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
-                <argument value="${cvs.home}/${martus-module}/build.number"/>
+                <argument value="${martus-module}/build.number"/>
             </commandline>
         </cvs>
 
