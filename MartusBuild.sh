@@ -315,7 +315,7 @@ copyThirdPartyLicenseToCDBuild() # copies third-party license info to CD Image
 
 setupBuildEnvironment() # sets up environment for build
 {
-	CURRENT_VERSION=pre2.5-internal
+	CURRENT_VERSION=2.6.0
 	BUILD_DATE=`date '+%Y%m%d'`
 	
 	# the build number below relies on the Ant task that creates and autoincrements this file
