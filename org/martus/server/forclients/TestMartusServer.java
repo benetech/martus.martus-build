@@ -1950,7 +1950,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		TRACE_BEGIN("testAllowUploads");
 
-		File uploadsFile = testServer.allowUploadFile;
+		File uploadsFile = testServer.getAllowUploadFile();
 
 		testServer.clientsThatCanUpload.clear();
 		uploadsFile.delete();
@@ -1997,7 +1997,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("clientId2 now in", true, testServer.canClientUpload(clientId2));
 		assertEquals("empty still out", false, testServer.canClientUpload(""));
 
-		File uploadsFile = testServer.allowUploadFile;
+		File uploadsFile = testServer.getAllowUploadFile();
 		uploadsFile.delete();
 		assertFalse("Couldn't delete uploadsok?", uploadsFile.exists());
 
@@ -2015,7 +2015,8 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		String clientId1 = "slidfj";
 		String clientId2 = "woeiruwe";
-		testServer.allowUploadFile = file;
+		File allowUploadFile = file;
+		testServer.allowUploadFile = allowUploadFile;
 		testServer.allowUploads(clientId1);
 		testServer.allowUploads(clientId2);
 		long lastUpdate = file.lastModified();
@@ -2128,7 +2129,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		String sampleMagicWord4 = sampleMagicWord1 + "\t" + sampleMagicWord2;
 		String nonExistentMagicWord = "ThisIsNotAMagicWord";
 		
-		File file = testServer.magicWordsFile;
+		File file = testServer.getMagicWordsFile();
 		UnicodeWriter writer = new UnicodeWriter(file);
 		writer.writeln(sampleMagicWord1);
 		writer.writeln(sampleMagicWord2);
@@ -2371,7 +2372,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		
 		testServer.incrementActiveClientsCounter();
 		assertEquals("testServerShutdown: incrementActiveClientsCounter 2", 1, testServer.getNumberActiveClients() );
-		File exitFile = testServer.shutdownFile;
+		File exitFile = testServer.getShutdownFile();
 		exitFile.createNewFile();
 		
 		testServer.allowUploads(clientId);
@@ -2476,7 +2477,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		Vector reply;
 		
 		testServer.incrementActiveClientsCounter();
-		File exitFile = testServer.shutdownFile;
+		File exitFile = testServer.getShutdownFile();
 		exitFile.createNewFile();
 		
 		reply = testServer.getServerInformation();

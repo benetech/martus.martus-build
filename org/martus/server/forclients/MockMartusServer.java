@@ -270,21 +270,21 @@ public class MockMartusServer extends MartusServer
 	
 	public void deleteAllFiles() throws IOException
 	{
-		allowUploadFile.delete();
-		if(allowUploadFile.exists())
+		getAllowUploadFile().delete();
+		if(getAllowUploadFile().exists())
 			throw new IOException("allowUploadFile");
-		magicWordsFile.delete();
-		if(magicWordsFile.exists())
+		getMagicWordsFile().delete();
+		if(getMagicWordsFile().exists())
 			throw new IOException("magicWordsFile");
-		keyPairFile.delete();
-		if(keyPairFile.exists())
+		getKeyPairFile().delete();
+		if(getKeyPairFile().exists())
 			throw new IOException("keyPairFile");
 			
-		File uploadSig = MartusUtilities.getSignatureFileFromFile(allowUploadFile);
+		File uploadSig = MartusUtilities.getSignatureFileFromFile(getAllowUploadFile());
 		if(uploadSig.exists())
 			uploadSig.delete();
 			
-		File magicSig = MartusUtilities.getSignatureFileFromFile(magicWordsFile);
+		File magicSig = MartusUtilities.getSignatureFileFromFile(getMagicWordsFile());
 		if(magicSig.exists())
 			magicSig.delete();
 
@@ -337,6 +337,13 @@ public class MockMartusServer extends MartusServer
 		return super.getPacket(myAccountId, authorAccountId, bulletinLocalId, packetLocalId);
 	}
 
+	public File getAllowUploadFile()
+	{
+		if(allowUploadFile != null)
+			return allowUploadFile;
+		return super.getAllowUploadFile();
+	}
+
 	public int countDownToGetPacketFailure;
 	public Vector newsResponse;
 	public String newsVersionLabelToCheck;
@@ -348,6 +355,8 @@ public class MockMartusServer extends MartusServer
 	public Vector listFieldOfficeSummariesResponse;
 	public Vector listFieldOfficeAccountsResponse;
 	public Vector complianceResponse;
+	
+	public File allowUploadFile;
 	
 	public String lastClientId;
 	public String lastUploadedBulletinId;

@@ -143,27 +143,32 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		magicWords = new Vector();
 		failedUploadRequestsPerIp = new Hashtable();
 		
-		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
-		magicWordsFile = new File(startupConfigDirectory, MAGICWORDSFILENAME);
-		keyPairFile = new File(startupConfigDirectory, getKeypairFilename());
-		bannedFile = new File(startupConfigDirectory, BANNEDCLIENTSFILENAME);
-		complianceFile = new File(startupConfigDirectory, COMPLIANCESTATEMENTFILENAME);
-		
-		shutdownFile = new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);
-		
-		Timer shutdownRequestTimer = new Timer(true);
- 		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
- 		shutdownRequestTimer.schedule(shutdownRequestTaskMonitor, IMMEDIATELY, shutdownRequestIntervalMillis);
-
-		Timer mirroringTimer = new Timer(true);
- 		TimerTask mirroringTask = new MirroringTask();
- 		mirroringTimer.schedule(mirroringTask, IMMEDIATELY, mirroringIntervalMillis);
- 		
- 		Timer failedUploadRequestsTimer = new Timer(true);
- 		TimerTask uploadRequestTask = new UploadRequestsMonitor();
- 		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, getUploadRequestTimerInterval());
+		createShutdownTimer();
+		createMirroringTimer();
+		createFailedUploadRequestsTimer();
 
 		setServerName(servername);
+	}
+
+	private void createFailedUploadRequestsTimer()
+	{
+		Timer failedUploadRequestsTimer = new Timer(true);
+		TimerTask uploadRequestTask = new UploadRequestsMonitor();
+		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, getUploadRequestTimerInterval());
+	}
+
+	private void createMirroringTimer()
+	{
+		Timer mirroringTimer = new Timer(true);
+		TimerTask mirroringTask = new MirroringTask();
+		mirroringTimer.schedule(mirroringTask, IMMEDIATELY, mirroringIntervalMillis);
+	}
+
+	private void createShutdownTimer()
+	{
+		Timer shutdownRequestTimer = new Timer(true);
+		TimerTask shutdownRequestTaskMonitor = new ShutdownRequestMonitor();
+		shutdownRequestTimer.schedule(shutdownRequestTaskMonitor, IMMEDIATELY, shutdownRequestIntervalMillis);
 	}
 	
 
@@ -209,12 +214,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public void verifyConfigurationFiles()
 	{
-		File allowUploadFileSignature = MartusUtilities.getSignatureFileFromFile(allowUploadFile);
-		if(allowUploadFile.exists() || allowUploadFileSignature.exists())
+		File allowUploadFileSignature = MartusUtilities.getSignatureFileFromFile(getAllowUploadFile());
+		if(getAllowUploadFile().exists() || allowUploadFileSignature.exists())
 		{
 			try
 			{
-				MartusUtilities.verifyFileAndSignature(allowUploadFile, allowUploadFileSignature, security, security.getPublicKeyString());
+				MartusUtilities.verifyFileAndSignature(getAllowUploadFile(), allowUploadFileSignature, security, security.getPublicKeyString());
 			}
 			catch(FileVerificationException e)
 			{
@@ -238,7 +243,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		try
 		{
-			UnicodeReader reader = new UnicodeReader(magicWordsFile);
+			UnicodeReader reader = new UnicodeReader(getMagicWordsFile());
 			String line = null;
 			while( (line = reader.readLine()) != null)
 				setMagicWord(normalizeMagicWord(line));
@@ -258,7 +263,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		try
 		{
-			BufferedReader reader = new BufferedReader(new FileReader(allowUploadFile));
+			BufferedReader reader = new BufferedReader(new FileReader(getAllowUploadFile()));
 			loadCanUploadList(reader);
 			reader.close();
 		}
@@ -311,12 +316,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	boolean hasAccount()
 	{
-		return keyPairFile.exists();
+		return getKeyPairFile().exists();
 	}
 	
 	void loadAccount(String passphrase) throws AuthorizationFailedException, InvalidKeyPairFileVersionException, IOException
 	{
-		FileInputStream in = new FileInputStream(keyPairFile);
+		FileInputStream in = new FileInputStream(getKeyPairFile());
 		readKeyPair(in, passphrase);
 		in.close();
 		System.out.println("Passphrase correct.");			
@@ -1424,13 +1429,13 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		try
 		{
-			UnicodeWriter writer = new UnicodeWriter(allowUploadFile);
+			UnicodeWriter writer = new UnicodeWriter(getAllowUploadFile());
 			for(int i = 0; i < clientsThatCanUpload.size(); ++i)
 			{
 				writer.writeln((String)clientsThatCanUpload.get(i));
 			}
 			writer.close();
-			MartusUtilities.createSignatureFileFromFile(allowUploadFile, security);
+			MartusUtilities.createSignatureFileFromFile(getAllowUploadFile(), security);
 			if(serverMaxLogging)
 				logging("allowUploads : Exit OK");
 		}
@@ -1508,13 +1513,13 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		try
 		{
-			UnicodeReader reader = new UnicodeReader(complianceFile);
+			UnicodeReader reader = new UnicodeReader(getComplianceFile());
 			setComplianceStatement(reader.readAll(100));
 			reader.close();
 		}
 		catch (IOException e)
 		{
-			logging("Missing or unable to read file: " + complianceFile.getAbsolutePath());
+			logging("Missing or unable to read file: " + getComplianceFile().getAbsolutePath());
 			throw e;
 		}
 	}
@@ -1524,7 +1529,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 // Too much logging!
 //		if(serverMaxLogging)
 //			logging("loadBannedClients()");
-		loadBannedClients(bannedFile);
+		loadBannedClients(getBannedFile());
 	}
 	
 	public void loadBannedClients(File bannedClientsFile)
@@ -1815,32 +1820,32 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(!secureMode)
 			return;
 
-		if(!magicWordsFile.delete())
+		if(!getMagicWordsFile().delete())
 		{
 			System.out.println("Unable to delete magicwords");
 			System.exit(4);
 		}
 
-		if(!keyPairFile.delete())
+		if(!getKeyPairFile().delete())
 		{
 			System.out.println("Unable to delete keypair");
 			System.exit(5);
 		}
 
-		if(bannedFile.exists())
+		if(getBannedFile().exists())
 		{
-			if(!bannedFile.delete())
+			if(!getBannedFile().delete())
 			{
-				System.out.println("Unable to delete " + bannedFile.getAbsolutePath() );
+				System.out.println("Unable to delete " + getBannedFile().getAbsolutePath() );
 				System.exit(5);
 			}
 		}
 
-		if(complianceFile.exists())
+		if(getComplianceFile().exists())
 		{
-			if(!complianceFile.delete())
+			if(!getComplianceFile().delete())
 			{
-				System.out.println("Unable to delete " + complianceFile.getAbsolutePath() );
+				System.out.println("Unable to delete " + getComplianceFile().getAbsolutePath() );
 				System.exit(5);
 			}
 		}
@@ -1850,7 +1855,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public boolean isShutdownRequested()
 	{
-		return(shutdownFile.exists());
+		return(getShutdownFile().exists());
 	}
 	
 	public synchronized void clientConnectionStart()
@@ -2367,6 +2372,35 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		setDatabase(diskDatabase);
 	}
 
+	public File getAllowUploadFile()
+	{
+		return new File(dataDirectory, UPLOADSOKFILENAME);
+	}
+
+	public File getMagicWordsFile()
+	{
+		return new File(startupConfigDirectory, MAGICWORDSFILENAME);
+	}
+
+	File getKeyPairFile()
+	{
+		return new File(startupConfigDirectory, getKeypairFilename());
+	}
+
+	File getBannedFile()
+	{
+		return new File(startupConfigDirectory, BANNEDCLIENTSFILENAME);
+	}
+
+	File getComplianceFile()
+	{
+		return new File(startupConfigDirectory, COMPLIANCESTATEMENTFILENAME);
+	}
+
+	public File getShutdownFile()
+	{
+		return new File(triggerDirectory, MARTUSSHUTDOWNFILENAME);
+	}
 
 	private class BannedClientsMonitor extends TimerTask
 	{
@@ -2398,7 +2432,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 				logging("Shutdown request received.");
 				
 				clientsThatCanUpload.clear();				
-				shutdownFile.delete();
+				getShutdownFile().delete();
 				logging("Server has exited.");
 				try
 				{
@@ -2432,13 +2466,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public Vector clientsBanned;
 	public MartusCrypto security;
 	String serverName;
-	File keyPairFile;
-	File bannedFile;
-	File complianceFile;
 	public File dataDirectory;
-	public File allowUploadFile;
-	public File magicWordsFile;
-	public File shutdownFile;
 	public File triggerDirectory;
 	public File startupConfigDirectory;
 	private Vector magicWords;
