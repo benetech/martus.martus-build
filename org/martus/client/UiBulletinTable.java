@@ -355,6 +355,10 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			if(!e.isPopupTrigger())
 				return;
 
+			int thisRow = rowAtPoint(e.getPoint());
+			if(getSelectedRowCount() != 1 || getSelectedRow() != thisRow)
+				selectRow(thisRow);
+			
 			if(getSelectedRowCount() == 0)
 			{
 				System.out.println("Table clicked on non-selected row");
