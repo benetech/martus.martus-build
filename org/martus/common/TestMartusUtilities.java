@@ -72,6 +72,7 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		UnicodeReader reader = new UnicodeReader(keyFile);
 		String key = reader.readLine();
 		String sig = reader.readLine();
+		reader.close();
 		assertEquals("wrong public key?", security.getPublicKeyString(), key);
 		MartusUtilities.validatePublicInfo(key, sig, security);
 		
@@ -199,8 +200,14 @@ public class TestMartusUtilities extends TestCaseEnhanced
 			DecryptionException
 	{
 		ZipFile copiedZip = new ZipFile(copiedZipFile);
-		MartusUtilities.validateIntegrityOfZipFilePackets(accountId, copiedZip, security);
-		copiedZip.close();
+		try
+		{
+			MartusUtilities.validateIntegrityOfZipFilePackets(accountId, copiedZip, security);
+		}
+		finally
+		{
+			copiedZip.close();
+		}
 	}
 
 	private File createCopyOfZipFile(File tempZipFile, String excludeStartsWith, String entryToAdd)
