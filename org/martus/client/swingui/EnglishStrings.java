@@ -210,6 +210,7 @@ public class EnglishStrings
 "menu:edit=Edit",
 "menu:search=Search",
 "menu:modifyBulletin=Modify Bulletin",
+"menu:SelectAllBulletins=Select All Bulletins",
 "menu:CutBulletins=Cut Bulletin(s)",
 "menu:CopyBulletins=Copy Bulletin(s)",
 "menu:PasteBulletins=Paste Bulletin(s)",

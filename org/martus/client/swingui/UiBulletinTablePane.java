@@ -65,6 +65,11 @@ public class UiBulletinTablePane extends JScrollPane
 	{
 		return table.getSelectedBulletinUids();
 	}
+	
+	public int getBulletinCount()
+	{
+		return table.getBulletinCount();
+	}
 
 	public Bulletin getSingleSelectedBulletin()
 	{
@@ -115,6 +120,11 @@ public class UiBulletinTablePane extends JScrollPane
 	public void doModifyBulletin()
 	{
 		table.doModifyBulletin();
+	}
+
+	public void doSelectAllBulletins()
+	{
+		table.doSelectAllBulletins();	
 	}
 
 	public void doCutBulletins()

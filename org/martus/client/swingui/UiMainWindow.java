@@ -407,14 +407,23 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		return actionMenuModifyBulletin;
 	}
+
+	
+	public ActionMenuSelectAllBulletins getActionMenuSelectAll()
+	{
+		return actionMenuSelectAllBulletins;
+	}
+
 	public ActionMenuCutBulletins getActionMenuCut()
 	{
 		return actionMenuCutBulletins;
 	}
+
 	public ActionMenuCopyBulletins getActionMenuCopy()
 	{
 		return actionMenuCopyBulletins;
 	}
+
 	public ActionMenuPasteBulletins getActionMenuPaste()
 	{
 		return actionMenuPasteBulletins;
@@ -622,6 +631,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		JMenu edit = new JMenu(app.getMenuLabel("edit"));
 		actionMenuModifyBulletin = new ActionMenuModifyBulletin();
+		actionMenuSelectAllBulletins = new ActionMenuSelectAllBulletins();
 		actionMenuCutBulletins = new ActionMenuCutBulletins();
 		actionMenuCopyBulletins = new ActionMenuCopyBulletins();
 		actionMenuPasteBulletins = new ActionMenuPasteBulletins();
@@ -637,6 +647,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		edit.add(actionMenuCutBulletins);
 		edit.add(actionMenuCopyBulletins);
 		edit.add(actionMenuPasteBulletins);
+		edit.add(actionMenuSelectAllBulletins);
 		edit.addSeparator();
 		edit.add(actionMenuDiscardBulletins);
 
@@ -706,6 +717,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private void doCutBulletins()
 	{
 		table.doCutBulletins();
+	}
+	
+	private void doSelectAllBulletins()
+	{
+		table.doSelectAllBulletins();	
 	}
 
 	private void doCopyBulletins()
@@ -1934,8 +1950,30 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
+	class ActionMenuSelectAllBulletins extends AbstractAction
+	{
+
+		public ActionMenuSelectAllBulletins()
+		{
+			super(app.getMenuLabel("SelectAllBulletins"), null);
+		}
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			doSelectAllBulletins();
+		}
+
+		public boolean isEnabled()
+		{
+			if(table.getBulletinCount() > 0)
+				return true;
+			return false;
+		}
+	}
+
 	class ActionMenuCutBulletins extends AbstractAction
 	{
+		
 		public ActionMenuCutBulletins()
 		{
 			super(app.getMenuLabel("CutBulletins"), null);
@@ -2024,6 +2062,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		public void menuSelected(MenuEvent e)
 		{
 			actionMenuModifyBulletin.setEnabled(actionMenuModifyBulletin.isEnabled());
+			actionMenuSelectAllBulletins.setEnabled(actionMenuSelectAllBulletins.isEnabled());
 			actionMenuCutBulletins.setEnabled(actionMenuCutBulletins.isEnabled());
 			actionMenuCopyBulletins.setEnabled(actionMenuCopyBulletins.isEnabled());
 			actionMenuPasteBulletins.setEnabled(actionMenuPasteBulletins.isEnabled());
@@ -2034,6 +2073,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		{
 			//Java Bug, menu items need to be disabled before correct behavior occures.
 			actionMenuModifyBulletin.setEnabled(false);
+			actionMenuSelectAllBulletins.setEnabled(false);
 			actionMenuCutBulletins.setEnabled(false);
 			actionMenuCopyBulletins.setEnabled(false);
 			actionMenuPasteBulletins.setEnabled(false);
@@ -2480,6 +2520,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	private InactivityDetector inactivityDetector;
 	private ActionMenuPrintBulletin actionMenuPrint;
 	private ActionMenuModifyBulletin actionMenuModifyBulletin;
+	private ActionMenuSelectAllBulletins actionMenuSelectAllBulletins;
 	private ActionMenuCutBulletins actionMenuCutBulletins;
 	private ActionMenuCopyBulletins actionMenuCopyBulletins;
 	private ActionMenuPasteBulletins actionMenuPasteBulletins;

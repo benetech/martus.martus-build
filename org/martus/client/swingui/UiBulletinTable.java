@@ -132,6 +132,11 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 
 		return bulletins;
 	}
+	
+	public int getBulletinCount()
+	{
+		return getRowCount();
+	}
 
 
 	public UniversalId[] getSelectedBulletinUids()
@@ -173,6 +178,12 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				addRowSelectionInterval(row, row);
 		}
 	}
+
+	public void doSelectAllBulletins()
+	{
+		selectAll();
+	}
+
 
 	public void bulletinContentsHaveChanged(Bulletin b)
 	{
@@ -352,6 +363,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		menu.add(mainWindow.getActionMenuCut());
 		menu.add(mainWindow.getActionMenuCopy());
 		menu.add(mainWindow.getActionMenuPaste());
+		menu.add(mainWindow.getActionMenuSelectAll());
 		menu.addSeparator();
 		menu.add(mainWindow.getActionMenuDiscard());
 		menu.show(component, x, y);
@@ -384,7 +396,9 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			}
 			if(e.isControlDown())
 			{
-				Cursor original = mainWindow.setWaitingCursor();				
+				Cursor original = mainWindow.setWaitingCursor();
+				if(e.getKeyCode() == KeyEvent.VK_A)
+					doSelectAllBulletins();
 				if(e.getKeyCode() == KeyEvent.VK_X)
 					doCutBulletins();
 				if(e.getKeyCode() == KeyEvent.VK_C)
