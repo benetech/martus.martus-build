@@ -103,12 +103,14 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
+			Vector list = new Vector();
 			if(hasData)
 			{
-				result.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
-				result.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE));
-				result.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+				list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
+				list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE));
+				list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
 			}
+			result.add(list);
 			return result;
 		}
 		

@@ -130,8 +130,10 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
-			result.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
-			result.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+			Vector list = new Vector();
+			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
+			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+			result.add(list);
 			return result;
 		}
 

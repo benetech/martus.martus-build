@@ -117,14 +117,14 @@ public class MockMartusServer extends MartusServer
 				chunkOffset, maxChunkSize);
 		}
 
-		public Vector legacyListMySealedBulletinIds(String clientId)
+		public Vector listMySealedBulletinIds(String clientId)
 		{
 			lastClientId = clientId;
 			if(listMyResponseNull)	
 				return null;
 			if(listMyResponse != null)
 				return new Vector(listMyResponse);
-			return (Vector)(super.legacyListMySealedBulletinIds(clientId)).clone();
+			return (Vector)(super.listMySealedBulletinIds(clientId)).clone();
 			
 		}
 		
@@ -139,14 +139,14 @@ public class MockMartusServer extends MartusServer
 			
 		}
 		
-		public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
+		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
 		{
 			lastClientId = hqAccountId;
 			if(listFieldOfficeSummariesResponseNull)	
 				return null;
 			if(listFieldOfficeSummariesResponse != null)
 				return new Vector(listFieldOfficeSummariesResponse);
-			return (Vector)(super.legacyListFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId)).clone();
+			return (Vector)(super.listFieldOfficeSealedBulletinIds(hqAccountId, authorAccountId)).clone();
 		}
 
 		public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId)

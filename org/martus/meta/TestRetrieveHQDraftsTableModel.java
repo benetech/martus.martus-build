@@ -195,10 +195,12 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		{			
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
+			Vector list = new Vector();
 			if(authorAccountId.equals(b0.getAccount()))
-				result.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId());
+				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId());
 			if(authorAccountId.equals(b2.getAccount()))
-				result.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
+				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
+			result.add(list);
 			return result;
 		}
 

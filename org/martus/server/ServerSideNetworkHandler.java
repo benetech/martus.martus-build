@@ -81,9 +81,9 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		String authorAccountId = (String)parameters.get(index++);
 
 		if(myAccountId.equals(authorAccountId))
-			result = server.legacyListMySealedBulletinIds(authorAccountId);
+			result = server.listMySealedBulletinIds(authorAccountId);
 		else
-			result = server.legacyListFieldOfficeSealedBulletinIds(myAccountId, authorAccountId);
+			result = server.listFieldOfficeSealedBulletinIds(myAccountId, authorAccountId);
 
 		server.decrementActiveClientsCounter();
 		return result;
@@ -107,18 +107,10 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		int index = 0;
 		String authorAccountId = (String)parameters.get(index++);
 
-		Vector legacyResult = null;
 		if(myAccountId.equals(authorAccountId))
-			legacyResult = server.listMyDraftBulletinIds(authorAccountId);
+			result = server.listMyDraftBulletinIds(authorAccountId);
 		else
-			legacyResult = server.listFieldOfficeDraftBulletinIds(myAccountId, authorAccountId);
-			
-		String resultCode = (String)legacyResult.get(0);
-		legacyResult.remove(0);
-
-		result.add(resultCode);
-		result.add(legacyResult);
-		
+			result = server.listFieldOfficeDraftBulletinIds(myAccountId, authorAccountId);
 		server.decrementActiveClientsCounter();
 		
 		return result;

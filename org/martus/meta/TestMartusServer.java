@@ -1072,9 +1072,9 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		BulletinStore nonFieldStore = new BulletinStore(new MockServerDatabase());
 		nonFieldStore.setSignatureGenerator(nonFieldSecurity);
 
-		Vector list1 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
+		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
 		assertNotNull("testListFieldOfficeBulletinSummaries returned null", list1);
-		assertEquals("wrong length list 1", 1, list1.size());
+		assertEquals("wrong length list 1", 2, list1.size());
 		assertNotNull("null id1 [0] list1", list1.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list1.get(0));
 
@@ -1096,7 +1096,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotNull("null id1 [0] list2", list2.get(0));
 		assertEquals(NetworkInterfaceConstants.OK, list2.get(0));
 		String b1Summary = bulletinDraft.getLocalId() + "=" + bulletinDraft.getFieldDataPacket().getLocalId();
-		assertContains("missing bulletin Draft?",b1Summary , list2);
+		assertContains("missing bulletin Draft?",b1Summary , (Vector)list2.get(1));
 	}
 
 
@@ -1759,7 +1759,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
 		
-		vecResult = testServer.listMyDraftBulletinIds(clientId);
+		vecResult = testServer.legacyListMyDraftBulletinIds(clientId);
 		verifyErrorResult("listMyDraftBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listMyDraftBulletinIds", 0, testServer.getNumberActiveClients() );
 		
@@ -1811,7 +1811,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("listFieldOfficeSealedBulletinIds1", vecResult, NetworkInterfaceConstants.OK );
 		assertEquals("listFieldOfficeSealedBulletinIds1", 0, testServer.getNumberActiveClients() );
 		
-		vecResult = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId);
+		vecResult = testServer.legacyListFieldOfficeDraftBulletinIds(hqId, clientId);
 		verifyErrorResult("listFieldOfficeDraftBulletinIds1", vecResult, NetworkInterfaceConstants.OK );
 		assertEquals("listFieldOfficeDraftBulletinIds1", 0, testServer.getNumberActiveClients() );
 		
@@ -1823,7 +1823,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("listFieldOfficeSealedBulletinIds2", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listFieldOfficeSealedBulletinIds2", 0, testServer.getNumberActiveClients() );
 		
-		vecResult = testServer.listFieldOfficeDraftBulletinIds(clientId, clientId);
+		vecResult = testServer.legacyListFieldOfficeDraftBulletinIds(clientId, clientId);
 		verifyErrorResult("listFieldOfficeDraftBulletinIds2", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listFieldOfficeDraftBulletinIds2", 0, testServer.getNumberActiveClients() );
 		
@@ -1862,7 +1862,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listMySealedBulletinIds", 1, testServer.getNumberActiveClients() );
 		
-		vecResult = testServer.listMyDraftBulletinIds(clientId);
+		vecResult = testServer.legacyListMyDraftBulletinIds(clientId);
 		verifyErrorResult("listMyDraftBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listMyDraftBulletinIds", 1, testServer.getNumberActiveClients() );
 		
@@ -1914,7 +1914,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		verifyErrorResult("listFieldOfficeSealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listFieldOfficeSealedBulletinIds", 1, testServer.getNumberActiveClients() );
 		
-		vecResult = testServer.listFieldOfficeDraftBulletinIds(hqId, clientId);
+		vecResult = testServer.legacyListFieldOfficeDraftBulletinIds(hqId, clientId);
 		verifyErrorResult("listFieldOfficeDraftBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listFieldOfficeDraftBulletinIds", 1, testServer.getNumberActiveClients() );
 		

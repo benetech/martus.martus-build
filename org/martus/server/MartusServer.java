@@ -877,6 +877,24 @@ public class MartusServer implements NetworkInterfaceConstants
 		return result;
 	}
 
+	public Vector legacyListMyDraftBulletinIds(String authorAccountId)
+	{
+		if(serverMaxLogging)
+			logging("legacyListMyDraftBulletinIds " + getClientAliasForLogging(authorAccountId));
+			
+		if( !isClientAuthorized(authorAccountId) )
+			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+		
+		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId);
+		Vector summaries = summaryCollector.getSummaries();
+		if(serverMaxLogging)
+			logging("legacyListMyDraftBulletinIds : Exit");
+		return summaries;
+	}
+
 	public Vector listMyDraftBulletinIds(String authorAccountId)
 	{
 		if(serverMaxLogging)
@@ -890,9 +908,16 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
+
+		String resultCode = (String)summaries.get(0);
+		summaries.remove(0);
+		Vector result = new Vector();
+		result.add(resultCode);
+		result.add(summaries);
+
 		if(serverMaxLogging)
 			logging("listMyDraftBulletinIds : Exit");
-		return summaries;
+		return result;
 	}
 
 	public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
@@ -939,6 +964,24 @@ public class MartusServer implements NetworkInterfaceConstants
 		return result;	
 	}
 
+	public Vector legacyListFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId)
+	{
+		if(serverMaxLogging)
+			logging("legacyListFieldOfficeDraftBulletinIds " + getClientAliasForLogging(hqAccountId));
+
+		if( !isClientAuthorized(hqAccountId) )
+			return returnSingleResponseAndLog( " returning REJECTED", NetworkInterfaceConstants.REJECTED );
+		
+		if( isShutdownRequested() )
+			return returnSingleResponseAndLog( " returning SERVER_DOWN", NetworkInterfaceConstants.SERVER_DOWN );
+			
+		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
+		Vector summaries = summaryCollector.getSummaries();
+		if(serverMaxLogging)
+			logging("legacyListFieldOfficeDraftBulletinIds : Exit");
+		return summaries;
+	}
+
 	public Vector listFieldOfficeDraftBulletinIds(String hqAccountId, String authorAccountId)
 	{
 		if(serverMaxLogging)
@@ -952,9 +995,16 @@ public class MartusServer implements NetworkInterfaceConstants
 			
 		SummaryCollector summaryCollector = new FieldOfficeDraftSummaryCollector(getDatabase(), hqAccountId, authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
+
+		String resultCode = (String)summaries.get(0);
+		summaries.remove(0);
+		Vector result = new Vector();
+		result.add(resultCode);
+		result.add(summaries);
+
 		if(serverMaxLogging)
 			logging("listFieldOfficeDraftBulletinIds : Exit");
-		return summaries;
+		return result;
 	}
 
 	public Vector listFieldOfficeAccounts(String hqAccountId)

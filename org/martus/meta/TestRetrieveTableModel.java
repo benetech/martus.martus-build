@@ -446,9 +446,10 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		Vector desiredSealedResult = new Vector();
 		desiredSealedResult.add(NetworkInterfaceConstants.OK);
-		desiredSealedResult.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId());
-		desiredSealedResult.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
-
+		Vector list = new Vector();
+		list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId());
+		list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
+		desiredSealedResult.add(list);
 		mockServer.listFieldOfficeSummariesResponse = desiredSealedResult;	
 
 		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp);
@@ -470,8 +471,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		Vector desiredDraftResult = new Vector();
 		desiredDraftResult.add(NetworkInterfaceConstants.OK);
-		desiredDraftResult.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId());
-
+		Vector list2 = new Vector();
+		list2.add(b3.getLocalId() + "=" + b3.getFieldDataPacket().getLocalId());
+		desiredDraftResult.add(list2);
 		mockServer.listFieldOfficeSummariesResponse = desiredDraftResult;	
 
 		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp);
@@ -496,13 +498,15 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 			super();
 		}
 		
-		public Vector legacyListMySealedBulletinIds(String clientId)
+		public Vector listMySealedBulletinIds(String clientId)
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
-			result.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
-			result.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE));
-			result.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+			Vector list = new Vector();
+			list.add(b0.getLocalId() + "= " + b0.get(b0.TAGTITLE));
+			list.add(b1.getLocalId() + "= " + b1.get(b1.TAGTITLE));
+			list.add(b2.getLocalId() + "= " + b2.get(b2.TAGTITLE));
+			result.add(list);
 			return result;
 		}
 		

@@ -183,16 +183,18 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 			setSecurity(new MockMartusSecurity());
 		}
 		
-		public Vector legacyListFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
+		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId)
 		{
 			Vector result = new Vector();
 			result.add(NetworkInterfaceConstants.OK);
+			Vector list = new Vector();
 			if(authorAccountId.equals(b0.getAccount()))
-				result.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId());
+				list.add(b0.getLocalId() + "=" + b0.getFieldDataPacket().getLocalId());
 			if(authorAccountId.equals(b1.getAccount()))
-				result.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId());
+				list.add(b1.getLocalId() + "=" + b1.getFieldDataPacket().getLocalId());
 			if(authorAccountId.equals(b2.getAccount()))
-				result.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
+				list.add(b2.getLocalId() + "=" + b2.getFieldDataPacket().getLocalId());
+			result.add(list);
 			return result;
 		}
 		
