@@ -54,10 +54,15 @@ public class FieldDataPacket extends Packet
 	public FieldDataPacket(UniversalId universalIdToUse, String[] fieldTagsToUse)
 	{
 		super(universalIdToUse);
+		setFieldTags(fieldTagsToUse);
+		clearAll();
+	}
+
+	void setFieldTags(String[] fieldTagsToUse)
+	{
 		fieldTags = fieldTagsToUse;
 		for(int f = 0; f < fieldTags.length; ++f)
 			fieldTags[f] = fieldTags[f].toLowerCase();
-		clearAll();
 	}
 
 	public static UniversalId createUniversalId(String accountId)
