@@ -1,10 +1,19 @@
 package org.martus.server;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Vector;
 
+import org.martus.common.Base64;
+import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
+import org.martus.common.DatabaseKey;
+import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
 
 public class SupplierSideMirroringHandler implements MirroringInterface
 {
@@ -75,10 +84,14 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 				result.add(accounts);
 				return result;
 			}
-			case cmdListSealedBulletinsForBackup:
+			case cmdListBulletinsForBackup:
 			{
 				String authorAccountId = (String)parameters.get(1);
-				Vector infos = listSealedBulletins(callerAccountId, authorAccountId);
+				Vector infos = listBulletins(callerAccountId, authorAccountId);
+				
+				result.add(OK);
+				result.add(infos);
+				return result;
 			}
 			default:
 			{
@@ -107,9 +120,33 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return collector.accounts;
 	}
 	
-	Vector listSealedBulletins(String callerAccountId, String authorAccountId)
+	Vector listBulletins(String callerAccountId, String authorAccountId)
 	{
-		return null;
+		class Collector implements Database.PacketVisitor
+		{
+			public void visit(DatabaseKey key)
+			{
+				try
+				{
+					InputStreamWithSeek in = db.openInputStream(key, null);
+					byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, verifier);
+					in.close();
+					String sigString = Base64.encode(sigBytes);
+					String info = key.getLocalId() + "=" + sigString;
+					infos.add(info);
+				}
+				catch (Exception e)
+				{
+					e.printStackTrace();
+				}
+			}
+			
+			Vector infos = new Vector();
+		}
+
+		Collector collector = new Collector();		
+		db.visitAllRecordsForAccount(collector, authorAccountId);
+		return collector.infos;
 	}
 	
 	int extractCommand(Object possibleCommand)
@@ -121,8 +158,8 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		if(cmdString.equals(CMD_LIST_ACCOUNTS_FOR_BACKUP))
 			return cmdListAccountsForBackup;
 		
-		if(cmdString.equals(CMD_LIST_SEALED_BULLETINS_FOR_BACKUP))
-			return cmdListSealedBulletinsForBackup;
+		if(cmdString.equals(CMD_LIST_BULLETINS_FOR_BACKUP))
+			return cmdListBulletinsForBackup;
 		
 		return cmdUnknown;
 	}
@@ -137,7 +174,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 	final static int cmdUnknown = 0;
 	final static int cmdPing = 1;
 	final static int cmdListAccountsForBackup = 2;
-	final static int cmdListSealedBulletinsForBackup = 3;
+	final static int cmdListBulletinsForBackup = 3;
 	
 	Database db;
 	MartusCrypto verifier;

@@ -6,7 +6,7 @@ public interface MirroringInterface
 {
 	public final static String CMD_PING = "ping";
 	public final static String CMD_LIST_ACCOUNTS_FOR_BACKUP = "listAccountsForBackup";
-	public final static String CMD_LIST_SEALED_BULLETINS_FOR_BACKUP = "listSealedBulletinsForBackup";
+	public final static String CMD_LIST_BULLETINS_FOR_BACKUP = "listBulletinsForBackup";
 
 	public static final String OK = "ok";
 	public static final String SIG_ERROR = "signature error";
