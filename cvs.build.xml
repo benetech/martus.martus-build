@@ -45,8 +45,8 @@
         <echo message="Build number is ${build.number}" />
         <echo message="Version is ${martus.version}" />
 
-        <property name="server.binary.cvs.dir" value="binary-martus/Releases/ServerJar/${cvs.year}/${cvs.month.day}"/>
-        <property name="client.binary.cvs.dir" value="binary-martus/Releases/ClientJar/${cvs.year}/${cvs.month.day}"/>
+        <property name="server.binary.cvs.dir" value="${cvs.home}/binary-martus/Releases/ServerJar/${cvs.year}/${cvs.month.day}"/>
+        <property name="client.binary.cvs.dir" value="${cvs.home}/binary-martus/Releases/ClientJar/${cvs.year}/${cvs.month.day}"/>
 
         <property name="init.complete" value="true"/>
     </target>
@@ -64,17 +64,17 @@
     <!-- run build and check in results -->
     <target name="release.and.checkin" depends="make.release,create.client.binary.cvs.dirs,create.server.binary.cvs.dirs" description="Tag CVS projects and check-in results">
         <!-- check in build number -->
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
-                <argument value="v ${DSTAMP}"/>
-                <argument value="./build.number"/>
+                <argument value="v${DSTAMP}_build-${build.number}"/>
+                <argument value="build.number"/>
             </commandline>
         </cvs>
 
         <!-- tag results -->
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
@@ -88,12 +88,12 @@
                 <argument value="${mspa-module}"/>
                 <argument value="${server-module}"/>
                 <argument value="${swing-module}"/>
-                <!-- <argument value="${thirdparty-module}"/> -->
                 <argument value="${utils-module}"/>
             </commandline>
         </cvs>
 
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="false">
+        <!-- tag results: these might fail -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false" noexec="true">
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
@@ -101,18 +101,76 @@
             </commandline>
         </cvs>
 
+        <!-- copy Client jars to CVS location -->
+        <copy todir="${client.binary.cvs.dir}">
+            <fileset dir="${public.release.folder}">
+                <include name="martus-client-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-client-${DSTAMP}.${build.number}.jar.md5"/>
+            </fileset>
+        </copy>
+
         <!-- check in Client results -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
+            <commandline>
+                <argument value="add"/>
+                <argument value="${client.binary.cvs.dir}/martus-client-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${client.binary.cvs.dir}/martus-client-${DSTAMP}.${build.number}.jar.md5"/>
+            </commandline>
+        </cvs>
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
+            <commandline>
+                <argument value="commit"/>
+                <argument value="-m"/>
+                <argument value="v-${CVS_DATE}_build-${BUILD_NUMBER}"/>
+                <argument value="${client.binary.cvs.dir}/martus-client-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${client.binary.cvs.dir}/martus-client-${DSTAMP}.${build.number}.jar.md5"/>
+            </commandline>
+        </cvs>
 
+        <!-- copy Server jars to CVS location -->
+        <copy todir="${server.binary.cvs.dir}">
+            <fileset dir="${public.release.folder}">
+                <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-server-${DSTAMP}.${build.number}.jar.md5"/>
+                <include name="martus-meta-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-meta-${DSTAMP}.${build.number}.jar.md5"/>
+                <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar.md5"/>
+            </fileset>
+        </copy>
 
-
-
+        <!-- check in Server results -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
+            <commandline>
+                <argument value="add"/>
+                <argument value="${server.binary.cvs.dir}/martus-server-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${server.binary.cvs.dir}/martus-server-${DSTAMP}.${build.number}.jar.md5"/>
+                <argument value="${server.binary.cvs.dir}/martus-meta-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${server.binary.cvs.dir}/martus-meta-${DSTAMP}.${build.number}.jar.md5"/>
+                <argument value="${server.binary.cvs.dir}/martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${server.binary.cvs.dir}/martus-mspa-client-${DSTAMP}.${build.number}.jar.md5"/>
+            </commandline>
+        </cvs>
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="true">
+            <commandline>
+                <argument value="commit"/>
+                <argument value="-m"/>
+                <argument value="v-${CVS_DATE}_build-${BUILD_NUMBER}"/>
+                <argument value="${server.binary.cvs.dir}/martus-server-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${server.binary.cvs.dir}/martus-server-${DSTAMP}.${build.number}.jar.md5"/>
+                <argument value="${server.binary.cvs.dir}/martus-meta-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${server.binary.cvs.dir}/martus-meta-${DSTAMP}.${build.number}.jar.md5"/>
+                <argument value="${server.binary.cvs.dir}/martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+                <argument value="${server.binary.cvs.dir}/martus-mspa-client-${DSTAMP}.${build.number}.jar.md5"/>
+            </commandline>
+        </cvs>
 
     </target>
 
     <target name="check.binary.cvs.dirs" description="Checks whether necessary directories for checkin exist">
 
         <!-- Client binary locations -->
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true">
             <commandline>
                 <argument value="checkout"/>
                 <argument value="-l"/>
@@ -120,7 +178,7 @@
             </commandline>
         </cvs>
 
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="false">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false">
             <commandline>
                 <argument value="checkout"/>
                 <argument value="-l"/>
@@ -130,7 +188,7 @@
         <available file="${client.binary.cvs.dir}" type="dir" property="client.binary.location.present"/>
 
         <!-- Server binary locations -->
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true">
             <commandline>
                 <argument value="checkout"/>
                 <argument value="-l"/>
@@ -138,7 +196,7 @@
             </commandline>
         </cvs>
 
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="false">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false">
             <commandline>
                 <argument value="checkout"/>
                 <argument value="-l"/>
@@ -149,14 +207,14 @@
 
     </target>
 
-    <target name="create.client.binary.cvs.dirs" depends="check.binary.cvs.dirs" unless="client.binary.location.present" description="Creates client binary CVS dirs">
+    <target name="create.client.binary.cvs.dirs" depends="init,check.binary.cvs.dirs" unless="client.binary.location.present" description="Creates client binary CVS dirs">
         <mkdir dir="${client.binary.cvs.dir}/CVS"/>
         <echo message="" file="${client.binary.cvs.dir}/CVS/Entries"/>
         <echo message="binary-martus/Releases/ClientJar" file="${client.binary.cvs.dir}/CVS/Repository"/>
         <echo message="${cvs.cvsroot}" file="${client.binary.cvs.dir}/CVS/Root"/>
     </target>
 
-    <target name="create.server.binary.cvs.dirs" depends="check.binary.cvs.dirs" unless="server.binary.location.present" description="Creates server binary CVS dirs">
+    <target name="create.server.binary.cvs.dirs" depends="init,check.binary.cvs.dirs" unless="server.binary.location.present" description="Creates server binary CVS dirs">
         <mkdir dir="${server.binary.cvs.dir}/CVS"/>
         <echo message="" file="${server.binary.cvs.dir}/CVS/Entries"/>
         <echo message="binary-martus/Releases/ServerJar" file="${server.binary.cvs.dir}/CVS/Repository"/>
