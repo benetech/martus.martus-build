@@ -77,8 +77,8 @@ public class MartusServerUtilities
 			Database.RecordHiddenException,
 			Packet.InvalidPacketException,
 			Packet.SignatureVerificationException,
-			MartusCrypto.SealedPacketExistsException,
-			MartusCrypto.DuplicatePacketException,
+			SealedPacketExistsException,
+			DuplicatePacketException,
 			Packet.WrongAccountException,
 			MartusCrypto.DecryptionException
 	{
@@ -102,8 +102,8 @@ public class MartusServerUtilities
 			Packet.InvalidPacketException,
 			IOException,
 			Packet.SignatureVerificationException,
-			MartusCrypto.SealedPacketExistsException,
-			MartusCrypto.DuplicatePacketException,
+			SealedPacketExistsException,
+			DuplicatePacketException,
 			Packet.WrongAccountException,
 			MartusCrypto.DecryptionException 
 	{
@@ -121,9 +121,9 @@ public class MartusServerUtilities
 			{
 				DatabaseKey newKey = header.createKeyWithHeaderStatus(uid);
 				if(newKey.isDraft())
-					throw new MartusCrypto.SealedPacketExistsException(entry.getName());
+					throw new SealedPacketExistsException(entry.getName());
 				else
-					throw new MartusCrypto.DuplicatePacketException(entry.getName());
+					throw new DuplicatePacketException(entry.getName());
 			}
 		}
 		
@@ -552,6 +552,22 @@ public class MartusServerUtilities
 	public static class MartusSignatureFileAlreadyExistsException extends Exception {}
 	public static class MartusSignatureFileDoesntExistsException extends Exception {}
 	public static class FileTooLargeException extends IOException {}
+
+	public static class DuplicatePacketException extends Exception
+	{
+		public DuplicatePacketException(String message)
+		{
+			super(message);
+		}
+	}
+	
+	public static class SealedPacketExistsException extends Exception
+	{
+		public SealedPacketExistsException(String message)
+		{
+			super(message);
+		}
+	}
 	
 	private static final String MARTUS_SIGNATURE_FILE_DATE_FORMAT = "yyyyMMdd-HHmmss";
 	private static final String MARTUS_SIGNATURE_FILE_IDENTIFIER = "Martus Signature File";
