@@ -2,22 +2,16 @@ package org.martus.server.formirroring;
 
 import java.util.Vector;
 
-import org.martus.common.Base64;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.Database;
-import org.martus.common.DatabaseKey;
-import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkInterfaceConstants;
 
 public class SupplierSideMirroringHandler implements MirroringInterface, NetworkInterfaceConstants
 {
-	public SupplierSideMirroringHandler(ServerSupplierInterface supplierToUse)
+	public SupplierSideMirroringHandler(ServerSupplierInterface supplierToUse, MartusCrypto verifierToUse)
 	{
 		supplier = supplierToUse;
-		db = supplier.getDatabase();
-		verifier = supplier.getSecurity();
+		verifier = verifierToUse;
 	}
 	
 	public Vector request(String callerAccountId, Vector parameters, String signature)
@@ -64,7 +58,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			}
 			case cmdListAccountsForMirroring:
 			{
-				Vector accounts = listAccountsForMirroring();
+				Vector accounts = supplier.listAccountsForMirroring();
 	
 				result.add(OK);
 				result.add(accounts);
@@ -73,7 +67,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 			case cmdListBulletinsForMirroring:
 			{
 				String authorAccountId = (String)parameters.get(1);
-				Vector infos = listBulletinsForMirroring(authorAccountId);
+				Vector infos = supplier.listBulletinsForMirroring(authorAccountId);
 				
 				result.add(OK);
 				result.add(infos);
@@ -103,54 +97,6 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		return result;
 	}
 
-	Vector listAccountsForMirroring()
-	{
-		class Collector implements Database.AccountVisitor
-		{
-			public void visit(String accountId)
-			{
-				accounts.add(accountId);
-			}
-			
-			Vector accounts = new Vector();
-		}
-
-		Collector collector = new Collector();		
-		db.visitAllAccounts(collector);
-		return collector.accounts;
-	}
-	
-	Vector listBulletinsForMirroring(String authorAccountId)
-	{
-		class Collector implements Database.PacketVisitor
-		{
-			public void visit(DatabaseKey key)
-			{
-				try
-				{
-					InputStreamWithSeek in = db.openInputStream(key, null);
-					byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, verifier);
-					in.close();
-					String sigString = Base64.encode(sigBytes);
-					Vector info = new Vector();
-					info.add(key.getLocalId());
-					info.add(sigString);
-					infos.add(info);
-				}
-				catch (Exception e)
-				{
-					e.printStackTrace();
-				}
-			}
-			
-			Vector infos = new Vector();
-		}
-
-		Collector collector = new Collector();		
-		db.visitAllRecordsForAccount(collector, authorAccountId);
-		return collector.infos;
-	}
-	
 	Vector getBulletinChunk(String authorAccountId, String bulletinLocalId, int offset, int maxChunkSize)
 	{
 		return supplier.getBulletinChunkWithoutVerifyingCaller(authorAccountId, bulletinLocalId, 
@@ -190,6 +136,5 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 	final static int cmdGetBulletinChunkForMirroring = 4;
 	
 	ServerSupplierInterface supplier;
-	Database db;
 	MartusCrypto verifier;
 }

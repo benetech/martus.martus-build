@@ -12,7 +12,6 @@ import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.NetworkInterfaceConstants;
-import org.martus.common.StringInputStream;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 
@@ -26,9 +25,8 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	protected void setUp() throws Exception
 	{
 		supplier = new FakeServerSupplier();
-		db = supplier.getDatabase();
 		supplierSecurity = supplier.getSecurity();
-		handler = new SupplierSideMirroringHandler(supplier);
+		handler = new SupplierSideMirroringHandler(supplier, supplierSecurity);
 		
 		callerSecurity = MockMartusSecurity.createClient();
 		callerAccountId = callerSecurity.getPublicKeyString();
@@ -114,9 +112,9 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		String accountId1 = "first sample account";
-		writeSealedRecord(db, accountId1);
+		supplier.addAccountToMirror(accountId1);
 		String accountId2 = "second sample account";
-		writeSealedRecord(db, accountId2);
+		supplier.addAccountToMirror(accountId2);
 
 		Vector parameters = new Vector();
 		parameters.add(MirroringInterface.CMD_LIST_ACCOUNTS_FOR_MIRRORING);
@@ -260,8 +258,8 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		StringWriter writer = new StringWriter();
 		byte[] sigBytes = bhp.writeXml(writer, authorSecurity);
 		DatabaseKey key = DatabaseKey.createDraftKey(bhp.getUniversalId());
-		db.writeRecord(key, new StringInputStream(writer.toString()));
 		String sigString = Base64.encode(sigBytes);
+		supplier.addBulletinToMirror(key, sigString);
 		
 		Vector info = new Vector();
 		info.add(key.getLocalId());
@@ -278,7 +276,6 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 	}
 
 	FakeServerSupplier supplier;
-	Database db;
 	MartusCrypto supplierSecurity;
 	SupplierSideMirroringHandler handler;
 	MartusCrypto callerSecurity;

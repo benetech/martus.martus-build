@@ -29,7 +29,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		supplier = new FakeServerSupplier();
 		supplier.authorizedCaller = security.getPublicKeyString();
 
-		handler = new SupplierSideMirroringHandler(supplier);
+		handler = new SupplierSideMirroringHandler(supplier, security);
 		realGateway = new CallerSideMirroringGateway(handler);
 		realRetriever = new MirroringRetriever(db, realGateway, security);
 		
