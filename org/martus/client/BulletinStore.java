@@ -177,7 +177,7 @@ public class BulletinStore
 		return visitor.setOfUniversalIds;
 	}
 	
-	public Set getSetOfBulletinUniversalIdsInFolders()
+	public synchronized Set getSetOfBulletinUniversalIdsInFolders()
 	{
 		Set setOfUniversalIds = new HashSet();
 		
@@ -202,7 +202,7 @@ public class BulletinStore
 		return possibleOrphans;
 	}
 
-	public void destroyBulletin(Bulletin b)
+	public synchronized void destroyBulletin(Bulletin b)
 	{
 		UniversalId id = b.getUniversalId();
 
@@ -769,7 +769,7 @@ public class BulletinStore
 				}
 				catch (DuplicatePacketException notAProblem) 
 				{
-					System.out.println("imported sealed that already existed");
+					//System.out.println("imported sealed that already existed");
 				} 
 			}
 			else
@@ -836,7 +836,7 @@ public class BulletinStore
 		bulletinCache.put(b.getUniversalId(), b);
 	}
 
-	static final int maxCachedBulletinCount = 100;
+	public static int maxCachedBulletinCount = 100;
 	
 	public static final String OUTBOX_FOLDER = "%OutBox";
 	public static final String SENT_FOLDER = "%Sent";
