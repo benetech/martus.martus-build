@@ -147,17 +147,23 @@ abstract public class MockDatabase implements Database
 
 	public File getIncomingInterimFile(DatabaseKey key)
 	{
-		return getInterimFile(key, incomingInterimMap);
+		File dir = getInterimFile(key, incomingInterimMap);
+		dir.mkdirs();
+		return new File(dir, "$$$in");
 	}
 
 	public File getOutgoingInterimFile(DatabaseKey key)
 	{
-		return getInterimFile(key, outgoingInterimMap);
+		File dir = getInterimFile(key, outgoingInterimMap);
+		dir.mkdirs();
+		return new File(dir, "$$$out");
 	}
 	
 	public File getContactInfoFile(String accountId)
 	{
-		return new File(getFolderForAccount(accountId), "$$$ContactFile.dat");
+		File dir = new File(getFolderForAccount(accountId));
+		dir.mkdirs();
+		return new File(dir, "$$$ContactFile.dat");
 	}
 
 	public synchronized boolean isInQuarantine(DatabaseKey key)

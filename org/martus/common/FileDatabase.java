@@ -324,6 +324,10 @@ public class FileDatabase implements Database
 			for(int packetBucket = 0; packetBucket < packetBuckets.length; ++packetBucket)
 			{
 				File bucketDir = new File(accountDir, packetBuckets[packetBucket]);
+				if(INTERIM_FOLDER_NAME.equals(bucketDir.getName()))
+					continue;
+				if(CONTACTINFO_FOLDER_NAME.equals(bucketDir.getName()))
+					continue;
 				if(isQuarantineBucketDirectory(bucketDir))
 					continue;
 				

@@ -314,7 +314,12 @@ public class TestDatabase extends TestCaseEnhanced
 		public void visit(DatabaseKey key)
 		{
 			++count;
-			assertTrue(db.toString()+"bad key?", db.doesRecordExist(key));
+			assertTrue(db.toString()+"bad key " + key.getLocalId() + "?", db.doesRecordExist(key));
+		}
+		
+		public void clear()
+		{
+			count = 0;
 		}
 		
 		Database db;
@@ -324,13 +329,36 @@ public class TestDatabase extends TestCaseEnhanced
 	private void internalTestVisitAllRecords(Database db) throws Exception
 	{
 		PacketCounter counter = new PacketCounter(db);
+
+		counter.clear();
 		db.visitAllRecords(counter);
 		assertEquals(db.toString()+"not empty?", 0, counter.count);
 		
 		db.writeRecord(smallKey, smallString);
 		db.writeRecord(largeKey, largeString);
+		counter.clear();
 		db.visitAllRecords(counter);
 		assertEquals(db.toString()+"count wrong?", 2, counter.count);
+
+		File interimFile = db.getOutgoingInterimFile(smallKey);
+		interimFile.deleteOnExit();
+		UnicodeWriter writer1 = new UnicodeWriter(interimFile);
+		writer1.write("just some stuff");
+		writer1.close();
+		counter.clear();
+		db.visitAllRecords(counter);
+		assertEquals(db.toString()+ " counted interim file?", 2, counter.count);
+		interimFile.delete();
+		
+		File contactFile = db.getContactInfoFile(security.getPublicKeyString());
+		contactFile.deleteOnExit();
+		UnicodeWriter writer2 = new UnicodeWriter(contactFile);
+		writer2.write("fake contact info");
+		writer2.close();
+		counter.clear();
+		db.visitAllRecords(counter);
+		assertEquals(db.toString()+ " counted contact info file?", 2, counter.count);
+		contactFile.delete();
 	}
 
 	private void internalTestDeleteAllData(Database db) throws Exception
