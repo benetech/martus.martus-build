@@ -254,13 +254,11 @@ public class MartusApp
 			}
 			catch (FileVerificationException handlingPostponedException)
 			{
-				// For now, ignore problems with the account map sig
-				System.out.println("initializeDatabase: FileVerificationException = " + handlingPostponedException);
+				throw new MartusAppInitializationException("ErrorAccountMapVerification");
 			}
 			catch (MissingAccountMapSignatureException handlingPostponedException)
 			{
-				// For now, ignore problems with the account map sig
-				System.out.println("initializeDatabase: MissingAccountMapSignatureException = " + handlingPostponedException);
+				throw new MartusAppInitializationException("ErrorMissingAccountMapSignature");
 			}
 	}
 	

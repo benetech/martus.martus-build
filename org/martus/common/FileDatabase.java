@@ -50,12 +50,23 @@ public class FileDatabase implements Database
 		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
 		accountMapSignatureFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME + ".sig");
 		loadAccountMap();
-		if(absoluteBaseDir.exists() && !accountMapFile.exists())
+		if(isAccountMapExpected() && !accountMapFile.exists())
+		{
+			throw new MissingAccountMapException();
+		}
+	}
+
+	public boolean isAccountMapExpected()
+	{
+		if(absoluteBaseDir.exists())
 		{
 			int fileCount = absoluteBaseDir.list().length;
 			if(fileCount > 0)
-				throw new MissingAccountMapException();
+				return true;
+			else
+				return false;
 		}
+		return false;
 	}
 
 	public void writeRecord(DatabaseKey key, String record) throws IOException
@@ -517,15 +528,8 @@ public class FileDatabase implements Database
 		}
 	}
 
-	synchronized void loadAccountMap() throws FileVerificationException, MissingAccountMapSignatureException
+	synchronized public void loadAccountMap() throws FileVerificationException, MissingAccountMapSignatureException
 	{
-		
-		accountMap.clear();
-
-		if(!accountMapFile.exists()) return;
-
-		verifyAccountMap();
-
 		accountMap.clear();
 		try
 		{
@@ -763,7 +767,7 @@ public class FileDatabase implements Database
 		accountMapSignatureFile = MartusUtilities.createSignatureFileFromFile(accountMapFile, security);
 	}
 	
-	private void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
+	public void verifyAccountMap() throws MartusUtilities.FileVerificationException, MissingAccountMapSignatureException
 	{
 		if( !accountMapSignatureFile.exists() )
 		{

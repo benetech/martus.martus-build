@@ -27,5 +27,12 @@ public class ServerFileDatabase extends FileDatabase
 		return folderName.startsWith(draftPrefix);
 	}
 	
+	public synchronized void loadAccountMap() throws FileVerificationException, MissingAccountMapSignatureException
+	{
+		super.loadAccountMap();
+		if(isAccountMapExpected())
+			super.verifyAccountMap();
+	}
+	
 	private static final String draftPrefix = "d" + defaultBucketPrefix;
 }
