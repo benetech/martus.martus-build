@@ -69,9 +69,6 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	{
 		System.out.println("MartusServer");
 		
-		File dataDirectory = getDefaultDataDirectory();
-		
-		MartusServer server = null;
 		boolean secureMode = false;
 		String servername = null;
 		for(int arg = 0; arg < args.length; ++arg)
@@ -104,9 +101,10 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			System.out.println("***RUNNING IN INSECURE MODE***");
 		
 		System.out.println("Initializing...this will take a few seconds...");
+		MartusServer server = null;
 		try
 		{
-			server = new MartusServer(dataDirectory);
+			server = new MartusServer(getDefaultDataDirectory());
 		} 
 		catch(CryptoInitializationException e) 
 		{
@@ -122,6 +120,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		String versionInfo = MartusUtilities.getVersionDate();
 		System.out.println("Build Date " + versionInfo);
 
+		if(!server.hasAccount())
+		{
+			System.out.println("***** Key pair file not found *****");
+			System.exit(2);
+		}
+		
 		System.out.print("Enter passphrase: ");
 		System.out.flush();
 
@@ -134,54 +138,49 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		try
 		{
 			String passphrase = reader.readLine();
-			if(server.hasAccount())
+			try
 			{
-				try
-				{
-					server.loadAccount(passphrase);
-				}
-				catch (Exception e)
-				{
-					System.out.println("Invalid password: " + e);
-					System.exit(73);
-				}
+				server.loadAccount(passphrase);
 			}
-			else
+			catch (Exception e1)
 			{
-				System.out.println("***** Key pair file not found *****");
-				System.exit(2);
+				System.out.println("Invalid password: " + e1);
+				System.exit(73);
 			}
 			
-			System.out.println("Passphrase correct.");			
 			server.initialize();
-			
-			System.out.println();
-			System.out.println("Server Compliance Statement:");
-			System.out.println("---");
-			System.out.println(server.complianceStatement);
-			System.out.println("---");
-			
-			String accountId = server.getAccountId();
-			System.out.println("Server Account: " + accountId);
-			System.out.println();
-
-			System.out.print("Server Public Code: ");
-			String publicCode = MartusUtilities.computePublicCode(accountId);
-			System.out.println(MartusUtilities.formatPublicCode(publicCode));
-			System.out.println();
 		}
-		catch(IOException e)
+		catch(Exception e)
 		{
 			System.out.println("MartusServer.main: " + e);
 			System.exit(3);
 		}
-		catch (InvalidBase64Exception e)
-		{
-			System.out.println("MartusServer.main: " + e);
-			System.exit(3);
-		}
+		
+		server.setDataDirectory(getDefaultDataDirectory());
+		
+		File runningFile = new File(server.triggerDirectory, "running");
+		runningFile.delete();
+		if(secureMode)
+			server.deleteStartupFiles();
+				
+		System.out.println();
+		System.out.println(server.clientsThatCanUpload.size() + " client(s) currently allowed to upload");
+		System.out.println(server.clientsBanned.size() + " client(s) are currently banned");
+		System.out.println(server.magicWords.size() + " active magic word(s)");
 
-		Database diskDatabase = new ServerFileDatabase(new File(dataDirectory, "packets"), server.getSecurity());
+		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
+		server.createNonSSLXmlRpcServer();
+		server.createSSLXmlRpcServer();
+		server.createMirroringSupplierXmlRpcServer();
+		writeSyncFile(runningFile);
+		System.out.println("Waiting for connection...");
+	}
+
+
+	private void setDataDirectory(File dataDirectory)
+	{
+		File packetsDirectory = new File(dataDirectory, "packets");
+		Database diskDatabase = new ServerFileDatabase(packetsDirectory, getSecurity());
 		try
 		{
 			diskDatabase.initialize();
@@ -205,25 +204,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 			System.exit(7);
 		}
 		
-		server.setDatabase(diskDatabase);
-		
-		File runningFile = new File(server.triggerDirectory, "running");
-		runningFile.delete();
-		if(secureMode)
-			server.deleteStartupFiles();
-				
-		System.out.println();
-
-		System.out.println(server.clientsThatCanUpload.size() + " client(s) currently allowed to upload");
-		System.out.println(server.clientsBanned.size() + " client(s) are currently banned");
-		System.out.println(server.magicWords.size() + " active magic word(s)");
-
-		System.out.println("Setting up sockets (this may take up to a minute or longer)...");
-		server.createNonSSLXmlRpcServer();
-		server.createSSLXmlRpcServer();
-		server.createMirroringSupplierXmlRpcServer();
-		writeSyncFile(runningFile);
-		System.out.println("Waiting for connection...");
+		setDatabase(diskDatabase);
 	}
 
 
@@ -276,10 +257,41 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
  		failedUploadRequestsTimer.schedule(uploadRequestTask, IMMEDIATELY, getUploadRequestTimerInterval());
 	}
 	
-	public void initialize() throws IOException
+
+	private void displayServerPublicCode() throws InvalidBase64Exception
+	{
+		System.out.print("Server Public Code: ");
+		String accountId = getAccountId();
+		String publicCode = MartusUtilities.computePublicCode(accountId);
+		System.out.println(MartusUtilities.formatPublicCode(publicCode));
+		System.out.println();
+	}
+
+	private String displayServerAccountId()
+	{
+		String accountId = getAccountId();
+		System.out.println("Server Account: " + accountId);
+		System.out.println();
+		return accountId;
+	}
+
+	private void displayComplianceStatement()
+	{
+		System.out.println();
+		System.out.println("Server Compliance Statement:");
+		System.out.println("---");
+		System.out.println(complianceStatement);
+		System.out.println("---");
+	}
+
+	public void initialize() throws Exception
 	{
 		verifyConfigurationFiles();
 		loadConfigurationFiles();
+
+		displayComplianceStatement();
+		displayServerAccountId();
+		displayServerPublicCode();
 	}
 	
 	public void verifyConfigurationFiles()
@@ -402,6 +414,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		FileInputStream in = new FileInputStream(keyPairFile);
 		readKeyPair(in, passphrase);
 		in.close();
+		System.out.println("Passphrase correct.");			
 	}
 	
 	public String getAccountId()
