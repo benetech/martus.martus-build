@@ -3,25 +3,27 @@ package org.martus.server.core;
 import junit.framework.Test;
 import junit.framework.TestSuite;
 
-public class TestAll 
+import org.martus.common.TestCommon;
+
+public class TestAll
 {
 	public static void main(String[] args) 
 	{
 		runTests();
 	}
 
-	public static void runTests () 
+	public static void runTests() 
 	{
-		junit.textui.TestRunner.run (suite());
+		junit.textui.TestRunner.run(suite());
 	}
 
-	public static Test suite ( ) 
+	public static Test suite() 
 	{
-		TestSuite suite= new TestSuite("All Server Martus Tests");
+		TestSuite suite = new TestSuite("All Server and Common Martus Tests");
 
-		suite.addTest(TestServerCore.suite());
-		suite.addTest(org.martus.common.TestCommon.suite());
+		suite.addTest(TestCommon.suite());
+		suite.addTest(TestServer.suite());
 
-	    return suite;
+		return suite;
 	}
 }
