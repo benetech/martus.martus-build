@@ -466,11 +466,15 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public String requestUploadRights(String clientId, String tryMagicWord)
 	{
+		boolean uploadGranted = false;
+
+		if(magicWords.contains(tryMagicWord))
+			uploadGranted = true;
+			
 		if(!areUploadRequestsCurrentlyAllowed())
 		{
-			if(!magicWords.contains(tryMagicWord))
+			if(!uploadGranted)
 				incrementFailedUploadRequests();
-
 			return NetworkInterfaceConstants.SERVER_ERROR;
 		}
 
@@ -483,14 +487,15 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		if(tryMagicWord.length() == 0 && clientsThatCanUpload.contains(clientId))
 			return NetworkInterfaceConstants.OK;
 		
-		if(!magicWords.contains(tryMagicWord))
+		if(!uploadGranted)
 		{
 			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + "magicWords=" + magicWords.toString() + " tryMagicWord=" +tryMagicWord);
 			incrementFailedUploadRequests();
 			return NetworkInterfaceConstants.REJECTED;
 		}
 		if(serverMaxLogging)
-			logging("requestUploadRights granted to :" + clientId + " with magicword=" + tryMagicWord);			
+			logging("requestUploadRights granted to :" + clientId + " with magicword=" + tryMagicWord);
+			
 		allowUploads(clientId);
 		return NetworkInterfaceConstants.OK;
 	}
@@ -1836,18 +1841,18 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		activeClientsCounter--;
 	}
 	
-	void incrementFailedUploadRequests()
+	public synchronized void incrementFailedUploadRequests()
 	{
 		failedUploadRequestCounter++;
 	}
 	
-	void subtractMaxFailedUploadAttemptsFromCounter()
+	public synchronized void subtractMaxFailedUploadAttemptsFromCounter()
 	{
 		failedUploadRequestCounter -= getMaxFailedUploadAllowedAttempts();
 		if(failedUploadRequestCounter < 0) failedUploadRequestCounter = 0;
 	}
 	
-	public int getNumFailedUploadRequest()
+	public synchronized int getNumFailedUploadRequest()
 	{
 		return failedUploadRequestCounter;
 	}
@@ -1862,7 +1867,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		return magicWordsGuessIntervalMillis;
 	}
 	
-	boolean areUploadRequestsCurrentlyAllowed()
+	synchronized boolean areUploadRequestsCurrentlyAllowed()
 	{
 		return (failedUploadRequestCounter < getMaxFailedUploadAllowedAttempts());
 	}

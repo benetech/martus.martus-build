@@ -1734,16 +1734,16 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("upload request 5?", NetworkInterfaceConstants.SERVER_ERROR, result);
 		assertEquals("counter 4?", 3, testServer.getNumFailedUploadRequest());
 		
-//		Thread.sleep(testServer.getUploadRequestTimerInterval());
-//		
-//		assertEquals("counter 5?", 1, testServer.getNumFailedUploadRequest());
-//		
-//		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
-//		assertEquals("upload request 6?", NetworkInterfaceConstants.OK, result);
-//		
-//		result = testServer.requestUploadRights(sampleId, sampleMagicWord+ "x");
-//		assertEquals("upload request 7?", NetworkInterfaceConstants.REJECTED, result);
-//		assertEquals("counter 6?", 2, testServer.getNumFailedUploadRequest());
+		testServer.subtractMaxFailedUploadAttemptsFromCounter();
+		
+		assertEquals("counter 5?", 1, testServer.getNumFailedUploadRequest());
+		
+		result = testServer.requestUploadRights(sampleId, sampleMagicWord);
+		assertEquals("upload request 6?", NetworkInterfaceConstants.OK, result);
+		
+		result = testServer.requestUploadRights(sampleId, sampleMagicWord+ "x");
+		assertEquals("upload request 7?", NetworkInterfaceConstants.REJECTED, result);
+		assertEquals("counter 6?", 2, testServer.getNumFailedUploadRequest());
 	}
 	
 	public void testLoadingMagicWords() throws Exception

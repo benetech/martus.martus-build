@@ -231,7 +231,7 @@ public class MockMartusServer extends MartusServer
 	
 	public long getUploadRequestTimerInterval()
 	{
-		return 10 * 1000;
+		return 100 * 1000;
 	}
 
 	static class TempDirectory extends File
