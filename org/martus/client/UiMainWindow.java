@@ -454,7 +454,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		file.add(new ActionMenuExit());
 
 		JMenu edit = new JMenu(app.getButtonLabel("edit"));
-		edit.addMenuListener(new EditMenuListener());
 		edit.add(new ActionMenuEdit());
 
 		edit.addSeparator();
@@ -466,6 +465,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		edit.addSeparator();
 		actionMenuDiscard = new ActionMenuDiscard();
 		edit.add(actionMenuDiscard);
+
+		EditMenuListener menuListener = new EditMenuListener();
+		edit.addMenuListener(menuListener);
+		menuListener.initalize();
+
 		edit.add(new ActionMenuSearch());
 
 		JMenu tools = new JMenu(app.getButtonLabel("tools"));
@@ -1620,6 +1624,33 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
+	class ActionMenuDiscard extends AbstractAction
+	{
+		public ActionMenuDiscard()
+		{
+			super(app.getMenuLabel("discardbulletin"), null);
+		}
+
+		public void actionPerformed(ActionEvent ae)
+		{
+			doDiscardBulletin();
+		}
+		
+		public boolean isEnabled()
+		{
+			updateName();
+			return (table.getSelectedBulletins().length > 0);
+		}
+
+		public void updateName() 
+		{
+			if(isDiscardedFolderSelected())
+				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("deletebulletin"));
+			else
+				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("discardbulletin"));
+		}
+	}
+
 	class ActionMenuPaste extends AbstractAction
 	{
 		public ActionMenuPaste()
@@ -1641,50 +1672,19 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 	{
 		public void menuSelected(MenuEvent e)
 		{
+			actionMenuDiscard.setEnabled(actionMenuDiscard.isEnabled());
 			actionMenuPaste.setEnabled(actionMenuPaste.isEnabled());
-			actionMenuDiscard.updateName();
-			actionMenuDiscard.setEnabled(actionMenuDiscard.shouldEnable());
+		}
+		
+		public void initalize()
+		{
+			//Java Bug, menu items need to be disabled before correct behavior occures.
+			actionMenuPaste.setEnabled(false);
+			actionMenuDiscard.setEnabled(false);
 		}
 
 		public void menuDeselected(MenuEvent e) {}
 		public void menuCanceled(MenuEvent e) {}
-		
-	}
-
-	class ActionMenuDiscard extends AbstractAction
-	{
-		public ActionMenuDiscard()
-		{
-			super(app.getMenuLabel("discardbulletin"), null);
-		}
-
-		public void actionPerformed(ActionEvent ae)
-		{
-			doDiscardBulletin();
-		}
-		
-		public boolean isEnabled()
-		{
-			updateName();
-			return shouldEnable();
-		}
-
-		public boolean shouldEnable() 
-		{
-			Bulletin[] b = table.getSelectedBulletins();
-			if( b.length > 0)
-				return true;
-			return false;
-		}
-
-		public void updateName() 
-		{
-			if(isDiscardedFolderSelected())
-				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("deletebulletin"));
-			else
-				actionMenuDiscard.putValue(actionMenuDiscard.NAME, getApp().getMenuLabel("discardbulletin"));
-		}
-
 	}
 
 	class ActionMenuSearch extends AbstractAction
