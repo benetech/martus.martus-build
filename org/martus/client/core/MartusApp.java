@@ -315,7 +315,7 @@ public class MartusApp
 
 	public File getDefaultDetailsFile()
 	{
-		return new File(getDataDirectory() + "Default.mdd");
+		return new File(getDataDirectory() + "Default" + DEFAULT_DETAILS_EXTENSION);
 	}
 
 	public String getUploadLogFilename()
