@@ -43,7 +43,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 			return result;
 		}
 
-		if(!isAuthorizedToBackup(callerAccountId))
+		if(!isAuthorizedForMirroring(callerAccountId))
 		{
 			Vector result = new Vector();
 			result.add(NOT_AUTHORIZED);
@@ -76,18 +76,18 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 				result.add(OK);
 				return result;
 			}
-			case cmdListAccountsForBackup:
+			case cmdListAccountsForMirroring:
 			{
-				Vector accounts = listAccounts(callerAccountId);
+				Vector accounts = listAccountsForMirroring(callerAccountId);
 	
 				result.add(OK);
 				result.add(accounts);
 				return result;
 			}
-			case cmdListBulletinsForBackup:
+			case cmdListBulletinsForMirroring:
 			{
 				String authorAccountId = (String)parameters.get(1);
-				Vector infos = listBulletins(callerAccountId, authorAccountId);
+				Vector infos = listBulletinsForMirroring(callerAccountId, authorAccountId);
 				
 				result.add(OK);
 				result.add(infos);
@@ -103,7 +103,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return result;
 	}
 
-	Vector listAccounts(String callerAccountId)
+	Vector listAccountsForMirroring(String callerAccountId)
 	{
 		class Collector implements Database.AccountVisitor
 		{
@@ -120,7 +120,7 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		return collector.accounts;
 	}
 	
-	Vector listBulletins(String callerAccountId, String authorAccountId)
+	Vector listBulletinsForMirroring(String callerAccountId, String authorAccountId)
 	{
 		class Collector implements Database.PacketVisitor
 		{
@@ -157,16 +157,16 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 		if(cmdString.equals(CMD_PING))
 			return cmdPing;
 
-		if(cmdString.equals(CMD_LIST_ACCOUNTS_FOR_BACKUP))
-			return cmdListAccountsForBackup;
+		if(cmdString.equals(CMD_LIST_ACCOUNTS_FOR_MIRRORING))
+			return cmdListAccountsForMirroring;
 		
-		if(cmdString.equals(CMD_LIST_BULLETINS_FOR_BACKUP))
-			return cmdListBulletinsForBackup;
+		if(cmdString.equals(CMD_LIST_BULLETINS_FOR_MIRRORING))
+			return cmdListBulletinsForMirroring;
 		
 		return cmdUnknown;
 	}
 	
-	boolean isAuthorizedToBackup(String callerAccountId)
+	boolean isAuthorizedForMirroring(String callerAccountId)
 	{
 		return authorizedCallers.contains(callerAccountId);
 	}
@@ -175,8 +175,8 @@ public class SupplierSideMirroringHandler implements MirroringInterface
 
 	final static int cmdUnknown = 0;
 	final static int cmdPing = 1;
-	final static int cmdListAccountsForBackup = 2;
-	final static int cmdListBulletinsForBackup = 3;
+	final static int cmdListAccountsForMirroring = 2;
+	final static int cmdListBulletinsForMirroring = 3;
 	
 	Database db;
 	MartusCrypto verifier;

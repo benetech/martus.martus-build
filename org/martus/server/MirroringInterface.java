@@ -5,8 +5,8 @@ import java.util.Vector;
 public interface MirroringInterface
 {
 	public final static String CMD_PING = "ping";
-	public final static String CMD_LIST_ACCOUNTS_FOR_BACKUP = "listAccountsForBackup";
-	public final static String CMD_LIST_BULLETINS_FOR_BACKUP = "listBulletinsForBackup";
+	public final static String CMD_LIST_ACCOUNTS_FOR_MIRRORING = "listAccountsForMirroring";
+	public final static String CMD_LIST_BULLETINS_FOR_MIRRORING = "listBulletinsForMirroring";
 
 	public static final String OK = "ok";
 	public static final String SIG_ERROR = "signature error";
