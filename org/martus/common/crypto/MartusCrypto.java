@@ -58,7 +58,8 @@ public abstract class MartusCrypto
 		MartusSignatureException;
 	public abstract String createSignatureOfVectorOfStrings(Vector dataToSign) throws
 			MartusCrypto.MartusSignatureException;
-	public abstract boolean verifySignatureOfVectorOfStrings(Vector dataToSign, String signedBy, String sig);
+	public abstract boolean verifySignatureOfVectorOfStrings(Vector dataToTest, String signedBy, String sig);
+	public abstract boolean verifySignatureOfVectorOfStrings(Vector dataToTestWithSignature, String signedBy);
 		
 	// multi-part signature methods
 	public abstract void signatureInitializeSign() throws

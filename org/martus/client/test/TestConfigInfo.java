@@ -155,9 +155,10 @@ public class TestConfigInfo extends TestCaseEnhanced
 		assertEquals("Author not correct?", sampleAuthor, contactInfo.get(2));
 		assertEquals("Address not correct?", sampleAddress, contactInfo.get(7));
 		assertEquals("phone not correct?", samplePhone, contactInfo.get(6));
-		String signature = (String)contactInfo.get(contactInfo.size()-1);
-		contactInfo.remove(contactInfo.size()-1);
-		assertTrue("Signature failed?", signer.verifySignatureOfVectorOfStrings(contactInfo, publicKey, signature));
+		assertTrue("Signature failed with signature in vector?", signer.verifySignatureOfVectorOfStrings(contactInfo, publicKey));
+
+		String signature = (String)contactInfo.remove(contactInfo.size()-1);
+		assertTrue("Signature failed with signature removed from vector?", signer.verifySignatureOfVectorOfStrings(contactInfo, publicKey, signature));
 	}
 	
 	

@@ -741,11 +741,8 @@ public class MartusServer implements NetworkInterfaceConstants
 		if(contentSize + 3 != contactInfo.size())
 			return result;
 
-		String signature = (String)contactInfo.remove(contactInfo.size()-1);
-		
-		if(!security.verifySignatureOfVectorOfStrings(contactInfo, publicKey, signature))
+		if(!security.verifySignatureOfVectorOfStrings(contactInfo, publicKey))
 			return NetworkInterfaceConstants.SIG_ERROR;
-		contactInfo.add(signature);
 
 		try
 		{
@@ -783,14 +780,12 @@ public class MartusServer implements NetworkInterfaceConstants
 		try
 		{
 			Vector contactInfo = MartusServerUtilities.getContactInfo(contactFile);
-			String signature = (String)contactInfo.remove(contactInfo.size()-1);
-			if(!security.verifySignatureOfVectorOfStrings(contactInfo, accountId, signature))
+			if(!security.verifySignatureOfVectorOfStrings(contactInfo, accountId))
 			{
 				log("getContactInfo:"+accountId +" : Signature failed");
 				results.add(NetworkInterfaceConstants.SIG_ERROR);
 				return results;
 			}
-			contactInfo.add(signature);
 			results.add(NetworkInterfaceConstants.OK);
 			results.add(contactInfo);
 			return results;

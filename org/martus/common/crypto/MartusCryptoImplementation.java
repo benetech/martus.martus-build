@@ -57,14 +57,21 @@ public abstract class MartusCryptoImplementation extends MartusCrypto
 		}
 	}
 
-	public synchronized boolean verifySignatureOfVectorOfStrings(Vector dataToSign, String signedBy, String sig)
+	public synchronized boolean verifySignatureOfVectorOfStrings(Vector dataToTestWithSignature, String signedBy)
+	{
+		Vector dataToTest = (Vector)dataToTestWithSignature.clone();
+		String sig = (String)dataToTest.remove(dataToTest.size() - 1);
+		return verifySignatureOfVectorOfStrings(dataToTest, signedBy, sig);
+	}
+	
+	public synchronized boolean verifySignatureOfVectorOfStrings(Vector dataToTest, String signedBy, String sig)
 	{
 		try
 		{
 			signatureInitializeVerify(signedBy);
-			for(int element = 0; element < dataToSign.size(); ++element)
+			for(int element = 0; element < dataToTest.size(); ++element)
 			{
-				String thisElement = dataToSign.get(element).toString();
+				String thisElement = dataToTest.get(element).toString();
 				byte[] bytesToSign = thisElement.getBytes("UTF-8");
 				//TODO: might want to optimize this for speed
 				for(int b = 0; b < bytesToSign.length; ++b)
