@@ -26,6 +26,7 @@ public class UiDisplayFileDlg extends JDialog
 	public UiDisplayFileDlg(UiMainWindow owner, String baseTag, InputStream fileStream, String tagMessage, InputStream fileStreamToc, String tagTOCMessage)
 	{
 		super(owner, "", true);
+		tocList = null;
 		MartusApp app = owner.getApp();
 		setTitle(app.getWindowTitle(baseTag));
 		getContentPane().setLayout(new ParagraphLayout());
@@ -37,6 +38,13 @@ public class UiDisplayFileDlg extends JDialog
 			return;	
 		}
 
+		msgArea = new UiWrappedTextArea(owner, message);
+		msgArea.addKeyListener(new TabToOkButton());
+		msgArea.setRows(14);
+		msgArea.setColumns(80);
+		msgAreaScrollPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+
 		Vector messageTOC = getFileVectorContents(fileStreamToc);
 		if(messageTOC != null)
 		{
@@ -47,14 +55,8 @@ public class UiDisplayFileDlg extends JDialog
 			tocMsgAreaScrollPane.setPreferredSize(new Dimension(580, 100));
 			getContentPane().add(new JLabel(app.getFieldLabel(tagTOCMessage)), ParagraphLayout.NEW_PARAGRAPH);
 			getContentPane().add(tocMsgAreaScrollPane);
+			tocList.setSelectedIndex(0);
 		}
-
-		msgArea = new UiWrappedTextArea(owner, message);
-		msgArea.addKeyListener(new TabToOkButton());
-		msgArea.setRows(14);
-		msgArea.setColumns(80);
-		msgAreaScrollPane = new JScrollPane(msgArea, JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
-				JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
 
 		ok = new JButton(app.getButtonLabel("ok"));
 		ok.addActionListener(new OkHandler());
