@@ -561,6 +561,12 @@ public class FileDatabase implements Database
 		String accountDir = entry.substring(0,splitAt);
 		if(startsWithAbsolutePath(accountDir))
 			accountDir = convertToRelativePath(accountDir);
+			
+		if(m.containsKey(accountString))
+		{
+			System.out.println("WARNING: Duplicate entries in account map: ");
+			System.out.println(" " + accountDir + " and " + m.get(accountString));
+		}
 		m.put(accountString, accountDir);
 	}
 	
