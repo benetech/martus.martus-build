@@ -389,6 +389,11 @@ public class FileDatabase extends Database
 							key.setDraft();
 						else
 							key.setSealed();
+							
+						if(key.getLocalId().startsWith("BUR-"))
+						{
+							continue;
+						}
 
 						try
 						{

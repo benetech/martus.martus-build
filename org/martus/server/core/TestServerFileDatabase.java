@@ -3,12 +3,14 @@ package org.martus.server.core;
 import java.io.File;
 import java.util.Vector;
 
+import org.martus.common.Bulletin;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
+import org.martus.server.forclients.MartusServerUtilities;
 
 public class TestServerFileDatabase extends TestCaseEnhanced 
 {
@@ -28,6 +30,49 @@ public class TestServerFileDatabase extends TestCaseEnhanced
 		goodDir2.mkdir();
 		serverFileDb = new ServerFileDatabase(goodDir2, security);
 		serverFileDb.initialize();
+	}
+	
+	public void testBURServer() throws Exception
+	{
+		TRACE_BEGIN("testBURHandling");
+
+		File tmpPacketDir = File.createTempFile("$$$MartusTestMartusServer", null);
+		tmpPacketDir.deleteOnExit();
+		tmpPacketDir.delete();
+		tmpPacketDir.mkdir();
+		ServerFileDatabase db = new ServerFileDatabase(tmpPacketDir, security);
+		db.initialize();
+
+		Bulletin b = new Bulletin(security);
+		b.setSealed();
+		DatabaseKey key = new DatabaseKey(b.getUniversalId());
+		key.setSealed();
+
+		String bur = MartusServerUtilities.createBulletinUploadRecord(b.getLocalId(), security);
+		MartusServerUtilities.writeSpecificBurToDatabase(db, b.getBulletinHeaderPacket(), bur);
+		
+		class PacketVisitor implements Database.PacketVisitor
+		{
+			PacketVisitor(Database databaseToUse)
+			{
+				db = databaseToUse;
+			}
+			
+			public void visit(DatabaseKey key)
+			{
+				String localId = key.getLocalId();
+				assertFalse("should not be a BUR packet", localId.startsWith("BUR-"));
+			}
+			
+			Database db;
+		}
+
+		PacketVisitor visitor = new PacketVisitor(db);
+		db.visitAllRecords(visitor);
+		
+		//db.deleteAllData();
+		
+		TRACE_END();
 	}
 	
 	public void testBasics() throws Exception
