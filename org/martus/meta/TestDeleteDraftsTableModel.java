@@ -4,7 +4,6 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.swingui.DeleteMyServerDraftsTableModel;
-import org.martus.client.swingui.UiLocalization;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
@@ -27,6 +26,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		MartusCrypto appSecurity = MockMartusSecurity.createClient();
+		localization = new MockUiLocalization();
 		app = MockMartusApp.create(appSecurity);
 
 		b0 = app.createBulletin();
@@ -45,11 +45,11 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		app.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
 
 		testServer.hasData = false;
-		modelWithoutData = new DeleteMyServerDraftsTableModel(app);
+		modelWithoutData = new DeleteMyServerDraftsTableModel(app, localization);
 		modelWithoutData.initialize(null);
 		
 		testServer.hasData = true;
-		modelWithData = new DeleteMyServerDraftsTableModel(app);
+		modelWithData = new DeleteMyServerDraftsTableModel(app, localization);
 		modelWithData.initialize(null);
 	}
 	
@@ -67,7 +67,6 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	
 	public void testGetColumnName()
 	{
-		UiLocalization localization = app.getLocalization();
 		assertEquals(localization.getFieldLabel("DeleteFlag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
@@ -153,6 +152,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 	final static String title1 = "This is a cool title";
 	final static String title2 = "Even cooler";
 
+	MockUiLocalization localization;
 	MockMartusApp app;
 	MockServer testServer;
 	DeleteMyServerDraftsTableModel modelWithData;

@@ -3,8 +3,8 @@ package org.martus.meta;
 import java.io.StringWriter;
 import java.util.Vector;
 
-import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.RetrieveMyDraftsTableModel;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
@@ -29,6 +29,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		MartusCrypto appSecurity = MockMartusSecurity.createClient();
+		localization = new MockUiLocalization();
 		app = MockMartusApp.create(appSecurity);
 
 		b0 = app.createBulletin();
@@ -50,10 +51,10 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		app.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
-		modelWithoutData = new RetrieveMyDraftsTableModel(app);
+		modelWithoutData = new RetrieveMyDraftsTableModel(app, localization);
 		modelWithoutData.initialize(null);
 		app.getStore().deleteAllData();
-		modelWithData = new RetrieveMyDraftsTableModel(app);
+		modelWithData = new RetrieveMyDraftsTableModel(app, localization);
 		modelWithData.initialize(null);
 	}
 	
@@ -63,9 +64,8 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
     	app.deleteAllFiles();
 	}
 
-	public void testGetColumnName()
+	public void testGetColumnName() throws Exception
 	{
-		UiLocalization localization = app.getLocalization();
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
@@ -189,6 +189,7 @@ public class TestRetrieveMyDraftsTableModel extends TestCaseEnhanced
 	MockMartusServer testServer;
 	NetworkInterfaceForNonSSL testServerInterface;
 	NetworkInterface testSSLServerInterface;
+	UiLocalization localization;
 	MockMartusApp app;
 	Bulletin b0;
 	Bulletin b1;

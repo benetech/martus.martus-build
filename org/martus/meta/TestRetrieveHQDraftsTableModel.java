@@ -5,7 +5,6 @@ import java.io.StringWriter;
 import java.util.Vector;
 
 import org.martus.client.core.BulletinStore;
-import org.martus.client.swingui.UiLocalization;
 import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.test.MockMartusApp;
 import org.martus.common.Bulletin;
@@ -33,6 +32,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
+		localization = new MockUiLocalization();
 		hqApp = MockMartusApp.create(hqSecurity);
 
 		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
@@ -77,14 +77,14 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		testServer.verifyAndLoadConfigurationFiles();
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
-		modelWithData = new RetrieveHQDraftsTableModel(hqApp);
+		modelWithData = new RetrieveHQDraftsTableModel(hqApp,localization);
 		modelWithData.initialize(null);
 		
 		importBulletinFromFieldOfficeToHq(db1, b0, fieldSecurity1);
 		importBulletinFromFieldOfficeToHq(db1, b1, fieldSecurity1);
 		importBulletinFromFieldOfficeToHq(db2, b2, fieldSecurity2);
 		
-		modelWithoutData = new RetrieveHQDraftsTableModel(hqApp);
+		modelWithoutData = new RetrieveHQDraftsTableModel(hqApp, localization);
 		modelWithoutData.initialize(null);
 	}
 	
@@ -106,7 +106,6 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		UiLocalization localization = fieldApp1.getLocalization();
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
@@ -275,6 +274,7 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 	MockMartusApp fieldApp1;
 	MockMartusApp fieldApp2;
 	MockMartusApp hqApp;
+	MockUiLocalization localization;
 	
 	Bulletin b0;
 	Bulletin b1;

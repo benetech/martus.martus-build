@@ -10,6 +10,7 @@ import org.martus.client.swingui.RetrieveHQDraftsTableModel;
 import org.martus.client.swingui.RetrieveHQTableModel;
 import org.martus.client.swingui.RetrieveMyDraftsTableModel;
 import org.martus.client.swingui.RetrieveMyTableModel;
+import org.martus.client.swingui.UiLocalization;
 import org.martus.client.test.MockMartusApp;
 import org.martus.client.test.NullProgressMeter;
 import org.martus.common.Bulletin;
@@ -31,6 +32,9 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
+		if(localization == null)
+			localization = new MockUiLocalization();
+	 
 		if(mockSecurityForApp == null)
 			mockSecurityForApp = MockMartusSecurity.createClient();
 		
@@ -106,7 +110,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		mockServer.countDownToGetPacketFailure = 2;
 
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
 		try
 		{
 			model.initialize(null);
@@ -128,7 +132,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		try
 		{
-			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer);
+			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithoutServer, localization);
 			model.initialize(null);
 			model.getMySummaries();
 			model.checkIfErrorOccurred();
@@ -141,7 +145,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		try
 		{
-			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithoutServer);
+			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithoutServer, localization);
 			model.initialize(null);
 			model.getMyDraftSummaries();
 			model.checkIfErrorOccurred();
@@ -163,7 +167,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listMyResponse = desiredResult;
 		try
 		{
-			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer);
+			RetrieveMyTableModel model = new RetrieveMyTableModel(appWithServer, localization);
 			model.initialize(null);
 			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
@@ -209,7 +213,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		store.destroyBulletin(b2);
 		store.destroyBulletin(b3);
 
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
@@ -274,7 +278,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		appWithAccount.getStore().destroyBulletin(b1);
 		appWithAccount.getStore().destroyBulletin(b2);
 
-		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount);
+		RetrieveMyTableModel model = new RetrieveMyTableModel(appWithAccount, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector allResult = model.getAllSummaries();
@@ -343,7 +347,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listMyResponse = desiredResult;
 		try
 		{
-			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer);
+			RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithServer, localization);
 			model.initialize(null);
 			model.checkIfErrorOccurred();
 			model.getDownloadableSummaries();
@@ -389,7 +393,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		store.destroyBulletin(b2);
 		store.destroyBulletin(b3);
 
-		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount);
+		RetrieveMyDraftsTableModel model = new RetrieveMyDraftsTableModel(appWithAccount, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector result = model.getDownloadableSummaries();
@@ -424,7 +428,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	{
 		try
 		{
-			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer);
+			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithoutServer, localization);
 			model.initialize(null);
 			model.getFieldOfficeSealedSummaries("");
 			model.checkIfErrorOccurred();
@@ -437,7 +441,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		
 		try
 		{
-			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer);
+			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithoutServer, localization);
 			model.initialize(null);
 			model.getFieldOfficeDraftSummaries("");
 			model.checkIfErrorOccurred();
@@ -459,7 +463,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		mockServer.listFieldOfficeSummariesResponse = desiredResult;
 		try
 		{
-			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer);
+			RetrieveHQTableModel model = new RetrieveHQTableModel(appWithServer, localization);
 			model.initialize(null);
 			model.getFieldOfficeSealedSummaries("");
 			model.checkIfErrorOccurred();
@@ -472,7 +476,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 
 		try
 		{
-			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer);
+			RetrieveHQDraftsTableModel model = new RetrieveHQDraftsTableModel(appWithServer, localization);
 			model.initialize(null);
 			model.getFieldOfficeDraftSummaries("");
 			model.checkIfErrorOccurred();
@@ -533,7 +537,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		desiredSealedResult.add(list);
 		mockServer.listFieldOfficeSummariesResponse = desiredSealedResult;	
 
-		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp);
+		RetrieveHQTableModel model = new RetrieveHQTableModel(hqApp, localization);
 		model.initialize(null);
 		model.checkIfErrorOccurred();
 		Vector returnedSealedResults = model.getDownloadableSummaries();
@@ -558,7 +562,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 		desiredDraftResult.add(list2);
 		mockServer.listFieldOfficeSummariesResponse = desiredDraftResult;	
 
-		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp);
+		RetrieveHQDraftsTableModel model2 = new RetrieveHQDraftsTableModel(hqApp, localization);
 		model2.initialize(null);
 		model2.checkIfErrorOccurred();
 		Vector returnedDraftResults = model2.getDownloadableSummaries();
@@ -639,6 +643,7 @@ public class TestRetrieveTableModel extends TestCaseEnhanced
 	String title1 = "This is a cool title";
 	String title2 = "Even cooler";
 
+	static UiLocalization localization;
 	private static MockMartusSecurity mockSecurityForApp;
 	private static MockMartusSecurity mockSecurityForServer;
 

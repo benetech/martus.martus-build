@@ -33,9 +33,9 @@ import org.martus.common.MartusUtilities.ServerErrorException;
 
 public class RetrieveMyDraftsTableModel extends RetrieveTableModelNonHQ
 {
-	public RetrieveMyDraftsTableModel(MartusApp appToUse)
+	public RetrieveMyDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
 	{
-		super(appToUse);
+		super(appToUse, localizationToUse);
 	}
 
 	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException

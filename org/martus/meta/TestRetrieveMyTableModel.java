@@ -29,6 +29,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		MartusCrypto appSecurity = MockMartusSecurity.createClient();
+		localization = new MockUiLocalization();
 		app = MockMartusApp.create(appSecurity);
 
 		b0 = app.createBulletin();
@@ -47,10 +48,10 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 		testServerInterface = new ServerSideNetworkHandlerForNonSSL(testServer);
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		app.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
-		modelWithoutData = new RetrieveMyTableModel(app);
+		modelWithoutData = new RetrieveMyTableModel(app, localization);
 		modelWithoutData.initialize(null);
 		app.getStore().deleteAllData();
-		modelWithData = new RetrieveMyTableModel(app);
+		modelWithData = new RetrieveMyTableModel(app, localization);
 		modelWithData.initialize(null);
 	}
 	
@@ -62,7 +63,6 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		UiLocalization localization = app.getLocalization();
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel("BulletinSize"), modelWithData.getColumnName(2));
@@ -200,6 +200,7 @@ public class TestRetrieveMyTableModel extends TestCaseEnhanced
 	NetworkInterfaceForNonSSL testServerInterface;
 	NetworkInterface testSSLServerInterface;
 	MockMartusApp app;
+	UiLocalization localization;
 	Bulletin b0;
 	Bulletin b1;
 	Bulletin b2;

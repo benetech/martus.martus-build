@@ -33,9 +33,9 @@ import org.martus.common.MartusUtilities.ServerErrorException;
 public class DeleteMyServerDraftsTableModel extends RetrieveTableModelNonHQ
 {
 
-	public DeleteMyServerDraftsTableModel(MartusApp appToUse)
+	public DeleteMyServerDraftsTableModel(MartusApp appToUse, UiLocalization localizationToUse)
 	{
-		super(appToUse);
+		super(appToUse, localizationToUse);
 	}
 
 	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException

@@ -32,6 +32,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
+		localization = new MockUiLocalization();
 		hqApp = MockMartusApp.create(hqSecurity);
 
 		MartusCrypto fieldSecurity1 = MockMartusSecurity.createClient();
@@ -72,14 +73,14 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		testServer.verifyAndLoadConfigurationFiles();
 		testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		hqApp.setSSLNetworkInterfaceHandlerForTesting(testSSLServerInterface);
-		modelWithData = new RetrieveHQTableModel(hqApp);
+		modelWithData = new RetrieveHQTableModel(hqApp, localization);
 		modelWithData.initialize(null);
 
 		importBulletinFromFieldOfficeToHq(db1, b0, fieldSecurity1);
 		importBulletinFromFieldOfficeToHq(db1, b1, fieldSecurity1);
 		importBulletinFromFieldOfficeToHq(db2, b2, fieldSecurity2);
 		
-		modelWithoutData = new RetrieveHQTableModel(hqApp);
+		modelWithoutData = new RetrieveHQTableModel(hqApp, localization);
 		modelWithoutData.initialize(null);
 		assertEquals(0, modelWithoutData.getRowCount());
 	}
@@ -102,7 +103,6 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 
 	public void testGetColumnName()
 	{
-		UiLocalization localization = fieldApp1.getLocalization();
 		assertEquals(localization.getFieldLabel("retrieveflag"), modelWithData.getColumnName(0));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGTITLE), modelWithData.getColumnName(1));
 		assertEquals(localization.getFieldLabel(Bulletin.TAGAUTHOR), modelWithData.getColumnName(2));
@@ -278,6 +278,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	MockMartusApp fieldApp1;
 	MockMartusApp fieldApp2;
 	MockMartusApp hqApp;
+	UiLocalization localization;
 	
 	Bulletin b0;
 	Bulletin b1;

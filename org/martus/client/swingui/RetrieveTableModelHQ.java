@@ -32,9 +32,9 @@ import org.martus.common.Bulletin;
 
 public abstract class RetrieveTableModelHQ extends RetrieveTableModel {
 
-	public RetrieveTableModelHQ(MartusApp appToUse)
+	public RetrieveTableModelHQ(MartusApp appToUse, UiLocalization localizationToUse)
 	{
-		super(appToUse);
+		super(appToUse, localizationToUse);
 	}
 
 	public String getColumnName(int column)

@@ -43,9 +43,11 @@ import org.martus.common.MartusUtilities.ServerErrorException;
 
 abstract public class RetrieveTableModel extends AbstractTableModel
 {
-	public RetrieveTableModel(MartusApp appToUse)
+	public RetrieveTableModel(MartusApp appToUse, UiLocalization localizationToUse)
 	{
 		app = appToUse;
+		localization = localizationToUse;
+		
 		downloadableSummaries = new Vector();
 		store = app.getStore();
 		allSummaries = new Vector();
@@ -55,7 +57,7 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	
 	UiLocalization getLocalization()
 	{
-		return app.getLocalization();
+		return localization;
 	}
 
 	protected void setProgressDialog(UiProgressRetrieveSummariesDlg progressDlg)
@@ -288,6 +290,8 @@ abstract public class RetrieveTableModel extends AbstractTableModel
 	}
 
 	MartusApp app;
+	UiLocalization localization;
+	
 	BulletinStore store;
 	private UiProgressRetrieveSummariesDlg retrieverDlg;
 	protected Vector currentSummaries;

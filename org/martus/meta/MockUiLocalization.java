@@ -24,25 +24,33 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.swingui;
+package org.martus.meta;
 
-import org.martus.client.core.MartusApp;
-import org.martus.common.MartusUtilities.ServerErrorException;
+import java.io.File;
+import java.io.IOException;
 
+import org.martus.client.swingui.UiLocalization;
 
-
-public class RetrieveMyTableModel extends RetrieveTableModelNonHQ
+public class MockUiLocalization extends UiLocalization
 {
-	public RetrieveMyTableModel(MartusApp appToUse, UiLocalization localizationToUse)
+
+	public MockUiLocalization() throws IOException
 	{
-		super(appToUse, localizationToUse);
+		super(createTempDirectory());
+		// TODO Auto-generated constructor stub
 	}
 
-	public void initialize(UiProgressRetrieveSummariesDlg progressDlg) throws ServerErrorException
+	static File createTempDirectory() throws IOException
 	{
-		setProgressDialog(progressDlg);
+		File directoryToUse = File.createTempFile("$$$MartusLoc", null);
+		directoryToUse.deleteOnExit();
+		directoryToUse.delete();
+		directoryToUse.mkdir();
+		return directoryToUse;
+	}
 
-		getMySummaries();
-		setCurrentSummaries();
+	public String getFieldLabel(String tag)
+	{
+		return "<" + tag + ">";
 	}
 }

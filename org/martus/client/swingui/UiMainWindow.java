@@ -550,7 +550,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void initalizeUiState()
 	{
-		UiLocalization localization = app.getLocalization();
+		UiLocalization localization = getLocalization();
 
 		uiState = new CurrentUiState();
 		File stateFile = app.getUiStateFile();
@@ -983,7 +983,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveMySealedBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedSealed();
 
-		RetrieveTableModel model = new RetrieveMyTableModel(app);
+		RetrieveTableModel model = new RetrieveMyTableModel(app, getLocalization());
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
@@ -994,7 +994,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveMyDraftBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedDraft();
 
-		RetrieveTableModel model = new RetrieveMyDraftsTableModel(app);
+		RetrieveTableModel model = new RetrieveMyDraftsTableModel(app, getLocalization());
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
@@ -1005,7 +1005,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveHQSealedBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedFieldOfficeSealed();
 
-		RetrieveTableModel model = new RetrieveHQTableModel(app);
+		RetrieveTableModel model = new RetrieveHQTableModel(app, getLocalization());
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
@@ -1016,7 +1016,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String retrieverProgressTag = "RetrieveHQDraftBulletinProgress";
 		String folderName = app.getNameOfFolderRetrievedFieldOfficeDraft();
 
-		RetrieveTableModel model = new RetrieveHQDraftsTableModel(app);
+		RetrieveTableModel model = new RetrieveHQDraftsTableModel(app, getLocalization());
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
 	}
 
@@ -1025,7 +1025,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String dlgTitleTag = "DeleteMyDraftsFromServer";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
 
-		RetrieveTableModel model = new DeleteMyServerDraftsTableModel(app);
+		RetrieveTableModel model = new DeleteMyServerDraftsTableModel(app, getLocalization());
 		deleteServerDrafts(model, dlgTitleTag, summariesProgressTag);
 	}
 
