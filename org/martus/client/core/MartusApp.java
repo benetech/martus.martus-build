@@ -1167,15 +1167,7 @@ public class MartusApp
 		Base64.InvalidBase64Exception,
 		MartusCrypto.MartusSignatureException
 	{
-			String publicKeyString = security.getPublicKeyString();
-			byte[] publicKeyBytes = Base64.decode(publicKeyString);
-			ByteArrayInputStream in = new ByteArrayInputStream(publicKeyBytes);
-			byte[] sigBytes = security.createSignature(in);
-			
-			UnicodeWriter writer = new UnicodeWriter(exportFile);
-			writer.writeln(publicKeyString);
-			writer.writeln(Base64.encode(sigBytes));
-			writer.close();
+		MartusUtilities.exportPublicKey(security, exportFile);
 	}
 	
 	public String extractPublicInfo(File file) throws

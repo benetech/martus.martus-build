@@ -46,6 +46,7 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
+import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
@@ -251,6 +252,50 @@ public class MartusUtilities
 			}
 		}
 	}
+	
+	public static void exportPublicKey(MartusCrypto security, File outputfile)
+		throws MartusSignatureException, InvalidBase64Exception, IOException
+	{
+		ByteArrayInputStream in = null;
+		UnicodeWriter writer = null;		
+		try
+		{
+			String publicKeyString = security.getPublicKeyString();
+			byte[] publicKeyBytes = Base64.decode(publicKeyString);
+			in = new ByteArrayInputStream(publicKeyBytes);
+			byte[] sigBytes = security.createSignature(in);
+			
+			writer = new UnicodeWriter(outputfile);
+			writer.writeln(publicKeyString);
+			writer.writeln(Base64.encode(sigBytes));
+		}
+		finally
+		{
+			if( in != null )
+			{
+				try
+				{
+					in.close();
+				}
+				catch (IOException ignored)
+				{
+					;
+				}
+			}
+			
+			if(writer != null)
+			{
+				try
+				{
+					writer.close();
+				}
+				catch(IOException ignored)
+				{
+					;
+				}
+			}
+		}
+	}
 
 	public static String formatPublicCode(String publicCode) 
 	{
@@ -345,6 +390,31 @@ public class MartusUtilities
 		Vector tags = new Vector();
 		tags.add(NetworkInterfaceConstants.TAG_BULLETIN_SIZE);
 		return tags;	
+	}
+	
+	public static DatabaseKey[] getPublicPacketKeys(BulletinHeaderPacket bhp)
+	{
+		String accountId = bhp.getAccountId();
+		String[] publicAttachmentIds = bhp.getPublicAttachmentIds();
+		
+		int corePacketCount = 3;
+		int publicAttachmentCount = publicAttachmentIds.length;
+		int totalPacketCount = corePacketCount + publicAttachmentCount;
+		DatabaseKey[] keys = new DatabaseKey[totalPacketCount];
+		
+		int next = 0;
+		UniversalId dataUid = UniversalId.createFromAccountAndLocalId(accountId, bhp.getFieldDataPacketId());
+		keys[next++] = createKeyWithHeaderStatus(bhp, dataUid);
+		
+		keys[next++] = createKeyWithHeaderStatus(bhp, dataUid);
+		for(int i=0; i < publicAttachmentIds.length; ++i)
+		{
+			UniversalId uid = UniversalId.createFromAccountAndLocalId(accountId, publicAttachmentIds[i]);
+			keys[next++] = createKeyWithHeaderStatus(bhp, uid);
+		}
+		keys[next++] = createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
+		
+		return keys;
 	}
 
 	public static DatabaseKey[] getAllPacketKeys(BulletinHeaderPacket bhp)

@@ -1,6 +1,8 @@
 package org.martus.server.forclients;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
@@ -11,9 +13,13 @@ import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
+import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.Packet;
 import org.martus.common.UniversalId;
+import org.martus.common.MartusCrypto.AuthorizationFailedException;
+import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
+import org.martus.common.MartusCrypto.CryptoInitializationException;
 
 public class MartusServerUtilities
 {
@@ -73,10 +79,13 @@ public class MartusServerUtilities
 		}
 	}
 
-
-
-
-
-
-
+	public static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
+		throws CryptoInitializationException, FileNotFoundException, IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException
+	{
+		MartusCrypto security = new MartusSecurity();
+		FileInputStream in = new FileInputStream(keyPairFile);
+		security.readKeyPair(in, passphrase);
+		in.close();
+		return security;
+	}
 }

@@ -2,23 +2,18 @@ package org.martus.server.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.martus.common.Database;
 import org.martus.common.FileDatabase;
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
 import org.martus.common.FileDatabase.MissingAccountMapException;
 import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
-import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
-import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.server.core.ServerFileDatabase;
+import org.martus.server.forclients.MartusServerUtilities;
 
 public class ShowServerAccountList 
 {
@@ -77,7 +72,7 @@ public class ShowServerAccountList
 		try
 		{
 			String passphrase = reader.readLine();
-			security = loadCurrentMartusSecurity(keyPairFile, passphrase);
+			security = MartusServerUtilities.loadCurrentMartusSecurity(keyPairFile, passphrase);
 		}
 		catch(Exception e)
 		{
@@ -94,16 +89,6 @@ public class ShowServerAccountList
 		fileDatabase = new ServerFileDatabase(dataDirectory, security);
 		fileDatabase.initialize();
 		fileDatabase.visitAllAccounts(new AccountVisitor());
-	}
-	
-	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
-		throws CryptoInitializationException, FileNotFoundException, IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException
-	{
-		MartusCrypto security = new MartusSecurity();
-		FileInputStream in = new FileInputStream(keyPairFile);
-		security.readKeyPair(in, passphrase);
-		in.close();
-		return security;
 	}
 
 	class AccountVisitor implements Database.AccountVisitor 

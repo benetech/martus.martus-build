@@ -2,17 +2,13 @@ package org.martus.server.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MartusCrypto.AuthorizationFailedException;
-import org.martus.common.MartusCrypto.CryptoInitializationException;
-import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
+import org.martus.server.forclients.MartusServerUtilities;
 
 public class ChangeKeypairPassphrase
 {
@@ -46,7 +42,7 @@ public class ChangeKeypairPassphrase
 			{
 				String oldPassphrase = reader.readLine();
 				
-				MartusCrypto security = loadCurrentMartusSecurity(keyPairFile, oldPassphrase);
+				MartusCrypto security = MartusServerUtilities.loadCurrentMartusSecurity(keyPairFile, oldPassphrase);
 				
 				System.out.print("Enter new passphrase:");
 				System.out.flush();
@@ -59,7 +55,7 @@ public class ChangeKeypairPassphrase
 				{
 					System.out.println("Updating passphrase...");
 					System.out.flush();
-					updateMartusPassphrase(keyPairFile, newPassphrase1, security);
+					updateKeypairPassphrase(keyPairFile, newPassphrase1, security);
 				}
 				else
 				{
@@ -77,20 +73,10 @@ public class ChangeKeypairPassphrase
 			System.exit(0);
 	}
 	
-	private static void updateMartusPassphrase(File keyPairFile, String newPassphrase, MartusCrypto security)
+	private static void updateKeypairPassphrase(File keyPairFile, String newPassphrase, MartusCrypto security)
 		throws FileNotFoundException, IOException
 	{
 		FileOutputStream out = new FileOutputStream(keyPairFile);
 		security.writeKeyPair(out, newPassphrase);
-	}
-	
-	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
-		throws CryptoInitializationException, FileNotFoundException, IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException
-	{
-		MartusCrypto security = new MartusSecurity();
-		FileInputStream in = new FileInputStream(keyPairFile);
-		security.readKeyPair(in, passphrase);
-		in.close();
-		return security;
 	}
 }

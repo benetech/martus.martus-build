@@ -2,18 +2,12 @@ package org.martus.server.tools;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStreamReader;
 
 import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MartusCrypto.AuthorizationFailedException;
-import org.martus.common.MartusCrypto.CryptoInitializationException;
-import org.martus.common.MartusCrypto.InvalidKeyPairFileVersionException;
 import org.martus.common.MartusUtilities.FileVerificationException;
+import org.martus.server.forclients.MartusServerUtilities;
 
 public class FileSignerAndVerifier
 {
@@ -65,7 +59,7 @@ public class FileSignerAndVerifier
 			try
 			{
 				String passphrase = reader.readLine();
-				security = loadCurrentMartusSecurity(keyPairFile, passphrase);
+				security = MartusServerUtilities.loadCurrentMartusSecurity(keyPairFile, passphrase);
 			}
 			catch(Exception e)
 			{
@@ -99,15 +93,5 @@ public class FileSignerAndVerifier
 				System.out.println("Signature file created at " + signatureFile.getAbsolutePath());
 			}
 			System.exit(0);
-	}
-	
-	private static MartusCrypto loadCurrentMartusSecurity(File keyPairFile, String passphrase)
-		throws CryptoInitializationException, FileNotFoundException, IOException, InvalidKeyPairFileVersionException, AuthorizationFailedException
-	{
-		MartusCrypto security = new MartusSecurity();
-		FileInputStream in = new FileInputStream(keyPairFile);
-		security.readKeyPair(in, passphrase);
-		in.close();
-		return security;
 	}
 }
