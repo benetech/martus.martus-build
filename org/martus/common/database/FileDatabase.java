@@ -91,22 +91,25 @@ public class FileDatabase extends Database
 		accountMapFile = new File(absoluteBaseDir, ACCOUNTMAP_FILENAME);
 		accountMapSignatureFile = MartusUtilities.getSignatureFileFromFile(accountMapFile);
 		loadAccountMap();
-		if(isAccountMapExpected() && !accountMapFile.exists())
+		if(isAccountMapExpected(absoluteBaseDir) && !accountMapFile.exists())
 		{
 			throw new MissingAccountMapException();
 		}
 	}
 
-	public boolean isAccountMapExpected()
+	public static boolean isAccountMapExpected(File baseDirectory)
 	{
-		if(absoluteBaseDir.exists())
+		if(!baseDirectory.exists())
+			return false;
+			
+		File files[] = baseDirectory.listFiles();
+		for (int i = 0; i < files.length; i++) 
 		{
-			int fileCount = absoluteBaseDir.list().length;
-			if(fileCount > 0)
-				return true;
-			else
-				return false;
+			File thisFile = files[i];
+			if(thisFile.isDirectory() && thisFile.getName().startsWith("a"))
+				return true; 
 		}
+
 		return false;
 	}
 

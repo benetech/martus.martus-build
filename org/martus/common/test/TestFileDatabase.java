@@ -29,6 +29,7 @@ package org.martus.common.test;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -115,6 +116,39 @@ public class TestFileDatabase extends TestCaseEnhanced
 		{
 			;
 		}
+	}
+	
+	public void testIsAccountMapExpected() throws Exception
+	{
+		File testDir = File.createTempFile("$$$MartusTestFileDatabase", null);
+		testDir.delete();
+		testDir.mkdir();
+		assertFalse("empty dir", FileDatabase.isAccountMapExpected(testDir));
+		
+		File irrelevantFile = new File(testDir, "test");
+		createEmptyFile(irrelevantFile);
+		boolean expectedWithIrrelevantFile = FileDatabase.isAccountMapExpected(testDir);
+		irrelevantFile.delete();
+		assertFalse("irrelevant file", expectedWithIrrelevantFile);
+
+		File nonAccountBucket = new File(testDir, "b12345");
+		nonAccountBucket.mkdir();
+		assertFalse("nonAccountBucket", FileDatabase.isAccountMapExpected(testDir));
+		nonAccountBucket.delete();
+		
+		File accountBucket = new File(testDir, "ab12345");
+		accountBucket.mkdir();
+		assertTrue("accountBucket", FileDatabase.isAccountMapExpected(testDir));
+		accountBucket.delete();
+		
+		testDir.delete();
+	}
+
+	private void createEmptyFile(File irrelevantFile)
+		throws FileNotFoundException, IOException {
+		FileOutputStream out = new FileOutputStream(irrelevantFile);
+		out.write(0);
+		out.close();
 	}
 
 	public void testWriteAndReadStrings() throws Exception

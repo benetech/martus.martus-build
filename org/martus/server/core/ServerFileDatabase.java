@@ -62,7 +62,7 @@ public class ServerFileDatabase extends FileDatabase
 	public synchronized void loadAccountMap() throws FileVerificationException, MissingAccountMapSignatureException
 	{
 		super.loadAccountMap();
-		if(isAccountMapExpected())
+		if(isAccountMapExpected(absoluteBaseDir))
 		{
 			File accountMapFile = super.getAccountMapFile();
 			File sigFile;
