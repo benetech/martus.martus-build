@@ -233,11 +233,6 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		return coreServer.uploadBulletinChunk(authorAccountId, bulletinLocalId, totalSize, chunkOffset, chunkSize, data, signature);
 	}
 	
-	public Vector downloadMyBulletinChunk(String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize, String signature)
-	{
-		return coreServer.downloadMyBulletinChunk(authorAccountId, bulletinLocalId, chunkOffset, maxChunkSize, signature);
-	}
-
 	public String uploadBulletin(String authorAccountId, String bulletinLocalId, String data)
 	{
 		return coreServer.uploadBulletin(authorAccountId, bulletinLocalId, data);

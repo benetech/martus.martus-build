@@ -171,10 +171,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.REJECTED, strResult );
 		assertEquals("uploadBulletinChunk", 0, testServer.getNumberActiveClients() );
 
-		vecResult = downloadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), bogusStringParameter, 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		verifyErrorResult("downloadBulletinChunk", vecResult, NetworkInterfaceConstants.REJECTED );
-		assertEquals("downloadBulletinChunk", 0, testServer.getNumberActiveClients() );
-
 		vecResult = testServer.legacyListMySealedBulletinIds(clientSecurity.getPublicKeyString());
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.REJECTED );
 		assertEquals("listMySealedBulletinIds", 0, testServer.getNumberActiveClients() );
@@ -263,16 +259,6 @@ public class TestServerForClients extends TestCaseEnhanced
 		byte[] sigBytes = signer.createSignature(new ByteArrayInputStream(bytesToSign));
 		String signature = Base64.encode(sigBytes);
 		return server.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
-	}
-	
-	Vector downloadBulletinChunk(NetworkInterface server, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
-	{
-		String stringToSign = authorAccountId + "," + bulletinLocalId + "," + 
-					Integer.toString(chunkOffset) + "," + Integer.toString(maxChunkSize);
-		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
-		byte[] sigBytes = clientSecurity.createSignature(new ByteArrayInputStream(bytesToSign));
-		String signature = Base64.encode(sigBytes);
-		return server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId, chunkOffset, maxChunkSize, signature);
 	}
 	
 	void verifyErrorResult(String label, Vector vector, String expected )

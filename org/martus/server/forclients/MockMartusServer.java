@@ -119,16 +119,6 @@ public class MockMartusServer extends MartusServer implements ServerForClientsIn
 		return (Vector)(super.downloadBulletin(authorAccountId, bulletinLocalId)).clone();
 	}
 	
-	public Vector downloadMyBulletinChunk(String authorAccountId, String bulletinId, int chunkOffset, int maxChunkSize, String signature)
-	{
-		lastClientId = authorAccountId;
-
-		if(downloadResponse != null)
-			return new Vector(downloadResponse);
-
-		return (Vector)(super.downloadMyBulletinChunk(authorAccountId, bulletinId, chunkOffset, maxChunkSize, signature)).clone();
-	}
-	
 	public Vector getBulletinChunk(String myAccountId, String authorAccountId, String bulletinLocalId,
 		int chunkOffset, int maxChunkSize) 
 	{

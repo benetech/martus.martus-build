@@ -348,19 +348,6 @@ public class ServerSideNetworkHandler implements NetworkInterface, NetworkInterf
 		return server.requestUploadRights(authorAccountId, tryMagicWord);
 	}
 
-	public Vector downloadMyBulletinChunk(String authorAccountId,String bulletinLocalId,
-		int chunkOffset, int maxChunkSize, String signature)
-	{
-		server.clientConnectionStart();
-		if(MartusServer.serverSSLLogging)
-			server.logging("SSL-downloadMyBulletinChunk");
-		server.logging("request for client " + server.getPublicCode(authorAccountId));
-		Vector response = server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId,
-					chunkOffset, maxChunkSize, signature);
-		server.clientConnectionExit();
-		return response;
-	}
-	
 	public Vector downloadFieldOfficeBulletinChunk(String authorAccountId, String bulletinLocalId, String hqAccountId, int chunkOffset, int maxChunkSize, String signature)
 	{
 		server.clientConnectionStart();

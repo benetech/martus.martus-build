@@ -46,7 +46,6 @@ public interface NetworkInterfaceXmlRpcConstants
 	public static final String CMD_PING = "ping";
 
 	// legacy!
-	public static final String CMD_DOWNLOAD_CHUNK = "downloadMyBulletinChunk";
 	public static final String CMD_DOWNLOAD_FIELD_OFFICE_CHUNK = "downloadFieldOfficeBulletinChunk";
 	public static final String CMD_MY_SUMMARIES = "listMyBulletinSummaries";
 	public static final String CMD_FIELD_OFFICE_SUMMARIES = "listFieldOfficeBulletinSummaries";

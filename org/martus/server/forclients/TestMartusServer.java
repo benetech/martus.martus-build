@@ -341,7 +341,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertNotContains("ping", names);
 		assertNotContains("requestUploadRights", names);
 		assertNotContains("uploadBulletinChunk", names);
-		assertContains("downloadMyBulletinChunk", names);
+		assertNotContains("downloadMyBulletinChunk", names);
 		assertContains("listMyBulletinSummaries", names);
 		assertContains("downloadFieldOfficeBulletinChunk", names);
 		assertContains("listFieldOfficeBulletinSummaries", names);
@@ -1010,44 +1010,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 	
-	public void testDownloadBulletinChunkBadId() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinOk");
-
-		Vector result = downloadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), "bulletinid", 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		assertNotNull("result null", result);
-		assertEquals(1, result.size());
-		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
-
-		TRACE_END();
-	}
-	
-	public void testDownloadBulletinChunkBadRequestSignature() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinChunkBadRequestSignature");
-
-		testServer.serverForClients.clearCanUploadList();
-		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		assertEquals(NetworkInterfaceConstants.OK, uploadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), b1.getLocalId(), b1ZipBytes.length, 0, b1ZipBytes.length, b1ZipString, clientSecurity));
-
-		Vector result1 = testServer.downloadMyBulletinChunk(b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE, "123");
-		assertNotNull("result null", result1);
-		assertEquals(1, result1.size());
-		assertEquals(NetworkInterfaceConstants.SIG_ERROR, result1.get(0));
-
-		String stringToSign = b1.getAccount() + "," + b1.getLocalId() + "," + 
-					Integer.toString(0) + "," + Integer.toString(NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
-		byte[] sigBytes = serverSecurity.createSignature(new ByteArrayInputStream(bytesToSign));
-		String signature = Base64.encode(sigBytes);
-		Vector result2 = testServer.downloadMyBulletinChunk(b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE, signature);
-		assertNotNull("result2 null", result2);
-		assertEquals(1, result2.size());
-		assertEquals(NetworkInterfaceConstants.SIG_ERROR, result2.get(0));
-
-		TRACE_END();
-	}
-
 	public void testDownloadFieldOfficeBulletinChunkBadId() throws Exception
 	{
 		TRACE_BEGIN("testDownloadFieldOfficeBulletinChunkBadId");
@@ -1142,42 +1104,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		return result;
 	}
 		
-	public void testDownloadBulletinChunkDraftWholeBulletin() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinChunkDraftWholeBulletin");
-
-		String draftZipString = uploadSampleDraftBulletin(draft);
-		byte[] draftZipBytes = Base64.decode(draftZipString);
-		
-		Vector result = downloadBulletinChunk(testServerInterface, draft.getAccount(), draft.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		assertEquals("failed?", NetworkInterfaceConstants.OK, result.get(0));
-		assertEquals("wrong total size?", new Integer(draftZipBytes.length), result.get(1));
-		assertEquals("wrong chunk size?", new Integer(draftZipBytes.length), result.get(2));
-		String zipString = (String)result.get(3);
-		assertEquals("bad zip?", getZipEntryNamesAndCrcs(draftZipString), getZipEntryNamesAndCrcs(zipString));
-		Bulletin loaded = new Bulletin(clientSecurity);
-		MockBulletin.loadFromZipString(loaded, zipString, clientSecurity);
-
-		TRACE_END();
-	}
-
-	public void testDownloadBulletinChunkWholeBulletin() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinChunkWholeBulletin");
-
-		uploadSampleBulletin();
-		Vector result = downloadBulletinChunk(testServerInterface, b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		assertEquals("failed?", NetworkInterfaceConstants.OK, result.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result.get(1));
-		assertEquals("wrong chunk size?", new Integer(b1ZipBytes.length), result.get(2));
-		String zipString = (String)result.get(3);
-		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
-		Bulletin loaded = new Bulletin(clientSecurity);
-		MockBulletin.loadFromZipString(loaded, zipString, clientSecurity);
-
-		TRACE_END();
-	}
-
 	Vector getBulletinChunk(MartusSecurity securityToUse, NetworkInterface server, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
 	{
 		Vector parameters = new Vector();
@@ -1238,77 +1164,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_END();
 	}
 
-	public void testDownloadBulletinChunkWholeBulletinLegacySignature() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinChunkWholeBulletinLegacySignature");
-
-		uploadSampleBulletin();
-		String legacyStringToSign = b1.getAccount() + "," + b1.getLocalId() + "," + "0" + "," +
-					Integer.toString(0) + "," + Integer.toString(NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		String legacySignature = MartusUtilities.createSignature(legacyStringToSign, clientSecurity);
-
-		Vector result = testServer.downloadMyBulletinChunk(b1.getAccount(), b1.getLocalId(), 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE, legacySignature);
-		assertEquals("failed?", NetworkInterfaceConstants.OK, result.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result.get(1));
-		assertEquals("wrong chunk size?", new Integer(b1ZipBytes.length), result.get(2));
-
-		TRACE_END();
-	}
-
-	public void testDownloadBulletinChunk2LegacySignature() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinChunkWholeBulletinLegacySignature");
-
-		uploadSampleBulletin();
-		int chunkSize = b1ZipBytes.length / 5 * 2;
-		String legacyStringToSign = b1.getAccount() + "," + b1.getLocalId() + "," + 
-					Integer.toString(b1ZipBytes.length) + "," + 
-					Integer.toString(chunkSize) + "," +
-					Integer.toString(chunkSize);
-		String legacySignature = MartusUtilities.createSignature(legacyStringToSign, clientSecurity);
-
-		Vector result = testServer.downloadMyBulletinChunk(b1.getAccount(), b1.getLocalId(), chunkSize, chunkSize, legacySignature);
-		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result.get(1));
-		assertEquals("wrong chunk size?", new Integer(chunkSize), result.get(2));
-
-		TRACE_END();
-	}
-
-	public void testDownloadBulletinThreeChunks() throws Exception
-	{
-		TRACE_BEGIN("testDownloadBulletinThreeChunks");
-
-		uploadSampleBulletin();
-		int chunkSize = b1ZipBytes.length / 5 * 2;
-		Vector result1 = downloadBulletinChunk(testServerInterface, b1.getAccount(), b1.getLocalId(), 0, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result1.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result1.get(1));
-		assertEquals("wrong chunk size?", new Integer(chunkSize), result1.get(2));
-		
-		Vector result2 = downloadBulletinChunk(testServerInterface, b1.getAccount(), b1.getLocalId(), chunkSize, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result2.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result2.get(1));
-		assertEquals("wrong chunk size?", new Integer(chunkSize), result2.get(2));
-
-		Vector result3 = downloadBulletinChunk(testServerInterface, b1.getAccount(), b1.getLocalId(), 2*chunkSize, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.OK, result3.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result3.get(1));
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		Base64.decode(new StringReader((String)result1.get(3)), out);
-		Base64.decode(new StringReader((String)result2.get(3)), out);
-		Base64.decode(new StringReader((String)result3.get(3)), out);
-		assertEquals("wrong amount of data?", b1ZipBytes.length, out.toByteArray().length);
-		String zipString = Base64.encode(out.toByteArray());
-		
-		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
-		Bulletin loaded = new Bulletin(clientSecurity);
-		MockBulletin.loadFromZipString(loaded, zipString, clientSecurity);
-
-		TRACE_END();
-	}
-	
 	public void testDownloadFieldOfficeBulletinThreeChunks() throws Exception
 	{
 		TRACE_BEGIN("testDownloadBulletinThreeChunks");
@@ -1327,43 +1182,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("wrong chunk size?", new Integer(chunkSize), result2.get(2));
 
 		Vector result3 = downloadFieldOfficeBulletinChunk(testServerInterface, hqSecurity, b1.getAccount(), b1.getLocalId(), 2*chunkSize, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.OK, result3.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result3.get(1));
-
-		ByteArrayOutputStream out = new ByteArrayOutputStream();
-		Base64.decode(new StringReader((String)result1.get(3)), out);
-		Base64.decode(new StringReader((String)result2.get(3)), out);
-		Base64.decode(new StringReader((String)result3.get(3)), out);
-		assertEquals("wrong amount of data?", b1ZipBytes.length, out.toByteArray().length);
-		String zipString = Base64.encode(out.toByteArray());
-		
-		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
-		Bulletin loaded = new Bulletin(clientSecurity);
-		MockBulletin.loadFromZipString(loaded, zipString, clientSecurity);
-
-		TRACE_END();
-	}
-	
-	// TODO: This is only needed to support the Guatemala HQ's. It should be removed
-	// after all those have been updated to newer software!
-	public void testLegacyDownloadFieldOfficeBulletinAsMyBulletin() throws Exception
-	{
-		TRACE_BEGIN("testLegacyDownloadFieldOfficeBulletinAsMyBulletin");
-
-		uploadSampleBulletin();
-
-		int chunkSize = b1ZipBytes.length / 5 * 2;
-		Vector result1 = legacyDownloadFieldOfficeBulletinChunkAsMyBulletin(testServerInterface, hqSecurity, b1.getAccount(), b1.getLocalId(), 0, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result1.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result1.get(1));
-		assertEquals("wrong chunk size?", new Integer(chunkSize), result1.get(2));
-		
-		Vector result2 = legacyDownloadFieldOfficeBulletinChunkAsMyBulletin(testServerInterface, hqSecurity, b1.getAccount(), b1.getLocalId(), chunkSize, chunkSize);
-		assertEquals("failed?", NetworkInterfaceConstants.CHUNK_OK, result2.get(0));
-		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result2.get(1));
-		assertEquals("wrong chunk size?", new Integer(chunkSize), result2.get(2));
-
-		Vector result3 = legacyDownloadFieldOfficeBulletinChunkAsMyBulletin(testServerInterface, hqSecurity, b1.getAccount(), b1.getLocalId(), 2*chunkSize, chunkSize);
 		assertEquals("failed?", NetworkInterfaceConstants.OK, result3.get(0));
 		assertEquals("wrong total size?", new Integer(b1ZipBytes.length), result3.get(1));
 
@@ -2313,10 +2131,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		assertEquals("uploadBulletinChunk", NetworkInterfaceConstants.SERVER_DOWN, strResult );
 		assertEquals("uploadBulletinChunk", 1, serverForClients.getNumberActiveClients() );
 
-		vecResult = downloadBulletinChunk(testServerInterface, clientSecurity.getPublicKeyString(), bogusStringParameter, 0, NetworkInterfaceConstants.MAX_CHUNK_SIZE);
-		verifyErrorResult("downloadBulletinChunk", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
-		assertEquals("downloadBulletinChunk", 1, serverForClients.getNumberActiveClients() );
-
 		vecResult = testServer.legacyListMySealedBulletinIds(clientSecurity.getPublicKeyString());
 		verifyErrorResult("listMySealedBulletinIds", vecResult, NetworkInterfaceConstants.SERVER_DOWN );
 		assertEquals("listMySealedBulletinIds", 1, serverForClients.getNumberActiveClients() );
@@ -2426,16 +2240,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		return testServer.uploadBulletinChunk(authorId, localId, totalLength, offset, chunkLength, data, signature);
 	}
 	
-	Vector downloadBulletinChunk(NetworkInterface server, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
-	{
-		String stringToSign = authorAccountId + "," + bulletinLocalId + "," + 
-					Integer.toString(chunkOffset) + "," + Integer.toString(maxChunkSize);
-		byte[] bytesToSign = stringToSign.getBytes("UTF-8");
-		byte[] sigBytes = clientSecurity.createSignature(new ByteArrayInputStream(bytesToSign));
-		String signature = Base64.encode(sigBytes);
-		return server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId, chunkOffset, maxChunkSize, signature);
-	}
-	
 	Vector downloadFieldOfficeBulletinChunk(NetworkInterface server, MartusCrypto hqSecurity, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
 	{
 		String hqAccountId = hqSecurity.getPublicKeyString();
@@ -2445,16 +2249,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		return server.downloadFieldOfficeBulletinChunk(authorAccountId, bulletinLocalId, hqAccountId, chunkOffset, maxChunkSize, signature);
 	}
 	
-	// TODO: This is only needed to support the Guatemala HQ's. It should be removed
-	// after all those have been updated to newer software!
-	Vector legacyDownloadFieldOfficeBulletinChunkAsMyBulletin(NetworkInterface server, MartusCrypto hqSecurity, String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize) throws Exception
-	{
-		String stringToSign = authorAccountId + "," + bulletinLocalId + "," + 
-					Integer.toString(chunkOffset) + "," + Integer.toString(maxChunkSize);
-		String signature = MartusUtilities.createSignature(stringToSign, hqSecurity);
-		return server.downloadMyBulletinChunk(authorAccountId, bulletinLocalId, chunkOffset, maxChunkSize, signature);
-	}
-
 	public int TESTSERVERTESTPORT = NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL + 35;
 	
 	static File tempFile;
