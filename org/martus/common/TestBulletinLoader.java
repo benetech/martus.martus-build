@@ -28,7 +28,6 @@ package org.martus.common;
 
 import java.io.File;
 
-import org.martus.client.test.MockBulletin;
 import org.martus.common.Bulletin.DamagedBulletinException;
 
 public class TestBulletinLoader extends TestCaseEnhanced

@@ -21,7 +21,6 @@ import java.util.zip.ZipException;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.test.MockBulletin;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Base64;
 import org.martus.common.Bulletin;
@@ -36,6 +35,7 @@ import org.martus.common.MartusConstants;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
+import org.martus.common.MockBulletin;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;

@@ -37,7 +37,6 @@ import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
-import org.martus.client.test.MockBulletin;
 
 public class TestBulletinZipImporter extends TestCaseEnhanced
 {

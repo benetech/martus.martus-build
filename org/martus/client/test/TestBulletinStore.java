@@ -46,6 +46,7 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusXml;
+import org.martus.common.MockBulletin;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
 import org.martus.common.MockMartusSecurity;
