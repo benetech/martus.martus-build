@@ -1,6 +1,7 @@
 package org.martus.meta;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
 
 import org.martus.common.Database;
@@ -9,6 +10,7 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
+import org.martus.common.Database.RecordHiddenException;
 import org.martus.server.core.ServerFileDatabase;
 
 public class TestDatabaseHiddenRecords extends TestCaseEnhanced
@@ -27,6 +29,14 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		fileDatabase = new ServerFileDatabase(tempDirectory, security);
 		fileDatabase.initialize();
 		mockDatabase = new MockServerDatabase();
+
+		draftUid = UniversalId.createFromAccountAndPrefix("bogus account", "G");
+		draftKey = DatabaseKey.createDraftKey(draftUid);
+
+		sealedUid = UniversalId.createFromAccountAndPrefix("bogus account", "G");
+		sealedKey = DatabaseKey.createSealedKey(sealedUid);
+		
+		assertNotEquals("duplicate uids?", draftUid, sealedUid);
 	}
 
 	protected void tearDown() throws Exception
@@ -43,14 +53,19 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 
 	private void verifyBasics(Database db) throws Exception
 	{
-		UniversalId uid = UniversalId.createDummyUniversalId();
-		assertFalse("already hidden?", db.isHidden(uid));
-		db.hide(uid);
-		assertTrue("not hidden?", db.isHidden(uid));
-		db.hide(uid);
-		assertTrue("not hidden after two hides?", db.isHidden(uid));
+		assertFalse("draft already hidden?", db.isHidden(draftUid));
+		assertFalse("sealed already hidden?", db.isHidden(sealedUid));
+		db.hide(draftUid);
+		db.hide(sealedUid);
+		assertTrue("draft not hidden?", db.isHidden(draftUid));
+		assertTrue("sealed not hidden?", db.isHidden(sealedUid));
+		db.hide(draftUid);
+		db.hide(sealedUid);
+		assertTrue("draft not hidden after two hides?", db.isHidden(draftUid));
+		assertTrue("sealed not hidden after two hides?", db.isHidden(sealedUid));
 		db.deleteAllData();
-		assertTrue("not hidden after deleteAllData?", db.isHidden(uid));
+		assertTrue("draft not hidden after deleteAllData?", db.isHidden(draftUid));
+		assertTrue("sealed not hidden after deleteAllData?", db.isHidden(sealedUid));
 	}
 	
 	public void testWriteHiddenRecordToServerDatabase() throws Exception
@@ -61,9 +76,8 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 
 	private void verifyWriteHiddenRecord(Database db) throws Exception
 	{
-		UniversalId uid = UniversalId.createDummyUniversalId();
-		db.hide(uid);
-		DatabaseKey draftKey = DatabaseKey.createDraftKey(uid);
+		db.hide(draftUid);
+		DatabaseKey draftKey = DatabaseKey.createDraftKey(draftUid);
 		try
 		{
 			db.writeRecord(draftKey, "draft");
@@ -73,7 +87,8 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		{
 		}
 		
-		DatabaseKey sealedKey = DatabaseKey.createSealedKey(uid);
+		db.hide(sealedUid);
+		DatabaseKey sealedKey = DatabaseKey.createSealedKey(sealedUid);
 		try
 		{
 			db.writeRecord(sealedKey, "sealed");
@@ -96,14 +111,16 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 		throws Exception
 	{
 		UniversalId visibleUid = UniversalId.createDummyUniversalId();
-		UniversalId hiddenUid = UniversalId.createDummyUniversalId();
-		db.hide(hiddenUid);
+		db.hide(draftUid);
+		db.hide(sealedUid);
 		
 		DatabaseKey visibleKey = DatabaseKey.createSealedKey(visibleUid);
-		DatabaseKey hiddenKey = DatabaseKey.createSealedKey(hiddenUid);
+		DatabaseKey hiddenDraftKey = DatabaseKey.createSealedKey(draftUid);
+		DatabaseKey hiddenSealedKey = DatabaseKey.createSealedKey(sealedUid);
 		HashMap entries = new HashMap();
 		entries.put(visibleKey, null);
-		entries.put(hiddenKey, null);
+		entries.put(draftKey, null);
+		entries.put(sealedKey, null);
 		try
 		{
 			db.importFiles(entries);
@@ -118,40 +135,67 @@ public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 	
 	public void testOpenInputStreamHidden() throws Exception
 	{
-		verifyOpenInputStreamHidden(mockDatabase);
-		verifyOpenInputStreamHidden(fileDatabase);
+		verifyOpenInputStreamHidden(mockDatabase, draftKey);
+		verifyOpenInputStreamHidden(mockDatabase, sealedKey);
+		verifyOpenInputStreamHidden(fileDatabase, draftKey);
+		verifyOpenInputStreamHidden(fileDatabase, sealedKey);
 	}
 	
-	void verifyOpenInputStreamHidden(Database db) throws Exception
+	void verifyOpenInputStreamHidden(Database db, DatabaseKey key) throws Exception
 	{
-		UniversalId draftUid = UniversalId.createDummyUniversalId();
-		DatabaseKey draftKey = DatabaseKey.createDraftKey(draftUid);
-		db.writeRecord(draftKey, "test");
-		db.hide(draftUid);
-		assertNull("opened stream for hidden?", db.openInputStream(draftKey, security));
+		writeAndHideRecord(db, key);
+		assertNull("opened stream for hidden?", db.openInputStream(key, security));
+		db.deleteAllData();
+	}
+
+	public void testReadRecordHidden() throws Exception
+	{
+		verifyReadRecordHidden(mockDatabase, draftKey);
+		verifyReadRecordHidden(mockDatabase, sealedKey);
+		verifyReadRecordHidden(fileDatabase, draftKey);
+		verifyReadRecordHidden(fileDatabase, sealedKey);
+	}
+	
+	void verifyReadRecordHidden(Database db, DatabaseKey key) throws Exception
+	{
+		writeAndHideRecord(db, key);
+		assertNull("able to read hidden?", db.readRecord(key, security));
 		db.deleteAllData();
 	}
 	
-	public void testReadRecordHidden() throws Exception
+	public void testDiscardRecordHidden() throws Exception
 	{
-		verifyReadRecordHidden(mockDatabase);
-		verifyReadRecordHidden(fileDatabase);
+		verifyDiscardRecordHidden(mockDatabase, draftKey);
+		verifyDiscardRecordHidden(mockDatabase, sealedKey);
+		verifyDiscardRecordHidden(fileDatabase, draftKey);
+		verifyDiscardRecordHidden(fileDatabase, sealedKey);
 	}
 	
-	void verifyReadRecordHidden(Database db) throws Exception
+	void verifyDiscardRecordHidden(Database db, DatabaseKey key) throws Exception
 	{
-		UniversalId draftUid = UniversalId.createDummyUniversalId();
-		DatabaseKey draftKey = DatabaseKey.createDraftKey(draftUid);
-		db.writeRecord(draftKey, "test");
-		db.hide(draftUid);
-		assertNull("able to read hidden?", db.readRecord(draftKey, security));
+		writeAndHideRecord(db, key);
+		db.discardRecord(key);
+		db.discardRecord(key);
 		db.deleteAllData();
 	}
 	
 	// TODO: need to test BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase
 
+	private void writeAndHideRecord(Database db, DatabaseKey key)
+		throws IOException, RecordHiddenException
+	{
+		db.writeRecord(key, "test");
+		db.hide(key.getUniversalId());
+	}
+	
 	MockMartusSecurity security;
 	File tempDirectory;	
 	Database fileDatabase;
 	Database mockDatabase;
+	
+	UniversalId draftUid;
+	DatabaseKey draftKey;
+
+	UniversalId sealedUid;
+	DatabaseKey sealedKey;
 }
