@@ -326,7 +326,7 @@ public class BulletinStore
 		try
 		{
 			b.setStore(this);
-			BulletinSaver.saveToDatabase(b, database, mustEncryptPublicData());
+			BulletinSaver.saveToDatabase(b, database, mustEncryptPublicData(), getSignatureGenerator());
 			//We don't call addToCaches here because we are not sure
 			//that this bulletin object is still usable -- maybe
 			//attachment proxies still point to disk files?

@@ -38,7 +38,6 @@ import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.FieldDataPacket;
 import org.martus.common.MartusCrypto;
@@ -103,11 +102,6 @@ public class Bulletin implements BulletinConstants
 	public MartusCrypto getSignatureVerifier()
 	{
 		return getStore().getSignatureVerifier();
-	}
-
-	public Database getDatabase()
-	{
-		return getStore().getDatabase();
 	}
 
 	public UniversalId getUniversalId()
@@ -466,7 +460,7 @@ public class Bulletin implements BulletinConstants
 		getPendingPrivateAttachments().addAll(other.getPendingPrivateAttachments());
 	}
 
-	private String getFirstOfThisYear()
+	static String getFirstOfThisYear()
 	{
 		GregorianCalendar cal = new GregorianCalendar();
 		cal.set(GregorianCalendar.MONTH, 0);

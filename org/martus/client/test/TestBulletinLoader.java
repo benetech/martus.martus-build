@@ -129,7 +129,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		b.set(Bulletin.TAGPUBLICINFO, "public info");
 		b.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b.setSealed();
-		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData());
+		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData(), security);
 		assertEquals("saved 1", 3, db.getAllKeys().size());
 
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
@@ -165,7 +165,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 
 		Bulletin b = store.createEmptyBulletin();
 		b.setAllPrivate(true);
-		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData());
+		BulletinSaver.saveToDatabase(b, db, store.mustEncryptPublicData(), security);
 		assertEquals("saved 1", 3, db.getAllKeys().size());
 
 		DatabaseKey key = new DatabaseKey(b.getUniversalId());
@@ -287,7 +287,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		{
 			try
 			{
-				BulletinLoader.loadFromDatabase(b.getStore(), headerKey, security);
+				BulletinLoader.loadFromDatabase(store, headerKey, security);
 			}
 			catch (DamagedBulletinException ignoreExpectedException)
 			{
@@ -295,7 +295,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 			return;
 		}
 
-		Bulletin invalid = BulletinLoader.loadFromDatabase(b.getStore(), headerKey, security);
+		Bulletin invalid = BulletinLoader.loadFromDatabase(store, headerKey, security);
 		assertEquals(label + " not invalid?", false, invalid.isValid());
 		assertEquals(label + " wrong uid?", b.getUniversalId(), invalid.getUniversalId());
 		assertEquals(label + " wrong fdp account?", b.getAccount(), invalid.getFieldDataPacket().getAccountId());

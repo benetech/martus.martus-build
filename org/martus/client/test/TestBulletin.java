@@ -395,6 +395,8 @@ public class TestBulletin extends TestCaseEnhanced
 
 		Bulletin copy = new Bulletin(b);
 		assertEquals("store", b.getStore(), copy.getStore());
+		assertEquals("signer", b.getSignatureGenerator(), copy.getSignatureGenerator());
+		assertEquals("verifier", b.getSignatureVerifier(), copy.getSignatureVerifier());
 		assertEquals("id", b.getLocalId(), copy.getLocalId());
 		assertEquals("account", b.getAccount(), copy.getAccount());
 		assertEquals("author", b.get("author"), copy.get("author"));
@@ -424,6 +426,8 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.pullDataFrom(b1);
 		assertEquals("store unchanged", store, b2.getStore());
+		assertEquals("signer", b1.getSignatureGenerator(), b2.getSignatureGenerator());
+		assertEquals("verifier", b1.getSignatureVerifier(), b2.getSignatureVerifier());
 		assertEquals("id unchanged", false, b2.getLocalId().equals(b1.getLocalId()));
 		assertEquals("public info", b1.get(Bulletin.TAGPUBLICINFO), b2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info", b1.get(Bulletin.TAGPRIVATEINFO), b2.get(Bulletin.TAGPRIVATEINFO));

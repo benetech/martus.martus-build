@@ -288,7 +288,7 @@ System.out.flush();
 			file = createTempFile();
 			copies = copiesToExport;
 			db = store.getDatabase();
-			security = bulletin.getSignatureVerifier();
+			security = store.getSignatureVerifier();
 			headerKey = DatabaseKey.createKey(bulletin.getUniversalId(), bulletin.getStatus());
 		}
 		

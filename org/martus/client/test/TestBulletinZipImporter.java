@@ -173,7 +173,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 		original.addPublicAttachment(a);
 		original.addPrivateAttachment(aPrivate);
 		original.setSealed();
-		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData());
+		BulletinSaver.saveToDatabase(original, db, store.mustEncryptPublicData(), security);
 		UniversalId uid = original.getUniversalId();
 
 		original = BulletinLoader.loadFromDatabase(store, new DatabaseKey(uid));

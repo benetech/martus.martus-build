@@ -165,7 +165,7 @@ public class BulletinZipImporter
 	{
 		Database db = store.getDatabase();
 		Bulletin imported = BulletinZipImporter.loadFromFile(store, inputFile);
-		BulletinSaver.saveToDatabase(imported, db, store.mustEncryptPublicData());
+		BulletinSaver.saveToDatabase(imported, db, store.mustEncryptPublicData(), store.getSignatureGenerator());
 		return imported.getUniversalId();
 	}
 

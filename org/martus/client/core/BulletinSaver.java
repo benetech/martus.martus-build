@@ -45,12 +45,10 @@ import org.martus.common.UniversalId;
 public class BulletinSaver
 {
 
-	public static void saveToDatabase(Bulletin b, Database db, boolean mustEncryptPublicData) throws 
+	public static void saveToDatabase(Bulletin b, Database db, boolean mustEncryptPublicData, MartusCrypto signer) throws 
 			IOException,
 			MartusCrypto.CryptoException
 	{
-		MartusCrypto signer = b.getSignatureGenerator();
-
 		UniversalId uid = b.getUniversalId();
 		BulletinHeaderPacket oldBhp = new BulletinHeaderPacket(uid);
 		DatabaseKey key = new DatabaseKey(uid);
