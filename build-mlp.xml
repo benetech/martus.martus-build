@@ -3,13 +3,18 @@
     <description>
         Martus MLP Build File
     </description>
-    <property name="BASEDIR" value="../binary-martus/Releases/ClientMLPs"/>
 
-<!-- Change these before you run for different Language Packs -->
-    <property name="LANGUAGEDIR" value="${BASEDIR}/arabic"/>
+<!-- ******************************************************* -->
+<!-- UPDATE THIS before you run for different Language Packs -->
+
     <property name="LANGUAGE" value="ar"/>
 
+<!-- ******************************************************* -->
 
+
+
+    <property name="BASEDIR" value="../binary-martus/Releases/ClientMLPs"/>
+    <property name="LANGUAGEDIR" value="${BASEDIR}/${LANGUAGE}"/>
     <!-- imports -->
     <target name="check_keypass" unless="sign.keypass">
         <input
