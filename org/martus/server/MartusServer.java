@@ -1379,8 +1379,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		}
 		else
 		{
-			String userHomeDir = System.getProperty("user.home");
-			dataDirectory = userHomeDir + "/MartusServer/";
+			dataDirectory = "/var/MartusServer/";
 		}
 		File file = new File(dataDirectory);
 		if(!file.exists())
