@@ -14,22 +14,31 @@
   <property name="server-dir" value="${martus-dir}/server"/>
   <property name="server-jar" value= "${dist}/martus-server.jar"/>
   <property name="server-package" value="${martus-package}.server"/>
-  <property name="server-files" value="${server-dir}/*.class"/>
+  <property name="server-files" value="${server-dir}/*.class,
+  					${server-dir}/core/*.class,
+  					${server-dir}/foramplifiers/*.class,
+  					${server-dir}/forclients/*.class,
+  					${server-dir}/formirroring/*.class,
+  					${server-dir}/tools/*.class,
+  					"/>
 
   <property name="client-dir" value="${martus-dir}/client"/>
   <property name="client-jar" value= "${dist}/martus.jar"/>
   <property name="client-package" value="${martus-package}.client"/>
   <property name="client-files" value="${client-dir}/*.class,
-    			${client-dir}/Martus-es.mtf,
-    			${client-dir}/MartusHelp-en.txt,
-    			${client-dir}/MartusHelp-es.txt,
-    			${client-dir}/MartusHelpTOC-en.txt,
-    			${client-dir}/MartusHelpTOC-es.txt,
-    			${client-dir}/MartusLogo.gif,
-    			${client-dir}/locked.jpg,
-    			${client-dir}/unlocked.jpg,
-    			${client-dir}/Martus.png,
-    			main-class.txt"/>
+  			${client-dir}/test/*.class,
+  			${client-dir}/core/*.class,
+  			${client-dir}/core/main-class.txt,
+  			${client-dir}/swingui/*.class,
+    			${client-dir}/swingui/Martus-es.mtf,
+    			${client-dir}/swingui/MartusHelp-en.txt,
+    			${client-dir}/swingui/MartusHelp-es.txt,
+    			${client-dir}/swingui/MartusHelpTOC-en.txt,
+    			${client-dir}/swingui/MartusHelpTOC-es.txt,
+    			${client-dir}/swingui/MartusLogo.gif,
+    			${client-dir}/swingui/locked.jpg,
+    			${client-dir}/swingui/unlocked.jpg,
+    			${client-dir}/swingui/Martus.png"/>
 
   <property name="meta-dir" value="${martus-dir}/meta"/>
   <property name="meta-jar" value= "${dist}/martus-meta.jar"/>
@@ -51,9 +60,17 @@
     <delete file="${common-jar}"/>
 
     <delete file="${server-dir}/*.class"/>
+    <delete file="${server-dir}/core/*.class"/>
+    <delete file="${server-dir}/foramplifiers/*.class"/>
+    <delete file="${server-dir}/forclients/*.class"/>
+    <delete file="${server-dir}/formirroring/*.class"/>
+    <delete file="${server-dir}/tools/*.class"/>
     <delete file="${server-jar}"/>
 
     <delete file="${client-dir}/*.class"/>
+    <delete file="${client-dir}/test/*.class"/>
+    <delete file="${client-dir}/core/*.class"/>
+    <delete file="${client-dir}/swingui/*.class"/>
     <delete file="${client-jar}"/>
 
     <delete file="${meta-dir}/*.class"/>
@@ -66,8 +83,16 @@
     <javac srcdir="${common-dir}" failonerror="true"/>
 
     <javac srcdir="${server-dir}" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${server-dir}/core" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${server-dir}/foramplifiers" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${server-dir}/forclients" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${server-dir}/formirroring" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${server-dir}/tools" classpath="${common-dir}" failonerror="true"/>
 
     <javac srcdir="${client-dir}" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${client-dir}/core" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${client-dir}/swingui" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${client-dir}/test" classpath="${common-dir}" failonerror="true"/>
 
     <javac srcdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true"/>
 
@@ -76,10 +101,17 @@
     		includes="${common-files}"/>
     <jar jarfile="${server-jar}" basedir="." 
     		includes="${server-files}, 
+    				${server-files}/core,
+    				${server-files}/foramplifiers,
+    				${server-files}/forclients,
+    				${server-files}/formirroring,
+    				${server-files}/tools,
     				${common-files}"/>
     <jar jarfile="${client-jar}" basedir="." 
-			manifest="${client-dir}/main-class.txt" 
-    		includes="${client-files}, 
+			manifest="${client-dir}/core/main-class.txt" 
+    		includes="${client-files}/core,
+    				${client-files}/swingui,
+    				${client-files}/test,
     				${common-files}"/>
     <jar jarfile="${meta-jar}" basedir="." 
     		includes="${meta-files}, 
