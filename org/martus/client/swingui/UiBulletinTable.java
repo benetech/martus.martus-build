@@ -580,9 +580,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		for(int i = 0 ; i < visibleFoldersContainingThisBulletin.size() ; ++i)
 		{
 			BulletinFolder thisFolder = (BulletinFolder)visibleFoldersContainingThisBulletin.get(i);
-			String thisFolderInternalName = thisFolder.getName();
-			String thisFolderLocalizedName = app.getFolderLabel(thisFolderInternalName);
-			names += thisFolderLocalizedName + "\n";
+			FolderNode node = new FolderNode(thisFolder.getName(), app);
+			names += node.getLocalizedName() + "\n";
 		}
 		return names;
 	}

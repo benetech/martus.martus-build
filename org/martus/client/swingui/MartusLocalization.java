@@ -288,7 +288,64 @@ public class MartusLocalization
 		}
 	}
 
+	public String getCurrentLanguageCode()
+	{
+		return currentLanguageCode;
+	}
+
+	public void setCurrentLanguageCode(String newLanguageCode)
+	{
+		currentLanguageCode = newLanguageCode;
+	}
+
+	public String getFieldLabel(String fieldName)
+	{
+		return getLabel(getCurrentLanguageCode(), "field", fieldName, "");
+	}
+
+	public String getLanguageName(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "language", code, "Unknown");
+	}
+
+	public String getWindowTitle(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "wintitle", code, "???");
+	}
+
+	public String getButtonLabel(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "button", code, "???");
+	}
+
+	public String getMenuLabel(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "menu", code, "???");
+	}
+
+	public String getMonthLabel(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "month", code, "???");
+	}
+
+	public String getMessageLabel(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "message", code, "???");
+	}
+
+	public String getStatusLabel(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "status", code, "???");
+	}
+
+	public String getKeyword(String code)
+	{
+		return getLabel(getCurrentLanguageCode(), "keyword", code, "???");
+	}
+
+
 	private Map languageTranslationsMap;
+	private String currentLanguageCode;
 
 	private static final String ENGLISH = "en";
 	public static final String[] ALL_LANGUAGE_CODES = {

@@ -1223,56 +1223,54 @@ public class MartusApp
 		return attemptSignInInternal(getKeyPairFile(), userName, userPassPhrase);
 	}
 
-	public String getFieldLabel(String fieldName)
+	public String getLocalizedFolderName(String folderName)
 	{
-		return localization.getLabel(getCurrentLanguage(), "field", fieldName, "");
+		return localization.getLabel(getCurrentLanguage(), "folder", folderName, "");
 	}
 
-	public String getFolderLabel(String folderName)
+	public String getFieldLabel(String fieldName)
 	{
-		if(BulletinFolder.isNameLocalized(folderName))
-			return localization.getLabel(getCurrentLanguage(), "folder", folderName, "");
-		return folderName;
+		return localization.getFieldLabel(fieldName);
 	}
 
 	public String getLanguageName(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "language", code, "Unknown");
+		return localization.getLanguageName(code);
 	}
 
 	public String getWindowTitle(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "wintitle", code, "???");
+		return localization.getWindowTitle(code);
 	}
 
 	public String getButtonLabel(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "button", code, "???");
+		return localization.getButtonLabel(code);
 	}
 
 	public String getMenuLabel(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "menu", code, "???");
+		return localization.getMenuLabel(code);
 	}
 
 	public String getMonthLabel(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "month", code, "???");
+		return localization.getMonthLabel(code);
 	}
 
 	public String getMessageLabel(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "message", code, "???");
+		return localization.getMessageLabel(code);
 	}
 
 	public String getStatusLabel(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "status", code, "???");
+		return localization.getStatusLabel(code);
 	}
 
 	public String getKeyword(String code)
 	{
-		return localization.getLabel(getCurrentLanguage(), "keyword", code, "???");
+		return localization.getKeyword(code);
 	}
 
 	public String[] getMonthLabels()
@@ -1296,13 +1294,13 @@ public class MartusApp
 
 	public String getCurrentLanguage()
 	{
-		return currentLanguage;
+		return localization.getCurrentLanguageCode();
 	}
 
 	public void setCurrentLanguage(String languageCode)
 	{
 		localization.loadTranslationFile(languageCode);
-		currentLanguage = languageCode;
+		localization.setCurrentLanguageCode(languageCode);
 	}
 
 	public String getCurrentDateFormatCode()
@@ -1625,7 +1623,6 @@ public class MartusApp
 
 	private final int MAXFOLDERS = 50;
 	public int serverChunkSize = NetworkInterfaceConstants.MAX_CHUNK_SIZE;
-	private String currentLanguage;
 	private String currentDateFormat;
 }
 

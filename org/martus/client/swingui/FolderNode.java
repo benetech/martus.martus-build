@@ -26,33 +26,35 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.swingui;
 
-import javax.swing.tree.DefaultMutableTreeNode;
-
+import org.martus.client.core.BulletinFolder;
 import org.martus.client.core.MartusApp;
 
-public class FolderTreeNode extends DefaultMutableTreeNode
+public class FolderNode
 {
-
-	public FolderTreeNode(Object obj, MartusApp appToUse)
+	FolderNode(String internalNameToUse, MartusApp appToUse)
 	{
-		super(obj);
-		internalNode = new FolderNode(super.toString(), appToUse);
+		internalName = internalNameToUse;
+		app = appToUse;
 	}
-
-	public String getInternalName()
+	
+	String getInternalName()
 	{
-		return internalNode.getInternalName();
+		return internalName;
 	}
-
+	
+	String getLocalizedName()
+	{
+		String internalName = getInternalName();
+		if(BulletinFolder.isNameLocalized(internalName))
+			return app.getLocalizedFolderName(internalName);
+		return internalName;
+	}
+	
 	public String toString()
 	{
 		return getLocalizedName();
 	}
-
-	public String getLocalizedName()
-	{
-		return internalNode.getLocalizedName();
-	}
-
-	private FolderNode internalNode;
+	
+	String internalName;
+	MartusApp app;
 }
