@@ -723,7 +723,6 @@ public class MartusLocalization
 		addEnglishTranslation("field:AccountInfoPublicKey=Public Key:");
 		addEnglishTranslation("field:AccountInfoPublicCode=Public Code:");
 		addEnglishTranslation("field:NameOfExportedFile=Please enter a name for the file you wish to export.");
-		addEnglishTranslation("field:NameOfExportedFile=Please enter a name for the file you wish to export.");
 		addEnglishTranslation("field:ServerNameEntry=Server name or IP address:");
 		addEnglishTranslation("field:ServerPublicCodeEntry=Server Public Identification Code:");
 		addEnglishTranslation("field:ServerMagicWordEntry=Server Magic Word:");
