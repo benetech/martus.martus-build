@@ -112,6 +112,7 @@ downloadSourcesFromCvs() # downloads sources from CVS
 	for cvs_module in $martus_cvs_src_modules
 		do
 		cvs -q checkout martus-$cvs_module/source || error "cvs returned $? - for martus-$cvs_module"
+		cvs -q -l checkout martus-$cvs_module || error "cvs returned $? - for -l martus-$cvs_module"
 		echo "copying martus-$cvs_module...";
 		echo
 		cp -r $CVS_HOME/martus-$cvs_module/source/* $MARTUSSOURCES || error "copy martus-$cvs_module returned $?"
