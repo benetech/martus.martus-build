@@ -1,0 +1,92 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-amp" default="notify-amp" basedir=".">
+    <description>
+        Martus Amplifier Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+    <import file="build-thirdparty.xml" />
+    <import file="build-common.xml" />
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- amplifier module name and dirs -->
+    <property name="martus.amplifier.module"  value="martus-amplifier"/>
+    <property name="martus.amplifier.src.root" value="${build.basedir}/${martus.amplifier.module}/source"/>
+    <property name="martus.amplifier.class.root" value="${build.basedir}/${martus.amplifier.module}/bin"/>
+
+    <!-- amp classpath -->
+    <path id="amp.class.path">
+        <pathelement path="${martus.utils.class.root}/"/>
+        <pathelement path="${martus.amplifier.class.root}/"/>
+        <pathelement path="${martus.common.class.root}/"/>
+        <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+    </path>
+
+    <fileset id="amp.presentation.files" dir="${build.basedir}/${martus.amplifier.module}/presentation" >
+        <include name="**/*"/>
+        <exclude name="Entries"/>
+        <exclude name="Root"/>
+        <exclude name="Repository"/>
+    </fileset>
+
+    <fileset id="amp.presentation.files.nonssl" dir="${build.basedir}/${martus.amplifier.module}/presentationNonSSL" >
+        <include name="**/*"/>
+        <exclude name="Entries"/>
+        <exclude name="Root"/>
+        <exclude name="Repository"/>
+    </fileset>
+
+    <fileset id="amp.nosrc.files" dir="${martus.amplifier.src.root}">
+        <include name="org/martus/amplifier/presentation/index.html"/>
+        <include name="org/martus/amplifier/common/LanguageNames_*.txt"/>
+    </fileset>
+
+    <target name="notify-amp">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+    </target>
+
+
+    <!-- ================================================================== -->
+    <!-- B U I L D                                                          -->
+    <!-- ================================================================== -->
+
+    <target name="build-amp" depends="build-common" description="Compile martus-amp">
+        <mkdir dir="${martus.amplifier.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.amplifier.src.root}" destdir="${martus.amplifier.class.root}" failonerror="true">
+            <classpath refid="amp.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+
+        <!-- copy presentation files -->
+        <mkdir dir="${martus.amplifier.class.root}/www/MartusAmplifier/presentation"/>
+        <copy todir="${martus.amplifier.class.root}/www/MartusAmplifier/presentation" >
+            <fileset refid="amp.presentation.files" />
+        </copy>
+
+        <mkdir dir="${martus.amplifier.class.root}/www/MartusAmplifier/presentationNonSSL"/>
+        <copy todir="${martus.amplifier.class.root}/www/MartusAmplifier/presentationNonSSL" >
+            <fileset refid="amp.presentation.files.nonssl" />
+        </copy>
+    </target>
+
+<!-- ================================================================== -->
+<!-- T E S T S                                                          -->
+<!-- ================================================================== -->
+
+  <target name="test-amp" depends="build-amp">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath refid="amp.class.path"/>
+            <formatter type="brief" usefile="no" />
+            <test name="${client-package}.test.TestAllAmplifier"/>
+        </junit>
+  </target>
+
+</project>

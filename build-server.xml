@@ -1,0 +1,100 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-server" default="notify-server" basedir=".">
+    <description>
+        Martus Server Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+    <import file="build-thirdparty.xml" />
+    <import file="build-amp.xml" />
+    <import file="build-mspa.xml" />
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- server module name and dirs -->
+    <property name="martus.server.module"  value="martus-server"/>
+    <property name="martus.server.src.root" value="${build.basedir}/${martus.server.module}/source"/>
+    <property name="martus.server.class.root" value="${build.basedir}/${martus.server.module}/bin"/>
+
+    <!-- server classpath -->
+    <path id="server.class.path">
+        <pathelement path="${martus.server.class.root}/"/>
+        <pathelement path="${martus.common.class.root}/"/>
+        <pathelement path="${martus.amplifier.class.root}/"/>
+        <pathelement path="${martus.utils.class.root}/"/>
+        <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+    </path>
+
+    <fileset id="server.nosrc.files" dir="${martus.server.class.root}">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <target name="notify-server">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+  <target name="build-server" depends="init,build-common,build-amp,build-mspa" description="Compile martus-server">
+        <mkdir dir="${martus.server.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.server.src.root}" destdir="${martus.server.class.root}" failonerror="true">
+            <classpath refid="server.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+
+        <!-- copy third party jars -->
+        <mkdir dir="${martus.server.class.root}/ThirdPartyJars"/>
+        <copy todir="${martus.server.class.root}/ThirdPartyJars" flatten="true">
+            <fileset refid="thirdparty.files" />
+        </copy>
+        <copy todir="${martus.server.class.root}">
+            <fileset dir="${martus.server.src.root}" includes="**/LanguageNames_*.txt"/>
+            <fileset dir="${martus.server.src.root}" includes="org/martus/amplifier/presentation/index.html"/>
+        </copy>
+  </target>
+
+<!-- ================================================================== -->
+<!-- T E S T S                                                          -->
+<!-- ================================================================== -->
+
+  <target name="test-server" depends="build-server">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath refid="server.class.path"/>
+            <formatter type="brief" usefile="no" />
+            <test name="org.martus.server.main.TestAll"/>
+        </junit>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="jar-server" depends="build-server" description="Create martus-server jar">
+        <mkdir dir="${public.release.folder}"/>
+        <jar destfile="${public.release.folder}/martus-server-${DSTAMP}.${build.number}.jar" manifest="${martus.server.src.root}/org/martus/server/main/main-class.txt">
+                <fileset refid="server.nosrc.files"/>
+                <fileset dir="${martus.server.class.root}" includes="**/*.class"/>
+
+                <fileset refid="amp.nosrc.files"/>
+                <fileset dir="${martus.amplifier.class.root}" includes="www/**/*"/>
+                <fileset dir="${martus.amplifier.class.root}" includes="**/*.class"/>
+
+                <fileset refid="jarverifier.nosrc.files"/>
+                <fileset dir="${martus.jarverifier.class.root}" includes="**/*.class"/>
+
+                <fileset refid="mspa.server.class.files"/>
+                <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
+        </jar>
+    </target>
+
+</project>

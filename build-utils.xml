@@ -1,0 +1,41 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-utils" default="notify-utils" basedir=".">
+    <description>
+        Martus Utils Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- utils module name and dirs -->
+    <property name="martus.utils.module"  value="martus-utils"/>
+    <property name="martus.utils.src.root" value="${build.basedir}/${martus.utils.module}/source"/>
+    <property name="martus.utils.class.root" value="${build.basedir}/${martus.utils.module}/bin"/>
+
+    <!-- utils classpath -->
+    <path id="utils.class.path">
+        <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+    </path>
+
+    <target name="notify-utils">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-utils" depends="init" description="Compile martus-utils">
+        <mkdir dir="${martus.utils.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.utils.src.root}" destdir="${martus.utils.class.root}" failonerror="true">
+            <classpath refid="utils.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+</project>

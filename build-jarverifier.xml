@@ -1,0 +1,44 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-jarverifier" default="notify-jarverifier" basedir=".">
+    <description>
+        Martus JarVerifier Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- jarverifier module name and dirs -->
+    <property name="martus.jarverifier.module"  value="martus-jar-verifier"/>
+    <property name="martus.jarverifier.src.root" value="${build.basedir}/${martus.jarverifier.module}/source"/>
+    <property name="martus.jarverifier.class.root" value="${build.basedir}/${martus.jarverifier.module}/bin"/>
+
+    <fileset id="jarverifier.nosrc.files" dir="${martus.jarverifier.src.root}">
+        <include name="**/ssmartusclientks"/>
+    </fileset>
+
+    <target name="notify-jarverifier">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-jarverifier" depends="init" description="Compile martus-verifier">
+        <mkdir dir="${martus.jarverifier.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.jarverifier.src.root}" destdir="${martus.jarverifier.class.root}" failonerror="true">
+              <include name="**/*.java"/>
+        </javac>
+
+        <!-- Copy jarverifier files that are needed for the jar -->
+        <copy todir="${martus.jarverifier.class.root}" >
+            <fileset refid="jarverifier.nosrc.files"/>
+        </copy>
+    </target>
+
+</project>

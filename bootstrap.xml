@@ -1,0 +1,68 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="bootstrap">
+    <description>
+        Martus Bootstrap Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- project names -->
+    <property name="martus-module" value="martus"/>
+    <property name="amp-module" value="martus-amplifier"/>
+    <property name="client-module" value="martus-client"/>
+    <property name="common-module" value="martus-common"/>
+    <property name="hrdag-module" value="martus-hrdag"/>
+    <property name="jarverifier-module" value="martus-jar-verifier"/>
+    <property name="logi-module" value="martus-logi"/>
+    <property name="meta-module" value="martus-meta"/>
+    <property name="mspa-module" value="martus-mspa"/>
+    <property name="server-module" value="martus-server"/>
+    <property name="swing-module" value="martus-swing"/>
+    <property name="thirdparty-module" value="martus-thirdparty"/>
+    <property name="utils-module" value="martus-utils"/>
+
+    <!-- create CVS_ROOT -->
+    <property name="cvs.cvsroot" value=":${cvs.protocol}:${cvs.username}@${cvs.location}:${cvs.repository}"/>
+
+    <!-- download from CVS -->
+    <target name="cvs.checkout">
+        <delete dir="${cvs.home}"/>
+        <mkdir dir="${cvs.home}"/>
+        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+            <commandline>
+                <argument value="-q"/>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="-P"/>
+                <argument value="${martus-module}"/>
+            </commandline>
+        </cvs>
+
+        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+            <commandline>
+                <argument value="-q"/>
+                <argument value="checkout"/>
+                <argument value="${amp-module}"/>
+                <argument value="${client-module}"/>
+                <argument value="${common-module}"/>
+                <argument value="${hrdag-module}"/>
+                <argument value="${jarverifier-module}"/>
+                <argument value="${logi-module}"/>
+                <argument value="${meta-module}"/>
+                <argument value="${mspa-module}"/>
+                <argument value="${server-module}"/>
+                <argument value="${swing-module}"/>
+                <argument value="${thirdparty-module}"/>
+                <argument value="${utils-module}"/>
+            </commandline>
+        </cvs>
+    </target>
+
+    <!-- run martus build file -->
+    <target name="build-martus" depends="cvs.checkout">
+        <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="make-release"/>
+    </target>
+
+
+</project>

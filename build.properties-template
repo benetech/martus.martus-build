@@ -10,7 +10,10 @@
 #				be set to 0
 # -------------------------------------------------------------------
 
+name = martus
+project.names=martus,martus-amp,martus-client,martus-common,martus-hrdag,martus-jarverifier,martus-logi,martus-meta,martus-mspa,martus-server,martus-swing,martus-thirdparty,martus-utils
 martus.version=
+build.basedir=
 
 # ############################
 # jarsigner related properties
@@ -22,18 +25,33 @@ sign.keypass=
 # ############################
 # cvs related properties
 # ############################
-cvs.cvsroot=
-cvs.pass=
+cvs.protocol=ext
+cvs.username=
+cvs.location=cvs.bookshare.org
+cvs.repository=/var/local/cvs
 cvs.home=
+cvs.port=822
+cvs.privatekey.location=
 
-# ##################################
-# installer build related properties
-# ##################################
-build.installer.dir=
-build.lib.dir=
-build.lib.dir.src=
+# #####################################
+# email properties
+# #####################################
 
-# ##################################
-# Martus Language Localization File
-# ##################################
-export.lang=
+# comma separated list of senders/recipients
+java.email.from=
+java.email.to=
+
+java.email.mailhost=BENESBS
+java.email.port=25
+java.email.msg=
+
+# #####################################
+# installer related properties
+# #####################################
+
+public.release.folder=E:/CVS_TEST/Build/martus/dist
+cd.image.dir.name=CD_IMAGE
+
+# #####################################
+# 
+# #####################################

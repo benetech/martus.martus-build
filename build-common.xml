@@ -1,0 +1,87 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-common" default="notify-common" basedir=".">
+    <description>
+        Martus Common Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+    <import file="build-thirdparty.xml" />
+    <import file="build-utils.xml" />
+    <import file="build-logi.xml" />
+    <import file="build-hrdag.xml" />
+    <import file="build-jarverifier.xml" />
+    <import file="build-swing.xml" />
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- client common name and dirs -->
+    <property name="martus.common.module"  value="martus-common"/>
+    <property name="martus.common.src.root" value="${build.basedir}/${martus.common.module}/source"/>
+    <property name="martus.common.class.root" value="${build.basedir}/${martus.common.module}/bin"/>
+
+    <!-- common classpath -->
+    <path id="common.class.path">
+        <pathelement path="${martus.common.class.root}"/>
+        <pathelement path="${martus.utils.class.root}/"/>
+        <pathelement path="${martus.swing.class.root}"/>
+        <pathelement path="${martus.logi.class.root}"/>
+        <pathelement path="${martus.jarverifier.class.root}"/>
+        <pathelement path="${martus.hrdag.class.root}"/>
+        <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+    </path>
+
+    <target name="notify-common">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-common" depends="init,build-logi,build-utils,build-hrdag,build-jarverifier,build-swing" description="Compile martus-common">
+        <mkdir dir="${martus.common.class.root}"/>
+        <replace file="${martus.common.src.root}/org/martus/common/VersionBuildDate.java" token="#{BUILDDATE}" value="${DSTAMP}.${build.number}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.common.src.root}" destdir="${martus.common.class.root}" failonerror="true">
+            <classpath refid="common.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- T E S T                                                            -->
+    <!-- ================================================================== -->
+
+    <target name="test-common" depends="build-common">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath refid="common.class.path"/>
+            <formatter type="brief" usefile="no" />
+            <test name="org.martus.common.TestCommon"/>
+        </junit>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="jar-common" depends="build-common" description="Create martus-common jar">
+        <mkdir dir="${public.release.folder}"/>
+        <jar destfile="${public.release.folder}/martus-common-${DSTAMP}.${build.number}.jar">
+            <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.jarverifier.class.root}">
+                <include name="**/*.class"/>
+                <include name="**/ssmartusclientks"/>
+            </fileset>
+        </jar>
+    </target>
+
+</project>

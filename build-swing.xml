@@ -1,0 +1,45 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-swing" default="notify-swing" basedir=".">
+    <description>
+        Martus Swing Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+    <import file="build-hrdag.xml" />
+    <import file="build-utils.xml" />
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- swing module name and dirs -->
+    <property name="martus.swing.module"  value="martus-swing"/>
+    <property name="martus.swing.src.root" value="${build.basedir}/${martus.swing.module}/source"/>
+    <property name="martus.swing.class.root" value="${build.basedir}/${martus.swing.module}/bin"/>
+
+    <!-- swing classpath -->
+    <path id="swing.class.path">
+        <pathelement path="${martus.swing.class.root}/"/>
+        <pathelement path="${martus.hrdag.class.root}/"/>
+        <pathelement path="${martus.utils.class.root}/"/>
+    </path>
+
+    <target name="notify-swing">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-swing" depends="init,build-hrdag,build-utils" description="Compile martus-swing">
+        <mkdir dir="${martus.swing.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.swing.src.root}" destdir="${martus.swing.class.root}" failonerror="true">
+            <classpath refid="swing.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+</project>

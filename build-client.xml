@@ -1,0 +1,126 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-client" default="notify-client" basedir=".">
+    <description>
+        Martus Client Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+    <import file="build-thirdparty.xml" />
+    <import file="build-jarverifier.xml" />
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- client module name and dirs -->
+    <property name="martus.client.module"  value="martus-client"/>
+    <property name="martus.client.src.root" value="${build.basedir}/${martus.client.module}/source"/>
+    <property name="martus.client.class.root" value="${build.basedir}/${martus.client.module}/bin"/>
+
+    <!-- client classpath -->
+    <path id="client.class.path">
+        <pathelement path="${martus.common.class.root}/"/>
+        <pathelement path="${martus.client.class.root}/"/>
+        <pathelement path="${martus.jarverifier.class.root}"/>
+        <pathelement path="${martus.utils.class.root}/"/>
+        <pathelement path="${martus.swing.class.root}"/>
+        <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+    </path>
+
+    <!-- client files -->
+    <fileset id="client.nosrc.files" dir="${martus.client.src.root}">
+        <include name="**/*.png"/>
+        <include name="**/*.gif"/>
+        <include name="**/*.jpg"/>
+        <include name="**/*.mlp"/>
+        <include name="org/martus/client/swingui/Martus-*.mtf"/>
+        <include name="org/martus/client/swingui/MartusHelp-*.txt"/>
+        <include name="org/martus/client/swingui/MartusHelpTOC-*.txt"/>
+        <include name="org/martus/client/swingui/UnofficialTranslationMessage.txt"/>
+        <include name="org/martus/client/swingui/UnofficialTranslationMessageRtoL.txt"/>
+    </fileset>
+
+    <target name="notify-client">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-client" depends="build-common" description="Compile martus-client">
+        <mkdir dir="${martus.client.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.client.src.root}" destdir="${martus.client.class.root}" failonerror="true">
+            <classpath refid="client.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+
+        <!-- Copy client files that are needed for the jars -->
+        <copy todir="${martus.client.class.root}" >
+            <fileset refid="client.nosrc.files"/>
+        </copy>
+    </target>
+
+<!-- ================================================================== -->
+<!-- T E S T S                                                          -->
+<!-- ================================================================== -->
+
+  <target name="test-client" depends="build-client">
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath refid="client.class.path"/>
+            <formatter type="brief" usefile="no" />
+            <test name="org.martus.client.test.TestAll"/>
+        </junit>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="jar-client" depends="build-client" description="Create martus-client jar">
+        <mkdir dir="${public.release.folder}"/>
+        <jar destfile="${public.release.folder}/martus-client-${DSTAMP}.${build.number}.jar" manifest="${martus.client.src.root}/org/martus/client/core/main-class.txt">
+            <fileset refid="client.nosrc.files"/>
+            <fileset dir="${martus.client.class.root}" includes="**/*.class"/>
+
+            <fileset refid="jarverifier.nosrc.files"/>
+            <fileset dir="${martus.jarverifier.class.root}" includes="**/*.class"/>
+
+            <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
+        </jar>
+    </target>
+
+<!-- ================================================================== -->
+<!-- Z I P  -  S O U R C E S                                            -->
+<!-- ================================================================== -->
+    <target name="zip-client-src" depends="init">
+        <mkdir dir="${public.release.folder}"/>
+        <property name="zip-filename"  value="${public.release.folder}/martus-${DSTAMP}.${build.number}-src.zip"/>
+
+        <zip zipfile="${zip-filename}">
+            <fileset refid="client.nosrc.files"/>
+            <fileset dir="${martus.client.src.root}" includes="**/*.java"/>
+
+            <fileset refid="jarverifier.nosrc.files"/>
+            <fileset dir="${martus.jarverifier.src.root}" includes="**/*.java"/>
+
+            <fileset dir="${martus.common.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.utils.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.hrdag.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.logi.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.swing.src.root}" includes="**/*.java"/>
+            <fileset dir="${build.basedir}">
+                <include name="${martus.thirdparty.module}/libext/**/*"/>
+                <include name="${martus.thirdparty.module}/common/**/*"/>
+                <include name="${martus.thirdparty.module}/client/**/*"/>
+            </fileset>
+        </zip>
+    </target>
+
+</project>

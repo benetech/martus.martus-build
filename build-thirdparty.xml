@@ -1,0 +1,52 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-thirdparty" basedir=".">
+    <description>
+        Martus ThirdParty Build File
+    </description>
+
+    <!-- set global properties for this build -->
+    <property file="build.properties" />
+
+    <!-- imports -->
+    <import file="build-thirdparty.xml" />
+
+    <!-- module names and dirs -->
+    <property name="martus.module"  value="martus"/>
+
+    <!-- thirdparty module name and dirs -->
+    <property name="martus.thirdparty.module"  value="martus-thirdparty"/>
+
+    <property name="martus.thirdparty.lib.xmlrpc"  value="${build.basedir}/${martus.thirdparty.module}/common/XMLRPC/bin/"/>
+    <property name="martus.thirdparty.lib.infinitemonkey"  value="${build.basedir}/${martus.thirdparty.module}/common/InfiniteMonkey/bin/"/>
+    <property name="martus.thirdparty.lib.ant"  value="${build.basedir}/${martus.thirdparty.module}/common/Ant/bin/"/>
+    <property name="martus.thirdparty.lib.lucene"  value="${build.basedir}/${martus.thirdparty.module}/server/Lucene/bin/"/>
+    <property name="martus.thirdparty.lib.jetty"  value="${build.basedir}/${martus.thirdparty.module}/server/Jetty/bin/"/>
+    <property name="martus.thirdparty.lib.velocity"  value="${build.basedir}/${martus.thirdparty.module}/server/Velocity/bin/"/>
+    <property name="martus.thirdparty.lib.junit"  value="${build.basedir}/${martus.thirdparty.module}/libext/JUnit/bin/"/>
+
+    <fileset id="thirdparty.server.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="server/Jetty/**/*.jar"/>
+        <include name="server/Lucene/**/*.jar"/>
+        <include name="server/Velocity/**/*.jar"/>
+    </fileset>
+
+    <fileset id="thirdparty.common.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="common/Ant/**/*.jar"/>
+        <include name="common/InfiniteMonkey/**/*.jar"/>
+        <include name="common/Logi/**/*.jar"/>
+        <include name="common/XMLRPC/**/*.jar"/>
+    </fileset>
+
+    <fileset id="thirdparty.libext.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="libext/BouncyCastle/**/*.jar"/>
+        <include name="libext/JUnit/**/*.jar"/>
+    </fileset>
+
+    <fileset id="thirdparty.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="**/*.jar"/>
+        <exclude name="Entries"/>
+        <exclude name="Root"/>
+        <exclude name="Repository"/>
+    </fileset>
+
+</project>
