@@ -71,6 +71,12 @@ public class RetrievePublicKey
 		{
 			NetworkResponse response = gateway.ping();
 			String resultCode = response.getResultCode();
+			if(resultCode.equals(NetworkInterfaceConstants.NO_SERVER))
+			{
+				System.out.println("Error no response from server");
+				System.exit(6);
+				return null;
+			}
 			if(!NetworkInterfaceConstants.OK.equals(resultCode))
 			{
 				System.out.println("Error response from server: " + resultCode);
