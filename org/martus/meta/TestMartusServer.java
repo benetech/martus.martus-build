@@ -636,7 +636,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		String gotString = (String)result.get(1);
 		
 		Bulletin got = store.createEmptyBulletin();
-		got.loadFromZipString(gotString);
+		MockBulletin.loadFromZipString(got, gotString);
 		assertEquals("id", bulletin.getLocalId(), got.getLocalId());
 		assertEquals("public", bulletin.get(bulletin.TAGPUBLICINFO), got.get(got.TAGPUBLICINFO));
 		assertEquals("private ", bulletin.get(bulletin.TAGPRIVATEINFO), got.get(got.TAGPRIVATEINFO));
@@ -760,7 +760,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		String zipString = (String)result.get(3);
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(draftZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
-		loaded.loadFromZipString(zipString);
+		MockBulletin.loadFromZipString(loaded, zipString);
 	}
 
 	public void testDownloadBulletinChunkWholeBulletin() throws Exception
@@ -773,7 +773,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		String zipString = (String)result.get(3);
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
-		loaded.loadFromZipString(zipString);
+		MockBulletin.loadFromZipString(loaded, zipString);
 	}
 
 	public void testDownloadBulletinChunkWholeBulletinLegacySignature() throws Exception
@@ -832,7 +832,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
-		loaded.loadFromZipString(zipString);
+		MockBulletin.loadFromZipString(loaded, zipString);
 	}
 	
 	public void testDownloadFieldOfficeBulletinThreeChunks() throws Exception
@@ -863,7 +863,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
-		loaded.loadFromZipString(zipString);
+		MockBulletin.loadFromZipString(loaded, zipString);
 	}
 	
 	// TODO: This is only needed to support the Guatemala HQ's. It should be removed
@@ -896,7 +896,7 @@ public class TestMartusServer extends TestCaseEnhanced
 		
 		assertEquals("bad zip?", getZipEntryNamesAndCrcs(b1ZipString), getZipEntryNamesAndCrcs(zipString));
 		Bulletin loaded = store.createEmptyBulletin();
-		loaded.loadFromZipString(zipString);
+		MockBulletin.loadFromZipString(loaded, zipString);
 	}
 	
 	public void testListFieldOfficeSealedBulletinIds() throws Exception

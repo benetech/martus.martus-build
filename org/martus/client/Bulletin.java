@@ -789,21 +789,6 @@ public class Bulletin implements BulletinConstants
 		
 	}
 
-	public void loadFromZipString(String zipString) throws IOException, Base64.InvalidBase64Exception
-	{
-		File tempFile = null;
-		try
-		{
-			tempFile = Base64.decodeToTempFile(zipString);
-			loadFromFile(tempFile, store.getSignatureVerifier());
-		}
-		finally
-		{
-			if(tempFile != null)
-				tempFile.delete();
-		}
-	}
-	
 	public boolean isStandardField(String fieldName)
 	{
 		return getFieldDataPacket().fieldExists(fieldName);

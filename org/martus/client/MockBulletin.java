@@ -30,6 +30,21 @@ public class MockBulletin extends Bulletin
 		super((BulletinStore) null);
 	}
 
+	public static void loadFromZipString(Bulletin b, String zipString) throws IOException, Base64.InvalidBase64Exception
+	{
+		File tempFile = null;
+		try
+		{
+			tempFile = Base64.decodeToTempFile(zipString);
+			b.loadFromFile(tempFile, b.getStore().getSignatureVerifier());
+		}
+		finally
+		{
+			if(tempFile != null)
+				tempFile.delete();
+		}
+	}
+	
 	public static String saveToZipString(Bulletin b) throws 
 		IOException,
 		MartusCrypto.CryptoException

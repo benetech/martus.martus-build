@@ -73,13 +73,13 @@ public class TestRetrieveHQDraftsTableModel extends TestCaseEnhanced
 		String z1 = MockBulletin.saveToZipString(b1);
 		String z2 = MockBulletin.saveToZipString(b2);
 		Bulletin hqB0 = hqApp.createBulletin();
-		hqB0.loadFromZipString(z0);
+		MockBulletin.loadFromZipString(hqB0, z0);
 		hqB0.save();
 		Bulletin hqB1 = hqApp.createBulletin();
-		hqB1.loadFromZipString(z1);
+		MockBulletin.loadFromZipString(hqB1, z1);
 		hqB1.save();
 		Bulletin hqB2 = hqApp.createBulletin();
-		hqB2.loadFromZipString(z2);
+		MockBulletin.loadFromZipString(hqB2, z2);
 		hqB2.save();
 		
 		modelWithoutData = new RetrieveHQDraftsTableModel(hqApp, null);
