@@ -31,6 +31,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.UnknownHostException;
 import java.util.Vector;
 
 import org.martus.common.MartusUtilities;
@@ -168,14 +169,14 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 		activeClientsCounter--;
 	}
 	
-	public void handleNonSSL(int[] ports)
+	public void handleNonSSL(int[] ports) throws UnknownHostException
 	{
 		ServerSideNetworkHandlerForNonSSL nonSSLServerHandler = new ServerSideNetworkHandlerForNonSSL(this);
 		for(int i=0; i < ports.length; ++i)
 			activeWebServers.add(MartusXmlRpcServer.createNonSSLXmlRpcServer(nonSSLServerHandler, ports[i], MartusServer.getMainIpAddress()));
 	}
 	
-	public void handleSSL(int[] ports)
+	public void handleSSL(int[] ports) throws UnknownHostException
 	{
 		ServerSideNetworkHandler serverHandler = new ServerSideNetworkHandler(this);
 		MartusSecureWebServer.security = getSecurity();

@@ -133,6 +133,11 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.out.println("Invalid password: " + e);
 			System.exit(73);
 		}
+		catch (UnknownHostException e)
+		{
+			System.out.println("ipAddress invalid: " + e);
+			System.exit(23);
+		}
 		catch (Exception e)
 		{
 			System.out.println("MartusServer.main: " + e);
@@ -1693,14 +1698,14 @@ public class MartusServer implements NetworkInterfaceConstants
 		serverForMirroring.addListeners();
 	}
 
-	private void initializeServerForClients()
+	private void initializeServerForClients() throws UnknownHostException
 	{
 		serverForClients.handleNonSSL(NetworkInterfaceXmlRpcConstants.defaultNonSSLPorts);
 		serverForClients.handleSSL(NetworkInterfaceXmlRpcConstants.defaultSSLPorts);
 		serverForClients.displayClientStatistics();
 	}
 	
-	private void initializeServerForAmplifiers()
+	private void initializeServerForAmplifiers() throws UnknownHostException
 	{
 		serverForAmplifiers.createAmplifierXmlRpcServer();
 	}
@@ -1744,17 +1749,9 @@ public class MartusServer implements NetworkInterfaceConstants
 			System.out.println("***RUNNING IN INSECURE MODE***");
 	}
 
-	public static InetAddress getMainIpAddress()
+	public static InetAddress getMainIpAddress() throws UnknownHostException
 	{
-		try
-		{
-			return InetAddress.getByName(mainIpAddress);
-		}
-		catch (UnknownHostException e)
-		{
-			e.printStackTrace();
-		}
-		return null;
+		return InetAddress.getByName(mainIpAddress);
 	}
 
 	private void setDataDirectory(File dataDirectory)

@@ -32,6 +32,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Vector;
 
 import org.martus.common.AmplifierNetworkInterface;
@@ -243,13 +244,13 @@ public class ServerForAmplifiers implements NetworkInterfaceConstants
 		return new File(coreServer.getStartupConfigDirectory(), "ampsWhoCallUs");
 	}
 	
-	public void createAmplifierXmlRpcServer()
+	public void createAmplifierXmlRpcServer() throws UnknownHostException
 	{
 		int port = AmplifierInterfaceXmlRpcConstants.MARTUS_PORT_FOR_AMPLIFIER;
 		createAmplifierXmlRpcServerOnPort(port);
 	}
 
-	public void createAmplifierXmlRpcServerOnPort(int port)
+	public void createAmplifierXmlRpcServerOnPort(int port) throws UnknownHostException
 	{
 		if(MartusSecureWebServer.security == null)
 			MartusSecureWebServer.security = getSecurity();
