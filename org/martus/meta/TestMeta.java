@@ -13,10 +13,16 @@ public class TestMeta extends TestCaseEnhanced
 		super(name);
 	}
 
-	public static void main(String[] args)
+	public static void main (String[] args)
 	{
+		runTests();
 	}
-	
+
+	public static void runTests ()
+	{
+		junit.textui.TestRunner.run (suite());
+	}
+
 	public static Test suite()
 	{
 		TestSuite suite= new TestSuite("Meta Tests");
