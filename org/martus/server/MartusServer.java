@@ -227,11 +227,21 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		clientsThatCanUpload = new Vector();
 		clientsBanned = new Vector();
 		magicWords = new Vector();
-		bannedClientsFile = new File(dataDirectory, BANNEDCLIENTSFILENAME);
+		
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(dataDirectory, getKeypairFilename());
-		shutdownFile = new File(dataDirectory, MARTUSSHUTDOWNFILENAME);
+		shutdownFile = new File(dataDirectory, MARTUSSHUTDOWNFILENAME);		
+		bannedClientsFile = new File(dataDirectory, BANNEDCLIENTSFILENAME);
+		
+		if(!bannedClientsFile.exists())
+		{
+			File deprecated_bannedClientsFile = new File(dataDirectory, DEPRECATED_BANNEDCLIENTSFILENAME);
+			if(deprecated_bannedClientsFile.exists())
+			{
+				deprecated_bannedClientsFile.renameTo(bannedClientsFile);
+			}
+		}
 
 		Timer bannedClientRefreshTimer = new Timer(true);
 		TimerTask bannedClientsTaskMonitor = new BannedClientsMonitor();
@@ -2067,7 +2077,9 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	private static final String KEYPAIRFILENAME = "keypair.dat";
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
-	private static final String BANNEDCLIENTSFILENAME = "notauthorized.txt";
+	private static final String DEPRECATED_BANNEDCLIENTSFILENAME = "notauthorized.txt";
+	private static final String BANNEDCLIENTSFILENAME = "banned.txt";
+	
 	private static final String MARTUSSHUTDOWNFILENAME = "exit";
 	private final long IMMEDIATELY = 0;
 	private static final long bannedCheckIntervalMillis = 60 * 1000;
