@@ -153,6 +153,7 @@ public class EnglishStrings
 "wintitle:notifyVerifyKeyPairSharePassed=Verification Succeded",				
 "wintitle:notifyRecoveryOfKeyShareComplete=Recovery Complete",
 "wintitle:notifyOperationCompleted=Finished",
+"wintitle:notifyErrorBackingupKeyPair=Error",
 
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -201,7 +202,6 @@ public class EnglishStrings
 "wintitle:BackupKeyShareCompleteInformation=Backup Complete",				
 "wintitle:RecoverShareKeyPair=Recover from Share Disk",				
 "wintitle:ErrorPreviousBackupShareExists=Previous File Exists",
-"wintitle:ErrorBackingupKeyPair=Error",
 "wintitle:ErrorRecoverNoAppropriateFileFound=No Appropriate File Found",
 "wintitle:ErrorRecoverShareDisk=KeyShare File Error",				
 "wintitle:ErrorVerifyingKeyPairShare=Verification Error",				
@@ -423,7 +423,6 @@ public class EnglishStrings
 "field:ServerComplianceChangedDescription=The current server has updated its statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  The new statement appears below. You can accept or reject this server based on its compliance statement.",
 "field:BackupKeyPairToMultipleUnencryptedFilesInformation=This is where the information goes explaining how the plain text keypair sharing occures and what the user is going to be prompted to go through, by saving #M# files onto #M# floppy disks and then pass them out to friends.  It will also explain that they will need at least #N# of them to get back their keypair without the use of a user name or password",
 "field:ErrorPreviousBackupShareExists=A previous share file exists.  You must save each file on its own removable media disk.",		
-"field:ErrorBackingupKeyPair=Unable to back up the key pair file on this disk.",
 "field:ErrorRecoverNoAppropriateFileFound=No appropriate share file was found on this disk, please try a different disk.",
 "field:ErrorRecoverShareDisk=An error occured reading this keyshare file.",
 "field:ErrorVerifyingKeyPairShare=An error occured verifying this keyshare file.",
@@ -592,6 +591,7 @@ public class EnglishStrings
 "field:notifyRecoveryOfKeyShareCompletecause=You have successfully restored your keypair from your keyshare files.  It is very important that you now re-scatter your key share.  We also recommend you backup your keypair as an encrypted file, you do not need to recreate the multi-file keyshare.",
 "field:notifyVerifyKeyPairSharePassedcause=Verification of all disks passed.",
 "field:notifyOperationCompletedcause=Operation completed.",
+"field:notifyErrorBackingupKeyPaircause=Unable to back up the key pair file on this disk.",
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occures in the future:",
