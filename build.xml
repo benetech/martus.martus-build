@@ -13,10 +13,9 @@
   <property name="common-dir" value="${martus-dir}/common"/>
   <property name="common-jar" value= "${dist}/martus-common.jar"/>
   <property name="common-package" value="${martus-package}.common"/>
-  <property name="BuildDateFile" value="${common-dir}/BuildDate.txt"/>
+  
   <property name="common-files" value="${common-dir}/*.class,
-  					${common-dir}/**/*.class,
-  					${BuildDateFile}
+  					${common-dir}/**/*.class
   					"/>
 
   <property name="server-dir" value="${martus-dir}/server"/>
@@ -54,6 +53,8 @@
   <target name="init">
     <!-- tstamp task initializes ${DSTAMP} etc -->
     <tstamp/>
+    <buildnumber/>
+    <property name="martus.version" value=" ${env.CURRENT_VERSION}"/>
   </target>
 
 <!-- ================================================================== -->
@@ -93,8 +94,8 @@
 
 	<!-- Build common -->
   <target name="build-common" depends="init">
-
-    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
+  
+    <replace file="${common-dir}/MartusUtilities.java" token="#{BUILDDATE}" value="${DSTAMP}"/>
     
     <javac target="1.4" optimize="on" srcdir="${common-dir}" failonerror="true">
     		<include name="**/*.java"/>
@@ -108,8 +109,6 @@
   
   <!-- Build client -->
   <target name="build-client" depends="init,build-common">
-
-    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
     
     <javac target="1.4" optimize="on" srcdir="${client-dir}" classpath="${common-jar}" failonerror="true">
     		<include name="**/*.java"/>
@@ -126,8 +125,6 @@
   <!-- Build server -->
   <target name="build-server" depends="init,build-common">
 
-    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
-
     <javac target="1.4" optimize="on" srcdir="${server-dir}" classpath="${common-jar}" failonerror="true">
     		<include name="**/*.java"/>
     </javac>
@@ -140,8 +137,6 @@
   
   <!-- Build meta -->
   <target name="build-meta" depends="init,build-common,build-server,build-client">
-
-    <echo message="${DSTAMP}" file="${BuildDateFile}"/>
 
     <javac target="1.4" optimize="on" srcdir="${meta-dir}" classpath="${client-jar};${server-jar}" failonerror="true">
     		<include name="**/*.java"/>

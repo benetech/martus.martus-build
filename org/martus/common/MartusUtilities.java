@@ -87,24 +87,7 @@ public class MartusUtilities
 
 	public static String getVersionDate()
 	{
-		java.lang.Class classToUse = MartusUtilities.class;
-		String versionDate = "[?]";
-		InputStream versionStream = null;
-		String fileVersionInfo = "BuildDate.txt";
-		versionStream = classToUse.getResourceAsStream(fileVersionInfo);
-		if(versionStream != null)
-		{
-			BufferedReader reader = new BufferedReader(new InputStreamReader(versionStream));
-			try
-			{
-				versionDate = reader.readLine();
-				reader.close();
-			}
-			catch(IOException ifNoDateAvailableLeaveItBlank)
-			{
-			}
-		}
-		return versionDate;
+		return "#{BUILDDATE}";
 	}
 
 	public static synchronized String createSignature(String stringToSign, MartusCrypto security)
