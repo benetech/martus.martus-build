@@ -281,7 +281,9 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	}
 
 	public void doCopyBulletins()
-	{
+	{				
+		Cursor cursor = mainWindow.setWaitingCursor();
+					
 		Bulletin[] selected = getSelectedBulletins();
 		BulletinFolder folder = getFolder();
 		TransferableBulletinList tb = new TransferableBulletinList(getStore(), selected, folder);
@@ -292,17 +294,21 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		mainWindow.lostOwnership(clipboard, contents);
 
 		clipboard.setContents(tb, mainWindow);
+		mainWindow.resetCursor(cursor);		
 	}
 
 	public void doPasteBulletins()
-	{
+	{				 
+		Cursor cursor = mainWindow.setWaitingCursor();
+		
 		BulletinFolder folder = getFolder();
 		TransferableBulletinList tb = UiClipboardUtilities.getClipboardTransferableBulletin();
 
 		boolean worked = false;
 		String resultMessageTag = null;
+			
 		if(tb == null)
-		{
+		{			
 			File file = UiClipboardUtilities.getClipboardTransferableFile();
 			try
 			{
@@ -339,6 +345,8 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			Toolkit.getDefaultToolkit().beep();
 			mainWindow.notifyDlg(mainWindow, resultMessageTag);
 		}
+		
+		mainWindow.resetCursor(cursor);	
 	}
 
 	public boolean confirmDeletionOfFile(String filePath)
@@ -364,6 +372,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		public void mouseClicked(MouseEvent e)
 		{
+	
 			if(!e.isPopupTrigger())
 			{
 				JTableHeader header = (JTableHeader)e.getSource();
@@ -387,7 +396,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 			}
 			if(e.isControlDown())
 			{
-				Cursor original = mainWindow.setWaitingCursor();
+
 				if(e.getKeyCode() == KeyEvent.VK_A)
 					doSelectAllBulletins();
 				if(e.getKeyCode() == KeyEvent.VK_X)
@@ -395,8 +404,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 				if(e.getKeyCode() == KeyEvent.VK_C)
 					doCopyBulletins();
 				if(e.getKeyCode() == KeyEvent.VK_V)
-					doPasteBulletins();
-				mainWindow.resetCursor(original);
+					doPasteBulletins();		
 			}
 		}
 	}
@@ -471,6 +479,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		Bulletin[] bulletins = getSelectedBulletins();
 		if(bulletins.length == 0 || bulletins[0] == null)
 			return;
+					
 		if(bulletins.length == 1)
 		{
 			okToDiscard = confirmDiscardSingleBulletin(bulletins[0]);
@@ -481,13 +490,16 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		}
 
 		if(okToDiscard)
-		{
-			discardAllSelectedBulletins();
+		{						
+			discardAllSelectedBulletins();			
 		}
+		
 	}
 
 	private void discardAllSelectedBulletins()
-	{
+	{		
+				
+		Cursor cursor = mainWindow.setWaitingCursor();
 		Bulletin[] bulletinsToDiscard = getSelectedBulletins();
 
 		BulletinFolder folderToDiscardFrom = getFolder();
@@ -508,6 +520,7 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 		mainWindow.folderContentsHaveChanged(folderToDiscardFrom);
 		mainWindow.folderContentsHaveChanged(discardedFolder);
 		mainWindow.selectNewCurrentBulletin(getSelectedRow());
+		mainWindow.resetCursor(cursor);			
 	}
 
 	private boolean confirmDiscardSingleBulletin(Bulletin b)
