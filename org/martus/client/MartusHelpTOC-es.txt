@@ -1,0 +1,27 @@
+Instalación de Martus
+Desinstalar Martus
+Activar su cuenta con nombre de usuario y contraseña
+Información de contacto
+Establecer una conexión con el servidor
+Establecer sus preferencias
+Crear un boletín
+Campos de un boletín de Martus
+Editar un borrador
+Uso de una plantilla en el campo "detalles"
+Guardar un borrador
+Enviar un boletín
+Descartar el borrador
+Mantenimiento de los boletines
+Carpetas por defecto
+Otras carpetas creadas por Martus
+Añadir carpetas
+Organizar los boletines
+Descargar boletines
+Desechar Boletines
+Localizar boletines específicos.
+Imprimir los boletines
+Mantener sus datos seguros
+Copias de seguridad del fichero con el par de claves
+Recuperar su fichero con el par de claves
+Uso inteligente de la contraseña
+Compartir los datos privados con su organización

@@ -42,7 +42,7 @@ Nota: Si prefiere teclear su contraseña usando el teclado del ordenador, haga cl
  
 
 ------------------------------------------------------------------------------------------------------------------------
-
+Información de contacto
 A partir de ahora, los datos públicos del boletín (es decir, aquellos datos que no se han etiquetado específicamente como privados) estarán al alcance de investigadores o prensa, entre otros. La información de contacto ofrece la posibilidad de que alguien que quiera seguir sus actividades o las de su organización pueda tener más información acerca  de sus boletines.
 
 En "Origen" introduzca su nombre o el de su organización, en tanto que origen de la información de los boletines que usted envíe.
