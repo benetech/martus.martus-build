@@ -50,20 +50,23 @@ import org.martus.common.MockBulletin;
 import org.martus.common.MockClientDatabase;
 import org.martus.common.MockDatabase;
 import org.martus.common.MockMartusSecurity;
+import org.martus.common.Stopwatch;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 
 
 public class TestBulletinStore extends TestCaseEnhanced
 {
-
+	static Stopwatch sw = new Stopwatch();
+	
     public TestBulletinStore(String name) {
         super(name);
     }
 
 	public void TRACE(String text)
 	{
-		//System.out.println(text);
+		//System.out.println("before " + text + ": " + sw.elapsed());
+		sw.start();
 	}
 
 
@@ -125,7 +128,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testVisitAllBulletins()
 	{
-		TRACE("testGetAllBulletinUids");
+		TRACE("testVisitAllBulletins");
 
 		class BulletinUidCollector implements Database.PacketVisitor
 		{
@@ -162,6 +165,9 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testCaching()
 	{
+		TRACE("testCaching");
+		int oldMax = BulletinStore.maxCachedBulletinCount;
+		BulletinStore.maxCachedBulletinCount = 3;
 		int numBulletins = BulletinStore.maxCachedBulletinCount + 1;
 		for(int i = 0; i < numBulletins; ++i)
 		{
@@ -170,6 +176,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 			store.findBulletinByUniversalId(b.getUniversalId());
 		}
 
+		BulletinStore.maxCachedBulletinCount = oldMax;
 		assertEquals("cache too large?", true, store.bulletinCache.size() <= BulletinStore.maxCachedBulletinCount);
 	}
 
@@ -660,6 +667,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testLoadAllDataWithErrors() throws Exception
 	{
+		TRACE("testLoadAllDataWithErrors");
 		Bulletin b = store.createEmptyBulletin();
 		store.saveBulletin(b);
 		BulletinHeaderPacket bhp = b.getBulletinHeaderPacket();
@@ -685,6 +693,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testClearFolder()
 	{
+		TRACE("testClearFolder");
 		Bulletin b1 = store.createEmptyBulletin();
 		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
@@ -699,6 +708,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testSave()
 	{
+		TRACE("testSave");
 		//TODO: This was moved in from TestBulletin, and it may
 		//not be needed--compare with testSaveBulletin
 		int oldCount = store.getBulletinCount();
@@ -720,6 +730,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testLastSavedTime() throws Exception
 	{
+		TRACE("testLastSavedTime");
 		Bulletin b = store.createEmptyBulletin();
 		long createdTime = b.getLastSavedTime();
 		assertEquals("time already set?", BulletinHeaderPacket.TIME_UNKNOWN, createdTime);
@@ -739,6 +750,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testAutomaticSaving() throws Exception
 	{
+		TRACE("testAutomaticSaving");
 		Database db = store.getDatabase();
 		DatabaseKey foldersKey = new DatabaseKey(UniversalId.createDummyUniversalId());
 
@@ -805,6 +817,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportZipFileWithAttachmentSealed() throws Exception
 	{
+		TRACE("testImportZipFileWithAttachmentSealed");
 		Bulletin original = store.createEmptyBulletin();
 		DatabaseKey originalKey = new DatabaseKey(original.getUniversalId());
 		AttachmentProxy a = new AttachmentProxy(tempFile1);
@@ -864,6 +877,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportZipFileBulletin() throws Exception
 	{
+		TRACE("testImportZipFileBulletin");
 		File tempFile = createTempFile();
 
 		Bulletin b = store.createEmptyBulletin();
@@ -906,6 +920,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportZipFileBulletinNotMine() throws Exception
 	{
+		TRACE("testImportZipFileBulletinNotMine");
 		File tempFile = createTempFile();
 
 		Bulletin original = store.createEmptyBulletin();
@@ -921,6 +936,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportZipFileFieldOffice() throws Exception
 	{
+		TRACE("testImportZipFileFieldOffice");
 		File tempFile = createTempFile();
 
 		BulletinStore hqStore = createTempStore();
@@ -939,6 +955,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportZipFileBulletinToOutbox() throws Exception
 	{
+		TRACE("testImportZipFileBulletinToOutbox");
 		BulletinStore creator = createTempStore();
 		Bulletin b = creator.createEmptyBulletin();
 		b.setSealed();
@@ -964,6 +981,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportDraftZipFile() throws Exception
 	{
+		TRACE("testImportDraftZipFile");
 		File tempFile = createTempFile();
 
 		Bulletin b = store.createEmptyBulletin();
@@ -982,6 +1000,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testImportZipFileWithAttachmentDraft() throws Exception
 	{
+		TRACE("testImportZipFileWithAttachmentDraft");
 		Bulletin original = store.createEmptyBulletin();
 		DatabaseKey originalKey = new DatabaseKey(original.getUniversalId());
 		AttachmentProxy a = new AttachmentProxy(tempFile1);
@@ -1048,6 +1067,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testCanPutBulletinInFolder() throws Exception
 	{
+		TRACE("testCanPutBulletinInFolder");
 		Bulletin b1 = store.createEmptyBulletin();
 		BulletinFolder outbox = store.getFolderOutbox();
 		BulletinFolder discardedbox = store.getFolderDiscarded();
@@ -1062,6 +1082,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testGetSetOfAllBulletinUniversalIds()
 	{
+		TRACE("testGetSetOfAllBulletinUniversalIds");
 		Set emptySet = store.getSetOfAllBulletinUniversalIds();
 		assertTrue("not empty to start?", emptySet.isEmpty());
 
@@ -1077,6 +1098,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testGetSetOfBulletinUniversalIdsInFolders()
 	{
+		TRACE("testGetSetOfBulletinUniversalIdsInFolders");
 		Set emptySet = store.getSetOfBulletinUniversalIdsInFolders();
 		assertTrue("not empty to start?", emptySet.isEmpty());
 
@@ -1099,6 +1121,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testGetSetOfOrphanedBulletinUniversalIds()
 	{
+		TRACE("testGetSetOfOrphanedBulletinUniversalIds");
 		Set emptySet = store.getSetOfOrphanedBulletinUniversalIds();
 		assertTrue("not empty to start?", emptySet.isEmpty());
 
@@ -1126,6 +1149,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testOrphansInHiddenFolders()
 	{
+		TRACE("testOrphansInHiddenFolders");
 		Bulletin b1 = store.createEmptyBulletin();
 		store.saveBulletin(b1);
 		Bulletin b2 = store.createEmptyBulletin();
@@ -1141,6 +1165,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testQuarantineUnreadableBulletinsSimple() throws Exception
 	{
+		TRACE("testQuarantineUnreadableBulletinsSimple");
 		assertEquals("found a bad bulletin in an empty database?", 0, store.quarantineUnreadableBulletins());
 		Bulletin b1 = store.createEmptyBulletin();
 		store.saveBulletin(b1);
@@ -1153,6 +1178,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	public void testQuarantineUnreadableBulletinsMany() throws Exception
 	{
+		TRACE("testQuarantineUnreadableBulletinsMany");
 		final int totalCount = 20;
 		Bulletin bulletins[] = new Bulletin[totalCount];
 		for (int i = 0; i < bulletins.length; i++)
