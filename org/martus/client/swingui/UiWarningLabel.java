@@ -24,30 +24,25 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.common.test;
+package org.martus.client.swingui;
 
-import org.martus.common.FieldSpec;
+import java.awt.Color;
+import java.awt.Font;
 
+import javax.swing.JLabel;
+import javax.swing.border.LineBorder;
 
-public class TestFieldSpec extends TestCaseEnhanced
+public class UiWarningLabel extends JLabel
 {
-	public TestFieldSpec(String name)
+	public UiWarningLabel(String text)
 	{
-		super(name);
-	}
-
-	public void testBasics()
-	{
-		FieldSpec plainField = new FieldSpec("a,b");
-		assertFalse("has unknown?", plainField.hasUnknownStuff());
-		assertEquals("a", plainField.getTag());
-		assertEquals("b", plainField.getLabel());
-		assertEquals("not normal?", FieldSpec.TYPE_NORMAL, plainField.getType());
-		
-		FieldSpec fieldWithExtra = new FieldSpec("c,d,e");
-		assertTrue("doesn't have unknown?", fieldWithExtra.hasUnknownStuff());
-		assertEquals("c", fieldWithExtra.getTag());
-		assertEquals("d", fieldWithExtra.getLabel());
-		assertEquals("not unknown?", FieldSpec.TYPE_UNKNOWN, fieldWithExtra.getType());
+		setHorizontalTextPosition(LEFT);
+		setVerticalTextPosition(TOP);
+		setText("   " + text + "   ");
+		setFont(getFont().deriveFont(Font.BOLD));
+		setBackground(Color.yellow);
+		setForeground(Color.black);
+		setOpaque(true);
+		setBorder(new LineBorder(Color.black, 2));
 	}
 }

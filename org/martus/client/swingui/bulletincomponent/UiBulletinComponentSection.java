@@ -38,6 +38,7 @@ import javax.swing.border.LineBorder;
 
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.swingui.UiLocalization;
+import org.martus.client.swingui.UiWarningLabel;
 import org.martus.client.swingui.fields.UiField;
 import org.martus.common.FieldSpec;
 import org.martus.common.bulletin.AttachmentProxy;
@@ -60,14 +61,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 		encryptedIndicator.setVerticalTextPosition(JLabel.TOP);
 		encryptedIndicator.setFont(encryptedIndicator.getFont().deriveFont(Font.BOLD));
 
-		damagedIndicator = new JLabel("", null, JLabel.LEFT);
-		damagedIndicator.setVerticalTextPosition(JLabel.TOP);
-		damagedIndicator.setText(localization.getFieldLabel("MayBeDamaged"));
-		damagedIndicator.setFont(damagedIndicator.getFont().deriveFont(Font.BOLD));
-		damagedIndicator.setBackground(Color.yellow);
-		damagedIndicator.setForeground(Color.black);
-		damagedIndicator.setOpaque(true);
-		damagedIndicator.setBorder(new LineBorder(Color.black, 2));
+		damagedIndicator = new UiWarningLabel(localization.getFieldLabel("MayBeDamaged"));
 
 		updateEncryptedIndicator(encrypted);
 		updateDamagedIndicator(false);
@@ -138,10 +132,13 @@ abstract public class UiBulletinComponentSection extends JPanel
 				ChoiceItem[] languages =
 					localization.getLanguageNameChoices();
 				field = createChoiceField(languages);
-				break;						
+				break;					
 			case FieldSpec.TYPE_NORMAL:
-			default:
 				field = createNormalField();
+				break;
+			case FieldSpec.TYPE_UNKNOWN:
+			default:
+				field = createUnknownField();
 				break;
 		}
 		field.getComponent().setBorder(new LineBorder(Color.black));
@@ -217,6 +214,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 	abstract public UiField createChoiceField(ChoiceItem[] choices);
 	abstract public UiField createDateField();
 	abstract public UiField createFlexiDateField();
+	abstract public UiField createUnknownField();
 	abstract public void createAttachmentTable();
 	abstract public void addAttachment(AttachmentProxy a);
 	abstract public void clearAttachments();

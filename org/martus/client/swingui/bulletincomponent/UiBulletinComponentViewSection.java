@@ -35,6 +35,7 @@ import org.martus.client.swingui.fields.UiField;
 import org.martus.client.swingui.fields.UiFlexiDateViewer;
 import org.martus.client.swingui.fields.UiMultilineViewer;
 import org.martus.client.swingui.fields.UiNormalTextViewer;
+import org.martus.client.swingui.fields.UiUnknownViewer;
 import org.martus.common.bulletin.AttachmentProxy;
 
 public class UiBulletinComponentViewSection extends UiBulletinComponentSection
@@ -47,6 +48,11 @@ public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 		bulletinComponent = bulletinComponentToUse;
 	}
 
+	public UiField createUnknownField()
+	{
+		return new UiUnknownViewer(localization);
+	}
+	
 	public UiField createFlexiDateField()
 	{		
 		return new UiFlexiDateViewer(localization); 

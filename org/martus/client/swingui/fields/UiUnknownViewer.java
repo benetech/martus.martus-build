@@ -24,30 +24,38 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.common.test;
+package org.martus.client.swingui.fields;
 
-import org.martus.common.FieldSpec;
+import javax.swing.JComponent;
+import javax.swing.JLabel;
 
+import org.martus.client.swingui.UiLocalization;
+import org.martus.client.swingui.UiWarningLabel;
 
-public class TestFieldSpec extends TestCaseEnhanced
+public class UiUnknownViewer extends UiField
 {
-	public TestFieldSpec(String name)
+	public UiUnknownViewer(UiLocalization localizationToUse)
 	{
-		super(name);
+		component = new UiWarningLabel(localizationToUse.getFieldLabel("UnknownFieldType"));
 	}
 
-	public void testBasics()
+	public JComponent getComponent()
 	{
-		FieldSpec plainField = new FieldSpec("a,b");
-		assertFalse("has unknown?", plainField.hasUnknownStuff());
-		assertEquals("a", plainField.getTag());
-		assertEquals("b", plainField.getLabel());
-		assertEquals("not normal?", FieldSpec.TYPE_NORMAL, plainField.getType());
-		
-		FieldSpec fieldWithExtra = new FieldSpec("c,d,e");
-		assertTrue("doesn't have unknown?", fieldWithExtra.hasUnknownStuff());
-		assertEquals("c", fieldWithExtra.getTag());
-		assertEquals("d", fieldWithExtra.getLabel());
-		assertEquals("not unknown?", FieldSpec.TYPE_UNKNOWN, fieldWithExtra.getType());
+		return component;
 	}
+
+	public String getText()
+	{
+		return null;
+	}
+
+	public void setText(String newText)
+	{
+	}
+
+	public void disableEdits()
+	{
+	}
+	
+	JLabel component;
 }

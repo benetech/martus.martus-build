@@ -34,18 +34,27 @@ public class FieldSpec
 {
 	public FieldSpec(String thisFieldDescription, int typeToUse)
 	{
-		tag = extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
-		label = extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
+		initializeFromDescription(thisFieldDescription);
+
 		type = typeToUse;
-		String unknownStuff = extractFieldSpecElement(thisFieldDescription, UNKNOWN_ELEMENT_NUMBER);
-		if(!unknownStuff.equals(""))
-			hasUnknown = true;
 	}
 
 	public FieldSpec(String thisFieldDescription)
 	{
-		this(thisFieldDescription, TYPE_UNKNOWN);
+		initializeFromDescription(thisFieldDescription);
+
 		type = getStandardType(tag);
+		if(type == TYPE_UNKNOWN && !hasUnknownStuff())
+			type = TYPE_NORMAL;
+	}
+
+	private void initializeFromDescription(String thisFieldDescription)
+	{
+		tag = extractFieldSpecElement(thisFieldDescription, TAG_ELEMENT_NUMBER);
+		label = extractFieldSpecElement(thisFieldDescription, LABEL_ELEMENT_NUMBER);
+		String unknownStuff = extractFieldSpecElement(thisFieldDescription, UNKNOWN_ELEMENT_NUMBER);
+		if(!unknownStuff.equals(""))
+			hasUnknown = true;
 	}
 	
 	public String getTag()

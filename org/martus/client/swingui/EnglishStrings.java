@@ -590,6 +590,7 @@ public class EnglishStrings
 "field:HowToCreateNewAccount=One or more accounts already exist on this computer. To create an additional account with a new username and passphrase, click OK.",
 "field:UntitledBulletin=Untitled Bulletin",
 "field:GetShareFileNameDescription=This file name should be unique and identifiable to you but we recommend not using your user name.  Each file will be generated with this name and its number sequence.",
+"field:UnknownFieldType=WARNING: This field requires a newer version of Martus to be viewed",
 
 "field:DateRangeFrom=Between",
 "field:DateRangeTo=and",
