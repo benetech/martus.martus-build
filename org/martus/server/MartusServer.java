@@ -501,7 +501,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		
 		if(!uploadGranted)
 		{
-			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + "magicWords=" + magicWords.toString() + " tryMagicWord=" +tryMagicWord);
+			logging("requestUploadRights: Rejected " + getPublicCode(clientId) + " magicWords=" + magicWords.toString() + " tryMagicWord=" +tryMagicWord);
 			incrementFailedUploadRequests();
 			return NetworkInterfaceConstants.REJECTED;
 		}
@@ -751,7 +751,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		{
 			logging("downloadFieldOfficeBulletinChunk ");
 			logging("  " + getClientAliasForLogging(authorAccountId) + " " + bulletinLocalId);
-			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + "HQ: " + getClientAliasForLogging(hqAccountId));
+			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize + " HQ: " + getClientAliasForLogging(hqAccountId));
 		}
 		
 		if(isClientBanned(hqAccountId) )
