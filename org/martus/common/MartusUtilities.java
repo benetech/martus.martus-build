@@ -141,6 +141,13 @@ public class MartusUtilities
 		return new File(originalFile.getAbsolutePath() + ".sig");	
 	}
 	
+	public static void deleteInterimFileAndSignature(File tempFile) 
+	{
+		File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
+		tempFile.delete();
+		tempFileSignature.delete();
+	}
+	
 	public static File createSignatureFileFromFile(File fileToSign, MartusCrypto signer)
 		throws IOException, MartusSignatureException
 	{		
@@ -192,17 +199,12 @@ public class MartusUtilities
 		{
 			try
 			{
-				inData.close();
+				if(inData != null)
+					inData.close();
 			}
 			catch (IOException ignoredException)
 			{
-				;
 			}
-			catch (NullPointerException ignoredException)
-			{
-				;
-			}
-
 		}
 	}
 

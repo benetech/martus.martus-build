@@ -203,26 +203,30 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	
 	public void testCreateInterimBulletinFile() throws Exception
 	{
-		File zipFile = createTempFile("$$$MartusServerBulletinZip");
-		File zipSignature = MartusUtilities.getSignatureFileFromFile(zipFile);
-		zipSignature.deleteOnExit();
-		assertFalse("Null files verified?", testServer.verifyBulletinInterimFile(zipFile, zipSignature));
+		File nullZipFile = createTempFile("$$$MartusServerBulletinZip");
+		File nullZipSignatureFile = MartusUtilities.getSignatureFileFromFile(nullZipFile);
+		nullZipSignatureFile.deleteOnExit();
+		assertFalse("Both zip & sig Null files verified?", testServer.verifyBulletinInterimFile(nullZipFile, nullZipSignatureFile));
 		
-		File file = createTempFile();
-		FileOutputStream out = new FileOutputStream(file);
+		File validZipFile = createTempFile();
+		FileOutputStream out = new FileOutputStream(validZipFile);
 		out.write(file1Bytes);
 		out.close();
-		assertFalse("Null zip files verified?", testServer.verifyBulletinInterimFile(file, zipSignature));
+		assertFalse("Valid zip Null sig files verified?", testServer.verifyBulletinInterimFile(validZipFile, nullZipSignatureFile));
 
-		zipSignature = MartusUtilities.createSignatureFileFromFile(file, serverSecurity);
-		zipSignature.deleteOnExit();
-		assertTrue("Did not verify?", testServer.verifyBulletinInterimFile(file, zipSignature));
+		File ZipSignatureFile = MartusUtilities.createSignatureFileFromFile(validZipFile, serverSecurity);
+		ZipSignatureFile.deleteOnExit();
+		File nullFile = createTempFile();
+		assertFalse("Null zip Valid sig file verified?", testServer.verifyBulletinInterimFile(nullFile, ZipSignatureFile));
 		
-		File file2 = createTempFile();
-		FileOutputStream out2 = new FileOutputStream(file2);
-		out2.write(file2Bytes);
-		out2.close();
-		assertFalse("File1's signature verified with File2?", testServer.verifyBulletinInterimFile(file2, zipSignature));
+		File invalidSignatureFile = createTempFile();
+		FileOutputStream outInvalidSig = new FileOutputStream(invalidSignatureFile);
+		outInvalidSig.write(file2Bytes);
+		outInvalidSig.close();
+		assertFalse("Valid zip, invalid signature file verified?", testServer.verifyBulletinInterimFile(validZipFile, invalidSignatureFile));
+
+		assertTrue("Valid zip with cooresponding signature file did not verify?", testServer.verifyBulletinInterimFile(validZipFile, ZipSignatureFile));
+	
 	}
 	
 	public void testPutContactInfo() throws Exception

@@ -624,9 +624,7 @@ public class MartusServer implements NetworkInterfaceConstants
 				in.close();
 				String zipString = writer.toString();
 	
-				tempFile.delete();
-				File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
-				tempFileSignature.delete();
+				MartusUtilities.deleteInterimFileAndSignature(tempFile);
 				result.add(NetworkInterfaceConstants.OK);
 				result.add(zipString);
 				if(serverMaxLogging)
@@ -639,7 +637,6 @@ public class MartusServer implements NetworkInterfaceConstants
 				result.add(NetworkInterfaceConstants.SERVER_ERROR);
 			}
 		}
-
 		return result;
 	}
 
@@ -1515,9 +1512,7 @@ public class MartusServer implements NetworkInterfaceConstants
 		int endPosition = chunkOffset + chunkSize;
 		if(endPosition >= totalLength)
 		{
-			tempFile.delete();
-			File tempFileSignature = MartusUtilities.getSignatureFileFromFile(tempFile);
-			tempFileSignature.delete();
+			MartusUtilities.deleteInterimFileAndSignature(tempFile);
 			result.add(NetworkInterfaceConstants.OK);
 		}
 		else
@@ -1551,8 +1546,7 @@ public class MartusServer implements NetworkInterfaceConstants
 			if(verifyBulletinInterimFile(tempFile, tempFileSignature))
 				return tempFile;
 		}
-		tempFile.delete();
-		tempFileSignature.delete();
+		MartusUtilities.deleteInterimFileAndSignature(tempFile);
 		MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(getDatabase(), headerKey, tempFile, security);
 		tempFileSignature = MartusUtilities.createSignatureFileFromFile(tempFile, security);
 		if(!verifyBulletinInterimFile(tempFile, tempFileSignature))
