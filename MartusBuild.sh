@@ -111,8 +111,7 @@ downloadSourcesFromCvs() # downloads sources from CVS
 	
 	for cvs_module in $martus_cvs_src_modules
 		do
-		cvs -q checkout martus-$cvs_module/source || error "cvs returned $? - for martus-$cvs_module"
-		cvs -q -l checkout martus-$cvs_module || error "cvs returned $? - for -l martus-$cvs_module"
+		cvs -q checkout martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
 		echo "copying martus-$cvs_module...";
 		echo
 		cp -r $CVS_HOME/martus-$cvs_module/source/* $MARTUSSOURCES || error "copy martus-$cvs_module returned $?"
@@ -163,6 +162,9 @@ downloadMartusThirdpartyFromCvsAndSetup() # downloads third-party items from CVS
 	server_thirdparty_jar_names="Jetty Lucene Velocity"
 	SRC_THIRDPARTY_JARS_SERVER_DIR=$CVS_HOME/martus-thirdparty/server
 
+	libext_thirdparty_jar_names="BouncyCastle JUnit"
+	SRC_THIRDPARTY_JARS_LIBEXT_DIR=$CVS_HOME/martus-thirdparty/libext
+
 	SRC_THIRDPARTY_JARS=$MARTUSSOURCES/ThirdPartyJars
 	export SRC_THIRDPARTY_JARS
 	
@@ -179,6 +181,11 @@ downloadMartusThirdpartyFromCvsAndSetup() # downloads third-party items from CVS
 	for jar_name in $server_thirdparty_jar_names
 		do
 		cp $SRC_THIRDPARTY_JARS_SERVER_DIR/$jar_name/bin/*.jar $SRC_THIRDPARTY_JARS/ || error "copy $jar_name returned $?"
+	done
+	
+	for jar_name in $libext_thirdparty_jar_names
+		do
+		cp $SRC_THIRDPARTY_JARS_LIBEXT_DIR/$jar_name/bin/*.jar $SRC_THIRDPARTY_JARS/ || error "copy $jar_name returned $?"
 	done
 } #downloadMartusThirdpartyFromCvsAndSetup
 
