@@ -90,12 +90,20 @@ public class FieldDataPacket extends Packet
 			int delimiter = delimitedTags.indexOf(FIELD_TAG_DELIMITER, tagStart);
 			if(delimiter < 0)
 				delimiter = delimitedTags.length();
-			String thisTag = delimitedTags.substring(tagStart, delimiter);
-
+			String thisFieldDescription = delimitedTags.substring(tagStart, delimiter);
+			String thisTag = extractTag(thisFieldDescription);
 			newFieldTags = appendTag(newFieldTags, thisTag);
 			tagStart = delimiter + 1;
 		}
 		return newFieldTags;
+	}
+	
+	static private String extractTag(String fieldDescription)
+	{
+		int comma = fieldDescription.indexOf(',');
+		if(comma < 0)
+			return fieldDescription;
+		return fieldDescription.substring(0, comma);
 	}
 
 	static private String[] appendTag(String[] existingFieldTags, String newTag)

@@ -214,6 +214,50 @@ public class TestFieldDataPacket extends TestCaseEnhanced
 		
 	}
 
+	public void testLoadFromXmlCustomFields() throws Exception
+	{
+		String account = "asbid";
+		String id = "1234567";
+		String data1 = "data 1í";
+		String simpleFieldDataPacket =
+			"<FieldDataPacket>\n" +
+			"<" + MartusXml.PacketIdElementName + ">" + id +
+			"</" + MartusXml.PacketIdElementName + ">\n" +
+			"<" + MartusXml.AccountElementName + ">" + account +
+			"</" + MartusXml.AccountElementName + ">\n" +
+			"<" + MartusXml.EncryptedFlagElementName + ">" +
+			"</" + MartusXml.EncryptedFlagElementName + ">" +
+			MartusXml.getTagStart(MartusXml.FieldListElementName) +
+			"title;author;custom1,\"&lt;Town&gt; \";entrydate;language" +  
+			MartusXml.getTagEnd(MartusXml.FieldListElementName) + 
+			"<" + MartusXml.FieldElementPrefix + "custom1>" + data1 +
+			"</" + MartusXml.FieldElementPrefix + "custom1>\n" +
+			"</FieldDataPacket>\n";
+		//System.out.println("{" + simpleFieldDataPacket + "}");
+
+		String[] noTags = {};
+		FieldDataPacket loaded = new FieldDataPacket(UniversalId.createDummyUniversalId(), noTags);
+
+		byte[] bytes = simpleFieldDataPacket.getBytes("UTF-8");
+		ByteArrayInputStreamWithSeek in = new ByteArrayInputStreamWithSeek(bytes);
+		loaded.loadFromXml(in, (MartusCrypto)null);
+
+		assertEquals("account", account, loaded.getAccountId());
+		assertEquals("id", id, loaded.getLocalId());
+		assertEquals("encrypted", true, loaded.isEncrypted());
+
+		String[] tags = loaded.getFieldTags();
+		assertEquals("wrong field count?", 5, tags.length);
+		assertEquals("title", tags[0]);
+		assertEquals("author", tags[1]);
+		assertEquals("custom1", tags[2]);
+		assertEquals("entrydate", tags[3]);
+		assertEquals("language", tags[4]);
+
+		assertEquals("custom", data1, loaded.get("custom1"));
+		
+	}
+
 	public void testLoadFromXmlWithSpaces() throws Exception
 	{
 		String id = "1234567";
