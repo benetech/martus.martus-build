@@ -28,5 +28,5 @@ package org.martus.server.core;
 
 public class ServerConstants
 {
-	public static final String marketingVersionNumber = "1.3.2";
+	public static final String marketingVersionNumber = "1.5";
 }
