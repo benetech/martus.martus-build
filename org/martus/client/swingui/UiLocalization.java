@@ -179,31 +179,48 @@ public class UiLocalization extends Localization
 	{
 		Vector languages = new Vector();
 		languages.addElement(new ChoiceItem(ENGLISH, getLabel(ENGLISH, "language", ENGLISH, "English")));
-		
-		addCompiledLanguageResources(languages);
-
-		String[] languageFiles = directory.list(new LanguageFilenameFilter());
-
-		for(int i=0;i<languageFiles.length;++i)
-		{
-			languages.addElement(getLanguageChoiceItem(languageFiles[i]));
-		}
-
+		languages.addAll(getAllCompiledLanguageResources());
+		languages.addAll(getNonDuplicateLanguageResourcesInDirectory(languages, directory));
 		return (ChoiceItem[])(languages.toArray((Object[])(new ChoiceItem[0])));
 	}
 	
-	Vector addCompiledLanguageResources(Vector languages)
+	Vector getAllCompiledLanguageResources()
 	{
 		String filename = null;
+		Vector internalLanguages = new Vector();
 		for(int i = 0; i < AVAILABLE_MTF_LANGUAGE_RESOURCES.length; ++i)
 		{
 			filename = MARTUS_LANGUAGE_FILE_PREFIX + AVAILABLE_MTF_LANGUAGE_RESOURCES[i] + MARTUS_LANGUAGE_FILE_SUFFIX;
 			if(getClass().getResource(filename) != null)
 			{
-				languages.addElement(getLanguageChoiceItem(filename));
+				internalLanguages.addElement(getLanguageChoiceItem(filename));
 			}
 		}
-		return languages;
+		return internalLanguages;
+	}
+	
+	Vector getNonDuplicateLanguageResourcesInDirectory(Vector currentLanguages, File languageDirectory)
+	{
+		Vector nonDuplicateLanguages = new Vector();
+		String[] languageFiles = languageDirectory.list(new LanguageFilenameFilter());
+		for(int i=0;i<languageFiles.length;++i)
+		{
+			ChoiceItem languageChoiceItem = getLanguageChoiceItem(languageFiles[i]);
+			String languageCodeToAdd = languageChoiceItem.getCode();
+			boolean nonDuplicateLanguage = true;
+			for(int j=0; j<currentLanguages.size(); ++j)
+			{
+				ChoiceItem languageChoiceAlreadyAdded = (ChoiceItem)currentLanguages.get(j);
+				if(languageChoiceAlreadyAdded.getCode().equalsIgnoreCase(languageCodeToAdd))
+				{
+					nonDuplicateLanguage = false;
+					break;
+				}
+			}
+			if(nonDuplicateLanguage)
+				nonDuplicateLanguages.addElement(languageChoiceItem);
+		}
+		return nonDuplicateLanguages;
 	}
 
 	public String getLocalizedFolderName(String folderName)
