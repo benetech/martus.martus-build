@@ -46,7 +46,7 @@
     <!-- run build and check in results -->
     <target name="release.and.checkin" depends="make.release,create.client.cvs.dirs,create.server.cvs.dirs" description="Tag CVS projects and check-in results">
         <!-- check in build number -->
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" dest="${cvs.home}" failonerror="true" noexec="false">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true" noexec="false">
             <commandline>
                 <argument value="commit"/>
                 <argument value="-m"/>
@@ -56,7 +56,7 @@
         </cvs>
 
         <!-- tag results -->
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" dest="${cvs.home}" failonerror="true" noexec="false">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true" noexec="false">
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>
@@ -75,7 +75,7 @@
         </cvs>
 
         <!-- tag results: these might fail -->
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" dest="${cvs.home}" failonerror="false" noexec="false">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="false" noexec="false">
             <commandline>
                 <argument value="tag"/>
                 <argument value="v${DSTAMP}_build-${build.number}"/>

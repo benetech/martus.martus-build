@@ -11,7 +11,7 @@
     <target name="cvs.checkout">
         <delete dir="${cvs.home}"/>
         <mkdir dir="${cvs.home}"/>
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true">
             <commandline>
                 <argument value="-q"/>
                 <argument value="checkout"/>
@@ -21,7 +21,7 @@
             </commandline>
         </cvs>
 
-        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true">
             <commandline>
                 <argument value="-q"/>
                 <argument value="checkout"/>
