@@ -60,6 +60,11 @@ abstract public class MockDatabase implements Database
 			file.delete();
 		}
 	}
+	
+	public int getRecordSize(DatabaseKey key) throws IOException
+	{
+		return readRecord(key).getBytes().length;
+	}
 
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws 
 			IOException

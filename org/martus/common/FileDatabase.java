@@ -54,6 +54,19 @@ public class FileDatabase implements Database
 		writeRecord(key, new StringInputStream(record));
 	}
 	
+	public int getRecordSize(DatabaseKey key) throws IOException
+	{
+		try 
+		{
+			return (int)getFileForRecord(key).length();
+		} 
+		catch (TooManyAccountsException e) 
+		{
+			System.out.println("FileDatabase:getRecordSize" + e);
+		}
+		return 0;
+	}
+	
 	public void importFiles(HashMap fileMapping)  throws IOException
 	{
 		Iterator keys = fileMapping.keySet().iterator();

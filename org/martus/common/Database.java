@@ -21,6 +21,7 @@ public interface Database
 	public File getIncomingInterimFile(DatabaseKey key) throws IOException;
 	public File getOutgoingInterimFile(DatabaseKey key) throws IOException;
 	public File getContactInfoFile(String accountId) throws IOException;
+	public int getRecordSize(DatabaseKey key) throws IOException;
 	
 	public boolean isInQuarantine(DatabaseKey key);
 	public void moveRecordToQuarantine(DatabaseKey key);

@@ -144,6 +144,14 @@ public class TestFileDatabase extends TestCaseEnhanced
 		assertEquals("wasn't discarded?", false, db.doesRecordExist(shortKey));
 	}
 	
+	public void testGetRecordSize() throws Exception
+	{
+		String testString = "This is a test";			
+		db.writeRecord(shortKey, testString);
+		assertEquals("Record size not correct?", testString.length(), db.getRecordSize(shortKey));
+		assertEquals("Size not zero?", 0, db.getRecordSize(shortKey2));
+	}
+	
 	public void testDeleteAllData() throws Exception
 	{
 		db.writeRecord(shortKey, sampleString1);
