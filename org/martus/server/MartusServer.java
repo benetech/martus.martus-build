@@ -223,17 +223,16 @@ public class MartusServer
 		
 
 		clientsThatCanUpload = new Vector();
-		clientsNotAuthorized = new Vector();
-		notAuthorizedClientsFile = new File(dataDirectory, NOTAUTHORIZEDCLIENTSFILENAME);
+		clientsBanned = new Vector();
+		bannedClientsFile = new File(dataDirectory, NOTAUTHORIZEDCLIENTSFILENAME);
 		allowUploadFile = new File(dataDirectory, UPLOADSOKFILENAME);
 		magicWordsFile = new File(dataDirectory, MAGICWORDSFILENAME);
 		keyPairFile = new File(dataDirectory, getKeypairFilename());
-		
-		notAuthorizedClientsLastModified = 0;
+
 		loadNotAuthorizedClients();
 		timer = new Timer(true);
-		TimerTask task = new MonitorTask();
-		timer.schedule(task, period, period);
+		TimerTask task = new BackgroundTask();
+		timer.schedule(task, IMMEDIATELY, bannedCheckIntervalMillis);
 
 		try
 		{
@@ -417,12 +416,6 @@ public class MartusServer
 			logging("uploadBulletinChunk");
 		}
 		
-		if( !isClientAuthorized(authorAccountId) )
-		{
-			logging("  returning REJECTED");
-			return NetworkInterfaceConstants.REJECTED;
-		}
-		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," +
 					Integer.toString(totalSize) + "," + Integer.toString(chunkOffset) + "," +
 					Integer.toString(chunkSize) + "," + data;
@@ -450,9 +443,9 @@ public class MartusServer
 				logging("Last Chunk = " + chunkSize);
 		}
 		
-		if(!canClientUpload(authorAccountId))
+		if( !isClientAuthorized(authorAccountId) || !canClientUpload(authorAccountId))
 		{
-			logging("putBulletinChunk REJECTED (!canClientUpload)");
+			logging("putBulletinChunk REJECTED");
 			return NetworkInterfaceConstants.REJECTED;
 		}
 		
@@ -562,14 +555,8 @@ public class MartusServer
 	{
 		if(serverMaxLogging)
 			logging("downloadBulletin " + getFolderFromClientId(authorAccountId) + " " + bulletinLocalId);
+
 		Vector result = new Vector();
-		
-		if( !isClientAuthorized(authorAccountId) )
-		{
-			logging("  returning REJECTED");
-			result.add(NetworkInterfaceConstants.REJECTED);
-			return result;
-		}
 		
 		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
 		DatabaseKey headerKey = new DatabaseKey(uid);
@@ -619,13 +606,6 @@ public class MartusServer
 		
 		Vector result = new Vector();
 		
-		if( !isClientAuthorized(hqAccountId) )
-		{
-			logging("  returning REJECTED");
-			result.add(NetworkInterfaceConstants.REJECTED);
-			return result;
-		}
-		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," + hqAccountId + "," + 
 					Integer.toString(chunkOffset) + "," +
 					Integer.toString(maxChunkSize);
@@ -673,14 +653,6 @@ public class MartusServer
 			logging("downloadMyBulletinChunk ");
 			logging("  " + getFolderFromClientId(authorAccountId) + " " + bulletinLocalId);
 			logging("  Offset=" + chunkOffset + ", Max=" + maxChunkSize);
-		}
-		
-		if( !isClientAuthorized(authorAccountId) )
-		{
-			logging("  returning REJECTED");
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.REJECTED);
-			return result;
 		}
 		
 		String signedString = authorAccountId + "," + bulletinLocalId + "," +
@@ -745,10 +717,7 @@ public class MartusServer
 		
 		if(!gotValidSignature)
 		{
-			logging("  all attempts to verify sig have failed!");
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.SIG_ERROR);
-			return result;
+			return returnSingleResponseAndLog("  all attempts to verify sig have failed!", NetworkInterfaceConstants.SIG_ERROR);
 		}
 
 		Vector result = getBulletinChunk(authorAccountId, authorAccountId, bulletinLocalId, 
@@ -804,14 +773,9 @@ public class MartusServer
 	{
 		if(serverMaxLogging)
 			logging("listMySealedBulletinIds " + getFolderFromClientId(clientId));
-			
+		
 		if( !isClientAuthorized(clientId) )
-		{
-			logging("  returning REJECTED");
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.REJECTED);
-			return result;
-		}
+			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		SummaryCollector summaryCollector = new MySealedSummaryCollector(getDatabase(), clientId);
 		Vector summaries = summaryCollector.getSummaries();
@@ -826,12 +790,7 @@ public class MartusServer
 			logging("listMyDraftBulletinIds " + getFolderFromClientId(authorAccountId));
 			
 		if( !isClientAuthorized(authorAccountId) )
-		{
-			logging("  returning REJECTED");
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.REJECTED);
-			return result;
-		}
+			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		
 		SummaryCollector summaryCollector = new MyDraftSummaryCollector(getDatabase(), authorAccountId);
 		Vector summaries = summaryCollector.getSummaries();
@@ -905,6 +864,9 @@ public class MartusServer
 
 		if(serverMaxLogging)
 			logging("listFieldOfficeAccounts " + getFolderFromClientId(hqAccountId));
+			
+		if( !isClientAuthorized(hqAccountId) )
+			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 
 		FieldOfficeAccountCollector visitor = new FieldOfficeAccountCollector(hqAccountId);
 		getDatabase().visitAllRecords(visitor);
@@ -922,18 +884,13 @@ public class MartusServer
 			
 		if( !isClientAuthorized(myAccountId) )
 		{
-			logging("  returning REJECTED");
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.REJECTED);
-			return result;
+			return returnSingleResponseAndLog("  returning REJECTED", NetworkInterfaceConstants.REJECTED);
 		}
 	
 		String signedString = authorAccountId + "," + packetLocalId + "," + myAccountId;
 		if(!isSignatureCorrect(signedString, signature, myAccountId))
 		{
-			Vector result = new Vector();
-			result.add(NetworkInterfaceConstants.SIG_ERROR);
-			return result;
+			return returnSingleResponseAndLog("", NetworkInterfaceConstants.SIG_ERROR);
 		}
 		
 		return	legacyDownloadPacket(authorAccountId, packetLocalId);
@@ -947,9 +904,7 @@ public class MartusServer
 		
 		if(AttachmentPacket.isValidLocalId(packetId))
 		{
-			logging("legacyDLPacket invalid for attachments");
-			result.add(NetworkInterfaceConstants.INVALID_DATA);
-			return result;
+			return returnSingleResponseAndLog("legacyDLPacket invalid for attachments", NetworkInterfaceConstants.INVALID_DATA);
 		}
 
 		Database db = getDatabase();
@@ -988,19 +943,11 @@ public class MartusServer
 		}
 	
 		Vector result = new Vector();
-		
-		if( !isClientAuthorized(myAccountId) )
-		{
-			logging("  returning REJECTED");
-			result.add(NetworkInterfaceConstants.REJECTED);
-			return result;
-		}
 
 		String signedString = authorAccountId + "," + bulletinLocalId + "," + packetLocalId + "," + myAccountId;
 		if(!isSignatureCorrect(signedString, signature, myAccountId))
 		{
-			result.add(NetworkInterfaceConstants.SIG_ERROR);
-			return result;
+			return returnSingleResponseAndLog("", NetworkInterfaceConstants.SIG_ERROR);
 		}
 		
 		result = getPacket(myAccountId, authorAccountId, bulletinLocalId, packetLocalId);
@@ -1018,9 +965,7 @@ public class MartusServer
 		
 		if(!FieldDataPacket.isValidLocalId(packetLocalId))
 		{
-			logging("  attempt to download non-fielddatapacket: " + packetLocalId);
-			result.add(NetworkInterfaceConstants.INVALID_DATA);
-			return result;
+			return returnSingleResponseAndLog( "  attempt to download non-fielddatapacket: " + packetLocalId, NetworkInterfaceConstants.INVALID_DATA );
 		}
 		
 		Database db = getDatabase();
@@ -1034,9 +979,7 @@ public class MartusServer
 		
 		if(!db.doesRecordExist(headerKey))
 		{
-			logging("  header packet not found");
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-			return result;
+			return returnSingleResponseAndLog( "  header packet not found", NetworkInterfaceConstants.NOT_FOUND );
 		}
 		
 		UniversalId dataPacketUid = UniversalId.createFromAccountAndLocalId(authorAccountId, packetLocalId);
@@ -1048,9 +991,7 @@ public class MartusServer
 			
 		if(!db.doesRecordExist(dataPacketKey))
 		{
-			logging("  data packet not found");
-			result.add(NetworkInterfaceConstants.NOT_FOUND);
-			return result;
+			return returnSingleResponseAndLog( "  data packet not found", NetworkInterfaceConstants.NOT_FOUND );
 		}
 		
 		try
@@ -1058,9 +999,7 @@ public class MartusServer
 			if(!myAccountId.equals(authorAccountId) && 
 					!myAccountId.equals(getBulletinHQAccountId(headerKey)) )
 			{
-				logging("  neither author nor HQ account");
-				result.add(NetworkInterfaceConstants.NOTYOURBULLETIN);
-				return result;
+				return returnSingleResponseAndLog( "  neither author nor HQ account", NetworkInterfaceConstants.NOTYOURBULLETIN );
 			}
 			
 			String packetXml = db.readRecord(dataPacketKey, security);
@@ -1112,7 +1051,7 @@ public class MartusServer
 	
 	public boolean isClientAuthorized(String clientId)
 	{
-		return !clientsNotAuthorized.contains(clientId);
+		return !clientsBanned.contains(clientId);
 	}
 
 	public synchronized void allowUploads(String clientId)
@@ -1153,7 +1092,7 @@ public class MartusServer
 		return formattedCode;
 	}
 	
-	public synchronized void loadListFromFile(BufferedReader readerInput, Vector list)
+	public synchronized void loadListFromFile(BufferedReader readerInput, Vector result)
 		throws IOException
 	{
 		try
@@ -1166,10 +1105,10 @@ public class MartusServer
 				if(currentLine.length() == 0)
 					continue;
 					
-				if( list.contains(currentLine) )
+				if( result.contains(currentLine) )
 					continue;
 
-				list.add(currentLine);
+				result.add(currentLine);
 				//System.out.println("MartusServer.loadListFromFile: " + currentLine);
 			}
 		}
@@ -1204,19 +1143,19 @@ public class MartusServer
 
 		try
 		{
-			long lastModified = notAuthorizedClientsFile.lastModified();
-			if( lastModified != notAuthorizedClientsLastModified )
+			long lastModified = bannedClientsFile.lastModified();
+			if( lastModified != bannedClientsFileLastModified )
 			{
-				clientsNotAuthorized.clear();
-				notAuthorizedClientsLastModified = lastModified;
-				UnicodeReader reader = new UnicodeReader(notAuthorizedClientsFile);
-				loadListFromFile(reader, clientsNotAuthorized);
+				clientsBanned.clear();
+				bannedClientsFileLastModified = lastModified;
+				UnicodeReader reader = new UnicodeReader(bannedClientsFile);
+				loadListFromFile(reader, clientsBanned);
 				reader.close();
 			}
 		}
 		catch(FileNotFoundException nothingToWorryAbout)
 		{
-			clientsNotAuthorized.clear();
+			clientsBanned.clear();
 		}
 		catch (IOException e)
 		{
@@ -1311,6 +1250,18 @@ public class MartusServer
 	public static String getKeypairFilename()
 	{
 		return KEYPAIRFILENAME;
+	}
+	
+	private Vector returnSingleResponseAndLog( String message, String responseCode )
+	{
+		if( message.length() > 0 )
+			logging( message.toString());
+		
+		Vector response = new Vector();
+		response.add( responseCode );
+		
+		return response;
+		
 	}
 	
 	class DuplicatePacketException extends Exception
@@ -1860,7 +1811,7 @@ public class MartusServer
 		String hqAccountId;
 	}
 	
-	private class MonitorTask extends TimerTask
+	private class BackgroundTask extends TimerTask
 	{
 		public void run()
 		{
@@ -1873,15 +1824,15 @@ public class MartusServer
 	ServerSideNetworkHandlerForNonSSL nonSSLServerHandler;
 	ServerSideNetworkHandler serverHandler;
 	public Vector clientsThatCanUpload;
-	public Vector clientsNotAuthorized;
+	public Vector clientsBanned;
 	public MartusCrypto security;
 	File keyPairFile;
 	public File allowUploadFile;
 	public File magicWordsFile;
-	public File notAuthorizedClientsFile;
+	public File bannedClientsFile;
 	private Timer timer;
 	private String magicWord;
-	private long notAuthorizedClientsLastModified;
+	private long bannedClientsFileLastModified;
 	private static boolean serverLogging;
 	private static boolean serverMaxLogging;
 	public static boolean serverSSLLogging;
@@ -1890,5 +1841,6 @@ public class MartusServer
 	private static final String MAGICWORDSFILENAME = "magicwords.txt";
 	private static final String UPLOADSOKFILENAME = "uploadsok.txt";
 	private static final String NOTAUTHORIZEDCLIENTSFILENAME = "notauthorized.txt";
-	private static final long period = 60000;
+	private final long IMMEDIATELY = 0;
+	private static final long bannedCheckIntervalMillis = 60000;
 }
