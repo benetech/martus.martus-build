@@ -54,6 +54,7 @@ import org.martus.common.bulletin.Bulletin;
 import org.martus.common.bulletin.BulletinZipUtilities;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusSecurity;
+import org.martus.common.crypto.MartusCrypto.CryptoInitializationException;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
 import org.martus.common.database.FileDatabase.MissingAccountMapException;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
@@ -1087,8 +1088,16 @@ public class MartusApp
 	public boolean attemptSignInInternal(File keyPairFile, String userName, String userPassPhrase)
 	{
 		FileInputStream inputStream = null;
-		security.clearKeyPair();
-		currentUserName = "";
+		MartusCrypto attemptSignInSecurityToUse = null;
+		try
+		{
+			 attemptSignInSecurityToUse = new MartusSecurity();
+		}
+		catch (CryptoInitializationException e1)
+		{
+			e1.printStackTrace();
+			return false;
+		}
 
 		try
 		{
@@ -1102,7 +1111,7 @@ public class MartusApp
 		boolean worked = true;
 		try
 		{
-			security.readKeyPair(inputStream, getCombinedPassPhrase(userName, userPassPhrase));
+			attemptSignInSecurityToUse.readKeyPair(inputStream, getCombinedPassPhrase(userName, userPassPhrase));
 		}
 		catch(Exception e)
 		{
@@ -1117,10 +1126,16 @@ public class MartusApp
 		{
 			worked = false;
 		}
-
+		if(security.hasKeyPair() && !security.getPublicKeyString().equals(attemptSignInSecurityToUse.getPublicKeyString()))
+			worked = false;
+			
 		if(!worked)
 			return false;
-		setCurrentAccount(userName);
+		if(!security.hasKeyPair())
+		{
+			security = attemptSignInSecurityToUse;
+			setCurrentAccount(userName);
+		}
 		return true;
 	}
 
