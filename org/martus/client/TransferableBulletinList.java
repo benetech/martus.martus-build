@@ -132,6 +132,15 @@ System.out.println("TransferableBulletinList.createTransferableZipFile: USING JU
 	{
 		return bulletinListDataFlavor;
 	}
+	
+	static public File extractFileFrom(Transferable t)
+	{
+		if(!t.isDataFlavorSupported(DataFlavor.javaFileListFlavor))
+			return null;	
+
+		System.out.println("extractFileFrom :" + t);
+		return null;
+	}
 
 	static public TransferableBulletinList extractFrom(Transferable t)
 	{

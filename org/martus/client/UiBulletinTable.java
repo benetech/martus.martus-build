@@ -19,6 +19,8 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.io.File;
+import java.io.IOException;
 import java.util.Vector;
 
 import javax.swing.AbstractAction;
@@ -34,7 +36,12 @@ import javax.swing.table.TableCellRenderer;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import org.martus.client.*;
+import org.martus.client.BulletinStore.StatusNotAllowedException;
+import org.martus.common.MartusCrypto.CryptoException;
+import org.martus.common.MartusUtilities.SealedPacketExistsException;
+import org.martus.common.Packet.InvalidPacketException;
+import org.martus.common.Packet.SignatureVerificationException;
+
 
 public class UiBulletinTable extends JTable implements ListSelectionListener, DragGestureListener, DragSourceListener
 {
@@ -232,9 +239,26 @@ public class UiBulletinTable extends JTable implements ListSelectionListener, Dr
 	{
 		BulletinFolder folder = getFolder();
 		TransferableBulletinList tb = mainWindow.getClipboardTransferableBulletin();
-
+	
 		boolean worked = false;
-		if(tb != null)
+		if(tb == null)
+		{
+			File file = mainWindow.getClipboardTransferableFile();
+			try 
+			{
+				if(file != null)
+					dropAdapter.attemptDropFile(file, folder);
+			} 
+			catch (InvalidPacketException e) 
+			{
+			} catch (SignatureVerificationException e) {
+			} catch (IOException e) {
+			} catch (CryptoException e) {
+			} catch (SealedPacketExistsException e) {
+			} catch (StatusNotAllowedException e) {
+			}
+		}
+		else
 			worked = dropAdapter.attemptDropBulletins(tb.getBulletins(), folder);
 		
 		if(!worked)

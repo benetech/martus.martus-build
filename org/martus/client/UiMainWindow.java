@@ -252,11 +252,23 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	public TransferableBulletinList getClipboardTransferableBulletin()
 	{
-		Toolkit toolkit = Toolkit.getDefaultToolkit();
-		Clipboard clipboard = toolkit.getSystemClipboard();
-		Transferable t = clipboard.getContents(this);
+		Transferable t = getTransferableFromClipboard();
 		TransferableBulletinList tb = TransferableBulletinList.extractFrom(t);
 		return tb;
+	}
+	
+	public File getClipboardTransferableFile()
+	{
+		Transferable t = getTransferableFromClipboard();
+		File file = TransferableBulletinList.extractFileFrom(t);
+		return file;		
+	}
+
+	public Transferable getTransferableFromClipboard() 
+	{
+		Toolkit toolkit = Toolkit.getDefaultToolkit();
+		Clipboard clipboard = toolkit.getSystemClipboard();
+		return clipboard.getContents(this);
 	}
 
 	public ActionMenuPaste getActionMenuPaste()
