@@ -30,6 +30,6 @@ abstract class UiMenuAction extends UiMartusAction
 {
 	public UiMenuAction(UiMainWindow mainWindowToUse, String tag)
 	{
-		super(mainWindowToUse, mainWindowToUse.getApp().getMenuLabel(tag));
+		super(mainWindowToUse, mainWindowToUse.getLocalization().getMenuLabel(tag));
 	}
 }

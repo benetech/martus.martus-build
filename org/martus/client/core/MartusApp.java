@@ -111,7 +111,7 @@ public class MartusApp
 
 			dataDirectory = dataDirectoryToUse.getPath() + "/";
 			security = cryptoToUse;
-			localization = new MartusLocalization();
+			localization = new MartusLocalization(getTranslationsDirectory());
 			store = new BulletinStore(dataDirectoryToUse, cryptoToUse);
 			configInfo = new ConfigInfo();
 
@@ -1246,11 +1246,6 @@ public class MartusApp
 	public String getMenuLabel(String code)
 	{
 		return localization.getMenuLabel(code);
-	}
-
-	public ChoiceItem[] getUiLanguages()
-	{
-		return localization.getUiLanguages(getTranslationsDirectory());
 	}
 
 	public String getCurrentLanguage()

@@ -212,6 +212,11 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
     {
 		return app;
 	}
+	
+	public MartusLocalization getLocalization()
+	{
+		return getApp().getLocalization();
+	}
 
 	public BulletinStore getStore()
 	{

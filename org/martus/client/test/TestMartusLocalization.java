@@ -44,12 +44,12 @@ public class TestMartusLocalization extends TestCase
 	public void setUp()
 	{
 		if(bd == null)
-			bd = new MartusLocalization();
+			bd = new MartusLocalization(MartusApp.getTranslationsDirectory());
  	}
 
 	public void testLanguagess()
 	{
-		ChoiceItem[] languages = bd.getUiLanguages(MartusApp.getTranslationsDirectory());
+		ChoiceItem[] languages = bd.getUiLanguages();
 		assertTrue("Should have multiple languages", languages.length > 1);
 
 		boolean foundEnglish = false;

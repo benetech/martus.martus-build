@@ -71,7 +71,7 @@ public class MartusLocalization
 		}
 
 		System.out.println("Exporting translations for: " + languageCode);
-		MartusLocalization bd = new MartusLocalization();
+		MartusLocalization bd = new MartusLocalization(MartusApp.getTranslationsDirectory());
 		bd.loadTranslationFile(languageCode);
 		Vector keys = bd.getAllTranslationStrings(languageCode);
 
@@ -93,12 +93,13 @@ public class MartusLocalization
 
     }
 
-    public MartusLocalization()
+    public MartusLocalization(String directoryToUse)
     {
+    	directory = new File(directoryToUse);
 		languageTranslationsMap = new TreeMap();
 		loadEnglishTranslations();
 	}
-
+	
 	public void loadEnglishTranslations()
 	{
 		createStringMap(ENGLISH);
@@ -173,7 +174,7 @@ public class MartusLocalization
 		return new ChoiceItem(code, name);
 	}
 
-	public ChoiceItem[] getUiLanguages(String translationsDirectory)
+	public ChoiceItem[] getUiLanguages()
 	{
 		Vector languages = new Vector();
 		languages.addElement(new ChoiceItem(ENGLISH, getLabel(ENGLISH, "language", ENGLISH, "English")));
@@ -182,8 +183,7 @@ public class MartusLocalization
 		{
 			languages.addElement(getLanguageChoiceItem(spanishFileName));
 		}
-		File dir = new File(translationsDirectory);
-		String[] languageFiles = dir.list(new LanguageFilenameFilter());
+		String[] languageFiles = directory.list(new LanguageFilenameFilter());
 
 		for(int i=0;i<languageFiles.length;++i)
 		{
@@ -377,7 +377,7 @@ public class MartusLocalization
 		return tempChoicesArray;
 	}
 
-
+	private File directory;
 	private Map languageTranslationsMap;
 	private String currentLanguageCode;
 

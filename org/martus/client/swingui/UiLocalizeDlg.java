@@ -35,8 +35,6 @@ import javax.swing.JLabel;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
-import org.martus.client.core.MartusApp;
-
 
 
 public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeListener
@@ -45,27 +43,27 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 	{
 		super(mainWindow, "", true);
 		owner = mainWindow;
-		MartusApp app = owner.getApp();
+		MartusLocalization localization = owner.getLocalization();
 
-		setTitle(app.getMenuLabel("Preferences"));
+		setTitle(localization.getMenuLabel("Preferences"));
 
 		dateFormatDropdown = new UiChoiceEditor(DateUtilities.getDateFormats());
 		dateFormatDropdown.setText(owner.getApp().getCurrentDateFormatCode());
 
-		languageDropdown = new UiChoiceEditor(app.getUiLanguages());
-		languageDropdown.setText(app.getCurrentLanguage());
+		languageDropdown = new UiChoiceEditor(localization.getUiLanguages());
+		languageDropdown.setText(localization.getCurrentLanguageCode());
 
-		ok = new JButton(app.getButtonLabel("ok"));
+		ok = new JButton(localization.getButtonLabel("ok"));
 		ok.addActionListener(this);
-		cancel = new JButton(app.getButtonLabel("cancel"));
+		cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
 
 		getContentPane().setLayout(new ParagraphLayout());
 
-		getContentPane().add(new JLabel(app.getFieldLabel("language")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("language")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(languageDropdown.getComponent());
 
-		getContentPane().add(new JLabel(app.getFieldLabel("dateformat")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("dateformat")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(dateFormatDropdown.getComponent());
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
