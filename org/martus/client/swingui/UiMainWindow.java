@@ -788,6 +788,9 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 			if(!confirmServerCompliance(gateway))
 			{
+				//TODO:The following line shouldn't be necessary but without it, the trustmanager 
+				//will reject the old server, we don't know why.
+				app.buildGateway(info.getServerName(), info.getServerPublicKey()); 
 				inConfigServer = false;
 				return;
 			}
