@@ -97,6 +97,26 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 				result.add(infos);
 				return result;
 			}
+			case cmdGetBulletinUploadRecordForMirroring:
+			{
+				String authorAccountId = (String)parameters.get(1);
+				String bulletinLocalId = (String)parameters.get(2);
+				supplier.log("Mirror: getBulletinUploadRecord" + bulletinLocalId);
+				String bur = supplier.getBulletinUploadRecord(authorAccountId, bulletinLocalId);
+				if(bur == null)
+				{
+					result.add(NOT_FOUND);
+				}
+				else
+				{
+					Vector burs = new Vector();
+					burs.add(bur);
+					
+					result.add(OK);
+					result.add(burs);
+				}
+				return result;
+			}
 			case cmdGetBulletinChunkForMirroring:
 			{
 				String authorAccountId = (String)parameters.get(1);
@@ -150,7 +170,10 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 		if(cmdString.equals(CMD_MIRRORING_LIST_SEALED_BULLETINS))
 			return cmdListBulletinsForMirroring;
 		
-		if(cmdString.equals(CMD_MIRRORINT_GET_BULLETIN_CHUNK))
+		if(cmdString.equals(CMD_MIRRORING_GET_BULLETIN_UPLOAD_RECORD))
+			return cmdGetBulletinUploadRecordForMirroring;
+
+		if(cmdString.equals(CMD_MIRRORING_GET_BULLETIN_CHUNK))
 			return cmdGetBulletinChunkForMirroring;
 
 		return cmdUnknown;
@@ -167,7 +190,8 @@ public class SupplierSideMirroringHandler implements MirroringInterface, Network
 	final static int cmdPing = 1;
 	final static int cmdListAccountsForMirroring = 2;
 	final static int cmdListBulletinsForMirroring = 3;
-	final static int cmdGetBulletinChunkForMirroring = 4;
+	final static int cmdGetBulletinUploadRecordForMirroring = 4;
+	final static int cmdGetBulletinChunkForMirroring = 5;
 	
 	ServerSupplierInterface supplier;
 	MartusCrypto verifier;

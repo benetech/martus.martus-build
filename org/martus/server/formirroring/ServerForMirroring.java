@@ -12,10 +12,12 @@ import org.martus.common.DatabaseKey;
 import org.martus.common.InputStreamWithSeek;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
+import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
 import org.martus.common.MartusUtilities.PublicInformationInvalidException;
 import org.martus.server.core.MartusXmlRpcServer;
 import org.martus.server.forclients.MartusServer;
+import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException;
 
 public class ServerForMirroring implements ServerSupplierInterface
@@ -121,6 +123,23 @@ public class ServerForMirroring implements ServerSupplierInterface
 		Collector collector = new Collector();		
 		getDatabase().visitAllRecordsForAccount(collector, authorAccountId);
 		return collector.infos;
+	}
+	
+	public String getBulletinUploadRecord(String authorAccountId, String bulletinLocalId)
+	{
+		UniversalId uid = UniversalId.createFromAccountAndLocalId(authorAccountId, bulletinLocalId);
+		DatabaseKey headerKey = new DatabaseKey(uid);
+		DatabaseKey burKey = MartusServerUtilities.getBurKey(headerKey);
+		try
+		{
+			String bur = getDatabase().readRecord(burKey, getSecurity());
+			return bur;
+		}
+		catch (Exception e)
+		{
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId, int chunkOffset, int maxChunkSize)

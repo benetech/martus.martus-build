@@ -29,6 +29,8 @@ public class MirroringRetriever
 		accountsToRetrieve = new Vector();
 	}
 	
+	static class MissingBulletinUploadRecordException extends Exception {}
+	
 	public void tick()
 	{
 		UniversalId uid = getNextUidToRetrieve();
@@ -37,14 +39,28 @@ public class MirroringRetriever
 			
 		try
 		{
+			String bur = retrieveBurFromMirror(uid);
 			File zip = retrieveOneBulletin(uid);
 			BulletinHeaderPacket bhp = MartusServerUtilities.saveZipFileToDatabase(db, uid.getAccountId(), zip, security);
+			MartusServerUtilities.writeSpecificBurToDatabase(db, bhp, bur);
 		}
 		catch (Exception e)
 		{
 			e.printStackTrace();
 		}
 		
+	}
+
+	private String retrieveBurFromMirror(UniversalId uid)
+		throws MartusSignatureException, MissingBulletinUploadRecordException
+	{
+		NetworkResponse response = gateway.getBulletinUploadRecord(security, uid);
+		if(!response.getResultCode().equals(NetworkInterfaceConstants.OK))
+		{
+			throw new MissingBulletinUploadRecordException();
+		}
+		String bur = (String)response.getResultVector().get(0);
+		return bur;
 	}
 	
 	UniversalId getNextUidToRetrieve()

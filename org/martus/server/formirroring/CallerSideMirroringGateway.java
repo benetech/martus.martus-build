@@ -5,6 +5,7 @@ import java.util.Vector;
 import org.martus.common.MartusCrypto;
 import org.martus.common.MartusUtilities;
 import org.martus.common.NetworkResponse;
+import org.martus.common.UniversalId;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 
 public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInterface
@@ -38,12 +39,22 @@ public class CallerSideMirroringGateway implements CallerSideMirroringGatewayInt
 		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
 	}
 	
+	public NetworkResponse getBulletinUploadRecord(MartusCrypto signer, UniversalId uid) throws MartusSignatureException
+	{
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_UPLOAD_RECORD);
+		parameters.add(uid.getAccountId());
+		parameters.add(uid.getLocalId());
+		String signature = MartusUtilities.sign(parameters, signer);
+		return new NetworkResponse(handler.request(signer.getPublicKeyString(), parameters, signature));
+	}
+
 	public NetworkResponse getBulletinChunk(MartusCrypto signer, String authorAccountId, String bulletinLocalId, 
 					int chunkOffset, int maxChunkSize) throws 
 			MartusCrypto.MartusSignatureException
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_CHUNK);
 		parameters.add(authorAccountId);
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(chunkOffset));

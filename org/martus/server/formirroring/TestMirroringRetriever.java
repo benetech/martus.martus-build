@@ -18,6 +18,7 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.MockServerDatabase;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
+import org.martus.server.forclients.MartusServerUtilities;
 
 public class TestMirroringRetriever extends TestCaseEnhanced
 {
@@ -92,10 +93,13 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		assertNull("tick asked for account?", supplier.gotAccount);
 		assertNull("tick asked for id?", supplier.gotLocalId);
 
-		MartusCrypto clientSecurity = MockMartusSecurity.createClient();
 		MockServerDatabase fakeDatabase = new MockServerDatabase();
+		MartusCrypto otherServerSecurity = MockMartusSecurity.createOtherServer();
+
+		MartusCrypto clientSecurity = MockMartusSecurity.createClient();
 		supplier.addAccountToMirror(clientSecurity.getPublicKeyString());
 		Vector bulletins = new Vector();
+		String[] burs = new String[3];
 		for(int i=0; i < 3; ++i)
 		{
 			Bulletin b = new Bulletin(clientSecurity);
@@ -105,8 +109,13 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 			key.setSealed();
 			BulletinSaver.saveToDatabase(b, fakeDatabase, false, clientSecurity);
 
-			InputStreamWithSeek in = fakeDatabase.openInputStream(key, clientSecurity);
-			byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, clientSecurity);
+			String bur = MartusServerUtilities.createBulletinUploadRecord(b.getLocalId(), otherServerSecurity);
+			burs[i] = bur;
+			MartusServerUtilities.writeSpecificBurToDatabase(fakeDatabase, b.getBulletinHeaderPacket(), bur);
+			assertEquals("after write bur" + i, (i+1)*databaseRecordsPerBulletin, fakeDatabase.getRecordCount());
+
+			InputStreamWithSeek in = fakeDatabase.openInputStream(key, otherServerSecurity);
+			byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, otherServerSecurity);
 			in.close();
 			String sigString = Base64.encode(sigBytes);
 			supplier.addBulletinToMirror(key, sigString);
@@ -127,13 +136,14 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 		{
 			Bulletin expectedBulletin = (Bulletin)bulletins.get(goodTick);
 			supplier.returnZipData = getZipString(fakeDatabase, expectedBulletin, clientSecurity);
+			supplier.addBur(expectedBulletin.getAccount(), expectedBulletin.getLocalId(), burs[goodTick]);
 			realRetriever.tick();
 			assertEquals("tick " + goodTick + " wrong account?", clientSecurity.getPublicKeyString(), supplier.gotAccount);
 			assertEquals("tick " + goodTick + " wrong id?", ((Bulletin)bulletins.get(goodTick)).getLocalId(), supplier.gotLocalId);
-//			assertEquals("after tick " + goodTick, (goodTick+1)*databaseRecordsPerBulletin, db.getRecordCount());
+			assertEquals("after tick " + goodTick, (goodTick+1)*databaseRecordsPerBulletin, db.getRecordCount());
 		}
 		realRetriever.tick();
-//		assertEquals("after extra tick", 3*databaseRecordsPerBulletin, db.getRecordCount());
+		assertEquals("after extra tick", 3*databaseRecordsPerBulletin, db.getRecordCount());
 	}
 	
 	private String getZipString(Database dbToExportFrom, Bulletin b, MartusCrypto signer) throws Exception

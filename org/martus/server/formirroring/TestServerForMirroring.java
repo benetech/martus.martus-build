@@ -12,6 +12,7 @@ import org.martus.common.MockMartusSecurity;
 import org.martus.common.TestCaseEnhanced;
 import org.martus.common.UniversalId;
 import org.martus.common.MartusUtilities.InvalidPublicKeyFileException;
+import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.forclients.MockMartusServer;
 
 public class TestServerForMirroring extends TestCaseEnhanced
@@ -134,6 +135,20 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		Vector ids2 = new Vector();
 		ids2.add(((Vector)result2.get(0)).get(0));
 		assertContains(bhp3.getLocalId(), ids2);
+	}
+	
+	public void testGetBulletinUploadRecord() throws Exception
+	{
+		String burNotFound = server.getBulletinUploadRecord(bhp1.getAccountId(), bhp1.getLocalId());
+		assertNull("found bur?", burNotFound);
+
+		String expectedBur = MartusServerUtilities.createBulletinUploadRecord(bhp1.getLocalId(), server.getSecurity());
+		DatabaseKey headerKey = MartusUtilities.createKeyWithHeaderStatus(bhp1, bhp1.getUniversalId());
+		String bulletinLocalId = headerKey.getLocalId();
+		MartusServerUtilities.writeSpecificBurToDatabase(coreServer.getDatabase(), bhp1, expectedBur);
+		String bur1 = server.getBulletinUploadRecord(bhp1.getAccountId(), bhp1.getLocalId());
+		assertNotNull("didn't find bur1?", bur1);
+		assertEquals("wrong bur?", expectedBur, bur1);
 	}
 	
 	public void testExtractIpFromFileName() throws Exception

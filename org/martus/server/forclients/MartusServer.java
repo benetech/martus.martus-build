@@ -1080,10 +1080,10 @@ public class MartusServer implements NetworkInterfaceConstants
 	{
 		String result = NetworkInterfaceConstants.OK;
 		
-		Database db = getDatabase();
 		BulletinHeaderPacket bhp = null;
 		try
 		{
+			Database db = getDatabase();
 			bhp = MartusServerUtilities.saveZipFileToDatabase(db, authorAccountId, zipFile, security);
 		}
 		catch (DuplicatePacketException e)
@@ -1116,10 +1116,9 @@ public class MartusServer implements NetworkInterfaceConstants
 
 		try
 		{
-			DatabaseKey headerKey = MartusUtilities.createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
-			DatabaseKey burKey = MartusServerUtilities.getBurKey(headerKey);
-			String bur = MartusServerUtilities.createBulletinUploadRecord(bulletinLocalId, security);
-			db.writeRecord(burKey, bur);
+			String bulletinLocalId1 = bhp.getLocalId();
+			String bur = MartusServerUtilities.createBulletinUploadRecord(bulletinLocalId1, security);
+			MartusServerUtilities.writeSpecificBurToDatabase(getDatabase(), bhp, bur);
 		}
 		catch (CreateDigestException e)
 		{
@@ -1133,7 +1132,6 @@ public class MartusServer implements NetworkInterfaceConstants
 		
 		return result;
 	}
-
 
 	private String getBulletinHQAccountId(DatabaseKey headerKey) throws
 			IOException,

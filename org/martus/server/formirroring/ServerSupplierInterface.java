@@ -8,6 +8,7 @@ public interface ServerSupplierInterface
 	public boolean isAuthorizedForMirroring(String callerAccountId);
 	public Vector listAccountsForMirroring();
 	public Vector listBulletinsForMirroring(String authorAccountId);
+	public String getBulletinUploadRecord(String authorAccountId, String bulletinLocalId);
 	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 			int chunkOffset, int maxChunkSize);
 	public void log(String message);

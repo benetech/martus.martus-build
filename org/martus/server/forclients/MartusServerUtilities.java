@@ -432,6 +432,14 @@ public class MartusServerUtilities
 			burKey.setDraft();
 		return burKey;
 	}
+
+	public static void writeSpecificBurToDatabase(Database db, BulletinHeaderPacket bhp, String bur)
+		throws IOException
+	{
+		DatabaseKey headerKey = MartusUtilities.createKeyWithHeaderStatus(bhp, bhp.getUniversalId());
+		DatabaseKey burKey = MartusServerUtilities.getBurKey(headerKey);
+		db.writeRecord(burKey, bur);
+	}
 	
 	public static class MartusSignatureFileAlreadyExistsException extends Exception {}
 	public static class MartusSignatureFileDoesntExistsException extends Exception {}

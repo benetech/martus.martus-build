@@ -35,6 +35,13 @@ class FakeServerSupplier implements ServerSupplierInterface
 		bulletinsToMirror.add(data);
 	}
 	
+	void addBur(String accountId, String localId, String bur)
+	{
+		burAccountId = accountId;
+		burLocalId = localId;
+		burContents = bur;
+	}
+	
 	int getChunkSize()
 	{
 		try
@@ -95,6 +102,16 @@ class FakeServerSupplier implements ServerSupplierInterface
 		}
 		return bulletins;
 	}
+	
+	public String getBulletinUploadRecord(String authorAccountId, String bulletinLocalId)
+	{
+		if(!authorAccountId.equals(burAccountId))
+			return null;
+		if(!bulletinLocalId.equals(burLocalId))
+			return null;
+		return burContents;
+	}
+	
 	public Vector getBulletinChunkWithoutVerifyingCaller(String authorAccountId, String bulletinLocalId,
 			int chunkOffset, int maxChunkSize)
 	{
@@ -123,6 +140,10 @@ class FakeServerSupplier implements ServerSupplierInterface
 	String returnZipData;
 	String returnResultTag;
 
+	String burAccountId;
+	String burLocalId;
+	String burContents;
+
 	MartusCrypto security;
 	Vector accountsToMirror;
 	Vector bulletinsToMirror;
@@ -131,4 +152,5 @@ class FakeServerSupplier implements ServerSupplierInterface
 	String gotLocalId;
 	int gotChunkOffset;
 	int gotMaxChunkSize;
+
 }

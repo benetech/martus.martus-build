@@ -218,11 +218,43 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		assertContains(result2, infos);
 		assertContains(result3, infos);
 	}
+	
+	public void testGetBulletinUploadRecordNotFound() throws Exception
+	{
+		supplier.authorizedCaller = callerAccountId;
+
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_UPLOAD_RECORD);
+		parameters.add("No such account");
+		parameters.add("No such bulletin");
+		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		Vector result = handler.request(callerAccountId, parameters, sig);
+		assertEquals(NetworkInterfaceConstants.NOT_FOUND, result.get(0));
+		assertEquals(1, result.size());
+	}
+
+	public void testGetBulletinUploadRecord() throws Exception
+	{
+		supplier.authorizedCaller = callerAccountId;
+
+		String accountId = "account";
+		String localId = "local";
+		String bur = "This pretends to be a BUR";
+		supplier.addBur(accountId, localId, bur);
+		Vector parameters = new Vector();
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_UPLOAD_RECORD);
+		parameters.add(accountId);
+		parameters.add(localId);
+		String sig = MartusUtilities.sign(parameters, callerSecurity);
+		Vector result = handler.request(callerAccountId, parameters, sig);
+		assertEquals(NetworkInterfaceConstants.OK, result.get(0));
+		assertEquals(2, result.size());
+	}
 
 	public void testGetBulletinChunkNotAuthorized() throws Exception
 	{
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_CHUNK);
 		parameters.add("account id to ignore");
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
@@ -235,7 +267,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_CHUNK);
 		parameters.add(new Integer(3));
 		String sig = MartusUtilities.sign(parameters, callerSecurity);
 		Vector result = handler.request(callerAccountId, parameters, sig);
@@ -248,7 +280,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_CHUNK);
 		parameters.add("pretend account");
 		parameters.add("pretend localid");
 		parameters.add(new Integer(3));
@@ -270,7 +302,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		supplier.authorizedCaller = callerAccountId;
 
 		Vector parameters = new Vector();
-		parameters.add(MirroringInterface.CMD_MIRRORINT_GET_BULLETIN_CHUNK);
+		parameters.add(MirroringInterface.CMD_MIRRORING_GET_BULLETIN_CHUNK);
 		parameters.add(authorAccountId);
 		parameters.add(bulletinLocalId);
 		parameters.add(new Integer(offset));
