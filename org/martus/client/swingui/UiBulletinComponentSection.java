@@ -37,16 +37,15 @@ import javax.swing.border.EtchedBorder;
 import javax.swing.border.LineBorder;
 
 import org.martus.client.core.ChoiceItem;
-import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
 import org.martus.common.FieldDataPacket;
 
 abstract public class UiBulletinComponentSection extends JPanel
 {
-	UiBulletinComponentSection(MartusApp appToUse, boolean encrypted)
+	UiBulletinComponentSection(MartusLocalization localizationToUse, boolean encrypted)
 	{
-		app = appToUse;
+		localization = localizationToUse;
 
 		ParagraphLayout layout = new ParagraphLayout();
 		layout.outdentFirstField();
@@ -60,7 +59,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 
 		damagedIndicator = new JLabel("", null, JLabel.LEFT);
 		damagedIndicator.setVerticalTextPosition(JLabel.TOP);
-		damagedIndicator.setText(app.getFieldLabel("MayBeDamaged"));
+		damagedIndicator.setText(localization.getFieldLabel("MayBeDamaged"));
 		damagedIndicator.setFont(damagedIndicator.getFont().deriveFont(Font.BOLD));
 		damagedIndicator.setBackground(Color.yellow);
 		damagedIndicator.setForeground(Color.black);
@@ -85,7 +84,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 			target.add(createLabel(tags[fieldNum]), ParagraphLayout.NEW_PARAGRAPH);
 			target.add(fields[fieldNum].getComponent());
 		}
-		JLabel attachments = new JLabel(app.getFieldLabel("attachments"));
+		JLabel attachments = new JLabel(localization.getFieldLabel("attachments"));
 		target.add(attachments, ParagraphLayout.NEW_PARAGRAPH);
 		return fields;
 	}
@@ -110,7 +109,7 @@ abstract public class UiBulletinComponentSection extends JPanel
 
  	public JLabel createLabel(String fieldTag)
 	{
-		return new JLabel(app.getFieldLabel(fieldTag));
+		return new JLabel(localization.getFieldLabel(fieldTag));
 	}
 
 	private UiField createField(String fieldName)
@@ -126,7 +125,6 @@ abstract public class UiBulletinComponentSection extends JPanel
 				field = createDateField();
 				break;
 			case Bulletin.CHOICE:
-				MartusLocalization localization = app.getLocalization();
 				ChoiceItem[] languages =
 					localization.getLanguageNameChoices();
 				field = createChoiceField(languages);
@@ -144,11 +142,11 @@ abstract public class UiBulletinComponentSection extends JPanel
 	public void updateEncryptedIndicator(boolean isEncrypted)
 	{
 		String iconFileName = "unlocked.jpg";
-		String title = app.getFieldLabel("publicsection");
+		String title = localization.getFieldLabel("publicsection");
 		if(isEncrypted == ENCRYPTED)
 		{
 			iconFileName = "locked.jpg";
-			title = app.getFieldLabel("privatesection");
+			title = localization.getFieldLabel("privatesection");
 		}
 
 		Icon icon = new ImageIcon(UiBulletinComponentSection.class.getResource(iconFileName));
@@ -194,7 +192,8 @@ abstract public class UiBulletinComponentSection extends JPanel
 		if(otherWidth > thisWidth)
 			getParagraphLayout().setFirstColumnWidth(otherWidth);
 	}
-	MartusApp app;
+
+	MartusLocalization localization;
 	JLabel encryptedIndicator;
 	JLabel damagedIndicator;
 	UiField[] fields;

@@ -29,13 +29,11 @@ package org.martus.client.swingui;
 import javax.swing.JComponent;
 import javax.swing.JLabel;
 
-import org.martus.client.core.MartusApp;
-
 public class UiDateViewer extends UiField
 {
-	public UiDateViewer(MartusApp appToUse)
+	public UiDateViewer(MartusLocalization localizationToUse)
 	{
-		app = appToUse;
+		localization = localizationToUse;
 		label = new JLabel();
 	}
 
@@ -51,7 +49,7 @@ public class UiDateViewer extends UiField
 
 	public void setText(String newText)
 	{
-		value = app.convertStoredToDisplay(newText);
+		value = localization.convertStoredDateToDisplay(newText);
 		label.setText("  " + value + "  ");
 	}
 
@@ -59,7 +57,7 @@ public class UiDateViewer extends UiField
 	{
 	}
 
-	MartusApp app;
+	MartusLocalization localization;
 	JLabel label;
 	String value;
 }

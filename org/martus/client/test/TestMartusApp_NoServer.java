@@ -821,36 +821,41 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 	public void testCurrentLanguage()
 	{
 		TRACE_BEGIN("testCurrentLanguage");
-		assertEquals("en", appWithAccount.getCurrentLanguage());
+		MartusLocalization localization = appWithAccount.getLocalization();
+
+		assertEquals("en", localization.getCurrentLanguageCode());
 		assertEquals("MartusHelp-en.txt", appWithAccount.getHelpFilename());
 		assertEquals("MartusHelp-en.txt", appWithAccount.getEnglishHelpFilename());
-		appWithAccount.setCurrentLanguage("es");
+		localization.setCurrentLanguageCode("es");
 		assertEquals("MartusHelp-es.txt", appWithAccount.getHelpFilename());
-		assertEquals("es", appWithAccount.getCurrentLanguage());
+		assertEquals("es", localization.getCurrentLanguageCode());
 		char iWithAccentInUtf8 = 237;
 		char[] titleInSpanish = {'T', iWithAccentInUtf8, 't', 'u', 'l', 'o'};
-		assertEquals(new String(titleInSpanish), appWithAccount.getFieldLabel("title"));
-		appWithAccount.setCurrentLanguage("en");
+		assertEquals(new String(titleInSpanish), localization.getFieldLabel("title"));
+		localization.setCurrentLanguageCode("en");
 		TRACE_END();
 	}
 
 	public void testDateConvert()
 	{
 		TRACE_BEGIN("testDateConvert");
-		assertEquals("12/13/1987", appWithAccount.convertStoredToDisplay("1987-12-13"));
-		assertEquals("", appWithAccount.convertStoredToDisplay("abc"));
-		assertEquals("", appWithAccount.convertStoredToDisplay("1987-13-13"));
+		MartusLocalization localization = appWithAccount.getLocalization();
+		assertEquals("12/13/1987", localization.convertStoredDateToDisplay("1987-12-13"));
+		assertEquals("", localization.convertStoredDateToDisplay("abc"));
+		assertEquals("", localization.convertStoredDateToDisplay("1987-13-13"));
 		TRACE_END();
 	}
 
 	public void testCurrentDateFormatCode()
 	{
 		TRACE_BEGIN("testCurrentDateFormatCode");
-		assertEquals("MM/dd/yyyy", appWithAccount.getCurrentDateFormatCode());
-		appWithAccount.setCurrentDateFormatCode("dd.MM.yyyy");
-		assertEquals("dd.MM.yyyy", appWithAccount.getCurrentDateFormatCode());
-		appWithAccount.setCurrentDateFormatCode("MM/dd/yyyy");
-		assertEquals("MM/dd/yyyy", appWithAccount.getCurrentDateFormatCode());
+		
+		MartusLocalization localization = appWithAccount.getLocalization();
+		assertEquals("MM/dd/yyyy", localization.getCurrentDateFormatCode());
+		localization.setCurrentDateFormatCode("dd.MM.yyyy");
+		assertEquals("dd.MM.yyyy", localization.getCurrentDateFormatCode());
+		localization.setCurrentDateFormatCode("MM/dd/yyyy");
+		assertEquals("MM/dd/yyyy", localization.getCurrentDateFormatCode());
 		TRACE_END();
 	}
 
@@ -863,10 +868,10 @@ public class TestMartusApp_NoServer extends TestCaseEnhanced
 		assertEquals("Mar", localization.getMonthLabel("mar"));
 		String[] months = localization.getMonthLabels();
 		assertEquals("Jan", months[0]);
-		appWithAccount.setCurrentLanguage("es");
+		localization.setCurrentLanguageCode("es");
 		months = localization.getMonthLabels();
 		assertEquals("Ene", months[0]);
-		appWithAccount.setCurrentLanguage("en");
+		localization.setCurrentLanguageCode("en");
 
 		TRACE_END();
 	}

@@ -28,7 +28,6 @@ package org.martus.client.swingui;
 
 import java.io.IOException;
 
-import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
 import org.martus.common.Bulletin;
 import org.martus.common.MartusCrypto;
@@ -43,9 +42,9 @@ public class UiBulletinEditor extends UiBulletinComponent
 		// ensure that attachmentEditor gets initialized
 	}
 
-	public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted)
+	public UiBulletinComponentSection createBulletinComponentSection(boolean encrypted)
 	{
-		return new UiBulletinComponentEditorSection(this, owner, app, encrypted);
+		return new UiBulletinComponentEditorSection(this, owner, encrypted);
 	}
 
 	public void copyDataToBulletin(Bulletin bulletin) throws

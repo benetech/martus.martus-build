@@ -96,7 +96,7 @@ public class TestBulletinTableModel extends TestCase
 		assertEquals(b.get("author"), list.getValueAt(2, 3));
 
 		b = list.getBulletin(4);
-		String displayDate = app.convertStoredToDisplay(b.get("eventdate"));
+		String displayDate = app.getLocalization().convertStoredDateToDisplay(b.get("eventdate"));
 		assertEquals(displayDate, list.getValueAt(4, 1));
     }
 
@@ -128,7 +128,7 @@ public class TestBulletinTableModel extends TestCase
 
 		b.set("eventdate", "1999-04-15");
 		store.saveBulletin(b);
-		String displayDate = app.convertStoredToDisplay("1999-04-15");
+		String displayDate = app.getLocalization().convertStoredDateToDisplay("1999-04-15");
 		assertEquals(displayDate, list.getValueAt(0,1));
 
 		assertEquals("xyz", b.get("title"));

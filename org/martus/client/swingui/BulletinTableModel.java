@@ -102,7 +102,7 @@ public class BulletinTableModel extends AbstractTableModel
 		}
 	 	if(Bulletin.getFieldType(fieldTag) == Bulletin.DATE)
 		{
-			value = app.convertStoredToDisplay(value);
+			value = app.getLocalization().convertStoredDateToDisplay(value);
 		}
 		return value;
 	}

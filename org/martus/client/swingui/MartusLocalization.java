@@ -31,7 +31,11 @@ import java.io.FileInputStream;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.io.InputStream;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -42,6 +46,7 @@ import java.util.Vector;
 
 import org.martus.client.core.ChoiceItem;
 import org.martus.client.core.MartusApp;
+import org.martus.common.Bulletin;
 import org.martus.common.UnicodeReader;
 import org.martus.common.UnicodeWriter;
 
@@ -308,6 +313,7 @@ public class MartusLocalization
 
 	public void setCurrentLanguageCode(String newLanguageCode)
 	{
+		loadTranslationFile(newLanguageCode);
 		currentLanguageCode = newLanguageCode;
 	}
 
@@ -388,6 +394,27 @@ public class MartusLocalization
 		Arrays.sort(tempChoicesArray);
 		return tempChoicesArray;
 	}
+
+	public String convertStoredDateToDisplay(String storedDate)
+	{
+		DateFormat dfStored = Bulletin.getStoredDateFormat();
+		DateFormat dfDisplay = new SimpleDateFormat(getCurrentDateFormatCode());
+		String result = "";
+		try
+		{
+			Date d = dfStored.parse(storedDate);
+			result = dfDisplay.format(d);
+		}
+		catch(ParseException e)
+		{
+			// unparsable dates simply become blank strings,
+			// so we don't want to do anything for this exception
+			//System.out.println(e);
+		}
+
+		return result;
+	}
+
 
 	private File directory;
 	private Map languageTranslationsMap;

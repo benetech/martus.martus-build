@@ -37,15 +37,12 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
 
-import org.martus.client.core.MartusApp;
 import org.martus.common.Bulletin;
 
 public class UiDateEditor extends UiField
 {
-	public UiDateEditor(MartusApp appToUse)
+	public UiDateEditor(MartusLocalization localizationToUse)
 	{
-		app = appToUse;
-
 		component = new JPanel();
 		Box box = Box.createHorizontalBox();
 
@@ -53,7 +50,7 @@ public class UiDateEditor extends UiField
 		for(int day=1; day <= 31; ++day)
 			dayCombo.addItem(new Integer(day).toString());
 
-		monthCombo = new JComboBox(app.getLocalization().getMonthLabels());
+		monthCombo = new JComboBox(localizationToUse.getMonthLabels());
 
 		yearCombo = new JComboBox();
 		Calendar cal = new GregorianCalendar();
@@ -61,7 +58,7 @@ public class UiDateEditor extends UiField
 		for(int year = 1900; year <= thisYear; ++year)
 			yearCombo.addItem(new Integer(year).toString());
 
-		String mdyOrder = DateUtilities.getMdyOrder(app.getCurrentDateFormatCode());
+		String mdyOrder = DateUtilities.getMdyOrder(localizationToUse.getCurrentDateFormatCode());
 		for(int i = 0; i < mdyOrder.length(); ++i)
 		{
 			switch(mdyOrder.charAt(i))
@@ -122,7 +119,6 @@ public class UiDateEditor extends UiField
 	{
 	}
 
-	MartusApp app;
 	JComponent component;
 	JComboBox monthCombo;
 	JComboBox dayCombo;

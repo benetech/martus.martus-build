@@ -27,28 +27,26 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import org.martus.client.core.ChoiceItem;
-import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
 
 public class UiBulletinComponentEditorSection extends UiBulletinComponentSection
 {
 
-	public UiBulletinComponentEditorSection(UiBulletinComponent bulletinComponentToUse, UiMainWindow ownerToUse, MartusApp appToUse, boolean encrypted)
+	public UiBulletinComponentEditorSection(UiBulletinComponent bulletinComponentToUse, UiMainWindow ownerToUse, boolean encrypted)
 	{
-		super(appToUse, encrypted);
-		app = appToUse;
+		super(ownerToUse.getLocalization(), encrypted);
 		owner = ownerToUse;
 		bulletinComponent = bulletinComponentToUse;
 	}
 
 	public UiField createNormalField()
 	{
-		return new UiNormalTextEditor(app.getLocalization());
+		return new UiNormalTextEditor(localization);
 	}
 
 	public UiField createMultilineField()
 	{
-		return new UiMultilineTextEditor(app.getLocalization());
+		return new UiMultilineTextEditor(localization);
 	}
 
 	public UiField createChoiceField(ChoiceItem[] choices)
@@ -58,7 +56,7 @@ public class UiBulletinComponentEditorSection extends UiBulletinComponentSection
 
 	public UiField createDateField()
 	{
-		return new UiDateEditor(app);
+		return new UiDateEditor(localization);
 	}
 
 	public void addAttachment(AttachmentProxy a)
@@ -78,7 +76,6 @@ public class UiBulletinComponentEditorSection extends UiBulletinComponentSection
 	}
 
 	UiAttachmentEditor attachmentEditor;
-	MartusApp app;
 	UiMainWindow owner;
 	UiBulletinComponent bulletinComponent;
 }

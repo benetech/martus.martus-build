@@ -34,7 +34,6 @@ import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 
-import org.martus.client.core.MartusApp;
 import org.martus.common.Bulletin;
 
 public class UiSearchDlg extends JDialog  implements ActionListener
@@ -42,36 +41,36 @@ public class UiSearchDlg extends JDialog  implements ActionListener
 	public UiSearchDlg(UiMainWindow owner)
 	{
 		super(owner, "", true);
-		MartusApp app = owner.getApp();
+		MartusLocalization localization = owner.getLocalization();
 
-		setTitle(app.getWindowTitle("search"));
-		search = new JButton(app.getButtonLabel("search"));
+		setTitle(localization.getWindowTitle("search"));
+		search = new JButton(localization.getButtonLabel("search"));
 		search.addActionListener(this);
 		getRootPane().setDefaultButton(search);
-		JButton cancel = new JButton(app.getButtonLabel("cancel"));
+		JButton cancel = new JButton(localization.getButtonLabel("cancel"));
 		cancel.addActionListener(this);
 		getContentPane().setLayout(new ParagraphLayout());
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);
-		getContentPane().add(new UiWrappedTextArea(app.getFieldLabel("SearchBulletinRules")));
+		getContentPane().add(new UiWrappedTextArea(localization.getFieldLabel("SearchBulletinRules")));
 
 		searchField = new JTextField(40);
 		searchField.setText(searchString);
-		getContentPane().add(new JLabel(app.getFieldLabel("SearchEntry")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("SearchEntry")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(searchField);
 
-		startDateEditor = new UiDateEditor(app);
+		startDateEditor = new UiDateEditor(localization);
 		if(startDate.length() == 0)
 			startDate = DEFAULT_SEARCH_START_DATE;
 		startDateEditor.setText(startDate);
-		getContentPane().add(new JLabel(app.getFieldLabel("SearchStartDate")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("SearchStartDate")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(startDateEditor.getComponent());
 
-		endDateEditor = new UiDateEditor(app);
+		endDateEditor = new UiDateEditor(localization);
 		if(endDate.length() == 0)
 			endDate = Bulletin.getLastDayOfThisYear();
 		endDateEditor.setText(endDate);
-		getContentPane().add(new JLabel(app.getFieldLabel("SearchEndDate")), ParagraphLayout.NEW_PARAGRAPH);
+		getContentPane().add(new JLabel(localization.getFieldLabel("SearchEndDate")), ParagraphLayout.NEW_PARAGRAPH);
 		getContentPane().add(endDateEditor.getComponent());
 
 		getContentPane().add(new JLabel(""), ParagraphLayout.NEW_PARAGRAPH);

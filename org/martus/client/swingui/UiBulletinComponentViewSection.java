@@ -27,33 +27,31 @@ Boston, MA 02111-1307, USA.
 package org.martus.client.swingui;
 
 import org.martus.client.core.ChoiceItem;
-import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
 
 public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 {
 
-	public UiBulletinComponentViewSection(UiBulletinComponent bulletinComponentToUse, UiMainWindow ownerToUse, MartusApp appToUse, boolean encrypted)
+	public UiBulletinComponentViewSection(UiBulletinComponent bulletinComponentToUse, UiMainWindow ownerToUse, boolean encrypted)
 	{
-		super(appToUse, encrypted);
-		app = appToUse;
+		super(ownerToUse.getLocalization(), encrypted);
 		owner = ownerToUse;
 		bulletinComponent = bulletinComponentToUse;
 	}
 
 	public UiField createDateField()
 	{
-		return new UiDateViewer(app);
+		return new UiDateViewer(localization);
 	}
 
 	public UiField createNormalField()
 	{
-		return new UiNormalTextViewer(app.getLocalization());
+		return new UiNormalTextViewer(localization);
 	}
 
 	public UiField createMultilineField()
 	{
-		return new UiMultilineViewer(app.getLocalization());
+		return new UiMultilineViewer(localization);
 	}
 
 	public UiField createChoiceField(ChoiceItem[] choices)
@@ -78,7 +76,6 @@ public class UiBulletinComponentViewSection extends UiBulletinComponentSection
 	}
 
 	UiAttachmentViewer attachmentViewer;
-	MartusApp app;
 	UiMainWindow owner;
 	UiBulletinComponent bulletinComponent;
 }

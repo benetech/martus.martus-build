@@ -48,7 +48,7 @@ public class UiBulletinPreviewDlg extends JDialog implements ActionListener
 		boolean isEncrypted = fdp.isEncrypted();
 		getContentPane().setLayout(new ParagraphLayout());
 
-		UiBulletinComponentViewSection view = new UiBulletinComponentViewSection(null, owner, owner.getApp(), isEncrypted);
+		UiBulletinComponentViewSection view = new UiBulletinComponentViewSection(null, owner, isEncrypted);
 		String[] standardFieldTags = Bulletin.getStandardFieldNames();
 		view.createLabelsAndFields(view, standardFieldTags);
 		view.createAttachmentTable();

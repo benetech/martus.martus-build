@@ -36,9 +36,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
@@ -127,8 +124,8 @@ public class MartusApp
 		if(languageFlag.exists())
 		{
 			languageFlag.delete();
-			setCurrentLanguage("es");
-			setCurrentDateFormatCode(DateUtilities.DMY_SLASH.getCode());
+			localization.setCurrentLanguageCode("es");
+			localization.setCurrentDateFormatCode(DateUtilities.DMY_SLASH.getCode());
 		}
 		else
 		{
@@ -136,15 +133,15 @@ public class MartusApp
 			previouslySavedState.load(getUiStateFile());
 			String previouslySavedStateLanguage = previouslySavedState.getCurrentLanguage();
 			if(previouslySavedStateLanguage == "")
-				setCurrentLanguage(MartusLocalization.getDefaultUiLanguage());
+				localization.setCurrentLanguageCode(MartusLocalization.getDefaultUiLanguage());
 			else
-				setCurrentLanguage(previouslySavedStateLanguage);
+				localization.setCurrentLanguageCode(previouslySavedStateLanguage);
 
 			String previouslySavedStateDateFormat = previouslySavedState.getCurrentDateFormat();
 			if(previouslySavedStateDateFormat == "")
-				setCurrentDateFormatCode(DateUtilities.getDefaultDateFormatCode());
+				localization.setCurrentDateFormatCode(DateUtilities.getDefaultDateFormatCode());
 			else
-				setCurrentDateFormatCode(previouslySavedStateDateFormat);
+				localization.setCurrentDateFormatCode(previouslySavedStateDateFormat);
 		}
 	}
 	
@@ -1243,47 +1240,12 @@ public class MartusApp
 		return localization.getButtonLabel(code);
 	}
 
-	public String getCurrentLanguage()
+	private String getCurrentLanguage()
 	{
 		return localization.getCurrentLanguageCode();
 	}
 
-	public void setCurrentLanguage(String languageCode)
-	{
-		localization.loadTranslationFile(languageCode);
-		localization.setCurrentLanguageCode(languageCode);
-	}
 
-	public String getCurrentDateFormatCode()
-	{
-		return localization.getCurrentDateFormatCode();
-	}
-
-	public void setCurrentDateFormatCode(String code)
-	{
-		localization.setCurrentDateFormatCode(code);
-	}
-
-
-	public String convertStoredToDisplay(String storedDate)
-	{
-		DateFormat dfStored = Bulletin.getStoredDateFormat();
-		DateFormat dfDisplay = new SimpleDateFormat(getCurrentDateFormatCode());
-		String result = "";
-		try
-		{
-			Date d = dfStored.parse(storedDate);
-			result = dfDisplay.format(d);
-		}
-		catch(ParseException e)
-		{
-			// unparsable dates simply become blank strings,
-			// so we don't want to do anything for this exception
-			//System.out.println(e);
-		}
-
-		return result;
-	}
 
 	public String getAccountId()
 	{

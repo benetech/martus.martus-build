@@ -91,7 +91,7 @@ public class BulletinHtmlGenerator
 			String tag = standardFieldTags[fieldNum];
 			String value = MartusUtilities.getXmlEncoded(b.get(tag));
 			if(Bulletin.getFieldType(tag) == Bulletin.DATE)
-				value = app.convertStoredToDisplay(value);
+				value = localization.convertStoredDateToDisplay(value);
 			else if(Bulletin.getFieldType(tag) == Bulletin.CHOICE)
 				value = localization.getLanguageName(value);
 			else if(Bulletin.getFieldType(tag) == Bulletin.MULTILINE)

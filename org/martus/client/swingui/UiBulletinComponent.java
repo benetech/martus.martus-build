@@ -54,8 +54,8 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	{
 		setLayout(new BorderLayout());
 
-		publicStuff = createBulletinComponentSection(getApp(), UiBulletinComponentSection.NOT_ENCRYPTED);
-		privateStuff = createBulletinComponentSection(getApp(), UiBulletinComponentSection.ENCRYPTED);
+		publicStuff = createBulletinComponentSection(UiBulletinComponentSection.NOT_ENCRYPTED);
+		privateStuff = createBulletinComponentSection(UiBulletinComponentSection.ENCRYPTED);
 		privateStuff.updateSectionBorder(true);
 
 		allPrivateField = createBoolField();
@@ -214,5 +214,5 @@ abstract public class UiBulletinComponent extends JPanel implements Scrollable, 
 	UiBulletinComponentSection privateStuff;
 
 	abstract public UiField createBoolField();
-	abstract public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted);
+	abstract public UiBulletinComponentSection createBulletinComponentSection(boolean encrypted);
 }

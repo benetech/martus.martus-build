@@ -28,8 +28,6 @@ package org.martus.client.swingui;
 
 import java.util.Vector;
 
-import org.martus.client.core.MartusApp;
-
 public class UiBulletinView extends UiBulletinComponent
 {
 	UiBulletinView(UiMainWindow mainWindowToUse)
@@ -42,9 +40,9 @@ public class UiBulletinView extends UiBulletinComponent
 		// ensure that attachmentViewer gets initialized
 	}
 
-	public UiBulletinComponentSection createBulletinComponentSection(MartusApp app, boolean encrypted)
+	public UiBulletinComponentSection createBulletinComponentSection(boolean encrypted)
 	{
-		UiBulletinComponentViewSection section = new UiBulletinComponentViewSection(this, mainWindow, app, encrypted);
+		UiBulletinComponentViewSection section = new UiBulletinComponentViewSection(this, mainWindow, encrypted);
 		bulletinViewSections.add(section);
 		return section;
 	}

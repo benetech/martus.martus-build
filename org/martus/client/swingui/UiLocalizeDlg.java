@@ -48,7 +48,7 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 		setTitle(localization.getMenuLabel("Preferences"));
 
 		dateFormatDropdown = new UiChoiceEditor(DateUtilities.getDateFormats());
-		dateFormatDropdown.setText(owner.getApp().getCurrentDateFormatCode());
+		dateFormatDropdown.setText(localization.getCurrentDateFormatCode());
 
 		languageDropdown = new UiChoiceEditor(localization.getUiLanguages());
 		languageDropdown.setText(localization.getCurrentLanguageCode());
@@ -81,8 +81,8 @@ public class UiLocalizeDlg extends JDialog implements ActionListener, ChangeList
 	{
 		if(ae.getSource() == ok)
 		{
-			owner.getApp().setCurrentDateFormatCode(dateFormatDropdown.getText());
-			owner.getApp().setCurrentLanguage(languageDropdown.getText());
+			owner.getLocalization().setCurrentDateFormatCode(dateFormatDropdown.getText());
+			owner.getLocalization().setCurrentLanguageCode(languageDropdown.getText());
 		}
 		dispose();
 	}

@@ -459,11 +459,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	void saveStateWithoutPrompting() throws IOException
 	{
+		MartusLocalization localization = getLocalization();
+	
 		String folderName = folders.getSelectedFolderName();
 		BulletinFolder folder = getStore().findFolder(folderName);
 		uiState.setCurrentFolder(folderName);
-		uiState.setCurrentDateFormat(app.getCurrentDateFormatCode());
-		uiState.setCurrentLanguage(app.getCurrentLanguage());
+		uiState.setCurrentDateFormat(localization.getCurrentDateFormatCode());
+		uiState.setCurrentLanguage(localization.getCurrentLanguageCode());
 		if(folder != null)
 		{
 			uiState.setCurrentSortTag(folder.sortedBy());
@@ -508,11 +510,13 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 	private void initalizeUiState()
 	{
+		MartusLocalization localization = app.getLocalization();
+
 		uiState = new CurrentUiState();
 		File stateFile = app.getUiStateFile();
 		uiState.load(stateFile);
-		uiState.setCurrentLanguage(app.getCurrentLanguage());
-		uiState.setCurrentDateFormat(app.getCurrentDateFormatCode());
+		uiState.setCurrentLanguage(localization.getCurrentLanguageCode());
+		uiState.setCurrentDateFormat(localization.getCurrentDateFormatCode());
 		if(uiState.getCurrentOperatingState().equals(CurrentUiState.OPERATING_STATE_UNKNOWN))
 		{
 			uiState.setCurrentOperatingState(CurrentUiState.OPERATING_STATE_BAD);
