@@ -472,6 +472,10 @@ public class MartusUtilities
 
 		MartusCrypto doNotCheckSigDuringDownload = null;
 		bhp.loadFromXml(headerIn, doNotCheckSigDuringDownload);
+		UniversalId loadedUid = bhp.getUniversalId();
+		if(!loadedUid.equals(headerKey.getUniversalId()))
+			throw new InvalidPacketException("Loaded uid doesn't match key uid");
+
 		DatabaseKey[] packetKeys = getAllPacketKeys(bhp);
 
 		FileOutputStream outputStream = new FileOutputStream(destZipFile);

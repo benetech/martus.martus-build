@@ -458,6 +458,29 @@ public class TestMartusUtilities extends TestCaseEnhanced
 		verifyDoesPacketNeedLocalEncryption("headerSaysPrivate, plain text",
 						false, bhpWithFlagPrivate, plainTextData);
 	}
+	
+	public void testHeaderInWrongPlace() throws Exception
+	{
+		MockMartusSecurity client1 = MockMartusSecurity.createClient();
+		MockMartusSecurity client2 = MockMartusSecurity.createOtherClient();
+		UniversalId realUid = BulletinHeaderPacket.createUniversalId(client1.getPublicKeyString());
+		UniversalId wrongUid = BulletinHeaderPacket.createUniversalId(client2.getPublicKeyString());
+		BulletinHeaderPacket bhp1 = new BulletinHeaderPacket(realUid);
+
+		Database db = new MockServerDatabase();
+		DatabaseKey wrongKey = new DatabaseKey(wrongUid);
+		bhp1.writeXmlToDatabase(db, wrongKey, false, client1);
+
+		File tempFile = createTempFile();
+		try
+		{
+			MartusUtilities.exportBulletinPacketsFromDatabaseToZipFile(db, wrongKey, tempFile, client1);
+			fail("should have thrown");
+		}
+		catch(InvalidPacketException ignoreExpectedException)
+		{
+		}
+	}
 
 	public void verifyDoesPacketNeedLocalEncryption(String label, boolean expected,
 							BulletinHeaderPacket bhp, byte[] bytes1)
