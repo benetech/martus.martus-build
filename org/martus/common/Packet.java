@@ -14,6 +14,7 @@ import java.util.Arrays;
 
 import javax.xml.parsers.ParserConfigurationException;
 
+import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.SAXParseException;
@@ -187,21 +188,19 @@ public class Packet
 			throw new InvalidPacketException("Wrong Local ID: expected " + localId + " but was " + handler.localId);
 	}
 
-	// this is only used by tests--remove it!
 	protected static void verifyPacketSignature(InputStreamWithSeek inputStream, MartusCrypto verifier) throws
-					IOException,
-					InvalidPacketException,
-					SignatureVerificationException
+			IOException,
+			InvalidPacketException,
+			SignatureVerificationException
 	{
 		verifyPacketSignature(inputStream, null, verifier);
 	}
 	
 	public static void verifyPacketSignature(InputStreamWithSeek in, byte[] expectedSig, MartusCrypto verifier) throws
-					IOException,
-					InvalidPacketException,
-					SignatureVerificationException
+			IOException,
+			InvalidPacketException,
+			SignatureVerificationException
 	{
-//System.out.println("Packet.verifyPacketSignature " + System.currentTimeMillis());
 		final long totalBytes = in.available();
 		UnicodeReader reader = new UnicodeReader(in);
 		
@@ -213,24 +212,54 @@ public class Packet
 		final String accountLine = reader.readLine();
 		final String publicKey = extractPublicKeyFromXmlLine(accountLine);
 		
-		String line = null;
-		String sigLine = null;
-		while( (line=reader.readLine()) != null)
+		try
 		{
-			if(line.startsWith(MartusXml.packetSignatureStart))
-				sigLine = line;
-		} 
+			synchronized(verifier)
+			{
+				verifier.signatureInitializeVerify(publicKey);
+				
+				digestOneLine(startComment, verifier);
+				digestOneLine(packetType, verifier);
+				digestOneLine(accountLine, verifier);
+				
+				String sigLine = null;
+				String line = null;
+				while( (line=reader.readLine()) != null)
+				{
+					if(line.startsWith(MartusXml.packetSignatureStart))
+					{
+						sigLine = line;
+						break;
+					}
+					
+					digestOneLine(line, verifier);
+				}
+				
+				byte[] sigBytes = extractSigFromXmlLine(sigLine);
+				if(expectedSig != null && !Arrays.equals(expectedSig, sigBytes))
+					throw new SignatureVerificationException();
 
-		byte[] sigBytes = extractSigFromXmlLine(sigLine);
-		
-		if(expectedSig != null && !Arrays.equals(expectedSig, sigBytes))
+				if(!verifier.signatureIsValid(sigBytes))
+					throw new SignatureVerificationException();
+			}
+		}
+		catch (MartusSignatureException e)
+		{
 			throw new SignatureVerificationException();
-		
-		final long dataLength = totalBytes - sigLine.length() - MartusXml.newLine.length();
-		in.seek(0);
-		verifySignature(in, dataLength, publicKey, sigBytes, verifier);
+		}
+		catch (UnsupportedEncodingException e)
+		{
+			throw new SignatureVerificationException();
+		}
 
 		in.seek(0);
+	}
+
+	static void digestOneLine(final String packetType, MartusCrypto verifier)
+		throws MartusSignatureException, UnsupportedEncodingException
+	{
+		verifier.signatureDigestBytes(packetType.getBytes("UTF-8"));
+		verifier.signatureDigestBytes(newlineBytes);
 	}
 
 	static byte[] extractSigFromXmlLine(String sigLine)
@@ -277,43 +306,6 @@ public class Packet
 		final String publicKey = accountLine.substring(startIndex, endIndex);
 		return publicKey;
 	}
-
-	private static void verifySignature(InputStream in,
-									final long dataLength, final String publicKey, 
-									byte[] expectedSigBytes, MartusCrypto verifier) throws 
-			IOException, 
-			SignatureVerificationException 
-	{
-//System.out.println("Packet.verifySignature " + System.currentTimeMillis());
-		try
-		{
-			synchronized(verifier)
-			{
-				verifier.signatureInitializeVerify(publicKey);
-				int got;
-				long remaining = dataLength;
-				byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
-				while(remaining >= bytes.length)
-				{
-					got = in.read(bytes);
-					verifier.signatureDigestBytes(bytes);
-					remaining -= got;
-				}
-			
-				byte[] lastBytes = new byte[(int)remaining];
-				in.read(lastBytes);
-				verifier.signatureDigestBytes(lastBytes);
-			
-				if(!verifier.signatureIsValid(expectedSigBytes))
-					throw new SignatureVerificationException();
-			}
-		}
-		catch(MartusCrypto.MartusSignatureException e)
-		{
-			throw new SignatureVerificationException();
-		}
-//System.out.println("Packet.verifySignature done " + System.currentTimeMillis());
-}
 
 	protected String getPacketRootElementName()
 	{
@@ -490,5 +482,6 @@ public class Packet
 		}
 	}
 
+	final static byte[] newlineBytes = "\n".getBytes();
 	UniversalId uid;
 }
