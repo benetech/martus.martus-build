@@ -484,6 +484,7 @@ public class MartusUtilities
 		while(entries.hasMoreElements())
 		{
 			ZipEntry entry = (ZipEntry)entries.nextElement();
+			localIds.remove(entry.getName());
 			InputStreamWithSeek in = new ZipEntryInputStream(zip, entry);
 			Packet.validateXml(in, authorAccountId, entry.getName(), null, security);
 		}
