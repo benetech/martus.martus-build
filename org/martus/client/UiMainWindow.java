@@ -115,6 +115,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			if(!createAccount())
 				return false;
 		}
+		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
 
 		try
 		{
@@ -135,7 +136,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 		
 
-		UiModelessBusyDlg waitingForBulletinsToLoad = new UiModelessBusyDlg(app.getFieldLabel("waitingForBulletinsToLoad"));
 		int quarantineCount = app.quarantineUnreadableBulletins();
 
 		if(uiState.getCurrentOperatingState().equals(uiState.OPERATING_STATE_OK))
@@ -152,7 +152,6 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 
 		initializeViews();
 		restoreState();
-		waitingForBulletinsToLoad.endDialog();
 
 		if(quarantineCount > 0)
 			notifyDlg(this, "FoundDamagedBulletins");
@@ -178,6 +177,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			uiState.setCurrentOperatingState(uiState.OPERATING_STATE_OK);
 			uiState.save(app.getUiStateFile());
 		}
+		waitingForBulletinsToLoad.endDialog();
 		mainWindowInitalizing = false;	
 		return true;
     }
