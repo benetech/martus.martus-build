@@ -42,9 +42,9 @@ import org.martus.common.crypto.MartusCrypto.InvalidKeyPairFileVersionException;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.FileDatabase;
+import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.packet.BulletinHeaderPacket;
 import org.martus.common.packet.Packet;
-import org.martus.server.core.ServerFileDatabase;
 import org.martus.util.InputStreamWithSeek;
 
 public class VerifyAllPackets

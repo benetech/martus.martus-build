@@ -8,10 +8,10 @@ import org.martus.common.crypto.MockMartusSecurity;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockServerDatabase;
+import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.Database.RecordHiddenException;
 import org.martus.common.packet.UniversalId;
 import org.martus.common.test.TestCaseEnhanced;
-import org.martus.server.core.ServerFileDatabase;
 
 public class TestDatabaseHiddenRecords extends TestCaseEnhanced
 {

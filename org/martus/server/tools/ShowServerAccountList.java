@@ -36,9 +36,9 @@ import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.CryptoInitializationException;
 import org.martus.common.database.Database;
 import org.martus.common.database.FileDatabase;
+import org.martus.common.database.ServerFileDatabase;
 import org.martus.common.database.FileDatabase.MissingAccountMapException;
 import org.martus.common.database.FileDatabase.MissingAccountMapSignatureException;
-import org.martus.server.core.ServerFileDatabase;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class ShowServerAccountList 

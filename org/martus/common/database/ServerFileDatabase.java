@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.core;
+package org.martus.common.database;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,8 +35,6 @@ import org.martus.common.MartusUtilities;
 import org.martus.common.MartusUtilities.FileVerificationException;
 import org.martus.common.crypto.MartusCrypto;
 import org.martus.common.crypto.MartusCrypto.MartusSignatureException;
-import org.martus.common.database.DatabaseKey;
-import org.martus.common.database.FileDatabase;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.forclients.MartusServerUtilities.MartusSignatureFileDoesntExistsException;
 import org.martus.util.FileOutputStreamViaTemp;

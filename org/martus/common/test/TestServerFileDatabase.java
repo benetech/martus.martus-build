@@ -24,18 +24,18 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.server.core;
+package org.martus.common.test;
 
 import java.io.File;
 import java.util.Vector;
 
 import org.martus.common.bulletin.Bulletin;
 import org.martus.common.crypto.MockMartusSecurity;
+import org.martus.common.database.*;
 import org.martus.common.database.Database;
 import org.martus.common.database.DatabaseKey;
 import org.martus.common.database.MockServerDatabase;
 import org.martus.common.packet.UniversalId;
-import org.martus.common.test.TestCaseEnhanced;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class TestServerFileDatabase extends TestCaseEnhanced 
