@@ -133,60 +133,68 @@ public class MartusServerUtilities
 		}
 		
 		return date;
-		
-		
 	}
 	
 	public static File getLatestSignatureFileFromFile(File originalFile)
 		throws IOException, ParseException, MartusSignatureFileDoesntExistsException
 	{
 		File sigDir = getPathToSignatureDirForFile(originalFile);
-		String [] signatureFilenames =  sigDir.list();
+		File [] signatureFiles =  sigDir.listFiles();
 		
-		if(signatureFilenames == null)
+		if(signatureFiles == null)
 		{
 			throw new MartusSignatureFileDoesntExistsException();
 		}
 		
-		String latestSignatureFilename = null;
 		Date latestSigDate = null;
+		File latestSignatureFile = null;
 		
-		String nextSignatureFilename = null;
-		Date nextSigDate = null;
-		
-		for(int x = 0; x < signatureFilenames.length; x++)
+		for(int x = 0; x < signatureFiles.length; x++)
 		{
-			if(signatureFilenames[x].endsWith(".sig") && signatureFilenames[x].startsWith(originalFile.getName()))
+			File nextSignatureFile = signatureFiles[x];
+
+			if(isMatchingSigFile(originalFile, nextSignatureFile))
 			{
-				if(latestSignatureFilename == null)
+				Date nextSigDate = getDateOfSignatureFile(nextSignatureFile);
+				if(isDateLatest(nextSigDate, latestSigDate))
 				{
-					latestSignatureFilename = signatureFilenames[x];
-					latestSigDate = getDateOfSignatureFile(new File(sigDir, latestSignatureFilename));
-					if(latestSigDate == null)
-					{
-						latestSignatureFilename = null;
-					}
-				}
-				else
-				{
-					nextSignatureFilename = signatureFilenames[x];
-					nextSigDate = getDateOfSignatureFile(new File(sigDir, nextSignatureFilename));
-			
-					if(nextSigDate != null && nextSigDate.after(latestSigDate))
-					{
-						latestSigDate = nextSigDate;
-						latestSignatureFilename = nextSignatureFilename;
-					}
+					latestSigDate = nextSigDate;
+					latestSignatureFile = nextSignatureFile;
 				}
 			}
 		}
 		
-		if(latestSignatureFilename == null)
+		if(latestSignatureFile == null)
 		{
 			throw new MartusSignatureFileDoesntExistsException();
 		}
 		 
-		return new File(sigDir, latestSignatureFilename);
+		return latestSignatureFile;
+	}
+
+	public static boolean isMatchingSigFile(File originalFile, File nextSignatureFile)
+	{
+		String orginalFilename = originalFile.getName();
+		String nextFilename = nextSignatureFile.getName();
+		
+		boolean isMatchingSigFile = nextFilename.endsWith(".sig") && nextFilename.startsWith(orginalFilename);
+		
+		return isMatchingSigFile;
+	}
+	
+	public static boolean isDateLatest(Date nextSigDate, Date latestSigDate)
+	{
+		if(nextSigDate == null)
+		{
+			return false;
+		}
+		
+		if(latestSigDate == null)
+		{
+			return true;
+		}
+
+		return nextSigDate.after(latestSigDate);
 	}
 
 	public synchronized static File createSignatureFileFromFileOnServer(File fileToSign, MartusCrypto signer)
@@ -301,23 +309,29 @@ public class MartusServerUtilities
 		}
 	}
 	
-	public static String getFileContents(File plainTextFile) throws IOException
+	public static byte [] getFileContents(File plainTextFile) throws IOException
 	{
-		UnicodeReader reader = new UnicodeReader(plainTextFile);
-		String all = "";
-		String line;
-		while((line = reader.readLine()) != null)
-		{
-			all += line + System.getProperty("line.separator");
-		}
-		reader.close();
+		long size = plainTextFile.length();
 		
-		return all;
+		if(size > MAX_ALLOWED_ENCRYPTED_FILESIZE)
+		{
+			throw new FileTooLargeException();
+		}
+		
+		byte [] result = new byte[(int) size];
+		
+		FileInputStream inputStream = new FileInputStream(plainTextFile);
+		inputStream.read(result);
+		inputStream.close();
+		
+		return result;
 	}
 	
 	public static class MartusSignatureFileAlreadyExistsException extends Exception {}
 	public static class MartusSignatureFileDoesntExistsException extends Exception {}
+	public static class FileTooLargeException extends IOException {}
 	
 	private static final String MARTUS_SIGNATURE_FILE_DATE_FORMAT = "yyyyMMdd-HHmmss";
 	private static final String MARTUS_SIGNATURE_FILE_IDENTIFIER = "Martus Signature File";
+	private static final int MAX_ALLOWED_ENCRYPTED_FILESIZE = 1000*1000;
 }

@@ -1,6 +1,5 @@
 package org.martus.server.tools;
 
-import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -93,23 +92,24 @@ public class DecryptFile
 			String retrievedEncryptedText = encryptedFileReader.readLine();
 			
 			String publicKeyString = security.getPublicKeyString();
-			if(publicKeyString.compareTo(retrievedPublicKeyString) != 0)
+			if(! publicKeyString.equals(retrievedPublicKeyString))
 			{
 				throw new IncorrectPublicKeyException();
 			}
 			
 			String identifierBytesExpected =  MartusSecurity.geEncryptedFileIdentifier();
-			if(identifierBytesExpected.compareTo(identifierBytesRetrieved) != 0)
+			if(! identifierBytesExpected.equals(identifierBytesRetrieved))
 			{
 				throw new IncorrectEncryptedFileIdentifierException();
 			}
 			
-			plainTextOutput = new BufferedOutputStream(new FileOutputStream(plainTextFile));
+			plainTextOutput = new FileOutputStream(plainTextFile);
 			decryptToFile(security, plainTextOutput, retrievedEncryptedText);
+			plainTextOutput.close();
 			
-			String plainText = MartusServerUtilities.getFileContents(plainTextFile);			
-			String calculatedDigest = MartusSecurity.createDigestString(plainText);
-			if(calculatedDigest.compareTo(retrievedDigest) != 0)
+			byte [] plainFileContents = MartusServerUtilities.getFileContents(plainTextFile);			
+			String calculatedDigest = Base64.encode(MartusSecurity.createDigest(plainFileContents));
+			if(! calculatedDigest.equals(retrievedDigest))
 			{
 				throw new DigestFailedException();
 			}			
@@ -126,7 +126,6 @@ public class DecryptFile
 		}
 		finally
 		{
-			plainTextOutput.close();
 			encryptedFileReader.close();
 		}
 		if(prompt)

@@ -1,20 +1,17 @@
 package org.martus.server.tools;
 
-import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
 import java.security.PublicKey;
+import java.util.Vector;
 
 import org.martus.common.Base64;
 import org.martus.common.MartusSecurity;
 import org.martus.common.MartusUtilities;
-import org.martus.common.MartusCrypto.CryptoInitializationException;
+import org.martus.common.UnicodeWriter;
 import org.martus.server.forclients.MartusServerUtilities;
 
 public class EncryptFile
@@ -49,44 +46,33 @@ public class EncryptFile
 			System.err.println("Incorrect arguments: EncryptFile --pubkey=<pubkey.dat> --plaintext-file=<input> --crypto-file=<output>");
 			System.exit(2);
 		}
-		
-		try
-		{
-			security = new MartusSecurity();
-		}
-		catch (CryptoInitializationException e)
-		{
-			System.err.println("EncryptFile.main: " + e);
-			System.exit(3);
-		}
-		
+
 		InputStream plainStream = null;
 		ByteArrayOutputStream cipherByteArrayOutputStream = null;
 		try
 		{
-			plainStream = new BufferedInputStream(new FileInputStream(plainTextFile));
+			security = new MartusSecurity();
+			
+			byte [] plainFileContents = MartusServerUtilities.getFileContents(plainTextFile);
+			String digest = Base64.encode(MartusSecurity.createDigest(plainFileContents));
+			
+			plainStream = new FileInputStream(plainTextFile);		
 			cipherByteArrayOutputStream = new ByteArrayOutputStream();
 			
-			String publicKeyString = (String) MartusUtilities.importServerPublicKeyFromFile(publicKeyFile, security).get(0);
+			Vector publicInfo = MartusUtilities.importServerPublicKeyFromFile(publicKeyFile, security);
+			String publicKeyString = (String) publicInfo.get(0);
 			PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
 			
 			security.encrypt(plainStream, cipherByteArrayOutputStream, security.createSessionKey(), publicKey);
 			String encodedEncryptedFile = Base64.encode(cipherByteArrayOutputStream.toByteArray());
+					
+			UnicodeWriter writer = new UnicodeWriter(cryptoFile);
+			writer.writeln(MartusSecurity.geEncryptedFileIdentifier());
+			writer.writeln(publicKeyString);
+			writer.writeln(digest);
+			writer.writeln(encodedEncryptedFile);
 			
-			String fileContents = MartusServerUtilities.getFileContents(plainTextFile);
-			String digest = MartusSecurity.createDigestString(fileContents);
-			
-			StringBuffer sbuffer = new StringBuffer();
-			sbuffer.append(MartusSecurity.geEncryptedFileIdentifier());
-			sbuffer.append("\n");
-			sbuffer.append(publicKeyString);
-			sbuffer.append("\n");
-			sbuffer.append(digest);
-			sbuffer.append("\n");
-			sbuffer.append(encodedEncryptedFile);
-			sbuffer.append("\n");
-			
-			writeEncryptedFile(cryptoFile, sbuffer.toString());
+			writer.close();
 		}
 		catch (Exception e)
 		{
@@ -106,13 +92,5 @@ public class EncryptFile
 		}
 
 		System.exit(0);
-	}
-	
-	public static void writeEncryptedFile(File cryptoFile, String fileContent)
-		throws FileNotFoundException, IOException, UnsupportedEncodingException
-	{
-		FileOutputStream cipherStream = new FileOutputStream(cryptoFile);
-		cipherStream.write(fileContent.getBytes("UTF-8"));
-		cipherStream.close();
 	}
 }
