@@ -317,8 +317,9 @@ public class ServerForClients implements ServerForNonSSLClientsInterface, Server
 			while( (line = reader.readLine()) != null)
 			{
 				if(line.trim().length() == 0)
-					throw new IOException(getMagicWordsFile() + " cannot contain a blank line!");
-				addMagicWord(normalizeMagicWord(line));
+					log("Warning: Found blank line in " + getMagicWordsFile().getPath());
+				else
+					addMagicWord(normalizeMagicWord(line));
 			}
 			reader.close();
 		}
