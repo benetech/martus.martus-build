@@ -1,3 +1,4 @@
+<!-- Ant build.xml - Need Ant v1.5 or later -->
 <project name="martus" default="test-meta" basedir=".">
 
   <!-- set global properties for this build -->
