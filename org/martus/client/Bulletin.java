@@ -169,6 +169,12 @@ public class Bulletin implements BulletinConstants
 
 	public String get(String fieldName)
 	{
+		if(fieldName.equals(BulletinsList.STATUS_TAG))
+		{
+			if(isDraft())
+				return BulletinConstants.STATUSDRAFT;
+			return BulletinConstants.STATUSSEALED;
+		}
 		if(isStandardField(fieldName))
 			return fieldData.get(fieldName);
 		else
