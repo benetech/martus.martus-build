@@ -21,8 +21,13 @@
 set -u
 #set -n
 
+#NOTE: Add additional language codes here
+MARTUS_LANGUAGES="en es ru ar fr th"
+export MARTUS_LANGUAGES
+
 # error function
 error() { echo "ERROR: $*" >&2; exit 1; }
+message() { echo "$*" >&2; }
 
 # usage fn
 usage()
@@ -73,7 +78,7 @@ cleanCvsHome() # Clean the build environment
 	fi
 }
 
-downloadSourcesFromCvs()
+downloadSourcesFromCvs() # downloads sources from CVS
 {
 	cleanCvsHome
 	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi"
@@ -99,7 +104,7 @@ downloadSourcesFromCvs()
 	downloadMartusInstallerFromCvsAndSetup
 } # downloadSourcesFromCvs
 
-downloadMartusFilesFromCVS()
+downloadMartusFilesFromCVS() # downloads martus files from CVS
 {
 	cd $CVS_HOME || error "unable to cd: err $?"
 	
@@ -110,7 +115,7 @@ downloadMartusFilesFromCVS()
 	echo
 } # downloadMartusFilesFromCVS
 
-downloadMartusAmpPresentationFromCvs()
+downloadMartusAmpPresentationFromCvs() # downloads martus-amp presentation files from CVS
 {
 	cd $CVS_HOME || error "unable to cd: err $?"
 	
@@ -125,7 +130,7 @@ downloadMartusAmpPresentationFromCvs()
 	echo
 } # downloadMartusAmpPresentationFromCvs
 
-downloadMartusThirdpartyFromCvsAndSetup()
+downloadMartusThirdpartyFromCvsAndSetup() # downloads third-party items from CVS
 {
 	cd $CVS_HOME || error "unable to cd: err $?"
 	
@@ -154,7 +159,7 @@ downloadMartusThirdpartyFromCvsAndSetup()
 	done
 } #downloadMartusThirdpartyFromCvsAndSetup
 
-downloadMartusVerifyFromCvsAndSetup()
+downloadMartusVerifyFromCvsAndSetup() # download server martus verify from CVS and build
 {
 	cd $CVS_HOME || error "unable to cd: err $?"
 	
@@ -188,7 +193,7 @@ find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 cd $CVS_HOME || exit
 } # cleanBuildArea
 
-downloadMartusInstallerFromCvsAndSetup()
+downloadMartusInstallerFromCvsAndSetup() # downloads installer from CVS and sets up CD Image
 {
 	if [ $build_client_cd = 0 ]; then
 		echo
@@ -205,7 +210,7 @@ downloadMartusInstallerFromCvsAndSetup()
 	cp $CVS_HOME/martus-thirdparty/common/InfiniteMonkey/bin/InfiniteMonkey.dll $MARTUSBUILDFILES/ProgramFiles/
 } # downloadMartusInstallerFromCvsAndSetup
 
-copyThirdPartyJarToCDBuild()
+copyThirdPartyJarToCDBuild() # copies third-party jars into CD Image
 {
 	BUILDFILES_JARS=$MARTUSBUILDFILES/Jars
 	SRC_THIRDPARTY_JARS_COMMON_DIR=$CVS_HOME/martus-thirdparty/common
@@ -220,7 +225,7 @@ copyThirdPartyJarToCDBuild()
 	cp $SRC_THIRDPARTY_JARS_LIBEXT_DIR/JUnit/bin/*.jar $BUILDFILES_JARS/
 } # copyThirdPartyJarToCDBuild
 
-copyThirdPartySourceToCDBuild()
+copyThirdPartySourceToCDBuild() # copies third-party sources into CD Image
 {
 	BUILDFILES_SRC_FILES=$MARTUSBUILDFILES/SourceFiles
 	rm -fr $BUILDFILES_SRC_FILES
@@ -251,7 +256,7 @@ copyThirdPartySourceToCDBuild()
 	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 } # copyThirdPartySourceToCDBuild
 
-copyThirdPartyLicenseToCDBuild()
+copyThirdPartyLicenseToCDBuild() # copies third-party license info to CD Image
 {
 	BUILDFILES_LICENSES=$MARTUSBUILDFILES/Documents/Licenses
 	rm -fr $BUILDFILES_LICENSES
@@ -278,7 +283,7 @@ copyThirdPartyLicenseToCDBuild()
 	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 } # copyThirdPartyLicenseToCDBuild
 
-setupBuildEnvironment()
+setupBuildEnvironment() # sets up environment for build
 {
 	CURRENT_VERSION=pre2.5-internal
 	BUILD_DATE=`date '+%Y%m%d'`
@@ -303,7 +308,7 @@ setupBuildEnvironment()
 	export CURRENT_VERSION BUILD_NUMBER BUILD_DATE MARTUS_ZIP_NAME BUILD_NUMBER_FILE RELEASE_DIR BUILD_VERNUM_TAG
 } # setupBuildEnvironment
 
-startAntBuild()
+startAntBuild() # initiates the Ant build
 {
 	echo
 	echo "Starting the ant build (might take a minute)..."
@@ -357,7 +362,7 @@ startAntBuild()
 	cd $INITIAL_DIR
 } # startAntBuild
 
-copyAntBuildToCDBuild()
+copyAntBuildToCDBuild() # copies successful build to CD Image
 {
 	echo
 	echo "Moving martus.jar to temp CD build location..."
@@ -408,7 +413,7 @@ copyAntBuildToCDBuild()
 	fi
 } # copyAntBuildToCDBuild
 
-updateCvsTree()
+updateCvsTree() # updates CVS with successful builds
 {
 	if [ $cvs_tag = 0 ]; then
 		return
@@ -507,7 +512,7 @@ updateCvsTree()
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $JARNAME_META_FINAL.jar.md5 || error "Unable to cvs commit $JARNAME_META_FINAL.jar"
 } # updateCvsTree
 
-removeUnnecesarryBuildFiles()
+removeUnnecesarryBuildFiles() # removes files uncessesary from CD Image
 {
 	cd $INITIAL_DIR
 	echo
@@ -525,7 +530,7 @@ removeUnnecesarryBuildFiles()
 	rm -f $MARTUSSOURCES/build.properties
 } # removeUnnecesarryBuildFiles
 
-createInstallerLicenseFile()
+createInstallerLicenseFile() # creates license file
 {
 	# create the license file for the installer
 	if [ -f "$MARTUSBUILDFILES/combined-license.txt" ]; then
@@ -575,13 +580,9 @@ zipSources()
 	find . -name "gpl.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	find . -name "main-class.txt" -print | zip $MARTUS_ZIP_PATH -q@
 	
-	
-	#NOTE: Add additional language codes here
-	martus_languages="en es ru ar fr th"
-	
 	echo
 	echo "zipping up language files...";
-	for martus_lang in $martus_languages
+	for martus_lang in $MARTUS_LANGUAGES
 		do
 		echo -e "\tzipping language: ${martus_lang}"
 		find . -name "MartusHelpTOC-${martus_lang}.txt" -print | zip $MARTUS_ZIP_PATH -q@
@@ -681,7 +682,6 @@ createInstallerCdImage()
 	export CD_IMAGE_DIR
 	
 	mkdir -p $CD_IMAGE_DIR
-	cp -v $MARTUSBUILDFILES/Documents/README*.txt $CD_IMAGE_DIR
 	cp -v $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR
 	
 	mkdir -p $CD_IMAGE_DIR/Win95
@@ -700,11 +700,17 @@ createInstallerCdImage()
 	cp -v $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR/Martus/
 	
 	mkdir -p $CD_IMAGE_DIR/Martus/Docs
+	cp -v $MARTUSBUILDFILES/Documents/README.txt $CD_IMAGE_DIR
 	cp -v $MARTUSBUILDFILES/Documents/martus_user_guide.pdf $CD_IMAGE_DIR/Martus/Docs
 	cp -v $MARTUSBUILDFILES/Documents/quickstartguide.pdf $CD_IMAGE_DIR/Martus/Docs
-	cp -v $MARTUSBUILDFILES/Documents/*_fr.pdf $CD_IMAGE_DIR/Martus/Docs
-	cp -v $MARTUSBUILDFILES/Documents/*_es.pdf $CD_IMAGE_DIR/Martus/Docs
-	cp -v $MARTUSBUILDFILES/Documents/*_ru.pdf $CD_IMAGE_DIR/Martus/Docs
+	
+	for martus_lang in $MARTUS_LANGUAGES
+		do
+		echo -e "\tcopying docs for language: ${martus_lang}"
+		cp -v $MARTUSBUILDFILES/Documents/README_${martus_lang}.txt $CD_IMAGE_DIR || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/README_${martus_lang}.txt"
+		cp -v $MARTUSBUILDFILES/Documents/*_${martus_lang}.pdf $CD_IMAGE_DIR/Martus/Docs || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/*_${martus_lang}.pdf"
+	done
+	
 	cp -v $MARTUSBUILDFILES/Documents/LinuxJavaInstall.txt $CD_IMAGE_DIR/Martus/Docs/
 	
 	cp -vr $BUILDFILES_LICENSES $CD_IMAGE_DIR/Martus/Docs/
