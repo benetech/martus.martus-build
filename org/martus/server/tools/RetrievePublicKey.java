@@ -14,7 +14,7 @@ import org.martus.common.MartusCrypto.AuthorizationFailedException;
 import org.martus.common.MartusCrypto.MartusSignatureException;
 import org.martus.server.forclients.MartusServerUtilities;
 import org.martus.server.formirroring.CallerSideMirroringGateway;
-import org.martus.server.formirroring.MirroringUtilities;
+import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc;
 import org.martus.server.formirroring.CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException;
 
 public class RetrievePublicKey
@@ -39,7 +39,7 @@ public class RetrievePublicKey
 	{
 		try
 		{
-			gateway = MirroringUtilities.createRealMirroringGateway(ip, port, publicCode);
+			gateway = RetrievePublicKey.createRealMirroringGateway(ip, port, publicCode);
 		}
 		catch (SSLSocketSetupException e)
 		{
@@ -158,6 +158,13 @@ public class RetrievePublicKey
 			System.exit(2);
 		}
 		
+	}
+
+	public static CallerSideMirroringGateway createRealMirroringGateway(String ip, int port, String publicCode) throws CallerSideMirroringGatewayForXmlRpc.SSLSocketSetupException
+	{
+		CallerSideMirroringGatewayForXmlRpc xmlRpcGateway = new CallerSideMirroringGatewayForXmlRpc(ip, port); 
+		xmlRpcGateway.setExpectedPublicCode(publicCode);
+		return new CallerSideMirroringGateway(xmlRpcGateway);
 	}
 
 	boolean prompt = true;

@@ -38,6 +38,11 @@ public class CallerSideMirroringGatewayForXmlRpc implements MirroringInterface
 		tm.setExpectedPublicCode(expectedPublicCode);
 	}
 
+	public void setExpectedPublicKey(String expectedPublicKey)
+	{
+		tm.setExpectedPublicKey(expectedPublicKey);
+	}
+
 	public Vector request(String callerAccountId, Vector parameters, String signature)
 	{
 		Vector params = new Vector();
