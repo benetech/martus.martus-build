@@ -47,7 +47,6 @@ public class TestClient
 
 		suite.addTest(new TestSuite(TestBulletinFolder.class));
 		suite.addTest(new TestSuite(TestBulletinStore.class));
-		suite.addTest(new TestSuite(TestBulletin.class));
 		suite.addTest(new TestSuite(TestBulletinSaver.class));
 		suite.addTest(new TestSuite(TestBulletinLoader.class));
 		suite.addTest(new TestSuite(TestBulletinZipImporter.class));

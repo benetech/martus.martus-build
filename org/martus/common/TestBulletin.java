@@ -24,7 +24,7 @@ Boston, MA 02111-1307, USA.
 
 */
 
-package org.martus.client.test;
+package org.martus.common;
 
 import java.io.File;
 import java.text.DateFormat;
@@ -35,21 +35,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
-
-import org.martus.client.core.BulletinStore;
-import org.martus.common.AttachmentProxy;
-import org.martus.common.Bulletin;
-import org.martus.common.BulletinConstants;
-import org.martus.common.BulletinHeaderPacket;
-import org.martus.common.BulletinSaver;
-import org.martus.common.DatabaseKey;
-import org.martus.common.FieldDataPacket;
-import org.martus.common.MartusCrypto;
-import org.martus.common.MartusSecurity;
-import org.martus.common.MartusUtilities;
-import org.martus.common.MockClientDatabase;
-import org.martus.common.MockDatabase;
-import org.martus.common.TestCaseEnhanced;
 
 
 public class TestBulletin extends TestCaseEnhanced
@@ -82,25 +67,16 @@ public class TestBulletin extends TestCaseEnhanced
 			security = new MartusSecurity();
 			security.createKeyPair(512);
 		}
-		app = MockMartusApp.create(security);
-		if(store == null)
-		{
-			db = new MockClientDatabase();
-			store = new BulletinStore(db);
-			store.setSignatureGenerator(app.getSecurity());
-			app.store = store;
-		}
-		store.deleteAllData();
+		db = new MockClientDatabase();
     }
 
     public void tearDown() throws Exception
     {
-    	app.deleteAllFiles();
     }
 
     public void testBasics()
     {
-		Bulletin b = new Bulletin(store.getSignatureGenerator());
+		Bulletin b = new Bulletin(security);
 		assertEquals(false, b.isStandardField("Nope"));
 		assertEquals(true, b.isStandardField("Location"));
 		assertEquals(true, b.isStandardField("location"));
@@ -110,19 +86,19 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(false, b.isPrivateField("LOCATION"));
 		assertEquals(true, b.isPrivateField(Bulletin.TAGPRIVATEINFO));
 
-		b = store.createEmptyBulletin();
+		b = new Bulletin(security);
 		assertNotEquals("", b.getLocalId());
 
 		assertEquals(security, b.getSignatureGenerator());
 
-		assertEquals("account not initialized correctly?", store.getAccountId(), b.getAccount());
-		assertEquals("field data account?", store.getAccountId(), b.getFieldDataPacket().getAccountId());
+		assertEquals("account not initialized correctly?", security.getPublicKeyString(), b.getAccount());
+		assertEquals("field data account?", security.getPublicKeyString(), b.getFieldDataPacket().getAccountId());
 
 	}
 
 	public void testAllPrivate()
 	{
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		assertEquals("not already all private?", true, b.isAllPrivate());
 		b.setAllPrivate(false);
 		assertEquals("still all private?", false, b.isAllPrivate());
@@ -142,14 +118,14 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testId()
 	{
-		Bulletin b = new Bulletin(store.getSignatureGenerator());
+		Bulletin b = new Bulletin(security);
 		assertNotNull("Id was Null?", b.getLocalId());
 		assertEquals("Id was empty?", false, b.getLocalId().length()==0);
 	}
 
 	public void testStatus()
 	{
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		assertEquals(Bulletin.STATUSDRAFT, b.getStatus());
 		assertEquals("Should start as draft", true, b.isDraft());
 		b.setDraft();
@@ -164,7 +140,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testEmpty()
 	{
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		String today = Bulletin.getToday();
 		assertEquals(today, b.get("entrydate"));
 
@@ -180,8 +156,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testGetSet()
 	{
-
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		assertEquals("", b.get("NoSuchField"));
 		b.set("NoSuchField", "hello");
 		assertEquals("", b.get("NoSuchField"));
@@ -206,7 +181,7 @@ public class TestBulletin extends TestCaseEnhanced
 		String publicInfo = "public info";
 		String privateInfo = "private info";
 
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		b.set(Bulletin.TAGPUBLICINFO, publicInfo);
 		b.set(Bulletin.TAGPRIVATEINFO, privateInfo);
 		assertEquals("public info not set?", publicInfo, b.get(Bulletin.TAGPUBLICINFO));
@@ -242,7 +217,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 	}
 
-	public void testEncryptPublicData()
+	public void testEncryptPublicData() throws Exception
 	{
 
 		class MyMockDatabase extends MockClientDatabase
@@ -255,13 +230,10 @@ public class TestBulletin extends TestCaseEnhanced
 		}
 
 		MyMockDatabase db = new MyMockDatabase();
-		BulletinStore store = new BulletinStore(db);
-		store.setSignatureGenerator(security);
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		b.setSealed();
 		b.setAllPrivate(false);
-		assertEquals("Ecrypted?", true, store.mustEncryptPublicData());
-		store.saveBulletin(b);
+		BulletinSaver.saveToDatabase(b, db, true, security);
 		assertEquals("Didn't Encrypt or Encyrpted too many packets.", 1, db.encryptWasCalled);
 	}
 
@@ -271,47 +243,9 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals(true, Bulletin.isFieldEncrypted("privateinfo"));
 	}
 
-	public void testSave()
-	{
-		int oldCount = store.getBulletinCount();
-		Bulletin b = store.createEmptyBulletin();
-		b.set("author", "testsave");
-		store.saveBulletin(b);
-		assertEquals(oldCount+1, store.getBulletinCount());
-		b = store.findBulletinByUniversalId(b.getUniversalId());
-		assertEquals("testsave", b.get("author"));
-		boolean empty = (b.getLocalId().length() == 0);
-		assertEquals("Saved ID must be non-empty\n", false, empty);
-
-		Bulletin b2 = store.createEmptyBulletin();
-		store.saveBulletin(b2);
-		assertNotEquals("Saved ID must be unique\n", b.getLocalId(), b2.getLocalId());
-
-		store.saveBulletin(b2);
-	}
-
-	public void testLastSavedTime() throws Exception
-	{
-		Bulletin b = store.createEmptyBulletin();
-		long createdTime = b.getLastSavedTime();
-		assertEquals("time already set?", BulletinHeaderPacket.TIME_UNKNOWN, createdTime);
-
-		Thread.sleep(200);
-		store.saveBulletin(b);
-		long firstSavedTime = b.getLastSavedTime();
-		assertNotEquals("Didn't update time saved?", createdTime, firstSavedTime);
-		long delta2 = Math.abs(firstSavedTime - System.currentTimeMillis());
-		assertTrue("time wrong?", delta2 < 1000);
-
-		Thread.sleep(200);
-		Bulletin b2 = store.loadFromDatabase(new DatabaseKey(b.getUniversalId()));
-		long loadedTime = b2.getLastSavedTime();
-		assertEquals("Didn't keep time saved?", firstSavedTime, loadedTime);
-	}
-
 	public void testGetStatus() throws Exception
 	{
-		Bulletin b1 = store.createEmptyBulletin();
+		Bulletin b1 = new Bulletin(security);
 		b1.set(Bulletin.TAGPUBLICINFO, "public info");
 		b1.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b1.setSealed();
@@ -322,12 +256,12 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testPullFrom() throws Exception
 	{
-		Bulletin b1 = store.createEmptyBulletin();
+		Bulletin b1 = new Bulletin(security);
 		b1.set(Bulletin.TAGPUBLICINFO, "public info");
 		b1.set(Bulletin.TAGPRIVATEINFO, "private info");
 		b1.setSealed();
-		store.saveBulletin(b1);
-		Bulletin b2 = store.createEmptyBulletin();
+		BulletinSaver.saveToDatabase(b1, db, true, security);
+		Bulletin b2 = new Bulletin(security);
 		b2.pullDataFrom(b1);
 		assertEquals("signer", b1.getSignatureGenerator(), b2.getSignatureGenerator());
 		assertEquals("id unchanged", false, b2.getLocalId().equals(b1.getLocalId()));
@@ -401,7 +335,7 @@ public class TestBulletin extends TestCaseEnhanced
 
 	public void testAddAttachment() throws Exception
 	{
-		Bulletin b = store.createEmptyBulletin();
+		Bulletin b = new Bulletin(security);
 		assertEquals("no attachments yet", 0, b.getPublicAttachments().length);
 		assertEquals("no private attachments yet", 0, b.getPrivateAttachments().length);
 
@@ -436,33 +370,9 @@ public class TestBulletin extends TestCaseEnhanced
 		assertEquals("a6 label", tempFile3.getName(), vp[2].getLabel());
 	}
 
-	public void testExtractAttachment() throws Exception
-	{
-		store.deleteAllData();
-		Bulletin original = store.createEmptyBulletin();
-		AttachmentProxy a1 = new AttachmentProxy(tempFile1);
-		AttachmentProxy a2 = new AttachmentProxy(tempFile2);
-		original.addPublicAttachment(a1);
-		original.addPublicAttachment(a2);
-		store.saveBulletin(original);
-		assertEquals("wrong record count", 5, db.getRecordCount());
-
-		Bulletin loaded = store.findBulletinByUniversalId(original.getUniversalId());
-		assertNotNull("not saved?", loaded);
-		AttachmentProxy[] list = loaded.getPublicAttachments();
-		assertEquals("count wrong?", 2, list.length);
-
-		File destFile1 = File.createTempFile("$$$MartusTestBulletinExt", null);
-		destFile1.deleteOnExit();
-		destFile1.delete();
-
-		BulletinSaver.extractAttachmentToFile(db, list[0], security, destFile1);
-		assertTrue("didn't create?", destFile1.exists());
-	}
-
 	public void testGetAndSetHQPublicKey()
 	{
-		Bulletin original = store.createEmptyBulletin();
+		Bulletin original = new Bulletin(security);
 		assertEquals("HQKey already set?", "", original.getHQPublicKey());
 		original.set(Bulletin.TAGPUBLICINFO, "public info");
 		String key = "12345";
@@ -495,8 +405,6 @@ public class TestBulletin extends TestCaseEnhanced
 	static AttachmentProxy proxy5;
 	static AttachmentProxy proxy6;
 
-	MockMartusApp app;
 	static MockDatabase db;
-	static BulletinStore store;
 	static MartusSecurity security;
 }

@@ -696,6 +696,46 @@ public class TestBulletinStore extends TestCaseEnhanced
 		assertEquals(0, folder.getBulletinCount());
 	}
 
+	public void testSave()
+	{
+		//TODO: This was moved in from TestBulletin, and it may 
+		//not be needed--compare with testSaveBulletin
+		int oldCount = store.getBulletinCount();
+		Bulletin b = store.createEmptyBulletin();
+		b.set("author", "testsave");
+		store.saveBulletin(b);
+		assertEquals(oldCount+1, store.getBulletinCount());
+		b = store.findBulletinByUniversalId(b.getUniversalId());
+		assertEquals("testsave", b.get("author"));
+		boolean empty = (b.getLocalId().length() == 0);
+		assertEquals("Saved ID must be non-empty\n", false, empty);
+
+		Bulletin b2 = store.createEmptyBulletin();
+		store.saveBulletin(b2);
+		assertNotEquals("Saved ID must be unique\n", b.getLocalId(), b2.getLocalId());
+
+		store.saveBulletin(b2);
+	}
+
+	public void testLastSavedTime() throws Exception
+	{
+		Bulletin b = store.createEmptyBulletin();
+		long createdTime = b.getLastSavedTime();
+		assertEquals("time already set?", BulletinHeaderPacket.TIME_UNKNOWN, createdTime);
+
+		Thread.sleep(200);
+		store.saveBulletin(b);
+		long firstSavedTime = b.getLastSavedTime();
+		assertNotEquals("Didn't update time saved?", createdTime, firstSavedTime);
+		long delta2 = Math.abs(firstSavedTime - System.currentTimeMillis());
+		assertTrue("time wrong?", delta2 < 1000);
+
+		Thread.sleep(200);
+		Bulletin b2 = store.loadFromDatabase(new DatabaseKey(b.getUniversalId()));
+		long loadedTime = b2.getLastSavedTime();
+		assertEquals("Didn't keep time saved?", firstSavedTime, loadedTime);
+	}
+
 	public void testAutomaticSaving() throws Exception
 	{
 		Database db = store.getDatabase();

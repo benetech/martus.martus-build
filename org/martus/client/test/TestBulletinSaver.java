@@ -303,6 +303,30 @@ public class TestBulletinSaver extends TestCaseEnhanced
 		}
 	}
 
+	public void testExtractAttachment() throws Exception
+	{
+		store.deleteAllData();
+		Bulletin original = store.createEmptyBulletin();
+		AttachmentProxy a1 = new AttachmentProxy(tempFile1);
+		AttachmentProxy a2 = new AttachmentProxy(tempFile2);
+		original.addPublicAttachment(a1);
+		original.addPublicAttachment(a2);
+		store.saveBulletin(original);
+		assertEquals("wrong record count", 5, db.getRecordCount());
+
+		Bulletin loaded = store.findBulletinByUniversalId(original.getUniversalId());
+		assertNotNull("not saved?", loaded);
+		AttachmentProxy[] list = loaded.getPublicAttachments();
+		assertEquals("count wrong?", 2, list.length);
+
+		File destFile1 = File.createTempFile("$$$MartusTestBulletinExt", null);
+		destFile1.deleteOnExit();
+		destFile1.delete();
+
+		BulletinSaver.extractAttachmentToFile(db, list[0], security, destFile1);
+		assertTrue("didn't create?", destFile1.exists());
+	}
+
 	static File tempFile1;
 	static File tempFile2;
 	static File tempFile3;
