@@ -65,6 +65,10 @@ public class EncryptFile
 			InputStream plainStream = new BufferedInputStream(new FileInputStream(plainTextFile));
 			OutputStream cipherStream = new BufferedOutputStream(new FileOutputStream(cryptoFile));
 			
+			byte[] buffer = MartusSecurity.geEncryptedFileIdentifier().getBytes();
+			int len = buffer.length;
+			cipherStream.write(buffer, 0, len);
+			
 			String publicKeyString = (String) MartusUtilities.importPublicKeyFromFile(publicKeyFile).get(0);
 			PublicKey publicKey = MartusSecurity.extractPublicKey(publicKeyString);
 			

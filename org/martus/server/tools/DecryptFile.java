@@ -7,6 +7,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.Arrays;
 
 import org.martus.common.FileInputStreamWithSeek;
 import org.martus.common.InputStreamWithSeek;
@@ -16,6 +17,8 @@ import org.martus.server.forclients.MartusServerUtilities;
 
 public class DecryptFile
 {
+	public static class IncorrectEncryptedFileIdentifierException extends Exception {};
+	
 	public static void main(String[] args)
 	{
 		File keyPairFile = null;
@@ -78,6 +81,17 @@ public class DecryptFile
 			
 			InputStreamWithSeek encryptedFileInput = new FileInputStreamWithSeek(cryptoFile);
 			OutputStream plainTextOutput = new BufferedOutputStream(new FileOutputStream(plainTextFile));
+			
+			int len = MartusSecurity.geEncryptedFileIdentifier().getBytes().length;
+			byte[] identifierBytesExpected = MartusSecurity.geEncryptedFileIdentifier().getBytes();
+			byte[] identifierBytesRetrieved = new byte[len];
+			
+			encryptedFileInput.read(identifierBytesRetrieved, 0, len);
+
+			if(! Arrays.equals(identifierBytesExpected, identifierBytesRetrieved))
+			{
+				throw new IncorrectEncryptedFileIdentifierException();
+			}
 			
 			security.decrypt(encryptedFileInput, plainTextOutput);
 		}

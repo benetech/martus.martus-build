@@ -335,7 +335,8 @@ public class MartusSecurity implements MartusCrypto
 	public synchronized void decrypt(InputStreamWithSeek cipherStream, OutputStream plainStream, byte[] sessionKeyBytes) throws
 			DecryptionException
 	{
-		CipherInputStream cis = createCipherInputStream(cipherStream, sessionKeyBytes);		BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
+		CipherInputStream cis = createCipherInputStream(cipherStream, sessionKeyBytes);
+		BufferedOutputStream bufferedPlainStream = new BufferedOutputStream(plainStream);
 		try
 		{
 			final int SIZE = MartusConstants.streamBufferCopySize;
@@ -359,7 +360,7 @@ public class MartusSecurity implements MartusCrypto
 		throws	DecryptionException
 	{
 		try
-		{
+		{	
 			DataInputStream dis = new DataInputStream(cipherStream);
 			byte[] storedSessionKey = readSessionKey(dis);
 			if(sessionKeyBytes == null)
@@ -803,6 +804,11 @@ public class MartusSecurity implements MartusCrypto
 	{
 		return Base64.encode(key.getEncoded());
 	}
+	
+	static public String geEncryptedFileIdentifier()
+	{
+		return ENCRYPTED_FILE_VERSION_IDENTIFIER;
+	}
 
 	protected synchronized void accumulateForSignOrVerify(InputStream in) throws
 					IOException,
@@ -828,6 +834,7 @@ public class MartusSecurity implements MartusCrypto
 	private static final String PBE_ALGORITHM = "PBEWithSHAAndTwofish-CBC";
 	private static final String SIGN_ALGORITHM = "SHA1WithRSA";
 	private static final String DIGEST_ALGORITHM = "SHA1";
+	private static final String ENCRYPTED_FILE_VERSION_IDENTIFIER = "Martus Encrypted File Version 001\n";
 
 	private static final int bitsInSessionKey = 256;
 	private static final int bitsInPublicKey = 2048;
