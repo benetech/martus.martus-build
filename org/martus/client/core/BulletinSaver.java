@@ -26,8 +26,12 @@ Boston, MA 02111-1307, USA.
 
 package org.martus.client.core;
 
+import java.io.File;
 import java.io.IOException;
 
+import org.martus.common.AttachmentPacket;
+import org.martus.common.AttachmentProxy;
+import org.martus.common.Base64;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
@@ -139,5 +143,20 @@ public class BulletinSaver
 				db.discardRecord(new DatabaseKey(auid));
 			}
 		}
+	}
+
+	public static void extractAttachmentToFile(Database db, AttachmentProxy a, MartusCrypto verifier, File destFile) throws
+		IOException,
+		Base64.InvalidBase64Exception,
+		Packet.InvalidPacketException,
+		Packet.SignatureVerificationException,
+		Packet.WrongPacketTypeException,
+		MartusCrypto.CryptoException
+	{
+		UniversalId uid = a.getUniversalId();
+		byte[] sessionKeyBytes = a.getSessionKeyBytes();
+		DatabaseKey key = new DatabaseKey(uid);
+		InputStreamWithSeek xmlIn = db.openInputStream(key, verifier);
+		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, destFile);
 	}
 }

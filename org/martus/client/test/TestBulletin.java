@@ -945,7 +945,7 @@ public class TestBulletin extends TestCaseEnhanced
 		destFile1.deleteOnExit();
 		destFile1.delete();
 
-		loaded.extractAttachmentToFile(list[0], security, destFile1);
+		BulletinSaver.extractAttachmentToFile(db, list[0], security, destFile1);
 		assertTrue("didn't create?", destFile1.exists());
 	}
 

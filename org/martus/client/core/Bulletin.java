@@ -39,7 +39,6 @@ import java.util.zip.ZipFile;
 
 import org.martus.common.AttachmentPacket;
 import org.martus.common.AttachmentProxy;
-import org.martus.common.Base64;
 import org.martus.common.BulletinConstants;
 import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
@@ -54,9 +53,6 @@ import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.DecryptionException;
 import org.martus.common.MartusCrypto.EncryptionException;
 import org.martus.common.MartusCrypto.NoKeyPairException;
-import org.martus.common.Packet.InvalidPacketException;
-import org.martus.common.Packet.SignatureVerificationException;
-import org.martus.common.Packet.WrongPacketTypeException;
 
 
 public class Bulletin implements BulletinConstants
@@ -258,22 +254,6 @@ public class Bulletin implements BulletinConstants
 	public AttachmentProxy[] getPrivateAttachments()
 	{
 		return getPrivateFieldDataPacket().getAttachments();
-	}
-
-	public void extractAttachmentToFile(AttachmentProxy a, MartusCrypto verifier, File destFile) throws
-		IOException,
-		Base64.InvalidBase64Exception,
-		InvalidPacketException,
-		SignatureVerificationException,
-		WrongPacketTypeException,
-		MartusCrypto.CryptoException
-	{
-		UniversalId uid = a.getUniversalId();
-		byte[] sessionKeyBytes = a.getSessionKeyBytes();
-		DatabaseKey key = new DatabaseKey(uid);
-		Database db = getDatabase();
-		InputStreamWithSeek xmlIn = db.openInputStream(key, verifier);
-		AttachmentPacket.exportRawFileFromXml(xmlIn, sessionKeyBytes, verifier, destFile);
 	}
 
 	public void clear()

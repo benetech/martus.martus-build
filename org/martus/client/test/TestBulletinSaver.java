@@ -283,11 +283,11 @@ public class TestBulletinSaver extends TestCaseEnhanced
 			AttachmentProxy gotA = originalAttachments[i];
 			String localId = gotA.getUniversalId().getLocalId();
 			DatabaseKey key1 = new DatabaseKey(gotA.getUniversalId());
-			assertEquals(tag + i + " missing original record?", true,  store.getDatabase().doesRecordExist(key1));
+			assertEquals(tag + i + " missing original record?", true,  db.doesRecordExist(key1));
 
 			File tempFile = File.createTempFile("$$$MartusTestBullSvAtt", null);
 			tempFile.deleteOnExit();
-			got.extractAttachmentToFile(gotA, security, tempFile);
+			BulletinSaver.extractAttachmentToFile(db, gotA, security, tempFile);
 			FileInputStream in = new FileInputStream(tempFile);
 			byte[] gotBytes = new byte[in.available()];
 			in.read(gotBytes);

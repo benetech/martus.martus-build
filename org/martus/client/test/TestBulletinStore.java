@@ -811,7 +811,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		
 		File tempRawFilePublic = File.createTempFile("$$$MartusTestImpSealedZipRawPublic",null);
 		tempRawFilePublic.deleteOnExit();
-		reloaded.extractAttachmentToFile(reloaded.getPublicAttachments()[0], security, tempRawFilePublic);
+		BulletinSaver.extractAttachmentToFile(db, reloaded.getPublicAttachments()[0], security, tempRawFilePublic);
 		byte[] rawBytesPublic = new byte[sampleBytes1.length];
 		FileInputStream in = new FileInputStream(tempRawFilePublic);
 		in.read(rawBytesPublic);
@@ -820,7 +820,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		File tempRawFilePrivate = File.createTempFile("$$$MartusTestImpSealedZipRawPrivate",null);
 		tempRawFilePrivate.deleteOnExit();
-		reloaded.extractAttachmentToFile(reloaded.getPrivateAttachments()[0], security, tempRawFilePrivate);
+		BulletinSaver.extractAttachmentToFile(db, reloaded.getPrivateAttachments()[0], security, tempRawFilePrivate);
 		byte[] rawBytesPrivate = new byte[sampleBytes2.length];
 		FileInputStream in2 = new FileInputStream(tempRawFilePrivate);
 		in2.read(rawBytesPrivate);
@@ -993,7 +993,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		
 		File tempRawFile = File.createTempFile("$$$MartusTestImpDraftZipRaw",null);
 		tempRawFile.deleteOnExit();
-		reloaded.extractAttachmentToFile(reloaded.getPublicAttachments()[0], security, tempRawFile);
+		BulletinSaver.extractAttachmentToFile(db, reloaded.getPublicAttachments()[0], security, tempRawFile);
 		
 		byte[] rawBytes = new byte[sampleBytes1.length];
 		FileInputStream in = new FileInputStream(tempRawFile);
@@ -1003,7 +1003,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		File tempRawFilePrivate = File.createTempFile("$$$MartusTestImpDraftZipRawPrivate",null);
 		tempRawFilePrivate.deleteOnExit();
-		reloaded.extractAttachmentToFile(reloaded.getPrivateAttachments()[0], security, tempRawFilePrivate);
+		BulletinSaver.extractAttachmentToFile(db, reloaded.getPrivateAttachments()[0], security, tempRawFilePrivate);
 		
 		byte[] rawBytesPrivate = new byte[sampleBytes2.length];
 		FileInputStream in2 = new FileInputStream(tempRawFilePrivate);

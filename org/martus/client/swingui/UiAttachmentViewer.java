@@ -41,9 +41,10 @@ import javax.swing.JTable;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.AbstractTableModel;
 
-import org.martus.client.core.Bulletin;
+import org.martus.client.core.BulletinSaver;
 import org.martus.client.core.MartusApp;
 import org.martus.common.AttachmentProxy;
+import org.martus.common.Database;
 
 
 
@@ -200,8 +201,8 @@ public class UiAttachmentViewer extends JPanel
 				AttachmentProxy proxy = model.getAttachmentProxyAt(selection,1);
 				try
 				{
-					Bulletin b = bulletinComponent.getCurrentBulletin();
-					b.extractAttachmentToFile(proxy, app.getSecurity(), outputFile);
+					Database db = mainWindow.getApp().getStore().getDatabase();
+					BulletinSaver.extractAttachmentToFile(db, proxy, app.getSecurity(), outputFile);
 				}
 				catch(Exception e)
 				{
