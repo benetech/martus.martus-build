@@ -47,7 +47,7 @@ public class UiUnknownViewer extends UiField
 
 	public String getText()
 	{
-		return null;
+		return "";
 	}
 
 	public void setText(String newText)
