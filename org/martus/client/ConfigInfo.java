@@ -148,7 +148,7 @@ public class ConfigInfo implements Serializable
 
 	private boolean mustAskUserToSendToServer;
 
-	final short VERSION = 2;
+	final short VERSION = 3;
 	//Version 1
 	private short version;
 	private String author;
@@ -163,5 +163,6 @@ public class ConfigInfo implements Serializable
 	private String hqKey;
 	//Version 2
 	private boolean sendContactInfoToServer;	
-
+	//Version 3 flag to indicate AccountMap.txt is signed.
+	
 }
