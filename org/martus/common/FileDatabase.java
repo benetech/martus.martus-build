@@ -99,7 +99,8 @@ public class FileDatabase extends Database
 		return false;
 	}
 
-	public void writeRecord(DatabaseKey key, String record) throws IOException
+	public void writeRecord(DatabaseKey key, String record) 
+			throws IOException, RecordHiddenException
 	{
 		writeRecord(key, new StringInputStream(record));
 	}
@@ -117,8 +118,11 @@ public class FileDatabase extends Database
 		return 0;
 	}
 
-	public void importFiles(HashMap fileMapping)  throws IOException
+	public void importFiles(HashMap fileMapping) 
+			throws IOException, RecordHiddenException
 	{
+		throwIfAnyRecordsHidden(fileMapping);
+
 		Iterator keys = fileMapping.keySet().iterator();
 		while(keys.hasNext())
 		{
@@ -134,6 +138,7 @@ public class FileDatabase extends Database
 
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws
 			IOException,
+			RecordHiddenException, 			
 			MartusCrypto.CryptoException
 	{
 		if(encrypter == null)
@@ -143,7 +148,8 @@ public class FileDatabase extends Database
 		writeRecordUsingCopier(key, in, new StreamEncryptor(encrypter));
 	}
 
-	public void writeRecord(DatabaseKey key, InputStream in) throws IOException
+	public void writeRecord(DatabaseKey key, InputStream in) 
+			throws IOException, RecordHiddenException
 	{
 		writeRecordUsingCopier(key, in, new StreamCopier());
 	}
@@ -647,10 +653,12 @@ public class FileDatabase extends Database
 	}
 
 	private synchronized void writeRecordUsingCopier(DatabaseKey key, InputStream in, StreamFilter copier)
-		throws IOException
+		throws IOException, RecordHiddenException
 	{
 		if(key == null)
 			throw new IOException("Null key");
+
+		throwIfRecordIsHidden(key);
 
 		try
 		{

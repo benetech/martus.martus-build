@@ -62,7 +62,6 @@ import org.martus.common.UnicodeReader;
 import org.martus.common.UniversalId;
 import org.martus.common.Base64.InvalidBase64Exception;
 import org.martus.common.MartusCrypto.AuthorizationFailedException;
-import org.martus.common.MartusCrypto.CreateDigestException;
 import org.martus.common.MartusCrypto.CryptoException;
 import org.martus.common.MartusCrypto.CryptoInitializationException;
 import org.martus.common.MartusCrypto.DecryptionException;
@@ -1117,15 +1116,11 @@ public class MartusServer implements NetworkInterfaceConstants
 			String bur = MartusServerUtilities.createBulletinUploadRecord(bulletinLocalId1, security);
 			MartusServerUtilities.writeSpecificBurToDatabase(getDatabase(), bhp, bur);
 		}
-		catch (CreateDigestException e)
+		catch (Exception e)
 		{
 			log("saveUpload SERVER_ERROR: " + e);
 			result =  NetworkInterfaceConstants.SERVER_ERROR;
-		} catch (IOException e)
-		{
-			log("saveUpload SERVER_ERROR: " + e);
-			result =  NetworkInterfaceConstants.SERVER_ERROR;
-		}
+		} 
 		
 		return result;
 	}

@@ -29,6 +29,7 @@ public class TestMeta extends TestCaseEnhanced
 
 		suite.addTest(new TestSuite(TestSSL.class));
 		suite.addTest(new TestSuite(TestDatabase.class));
+		suite.addTest(new TestSuite(TestDatabaseHiddenRecords.class));
 		suite.addTest(new TestSuite(TestThreads.class));
 	
 		suite.addTest(new TestSuite(TestMartusApp_WithServer.class));

@@ -225,6 +225,7 @@ public class BulletinZipUtilities
 
 	public static void importBulletinPacketsFromZipFileToDatabase(Database db, String authorAccountId, ZipFile zip, MartusCrypto security)
 		throws IOException,
+		Database.RecordHiddenException,
 		Packet.InvalidPacketException,
 		Packet.SignatureVerificationException,
 		Packet.WrongAccountException,

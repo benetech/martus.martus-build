@@ -69,16 +69,22 @@ abstract public class MockDatabase extends Database
 		outgoingInterimMap = new TreeMap();
 	}
 
-	public void writeRecord(DatabaseKey key, String record) throws IOException
+	public void writeRecord(DatabaseKey key, String record) 
+			throws IOException, RecordHiddenException
 	{
 		if(key == null || record == null)
 			throw new IOException("Null parameter");
 
+		throwIfRecordIsHidden(key);
+
 		addKeyToMap(key, record);
 	}
 
-	public void importFiles(HashMap fileMapping) throws IOException
+	public void importFiles(HashMap fileMapping) throws 
+		IOException, RecordHiddenException
 	{
+		throwIfAnyRecordsHidden(fileMapping);
+
 		Iterator keys = fileMapping.keySet().iterator();
 		while(keys.hasNext())
 		{
@@ -105,13 +111,14 @@ abstract public class MockDatabase extends Database
 	}
 
 	public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws
-			IOException
+			IOException, RecordHiddenException
 	{
 		writeRecord(key, record);
 	}
 
 	//TODO try BufferedInputStream
-	public void writeRecord(DatabaseKey key, InputStream record) throws IOException
+	public void writeRecord(DatabaseKey key, InputStream record) 
+		throws IOException, RecordHiddenException
 	{
 		if(key == null || record == null)
 			throw new IOException("Null parameter");

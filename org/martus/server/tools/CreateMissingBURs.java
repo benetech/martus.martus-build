@@ -35,6 +35,7 @@ import org.martus.common.BulletinHeaderPacket;
 import org.martus.common.Database;
 import org.martus.common.DatabaseKey;
 import org.martus.common.MartusCrypto;
+import org.martus.common.Database.RecordHiddenException;
 import org.martus.common.FileDatabase.TooManyAccountsException;
 import org.martus.common.MartusCrypto.CreateDigestException;
 import org.martus.server.core.ServerFileDatabase;
@@ -60,7 +61,8 @@ public class CreateMissingBURs
 	static class BurAlreadyExistedException extends Exception {}
 	
 	static void createBulletinUploadRecord(ServerFileDatabase db, DatabaseKey key, MartusCrypto security)
-		throws CreateDigestException, BurAlreadyExistedException, IOException, TooManyAccountsException
+		throws CreateDigestException, BurAlreadyExistedException, 
+		IOException, RecordHiddenException, TooManyAccountsException
 	{
 		String timeStamp = db.getTimeStamp(key);
 		String bur = MartusServerUtilities.createBulletinUploadRecordWithSpecificTimeStamp(key.getLocalId(), timeStamp, security);

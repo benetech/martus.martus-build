@@ -69,6 +69,7 @@ public class MartusServerUtilities
 		throws
 			ZipException,
 			IOException,
+			Database.RecordHiddenException,
 			Packet.InvalidPacketException,
 			Packet.SignatureVerificationException,
 			MartusServer.SealedPacketExistsException,
@@ -476,7 +477,7 @@ public class MartusServerUtilities
 	}
 
 	public static void writeSpecificBurToDatabase(Database db, BulletinHeaderPacket bhp, String bur)
-		throws IOException
+		throws IOException, Database.RecordHiddenException
 	{
 		DatabaseKey headerKey = bhp.createKeyWithHeaderStatus(bhp.getUniversalId());
 		DatabaseKey burKey = MartusServerUtilities.getBurKey(headerKey);

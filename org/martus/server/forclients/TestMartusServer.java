@@ -710,7 +710,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		
 		public void writeRecord(DatabaseKey key, InputStream record)
-			throws IOException 
+			throws IOException, RecordHiddenException
 		{
 			if(!key.isDraft())
 				throw new IOException("Invalid Status");
@@ -722,7 +722,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 	{
 		
 		public void writeRecord(DatabaseKey key, InputStream record)
-			throws IOException 
+			throws IOException, RecordHiddenException
 		{
 			if(!key.isSealed())
 				throw new IOException("Invalid Status");

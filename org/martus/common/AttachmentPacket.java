@@ -36,6 +36,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.HashMap;
 
+import org.martus.common.Database.RecordHiddenException;
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -80,7 +81,15 @@ public class AttachmentPacket extends Packet
 		DatabaseKey headerKey = new DatabaseKey(getUniversalId());
 		HashMap importMap = new HashMap();
 		importMap.put(headerKey, temp);
-		db.importFiles(importMap);
+		try
+		{
+			db.importFiles(importMap);
+		}
+		catch (RecordHiddenException e)
+		{
+			e.printStackTrace();
+			throw new IOException(e.toString());
+		}
 		temp.delete();
 		return sig;
 	}

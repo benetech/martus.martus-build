@@ -947,6 +947,11 @@ public class BulletinStore
 		{
 			BulletinZipUtilities.importBulletinPacketsFromZipFileToDatabase(getDatabase(), null, zip, getSignatureVerifier());
 		}
+		catch (Database.RecordHiddenException shouldBeImpossible)
+		{
+			shouldBeImpossible.printStackTrace();
+			throw new IOException(shouldBeImpossible.toString());
+		}
 		catch(WrongAccountException shouldBeImpossible)
 		{
 			throw new Packet.InvalidPacketException("Wrong account???");

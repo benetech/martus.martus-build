@@ -394,7 +394,7 @@ public class TestDatabase extends TestCaseEnhanced
 		internalTestLargeWriteRecordFromStream(serverFileDb);
 	}
 
-	public void testBadStream()
+	public void testBadStream() throws Exception
 	{
 		TRACE("testBadKey");
 		internalTestBadStream(mockDb);
@@ -780,7 +780,7 @@ public class TestDatabase extends TestCaseEnhanced
 		assertEquals(db.toString()+"wrong data?", largeString, gotBackLarge);
 	}
 
-	private void internalTestBadStream(Database db)
+	private void internalTestBadStream(Database db) throws Exception
 	{
 		class BadInputStream extends InputStream
 		{

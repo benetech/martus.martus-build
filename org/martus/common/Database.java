@@ -30,7 +30,11 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 import org.martus.common.FileDatabase.MissingAccountMapException;
 import org.martus.common.FileDatabase.MissingAccountMapSignatureException;
@@ -40,6 +44,8 @@ import org.martus.common.MartusUtilities.FileVerificationException;
 
 abstract public class Database
 {
+	public static class RecordHiddenException extends Exception {}
+
 	public interface PacketVisitor
 	{
 		void visit(DatabaseKey key);
@@ -50,12 +56,18 @@ abstract public class Database
 		void visit(String accountString);
 	}
 
+	protected Database()
+	{
+		final int expectedMaxEntries = 100;
+		hiddenPacketUids = Collections.synchronizedSet(new HashSet(expectedMaxEntries));
+	}
+	
 	abstract public void deleteAllData() throws Exception;
 	abstract public void initialize() throws FileVerificationException, MissingAccountMapException, MissingAccountMapSignatureException;
-	abstract public void writeRecord(DatabaseKey key, String record) throws IOException;
-	abstract public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws IOException, MartusCrypto.CryptoException;
-	abstract public void writeRecord(DatabaseKey key, InputStream record) throws IOException;
-	abstract public void importFiles(HashMap entries) throws IOException;
+	abstract public void writeRecord(DatabaseKey key, String record) throws IOException, RecordHiddenException;
+	abstract public void writeRecord(DatabaseKey key, InputStream record) throws IOException, RecordHiddenException;
+	abstract public void writeRecordEncrypted(DatabaseKey key, String record, MartusCrypto encrypter) throws IOException, RecordHiddenException, MartusCrypto.CryptoException;
+	abstract public void importFiles(HashMap entries) throws IOException, RecordHiddenException;
 	abstract public InputStreamWithSeek openInputStream(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
 	abstract public String readRecord(DatabaseKey key, MartusCrypto decrypter) throws IOException, MartusCrypto.CryptoException;
 	abstract public void discardRecord(DatabaseKey key);
@@ -71,6 +83,16 @@ abstract public class Database
 
 	abstract public boolean isInQuarantine(DatabaseKey key);
 	abstract public void moveRecordToQuarantine(DatabaseKey key);
+
+	public void hide(UniversalId uid)
+	{
+		hiddenPacketUids.add(uid);
+	}
+	
+	public boolean isHidden(UniversalId uid)
+	{
+		return hiddenPacketUids.contains(uid);
+	}
 
 	public boolean mustEncryptLocalData()
 	{
@@ -105,4 +127,22 @@ abstract public class Database
 		return new ByteArrayInputStreamWithSeek(bytes);
 	}
 
+	protected void throwIfAnyRecordsHidden(HashMap fileMapping) throws RecordHiddenException
+	{
+		Iterator lookForHiddenKeys = fileMapping.keySet().iterator();
+		while(lookForHiddenKeys.hasNext())
+		{
+			DatabaseKey key = (DatabaseKey) lookForHiddenKeys.next();
+			if(isHidden(key.getUniversalId()))
+				throw new RecordHiddenException();
+		}
+	}
+
+	protected void throwIfRecordIsHidden(DatabaseKey key) throws RecordHiddenException
+	{
+		if(isHidden(key.getUniversalId()))
+			throw new RecordHiddenException();
+	}
+
+	Set hiddenPacketUids;
 }
