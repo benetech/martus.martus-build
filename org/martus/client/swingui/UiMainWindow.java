@@ -1314,8 +1314,9 @@ if(result == NEW_ACCOUNT)
 	{
 		UiLocalization localization = getLocalization();
 		String message = localization.getFieldLabel("BackupKeyPairToMultipleUnencryptedFilesInformation");
-		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, "BackupKeyPairToMultipleUnencryptedFilesInformation", "Continue", "", "", message);
-		String defaultFileName = getStringInput("GetShareFileName","GetShareFileNameDescription","");
+		DisplayScrollableMessage("BackupKeyPairToMultipleUnencryptedFilesInformation", message, "Continue");
+		String defaultInputText = "";
+		String defaultFileName = getStringInput("GetShareFileName","GetShareFileNameDescription",defaultInputText);
 		if(defaultFileName == null)
 			return;
 		
@@ -1324,17 +1325,13 @@ if(result == NEW_ACCOUNT)
 		boolean saved;
 		for(int disk = 1; disk <= maxFiles; ++disk )
 		{
-			saved = false;
-			do
+			while(true)
 			{
 				UiFileChooser chooser = new UiFileChooser();
 				String windowTitle = localization.getWindowTitle("SaveShareKeyPair");
-				windowTitle = windowTitle.concat(" ");
-				windowTitle = windowTitle.concat(Integer.toString(disk));
-				windowTitle = windowTitle.concat(" ");
-				windowTitle = windowTitle.concat(localization.getWindowTitle("SaveShareKeyPairOf"));
-				windowTitle = windowTitle.concat(" ");
-				windowTitle = windowTitle.concat(Integer.toString(maxFiles));
+				windowTitle = windowTitle + " " + Integer.toString(disk) + " " + 
+								localization.getWindowTitle("SaveShareKeyPairOf") + " " +
+								Integer.toString(maxFiles);
 				chooser.setDialogTitle(windowTitle);
 				chooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 				String fileName = defaultFileName.concat(Integer.toString(disk)) + MartusApp.SHARE_KEYPAIR_FILENAME_EXTENSION;
@@ -1350,27 +1347,39 @@ if(result == NEW_ACCOUNT)
 						notifyDlg(this, "ErrorPreviousBackupShareExists");
 						continue;
 					}
-
-					try
-					{
-						FileOutputStream output = new FileOutputStream(newBackupFile);
-						output.write(disk);
-						output.close();
-						saved = true;
-					}
-					catch (IOException ioe)
-					{
-						System.out.println(ioe.getMessage());
-						notifyDlg(this, "ErrorBackingupKeyPair");
-					}
+					byte[] dataToSave = {0};
+					if(writeSharePieceToFile(newBackupFile, dataToSave))
+						break;
 				}
 				else
 				{
 					if(confirmDlg(this, "CancelShareBackup"))
 						return;
 				}
-			}while(!saved);
+			}
 		}
+	}
+
+	private boolean writeSharePieceToFile(File newBackupFile, byte[] dataToSave) 
+	{
+		try
+		{
+			FileOutputStream output = new FileOutputStream(newBackupFile);
+			output.write(dataToSave);
+			output.close();
+			return true;
+		}
+		catch (IOException ioe)
+		{
+			System.out.println(ioe.getMessage());
+			notifyDlg(this, "ErrorBackingupKeyPair");
+			return false;
+		}
+	}
+
+	private void DisplayScrollableMessage(String titleTag, String message, String okButtonTag) 
+	{
+		UiShowScrollableTextDlg dlg = new UiShowScrollableTextDlg(this, titleTag, okButtonTag, "", "", message);
 	}
 
 	public class BackupShareFilenameFilter implements FilenameFilter
