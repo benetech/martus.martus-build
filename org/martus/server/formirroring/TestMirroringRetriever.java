@@ -24,7 +24,7 @@ public class TestMirroringRetriever extends TestCaseEnhanced
 	public void setUp() throws Exception
 	{
 		db = new MockServerDatabase();
-		security = MockMartusSecurity.createClient();
+		security = MockMartusSecurity.createServer();
 		security.createKeyPair();
 		
 		supplier = new FakeServerSupplier();

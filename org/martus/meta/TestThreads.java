@@ -111,7 +111,6 @@ public class TestThreads extends TestCaseEnhanced
 			//store.maxCachedBulletinCount = 10;
 			
 			MockMartusSecurity security = MockMartusSecurity.createClient();
-			security.createKeyPair();
 			store.setSignatureGenerator(security);
 
 			for (int i = 0; i < 10; i++)
@@ -135,7 +134,6 @@ public class TestThreads extends TestCaseEnhanced
 		{
 			store = new BulletinStore(new MockClientDatabase());
 			MockMartusSecurity security = MockMartusSecurity.createClient();
-			security.createKeyPair();
 			
 			store.setSignatureGenerator(security);
 			b = store.createEmptyBulletin();
@@ -157,7 +155,6 @@ public class TestThreads extends TestCaseEnhanced
 		{
 			store = new BulletinStore(new MockClientDatabase());
 			MockMartusSecurity security = MockMartusSecurity.createClient();
-			security.createKeyPair();
 			store.setSignatureGenerator(security);
 		}
 		
@@ -176,7 +173,6 @@ public class TestThreads extends TestCaseEnhanced
 			store = new BulletinStore(new MockClientDatabase());
 
 			MockMartusSecurity security = MockMartusSecurity.createClient();
-			security.createKeyPair();
 			store.setSignatureGenerator(security);
 
 		}
@@ -196,7 +192,6 @@ public class TestThreads extends TestCaseEnhanced
 			store = new BulletinStore(new MockClientDatabase());
 
 			MockMartusSecurity security = MockMartusSecurity.createClient();
-			security.createKeyPair();
 			store.setSignatureGenerator(security);
 
 		}
@@ -217,7 +212,6 @@ public class TestThreads extends TestCaseEnhanced
 			store = new BulletinStore(new MockClientDatabase());
 
 			MockMartusSecurity security = MockMartusSecurity.createClient();
-			security.createKeyPair();
 			store.setSignatureGenerator(security);
 
 		}

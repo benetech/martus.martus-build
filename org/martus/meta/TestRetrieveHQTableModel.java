@@ -30,7 +30,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 	
 	public void setUp() throws Exception
 	{
-		MartusCrypto hqSecurity = MockMartusSecurity.createClient();
+		MartusCrypto hqSecurity = MockMartusSecurity.createHQ();
 		hqSecurity.createKeyPair();
 		hqApp = MockMartusApp.create(hqSecurity);
 
@@ -39,7 +39,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		fieldApp1 = MockMartusApp.create(fieldSecurity1);
 		Database db1 = fieldApp1.getStore().getDatabase();
 
-		MartusCrypto fieldSecurity2 = MockMartusSecurity.createClient();
+		MartusCrypto fieldSecurity2 = MockMartusSecurity.createOtherClient();
 		fieldSecurity2.createKeyPair();
 		fieldApp2 = MockMartusApp.create(fieldSecurity2);
 		Database db2 = fieldApp2.getStore().getDatabase();
@@ -207,7 +207,7 @@ public class TestRetrieveHQTableModel extends TestCaseEnhanced
 		MockServer() throws Exception
 		{
 			super();
-			setSecurity(MockMartusSecurity.createClient());
+			setSecurity(MockMartusSecurity.createServer());
 		}
 		
 		public Vector listFieldOfficeSealedBulletinIds(String hqAccountId, String authorAccountId, Vector retrieveTags)

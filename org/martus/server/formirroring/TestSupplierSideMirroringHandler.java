@@ -34,7 +34,7 @@ public class TestSupplierSideMirroringHandler extends TestCaseEnhanced
 		callerSecurity.createKeyPair();
 		callerAccountId = callerSecurity.getPublicKeyString();
 		
-		authorSecurity = MockMartusSecurity.createClient();
+		authorSecurity = MockMartusSecurity.createOtherClient();
 		authorSecurity.createKeyPair();
 	}
 

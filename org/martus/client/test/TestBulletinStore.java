@@ -1203,8 +1203,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 	private BulletinStore createTempStore() throws Exception
 	{
-		MockMartusSecurity tempSecurity = MockMartusSecurity.createClient();
-		tempSecurity.createKeyPairForOtherClient();
+		MockMartusSecurity tempSecurity = MockMartusSecurity.createOtherClient();
 		BulletinStore tempStore = new BulletinStore(new MockClientDatabase());
 		tempStore.setSignatureGenerator(tempSecurity);
 		return tempStore;

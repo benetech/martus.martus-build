@@ -899,7 +899,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		TRACE_BEGIN("testBadlySignedBulletinUpload");
 
 		testServer.allowUploads(clientSecurity.getPublicKeyString());
-		MockMartusSecurity mockServerSecurity = MockMartusSecurity.createClient();
+		MockMartusSecurity mockServerSecurity = MockMartusSecurity.createServer();
 		mockServerSecurity.fakeSigVerifyFailure = true;
 		testServer.security = mockServerSecurity;
 
@@ -1366,8 +1366,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		MartusSecurity fieldSecurity1 = clientSecurity;
 		testServer.allowUploads(fieldSecurity1.getPublicKeyString());
 
-		MartusSecurity nonFieldSecurity = MockMartusSecurity.createClient();
-		nonFieldSecurity.createKeyPair();
+		MartusSecurity nonFieldSecurity = MockMartusSecurity.createOtherClient();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
 		Vector list1 = testServer.legacyListFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString());
@@ -1414,8 +1413,7 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 		MartusSecurity fieldSecurity1 = clientSecurity;
 		testServer.allowUploads(fieldSecurity1.getPublicKeyString());
 
-		MartusSecurity nonFieldSecurity = MockMartusSecurity.createClient();
-		nonFieldSecurity.createKeyPair();
+		MartusSecurity nonFieldSecurity = MockMartusSecurity.createOtherClient();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
 		Vector list1 = testServer.listFieldOfficeSealedBulletinIds(hqSecurity.getPublicKeyString(), fieldSecurity1.getPublicKeyString(), new Vector());
@@ -1509,7 +1507,6 @@ public class TestMartusServer extends TestCaseEnhanced implements NetworkInterfa
 
 		Database nonFieldDatabase = new MockClientDatabase();
 		MartusSecurity nonFieldSecurity = MockMartusSecurity.createClient();
-		nonFieldSecurity.createKeyPair();
 		testServer.allowUploads(nonFieldSecurity.getPublicKeyString());
 
 		Bulletin b = new Bulletin(nonFieldSecurity);

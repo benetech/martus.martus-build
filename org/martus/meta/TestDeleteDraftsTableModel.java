@@ -38,8 +38,7 @@ public class TestDeleteDraftsTableModel extends TestCaseEnhanced
 		
 		testServer = new MockServer();
 		testServer.initialize();
-		MockMartusSecurity serverSecurity = MockMartusSecurity.createClient();
-		serverSecurity.createKeyPairForServer(); 
+		MockMartusSecurity serverSecurity = MockMartusSecurity.createServer();
 		testServer.setSecurity(serverSecurity);
 		ServerSideNetworkHandler testSSLServerInterface = new ServerSideNetworkHandler(testServer);
 		

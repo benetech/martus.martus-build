@@ -54,7 +54,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 			mockSecurityForApp = MockMartusSecurity.createClient();
 		
 		if(mockSecurityForServer == null)
-			mockSecurityForServer = MockMartusSecurity.createClient();
+			mockSecurityForServer = MockMartusSecurity.createServer();
 
 		mockServer = new MockMartusServer();
 		mockServer.initialize();
@@ -305,10 +305,11 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	
 	public void testGetServerPublicKey() throws Exception
 	{
-		MockMartusSecurity securityWithAccount = MockMartusSecurity.createClient();
+		MockMartusSecurity securityWithAccount = MockMartusSecurity.createOtherClient();
 		mockServer.setSecurity(securityWithAccount);
 		String publicKey = appWithServer.getServerPublicKey(mockNonSSLServerHandler);
 		assertEquals("wrong key?", securityWithAccount.getPublicKeyString(), publicKey);
+		mockServer.setSecurity(mockSecurityForServer);
 	}
 	
 
@@ -1133,7 +1134,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 	{
 		TRACE_BEGIN("testDownloadFieldOfficeBulletins");
 
-		MockMartusSecurity hqSecurity = MockMartusSecurity.createClient();	
+		MockMartusSecurity hqSecurity = MockMartusSecurity.createHQ();	
 		hqSecurity.createKeyPair();
 		MockMartusApp hqApp = MockMartusApp.create(hqSecurity);
 		hqApp.setServerInfo("mock", mockServer.getAccountId(), "");
@@ -1316,7 +1317,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	byte[] getBulletinZipBytes(Bulletin b) throws Exception
 	{
-		return Base64.decode(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForServer));
+		return Base64.decode(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForApp));
 	}
 		
 	private static MockMartusSecurity mockSecurityForApp;
