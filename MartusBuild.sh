@@ -21,11 +21,33 @@
 set -u
 #set -n
 
-#NOTE: Add additional language codes here
+#NOTE: Add additional language-code and language-code to language-string mappings below
 MARTUS_LANGUAGES="en es ru ar fr th"
 export MARTUS_LANGUAGES
 
-# error function
+# language-code to language-name mapping
+LANGUAGE_STRING="English"
+getLangNameFromCode()
+{
+	LANGUAGE_CODE=$1
+	
+	case $LANGUAGE_CODE in
+	"es")
+	   LANGUAGE_STRING="Spanish";;
+	"ru")
+	   LANGUAGE_STRING="Russian";;
+	"ar")
+	   LANGUAGE_STRING="Arabic";;
+	"fr")
+	   LANGUAGE_STRING="French";;
+	"th")
+	   LANGUAGE_STRING="Thai";;
+	*)
+	   LANGUAGE_STRING="English";;
+	esac
+}
+
+# error functions
 error() { echo "ERROR: $*" >&2; exit 1; }
 message() { echo "$*" >&2; }
 
@@ -657,12 +679,12 @@ createClientInstallers()
 	
 	cp -v $MARTUSNSISPROJECTDIR/*.nsi "$INSTALLER_SRC_FILES/" || error "Unable to copy *.nsi files"
 	mkdir "$INSTALLER_SRC_FILES/locallang"
-	
-	# NOTE: Language specific items below
-	cp -v $MARTUSNSISPROJECTDIR/locallang/English.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
-	cp -v $MARTUSNSISPROJECTDIR/locallang/Spanish.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
-	cp -v $MARTUSNSISPROJECTDIR/locallang/Russian.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
-	cp -v $MARTUSNSISPROJECTDIR/locallang/Arabic.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang files"
+
+	for martus_lang_code in $MARTUS_LANGUAGES
+		do
+		getLangNameFromCode $martus_lang_code
+		cp -v $MARTUSNSISPROJECTDIR/locallang/${LANGUAGE_STRING}.* "$INSTALLER_SRC_FILES/locallang/" || error "Unable to copy locallang ${martus_lang_code} files"
+	done
 	
 	find $CVS_HOME -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 	find $MARTUSSOURCES -type "f" -name "*.class" -exec rm -fR '{}' \; > /dev/null
