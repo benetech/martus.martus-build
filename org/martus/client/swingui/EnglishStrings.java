@@ -367,7 +367,7 @@ public class EnglishStrings
 "field:OnlineHelpTOCMessage=Topics:",
 "field:OnlineHelpTOCMessageDescription=Click on topic to display details.",
 "field:DefaultDetailFiles=Default Details",
-"field:ServerComplianceDescription=This server has provided the following statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  You can accept or reject this server based on its compliance statement.",
+"field:ServerComplianceDescription=The server you have selected has provided the following statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  You can accept or reject this server based on its compliance statement.",
 "field:ServerComplianceChangedDescription=The current server has updated its statement describing its compliance with the official guidelines for the secure and reliable operation of a Martus server.  The new statement appears below. You can accept or reject this server based on its compliance statement.",
 
 "field:VirtualUserNameDescription=(Enter using regular keyboard)",
@@ -431,8 +431,8 @@ public class EnglishStrings
 "field:confirmNotYourBulletinViewAttachmentAnywayseffect=Clicking on Yes will display the attachment, clicking on No will not try to display the attachment.",
 "field:confirmDoQuickErasecause=This will delete all bulletins and folders on this computer.",
 "field:confirmDoQuickEraseeffect=Bulletins that have not been backed up will be permanently lost.",
-"field:confirmServerComplianceFailedcause=Unable to determine whether this server complies with the official guidelines for operating a secure and reliable Martus server.",
-"field:confirmServerComplianceFailedeffect=We recommend that you do not use this server.  Continuing will select this non-compliant server anyway.",
+"field:confirmServerComplianceFailedcause=Martus software is unable to determine whether this server complies with the official guidelines for operating a secure and reliable Martus server.",
+"field:confirmServerComplianceFailedeffect=Benetech recommends that you do not use this server until a compliance statement is made available for you to read.  Continuing will select this non-compliant server anyway.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
