@@ -972,7 +972,8 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			//TODO eventually try to restore keypair from backup.
 		}
 
-		notifyDlg(this, "RewriteKeyPairWorked");
+		notifyDlg(this, "RewriteKeyPairSaved");
+		askToBackupKeyPair();
 	}
 
 	public void updateBulletinDetails(File defaultFile)
@@ -1216,6 +1217,12 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		}
 	}
 
+	public void askToBackupKeyPair()
+	{
+		if(confirmDlg(this,"BackupKeyPair"))
+			doBackupKeyPair();
+	}
+
 	public void doBackupKeyPair()
 	{
 		File keypairFile = app.getKeyPairFile();
@@ -1225,6 +1232,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			notifyDlg(this, "ErrorBackingupKeyPair");
 			return;
 		}
+		notifyDlg(this, "BackupKeyPairInformation");
 
 		JFileChooser chooser = new JFileChooser();
 		chooser.setDialogTitle(getLocalization().getWindowTitle("saveBackupKeyPair"));
@@ -1454,6 +1462,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 			return false;
 		}
 		waitingForKeyPair.endDialog();
+		askToBackupKeyPair();
 		return true;
 	}
 

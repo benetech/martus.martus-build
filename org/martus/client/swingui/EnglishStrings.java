@@ -67,6 +67,7 @@ public class EnglishStrings
 "wintitle:confirmNotYourBulletinViewAttachmentAnyways=View Attachment",
 "wintitle:confirmDoQuickErase=Quick Erase",
 "wintitle:confirmServerComplianceFailed=Server Compliance Statement",
+"wintitle:confirmBackupKeyPair=Backing Up Keypair",
 	
 "wintitle:notifyDropErrorNotAllowed=Cannot Move Bulletin(s)",
 "wintitle:notifyDropErrors=Error Moving Bulletin(s)",
@@ -91,7 +92,7 @@ public class EnglishStrings
 "wintitle:notifymagicwordok=Upload Permission Granted",
 "wintitle:notifymagicwordrejected=Upload Permission Rejected",
 "wintitle:notifyRewriteKeyPairFailed=Error Changing User Name or Password",
-"wintitle:notifyRewriteKeyPairWorked=Changed User Name or Password",
+"wintitle:notifyRewriteKeyPairSaved=Changed User Name or Password",
 "wintitle:notifyUnableToViewAttachment=Viewing Attachment Failed",
 "wintitle:notifyUnableToSaveAttachment=Saving Attachment Failed",
 "wintitle:notifySearchFailed=Search Results",
@@ -131,6 +132,7 @@ public class EnglishStrings
 "wintitle:notifyUserRejectedServerCompliance=Server Compliance Statement",
 "wintitle:notifyExistingServerRemoved=Server Removed",
 "wintitle:notifyErrorSavingBulletin=Error Saving",
+"wintitle:notifyBackupKeyPairInformation=Backing Your Keypair",
 				
 "wintitle:inputservername=Server Name",
 "wintitle:inputserverpubliccode=Server Identification",
@@ -438,6 +440,8 @@ public class EnglishStrings
 "field:confirmDoQuickEraseeffect=Bulletins that have not been backed up will be permanently lost.",
 "field:confirmServerComplianceFailedcause=Martus software is unable to determine whether this server complies with the official guidelines for operating a secure and reliable Martus server.",
 "field:confirmServerComplianceFailedeffect=Benetech recommends that you do not use this server until a compliance statement is made available for you to read.  Continuing will select this non-compliant server anyway.",
+"field:confirmBackupKeyPaircause=We strongly recommend that you backup your keypair file at this time.  If something happens to this file, and you don't have a backup you will not be able to open any bulletins you have created with this keypair.",
+"field:confirmBackupKeyPaireffect=By choosing Yes, you will be prompted to save a copy of your keypair onto a removable disk.",
 		
 "field:notifyDropErrorNotAllowedcause=One or more bulletins cannot be moved to that folder. This may be because of their Draft/Sealed status, or their author.",
 "field:notifyDropErrorscause=An unexpected error occured while moving the bulletin(s). One or more files may be damaged.",
@@ -462,7 +466,7 @@ public class EnglishStrings
 "field:notifymagicwordokcause=The Server has accepted your request for permission to upload bulletins.",
 "field:notifymagicwordrejectedcause=The Server has rejected your request. The magic word is probably not correct.",
 "field:notifyRewriteKeyPairFailedcause=An error occured.  Unable to change user name or password.  You may need to restore your backup key pair file.",
-"field:notifyRewriteKeyPairWorkedcause=Successfully saved your new username and password.\n\nWe strongly recommend that you back up your keypair.dat file at this time!",
+"field:notifyRewriteKeyPairSavedcause=Successfully saved your new username and password.",
 "field:notifyUnableToSaveAttachmentcause=Unable to save the selected attachment for some reason.  Try saving it to a different file.",
 "field:notifyUnableToViewAttachmentcause=Unable to view the selected attachment for some reason.",
 "field:notifySearchFailedcause=Sorry, no bulletins were found.",
@@ -502,6 +506,7 @@ public class EnglishStrings
 "field:notifyUserRejectedServerCompliancecause=You have chosen not to use this server",
 "field:notifyExistingServerRemovedcause=You will have to select a server for any bulletins to be backed up to that server, or to retrieve bulletins from that server.",
 "field:notifyErrorSavingBulletincause=An error prevented the bulletin from being saved. Check to make sure the disk is not full or write protected.",		
+"field:notifyBackupKeyPairInformationcause=Backing up your keypair should be saved onto removalble media.  We recommend you save this file to a floppy drive, or some other removable media drive.  Then store this disk in a safe place.",		
 
 "field:messageServerNewscause=The current server has sent this message:",
 "field:messageErrorDateInFuturecause=This date occurs in the future:",
