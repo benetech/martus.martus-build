@@ -29,7 +29,7 @@
     <target name="cvs.checkout">
         <delete dir="${cvs.home}"/>
         <mkdir dir="${cvs.home}"/>
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true">
             <commandline>
                 <argument value="-q"/>
                 <argument value="checkout"/>
@@ -39,7 +39,7 @@
             </commandline>
         </cvs>
 
-        <cvs cvsRoot="${cvs.cvsroot}" passfile="${cvs.privatekey.location}" quiet="false" dest="${cvs.home}" failonerror="true">
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true">
             <commandline>
                 <argument value="-q"/>
                 <argument value="checkout"/>
@@ -60,8 +60,8 @@
     </target>
 
     <!-- run martus build file -->
-    <target name="build-martus" depends="cvs.checkout">
-        <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="make-release"/>
+    <target name="build.martus" depends="cvs.checkout">
+        <ant antfile="${cvs.home}/${martus-module}/cvs.build.xml" dir="${cvs.home}/${martus-module}" target="release.and.checkin"/>
     </target>
 
 
