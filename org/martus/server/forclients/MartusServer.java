@@ -1607,7 +1607,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		security.writeKeyPair(out, passphrase);
 	}
 	
-	public static File getDefaultDataDirectory()
+	public static String getDefaultDataDirectoryPath()
 	{
 		String dataDirectory = null;
 		if(System.getProperty("os.name").indexOf("Windows") >= 0)
@@ -1618,7 +1618,12 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 		{
 			dataDirectory = "/var/MartusServer/";
 		}
-		File file = new File(dataDirectory);
+		return dataDirectory;
+	}
+	
+	public static File getDefaultDataDirectory()
+	{
+		File file = new File(MartusServer.getDefaultDataDirectoryPath());
 		if(!file.exists())
 		{
 			file.mkdirs();
