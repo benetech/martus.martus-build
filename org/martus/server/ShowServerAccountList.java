@@ -26,6 +26,7 @@ public class ShowServerAccountList
 	{
 		File dataDir = null;
 		File keyPairFile = null;
+		boolean prompt = true;
 		
 		for (int i = 0; i < args.length; i++)
 		{
@@ -37,6 +38,11 @@ public class ShowServerAccountList
 			if(args[i].startsWith("--packet-directory="))
 			{
 				dataDir = new File(args[i].substring(args[i].indexOf("=")+1));
+			}
+			
+			if(args[i].startsWith("--no-prompt="))
+			{
+				prompt = false;
 			}
 		}
 		
@@ -60,8 +66,12 @@ public class ShowServerAccountList
 		
 		MartusCrypto security = null;
 		
-		System.out.print("Enter server passphrase:");
-		System.out.flush();
+		if(prompt)
+		{
+			System.out.print("Enter server passphrase:");
+			System.out.flush();
+		}
+		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		try
 		{
