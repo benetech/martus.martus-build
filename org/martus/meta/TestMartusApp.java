@@ -1633,7 +1633,9 @@ public class TestMartusApp extends TestCaseEnhanced
 		appWithServer.setCurrentLanguage("es");
 		assertEquals("MartusHelp-es.txt", appWithServer.getHelpFilename());
 		assertEquals("es", appWithServer.getCurrentLanguage());
-		assertEquals("Título", appWithServer.getFieldLabel("title"));
+		char iWithAccentInUtf8 = 237;
+		char[] titleInSpanish = {'T', iWithAccentInUtf8, 't', 'u', 'l', 'o'};
+		assertEquals(new String(titleInSpanish), appWithServer.getFieldLabel("title"));
 		appWithServer.setCurrentLanguage("en");
 		TRACE_END();
 	}
