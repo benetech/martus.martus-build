@@ -104,6 +104,8 @@ public class ServerForMirroring implements ServerSupplierInterface
 				{
 					if(key.isDraft())
 						return;
+					if(!BulletinHeaderPacket.isValidLocalId(key.getLocalId()))
+						return;
 					InputStreamWithSeek in = getDatabase().openInputStream(key, null);
 					byte[] sigBytes = BulletinHeaderPacket.verifyPacketSignature(in, getSecurity());
 					in.close();

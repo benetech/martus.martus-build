@@ -63,7 +63,7 @@ public class TestServerForMirroring extends TestCaseEnhanced
 		UniversalId fdpUid = FieldDataPacket.createUniversalId(clientSecurity1.getPublicKeyString());
 		String[] tags = {"whatever"};
 		FieldDataPacket fdp1 = new FieldDataPacket(fdpUid, tags);
-		fdp1.writeXmlToClientDatabase(db, false, clientSecurity2);
+		fdp1.writeXmlToClientDatabase(db, false, clientSecurity1);
 		
 		UniversalId otherPacketId = UniversalId.createFromAccountAndPrefix(clientSecurity2.getPublicKeyString(), "X");
 		DatabaseKey key = new DatabaseKey(otherPacketId);
