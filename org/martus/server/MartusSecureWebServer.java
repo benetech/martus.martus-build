@@ -6,10 +6,9 @@ import java.net.ServerSocket;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLServerSocketFactory;
 
-import org.apache.xmlrpc.WebServer;
 import org.martus.common.MartusCrypto;
 
-public class MartusSecureWebServer extends WebServer
+public class MartusSecureWebServer extends WebServerWithClientId
 {
 	public MartusSecureWebServer(int port) throws IOException
 	{

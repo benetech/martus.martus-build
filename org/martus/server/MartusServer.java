@@ -409,7 +409,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	
 	public void createNonSSLXmlRpcServer()
 	{
-		XmlRpcServer.createNonSSLXmlRpcServer(getNonSSLServerHandler(), NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL);
+		MartusXmlRpcServer.createNonSSLXmlRpcServer(getNonSSLServerHandler(), NetworkInterfaceXmlRpcConstants.MARTUS_PORT_FOR_NON_SSL);
 	}
 
 	public void createSSLXmlRpcServer()
@@ -421,7 +421,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 	public void createSSLXmlRpcServerOnPort(int port) 
 	{
 		MartusSecureWebServer.security = security;
-		XmlRpcServer.createSSLXmlRpcServer(getServerHandler(), port);
+		MartusXmlRpcServer.createSSLXmlRpcServer(getServerHandler(), port);
 	}
 	
 	public void createMirroringSupplierXmlRpcServer()
@@ -432,7 +432,7 @@ public class MartusServer implements NetworkInterfaceConstants, ServerSupplierIn
 
 	public void createMirroringSupplierXmlRpcServer(int port)
 	{
-		XmlRpcServer.createSSLXmlRpcServer(getMirroringSupplierHandler(), port);
+		MartusXmlRpcServer.createSSLXmlRpcServer(getMirroringSupplierHandler(), port);
 	}
 	
 	public String ping()
