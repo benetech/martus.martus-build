@@ -21,13 +21,18 @@ public class ChangeServerPassphrase
 			System.out.println("ChangeServerPassphrase:\nThis program will replace your keypair.dat file."
 				+ "\nWe strongly recommend that you make sure you have a backup copy before running this program. "
 				+ "\nAlso, after successfully changing the password, we strongly recommend that you create a backup of the new keypair.dat file.\n");
-			File dataDirectory = MartusServer.getDefaultDataDirectory();
-			String keyPairFilename = MartusServer.getKeypairFilename();
-			File keyPairFile = new File(dataDirectory, keyPairFilename);
+
+			if( args.length == 0 || !args[0].startsWith("--file"))
+			{
+					System.out.println("Error: Incorrect argument.\nChangeServerPassphrase --file=/path/keypair.dat" );
+					System.out.flush();
+					System.exit(1);				
+			}
+			File keyPairFile = new File(args[0].substring(args[0].indexOf("=")+1));
+
 			if(!keyPairFile.exists())
 			{
-				System.out.println("There is no server account.");
-				System.out.print("Create an account first by running the Martus Server.");
+				System.out.println("Error: There is no keypair file at location " + keyPairFile + "." );
 				System.out.flush();
 				System.exit(1);
 			}
