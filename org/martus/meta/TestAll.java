@@ -15,7 +15,19 @@ public class TestAll extends java.lang.Object
 
 	public static void main (String[] args) 
 	{
-		runTests();
+		int loop = 0;
+		if(args.length > 0 && args[0].equalsIgnoreCase("LOOP"))
+			loop = 1;
+		do
+		{
+			if(loop>0)
+			{
+				System.out.println("\nTo exit tests type Control + C.");
+				System.out.println("Loop:"+loop);
+				loop++;
+			}
+			runTests();
+		}while(loop>0);
 	}
 
 	public static void runTests () 
