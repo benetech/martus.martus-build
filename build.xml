@@ -63,16 +63,16 @@
   <target name="build" depends="init">
 
     <echo message="${DSTAMP}" file="${common-dir}/version.txt"/>
-    <javac srcdir="${common-dir}" destdir="${common-dir}" failonerror="true"/>
+    <javac srcdir="${common-dir}" failonerror="true"/>
 
     <echo message="${DSTAMP}" file="${server-dir}/version.txt"/>
-    <javac srcdir="${server-dir}" destdir="${server-dir}" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${server-dir}" classpath="${common-dir}" failonerror="true"/>
 
     <echo message="${DSTAMP}" file="${client-dir}/version.txt"/>
-    <javac srcdir="${client-dir}" destdir="${client-dir}" classpath="${common-dir}" failonerror="true"/>
+    <javac srcdir="${client-dir}" classpath="${common-dir}" failonerror="true"/>
 
     <echo message="${DSTAMP}" file="${meta-dir}/version.txt"/>
-    <javac srcdir="${meta-dir}" destdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true"/>
+    <javac srcdir="${meta-dir}" classpath="${common-dir};${client-dir};${server-dir}" failonerror="true"/>
 
     <mkdir dir="${dist}"/>
     <jar jarfile="${common-jar}" basedir="." 
