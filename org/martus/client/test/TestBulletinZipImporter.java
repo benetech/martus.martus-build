@@ -91,7 +91,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(db, b, tempFile);
+		MockBulletin.saveToFile(db, b, tempFile, store.getSignatureVerifier());
 
 		Bulletin loaded = store.createEmptyBulletin();
 		BulletinZipImporter.loadFromFile(loaded, tempFile, security);
@@ -189,7 +189,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		File tmpFile = File.createTempFile("$$$MartusTestBullSaveFileAtta1", null);
 		tmpFile.deleteOnExit();
-		MockBulletin.saveToFile(db, original, tmpFile);
+		MockBulletin.saveToFile(db, original, tmpFile, store.getSignatureVerifier());
 		assertTrue("unreasonable file size?", tmpFile.length() > 20);
 
 		ZipFile zip = new ZipFile(tmpFile);
@@ -247,7 +247,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTest", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(db, b, tempFile);
+		MockBulletin.saveToFile(db, b, tempFile, store.getSignatureVerifier());
 		assertTrue("unreasonable file size?", tempFile.length() > 20);
 
 		ZipFile zip = new ZipFile(tempFile);
@@ -298,7 +298,7 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		original.setDraft();
 		original.setAllPrivate(true);
-		MockBulletin.saveToFile(db, original, tempFile);
+		MockBulletin.saveToFile(db, original, tempFile, store.getSignatureVerifier());
 		Bulletin loaded2 = store.createEmptyBulletin();
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("draft private could get public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
@@ -306,21 +306,21 @@ public class TestBulletinZipImporter extends TestCaseEnhanced
 
 		original.setDraft();
 		original.setAllPrivate(false);
-		MockBulletin.saveToFile(db,original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("draft public could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("draft public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 
 		original.setSealed();
 		original.setAllPrivate(true);
-		MockBulletin.saveToFile(db,original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("sealed private could get encrypted public?", "", loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("sealed private could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));
 
 		original.setSealed();
 		original.setAllPrivate(false);
-		MockBulletin.saveToFile(db,original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, otherSecurity);
 		assertEquals("sealed public couldn't get encrypted public?", original.get(Bulletin.TAGPUBLICINFO), loaded2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("sealed public could get private?", "", loaded2.get(Bulletin.TAGPRIVATEINFO));

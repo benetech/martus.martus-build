@@ -778,7 +778,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File zipFile = File.createTempFile("$$$MartusTestZipSealed", null);
 		zipFile.deleteOnExit();
 		Bulletin loaded = BulletinLoader.loadFromDatabase(store, originalKey);
-		MockBulletin.saveToFile(db,loaded, zipFile);
+		MockBulletin.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getRecordCount());
 		
@@ -827,7 +827,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempFile = createTempFile();
 
 		Bulletin b = store.createEmptyBulletin();
-		MockBulletin.saveToFile(db,b, tempFile);
+		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 		
 		BulletinFolder folder = store.createFolder("test");
 		folder.setStatusAllowed(Bulletin.STATUSSEALED);
@@ -851,7 +851,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		folder = store.createFolder("test2");
 
 		b.setSealed();
-		MockBulletin.saveToFile(db,b, tempFile);
+		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 		store.importZipFileBulletin(tempFile, folder, false);
 		assertEquals("not imported to store?", 1, store.getBulletinCount());
 		assertEquals("not imported to folder count?", 1, folder.getBulletinCount());
@@ -869,7 +869,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempFile = createTempFile();
 
 		Bulletin original = store.createEmptyBulletin();
-		MockBulletin.saveToFile(db,original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
 
 		BulletinStore importer = createTempStore();
 		BulletinFolder folder = importer.createFolder("test");
@@ -888,7 +888,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		Bulletin original = store.createEmptyBulletin();
 		original.setHQPublicKey(hqStore.getAccountId());
 		original.setSealed();
-		MockBulletin.saveToFile(db,original, tempFile);
+		MockBulletin.saveToFile(db,original, tempFile, store.getSignatureVerifier());
 		
 		BulletinFolder folder = hqStore.createFolder("test");
 		hqStore.importZipFileBulletin(tempFile, folder, false);
@@ -905,7 +905,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		File tempFile = File.createTempFile("$$$MartusTestStoreImportZip", null);
 		tempFile.deleteOnExit();
-		MockBulletin.saveToFile(db,b, tempFile);
+		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 		
 		creator.importZipFileBulletin(tempFile, creator.getFolderOutbox(), false);
 		assertEquals("Didn't fully import?", 1, creator.getBulletinCount());
@@ -927,7 +927,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 		File tempFile = createTempFile();
 
 		Bulletin b = store.createEmptyBulletin();
-		MockBulletin.saveToFile(db,b, tempFile);
+		MockBulletin.saveToFile(db,b, tempFile, store.getSignatureVerifier());
 		UniversalId originalUid = b.getUniversalId();
 		
 		BulletinFolder folder = store.createFolder("test");
@@ -956,7 +956,7 @@ public class TestBulletinStore extends TestCaseEnhanced
 
 		File zipFile = File.createTempFile("$$$MartusTestZipDraft", null);
 		zipFile.deleteOnExit();
-		MockBulletin.saveToFile(db,loaded, zipFile);
+		MockBulletin.saveToFile(db,loaded, zipFile, store.getSignatureVerifier());
 		
 		store.deleteAllData();
 		assertEquals("still a record?", 0, db.getRecordCount());

@@ -644,7 +644,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.OK);
 		response.add(new Integer(totalSize));
 		response.add(new Integer(chunkSize));
-		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b));
+		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForServer));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -672,7 +672,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.OK);
 		response.add(new Integer(-1));
 		response.add(new Integer(bulletinBytes.length));
-		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(),b));
+		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(),b, mockSecurityForServer));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -700,7 +700,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 		response.add(NetworkInterfaceConstants.CHUNK_OK);
 		response.add(new Integer(bulletinBytes.length));
 		response.add(new Integer(bulletinBytes.length / 3 * 2));
-		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(),b));
+		response.add(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(),b, mockSecurityForServer));
 		mockServer.downloadResponse = response;
 		
 		try
@@ -1246,7 +1246,7 @@ public class TestMartusApp_WithServer extends TestCaseEnhanced
 
 	byte[] getBulletinZipBytes(Bulletin b) throws Exception
 	{
-		return Base64.decode(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b));
+		return Base64.decode(MockBulletin.saveToZipString(appWithServer.getStore().getDatabase(), b, mockSecurityForServer));
 	}
 		
 	private static MockMartusSecurity mockSecurityForApp;

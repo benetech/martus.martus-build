@@ -60,13 +60,13 @@ public class MockBulletin extends Bulletin
 		super((BulletinStore) null);
 	}
 
-	public static void loadFromZipString(Bulletin b, String zipString) throws IOException, Base64.InvalidBase64Exception
+	public static void loadFromZipString(Bulletin b, String zipString, MartusCrypto sigVerifier) throws IOException, Base64.InvalidBase64Exception
 	{
 		File tempFile = null;
 		try
 		{
 			tempFile = Base64.decodeToTempFile(zipString);
-			BulletinZipImporter.loadFromFile(b, tempFile, b.getSignatureVerifier());
+			BulletinZipImporter.loadFromFile(b, tempFile, sigVerifier);
 		}
 		finally
 		{
@@ -75,7 +75,7 @@ public class MockBulletin extends Bulletin
 		}
 	}
 
-	public static String saveToZipString(Database db, Bulletin b) throws
+	public static String saveToZipString(Database db, Bulletin b, MartusCrypto sigVerifier) throws
 		IOException,
 		MartusCrypto.CryptoException
 	{
@@ -83,7 +83,7 @@ public class MockBulletin extends Bulletin
 		try
 		{
 			tempFile.deleteOnExit();
-			saveToFile(db, b, tempFile);
+			saveToFile(db, b, tempFile, sigVerifier);
 			FileInputStream inputStream = new FileInputStream(tempFile);
 			int len = inputStream.available();
 			byte[] rawBytes = new byte[len];
@@ -98,7 +98,7 @@ public class MockBulletin extends Bulletin
 
 	}
 
-	public static void saveToFile(Database db, Bulletin b, File destFile) throws
+	public static void saveToFile(Database db, Bulletin b, File destFile, MartusCrypto sigVerifier) throws
 		IOException,
 		MartusCrypto.CryptoException
 	{
@@ -118,8 +118,8 @@ public class MockBulletin extends Bulletin
 			byte[] privateDataSig = writePacketToZip(b, zipOut, b.getPrivateFieldDataPacket());
 			header.setPrivateFieldDataSignature(privateDataSig);
 
-			writeAttachmentsToZip(db, b, zipOut, b.getPublicAttachments());
-			writeAttachmentsToZip(db, b, zipOut, b.getPrivateAttachments());
+			writeAttachmentsToZip(db, b, zipOut, b.getPublicAttachments(), sigVerifier);
+			writeAttachmentsToZip(db, b, zipOut, b.getPrivateAttachments(), sigVerifier);
 
 			writePacketToZip(b, zipOut, header);
 		}
@@ -129,7 +129,7 @@ public class MockBulletin extends Bulletin
 		}
 	}
 
-	public static void writeAttachmentsToZip(Database db, Bulletin b, ZipOutputStream zipOut, AttachmentProxy[] attachments) throws
+	public static void writeAttachmentsToZip(Database db, Bulletin b, ZipOutputStream zipOut, AttachmentProxy[] attachments, MartusCrypto sigVerifier) throws
 		IOException,
 		CryptoException
 	{
@@ -138,7 +138,7 @@ public class MockBulletin extends Bulletin
 			UniversalId uid = attachments[i].getUniversalId();
 			ZipEntry attachmentEntry = new ZipEntry(uid.getLocalId());
 			zipOut.putNextEntry(attachmentEntry);
-			InputStream in = new BufferedInputStream(db.openInputStream(new DatabaseKey(uid), b.getSignatureVerifier()));
+			InputStream in = new BufferedInputStream(db.openInputStream(new DatabaseKey(uid), sigVerifier));
 
 			byte[] bytes = new byte[MartusConstants.streamBufferCopySize];
 			int got;

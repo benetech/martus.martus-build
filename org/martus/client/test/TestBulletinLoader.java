@@ -153,7 +153,7 @@ public class TestBulletinLoader extends TestCaseEnhanced
 		assertEquals("Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded.getFieldDataPacket().getHQPublicKey());
 
 		File tempFile = createTempFile();
-		MockBulletin.saveToFile(db, original, tempFile);
+		MockBulletin.saveToFile(db, original, tempFile, store.getSignatureGenerator());
 		Bulletin loaded2 = store.createEmptyBulletin();
 		BulletinZipImporter.loadFromFile(loaded2, tempFile, security);
 		assertEquals("Loaded Keys not the same?", original.getFieldDataPacket().getHQPublicKey(), loaded2.getFieldDataPacket().getHQPublicKey());

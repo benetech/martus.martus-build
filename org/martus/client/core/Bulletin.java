@@ -54,9 +54,7 @@ public class Bulletin implements BulletinConstants
 	public Bulletin(BulletinStore bulletinStore)
 	{
 		security = bulletinStore.getSignatureGenerator();
-		String accountId = "";
-		if(bulletinStore != null)
-			accountId = bulletinStore.getAccountId();
+		String accountId = security.getPublicKeyString();
 		UniversalId headerUid = BulletinHeaderPacket.createUniversalId(accountId);
 		UniversalId dataUid = FieldDataPacket.createUniversalId(accountId);
 		UniversalId privateDataUid = FieldDataPacket.createUniversalId(accountId);
@@ -67,11 +65,6 @@ public class Bulletin implements BulletinConstants
 	}
 
 	public MartusCrypto getSignatureGenerator()
-	{
-		return security;
-	}
-
-	public MartusCrypto getSignatureVerifier()
 	{
 		return security;
 	}
@@ -172,7 +165,7 @@ public class Bulletin implements BulletinConstants
 		if(rawFile != null)
 		{
 			byte[] sessionKeyBytes = getSignatureGenerator().createSessionKey();
-			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, getSignatureVerifier());
+			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, getSignatureGenerator());
 			bhp.addPublicAttachmentLocalId(ap.getLocalId());
 			pendingPublicAttachments.add(ap);
 			a.setUniversalIdAndSessionKey(ap.getUniversalId(), sessionKeyBytes);
@@ -194,7 +187,7 @@ public class Bulletin implements BulletinConstants
 		if(rawFile != null)
 		{
 			byte[] sessionKeyBytes = getSignatureGenerator().createSessionKey();
-			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, getSignatureVerifier());
+			AttachmentPacket ap = new AttachmentPacket(getAccount(), sessionKeyBytes, rawFile, getSignatureGenerator());
 			bhp.addPrivateAttachmentLocalId(ap.getLocalId());
 			getPendingPrivateAttachments().add(ap);
 			a.setUniversalIdAndSessionKey(ap.getUniversalId(), sessionKeyBytes);

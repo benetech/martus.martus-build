@@ -408,7 +408,6 @@ public class TestBulletin extends TestCaseEnhanced
 		Bulletin b2 = store.createEmptyBulletin();
 		b2.pullDataFrom(b1);
 		assertEquals("signer", b1.getSignatureGenerator(), b2.getSignatureGenerator());
-		assertEquals("verifier", b1.getSignatureVerifier(), b2.getSignatureVerifier());
 		assertEquals("id unchanged", false, b2.getLocalId().equals(b1.getLocalId()));
 		assertEquals("public info", b1.get(Bulletin.TAGPUBLICINFO), b2.get(Bulletin.TAGPUBLICINFO));
 		assertEquals("private info", b1.get(Bulletin.TAGPRIVATEINFO), b2.get(Bulletin.TAGPRIVATEINFO));
