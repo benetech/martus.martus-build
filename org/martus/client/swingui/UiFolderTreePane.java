@@ -105,12 +105,7 @@ class UiFolderTreePane extends JScrollPane
 
 	public void deleteCurrentFolderIfPossible()
 	{
-		FolderTreeNode node = getCurrentFolderNode();
-		if(canDeleteFolder(node))
-		{
-			ActionDelete delete = new ActionDelete(node);
-			delete.actionPerformed(null);
-		}
+		deleteFolderNodeIfPossible(getCurrentFolderNode());
 	}
 
 	public FolderTreeNode getCurrentFolderNode()
@@ -193,6 +188,22 @@ class UiFolderTreePane extends JScrollPane
 		return true;
 	}
 
+	public void deleteFolderNodeIfPossible(FolderTreeNode nodeToDelete)
+	{
+		if(!canDeleteFolder(nodeToDelete))
+			return;
+
+		Cursor originalCursor = parent.setWaitingCursor();
+		final String internalName = nodeToDelete.getInternalName();
+		final boolean isFolderEmpty = store.findFolder(internalName).getBulletinCount() == 0;
+		if(isFolderEmpty || parent.confirmDlg(parent, "deletefolder"))
+		{
+			store.deleteFolder(internalName);
+			parent.folderTreeContentsHaveChanged();
+		}
+		parent.resetCursor(originalCursor);
+	}
+
 	class ActionDelete extends AbstractAction
 	{
 		public ActionDelete(FolderTreeNode node)
@@ -207,14 +218,7 @@ class UiFolderTreePane extends JScrollPane
 
 		public void actionPerformed(ActionEvent ae)
 		{
-			Cursor originalCursor = parent.setWaitingCursor();
-			if(store.findFolder(nodeToDelete.getInternalName()).getBulletinCount() == 0
-				|| parent.confirmDlg(parent, "deletefolder"))
-			{
-				store.deleteFolder(nodeToDelete.getInternalName());
-				parent.folderTreeContentsHaveChanged();
-			}
-			parent.resetCursor(originalCursor);
+			deleteFolderNodeIfPossible(nodeToDelete);
 		}
 
 		public boolean isEnabled()
