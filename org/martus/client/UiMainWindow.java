@@ -941,7 +941,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String dlgTitleTag = "retrieve";
 		String summariesProgressTag = "RetrieveMySealedBulletinSummaries";
 		String retrieverProgressTag = "RetrieveMySealedBulletinProgress";
-		String folderName = app.getNameOfFolderRetrieved();
+		String folderName = app.getNameOfFolderRetrievedSealed();
 
 		RetrieveTableModel model = new RetrieveMyTableModel(app);
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
@@ -952,7 +952,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String dlgTitleTag = "RetrieveDrafts";
 		String summariesProgressTag = "RetrieveMyDraftBulletinSummaries";
 		String retrieverProgressTag = "RetrieveMyDraftBulletinProgress";
-		String folderName = app.getNameOfFolderRetrieved();
+		String folderName = app.getNameOfFolderRetrievedDraft();
 
 		RetrieveTableModel model = new RetrieveMyDraftsTableModel(app);
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
@@ -963,7 +963,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String dlgTitleTag = "retrieveHQ";
 		String summariesProgressTag = "RetrieveHQSealedBulletinSummaries";
 		String retrieverProgressTag = "RetrieveHQSealedBulletinProgress";
-		String folderName = app.getNameOfFolderRetrievedFieldOffice();
+		String folderName = app.getNameOfFolderRetrievedFieldOfficeSealed();
 
 		RetrieveTableModel model = new RetrieveHQTableModel(app);
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);
@@ -974,7 +974,7 @@ public class UiMainWindow extends JFrame implements ClipboardOwner
 		String dlgTitleTag = "retrieveHQDrafts";
 		String summariesProgressTag = "RetrieveHQDraftBulletinSummaries";
 		String retrieverProgressTag = "RetrieveHQDraftBulletinProgress";
-		String folderName = app.getNameOfFolderRetrievedFieldOffice();
+		String folderName = app.getNameOfFolderRetrievedFieldOfficeDraft();
 
 		RetrieveTableModel model = new RetrieveHQDraftsTableModel(app);
 		retrieveBulletins(model, folderName, dlgTitleTag, summariesProgressTag, retrieverProgressTag);

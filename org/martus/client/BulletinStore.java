@@ -397,16 +397,26 @@ public class BulletinStore
 		return RECOVERED_BULLETIN_FOLDER;
 	}
 
-	public String getNameOfFolderRetrieved()
+	public String getNameOfFolderRetrievedSealed()
 	{
-		return RETRIEVE_BULLETIN_FOLDER;
+		return RETRIEVE_SEALED_BULLETIN_FOLDER;
 	}
 	
-	public String getNameOfFolderRetrievedFieldOffice()
+	public String getNameOfFolderRetrievedDraft()
 	{
-		return RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER;
+		return RETRIEVE_DRAFT_BULLETIN_FOLDER;
+	}
+
+	public String getNameOfFolderRetrievedFieldOfficeSealed()
+	{
+		return RETRIEVE_SEALED_FIELD_OFFICE_BULLETIN_FOLDER;
 	}
 	
+	public String getNameOfFolderRetrievedFieldOfficeDraft()
+	{
+		return RETRIEVE_DRAFT_FIELD_OFFICE_BULLETIN_FOLDER;
+	}
+
 	public String getNameOfFolderDamaged()
 	{
 		return DAMAGED_BULLETIN_FOLDER;
@@ -856,8 +866,10 @@ public class BulletinStore
 	public static final String DISCARDED_FOLDER = "%Discarded";
 	public static final String SEARCH_RESULTS_BULLETIN_FOLDER = "%SearchResults";
 	public static final String RECOVERED_BULLETIN_FOLDER = "%RecoveredBulletins";
-	public static final String RETRIEVE_BULLETIN_FOLDER = "%RetrievedMyBulletin";
-	public static final String RETRIEVE_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletin";
+	public static final String RETRIEVE_SEALED_BULLETIN_FOLDER = "%RetrievedMyBulletin";
+	public static final String RETRIEVE_SEALED_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletin";
+	public static final String RETRIEVE_DRAFT_BULLETIN_FOLDER = "%RetrievedMyBulletinDraft";
+	public static final String RETRIEVE_DRAFT_FIELD_OFFICE_BULLETIN_FOLDER = "%RetrievedFieldOfficeBulletinDraft";
 	public static final String DAMAGED_BULLETIN_FOLDER = "%DamagedBulletins";
 	private static final String DRAFT_OUTBOX = "*DraftOutbox";
 	

@@ -70,16 +70,16 @@ public class TestFolderList extends TestCase
 		int baseCount = getVisibleFolderCount(store);
 		assertEquals("Initial count", baseCount, list.getCount());
 
-		BulletinFolder folder = store.createFolder(app.getNameOfFolderRetrieved());
+		BulletinFolder folder = store.createFolder(app.getNameOfFolderRetrievedSealed());
 		list.loadFolders(store);
 		assertEquals(baseCount+1, list.getCount());
 		assertEquals("Outbox not first?", app.getFolderLabel(app.getFolderOutbox().getName()), list.getName(0));
 
 		FolderTreeNode node = list.getNode(baseCount);
-		assertEquals(app.getNameOfFolderRetrieved(), node.getInternalName());
+		assertEquals(app.getNameOfFolderRetrievedSealed(), node.getInternalName());
 
-		assertEquals(app.getFolderLabel(app.getNameOfFolderRetrieved()), node.getLocalizedName());
-		store.deleteFolder(app.getNameOfFolderRetrieved());
+		assertEquals(app.getFolderLabel(app.getNameOfFolderRetrievedSealed()), node.getLocalizedName());
+		store.deleteFolder(app.getNameOfFolderRetrievedSealed());
 		list.loadFolders(store);
 		assertEquals(baseCount, list.getCount());
 		

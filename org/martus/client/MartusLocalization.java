@@ -707,6 +707,8 @@ public class MartusLocalization
 		addEnglishTranslation("folder:%Discarded=Discarded Bulletins");
 		addEnglishTranslation("folder:%RetrievedMyBulletin=Retrieved Bulletins");
 		addEnglishTranslation("folder:%RetrievedFieldOfficeBulletin=Field Desk Bulletins");
+		addEnglishTranslation("folder:%RetrievedMyBulletinDraft=Retrieved Draft Bulletins");
+		addEnglishTranslation("folder:%RetrievedFieldOfficeBulletinDraft=Field Desk Draft Bulletins");
 		addEnglishTranslation("folder:%SearchResults=Search Results");
 		addEnglishTranslation("folder:%RecoveredBulletins=Recovered Bulletins");
 		addEnglishTranslation("folder:%DamagedBulletins=Damaged Bulletins");

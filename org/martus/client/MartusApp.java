@@ -353,24 +353,34 @@ public class MartusApp
 	
 	public BulletinFolder createFolderRetrieved()
 	{
-		String folderName = getNameOfFolderRetrieved();
+		String folderName = getNameOfFolderRetrievedSealed();
 		return createOrFindFolder(folderName);
 	}
 
 	public BulletinFolder createFolderRetrievedFieldOffice()
 	{
-		String folderName = getNameOfFolderRetrievedFieldOffice();
+		String folderName = getNameOfFolderRetrievedFieldOfficeSealed();
 		return createOrFindFolder(folderName);
 	}
 
-	public String getNameOfFolderRetrieved()
+	public String getNameOfFolderRetrievedSealed()
 	{
-		return store.getNameOfFolderRetrieved();
+		return store.getNameOfFolderRetrievedSealed();
 	}
 	
-	public String getNameOfFolderRetrievedFieldOffice()
+	public String getNameOfFolderRetrievedDraft()
 	{
-		return store.getNameOfFolderRetrievedFieldOffice();
+		return store.getNameOfFolderRetrievedDraft();
+	}
+
+	public String getNameOfFolderRetrievedFieldOfficeSealed()
+	{
+		return store.getNameOfFolderRetrievedFieldOfficeSealed();
+	}
+
+	public String getNameOfFolderRetrievedFieldOfficeDraft()
+	{
+		return store.getNameOfFolderRetrievedFieldOfficeDraft();
 	}
 	
 	public BulletinFolder createOrFindFolder(String name)
