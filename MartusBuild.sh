@@ -18,7 +18,7 @@ set -u
 #set -n
 
 #NOTE: Add additional language-code and language-code to language-string mappings below
-MARTUS_LANGUAGES="en es ru ar fr th"
+MARTUS_LANGUAGES="en es ru ar fr th fa"
 export MARTUS_LANGUAGES
 
 #################################################
@@ -119,7 +119,7 @@ downloadSourcesFromCvs()
 	cleanCvsHome
 	cd "$CVS_HOME" || error "unable to cd: err $?"
 	echo
-	echo "Downloading source from CVS...";
+	echo "Downloading source from CVS...";	
 	cvs -q checkout -l -P martus || error "cvs checkout martus returned $?"
 
 	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi thirdparty"
@@ -129,7 +129,7 @@ downloadSourcesFromCvs()
 		cvs -q checkout martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
 		echo
 	done
-	
+
 	downloadMartusInstallerFromCvsAndSetup
 } # downloadSourcesFromCvs
 
@@ -243,7 +243,7 @@ copyThirdPartyLicenseToCDBuild()
 #################################################
 setupBuildEnvironment() 
 {
-	CURRENT_VERSION=2.6.1
+	CURRENT_VERSION=2.7
 	BUILD_DATE=`date '+%Y%m%d'`
 	
 	# the build number below relies on the Ant task that creates and autoincrements this file
@@ -306,7 +306,7 @@ startAntBuild()
 		echo "Exiting..."
 		exit 1
 	fi
-	
+
 	if [ $cvs_tag = 1 ]; then
 		if [ ! -f "$MARTUS_JAR_FILE.md5" ]; then
 			echo "BUILD FAILED!! Missing md5. Exit status $status"
@@ -385,13 +385,13 @@ updateCvsTree()
 	cp -v $RELEASE_DIR/martus-client-*.jar.md5 $CVS_CLIENTJAR_DIR/ || error "unable to copy"
 	echo "Adding to client jar to CVS."
 	cd "$CVS_CLIENTJAR_DIR"
-	for filename in *.jar
+	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
 	done
 	
-	for filename in *.jar.md5
+	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.md5
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
@@ -433,13 +433,13 @@ updateCvsTree()
 	
 	echo "Adding to server jars to CVS"
 	cd "$CVS_SERVERJAR_DIR"
-	for filename in *.jar
+	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
 	done
 	
-	for filename in *.jar.md5
+	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.md5
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
