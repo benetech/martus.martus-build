@@ -40,17 +40,6 @@
     <property name="martus.utils.src.root" value="${build.basedir}/${martus.utils.module}/source"/>
     <property name="martus.utils.class.root" value="${build.basedir}/${martus.utils.module}/bin"/>
 
-    <!-- thirdparty module name and dirs -->
-    <property name="martus.thirdparty.module"  value="martus-thirdparty"/>
-    <property name="martus.thirdparty.lib.xmlrpc"  value="${build.basedir}/${martus.thirdparty.module}/common/XMLRPC/bin/"/>
-    <property name="martus.thirdparty.lib.infinitemonkey"  value="${build.basedir}/${martus.thirdparty.module}/common/InfiniteMonkey/bin/"/>
-    <property name="martus.thirdparty.lib.ant"  value="${build.basedir}/${martus.thirdparty.module}/common/Ant/bin/"/>
-    <property name="martus.thirdparty.lib.lucene"  value="${build.basedir}/${martus.thirdparty.module}/server/Lucene/bin/"/>
-    <property name="martus.thirdparty.lib.jetty"  value="${build.basedir}/${martus.thirdparty.module}/server/Jetty/bin/"/>
-    <property name="martus.thirdparty.lib.velocity"  value="${build.basedir}/${martus.thirdparty.module}/server/Velocity/bin/"/>
-    <property name="martus.thirdparty.lib.junit"  value="${build.basedir}/${martus.thirdparty.module}/libext/JUnit/bin/"/>
-    <property name="martus.thirdparty.lib.bouncycastle"  value="${build.basedir}/${martus.thirdparty.module}/libext/BouncyCastle/bin/"/>
-
     <!-- swing module name and dirs -->
     <property name="martus.swing.module"  value="martus-swing"/>
     <property name="martus.swing.src.root" value="${build.basedir}/${martus.swing.module}/source"/>
@@ -81,4 +70,30 @@
     <property name="martus.common.src.root" value="${build.basedir}/${martus.common.module}/source"/>
     <property name="martus.common.class.root" value="${build.basedir}/${martus.common.module}/bin"/>
 
+    <!-- thirdparty module name and dirs -->
+    <property name="martus.thirdparty.module"  value="martus-thirdparty"/>
+
+    <property name="martus.thirdparty.lib.xmlrpc"  value="${build.basedir}/${martus.thirdparty.module}/common/XMLRPC/bin/"/>
+    <property name="martus.thirdparty.lib.infinitemonkey"  value="${build.basedir}/${martus.thirdparty.module}/common/InfiniteMonkey/bin/"/>
+    <property name="martus.thirdparty.lib.ant"  value="${build.basedir}/${martus.thirdparty.module}/common/Ant/bin/"/>
+    <property name="martus.thirdparty.lib.logi"  value="${build.basedir}/${martus.thirdparty.module}/common/Logi/bin/"/>
+
+    <property name="martus.thirdparty.lib.lucene"  value="${build.basedir}/${martus.thirdparty.module}/server/Lucene/bin/"/>
+    <property name="martus.thirdparty.lib.jetty"  value="${build.basedir}/${martus.thirdparty.module}/server/Jetty/bin/"/>
+    <property name="martus.thirdparty.lib.velocity"  value="${build.basedir}/${martus.thirdparty.module}/server/Velocity/bin/"/>
+
+    <property name="martus.thirdparty.lib.junit"  value="${build.basedir}/${martus.thirdparty.module}/libext/JUnit/bin/"/>
+    <property name="martus.thirdparty.lib.bouncycastle"  value="${build.basedir}/${martus.thirdparty.module}/libext/BouncyCastle/bin/"/>
+
+    <!-- binary-martus module name and dirs -->
+    <property name="martus.binary.module"  value="binary-martus"/>
+    <property name="martus.binary.installer"  value="${build.basedir}/${martus.binary.module}/Installer"/>
+    <property name="martus.binary.installer.project"  value="${build.basedir}/${martus.binary.module}/Win32_NSIS"/>
+    <property name="martus.binary.buildfiles"  value="${martus.binary.installer}/BuildFiles"/>
+    <property name="martus.binary.buildfiles.jars"  value="${martus.binary.installer}/BuildFiles/Jars"/>
+    <property name="martus.binary.buildfiles.sourcesdir"  value="${martus.binary.installer}/BuildFiles/SourceFiles"/>
+    <property name="martus.binary.buildfiles.licensesdir"  value="${martus.binary.installer}/BuildFiles/Documents/Licenses"/>
+    <property name="martus.binary.buildfiles.programfilesdir"  value="${martus.binary.installer}/BuildFiles/ProgramFiles"/>
+
 </project>
+
