@@ -25,6 +25,7 @@
             <commandline>
                 <argument value="-q"/>
                 <argument value="checkout"/>
+                <argument value="-P"/>
                 <argument value="${martus.amplifier.module}"/>
                 <argument value="${martus.client.module}"/>
                 <argument value="${martus.common.module}"/>
