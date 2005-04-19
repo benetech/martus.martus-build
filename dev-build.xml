@@ -222,25 +222,45 @@
   </target>
 
    <!-- Build TestMLPK -->
-  <target name="build-test-mlp" depends="init">
+  <target name="build-test-mlp" depends="init, check_storepass, check_keypass" >
 	
     <mkdir dir="${dist}"/>
 
     <jar jarfile="${dist}/Martus-xx.mlp" basedir="mtf" 
 	    manifest="mtf/main-class"
 	    includes="**/*xx.txt **/*xx.mtf **/*xx.pdf"/>
+    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+        <fileset dir="${dist}">
+            <include name="Martus-xx.mlp"/>
+        </fileset>
+    </signjar>          
 
-    <jar jarfile="${dist}/Martus-yy.mlp" basedir="mtf" 
+    <jar jarfile="${dist}/Martus-yy.mlp" basedir="mtf/original_yy_docs" 
 	    manifest="mtf/main-class"
 	    includes="**/*yy.txt **/*yy.mtf **/*yy.pdf"/>
+    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+        <fileset dir="${dist}">
+            <include name="Martus-yy.mlp"/>
+        </fileset>
+    </signjar>          
 
-    <jar jarfile="${dist}/Martus-updated-yy.mlp" basedir="mtf" 
+    <jar jarfile="${dist}/Martus-updated-yy.mlp" basedir="mtf/updated_yy_docs" 
 	    manifest="mtf/main-class"
-	    includes="**/*yy.txt **/*yy.mtf"/>
+	    includes="**/*yy.txt **/*yy.mtf **/*yy.pdf"/>
+    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+        <fileset dir="${dist}">
+            <include name="Martus-updated-yy.mlp"/>
+        </fileset>
+    </signjar>          
 
     <jar jarfile="${dist}/Martus-en.mlp" basedir="mtf" 
 	    manifest="mtf/main-class"
 	    includes="**/*en.txt **/*en.mtf **/*en.pdf"/>
+    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+        <fileset dir="${dist}">
+            <include name="Martus-en.mlp"/>
+        </fileset>
+    </signjar>          
 
    </target>
 
