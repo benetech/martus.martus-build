@@ -226,32 +226,49 @@
 	
     <mkdir dir="${dist}"/>
 
-    <jar jarfile="${dist}/Martus-xx.mlp" basedir="mlptestfiles" 
-	    manifest="mlptestfiles/main-class"
-	    includes="**/*xx.txt **/*xx.mtf **/*xx.pdf"/>
-    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-        <fileset dir="${dist}">
-            <include name="Martus-xx.mlp"/>
-        </fileset>
-    </signjar>          
+     <!-- Build Martus-xx.mlp -->
+	    <jar jarfile="${dist}/Martus-xx.mlp" basedir="mlptestfiles" 
+		    manifest="mlptestfiles/main-class"
+		    includes="**/*xx.txt **/*xx.mtf **/*xx.pdf"/>
+	    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+	        <fileset dir="${dist}">
+	            <include name="Martus-xx.mlp"/>
+	        </fileset>
+	    </signjar>          
 
-    <jar jarfile="${dist}/Martus-yy.mlp" basedir="mlptestfiles/original_yy_docs" 
-	    manifest="mlptestfiles/main-class"
-	    includes="**/*yy.txt **/*yy.mtf **/*yy.pdf"/>
-    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-        <fileset dir="${dist}">
-            <include name="Martus-yy.mlp"/>
-        </fileset>
-    </signjar>          
+    <!-- Build Martus-xx-notSealed.mlp -->
+	    <jar jarfile="${dist}/Martus-xx-notSealed.mlp" basedir="mlptestfiles" 
+		    includes="**/*xx.txt **/*xx.mtf **/*xx.pdf"/>
+	    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+	        <fileset dir="${dist}">
+	            <include name="Martus-xx-notSealed.mlp"/>
+	        </fileset>
+	    </signjar>          
 
-    <jar jarfile="${dist}/Martus-updated-yy.mlp" basedir="mlptestfiles/updated_yy_docs" 
-	    manifest="mlptestfiles/main-class"
-	    includes="**/*yy.txt **/*yy.mtf **/*yy.pdf"/>
-    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-        <fileset dir="${dist}">
-            <include name="Martus-updated-yy.mlp"/>
-        </fileset>
-    </signjar>          
+    <!-- Build Martus-xx-notSigned.mlp -->
+	    <jar jarfile="${dist}/Martus-xx-notSigned.mlp" basedir="mlptestfiles" 
+		    manifest="mlptestfiles/main-class"
+		    includes="**/*xx.txt **/*xx.mtf **/*xx.pdf"/>
+
+     <!-- Build Martus-yy.mlp -->
+	    <jar jarfile="${dist}/Martus-yy.mlp" basedir="mlptestfiles/original_yy_docs" 
+		    manifest="mlptestfiles/main-class"
+		    includes="**/*yy.txt **/*yy.mtf **/*yy.pdf"/>
+	    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+	        <fileset dir="${dist}">
+	            <include name="Martus-yy.mlp"/>
+	        </fileset>
+	    </signjar>          
+
+     <!-- Build Martus-updated-yy.mlp -->
+	    <jar jarfile="${dist}/Martus-updated-yy.mlp" basedir="mlptestfiles/updated_yy_docs" 
+		    manifest="mlptestfiles/main-class"
+		    includes="**/*yy.txt **/*yy.mtf **/*yy.pdf"/>
+	    <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+	        <fileset dir="${dist}">
+	            <include name="Martus-updated-yy.mlp"/>
+	        </fileset>
+	    </signjar>          
 
    </target>
 
