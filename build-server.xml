@@ -46,7 +46,9 @@
         <!-- copy third party jars -->
         <mkdir dir="${martus.server.class.root}/ThirdPartyJars"/>
         <copy todir="${martus.server.class.root}/ThirdPartyJars" flatten="true">
-            <fileset refid="thirdparty.files" />
+            <fileset refid="thirdparty.server.files" />
+            <fileset refid="thirdparty.common.files" />
+            <fileset refid="thirdparty.libext.files" />
         </copy>
         <copy todir="${martus.server.class.root}">
             <fileset dir="${martus.server.src.root}" includes="**/LanguageNames_*.txt"/>
@@ -106,6 +108,49 @@
                 <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
         </jar>
+    </target>
+
+<!-- ================================================================== -->
+<!-- Z I P  -  S O U R C E S                                            -->
+<!-- ================================================================== -->
+    <target name="zip-server-src" depends="init">
+        <mkdir dir="${public.release.folder}"/>
+        <property name="zip-filename"  value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}-src.zip"/>
+
+        <zip zipfile="${zip-filename}">
+            <fileset refid="server.nosrc.files"/>
+            <fileset dir="${martus.server.src.root}" includes="**/*.java"/>
+
+            <fileset dir="${martus.amplifier.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.amplifier.src.root}" includes="org/martus/amplifier/presentation/index.html"/>
+            <fileset dir="${build.basedir}/${martus.amplifier.module}" >
+                <include name="presentation/**/*"/>
+                <include name="presentationNonSSL/**/*"/>
+            </fileset>
+
+            <fileset dir="${martus.amplifier.src.root}">
+                <include name="**/common/LanguageNames_*.txt"/>
+            </fileset>
+
+            <fileset refid="jarverifier.nosrc.files"/>
+            <fileset dir="${martus.jarverifier.src.root}" includes="**/*.java"/>
+
+            <fileset refid="mspa.server.src.files"/>
+            <fileset dir="${martus.common.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.utils.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.hrdag.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.logi.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.swing.src.root}" includes="**/*.java"/>
+
+            <fileset dir="${build.basedir}">
+                <exclude name="${martus.thirdparty.module}/**/bin/*"/>
+                <exclude name="${martus.thirdparty.module}/client/**/*"/>
+
+                <include name="${martus.thirdparty.module}/libext/**/*"/>
+                <include name="${martus.thirdparty.module}/common/**/*"/>
+                <include name="${martus.thirdparty.module}/server/**/*"/>
+            </fileset>
+        </zip>
     </target>
 
 </project>
