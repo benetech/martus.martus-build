@@ -40,6 +40,8 @@ getLangNameFromCode()
 	   LANGUAGE_STRING="French";;
 	"th")
 	   LANGUAGE_STRING="Thai";;
+	"fa")
+	   LANGUAGE_STRING="Farsi";;
 	*)
 	   LANGUAGE_STRING="English";;
 	esac
@@ -617,7 +619,7 @@ createInstallerCdImage()
 	cp -v $MARTUSBUILDFILES/Jars/* $CD_IMAGE_DIR/LibExt/
 	
 	mkdir -p $CD_IMAGE_DIR/Sources/
-	cp -v $CVS_HOME/martus/dist/martus-$CVS_DATE_FILENAME.$BUILD_NUMBER.zip $CD_IMAGE_DIR/Sources/martus-$CURRENT_VERSION-src.zip
+	cp -v $CVS_HOME/martus/dist/martus-client-*.zip $CD_IMAGE_DIR/Sources/martus-client-$CURRENT_VERSION-src.zip
 	
 	mkdir -p $CD_IMAGE_DIR/Java/Linux/i586
 	cd "$MARTUSBUILDFILES/Java redist/Linux/i586/"
@@ -660,7 +662,7 @@ createCdNsisInstaller()
 #################################################
 createSingleNsisInstaller()
 {
-	cp -v $CVS_HOME/martus/dist/*.zip $MARTUSBUILDFILES/ || error "zip copy failed"
+	cp -v $CVS_HOME/martus/dist/martus-client-*.zip $MARTUSBUILDFILES/ || error "zip copy failed"
 	
 	cd "$MARTUSNSISPROJECTDIR"
 	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" ]; then
@@ -903,7 +905,7 @@ echo "The build completed succesfully. The Release files are located in $RELEASE
 if [ $burn_client_cd = 1 ]; then
 	echo "Ready to burn image onto CD. Make sure a blank CD is in the CD burner, then press Enter to start:"
 	read throw_away
-	cdrecord dev=0,1,0 -v -eject -dao -data $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso
+	cdrecord dev=0,1,0 -v -eject -dao -data "$RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso"
 fi
 
 cd "$INITIAL_DIR"
