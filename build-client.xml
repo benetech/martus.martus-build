@@ -109,7 +109,7 @@
 <!-- ================================================================== -->
     <target name="zip-client-src" depends="init">
         <mkdir dir="${public.release.folder}"/>
-        <property name="zip-filename"  value="${public.release.folder}/martus-${DSTAMP}.${build.number}-src.zip"/>
+        <property name="zip-filename"  value="${public.release.folder}/martus-client-${DSTAMP}.${build.number}-src.zip"/>
 
         <zip zipfile="${zip-filename}">
             <fileset refid="client.nosrc.files"/>
@@ -124,9 +124,14 @@
             <fileset dir="${martus.logi.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.swing.src.root}" includes="**/*.java"/>
             <fileset dir="${build.basedir}">
+                <exclude name="${martus.thirdparty.module}/**/bin/*"/>
+                <exclude name="${martus.thirdparty.module}/client/Fonts/**/*"/>
+
                 <include name="${martus.thirdparty.module}/libext/**/*"/>
                 <include name="${martus.thirdparty.module}/common/**/*"/>
                 <include name="${martus.thirdparty.module}/client/**/*"/>
+                <include name="${martus.binary.installer.project}/**/*.nsi"/>
+                <include name="${martus.binary.installer.project}/**/*.nsh"/>
             </fileset>
         </zip>
     </target>
