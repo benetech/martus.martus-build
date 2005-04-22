@@ -226,11 +226,11 @@
 <!-- R E L E A S E                                                      -->
 <!-- ================================================================== -->
 
-    <target name="release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,test,jarsign,zip-client-src,md5">
+    <target name="release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,test,jarsign,zip-client-src,zip-server-src,md5">
         <echo message="Release Built."/>
     </target>
 
-    <target name="nosign.release" depends="test,zip-client-src,md5">
+    <target name="nosign.release" depends="test,zip-client-src,zip-server-src,md5">
         <echo message="Unsigned Release Built."/>
     </target>
 
