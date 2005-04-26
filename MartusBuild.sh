@@ -565,6 +565,9 @@ createClientInstallers()
 	mkdir "$INSTALLER_SRC_FILES/common"
 	cp -v $MARTUSNSISPROJECTDIR/common/*.nsi "$INSTALLER_SRC_FILES/common" || error "Unable to copy *.nsi files"
 	
+	# copy bc-jce
+	cp -v "$RELEASE_DIR/bc-jce-*.jar" "$MARTUSBUILDFILES/ProgramFiles/bc-jce.jar" || error "Unable to copy bc-jce jar"
+	
 	createAndFixCdDocuments
 	buildClientJarVerifier
 	createInstallerCdImage
