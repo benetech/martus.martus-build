@@ -55,6 +55,8 @@
             </classpath>
         </taskdef>
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <jvmarg value="-Xbootclasspath/a:${martus.thirdparty.lib.bouncycastle}/bcprov-jdk14-${bouncycastle.version}.jar"/>
+            <jvmarg value="-Xbootclasspath/p:${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
             <classpath>
                 <pathelement path="${java.class.path}"/>
                 <fileset dir="${public.release.folder}" >
@@ -73,7 +75,7 @@
   <!-- J A R                                                          -->
   <!-- ================================================================== -->
 
-    <target name="jar-common" depends="build-common" description="Create martus-common jar">
+    <target name="jar-common" depends="build-common,jar-bc-jce" description="Create martus-common jar">
         <mkdir dir="${public.release.folder}"/>
         <jar destfile="${public.release.folder}/martus-common-${DSTAMP}.${build.number}.jar">
             <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
