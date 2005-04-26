@@ -9,6 +9,7 @@
     <import file="build-common.xml" />
     <import file="build-client.xml" />
     <import file="build-server.xml" />
+    <import file="build-bcjce.xml" />
 
     <!-- meta classpath -->
     <path id="meta.class.path">
@@ -71,6 +72,7 @@
     <delete dir="${martus.client.class.root}"/>
     <delete dir="${martus.amplifier.class.root}"/>
     <delete dir="${martus.utils.class.root}"/>
+    <delete dir="${martus.bcjce.class.root}"/>
 
   </target>
 
@@ -78,7 +80,7 @@
   <!-- B U I L D                                                          -->
   <!-- ================================================================== -->
 
-  <target name="build" depends="build-common,build-server,build-client" description="Compile martus-meta">
+  <target name="build" depends="build-bc-jce,build-common,build-server,build-client" description="Compile martus-meta">
     <mkdir dir="${martus.meta.class.root}"/>
     <javac target="1.4" optimize="on" srcdir="${martus.meta.src.root}" destdir="${martus.meta.class.root}" failonerror="true">
             <classpath refid="meta.class.path"/>
@@ -90,7 +92,7 @@
   <!-- J A R                                                          -->
   <!-- ================================================================== -->
 
-    <target name="jar" depends="build,jar-common,jar-client,jar-server,jar-mspa" description="Create martus-meta jar">
+    <target name="jar" depends="build,jar-bc-jce,jar-common,jar-client,jar-server,jar-mspa" description="Create martus-meta jar">
         <mkdir dir="${public.release.folder}"/>
         <jar destfile="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar">
                 <fileset dir="${martus.meta.class.root}" includes="**/*.class"/>
@@ -131,8 +133,11 @@
         </taskdef>
 
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr" showoutput="yes">
+            <jvmarg value="-Xbootclasspath/a:${martus.thirdparty.lib.bouncycastle}/bcprov-jdk14-${bouncycastle.version}.jar"/>
+            <jvmarg value="-Xbootclasspath/p:${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
             <classpath>
                 <fileset dir="${public.release.folder}" >
+                    <include name="bc-jce-${DSTAMP}.${build.number}.jar"/>
                     <include name="martus-meta-${DSTAMP}.${build.number}.jar"/>
                 </fileset>
                 <pathelement path="${java.class.path}"/>
