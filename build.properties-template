@@ -15,6 +15,11 @@ project.names=martus,martus-amp,martus-client,martus-common,martus-hrdag,martus-
 martus.version=
 build.basedir=
 
+# ###############################
+# third party related properties
+# ###############################
+bouncycastle.version=
+
 # ############################
 # jarsigner related properties
 # ############################
