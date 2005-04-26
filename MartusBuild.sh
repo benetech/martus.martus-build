@@ -92,7 +92,7 @@ setCvsEnvVars()
 	CLASSPATH=$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/Ant/bin/ant.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/Ant/bin/ant-junit.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/JUnit/bin/junit.jar)
-	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/BouncyCastle/bin/bcprov-jdk14-120.jar)
+	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/BouncyCastle/bin/bcprov-jdk14-128.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-mail/bin/mail.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-activation-framework/bin/activation.jar)
 
