@@ -42,18 +42,6 @@
             <classpath refid="server.class.path"/>
             <include name="**/*.java"/>
         </javac>
-
-        <!-- copy third party jars -->
-        <mkdir dir="${martus.server.class.root}/ThirdPartyJars"/>
-        <copy todir="${martus.server.class.root}/ThirdPartyJars" flatten="true">
-            <fileset refid="thirdparty.server.files" />
-            <fileset refid="thirdparty.common.files" />
-            <fileset refid="thirdparty.libext.files" />
-        </copy>
-        <copy todir="${martus.server.class.root}">
-            <fileset dir="${martus.server.src.root}" includes="**/LanguageNames_*.txt"/>
-            <fileset dir="${martus.server.src.root}" includes="org/martus/amplifier/presentation/index.html"/>
-        </copy>
   </target>
 
 <!-- ================================================================== -->
@@ -88,7 +76,21 @@
   <!-- J A R                                                          -->
   <!-- ================================================================== -->
 
-    <target name="jar-server" depends="build-server" description="Create martus-server jar">
+    <target name="jar-server" depends="build-server,jar-bc-jce" description="Create martus-server jar">
+
+        <!-- copy third party jars -->
+        <mkdir dir="${martus.server.class.root}/ThirdPartyJars"/>
+        <copy todir="${martus.server.class.root}/ThirdPartyJars" flatten="true">
+            <fileset refid="thirdparty.server.files" />
+            <fileset refid="thirdparty.common.files" />
+            <fileset refid="thirdparty.libext.files" />
+            <fileset dir="${public.release.folder}" includes="bc-jce-${DSTAMP}.${build.number}.jar"/>
+        </copy>
+        <copy todir="${martus.server.class.root}">
+            <fileset dir="${martus.server.src.root}" includes="**/LanguageNames_*.txt"/>
+            <fileset dir="${martus.server.src.root}" includes="org/martus/amplifier/presentation/index.html"/>
+        </copy>
+
         <mkdir dir="${public.release.folder}"/>
         <jar destfile="${public.release.folder}/martus-server-${DSTAMP}.${build.number}.jar" manifest="${martus.server.src.root}/org/martus/server/main/main-class.txt">
                 <fileset refid="server.nosrc.files"/>
