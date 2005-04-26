@@ -70,6 +70,11 @@
     <property name="martus.common.src.root" value="${build.basedir}/${martus.common.module}/source"/>
     <property name="martus.common.class.root" value="${build.basedir}/${martus.common.module}/bin"/>
 
+    <!-- bc-jce module name and dirs -->
+    <property name="martus.bcjce.module"  value="martus-bc-jce"/>
+    <property name="martus.bcjce.src.root" value="${build.basedir}/${martus.bcjce.module}/source"/>
+    <property name="martus.bcjce.class.root" value="${build.basedir}/${martus.bcjce.module}/bin"/>
+
     <!-- thirdparty module name and dirs -->
     <property name="martus.thirdparty.module"  value="martus-thirdparty"/>
 
