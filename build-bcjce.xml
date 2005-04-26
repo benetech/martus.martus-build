@@ -1,0 +1,45 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-bc-jce" default="notify-bc-jce" basedir=".">
+    <description>
+        Martus BC-JCE Build File
+    </description>
+
+    <!-- imports -->
+    <import file="build.shared.values.xml" />
+
+    <!-- bc-jce classpath -->
+    <path id="bcjce.class.path">
+        <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
+    </path>
+
+    <target name="notify-bc-jce">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-bc-jce" depends="init" description="Compile bc-jce">
+        <mkdir dir="${martus.bcjce.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.bcjce.src.root}" destdir="${martus.bcjce.class.root}" failonerror="true">
+            <classpath refid="bcjce.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                              -->
+  <!-- ================================================================== -->
+
+      <!-- create bc-jce jar -->
+      <target name="jar-bc-jce" depends="build-bc-jce" description="Create bc-jce jar">
+          <property name="bc-jce-filename" value="${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
+          <mkdir dir="${public.release.folder}"/>
+          <jar destfile="${bc-jce-filename}">
+                <fileset dir="${martus.bcjce.class.root}" includes="**/*.class"/>
+          </jar>
+          <copy file="${bc-jce-filename}" tofile="${martus.bcjce.class.root}/../bc-jce.jar" />
+    </target>
+
+</project>
