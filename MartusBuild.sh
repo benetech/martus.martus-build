@@ -124,7 +124,7 @@ downloadSourcesFromCvs()
 	echo "Downloading source from CVS...";	
 	cvs -q checkout -l -P martus || error "cvs checkout martus returned $?"
 
-	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi thirdparty"
+	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi bc-jce thirdparty"
 	
 	for cvs_module in $martus_cvs_src_modules
 		do
@@ -356,7 +356,7 @@ updateCvsTree()
 	echo
 	echo "Labeling CVS with tag: v${CVS_DATE}_build-$BUILD_NUMBER"
 	cd "$CVS_HOME"
-	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-jar-verifier martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi || error "Unable to add tag to CVS. Check any error messages displayed."
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-jar-verifier martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi martus-bc-jce || error "Unable to add tag to CVS. Check any error messages displayed."
 	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus-thirdparty
 	
 	#check if ClientJar directory structure already exists, if not add it
@@ -446,6 +446,10 @@ updateCvsTree()
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
 	done
+	
+	# add bc-jce to CVS
+	cd "$CVS_HOME/martus-bc-jce/"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "bc-jce.jar"
 } # updateCvsTree
 
 #################################################
