@@ -107,7 +107,7 @@
 <!-- ================================================================== -->
 <!-- Z I P  -  S O U R C E S                                            -->
 <!-- ================================================================== -->
-    <target name="zip-client-src" depends="init">
+    <target name="zip-client-src" depends="init,zip-bcjce-src">
         <mkdir dir="${public.release.folder}"/>
         <property name="zip-filename"  value="${public.release.folder}/martus-client-${DSTAMP}.${build.number}-src.zip"/>
 
@@ -133,6 +133,7 @@
                 <include name="${martus.binary.installer.project}/**/*.nsi"/>
                 <include name="${martus.binary.installer.project}/**/*.nsh"/>
             </fileset>
+            <fileset dir="${public.release.folder}" includes="bc-jce-src.zip"/>
         </zip>
     </target>
 
