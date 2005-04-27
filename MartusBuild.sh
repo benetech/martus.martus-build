@@ -171,6 +171,8 @@ copyThirdPartyJarToCDBuild()
 	cp -v $SRC_THIRDPARTY_JARS_COMMON_DIR/XMLRPC/bin/xmlrpc-*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/BouncyCastle/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/JUnit/bin/*.jar $BUILDFILES_JARS/
+	# copy bc-jce
+	cp -v $RELEASE_DIR/bc-jce-*.jar "$BUILDFILES_JARS/bc-jce.jar" || error "Unable to copy bc-jce jar"
 	
 } # copyThirdPartyJarToCDBuild
 
@@ -563,9 +565,6 @@ createClientInstallers()
 	
 	mkdir "$INSTALLER_SRC_FILES/common"
 	cp -v $MARTUSNSISPROJECTDIR/common/*.nsi "$INSTALLER_SRC_FILES/common" || error "Unable to copy *.nsi files"
-	
-	# copy bc-jce
-	cp -v $RELEASE_DIR/bc-jce-*.jar "$MARTUSBUILDFILES/ProgramFiles/bc-jce.jar" || error "Unable to copy bc-jce jar"
 	
 	createAndFixCdDocuments
 	buildClientJarVerifier
