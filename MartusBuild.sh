@@ -272,17 +272,15 @@ startAntBuild()
 {
 	echo
 	echo "Starting the ant build (might take a minute)..."
-	cd "$CVS_HOME"
+	cd "$CVS_HOME/martus"
 	if [ $cvs_tag = 1 ]; then
-		#ant md5
-		ant -f martus/build-meta.xml release
+		ant -f build-meta.xml release
 	else
-		ant -f martus/build-meta.xml release
+		ant -f build-meta.xml nosign.release
 	fi
 	status=$?
 	
 	# check the build.number file back into CVS
-	cd "$CVS_HOME/martus"
 	echo
 	echo "Updating to CVS: $BUILD_NUMBER_FILE"
 	cvs commit -m "v $CVS_DATE" build.number
