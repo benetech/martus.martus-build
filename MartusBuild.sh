@@ -337,7 +337,8 @@ copyAntBuildToCDBuild()
 	mkdir -p $RELEASE_DIR
 	
 	cp -v $BUILD_OUTPUT_DIR/*.jar $RELEASE_DIR/ || exit
-	cp -v $BUILD_OUTPUT_DIR/*.jar.md5 $RELEASE_DIR/ || exit
+	cp -v $BUILD_OUTPUT_DIR/*.zip $RELEASE_DIR/ || exit
+	cp -v $BUILD_OUTPUT_DIR/*.md5 $RELEASE_DIR/ || exit
 	cp -v $BUILD_OUTPUT_DIR/martus-client-$CVS_DATE_FILENAME.$BUILD_NUMBER.jar $RELEASE_DIR/martus.jar
 	
 } # copyAntBuildToCDBuild
