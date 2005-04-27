@@ -125,7 +125,6 @@
         <property name="zip-servre-filename"  value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}-src.zip"/>
 
         <zip zipfile="${zip-servre-filename}">
-            <fileset refid="server.nosrc.files"/>
             <fileset dir="${martus.server.src.root}" includes="**/*.java"/>
 
             <fileset dir="${martus.amplifier.src.root}" includes="**/*.java"/>
