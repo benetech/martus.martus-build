@@ -81,9 +81,14 @@
         <!-- copy third party jars -->
         <mkdir dir="${martus.server.class.root}/ThirdPartyJars"/>
         <copy todir="${martus.server.class.root}/ThirdPartyJars" flatten="true">
-            <fileset refid="thirdparty.server.files" />
-            <fileset refid="thirdparty.common.files" />
-            <fileset refid="thirdparty.libext.files" />
+            <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
             <fileset dir="${public.release.folder}" includes="bc-jce-${DSTAMP}.${build.number}.jar"/>
         </copy>
         <copy todir="${martus.server.class.root}">
