@@ -38,8 +38,23 @@
           <mkdir dir="${public.release.folder}"/>
           <jar destfile="${bc-jce-filename}">
                 <fileset dir="${martus.bcjce.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.bcjce.class.root}/.." includes="LICENSE.html"/>
           </jar>
           <copy file="${bc-jce-filename}" tofile="${martus.bcjce.class.root}/../bc-jce.jar" />
+    </target>
+
+<!-- ================================================================== -->
+<!-- Z I P  -  S O U R C E S                                            -->
+<!-- ================================================================== -->
+    <target name="zip-bcjce-src" depends="init">
+        <mkdir dir="${public.release.folder}"/>
+        <property name="zip-bcjce-filename"  value="${public.release.folder}/martus-bc-jce-${DSTAMP}.${build.number}-src.zip"/>
+
+        <zip zipfile="${zip-bcjce-filename}">
+            <fileset dir="${martus.bcjce.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.bcjce.src.root}/.." includes="LICENSE.html"/>
+        </zip>
+        <copy file="${zip-bcjce-filename}" tofile="${public.release.folder}/bc-jce-src.zip" />
     </target>
 
 </project>
