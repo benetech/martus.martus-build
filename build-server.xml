@@ -120,11 +120,11 @@
 <!-- ================================================================== -->
 <!-- Z I P  -  S O U R C E S                                            -->
 <!-- ================================================================== -->
-    <target name="zip-server-src" depends="init">
+    <target name="zip-server-src" depends="init,zip-bcjce-src">
         <mkdir dir="${public.release.folder}"/>
-        <property name="zip-filename"  value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}-src.zip"/>
+        <property name="zip-servre-filename"  value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}-src.zip"/>
 
-        <zip zipfile="${zip-filename}">
+        <zip zipfile="${zip-servre-filename}">
             <fileset refid="server.nosrc.files"/>
             <fileset dir="${martus.server.src.root}" includes="**/*.java"/>
 
@@ -157,6 +157,7 @@
                 <include name="${martus.thirdparty.module}/common/**/*"/>
                 <include name="${martus.thirdparty.module}/server/**/*"/>
             </fileset>
+            <fileset dir="${public.release.folder}" includes="bc-jce-src.zip"/>
         </zip>
     </target>
 
