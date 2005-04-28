@@ -56,6 +56,8 @@
             </classpath>
         </taskdef>
         <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <jvmarg value="-Xbootclasspath/p:${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
+            <jvmarg value="-Xbootclasspath/p:${martus.thirdparty.lib.bouncycastle}/bcprov-jdk14-${bouncycastle.version}.jar"/>
             <classpath>
                 <fileset dir="${public.release.folder}" >
                     <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
