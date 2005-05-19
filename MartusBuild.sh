@@ -79,6 +79,7 @@ setCvsEnvVars()
 	MARTUSBUILDFILES=$MARTUSINSTALLERPROJECT/BuildFiles
 
 	RELEASE_DIR=/cygdrive/c/SharedDocs/MatusReleases
+	PREVIOUS_RELEASE_DIR=/cygdrive/c/SharedDocs/Prev.MatusReleases
 
 	PATH=/cygdrive/c/j2sdk1.4.2_07/bin:/cygdrive/c/java/apache-ant-1.6.2/bin:$PATH
 
@@ -97,7 +98,7 @@ setCvsEnvVars()
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-activation-framework/bin/activation.jar)
 
 	export CVSROOT HOMEDRIVE HOMEPATH CVS_HOME CVS_DATE CVS_YEAR CVS_MONTH_DAY CVS_DATE_FILENAME
-	export MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH INITIAL_DIR RELEASE_DIR CLASSPATH
+	export MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH INITIAL_DIR RELEASE_DIR PREVIOUS_RELEASE_DIR CLASSPATH
 }
 
 #################################################
@@ -333,8 +334,12 @@ copyAntBuildToCDBuild()
 {
 	echo
 	echo "Moving martus.jar to temp CD build location..."
+	if [ -d "$PREVIOUS_RELEASE_DIR" ]; then
+		rm -fR $PREVIOUS_RELEASE_DIR
+	fi	
+
 	if [ -d "$RELEASE_DIR" ]; then
-		rm -fR $RELEASE_DIR
+		mv "$RELEASE_DIR" "$PREVIOUS_RELEASE_DIR"
 	fi
 	mkdir -p $RELEASE_DIR
 	
