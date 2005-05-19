@@ -335,7 +335,7 @@ copyAntBuildToCDBuild()
 	echo
 	echo "Moving martus.jar to temp CD build location..."
 	if [ -d "$PREVIOUS_RELEASE_DIR" ]; then
-		rm -fR $PREVIOUS_RELEASE_DIR
+		rm -fR "$PREVIOUS_RELEASE_DIR"
 	fi	
 
 	if [ -d "$RELEASE_DIR" ]; then
