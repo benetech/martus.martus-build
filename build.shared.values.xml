@@ -20,6 +20,11 @@
     <property name="martus.client.src.root" value="${build.basedir}/${martus.client.module}/source"/>
     <property name="martus.client.class.root" value="${build.basedir}/${martus.client.module}/bin"/>
 
+    <!-- clientside module name and dirs -->
+    <property name="martus.clientside.module"  value="martus-clientside"/>
+    <property name="martus.clientside.src.root" value="${build.basedir}/${martus.clientside.module}/source"/>
+    <property name="martus.clientside.class.root" value="${build.basedir}/${martus.clientside.module}/bin"/>
+
     <!-- hrdag module name and dirs -->
     <property name="martus.hrdag.module"  value="martus-hrdag"/>
     <property name="martus.hrdag.src.root" value="${build.basedir}/${martus.hrdag.module}/source"/>

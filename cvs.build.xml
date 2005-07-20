@@ -81,6 +81,7 @@
                 <argument value="${cvs.home}/${martus.server.module}"/>
                 <argument value="${cvs.home}/${martus.swing.module}"/>
                 <argument value="${cvs.home}/${martus.utils.module}"/>
+                <argument value="${cvs.home}/${martus.clientside.module}"/>
             </commandline>
         </cvs>
 

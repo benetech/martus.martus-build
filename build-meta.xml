@@ -8,6 +8,7 @@
     <import file="build.shared.values.xml" />
     <import file="build-common.xml" />
     <import file="build-client.xml" />
+    <import file="build-clientside.xml" />
     <import file="build-server.xml" />
     <import file="build-bcjce.xml" />
 
@@ -15,6 +16,7 @@
     <path id="meta.class.path">
         <pathelement path="${martus.meta.class.root}/"/>
         <pathelement path="${martus.client.class.root}/"/>
+        <pathelement path="${martus.clientside.class.root}/"/>
         <pathelement path="${martus.server.class.root}/"/>
         <pathelement path="${martus.common.class.root}/"/>
         <pathelement path="${martus.amplifier.class.root}/"/>
@@ -60,19 +62,21 @@
     <delete dir="${public.release.folder}"/>
 
     <!-- Remove class dirs -->
-    <delete dir="${martus.jarverifier.class.root}"/>
-    <delete dir="${martus.thirdparty.class.root}"/>
-    <delete dir="${martus.swing.class.root}"/>
-    <delete dir="${martus.server.class.root}"/>
-    <delete dir="${martus.mspa.class.root}"/>
-    <delete dir="${martus.meta.class.root}"/>
-    <delete dir="${martus.logi.class.root}"/>
-    <delete dir="${martus.hrdag.class.root}"/>
-    <delete dir="${martus.common.class.root}"/>
-    <delete dir="${martus.client.class.root}"/>
-    <delete dir="${martus.amplifier.class.root}"/>
-    <delete dir="${martus.utils.class.root}"/>
-    <delete dir="${martus.bcjce.class.root}"/>
+    <delete>
+        <fileset dir="${martus.jarverifier.class.root}" includes="**/*"/>
+        <fileset dir="${martus.swing.class.root}" includes="**/*"/>
+        <fileset dir="${martus.server.class.root}" includes="**/*"/>
+        <fileset dir="${martus.mspa.class.root}" includes="**/*"/>
+        <fileset dir="${martus.meta.class.root}" includes="**/*"/>
+        <fileset dir="${martus.logi.class.root}" includes="**/*"/>
+        <fileset dir="${martus.hrdag.class.root}" includes="**/*"/>
+        <fileset dir="${martus.common.class.root}" includes="**/*"/>
+        <fileset dir="${martus.client.class.root}" includes="**/*"/>
+        <fileset dir="${martus.amplifier.class.root}" includes="**/*"/>
+        <fileset dir="${martus.utils.class.root}" includes="**/*"/>
+        <fileset dir="${martus.bcjce.class.root}" includes="**/*"/>
+        <fileset dir="${martus.clientside.class.root}" includes="**/*"/>
+    </delete>
 
   </target>
 
@@ -111,6 +115,7 @@
 
                 <fileset refid="client.nosrc.files"/>
                 <fileset dir="${martus.client.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
 
                 <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>

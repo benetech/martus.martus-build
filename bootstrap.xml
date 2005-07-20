@@ -38,6 +38,7 @@
                 <argument value="${martus.swing.module}"/>
                 <argument value="${martus.thirdparty.module}"/>
                 <argument value="${martus.utils.module}"/>
+                <argument value="${martus.clientside.module}"/>
             </commandline>
         </cvs>
     </target>

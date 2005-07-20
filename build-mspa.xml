@@ -11,6 +11,7 @@
     <!-- mspa classpath -->
     <path id="mspa.class.path">
         <pathelement path="${martus.common.class.root}/"/>
+        <pathelement path="${martus.clientside.class.root}/"/>
         <pathelement path="${martus.mspa.class.root}/"/>
         <pathelement path="${martus.swing.class.root}/"/>
         <pathelement path="${martus.utils.class.root}/"/>
@@ -49,7 +50,7 @@
   <!-- B U I L D                                                          -->
   <!-- ================================================================== -->
 
-    <target name="build-mspa" depends="build-common" description="Compile martus-mspa">
+    <target name="build-mspa" depends="build-common,build-clientside" description="Compile martus-mspa">
         <mkdir dir="${martus.mspa.class.root}"/>
         <javac target="1.4" optimize="on" srcdir="${martus.mspa.src.root}" destdir="${martus.mspa.class.root}" failonerror="true">
             <classpath refid="mspa.class.path"/>
@@ -93,6 +94,7 @@
           <mkdir dir="${public.release.folder}"/>
           <jar destfile="${public.release.folder}/martus-mspa-client-${DSTAMP}.${build.number}.jar" manifest="${martus.mspa.src.root}/org/martus/mspa/main/main-class.txt">
                 <fileset refid="mspa.client.class.files" />
+                <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
           </jar>
     </target>
 

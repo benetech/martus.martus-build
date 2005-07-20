@@ -24,6 +24,7 @@
         <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
     </path>
 
     <target name="notify-common">

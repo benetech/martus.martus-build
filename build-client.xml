@@ -18,6 +18,7 @@
         <pathelement path="${martus.utils.class.root}/"/>
         <pathelement path="${martus.swing.class.root}"/>
         <pathelement path="${martus.logi.class.root}"/>
+        <pathelement path="${martus.clientside.class.root}"/>
         <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
@@ -45,7 +46,7 @@
   <!-- B U I L D                                                          -->
   <!-- ================================================================== -->
 
-    <target name="build-client" depends="build-common" description="Compile martus-client">
+    <target name="build-client" depends="build-common,build-clientside" description="Compile martus-client">
         <mkdir dir="${martus.client.class.root}"/>
         <javac target="1.4" optimize="on" srcdir="${martus.client.src.root}" destdir="${martus.client.class.root}" failonerror="true">
             <classpath refid="client.class.path"/>
@@ -104,6 +105,7 @@
             <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
         </jar>
     </target>
 
@@ -122,6 +124,7 @@
             <fileset dir="${martus.jarverifier.src.root}" includes="**/*.java"/>
 
             <fileset dir="${martus.common.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.clientside.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.utils.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.hrdag.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.logi.src.root}" includes="**/*.java"/>
