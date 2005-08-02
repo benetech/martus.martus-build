@@ -311,10 +311,10 @@ startAntBuild()
 	fi
 
 	if [ $cvs_tag = 1 ]; then
-		if [ ! -f "$MARTUS_JAR_FILE.md5" ]; then
-			echo "BUILD FAILED!! Missing md5. Exit status $status"
+		if [ ! -f "$MARTUS_JAR_FILE.sha" ]; then
+			echo "BUILD FAILED!! Missing sha. Exit status $status"
 			echo "Please note any messages above"
-			echo "Unable to find $MARTUS_JAR_FILE.md5"
+			echo "Unable to find $MARTUS_JAR_FILE.sha"
 			echo "Cleaning up..."
 			cd /
 			#rm -Rf $CVS_HOME
@@ -345,7 +345,7 @@ copyAntBuildToCDBuild()
 	
 	cp -v $BUILD_OUTPUT_DIR/*.jar $RELEASE_DIR/ || exit
 	cp -v $BUILD_OUTPUT_DIR/*.zip $RELEASE_DIR/ || exit
-	cp -v $BUILD_OUTPUT_DIR/*.md5 $RELEASE_DIR/ || exit
+	cp -v $BUILD_OUTPUT_DIR/*.sha $RELEASE_DIR/ || exit
 	cp -v $BUILD_OUTPUT_DIR/martus-client-$CVS_DATE_FILENAME.$BUILD_NUMBER.jar $RELEASE_DIR/martus.jar
 	
 } # copyAntBuildToCDBuild
@@ -390,7 +390,7 @@ updateCvsTree()
 	# add client to CVS
 	CVS_CLIENTJAR_DIR=$CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR/$CVS_MONTH_DAY
 	cp -v $RELEASE_DIR/martus-client-*.jar $CVS_CLIENTJAR_DIR/ || error "unable to copy"
-	cp -v $RELEASE_DIR/martus-client-*.jar.md5 $CVS_CLIENTJAR_DIR/ || error "unable to copy"
+	cp -v $RELEASE_DIR/martus-client-*.jar.sha $CVS_CLIENTJAR_DIR/ || error "unable to copy"
 	echo "Adding to client jar to CVS."
 	cd "$CVS_CLIENTJAR_DIR"
 	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar
@@ -399,7 +399,7 @@ updateCvsTree()
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
 	done
 	
-	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.md5
+	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.sha
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
@@ -431,13 +431,13 @@ updateCvsTree()
 	# add server to CVS
 	CVS_SERVERJAR_DIR=$CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR/$CVS_MONTH_DAY
 	cp -v $RELEASE_DIR/martus-server-*.jar $CVS_SERVERJAR_DIR/ || error "Unable to copy"
-	cp -v $RELEASE_DIR/martus-server-*.jar.md5 $CVS_SERVERJAR_DIR || error "Unable to copy"
+	cp -v $RELEASE_DIR/martus-server-*.jar.sha $CVS_SERVERJAR_DIR || error "Unable to copy"
 	
 	cp -v $RELEASE_DIR/martus-meta-*.jar $CVS_SERVERJAR_DIR || error "Unable to copy"
-	cp -v $RELEASE_DIR/martus-meta-*.jar.md5 $CVS_SERVERJAR_DIR || error "Unable to copy"
+	cp -v $RELEASE_DIR/martus-meta-*.jar.sha $CVS_SERVERJAR_DIR || error "Unable to copy"
 	
 	cp -v $RELEASE_DIR/martus-mspa-client-*.jar $CVS_SERVERJAR_DIR/ || error "Unable to copy"
-	cp -v $RELEASE_DIR/martus-mspa-client-*.jar.md5 $CVS_SERVERJAR_DIR/ || error "Unable to copy"
+	cp -v $RELEASE_DIR/martus-mspa-client-*.jar.sha $CVS_SERVERJAR_DIR/ || error "Unable to copy"
 	
 	echo "Adding to server jars to CVS"
 	cd "$CVS_SERVERJAR_DIR"
@@ -447,7 +447,7 @@ updateCvsTree()
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
 	done
 	
-	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.md5
+	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.sha
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
@@ -692,10 +692,10 @@ createSingleNsisInstaller()
 	fi
 	
 	echo
-	echo "generating md5sums of Single installer..."
+	echo "generating checksums of Single installer..."
 	cd "$RELEASE_DIR"
-	md5sum $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
-	echo -e "\n" >> $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
+	sha1sum $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha
+	echo -e "\n" >> $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha
 } # createSingleNsisInstaller
 
 #################################################
@@ -721,10 +721,10 @@ createUpgradeInstaller()
 	fi
 	
 	echo
-	echo "generating md5sums of Upgrade..."
+	echo "generating checksums of Upgrade..."
 	cd "$RELEASE_DIR"
-	md5sum $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
-	echo -e "\n" >> $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
+	sha1sum $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha
+	echo -e "\n" >> $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha
 	
 	cd "$INITIAL_DIR"
 } # createUpgradeInstaller
@@ -752,10 +752,10 @@ createCdIso()
 	mv $MARTUSBUILDFILES/Martus-$BUILD_VERNUM_TAG.iso $RELEASE_DIR/
 	
 	echo
-	echo "generating md5sums of ISO..."
+	echo "generating checksums of ISO..."
 	cd "$RELEASE_DIR"
-	md5sum $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso > $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5
-	echo -e "\n" >> $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5
+	sha1sum $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso > $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.sha
+	echo -e "\n" >> $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.sha
 } # createCdIso
 
 #################################################
@@ -777,20 +777,20 @@ updateCvsTreeWithBinaries()
 		echo $CVSROOT > Root
 	fi
 
-	# add ISO md5 to CVS
-	cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5 $CVS_HOME/binary-martus/Releases/ClientISO || exit
+	# add ISO checksum to CVS
+	cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.sha $CVS_HOME/binary-martus/Releases/ClientISO || exit
 	cd "$CVS_HOME/binary-martus/Releases/ClientISO/"
-	echo "Adding to CVS: Martus-$BUILD_VERNUM_TAG.iso.md5"
-	cvs.exe add Martus-$BUILD_VERNUM_TAG.iso.md5  || exit
-	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" Martus-$BUILD_VERNUM_TAG.iso.md5 || exit
+	echo "Adding to CVS: Martus-$BUILD_VERNUM_TAG.iso.sha"
+	cvs.exe add Martus-$BUILD_VERNUM_TAG.iso.sha  || exit
+	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" Martus-$BUILD_VERNUM_TAG.iso.sha || exit
 	
 	# move ISO onto Network
 	if [ -d "/cygdrive/h/Martus/ClientISO" ]; then
 		echo "Moving ISO onto network drive"
 		cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso /cygdrive/h/Martus/ClientISO/ || exit
-		cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5 /cygdrive/h/Martus/ClientISO/ || exit
+		cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.sha /cygdrive/h/Martus/ClientISO/ || exit
 	else
-		echo "Beneserve2 not available. You must move the Client ISO onto //Beneserve2/Engineering/Martus/ClientISO/ , its md5 has already been checked into CVS"
+		echo "Beneserve2 not available. You must move the Client ISO onto //Beneserve2/Engineering/Martus/ClientISO/ , its sha has already been checked into CVS"
 	fi
 	
 	# add Single Installer into CVS
@@ -802,36 +802,36 @@ updateCvsTreeWithBinaries()
 		echo $CVSROOT > Root
 	fi
 	
-	# add Single exe md5 to CVS
-	cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 $CVS_HOME/binary-martus/Releases/ClientExe || exit
+	# add Single exe sha to CVS
+	cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha $CVS_HOME/binary-martus/Releases/ClientExe || exit
 	cd "$CVS_HOME/binary-martus/Releases/ClientExe/"
-	echo "Adding to CVS: MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5"
-	cvs.exe add MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5  || exit
-	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 || exit
+	echo "Adding to CVS: MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha"
+	cvs.exe add MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha  || exit
+	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha || exit
 	
 	# move Single Exe onto Network
 	if [ -d "/cygdrive/h/Martus/ClientExe" ]; then
 		echo "Moving ClientExe onto network drive"
 		cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe /cygdrive/h/Martus/ClientExe/ || exit
-		cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
+		cp $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha /cygdrive/h/Martus/ClientExe/ || exit
 	else
-		echo "Beneserve2 not available. You must move the Client Single Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its md5 has already been checked into CVS"
+		echo "Beneserve2 not available. You must move the Client Single Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its sha has already been checked into CVS"
 	fi
 	
-	# add Upgrade exe md5 to CVS
-	cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 $CVS_HOME/binary-martus/Releases/ClientExe || exit
+	# add Upgrade exe sha to CVS
+	cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha $CVS_HOME/binary-martus/Releases/ClientExe || exit
 	cd "$CVS_HOME/binary-martus/Releases/ClientExe/"
-	echo "Adding to CVS: MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5"
-	cvs.exe add MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5  || exit
-	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 || exit
+	echo "Adding to CVS: MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha"
+	cvs.exe add MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha  || exit
+	cvs.exe commit -m "v $CVS_DATE build $BUILD_NUMBER" MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha || exit
 	
 	# move Upgrade Exe onto Network
 	if [ -d "/cygdrive/h/Martus/ClientExe" ]; then
 		echo "Moving MartusSetupUpgrade onto network drive"
 		cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe /cygdrive/h/Martus/ClientExe/ || exit
-		cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5 /cygdrive/h/Martus/ClientExe/ || exit
+		cp $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.sha /cygdrive/h/Martus/ClientExe/ || exit
 	else
-		echo "Beneserve2 not available. You must move the Client Upgrade Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its md5 has already been checked into CVS"
+		echo "Beneserve2 not available. You must move the Client Upgrade Exe onto //Beneserve2/Engineering/Martus/ClientExe/ , its sha has already been checked into CVS"
 	fi
 }
 

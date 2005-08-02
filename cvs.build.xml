@@ -98,7 +98,7 @@
         <copy todir="${client.binary.cvs.dir}/${cvs.year}/${cvs.month.day}">
             <fileset dir="${public.release.folder}">
                 <include name="martus-client-${DSTAMP}.${build.number}.jar"/>
-                <include name="martus-client-${DSTAMP}.${build.number}.jar.md5"/>
+                <include name="martus-client-${DSTAMP}.${build.number}.jar.*"/>
             </fileset>
         </copy>
 
@@ -108,18 +108,18 @@
             <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="martus-client-${DSTAMP}.${build.number}.jar"/>
-            <arg line="martus-client-${DSTAMP}.${build.number}.jar.md5"/>
+            <arg line="martus-client-${DSTAMP}.${build.number}.jar.*"/>
         </exec>
 
         <!-- copy Server jars to CVS location -->
         <copy todir="${server.binary.cvs.dir}/${cvs.year}/${cvs.month.day}">
             <fileset dir="${public.release.folder}">
                 <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
-                <include name="martus-server-${DSTAMP}.${build.number}.jar.md5"/>
+                <include name="martus-server-${DSTAMP}.${build.number}.jar.*"/>
                 <include name="martus-meta-${DSTAMP}.${build.number}.jar"/>
-                <include name="martus-meta-${DSTAMP}.${build.number}.jar.md5"/>
+                <include name="martus-meta-${DSTAMP}.${build.number}.jar.*"/>
                 <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
-                <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar.md5"/>
+                <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar.*"/>
             </fileset>
         </copy>
 
@@ -129,11 +129,11 @@
             <!-- <arg line="-n"/> -->
             <arg line="add"/>
             <arg line="martus-server-${DSTAMP}.${build.number}.jar"/>
-            <arg line="martus-server-${DSTAMP}.${build.number}.jar.md5"/>
+            <arg line="martus-server-${DSTAMP}.${build.number}.jar.*"/>
             <arg line="martus-meta-${DSTAMP}.${build.number}.jar"/>
-            <arg line="martus-meta-${DSTAMP}.${build.number}.jar.md5"/>
+            <arg line="martus-meta-${DSTAMP}.${build.number}.jar.*"/>
             <arg line="martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
-            <arg line="martus-mspa-client-${DSTAMP}.${build.number}.jar.md5"/>
+            <arg line="martus-mspa-client-${DSTAMP}.${build.number}.jar.*"/>
         </exec>
 
         <!-- commit cvs changes -->

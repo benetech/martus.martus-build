@@ -223,8 +223,8 @@
 <!-- M D 5                                                              -->
 <!-- ================================================================== -->
 
-    <target name="md5" depends="jar" description="Generate md5 checksum of jars and zips">
-        <checksum algorithm="MD5" fileext=".md5">
+    <target name="checksum" depends="jar" description="Generate sha checksum of jars and zips">
+        <checksum algorithm="SHA" fileext=".sha">
             <fileset dir="${public.release.folder}">
                 <include name="*.jar"/>
                 <include name="*.zip"/>
@@ -236,11 +236,11 @@
 <!-- R E L E A S E                                                      -->
 <!-- ================================================================== -->
 
-    <target name="release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,test,jarsign,zip-client-src,zip-server-src,md5">
+    <target name="release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,test,jarsign,zip-client-src,zip-server-src,checksum">
         <echo message="Release Built."/>
     </target>
 
-    <target name="nosign.release" depends="test,zip-client-src,zip-server-src,md5">
+    <target name="nosign.release" depends="test,zip-client-src,zip-server-src,checksum">
         <echo message="Unsigned Release Built."/>
     </target>
 

@@ -521,16 +521,16 @@
 <!-- ================================================================== -->
 <!-- M D 5                                                              -->
 <!-- ================================================================== -->
-    <target name="md5" depends="jarsigner">
-        <checksum>
+    <target name="checksum" depends="jarsigner">
+        <checksum algorithm="SHA" >
             <fileset dir="${dist}">
                 <include name="*.jar"/>
             </fileset>
         </checksum>
     </target>
 
-    <target name="md5-no-tests" depends="jarsigner-no-tests">
-        <checksum>
+    <target name="checksum-no-tests" depends="jarsigner-no-tests">
+        <checksum algorithm="SHA" >
             <fileset dir="${dist}">
                 <include name="*.jar"/>
             </fileset>
