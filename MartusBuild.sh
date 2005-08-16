@@ -132,9 +132,51 @@ downloadSourcesFromCvs()
 		cvs -q checkout martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
 		echo
 	done
+	
+	# get a listing of language files
+	AVAILABLE_MTFS=`find martus-client/source/org/martus/client/swingui/ -type "f" -name "Martus-*.mtf"`
+	AVAILABLE_HELP=`find martus-client/source/org/martus/client/swingui/ -type "f" -name "MartusHelp-*.txt"`
+	AVAILABLE_TOC=`find martus-client/source/org/martus/client/swingui/ -type "f" -name "MartusHelpTOC-*.txt"`
+	
+	file_listings=$AVAILABLE_MTFS;
+	removeFilesWithIncorrectLanguageCode;
+	
+	file_listings=$AVAILABLE_HELP;
+	removeFilesWithIncorrectLanguageCode;
+	
+	file_listings=$AVAILABLE_TOC;
+	removeFilesWithIncorrectLanguageCode;
 
 	downloadMartusInstallerFromCvsAndSetup
 } # downloadSourcesFromCvs
+
+#################################################
+# received a list of files, deletes those that have language code that
+#  are not in language code list
+#################################################
+removeFilesWithIncorrectLanguageCode()
+{
+	for name in $file_listings;
+	do
+		lang_code_pos_1=`expr index "$name" .`;
+		lang_code_pos_2=$lang_code_pos_1-3;
+		lang_code=${name:$lang_code_pos_2:2};
+
+		for lang in $MARTUS_LANGUAGES;
+		do
+			delete=1;
+			if [ $lang_code = $lang ]; then
+				delete=0;
+				echo "$lang_code exists in array, leaving";
+				break;
+			fi
+		done
+		if [ $delete = 1 ]; then
+			echo "$lang_code does not exists in array, deleting $name";
+			rm -v $name;
+		fi
+	done
+}
 
 #################################################
 # downloads installer from CVS and sets up CD Image
