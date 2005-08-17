@@ -40,6 +40,8 @@ getLangNameFromCode()
 	   LANGUAGE_STRING="French";;
 	"th")
 	   LANGUAGE_STRING="Thai";;
+	"fa")
+	   LANGUAGE_STRING="Farsi";;
 	*)
 	   LANGUAGE_STRING="English";;
 	esac
@@ -77,6 +79,7 @@ setCvsEnvVars()
 	MARTUSBUILDFILES=$MARTUSINSTALLERPROJECT/BuildFiles
 
 	RELEASE_DIR=/cygdrive/c/SharedDocs/MatusReleases
+	PREVIOUS_RELEASE_DIR=/cygdrive/c/SharedDocs/Prev.MatusReleases
 
 	PATH=/cygdrive/c/j2sdk1.4.2_07/bin:/cygdrive/c/java/apache-ant-1.6.2/bin:$PATH
 
@@ -95,7 +98,7 @@ setCvsEnvVars()
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-activation-framework/bin/activation.jar)
 
 	export CVSROOT HOMEDRIVE HOMEPATH CVS_HOME CVS_DATE CVS_YEAR CVS_MONTH_DAY CVS_DATE_FILENAME
-	export MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH INITIAL_DIR RELEASE_DIR CLASSPATH
+	export MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH INITIAL_DIR RELEASE_DIR PREVIOUS_RELEASE_DIR CLASSPATH
 }
 
 #################################################
@@ -120,13 +123,13 @@ downloadSourcesFromCvs()
 	cd "$CVS_HOME" || error "unable to cd: err $?"
 	echo
 	echo "Downloading source from CVS...";	
-	cvs -q checkout -l -P martus || error "cvs checkout martus returned $?"
+	cvs -q checkout -r Client_v2-7-2-branch -l -P martus || error "cvs checkout martus returned $?"
 
 	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi thirdparty"
 	
 	for cvs_module in $martus_cvs_src_modules
 		do
-		cvs -q checkout martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
+		cvs -q checkout -r Client_v2-7-2-branch martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
 		echo
 	done
 
@@ -145,7 +148,7 @@ downloadMartusInstallerFromCvsAndSetup()
 	fi
 	echo
 	echo "CD Build necessary, downloading installer from CVS...";
-	cvs checkout binary-martus/Installer/ 2>&1 || error "cvs returned $?"
+	cvs checkout -r Client_v2-7-2-branch binary-martus/Installer/ 2>&1 || error "cvs returned $?"
 	
 	copyThirdPartyJarToCDBuild
 	copyThirdPartySourceToCDBuild
@@ -243,7 +246,7 @@ copyThirdPartyLicenseToCDBuild()
 #################################################
 setupBuildEnvironment() 
 {
-	CURRENT_VERSION=2.7
+	CURRENT_VERSION=2.7.2
 	BUILD_DATE=`date '+%Y%m%d'`
 	
 	# the build number below relies on the Ant task that creates and autoincrements this file
@@ -270,17 +273,15 @@ startAntBuild()
 {
 	echo
 	echo "Starting the ant build (might take a minute)..."
-	cd "$CVS_HOME"
+	cd "$CVS_HOME/martus"
 	if [ $cvs_tag = 1 ]; then
-		#ant md5
-		ant -f martus/build-meta.xml release
+		ant -f build-meta.xml release
 	else
-		ant -f martus/build-meta.xml release
+		ant -f build-meta.xml nosign.release
 	fi
 	status=$?
 	
 	# check the build.number file back into CVS
-	cd "$CVS_HOME/martus"
 	echo
 	echo "Updating to CVS: $BUILD_NUMBER_FILE"
 	cvs commit -m "v $CVS_DATE" build.number
@@ -331,13 +332,18 @@ copyAntBuildToCDBuild()
 {
 	echo
 	echo "Moving martus.jar to temp CD build location..."
+	if [ -d "$PREVIOUS_RELEASE_DIR" ]; then
+		rm -fR "$PREVIOUS_RELEASE_DIR"
+	fi	
+
 	if [ -d "$RELEASE_DIR" ]; then
-		rm -fR $RELEASE_DIR
+		mv "$RELEASE_DIR" "$PREVIOUS_RELEASE_DIR"
 	fi
 	mkdir -p $RELEASE_DIR
 	
 	cp -v $BUILD_OUTPUT_DIR/*.jar $RELEASE_DIR/ || exit
-	cp -v $BUILD_OUTPUT_DIR/*.jar.md5 $RELEASE_DIR/ || exit
+	cp -v $BUILD_OUTPUT_DIR/*.zip $RELEASE_DIR/ || exit
+	cp -v $BUILD_OUTPUT_DIR/*.md5 $RELEASE_DIR/ || exit
 	cp -v $BUILD_OUTPUT_DIR/martus-client-$CVS_DATE_FILENAME.$BUILD_NUMBER.jar $RELEASE_DIR/martus.jar
 	
 } # copyAntBuildToCDBuild
@@ -444,6 +450,8 @@ updateCvsTree()
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
 	done
+
+
 } # updateCvsTree
 
 #################################################
@@ -617,7 +625,7 @@ createInstallerCdImage()
 	cp -v $MARTUSBUILDFILES/Jars/* $CD_IMAGE_DIR/LibExt/
 	
 	mkdir -p $CD_IMAGE_DIR/Sources/
-	cp -v $CVS_HOME/martus/dist/martus-$CVS_DATE_FILENAME.$BUILD_NUMBER.zip $CD_IMAGE_DIR/Sources/martus-$CURRENT_VERSION-src.zip
+	cp -v $CVS_HOME/martus/dist/martus-*.zip $CD_IMAGE_DIR/Sources/martus-client-$CURRENT_VERSION-src.zip
 	
 	mkdir -p $CD_IMAGE_DIR/Java/Linux/i586
 	cd "$MARTUSBUILDFILES/Java redist/Linux/i586/"
@@ -660,7 +668,7 @@ createCdNsisInstaller()
 #################################################
 createSingleNsisInstaller()
 {
-	cp -v $CVS_HOME/martus/dist/*.zip $MARTUSBUILDFILES/ || error "zip copy failed"
+	cp -v $CVS_HOME/martus/dist/martus-*.zip $MARTUSBUILDFILES/ || error "zip copy failed"
 	
 	cd "$MARTUSNSISPROJECTDIR"
 	if [ -f "$MARTUSNSISPROJECTDIR/MartusSetupSingle.exe" ]; then
@@ -680,7 +688,7 @@ createSingleNsisInstaller()
 	fi
 	
 	echo
-	echo "generating md5sums of Single installer..."
+	echo "generating checksums of Single installer..."
 	cd "$RELEASE_DIR"
 	md5sum $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
 	echo -e "\n" >> $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
@@ -709,7 +717,7 @@ createUpgradeInstaller()
 	fi
 	
 	echo
-	echo "generating md5sums of Upgrade..."
+	echo "generating checksums of Upgrade..."
 	cd "$RELEASE_DIR"
 	md5sum $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe > $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
 	echo -e "\n" >> $RELEASE_DIR/MartusSetupUpgrade-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe.md5
@@ -740,7 +748,7 @@ createCdIso()
 	mv $MARTUSBUILDFILES/Martus-$BUILD_VERNUM_TAG.iso $RELEASE_DIR/
 	
 	echo
-	echo "generating md5sums of ISO..."
+	echo "generating checksums of ISO..."
 	cd "$RELEASE_DIR"
 	md5sum $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso > $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5
 	echo -e "\n" >> $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5
@@ -765,7 +773,7 @@ updateCvsTreeWithBinaries()
 		echo $CVSROOT > Root
 	fi
 
-	# add ISO md5 to CVS
+	# add ISO checksum to CVS
 	cp $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.md5 $CVS_HOME/binary-martus/Releases/ClientISO || exit
 	cd "$CVS_HOME/binary-martus/Releases/ClientISO/"
 	echo "Adding to CVS: Martus-$BUILD_VERNUM_TAG.iso.md5"
@@ -903,7 +911,7 @@ echo "The build completed succesfully. The Release files are located in $RELEASE
 if [ $burn_client_cd = 1 ]; then
 	echo "Ready to burn image onto CD. Make sure a blank CD is in the CD burner, then press Enter to start:"
 	read throw_away
-	cdrecord dev=0,1,0 -v -eject -dao -data $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso
+	cdrecord dev=0,1,0 -v -eject -dao -data "$RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso"
 fi
 
 cd "$INITIAL_DIR"
