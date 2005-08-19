@@ -37,6 +37,9 @@
           <property name="bc-jce-filename" value="${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
           <mkdir dir="${public.release.folder}"/>
           <jar destfile="${bc-jce-filename}">
+          	<manifest>
+          		<attribute name="Sealed" value="true"/>
+          	</manifest>
                 <fileset dir="${martus.bcjce.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.bcjce.class.root}/.." includes="LICENSE.html"/>
           </jar>
