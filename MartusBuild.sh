@@ -496,6 +496,7 @@ updateCvsTree()
 	done
 	
 	# add bc-jce to CVS
+	cp -v $RELEASE_DIR/bc-jce-*.jar "$CVS_HOME/martus-bc-jce/bc-jce.jar" || error "Unable to copy bc-jce jar to cvs checkin directory"
 	cd "$CVS_HOME/martus-bc-jce/"
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "bc-jce.jar"
 } # updateCvsTree
