@@ -90,6 +90,20 @@ setCvsEnvVars()
 
 	INITIAL_DIR=`pwd`
 
+	first_char_in_path=${0:0:1};
+	if [ $first_char_in_path = "/" ]; then
+		CURRENT_SCRIPT="$0";
+	elif [ $first_char_in_path = "." ]; then
+		CURRENT_SCRIPT=${0/#\./$INITIAL_DIR};
+	else
+		CURRENT_SCRIPT="$INITIAL_DIR/$0";
+	fi
+	
+	if [ ! -f "$CURRENT_SCRIPT" ]; then
+		echo
+		error "CURRENT_SCRIPT doesnt exist: $CURRENT_SCRIPT"
+	fi
+
 	CLASSPATH=$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/Ant/bin/ant.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/Ant/bin/ant-junit.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/JUnit/bin/junit.jar)
@@ -98,7 +112,7 @@ setCvsEnvVars()
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-activation-framework/bin/activation.jar)
 
 	export CVSROOT HOMEDRIVE HOMEPATH CVS_HOME CVS_DATE CVS_YEAR CVS_MONTH_DAY CVS_DATE_FILENAME
-	export MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH INITIAL_DIR RELEASE_DIR PREVIOUS_RELEASE_DIR CLASSPATH
+	export MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR MARTUSBUILDFILES PATH INITIAL_DIR RELEASE_DIR PREVIOUS_RELEASE_DIR CLASSPATH CURRENT_SCRIPT
 }
 
 #################################################
@@ -158,9 +172,8 @@ removeFilesWithIncorrectLanguageCode()
 {
 	for name in $file_listings;
 	do
-		lang_code_pos_1=`expr index "$name" .`;
-		lang_code_pos_2=$lang_code_pos_1-3;
-		lang_code=${name:$lang_code_pos_2:2};
+		part1=${name%.*}
+		lang_code=${part1#*Martus-}
 
 		for lang in $MARTUS_LANGUAGES;
 		do
@@ -400,6 +413,13 @@ updateCvsTree()
 	if [ $cvs_tag = 0 ]; then
 		return
 	fi
+	
+	# add build script to CVS
+	echo 
+	echo "Adding $CURRENT_SCRIPT to cvs"
+	cp -v $CURRENT_SCRIPT "$CVS_HOME/martus/MartusBuild.sh"
+	cd "$CVS_HOME/martus/"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "MartusBuild.sh"
 	
 	echo
 	echo "Labeling CVS with tag: v${CVS_DATE}_build-$BUILD_NUMBER"
