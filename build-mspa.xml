@@ -100,11 +100,7 @@
     
     <target name="jarsign-mspa" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-mspa" description="Sign MSPA jar">
     	<property name="mspa-filename" value="${public.release.folder}/martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
-        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-            <fileset dir="${public.release.folder}">
-                <include name="${mspa-filename}"/>
-            </fileset>
-        </signjar>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${mspa-filename}" />
     </target>
 
 </project>

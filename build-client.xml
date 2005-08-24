@@ -100,7 +100,10 @@
             <fileset refid="jarverifier.nosrc.files"/>
             <fileset dir="${martus.jarverifier.class.root}" includes="**/*.class"/>
 
-            <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.common.class.root}">
+                <include name="**/*.class"/>
+                <include name="**/*.SF"/>
+            </fileset>
             <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
@@ -111,11 +114,7 @@
     
     <target name="jarsign-client" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-client" description="Sign Client jar">
     	<property name="client-filename" value="${public.release.folder}/martus-client-${DSTAMP}.${build.number}.jar"/>
-        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-            <fileset dir="${public.release.folder}">
-                <include name="${client-filename}"/>
-            </fileset>
-        </signjar>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${client-filename}"/>
     </target>
 
 <!-- ================================================================== -->
@@ -132,7 +131,10 @@
             <fileset refid="jarverifier.nosrc.files"/>
             <fileset dir="${martus.jarverifier.src.root}" includes="**/*.java"/>
 
-            <fileset dir="${martus.common.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.common.src.root}">
+                <include name="**/*.java"/>
+                <include name="**/*.SF"/>
+            </fileset>
             <fileset dir="${martus.clientside.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.utils.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.hrdag.src.root}" includes="**/*.java"/>

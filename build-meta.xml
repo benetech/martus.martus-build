@@ -117,7 +117,10 @@
                 <fileset dir="${martus.client.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
 
-                <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
+	            <fileset dir="${martus.common.class.root}">
+	                <include name="**/*.class"/>
+	                <include name="**/*.SF"/>
+	            </fileset>
                 <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
@@ -127,11 +130,7 @@
     
     <target name="jarsign-meta" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar" description="Sign Meta jar">
     	<property name="meta-filename" value="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar"/>
-        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-            <fileset dir="${public.release.folder}">
-                <include name="${meta-filename}"/>
-            </fileset>
-        </signjar>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${meta-filename}" />
     </target>
     
     <target name="jar" depends="build,jar-bc-jce,jar-common,jar-client,jar-server,jar-meta" description="Create all jars">
@@ -220,7 +219,7 @@
     </target>
 
 <!-- ================================================================== -->
-<!-- J A R S I G N E R                                                  -->
+<!-- J A R S I G N                                                      -->
 <!-- ================================================================== -->
 
     <target name="jarsign" depends="jarsign-bc-jce,jarsign-common,jarsign-server,jarsign-client,jarsign-mspa,jarsign-meta" description="Sign jars">
@@ -243,7 +242,7 @@
 <!-- R E L E A S E                                                      -->
 <!-- ================================================================== -->
 
-    <target name="release" depends="jarsign,zip-client-src,zip-server-src,checksum">
+    <target name="release" depends="test,zip-client-src,zip-server-src,checksum">
         <echo message="Release Built."/>
     </target>
 

@@ -111,7 +111,10 @@
                 <fileset dir="${martus.jarverifier.class.root}" includes="**/*.class"/>
 
                 <fileset refid="mspa.server.class.files"/>
-                <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
+	            <fileset dir="${martus.common.class.root}">
+	                <include name="**/*.class"/>
+	                <include name="**/*.SF"/>
+	            </fileset>
                 <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
@@ -121,11 +124,7 @@
     
     <target name="jarsign-server" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-server" description="Sign Server jar">
     	<property name="server-filename" value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}.jar"/>
-        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-            <fileset dir="${public.release.folder}">
-                <include name="${server-filename}"/>
-            </fileset>
-        </signjar>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${server-filename}" />
     </target>
 
 <!-- ================================================================== -->
