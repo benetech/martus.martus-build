@@ -42,6 +42,12 @@
             <classpath refid="common.class.path"/>
             <include name="**/*.java"/>
         </javac>
+        <!-- Copy common files that are needed for the jars -->
+        <copy todir="${martus.common.class.root}" >
+            <fileset dir="${martus.common.src.root}">
+                <include name="**/*.sf"/>
+            </fileset>
+        </copy>
     </target>
 
     <!-- ================================================================== -->
@@ -80,6 +86,7 @@
         <mkdir dir="${public.release.folder}"/>
         <jar destfile="${public.release.folder}/martus-common-${DSTAMP}.${build.number}.jar">
             <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
+            <fileset dir="${martus.common.class.root}" includes="**/*.sf"/>
             <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
@@ -89,6 +96,15 @@
                 <include name="**/ssmartusclientks"/>
             </fileset>
         </jar>
+    </target>
+
+    <target name="jarsign-common" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-common" description="Sign Common jars">
+    	<property name="common-filename" value="${public.release.folder}/martus-common-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+            <fileset dir="${public.release.folder}">
+                <include name="${common-filename}"/>
+            </fileset>
+        </signjar>
     </target>
 
 </project>

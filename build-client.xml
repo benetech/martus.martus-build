@@ -108,6 +108,15 @@
             <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
         </jar>
     </target>
+    
+    <target name="jarsign-client" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-client" description="Sign Client jar">
+    	<property name="client-filename" value="${public.release.folder}/martus-client-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+            <fileset dir="${public.release.folder}">
+                <include name="${client-filename}"/>
+            </fileset>
+        </signjar>
+    </target>
 
 <!-- ================================================================== -->
 <!-- Z I P  -  S O U R C E S                                            -->

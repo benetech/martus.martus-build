@@ -44,6 +44,21 @@
                 <fileset dir="${martus.bcjce.class.root}/.." includes="LICENSE.html"/>
           </jar>
     </target>
+    
+    <target name="jarsign-bc-jce" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-bc-jce" description="Sign jars">
+    	<property name="bc-jce-filename" value="${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+            <fileset dir="${public.release.folder}">
+                <include name="${bc-jce-filename}"/>
+            </fileset>
+        </signjar>
+          <!-- extract the sf file to martus-common\source\org\martus\common\crypto\ -->
+		 <unzip src="${bc-jce-filename}" dest="${martus.common.src.root}\org\martus\common\crypto\">
+			    <patternset>
+			        <include name="meta-inf/Ssmtsjar.sf"/>
+			    </patternset>
+		</unzip>
+    </target>
 
 <!-- ================================================================== -->
 <!-- Z I P  -  S O U R C E S                                            -->

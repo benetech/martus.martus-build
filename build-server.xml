@@ -118,6 +118,15 @@
                 <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
         </jar>
     </target>
+    
+    <target name="jarsign-server" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-server" description="Sign Server jar">
+    	<property name="server-filename" value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+            <fileset dir="${public.release.folder}">
+                <include name="${server-filename}"/>
+            </fileset>
+        </signjar>
+    </target>
 
 <!-- ================================================================== -->
 <!-- Z I P  -  S O U R C E S                                            -->
