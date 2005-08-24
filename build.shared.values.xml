@@ -70,7 +70,7 @@
     <property name="martus.logi.src.root" value="${build.basedir}/${martus.logi.module}/source"/>
     <property name="martus.logi.class.root" value="${build.basedir}/${martus.logi.module}/bin"/>
 
-    <!-- client common name and dirs -->
+    <!-- common module name and dirs -->
     <property name="martus.common.module"  value="martus-common"/>
     <property name="martus.common.src.root" value="${build.basedir}/${martus.common.module}/source"/>
     <property name="martus.common.class.root" value="${build.basedir}/${martus.common.module}/bin"/>
