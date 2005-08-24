@@ -173,7 +173,7 @@ removeFilesWithIncorrectLanguageCode()
 	for name in $file_listings;
 	do
 		part1=${name%.*}
-		lang_code=${part1#*Martus-}
+		lang_code=${part1#*Martus*-}
 
 		for lang in $MARTUS_LANGUAGES;
 		do
@@ -420,6 +420,12 @@ updateCvsTree()
 	cp -v $CURRENT_SCRIPT "$CVS_HOME/martus/MartusBuild.sh"
 	cd "$CVS_HOME/martus/"
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "MartusBuild.sh"
+	
+	# add bc-jce signature file to CVS
+	echo 
+	echo "Adding bc-jce signature file to cvs"
+	cd "$CVS_HOME/martus-common/source/org/martus/common/crypto/"
+	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "SSMTSJAR.SF"
 	
 	echo
 	echo "Labeling CVS with tag: v${CVS_DATE}_build-$BUILD_NUMBER"
