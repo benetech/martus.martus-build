@@ -82,11 +82,13 @@
   <!-- J A R                                                          -->
   <!-- ================================================================== -->
 
-    <target name="jar-common" depends="build-common,jar-bc-jce" description="Create martus-common jar">
+    <target name="jar-common" depends="build-common" description="Create martus-common jar">
         <mkdir dir="${public.release.folder}"/>
         <jar destfile="${public.release.folder}/martus-common-${DSTAMP}.${build.number}.jar">
-            <fileset dir="${martus.common.class.root}" includes="**/*.class"/>
-            <fileset dir="${martus.common.class.root}" includes="**/*.sf"/>
+            <fileset dir="${martus.common.class.root}">
+                <include name="**/*.class"/>
+                <include name="**/*.sf"/>
+            </fileset>
             <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
@@ -98,7 +100,7 @@
         </jar>
     </target>
 
-    <target name="jarsign-common" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-common" description="Sign Common jars">
+    <target name="jarsign-common" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jarsign-bc-jce,jar-common" description="Sign Common jars">
     	<property name="common-filename" value="${public.release.folder}/martus-common-${DSTAMP}.${build.number}.jar"/>
         <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
             <fileset dir="${public.release.folder}">
