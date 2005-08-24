@@ -84,7 +84,7 @@
   <!-- B U I L D                                                          -->
   <!-- ================================================================== -->
 
-  <target name="build" depends="build-bc-jce,build-common,build-server,build-client" description="Compile martus-meta">
+  <target name="build" depends="build-bc-jce,build-common,build-server,build-client,build-mspa" description="Compile martus-meta">
     <mkdir dir="${martus.meta.class.root}"/>
     <javac target="1.4" optimize="on" srcdir="${martus.meta.src.root}" destdir="${martus.meta.class.root}" failonerror="true">
             <classpath refid="meta.class.path"/>
@@ -96,7 +96,7 @@
   <!-- J A R                                                          -->
   <!-- ================================================================== -->
 
-    <target name="jar" depends="build,jar-bc-jce,jar-common,jar-client,jar-server,jar-mspa" description="Create martus-meta jar">
+    <target name="jar-meta" depends="build" description="Create martus-meta jar">
         <mkdir dir="${public.release.folder}"/>
         <jar destfile="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar">
                 <fileset dir="${martus.meta.class.root}" includes="**/*.class"/>
@@ -124,12 +124,24 @@
                 <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
         </jar>
     </target>
+    
+    <target name="jarsign-meta" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar" description="Sign Meta jar">
+    	<property name="meta-filename" value="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+            <fileset dir="${public.release.folder}">
+                <include name="${meta-filename}"/>
+            </fileset>
+        </signjar>
+    </target>
+    
+    <target name="jar" depends="build,jar-bc-jce,jar-common,jar-client,jar-server,jar-meta" description="Create all jars">
+    </target>
 
     <!-- ================================================================== -->
     <!-- T E S T S                                                          -->
     <!-- ================================================================== -->
 
-    <target name="test" depends="jar" description="Run all tests from the jars">
+    <target name="test" depends="jarsign" description="Run all tests from the jars">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
             <classpath>
                 <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
@@ -211,16 +223,11 @@
 <!-- J A R S I G N E R                                                  -->
 <!-- ================================================================== -->
 
-    <target name="jarsign" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass, check_keypass,jar" description="Sign jars">
-        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-            <fileset dir="${public.release.folder}">
-                <include name="*-${DSTAMP}.${build.number}.jar"/>
-            </fileset>
-        </signjar>
+    <target name="jarsign" depends="jarsign-bc-jce,jarsign-common,jarsign-server,jarsign-client,jarsign-mspa,jarsign-meta" description="Sign jars">
     </target>
 
 <!-- ================================================================== -->
-<!-- M D 5                                                              -->
+<!-- C H E C K S U M                                                              -->
 <!-- ================================================================== -->
 
     <target name="checksum" depends="jar" description="Generate sha checksum of jars and zips">
@@ -236,11 +243,11 @@
 <!-- R E L E A S E                                                      -->
 <!-- ================================================================== -->
 
-    <target name="release" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,test,jarsign,zip-client-src,zip-server-src,checksum">
+    <target name="release" depends="jarsign,zip-client-src,zip-server-src,checksum">
         <echo message="Release Built."/>
     </target>
 
-    <target name="nosign.release" depends="test,zip-client-src,zip-server-src,checksum">
+    <target name="nosign.release" depends="jar,zip-client-src,zip-server-src,checksum">
         <echo message="Unsigned Release Built."/>
     </target>
 
