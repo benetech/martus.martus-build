@@ -77,7 +77,7 @@ setCvsEnvVars()
 	MARTUSINSTALLERPROJECT=$CVS_HOME/binary-martus/Installer
 	MARTUSNSISPROJECTDIR=$MARTUSINSTALLERPROJECT/Win32_NSIS
 	MARTUSBUILDFILES=$MARTUSINSTALLERPROJECT/BuildFiles
-	
+
 	RELEASE_DIR=/cygdrive/c/SharedDocs/MatusReleases
 	PREVIOUS_RELEASE_DIR=/cygdrive/c/SharedDocs/Prev.MatusReleases
 
@@ -180,12 +180,11 @@ removeFilesWithIncorrectLanguageCode()
 			delete=1;
 			if [ $lang_code = $lang ]; then
 				delete=0;
-				echo "$lang_code exists in array, leaving";
 				break;
 			fi
 		done
 		if [ $delete = 1 ]; then
-			echo "$lang_code does not exists in array, deleting $name";
+			echo "deleting $name";
 			rm -v $name;
 		fi
 	done
@@ -204,7 +203,7 @@ downloadMartusInstallerFromCvsAndSetup()
 	echo
 	echo "CD Build necessary, downloading installer from CVS...";
 	cvs checkout binary-martus/Installer/ 2>&1 || error "cvs returned $?"
-		
+	
 	copyThirdPartyJarToCDBuild
 	copyThirdPartySourceToCDBuild
 	copyThirdPartyLicenseToCDBuild
@@ -313,10 +312,10 @@ setupBuildEnvironment()
 	else
 		BUILD_NUMBER=1
 	fi
-	
+
 	echo
 	echo "Build is v $CURRENT_VERSION, b $BUILD_NUMBER, date $BUILD_DATE"
-		
+	
 	BUILD_OUTPUT_DIR=$CVS_HOME/martus/dist
 	BUILD_VERNUM_TAG=$BUILD_DATE.$BUILD_NUMBER
 	
@@ -364,7 +363,7 @@ startAntBuild()
 		echo "Exiting..."
 		exit 1
 	fi
-	
+
 	if [ $cvs_tag = 1 ]; then
 		if [ ! -f "$MARTUS_JAR_FILE.sha" ]; then
 			echo "BUILD FAILED!! Missing sha. Exit status $status"
@@ -522,7 +521,7 @@ updateCvsTree()
 	done
 	
 	# add bc-jce to CVS
-	cp -v $RELEASE_DIR/bc-jce-*.jar "$CVS_HOME/martus-bc-jce/bc-jce.jar" || error "Unable to copy bc-jce jar to cvs checkin directory"
+	cp -v "$RELEASE_DIR/bc-jce-$CVS_DATE_FILENAME.$BUILD_NUMBER.jar" "$CVS_HOME/martus-bc-jce/bc-jce.jar" || error "Unable to copy bc-jce jar to cvs checkin directory"
 	cd "$CVS_HOME/martus-bc-jce/"
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "bc-jce.jar"
 } # updateCvsTree
