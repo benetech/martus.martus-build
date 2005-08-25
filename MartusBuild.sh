@@ -77,7 +77,7 @@ setCvsEnvVars()
 	MARTUSINSTALLERPROJECT=$CVS_HOME/binary-martus/Installer
 	MARTUSNSISPROJECTDIR=$MARTUSINSTALLERPROJECT/Win32_NSIS
 	MARTUSBUILDFILES=$MARTUSINSTALLERPROJECT/BuildFiles
-
+	
 	RELEASE_DIR=/cygdrive/c/SharedDocs/MatusReleases
 	PREVIOUS_RELEASE_DIR=/cygdrive/c/SharedDocs/Prev.MatusReleases
 
@@ -146,7 +146,7 @@ downloadSourcesFromCvs()
 		cvs -q checkout martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
 		echo
 	done
-	
+
 	# get a listing of language files
 	AVAILABLE_MTFS=`find martus-client/source/org/martus/client/swingui/ -type "f" -name "Martus-*.mtf"`
 	AVAILABLE_HELP=`find martus-client/source/org/martus/client/swingui/ -type "f" -name "MartusHelp-*.txt"`
@@ -204,7 +204,7 @@ downloadMartusInstallerFromCvsAndSetup()
 	echo
 	echo "CD Build necessary, downloading installer from CVS...";
 	cvs checkout binary-martus/Installer/ 2>&1 || error "cvs returned $?"
-	
+		
 	copyThirdPartyJarToCDBuild
 	copyThirdPartySourceToCDBuild
 	copyThirdPartyLicenseToCDBuild
@@ -313,10 +313,10 @@ setupBuildEnvironment()
 	else
 		BUILD_NUMBER=1
 	fi
-
+	
 	echo
 	echo "Build is v $CURRENT_VERSION, b $BUILD_NUMBER, date $BUILD_DATE"
-	
+		
 	BUILD_OUTPUT_DIR=$CVS_HOME/martus/dist
 	BUILD_VERNUM_TAG=$BUILD_DATE.$BUILD_NUMBER
 	
@@ -364,7 +364,7 @@ startAntBuild()
 		echo "Exiting..."
 		exit 1
 	fi
-
+	
 	if [ $cvs_tag = 1 ]; then
 		if [ ! -f "$MARTUS_JAR_FILE.sha" ]; then
 			echo "BUILD FAILED!! Missing sha. Exit status $status"
@@ -417,7 +417,7 @@ updateCvsTree()
 	# add build script to CVS
 	echo 
 	echo "Adding $CURRENT_SCRIPT to cvs"
-	cp -v $CURRENT_SCRIPT "$CVS_HOME/martus/MartusBuild.sh"
+	cp -v "$CURRENT_SCRIPT" "$CVS_HOME/martus/MartusBuild.sh"
 	cd "$CVS_HOME/martus/"
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "MartusBuild.sh"
 	
