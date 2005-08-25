@@ -642,6 +642,7 @@ createClientInstallers()
 	createAndFixCdDocuments
 	buildClientJarVerifier
 	createInstallerCdImage
+	createMacLinuxZip
 	createCdNsisInstaller
 	createSingleNsisInstaller
 	createUpgradeInstaller
@@ -707,6 +708,32 @@ createInstallerCdImage()
 	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 	cd "$INITIAL_DIR"
 } # createInstallerCdImage
+
+#################################################
+# 
+#################################################
+function createMacLinuxZip()
+{
+	echo
+	echo "Creating Mac/Linux zip file..."
+	mkdir /tmp/MartusClient-$CURRENT_VERSION
+	
+	# copy verify
+	cp -v -r "$CD_IMAGE_DIR/*" /tmp/MartusClient-$CURRENT_VERSION/
+	
+	# remove unnecessary stuff
+	rm -v /tmp/MartusClient-$CURRENT_VERSION/*.dll
+	rm -vfr /tmp/MartusClient-$CURRENT_VERSION/Win95
+	rm -vfr /tmp/MartusClient-$CURRENT_VERSION/*.exe
+	rm -vfr /tmp/MartusClient-$CURRENT_VERSION/*.inf	
+	
+	# zip up to release dir
+	cd /tmp
+	zip -r9v "MartusClient-$CURRENT_VERSION" "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip"
+	sha1sum "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip" > "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip.sha"
+	
+	rm -fr /tmp/MartusClient-$CURRENT_VERSION
+}
 
 #################################################
 # 
