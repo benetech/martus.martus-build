@@ -44,7 +44,12 @@
             <fileset dir="${LANGUAGEDIR}">
                 <include name="Martus-${LANGUAGE}.mlp"/>
             </fileset>
-        </signjar>          
+        </signjar>
+        <checksum algorithm="SHA" fileext=".sha">
+            <fileset dir="${LANGUAGEDIR}">
+                <include name="Martus-${LANGUAGE}.mlp"/>
+            </fileset>
+        </checksum>
       </target>
 
 </project>
