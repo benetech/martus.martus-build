@@ -145,7 +145,7 @@
         <mkdir dir="${martus.binary.buildfiles.programfilesdir}"/>
     </target>
 
-    <target name="buildfiles.move.licenses" depends="buildfiles.create.programfiles.dir">
+    <target name="buildfiles.move.infinitemonkey" depends="buildfiles.create.programfiles.dir">
         <copy todir="${martus.binary.buildfiles.programfilesdir}">
             <fileset dir="${martus.thirdparty.lib.infinitemonkey}" defaultexcludes="yes" includes="*.dll"/>
         </copy>
@@ -183,7 +183,7 @@
     <!--
         Create Installer CD images
     -->
-    <target name="build.installers" depends="cvs.installer.checkout,create.jars.dir">
+    <target name="build.installers" depends="cvs.installer.checkout,buildfiles.create.jars.dir">
 
     </target>
 

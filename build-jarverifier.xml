@@ -5,6 +5,7 @@
     </description>
 
     <!-- imports -->
+	<import file="build-meta.xml" />
     <import file="build.shared.values.xml" />
 
     <fileset id="jarverifier.nosrc.files" dir="${martus.jarverifier.src.root}">
