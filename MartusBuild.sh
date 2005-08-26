@@ -719,20 +719,28 @@ function createMacLinuxZip()
 	mkdir /tmp/MartusClient-$CURRENT_VERSION
 	
 	# copy verify
-	cp -v -r "$CD_IMAGE_DIR/*" /tmp/MartusClient-$CURRENT_VERSION/
+	cd "$CD_IMAGE_DIR"
+	cp -v -r * /tmp/MartusClient-$CURRENT_VERSION/
 	
 	# remove unnecessary stuff
-	rm -v /tmp/MartusClient-$CURRENT_VERSION/*.dll
+	find /tmp/MartusClient-$CURRENT_VERSION -type "f" -name "*.dll" -exec rm -vfR '{}' \; > /dev/null
+	find /tmp/MartusClient-$CURRENT_VERSION -type "f" -name "*.exe" -exec rm -vfR '{}' \; > /dev/null
+	find /tmp/MartusClient-$CURRENT_VERSION -type "f" -name "*.inf" -exec rm -vfR '{}' \; > /dev/null
 	rm -vfr /tmp/MartusClient-$CURRENT_VERSION/Win95
-	rm -vfr /tmp/MartusClient-$CURRENT_VERSION/*.exe
-	rm -vfr /tmp/MartusClient-$CURRENT_VERSION/*.inf	
 	
 	# zip up to release dir
+	ZIPFILE_NAME="$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip"
 	cd /tmp
-	zip -r9v "MartusClient-$CURRENT_VERSION" "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip"
-	sha1sum "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip" > "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip.sha"
+	zip -r9v "$ZIPFILE_NAME" "MartusClient-$CURRENT_VERSION"
 	
-	rm -fr /tmp/MartusClient-$CURRENT_VERSION
+	if [ ! -f "$ZIPFILE_NAME" ]; then
+		echo ""
+		echo "Error: Unable to create $ZIPFILE_NAME !"
+	else
+		sha1sum "$ZIPFILE_NAME" > "$ZIPFILE_NAME.sha"
+	fi
+	
+	rm -vfr /tmp/MartusClient-$CURRENT_VERSION
 }
 
 #################################################
