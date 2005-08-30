@@ -77,7 +77,7 @@ setCvsEnvVars()
 	MARTUSINSTALLERPROJECT=$CVS_HOME/binary-martus/Installer
 	MARTUSNSISPROJECTDIR=$MARTUSINSTALLERPROJECT/Win32_NSIS
 	MARTUSBUILDFILES=$MARTUSINSTALLERPROJECT/BuildFiles
-
+	
 	RELEASE_DIR=/cygdrive/c/SharedDocs/MatusReleases
 	PREVIOUS_RELEASE_DIR=/cygdrive/c/SharedDocs/Prev.MatusReleases
 
@@ -203,7 +203,7 @@ downloadMartusInstallerFromCvsAndSetup()
 	echo
 	echo "CD Build necessary, downloading installer from CVS...";
 	cvs checkout binary-martus/Installer/ 2>&1 || error "cvs returned $?"
-	
+		
 	copyThirdPartyJarToCDBuild
 	copyThirdPartySourceToCDBuild
 	copyThirdPartyLicenseToCDBuild
@@ -226,8 +226,6 @@ copyThirdPartyJarToCDBuild()
 	cp -v $SRC_THIRDPARTY_JARS_COMMON_DIR/XMLRPC/bin/xmlrpc-*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/BouncyCastle/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/JUnit/bin/*.jar $BUILDFILES_JARS/
-	# copy bc-jce
-	cp -v $RELEASE_DIR/bc-jce-*.jar "$BUILDFILES_JARS/bc-jce.jar" || error "Unable to copy bc-jce jar"
 	
 } # copyThirdPartyJarToCDBuild
 
@@ -312,10 +310,10 @@ setupBuildEnvironment()
 	else
 		BUILD_NUMBER=1
 	fi
-
+	
 	echo
 	echo "Build is v $CURRENT_VERSION, b $BUILD_NUMBER, date $BUILD_DATE"
-	
+		
 	BUILD_OUTPUT_DIR=$CVS_HOME/martus/dist
 	BUILD_VERNUM_TAG=$BUILD_DATE.$BUILD_NUMBER
 	
@@ -363,7 +361,7 @@ startAntBuild()
 		echo "Exiting..."
 		exit 1
 	fi
-
+	
 	if [ $cvs_tag = 1 ]; then
 		if [ ! -f "$MARTUS_JAR_FILE.sha" ]; then
 			echo "BUILD FAILED!! Missing sha. Exit status $status"
@@ -401,6 +399,15 @@ copyAntBuildToCDBuild()
 	cp -v $BUILD_OUTPUT_DIR/*.zip $RELEASE_DIR/ || exit
 	cp -v $BUILD_OUTPUT_DIR/*.sha $RELEASE_DIR/ || exit
 	cp -v $BUILD_OUTPUT_DIR/martus-client-$CVS_DATE_FILENAME.$BUILD_NUMBER.jar $RELEASE_DIR/martus.jar
+	
+	if [ $build_client_cd = 0 ]; then
+		echo
+		echo "No CD Build necessary...";
+		return
+	fi
+	
+	# copy bc-jce
+	cp -v "$BUILD_OUTPUT_DIR/bc-jce-$CVS_DATE_FILENAME.$BUILD_NUMBER.jar" "$BUILDFILES_JARS/bc-jce.jar" || error "Unable to copy bc-jce jar"
 	
 } # copyAntBuildToCDBuild
 
@@ -732,7 +739,7 @@ function createMacLinuxZip()
 	ZIPFILE_NAME="$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip"
 	cd /tmp
 	zip -r9v "$ZIPFILE_NAME" "MartusClient-$CURRENT_VERSION"
-	
+
 	if [ ! -f "$ZIPFILE_NAME" ]; then
 		echo ""
 		echo "Error: Unable to create $ZIPFILE_NAME !"
