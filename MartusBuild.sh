@@ -18,7 +18,7 @@ set -u
 #set -n
 
 #NOTE: Add additional language-code and language-code to language-string mappings below
-MARTUS_LANGUAGES="en es ru ar fr th fa"
+MARTUS_LANGUAGES="en es ru ar fr th fa ne"
 export MARTUS_LANGUAGES
 
 #################################################
@@ -691,7 +691,8 @@ createInstallerCdImage()
 		do
 		echo -e "\tcopying docs for language: ${martus_lang}"
 		cp -v $MARTUSBUILDFILES/Documents/README_${martus_lang}.txt $CD_IMAGE_DIR || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/README_${martus_lang}.txt"
-		cp -v $MARTUSBUILDFILES/Documents/*_${martus_lang}.pdf $CD_IMAGE_DIR/Martus/Docs || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/*_${martus_lang}.pdf"
+		cp -v $MARTUSBUILDFILES/Documents/martus_user_guide_${martus_lang}.pdf $CD_IMAGE_DIR/Martus/Docs || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/martus_user_guide_${martus_lang}.pdf"
+		cp -v $MARTUSBUILDFILES/Documents/quickstartguide_${martus_lang}.pdf $CD_IMAGE_DIR/Martus/Docs || message "ERROR: Unable to copy $MARTUSBUILDFILES/Documents/quickstartguide_${martus_lang}.pdf"
 		cp -v $MARTUSBUILDFILES/Verify/readme_verify_${martus_lang}.txt $CD_IMAGE_DIR/verify/ || message "ERROR: Unable to copy $CD_IMAGE_DIR/readme_verify_${martus_lang}.txt"
 	done
 	
