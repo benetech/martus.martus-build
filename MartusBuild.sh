@@ -377,6 +377,12 @@ startAntBuild()
 	fi
 	cd "$INITIAL_DIR"
 
+	# clean up temp dir
+	if [ -d "$TEMP" ]; then
+		find "$TEMP" -type "d" -name "\$\$\$*" -exec rm -fR '{}' \; > /dev/null
+		find "$TEMP" -type "f" -name "\$\$\$*" -exec rm -fR '{}' \; > /dev/null
+	fi
+
 } # startAntBuild
 
 #################################################
