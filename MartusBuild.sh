@@ -376,7 +376,7 @@ startAntBuild()
 		fi
 	fi
 	cd "$INITIAL_DIR"
-
+	
 	# clean up temp dir
 	if [ -d "$TEMP" ]; then
 		find "$TEMP" -type "d" -name "\$\$\$*" -exec rm -fR '{}' \; > /dev/null
@@ -744,7 +744,7 @@ function createMacLinuxZip()
 	ZIPFILE_NAME="$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG-MacLinux.zip"
 	cd /tmp
 	zip -r9v "$ZIPFILE_NAME" "MartusClient-$CURRENT_VERSION"
-	
+
 	if [ ! -f "$ZIPFILE_NAME" ]; then
 		echo ""
 		echo "Error: Unable to create $ZIPFILE_NAME !"
