@@ -23,6 +23,7 @@
         <pathelement path="${martus.utils.class.root}/"/>
         <pathelement path="${martus.hrdag.class.root}/"/>
         <pathelement path="${martus.logi.class.root}/"/>
+        <pathelement path="${martus.swing.class.root}/"/>
         <fileset refid="thirdparty.common.files"/>
         <fileset refid="thirdparty.server.files"/>
         <fileset dir="${build.basedir}/${martus.thirdparty.module}" >
@@ -117,22 +118,22 @@
                 <fileset dir="${martus.client.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
 
-	            <fileset dir="${martus.common.class.root}">
-	                <include name="**/*.class"/>
-	                <include name="**/*.SF"/>
-	            </fileset>
+                <fileset dir="${martus.common.class.root}">
+                    <include name="**/*.class"/>
+                    <include name="**/*.SF"/>
+                </fileset>
                 <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
         </jar>
     </target>
-    
+
     <target name="jarsign-meta" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar" description="Sign Meta jar">
-    	<property name="meta-filename" value="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar"/>
+        <property name="meta-filename" value="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar"/>
         <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${meta-filename}" />
     </target>
-    
+
     <target name="jar" depends="build,jar-bc-jce,jar-common,jar-client,jar-server,jar-meta" description="Create all jars">
     </target>
 
