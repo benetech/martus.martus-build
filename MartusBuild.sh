@@ -300,7 +300,7 @@ copyThirdPartyLicenseToCDBuild()
 #################################################
 setupBuildEnvironment() 
 {
-	CURRENT_VERSION=2.7.9
+	CURRENT_VERSION=2.8.0
 	BUILD_DATE=`date '+%Y%m%d'`
 	
 	# the build number below relies on the Ant task that creates and autoincrements this file
