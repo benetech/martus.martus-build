@@ -658,6 +658,7 @@ createClientInstallers()
 	createSingleNsisInstaller
 	createUpgradeInstaller
 	createCdIso
+	createPieces
 } # createClientInstallers
 
 #################################################
@@ -872,6 +873,32 @@ createCdIso()
 	sha1sum $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso > $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.sha
 	echo -e "\n" >> $RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso.sha
 } # createCdIso
+
+#################################################
+# 
+#################################################
+createPieces()
+{
+	echo 
+	echo "Creating Pieces..."
+	SPLITTER_PROGRAM="$MARTUSBUILDFILES/MartusSetupLauncher/filesplit-2.0.100/bin/filesplit.exe"
+	
+	if [ ! -d "$RELEASE_DIR/Pieces" ]; then
+		mkdir -p "$RELEASE_DIR/Pieces"
+	fi
+	
+	$SPLITTER_PROGRAM -s "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe" 1400 "$RELEASE_DIR/Pieces"
+	
+	echo
+	echo "generating checksums of Pieces..."
+	cd "$RELEASE_DIR/Pieces"
+	for filename in *.cnk
+		do
+		sha1sum $filename > $filename.sha
+		echo -e "\n" >> $filename.sha
+	done
+	
+} # createPieces
 
 #################################################
 # 
