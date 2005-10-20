@@ -56,7 +56,7 @@
 			    	<include name="META-INF/SSMTSJAR.SF"/>
 			    </patternset>
 		</unzip>
-		<move file="${martus.common.src.root}\org\martus\common\crypto\META-INF\SSMTSJAR.SF" todir="${martus.common.src.root}\org\martus\common\crypto" />
+		<move file="${martus.common.src.root}\org\martus\common\crypto\META-INF\SSMTSJAR.SF" tofile="${martus.common.src.root}\org\martus\common\crypto\SSMTSJAR.SIG" />
 		<delete dir="${martus.common.src.root}\org\martus\common\crypto\META-INF"/>
     </target>
 
