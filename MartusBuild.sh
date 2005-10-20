@@ -300,7 +300,8 @@ copyThirdPartyLicenseToCDBuild()
 #################################################
 setupBuildEnvironment() 
 {
-	CURRENT_VERSION=2.8.0
+	BUILD_PROPERTY_FILE="$CVS_HOME/martus/build.properties"
+	CURRENT_VERSION=`cat $BUILD_PROPERTY_FILE | grep martus.version | cut -d'=' -f2`
 	BUILD_DATE=`date '+%Y%m%d'`
 	
 	# the build number below relies on the Ant task that creates and autoincrements this file
@@ -329,7 +330,7 @@ startAntBuild()
 	echo "Starting the ant build (might take a minute)..."
 	cd "$CVS_HOME/martus"
 	if [ $cvs_tag = 1 ]; then
-		ant -f build-meta.xml release
+		ant -logger org.apache.tools.ant.XmlLogger -verbose -logfile build_log.xml -f build-meta.xml release
 	else
 		ant -f build-meta.xml nosign.release
 	fi
