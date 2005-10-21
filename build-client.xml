@@ -102,7 +102,7 @@
 
             <fileset dir="${martus.common.class.root}">
                 <include name="**/*.class"/>
-                <include name="**/*.SF"/>
+                <include name="**/*.SIG"/>
             </fileset>
             <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
@@ -133,7 +133,7 @@
 
             <fileset dir="${martus.common.src.root}">
                 <include name="**/*.java"/>
-                <include name="**/*.SF"/>
+                <include name="**/*.SIG"/>
             </fileset>
             <fileset dir="${martus.clientside.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.utils.src.root}" includes="**/*.java"/>
