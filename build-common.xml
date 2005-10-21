@@ -45,7 +45,7 @@
         <!-- Copy common files that are needed for the jars -->
         <copy todir="${martus.common.class.root}" >
             <fileset dir="${martus.common.src.root}">
-                <include name="**/*.SF"/>
+                <include name="**/*.SIG"/>
             </fileset>
         </copy>
     </target>
