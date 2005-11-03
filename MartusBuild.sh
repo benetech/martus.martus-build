@@ -330,7 +330,7 @@ startAntBuild()
 	echo "Starting the ant build (might take a minute)..."
 	cd "$CVS_HOME/martus"
 	if [ $cvs_tag = 1 ]; then
-		ant -logger org.apache.tools.ant.XmlLogger -verbose -logfile build_log.xml -f build-meta.xml release
+		ant -f build-meta.xml release
 	else
 		ant -f build-meta.xml nosign.release
 	fi
