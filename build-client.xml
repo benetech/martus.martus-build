@@ -31,6 +31,7 @@
         <include name="**/*.gif"/>
         <include name="**/*.jpg"/>
         <include name="**/*.mlp"/>
+		<include name="org/martus/client/test/Sample*.xml"/>
         <include name="org/martus/client/swingui/Martus-*.mtf"/>
         <include name="org/martus/client/swingui/MartusHelp-*.txt"/>
         <include name="org/martus/client/swingui/MartusHelpTOC-*.txt"/>
