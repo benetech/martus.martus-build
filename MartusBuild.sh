@@ -883,25 +883,12 @@ createPieces()
 	echo 
 	echo "Creating Pieces..."
 	SPLITTER_PROGRAM="$MARTUSBUILDFILES/MartusSetupLauncher/filesplit-2.0.100/bin/filesplit.exe"
-	if [ ! -f "$SPLITTER_PROGRAM" ]; then
-		echo
-		echo "Error: Splitter program not available!"
-		return
-	fi
-	
-	if [ ! -f "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe" ]; then
-		echo
-		echo "Error: cannot find $RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe!"
-		return
-	fi
 	
 	if [ ! -d "$RELEASE_DIR/Pieces" ]; then
 		mkdir -p "$RELEASE_DIR/Pieces"
 	fi
 	
-	WINDOWS_RELEASE_DIR=$(cygpath -w $RELEASE_DIR)
-	
-	$SPLITTER_PROGRAM -s "$WINDOWS_RELEASE_DIR\\MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe" 1400 "$WINDOWS_RELEASE_DIR\\Pieces"
+	$SPLITTER_PROGRAM -s "$RELEASE_DIR/MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe" 1400 "$RELEASE_DIR/Pieces"
 	
 	echo
 	echo "generating checksums of Pieces..."
