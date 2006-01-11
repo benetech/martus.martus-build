@@ -5,7 +5,7 @@
     </description>
 
     <!-- imports -->
-	<import file="build-meta.xml" />
+    <import file="build-meta.xml" />
     <import file="build.shared.values.xml" />
 
     <!-- bc-jce classpath -->
@@ -38,26 +38,27 @@
           <property name="bc-jce-filename" value="${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
           <mkdir dir="${public.release.folder}"/>
           <jar destfile="${bc-jce-filename}">
-	          	<manifest>
-	          		<attribute name="Sealed" value="true"/>
-	          	</manifest>
+                <manifest>
+                    <attribute name="Sealed" value="true"/>
+                </manifest>
                 <fileset dir="${martus.bcjce.class.root}" includes="**/*.class"/>
                 <fileset dir="${martus.bcjce.class.root}/.." includes="LICENSE.html"/>
           </jar>
     </target>
-    
+
     <target name="jarsign-bc-jce" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-bc-jce" description="Sign jars">
-    	<property name="bc-jce-filename" value="${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
+        <property name="bc-jce-filename" value="${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
         <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${bc-jce-filename}"/>
         <!-- extract the sf file to martus-common\source\org\martus\common\crypto\ -->
-        <delete file="${martus.common.src.root}\org\martus\common\crypto\SSMTSJAR.SF"/>  
-		<unzip src="${bc-jce-filename}" dest="${martus.common.src.root}\org\martus\common\crypto\">
-			    <patternset>
-			    	<include name="META-INF/SSMTSJAR.SF"/>
-			    </patternset>
-		</unzip>
-		<move file="${martus.common.src.root}\org\martus\common\crypto\META-INF\SSMTSJAR.SF" tofile="${martus.common.src.root}\org\martus\common\crypto\SSMTSJAR.SIG" />
-		<delete dir="${martus.common.src.root}\org\martus\common\crypto\META-INF"/>
+        <delete file="${martus.common.src.root}\org\martus\common\crypto\SSMTSJAR.SF"/>
+        <delete file="${martus.common.src.root}\org\martus\common\crypto\SSMTSJAR.SIG"/>
+        <unzip src="${bc-jce-filename}" dest="${martus.common.src.root}\org\martus\common\crypto\">
+                <patternset>
+                    <include name="META-INF/SSMTSJAR.SF"/>
+                </patternset>
+        </unzip>
+        <move file="${martus.common.src.root}\org\martus\common\crypto\META-INF\SSMTSJAR.SF" tofile="${martus.common.src.root}\org\martus\common\crypto\SSMTSJAR.SIG" />
+        <delete dir="${martus.common.src.root}\org\martus\common\crypto\META-INF"/>
     </target>
 
 <!-- ================================================================== -->
