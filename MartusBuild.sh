@@ -141,7 +141,7 @@ downloadSourcesFromCvs()
 	echo "Downloading source from CVS...";	
 	cvs -q checkout -l -P martus || error "cvs checkout martus returned $?"
 
-	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi bc-jce clientside thirdparty"
+	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi bc-jce clientside js-xml-generator thirdparty"
 	
 	for cvs_module in $martus_cvs_src_modules
 		do
@@ -457,7 +457,7 @@ updateCvsTree()
 	echo
 	echo "Labeling CVS with tag: v${CVS_DATE}_build-$BUILD_NUMBER"
 	cd "$CVS_HOME"
-	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-jar-verifier martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi martus-bc-jce martus-clientside || error "Unable to add tag to CVS. Check any error messages displayed."
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus martus-client martus-amplifier martus-common martus-jar-verifier martus-hrdag martus-meta martus-server martus-swing martus-utils martus-mspa martus-logi martus-bc-jce martus-clientside martus-js-xml-generator || error "Unable to add tag to CVS. Check any error messages displayed."
 	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus-thirdparty
 	
 	#check if ClientJar directory structure already exists, if not add it
