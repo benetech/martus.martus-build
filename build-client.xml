@@ -8,6 +8,7 @@
     <import file="build.shared.values.xml" />
     <import file="build-thirdparty.xml" />
     <import file="build-jarverifier.xml" />
+    <import file="build-js-xml-generator.xml" />
 
     <!-- client classpath -->
     <path id="client.class.path">
@@ -19,6 +20,7 @@
         <pathelement path="${martus.swing.class.root}"/>
         <pathelement path="${martus.logi.class.root}"/>
         <pathelement path="${martus.clientside.class.root}"/>
+        <pathelement path="${martus.jsxmlgenerator.class.root}"/>
         <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
@@ -31,7 +33,7 @@
         <include name="**/*.gif"/>
         <include name="**/*.jpg"/>
         <include name="**/*.mlp"/>
-		<include name="org/martus/client/test/Sample*.xml"/>
+        <include name="org/martus/client/test/Sample*.xml"/>
         <include name="org/martus/client/swingui/Martus-*.mtf"/>
         <include name="org/martus/client/swingui/MartusHelp-*.txt"/>
         <include name="org/martus/client/swingui/MartusHelpTOC-*.txt"/>
@@ -110,11 +112,19 @@
             <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
+
+            <!-- **********
+                include below when project 3rd party files are corrected
+
+            <fileset refid="jsxmlgenerator.nosrc.files"/>
+            <fileset dir="${martus.jsxmlgenerator.class.root}" includes="**/*.class"/>
+            ***********
+            -->
         </jar>
     </target>
-    
+
     <target name="jarsign-client" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-client" description="Sign Client jar">
-    	<property name="client-filename" value="${public.release.folder}/martus-client-${DSTAMP}.${build.number}.jar"/>
+        <property name="client-filename" value="${public.release.folder}/martus-client-${DSTAMP}.${build.number}.jar"/>
         <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${client-filename}"/>
     </target>
 
