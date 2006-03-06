@@ -25,6 +25,7 @@
         <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.persiancalendar}" includes="**/*.jar"/>
     </path>
 
     <target name="notify-common">
