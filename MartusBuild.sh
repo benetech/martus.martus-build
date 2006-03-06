@@ -106,6 +106,8 @@ setCvsEnvVars()
 
 	CLASSPATH=$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/Ant/bin/ant.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/Ant/bin/ant-junit.jar)
+	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/PersianCalendar/bin/persiancalendar.jar)
+	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/PersianCalendar/bin/icu4j_3_2_calendar.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/JUnit/bin/junit.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/BouncyCastle/bin/bcprov-jdk14-128.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-mail/bin/mail.jar)
@@ -224,6 +226,8 @@ copyThirdPartyJarToCDBuild()
 	cd "$CVS_HOME"
 	cp -v $SRC_THIRDPARTY_JARS_COMMON_DIR/InfiniteMonkey/bin/InfiniteMonkey.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_COMMON_DIR/XMLRPC/bin/xmlrpc-*.jar $BUILDFILES_JARS/
+	cp -v $SRC_THIRDPARTY_JARS_COMMON_DIR/PersianCalendar/bin/*.jar $BUILDFILES_JARS/
+	cp -v $SRC_THIRDPARTY_JARS_COMMON_DIR/Velocity/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/BouncyCastle/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/JUnit/bin/*.jar $BUILDFILES_JARS/
 	
@@ -259,6 +263,12 @@ copyThirdPartySourceToCDBuild()
 	mkdir -p $BUILDFILES_SRC_FILES/xmlrpc
 	cp -v $CVS_HOME/martus-thirdparty/common/XMLRPC/source/* $BUILDFILES_SRC_FILES/xmlrpc/
 	
+	mkdir -p $BUILDFILES_SRC_FILES/PersianCalendar
+	cp -v $CVS_HOME/martus-thirdparty/common/PersianCalendar/source/* $BUILDFILES_SRC_FILES/PersianCalendar/
+	
+	mkdir -p $BUILDFILES_SRC_FILES/Velocity
+	cp -v $CVS_HOME/martus-thirdparty/common/Velocity/source/* $BUILDFILES_SRC_FILES/Velocity/
+	
 	cd "$BUILDFILES_SRC_FILES"
 	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
 	
@@ -289,6 +299,12 @@ copyThirdPartyLicenseToCDBuild()
 	
 	mkdir -p $BUILDFILES_LICENSES/Xml-Rpc
 	cp -v $CVS_HOME/martus-thirdparty/common/XMLRPC/license/* $BUILDFILES_LICENSES/Xml-Rpc/
+	
+	mkdir -p $BUILDFILES_LICENSES/PersianCalendar
+	cp -v $CVS_HOME/martus-thirdparty/common/PersianCalendar/license/* $BUILDFILES_LICENSES/PersianCalendar/
+	
+	mkdir -p $BUILDFILES_LICENSES/Velocity
+	cp -v $CVS_HOME/martus-thirdparty/common/Velocity/license/* $BUILDFILES_LICENSES/Velocity/
 	
 	cd "$BUILDFILES_LICENSES"
 	find . -type "d" -name "CVS" -exec rm -fR '{}' \; > /dev/null
