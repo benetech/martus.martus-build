@@ -1,0 +1,66 @@
+How to use the build environment
+--------------------------------
+
+###################
+1- Requirements
+###################
+
+- Build only:
+Cygwin
+Java (currently 1.4.2_07
+Ant (currently 1.6.2)
+Keystore if running meta tests or making releases 
+
+- If doing client builds/releases also (Windows only for installers):
+NSIS
+sha1sum
+mkisofs
+filesplit
+cdrecord
+
+
+###########################
+2- Doing a java build ONLY
+###########################
+
+- Set your path so Java bin and Ant bin are included:
+
+PATH=/cygdrive/c/j2sdk1.4.2_07/bin:/cygdrive/c/apache-ant-1.6.2/bin:$PATH
+
+- set up build environment variables
+
+HOMEDRIVE=e:
+HOMEPATH=CVS\Martus
+CVS_HOME=$HOMEDRIVE/$HOMEPATH
+MARTUSINSTALLERPROJECT=$CVS_HOME/binary-martus/Installer
+MARTUSNSISPROJECTDIR=$MARTUSINSTALLERPROJECT/Win32_NSIS
+
+CLASSPATH=$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/Ant/bin/ant.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/Ant/bin/ant-junit.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/PersianCalendar/bin/persiancalendar.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/PersianCalendar/bin/icu4j_3_2_calendar.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/libext/JUnit/bin/junit.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/libext/BouncyCastle/bin/bcprov-jdk14-128.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/build/java-mail/bin/mail.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/build/java-activation-framework/bin/activation.jar)
+
+export PATH CVSROOT HOMEDRIVE HOMEPATH CVS_HOME CLASSPATH MARTUSINSTALLERPROJECT MARTUSNSISPROJECTDIR
+
+- Update the build.properties file so that the property cvs.home point to the CVS_HOME environment variable
+
+- Run the build from the 'martus' directory, where all the ant xml files are located
+
+# build with no tests or signing
+ant -f build-meta.xml nosign.notest.release
+
+# build with no signing. TestAll from meta is not run since it needs signed jars to be successful
+ant -f build-meta.xml nosign.release
+
+# build, jar, sign  & TestAll
+ant -f build-meta.xml release
+
+###########################
+3- Doing a full build
+###########################
+
+## TODO: ##
