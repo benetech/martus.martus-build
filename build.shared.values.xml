@@ -25,6 +25,11 @@
     <property name="martus.clientside.src.root" value="${build.basedir}/${martus.clientside.module}/source"/>
     <property name="martus.clientside.class.root" value="${build.basedir}/${martus.clientside.module}/bin"/>
 
+    <!-- js-xml-generator module name and dirs -->
+    <property name="martus.jsxmlgenerator.module"  value="martus-js-xml-generator"/>
+    <property name="martus.jsxmlgenerator.src.root" value="${build.basedir}/${martus.jsxmlgenerator.module}/source"/>
+    <property name="martus.jsxmlgenerator.class.root" value="${build.basedir}/${martus.jsxmlgenerator.module}/bin"/>
+
     <!-- hrdag module name and dirs -->
     <property name="martus.hrdag.module"  value="martus-hrdag"/>
     <property name="martus.hrdag.src.root" value="${build.basedir}/${martus.hrdag.module}/source"/>
@@ -88,6 +93,7 @@
     <property name="martus.thirdparty.lib.ant"  value="${build.basedir}/${martus.thirdparty.module}/common/Ant/bin/"/>
     <property name="martus.thirdparty.lib.logi"  value="${build.basedir}/${martus.thirdparty.module}/common/Logi/bin/"/>
     <property name="martus.thirdparty.lib.velocity"  value="${build.basedir}/${martus.thirdparty.module}/common/Velocity/bin/"/>
+    <property name="martus.thirdparty.lib.persiancalendar"  value="${build.basedir}/${martus.thirdparty.module}/common/PersianCalendar/bin/"/>
 
     <property name="martus.thirdparty.lib.lucene"  value="${build.basedir}/${martus.thirdparty.module}/server/Lucene/bin/"/>
     <property name="martus.thirdparty.lib.jetty"  value="${build.basedir}/${martus.thirdparty.module}/server/Jetty/bin/"/>
