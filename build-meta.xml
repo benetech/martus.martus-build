@@ -11,6 +11,7 @@
     <import file="build-clientside.xml" />
     <import file="build-server.xml" />
     <import file="build-bcjce.xml" />
+    <import file="build-js-xml-generator.xml" />
 
     <!-- meta classpath -->
     <path id="meta.class.path">
@@ -77,6 +78,7 @@
         <fileset dir="${martus.utils.class.root}" includes="**/*"/>
         <fileset dir="${martus.bcjce.class.root}" includes="**/*"/>
         <fileset dir="${martus.clientside.class.root}" includes="**/*"/>
+        <fileset dir="${martus.jsxmlgenerator.class.root}" includes="**/*"/>
     </delete>
 
   </target>
@@ -141,7 +143,7 @@
     <!-- T E S T S                                                          -->
     <!-- ================================================================== -->
 
-    <target name="test" depends="jarsign" description="Run all tests from the jars">
+    <target name="test" depends="jar" description="Run all tests from the jars">
         <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
             <classpath>
                 <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
@@ -162,6 +164,7 @@
                 <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
                 <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
                 <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.persiancalendar}" includes="**/*.jar"/>
 
                 <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
                 <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
@@ -243,11 +246,15 @@
 <!-- R E L E A S E                                                      -->
 <!-- ================================================================== -->
 
-    <target name="release" depends="test,zip-client-src,zip-server-src,checksum">
+    <target name="release" depends="jarsign,test,zip-client-src,zip-server-src,checksum">
         <echo message="Release Built."/>
     </target>
 
-    <target name="nosign.release" depends="jar,zip-client-src,zip-server-src,checksum">
+    <target name="nosign.release" depends="test,zip-client-src,zip-server-src,checksum">
+        <echo message="Unsigned Release Built."/>
+    </target>
+
+    <target name="nosign.notest.release" depends="jar,zip-client-src,zip-server-src,checksum">
         <echo message="Unsigned Release Built."/>
     </target>
 
