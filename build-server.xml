@@ -91,7 +91,7 @@
             <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
             <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
             <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
-            <fileset dir="${martus.thirdparty.lib.persiancalendar" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.persiancalendar}" includes="**/*.jar"/>
             <fileset dir="${public.release.folder}" includes="bc-jce-${DSTAMP}.${build.number}.jar"/>
         </copy>
         <copy todir="${martus.server.class.root}">
