@@ -94,6 +94,8 @@
     <property name="martus.thirdparty.lib.logi"  value="${build.basedir}/${martus.thirdparty.module}/common/Logi/bin/"/>
     <property name="martus.thirdparty.lib.velocity"  value="${build.basedir}/${martus.thirdparty.module}/common/Velocity/bin/"/>
     <property name="martus.thirdparty.lib.persiancalendar"  value="${build.basedir}/${martus.thirdparty.module}/common/PersianCalendar/bin/"/>
+    
+    <property name="martus.thirdparty.lib.rhino"  value="${build.basedir}/${martus.thirdparty.module}/client/RhinoJavaScript/bin/"/>
 
     <property name="martus.thirdparty.lib.lucene"  value="${build.basedir}/${martus.thirdparty.module}/server/Lucene/bin/"/>
     <property name="martus.thirdparty.lib.jetty"  value="${build.basedir}/${martus.thirdparty.module}/server/Jetty/bin/"/>
