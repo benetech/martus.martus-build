@@ -9,7 +9,9 @@
 
     <!-- js-xml-generator classpath -->
     <path id="jsxmlgenerator.class.path">
-
+		<pathelement path="${martus.utils.class.root}/"/>
+		<fileset dir="${martus.thirdparty.lib.rhino}" includes="**/*.jar"/>
+		<fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
     </path>
     
     <!-- js-xml-generator files -->
