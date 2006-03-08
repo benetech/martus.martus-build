@@ -49,7 +49,7 @@
   <!-- B U I L D                                                          -->
   <!-- ================================================================== -->
 
-    <target name="build-client" depends="build-common,build-clientside" description="Compile martus-client">
+    <target name="build-client" depends="build-common,build-clientside,build-js-xml-generator" description="Compile martus-client">
         <mkdir dir="${martus.client.class.root}"/>
         <javac target="1.4" optimize="on" srcdir="${martus.client.src.root}" destdir="${martus.client.class.root}" failonerror="true">
             <classpath refid="client.class.path"/>
@@ -113,13 +113,8 @@
             <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
             <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
 
-            <!-- **********
-                include below when project 3rd party files are corrected
-
             <fileset refid="jsxmlgenerator.nosrc.files"/>
             <fileset dir="${martus.jsxmlgenerator.class.root}" includes="**/*.class"/>
-            ***********
-            -->
         </jar>
     </target>
 
@@ -141,6 +136,9 @@
 
             <fileset refid="jarverifier.nosrc.files"/>
             <fileset dir="${martus.jarverifier.src.root}" includes="**/*.java"/>
+			
+			<fileset refid="jsxmlgenerator.nosrc.files"/>
+			<fileset dir="${martus.jsxmlgenerator.src.root}" includes="**/*.java"/>
 
             <fileset dir="${martus.common.src.root}">
                 <include name="**/*.java"/>
@@ -154,12 +152,20 @@
             <fileset dir="${build.basedir}">
                 <exclude name="${martus.thirdparty.module}/**/bin/*"/>
                 <exclude name="${martus.thirdparty.module}/client/Fonts/**/*"/>
+				
+				<exclude name="${martus.thirdparty.module}/client/RhinoJavaScript/docs/**/*"/>
+				<exclude name="${martus.thirdparty.module}/client/RhinoJavaScript/examples/**/*"/>
+				<exclude name="${martus.thirdparty.module}/client/RhinoJavaScript/toolsrc/**/*"/>
+				<exclude name="${martus.thirdparty.module}/client/RhinoJavaScript/xmlimpsrc/**/*"/>
+				<exclude name="${martus.thirdparty.module}/client/RhinoJavaScript/*"/>
 
                 <include name="${martus.thirdparty.module}/libext/**/*"/>
                 <include name="${martus.thirdparty.module}/common/**/*"/>
                 <include name="${martus.thirdparty.module}/client/**/*"/>
                 <include name="${martus.binary.installer.project}/**/*.nsi"/>
                 <include name="${martus.binary.installer.project}/**/*.nsh"/>
+				
+				<include name="${martus.module}/**/MartusIntoEclipse.txt"/>
             </fileset>
             <fileset dir="${public.release.folder}" includes="bc-jce-src.zip"/>
         </zip>
