@@ -110,7 +110,6 @@ setCvsEnvVars()
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/common/PersianCalendar/bin/icu4j_3_2_calendar.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/JUnit/bin/junit.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/libext/BouncyCastle/bin/bcprov-jdk14-128.jar)
-	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/client/RhinoJavaScript/bin/js.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-mail/bin/mail.jar)
 	CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/c/CVS_HOME/martus-thirdparty/build/java-activation-framework/bin/activation.jar)
 
@@ -221,7 +220,6 @@ copyThirdPartyJarToCDBuild()
 	BUILDFILES_JARS=$MARTUSBUILDFILES/Jars
 	SRC_THIRDPARTY_JARS_COMMON_DIR=$CVS_HOME/martus-thirdparty/common
 	SRC_THIRDPARTY_JARS_LIBEXT_DIR=$CVS_HOME/martus-thirdparty/libext
-	SRC_THIRDPARTY_JARS_CLIENT_DIR=$CVS_HOME/martus-thirdparty/client
 	echo
 	echo "Copying thirdparty jars to build location..."
 	mkdir -p $BUILDFILES_JARS
@@ -232,7 +230,6 @@ copyThirdPartyJarToCDBuild()
 	cp -v $SRC_THIRDPARTY_JARS_COMMON_DIR/Velocity/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/BouncyCastle/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/JUnit/bin/*.jar $BUILDFILES_JARS/
-	cp -v $SRC_THIRDPARTY_JARS_CLIENT_DIR/RhinoJavaScript/bin/*.jar $BUILDFILES_JARS/
 	
 } # copyThirdPartyJarToCDBuild
 
@@ -259,9 +256,6 @@ copyThirdPartySourceToCDBuild()
 	
 	mkdir -p $BUILDFILES_SRC_FILES/Logi
 	cp -v $CVS_HOME/martus-thirdparty/common/Logi/source/* $BUILDFILES_SRC_FILES/Logi/
-	
-	mkdir -p $BUILDFILES_SRC_FILES/Rhino
-	cp -v $CVS_HOME/martus-thirdparty/client/RhinoJavaScript/source/* $BUILDFILES_SRC_FILES/RhinoJavaScript/
 	
 	mkdir -p $BUILDFILES_SRC_FILES/Sun
 	cp -v $CVS_HOME/martus-thirdparty/client/Sun/source/* $BUILDFILES_SRC_FILES/Sun/
@@ -302,9 +296,6 @@ copyThirdPartyLicenseToCDBuild()
 	
 	mkdir -p $BUILDFILES_LICENSES/Sun
 	cp -v $CVS_HOME/martus-thirdparty/client/Sun/license/* $BUILDFILES_LICENSES/Sun/
-	
-	mkdir -p $BUILDFILES_LICENSES/Rhino
-	cp -v $CVS_HOME/martus-thirdparty/client/RhinoJavaScript/license/* $BUILDFILES_LICENSES/RhinoJavaScript/
 	
 	mkdir -p $BUILDFILES_LICENSES/Xml-Rpc
 	cp -v $CVS_HOME/martus-thirdparty/common/XMLRPC/license/* $BUILDFILES_LICENSES/Xml-Rpc/
