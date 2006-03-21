@@ -456,12 +456,14 @@ updateCvsTree()
 	cp -v "$CURRENT_SCRIPT" "$CVS_HOME/martus/MartusBuild.sh"
 	cd "$CVS_HOME/martus/"
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "MartusBuild.sh"
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER "MartusBuild.sh"
 	
 	# add bc-jce signature file to CVS
 	echo 
 	echo "Adding bc-jce signature file to cvs"
 	cd "$CVS_HOME/martus-common/source/org/martus/common/crypto/"
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "SSMTSJAR.SIG"
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER "SSMTSJAR.SIG"
 	
 	echo
 	echo "Labeling CVS with tag: v${CVS_DATE}_build-$BUILD_NUMBER"
@@ -501,12 +503,14 @@ updateCvsTree()
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
+		cvs tag v${CVS_DATE}_build-$BUILD_NUMBER $filename
 	done
 	
 	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.sha
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
+		cvs tag v${CVS_DATE}_build-$BUILD_NUMBER $filename
 	done
 
 	#check if ServerJar directory structure already exists, if not add it
@@ -549,18 +553,21 @@ updateCvsTree()
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
+		cvs tag v${CVS_DATE}_build-$BUILD_NUMBER $filename
 	done
 	
 	for filename in *$CVS_DATE_FILENAME.$BUILD_NUMBER.jar.sha
 		do
 		cvs add $filename  || error "unable to cvs add $filename"
 		cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" $filename || error "unable to commit $filename"
+		cvs tag v${CVS_DATE}_build-$BUILD_NUMBER $filename
 	done
 	
 	# add bc-jce to CVS
 	cp -v "$RELEASE_DIR/bc-jce-$CVS_DATE_FILENAME.$BUILD_NUMBER.jar" "$CVS_HOME/martus-bc-jce/bc-jce.jar" || error "Unable to copy bc-jce jar to cvs checkin directory"
 	cd "$CVS_HOME/martus-bc-jce/"
 	cvs commit -m "v $CVS_DATE build $BUILD_NUMBER" "bc-jce.jar"
+	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER "bc-jce.jar"
 } # updateCvsTree
 
 #################################################
