@@ -935,6 +935,7 @@ createPieces()
 	
 	cd "$RELEASE_DIR"
 	$SPLITTER_PROGRAM -s "MartusClient-$CURRENT_VERSION-$BUILD_VERNUM_TAG.exe" 1400 "Pieces"
+	#mv *.cnk "$RELEASE_DIR/Pieces"
 	
 	echo
 	echo "generating checksums of Pieces..."
