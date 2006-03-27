@@ -39,6 +39,7 @@ CLASSPATH=$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/Ant/bin/a
 CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/Ant/bin/ant-junit.jar)
 CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/PersianCalendar/bin/persiancalendar.jar)
 CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/common/PersianCalendar/bin/icu4j_3_2_calendar.jar)
+CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/client/RhinoJavaScript/js.jar)
 CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/libext/JUnit/bin/junit.jar)
 CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/libext/BouncyCastle/bin/bcprov-jdk14-128.jar)
 CLASSPATH=$CLASSPATH\;$(cygpath -w /cygdrive/e/CVS/Martus/martus-thirdparty/build/java-mail/bin/mail.jar)
