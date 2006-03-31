@@ -85,3 +85,6 @@ ant -f build-meta.xml release
 # to do a build with client releases
 ./MartusBuild.sh -tc
 
+- The build with client releases will create all items needed for a client release except the MartusSetupBuilder.exe for the Pieces. This will need to be done manually with Visual C++ 6 by opening the project CVS/binary-martus/Installer/BuildFiles/MartusSetupLauncher/MartusSetup.dsw and compiling it. The MartusSetup.exe will be placed under <CVS>/binary-martus/Installer/BuildFiles/MartusSetupLauncher/release/ . If the version has changed the file <CVS>/binary-martus/Installer/BuildFiles/MartusSetupLauncher/MartusSetup.cpp has filenames and version info that need updating.
+
+- 
