@@ -1,0 +1,69 @@
+Go to http://sourceforge.net/account/login.php?return_to=%2Fmy%2Fmyprojects.php
+If that link doesn't work use http://sourceforge.net/ <http://sourceforge.net/account/login.php?return_to=%2Fmy%2Fmyprojects.php>  and then click on "My Projects" Log in using "benetech" and the password given.
+ 
+My SourceForge.net Projects
+Scroll down to "Active Projects"
+click on "Martus (TM) Human Rights Bulletin System <http://sourceforge.net/projects/martus>  (registered 2002-12-17 12:04)"
+ 
+Martus (TM) Human Rights Bulletin System
+click on "Admin"
+then click on "File Releases"
+ 
+File Release System
+scroll down to the section "File Release Packages"
+click on "Add Release" or "Edit Release" (to update something) beside either the "Developer Docs", "martus" (Client) or "Martus Server".
+ 
+Create a File Release
+New release name: (type in version # eg. "2.6")
+click on "Create This Release"
+ 
+NOTE: You can NOT delete a release once you create it, you can only hide it which I found out.  So now there are bogus Martus Server 2.6.0.0, and 2.6.0.0.0 and Developer docs 1.01 releases which will show up in the Admin section.  These unused releases can be renamed in the future and used. Once you Create a File Release it will take you to 
+ 
+Step 1:   Edit Existing Release 
+ 
+Release Date: (You can update the date of the release.)
+Release Name: (You can change this here if you typed it wrong originally)
+Status: (Active)
+ 
+Instead of uploading the release notes we usually paste them in for both the Release Notes and the Change Log check the box "Preserve my pre-formatted text."
+ 
+You get the Change Log from the Readme file
+You get the Release Notes from the Readme file, everything but the Change Log goes in the Release Notes.  Also remove any header info which is not needed. Click on "Submit/Refresh"
+ 
+
+Step 2:   Add Files To This Release
+
+Upload to the FTP server the zip file.
+Use an FTP client upload.sourceforge.net
+go to the "incoming" directory
+upload the file.
+ 
+Look for and check the file you uploaded to the ftp website. Make sure your FTP has finished uploading before adding the file. click on "Add Files and/or Refresh View"
+ 
+Step 3:   Edit Files In This Release
+ 
+Processor "Platform Independent"
+File Type "Source Zip"
+Release Version "Shouldn't need to adjust this"
+Release Date "Shouldn't need to adjust this"
+click on "Update/Refresh"
+ 
+Step 4:   Email Release Notice
+ 
+Send Notice to users monitoring the package is any.
+ 
+ 
+Then go to 
+https://sourceforge.net/projects/martus
+ 
+ 
+You can also add news about your new release by going to 
+News / Submit
+
+Eg: 
+
+Summary: Martus Client 2.9 Released <https://sourceforge.net/forum/forum.php?forum_id=557936 <https://sourceforge.net/forum/forum.php?forum_id=557936> > 
+
+This release includes speed enhancements, improved searching, and Thai and Persian date localization enhancements. 
+
+Martus 2.9 is available in English, Spanish, and Arabic, with "Language Packs" for other languages placed on http://www.martus.org/downloads <http://www.martus.org/downloads>  <http://www.martus.org/downloads <http://www.martus.org/downloads> > ] as they become available. 
