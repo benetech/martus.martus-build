@@ -6,6 +6,7 @@
 
     <!-- imports -->
     <import file="build.shared.values.xml" />
+    <import file="build-common.xml" />
 
     <!-- js-xml-generator classpath -->
     <path id="jsxmlgenerator.class.path">
