@@ -1,0 +1,23 @@
+Instructions for bundling Martus with Java.
+May 23, 2006
+
+1.	Download and Install the Windows SDK version, and make sure Eclipse will point to and use in order to build Martus.  Also Download the Linux version of the JRE.  We download the SDK for Windows so we can develop with it, and we use the JRE sub directory in the SDK for actual deployment on windows Machines.  During install of the SDK I usually don’t install the separate JRE in the ProgramFiles\Java directory.
+
+2.	Copy the files from 
+C:\ j2sdk1.4.2_XX\ to .\martus-thirdparty\client\Sun\license\
+Be sure to include the license*.*, Readme.txt, COPYRIGHT, and THIRDPARTYLICENSEREADME.txt
+
+3.	Do the same for .\martus-thirdparty\server\Sun\license\
+
+4.	Edit the Readme files in .\martus-thirdparty\client\Sun\Source and .\martus-thirdparty\server\Sun\Souce to adjust the version of Java we are using and update the URL’s to the Sun download site.
+
+5.	Copy the Linux version of Java to .\binary-martus\Installer\BuildFiles\Java redist\Linux\i586\j2re-1_4_2_XX-linux-i586-rpm.bin
+
+6. 	Copy the Folders (lib & bin) under the Java SDK’s JRE directory to .\binary-martus\Installer\BuildFiles\Java redist\Win32\, we do not distribute javaws (Java Web Start) directory.
+
+7. 	Install the new Java on the build machine, modify %JAVA_HOME%, update the %PATH% so it points to the bin folder in the new java and update the build script so it points to the new java bin path
+
+8.  Do a build on the Build machine and make sure the new Java gets put onto the install CD.
+
+9.  Tell Scott to update the Java on the Martus Servers.
+
