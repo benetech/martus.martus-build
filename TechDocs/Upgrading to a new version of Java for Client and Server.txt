@@ -21,7 +21,9 @@ Be sure to include the license*.*, Readme.txt, COPYRIGHT, and THIRDPARTYLICENSER
 
 9.  Look at the Martus_Build.txt file for other info.
 
-10.  Do a build on the Build machine and make sure the new Java gets put onto the install CD.
+10. Zone Alarm on the build machine may have issues and a SSL test might fail until you acept that Java can run unrestricted.
 
-11.  Tell Scott to update the Java on the Martus Servers.
+11.  Do a build on the Build machine and make sure the new Java gets put onto the install CD.
+
+12.  Tell Scott to update the Java on the Martus Servers.
 

@@ -81,7 +81,7 @@ setCvsEnvVars()
 	RELEASE_DIR=/cygdrive/c/SharedDocs/MatusReleases
 	PREVIOUS_RELEASE_DIR=/cygdrive/c/SharedDocs/Prev.MatusReleases
 
-	PATH=/cygdrive/c/j2sdk1.4.2_07/bin:/cygdrive/c/java/apache-ant-1.6.2/bin:"/cygdrive/c/Program Files/NSIS":$PATH
+	PATH=/cygdrive/c/j2sdk1.4.2_11/bin:/cygdrive/c/java/apache-ant-1.6.2/bin:"/cygdrive/c/Program Files/NSIS":$PATH
 
 	CVS_DATE=`date '+%Y-%m-%d'`
 	CVS_DATE_FILENAME=`date '+%Y%m%d'`
