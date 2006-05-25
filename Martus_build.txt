@@ -7,7 +7,7 @@ How to use the build environment
 
 - Build only:
 Cygwin
-Java (currently 1.4.2_07)
+Java (currently 1.4.2_11)
 Ant (currently 1.6.2)
 Keystore if running meta tests or creating signed releases 
 
@@ -22,9 +22,10 @@ MS C++
 2- Doing a java build ONLY
 ###########################
 
-- Set your path so Java bin and Ant bin are included. Below assumes that Ant was installed under C:\apache-ant-1.6.2 and Java under C:\j2sdk1.4.2_07:
+- Set your path so Java bin and Ant bin are included. Below assumes that Ant was installed under C:\apache-ant-1.6.2 and Java under C:\
+1.4.2_11:
 
-PATH=/cygdrive/c/j2sdk1.4.2_07/bin:/cygdrive/c/apache-ant-1.6.2/bin:$PATH
+PATH=/cygdrive/c/j2sdk1.4.2_11/bin:/cygdrive/c/apache-ant-1.6.2/bin:$PATH
 
 - set up build environment variables (HOMEDRIVE and HOMEPATH are where the martus projects are located and where the build will take place). Below assumes that the martus projects are under E:\CVS\Martus
 

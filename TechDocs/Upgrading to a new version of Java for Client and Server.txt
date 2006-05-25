@@ -15,9 +15,13 @@ Be sure to include the license*.*, Readme.txt, COPYRIGHT, and THIRDPARTYLICENSER
 
 6. 	Copy the Folders (lib & bin) under the Java SDK’s JRE directory to .\binary-martus\Installer\BuildFiles\Java redist\Win32\, we do not distribute javaws (Java Web Start) directory.
 
-7. 	Install the new Java on the build machine, modify %JAVA_HOME%, update the %PATH% so it points to the bin folder in the new java and update the build script so it points to the new java bin path
+7. 	Install the new Java on the build machine, modify %JAVA_HOME%, update the %PATH% so it points to the bin folder in the new java 
 
-8.  Do a build on the Build machine and make sure the new Java gets put onto the install CD.
+8.  Update the build script so it points to the new java bin path: MartusBuild.sh (	PATH=/cygdrive/c/j2sdk1.4.2_11/bin:/cygdrive/c/java/apache-ant-1.6.2/bin:"/cygdrive/c/Program Files/NSIS":$PATH)
 
-9.  Tell Scott to update the Java on the Martus Servers.
+9.  Look at the Martus_Build.txt file for other info.
+
+10.  Do a build on the Build machine and make sure the new Java gets put onto the install CD.
+
+11.  Tell Scott to update the Java on the Martus Servers.
 
