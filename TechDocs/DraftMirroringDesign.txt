@@ -1,22 +1,23 @@
 Draft Mirroring Design Spec
-v1
-2006-05-25 kbs
+v2
+2006-05-26 kbs
 
 ------------------------------------------------------------------------
 
 1. MIRRORING DRAFTS
 
 We would create a new XMLRPC command to pull a list of mirrorable
-bulletin revisions, which would replace the existing command. We can
+information, which would replace the existing command. We can
 discuss whether to keep the old command around for one version to avoid
 needing to upgrade all the servers at one time.
 
 This new command would take an author account id and would return a list
-of all bulletin revisions available to be pulled from this server. Each
+of all mirrorable information that can be pulled from this server. Each
 entry in the returned list would contain:
   - local id (of the B- packet)
-  - status of the bulletin (draft/sealed)
+  - status of the bulletin (draft/sealed/deleted)
   - "mtime" of the B-packet file (file system modification timestamp), 
+    or DEL-packet file,
     as a Long value containing the number of millis since the epoch.
 
 
@@ -88,10 +89,19 @@ any. Errors deleting the DEL packet should be logged but not reported
 back to the caller.
 
 The format of the file will be utf-8 text (using UnicodeWriter and
-UnicodeReader). The first line will contain the account Id. The second
+UnicodeReader), containing the actual request as sent by the client, 
+and some metadata. The first line will have an identifier string, 
+like "Martus Draft Delete Request". 
+
+Immediately after that will be the client request. Within that, 
+the first line will contain the account Id. The second
 line will contain the number of local ids in the request. Each local id
 will follow on a line by itself. The last line will be the signature, as
-sent by the client.
+sent by the client. To verify the signature, the same rules must be 
+followed as are currently used in the server XMLRPC call handler.
+
+Additional metadata would follow. Since there is none right now, 
+any extra lines should be ignored.
 
 -------------------------------------------------------------------------
 2. PROPAGATING DELETES
@@ -99,19 +109,15 @@ sent by the client.
 We are not sure if this will be implemented for this release, or
 postponed to the next one.
 
-We will add a new mirroring API call to ask for a list of all delete
-requests (DEL packets) for an author account. For each deleted bulletin,
-the entry will contain the bulletin local id, and the mtime of the DEL
-packet. The code should ignore additional parameters that might be added
-in the future. 
+While deciding what to copy or delete, the caller should use the sealed 
+bulletin if there is one. Otherwise, if both a draft bulletin and a DEL 
+packet exist, the newer one should be used (according to the mtime). 
+This logic should be used in any case that one of these items is being 
+retrieved.
 
-While processing this request, the caller should detect the case where
-there is both a draft bulletin and a DEL packet. In that case, the mtime
-values should be compared, and the older item should be deleted. If the
-bulletin is deleted, the corresponding BUR should be deleted as well.
-This code will be reused in several places, as mentioned below.
+Later, we would build some process to actually delete the obsolete items.
 
-A second new API call would retrieve a single DEL packet, given an
+A new API call would retrieve a single DEL packet, given an
 account id and bulletin local id. We might want to generalize the BUR
 api call, to allow for additional special packet types in the future.
 Because a DEL packet could be large, I would prefer not to return more
@@ -131,7 +137,7 @@ bulletin, and should delete the older one as described above.
 Then, we should compare the mtime of our file (bulletin or DEL packet)
 against the mtime of the incoming delete request. If our item is newer,
 we should ignore the incoming entry. If we have neither a DEL file nor a
-draft bulletin for this item, we should ignore it.
+draft bulletin for this item, we should pull the DEL record.
 
 Next, we would pull the actual DEL packet, and then apply these rules:
 
