@@ -1,5 +1,5 @@
 Draft Mirroring Design Spec
-v2
+v2.1
 2006-05-26 kbs
 
 ------------------------------------------------------------------------
@@ -36,6 +36,13 @@ work for draft bulletins. The API does not need to change, and we will
 not modify the BUR data format at this time (we will do so in the
 future, to make the originating server transparent instead of hidden).
 
+The MirroringRetriever would pass the desired mtime into 
+store.saveZipFileToDatabase and the existing store.saveZipFileToDatabase 
+would pass "now" to the new version with the extra mtime parameter.
+so clients, and the upload code, would continue to use "now". But instead 
+of each packet getting the "now" at which it was written to this disk, 
+they would all get the same "now" which was the moment in time that 
+store.saveZipFileToDatabase was called.
 
 B. CALLING SIDE
 
