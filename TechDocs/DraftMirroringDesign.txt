@@ -1,6 +1,7 @@
 Draft Mirroring Design Spec
-v2.1
+v2.2
 2006-05-26 kbs
+2006-06-02 cml
 
 ------------------------------------------------------------------------
 
@@ -9,7 +10,7 @@ v2.1
 We would create a new XMLRPC command to pull a list of mirrorable
 information, which would replace the existing command. We can
 discuss whether to keep the old command around for one version to avoid
-needing to upgrade all the servers at one time.
+needing to upgrade all the servers at one time. [cml Done]
 
 This new command would take an author account id and would return a list
 of all mirrorable information that can be pulled from this server. Each
@@ -19,22 +20,22 @@ entry in the returned list would contain:
   - "mtime" of the B-packet file (file system modification timestamp), 
     or DEL-packet file,
     as a Long value containing the number of millis since the epoch.
-
+[cml Done]
 
 A. LISTENING SIDE
 
 It should be coded to ignore additional fields that we might add in
-future versions (such as SHA-1 values).
+future versions (such as SHA-1 values).[cml Done]
 
 The existing code to retrieve individual bulletins should already work
 for drafts, so no changes required there. Confirm that the timestamp
 that gets written for each entry in the zip file is the "mtime" value of
-the corresponding file on disk.
+the corresponding file on disk.[cml Done]
 
 The existing code for retrieving BUR packets will need to be updated to
 work for draft bulletins. The API does not need to change, and we will
 not modify the BUR data format at this time (we will do so in the
-future, to make the originating server transparent instead of hidden).
+future, to make the originating server transparent instead of hidden).[cml Done]
 
 The MirroringRetriever would pass the desired mtime into 
 store.saveZipFileToDatabase and the existing store.saveZipFileToDatabase 
@@ -42,19 +43,19 @@ would pass "now" to the new version with the extra mtime parameter.
 so clients, and the upload code, would continue to use "now". But instead 
 of each packet getting the "now" at which it was written to this disk, 
 they would all get the same "now" which was the moment in time that 
-store.saveZipFileToDatabase was called.
+store.saveZipFileToDatabase was called.[cml Done]
 
 B. CALLING SIDE
 
 MirroringRetriever.getNextUidToRetrieve will need to be updated to call
 the new XMLRPC command that returns drafts as well as sealed bulletins.
 Obviously it will need to handle the new/different data structure that
-will be returned by the new call.
+will be returned by the new call.[cml Done]
 
 MirroringRetriever.listOnlyPacketsThatWeWant will need to be updated to
 correctly filter which bulletins we want, using these rules:
   Sealed bulletins that we do not have should be retrieved
-  Draft bulletins that are newer than what we have should be retrieved
+  Draft bulletins that are newer than what we have should be retrieved.[cml Done]
 
 Receiving a sealed version should delete the corresponding draft
 version, if we have one. We should reuse the same code that is called
@@ -109,6 +110,17 @@ followed as are currently used in the server XMLRPC call handler.
 
 Additional metadata would follow. Since there is none right now, 
 any extra lines should be ignored.
+
+MirroringRetriever.listOnlyPacketsThatWeWant will need to be updated to
+correctly filter which bulletins we want, using these new rules:
+  Sealed bulletins that we do not have should be retrieved
+  Draft bulletins that are newer than what we have should be retrieved unless
+  a DEL request packet exists for this draft.  If a DEL request packet exists
+  only retrieve the draft if it is newer than the DEL request
+
+If we want to get this new draft/sealed bulletin based on the rules above
+and a DEL request packet exists, ensure that the DEL request is deleted,
+this should use the same code as if a client uploaded the bulletin.
 
 -------------------------------------------------------------------------
 2. PROPAGATING DELETES
