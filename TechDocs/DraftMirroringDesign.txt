@@ -102,6 +102,7 @@ The format of the file will be utf-8 text (using UnicodeWriter and
 UnicodeReader), containing the actual request as sent by the client, 
 and some metadata. The first line will have an identifier string, 
 like "Martus Draft Delete Request". 
+Second line will be the mTime when it was first created. 
 
 Immediately after that will be the client request. Within that, 
 the first line will contain the account Id. The second
