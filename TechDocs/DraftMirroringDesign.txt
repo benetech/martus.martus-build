@@ -59,17 +59,19 @@ correctly filter which bulletins we want, using these rules:
 
 Receiving a sealed version should delete the corresponding draft
 version, if we have one. We should reuse the same code that is called
-when a client directly uploads a sealed bulletin that replaces a draft.
+when a client directly uploads a sealed bulletin that replaces a draft. 
+This occures in importBulletinPacketsFromZipFileToDatabase which is
+called by saveZipFileToDatabase. [cml Done] 
 
 Packets received via mirroring must be given the same timestamp as they
 had in the zip file. This must happen prior to calling db.importFiles.
 Note that packets received via client uploads must have their "mtime"
 written with the current server time, which is the default, but since
 they are also retrieved as zip files it means we should pass in the
-desired mtime as a parameter to the zip extractor.
+desired mtime as a parameter to the zip extractor. [cml Done]
 
 As with sealed bulletins, BUR packets should be pulled along with each
-bulletin.
+bulletin. [cml Done]
 
 
 C. STORING DELETE REQUESTS
