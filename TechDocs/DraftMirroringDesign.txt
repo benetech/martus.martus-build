@@ -96,7 +96,7 @@ with the current time as the mtime, which happens by default. [cml done]
 Whenever a client uploads a draft or sealed bulletin, we should first
 write the bulletin, and then delete the corresponding DEL record, if
 any. Errors deleting the DEL packet should be logged but not reported
-back to the caller.
+back to the caller. [cml done]
 
 The format of the file will be utf-8 text (using UnicodeWriter and
 UnicodeReader), containing the actual request as sent by the client, 
@@ -109,7 +109,7 @@ the first line will contain the account Id. The second
 line will contain the number of local ids in the request. Each local id
 will follow on a line by itself. The last line will be the signature, as
 sent by the client. To verify the signature, the same rules must be 
-followed as are currently used in the server XMLRPC call handler. 
+followed as are currently used in the server XMLRPC call handler. [cml done]
 
 Additional metadata would follow. Since there is none right now, 
 any extra lines should be ignored. [cml done]
