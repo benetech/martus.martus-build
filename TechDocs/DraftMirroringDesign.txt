@@ -78,20 +78,20 @@ C. STORING DELETE REQUESTS
 
 Whenever a client deletes a draft bulletin, the server must store the
 delete request to disk. That way, in a later version, we can propagate
-these delete requests to mirroring servers.
+these delete requests to mirroring servers. [cml done]
 
 A delete request from the client can specify multiple bulletins. For
 each bulletin that was deleted, we will store a copy of the delete
 request attached to that bulletin id. We should create a
 "DeleteRequestRecord" which will be like the existing
-BulletinUploadRecord, but with a DEL- prefix instead of BUR-.
+BulletinUploadRecord, but with a DEL- prefix instead of BUR-. [cml done]
 
 When the client submits a delete request, we should write each DEL
 packet before deleting each bulletin. If the bulletin already exists
 sealed, or if it does not exist as a draft, we should not write that DEL
 copy. An error writing a DEL should be reported back to the caller as
 the existing INCOMPLETE return code. Each DEL packet will be written
-with the current time as the mtime, which happens by default.
+with the current time as the mtime, which happens by default. [cml done]
 
 Whenever a client uploads a draft or sealed bulletin, we should first
 write the bulletin, and then delete the corresponding DEL record, if
@@ -102,17 +102,17 @@ The format of the file will be utf-8 text (using UnicodeWriter and
 UnicodeReader), containing the actual request as sent by the client, 
 and some metadata. The first line will have an identifier string, 
 like "Martus Draft Delete Request". 
-Second line will be the mTime when it was first created. 
+Second line will be the mTime when it was first created. [cml done]
 
 Immediately after that will be the client request. Within that, 
 the first line will contain the account Id. The second
 line will contain the number of local ids in the request. Each local id
 will follow on a line by itself. The last line will be the signature, as
 sent by the client. To verify the signature, the same rules must be 
-followed as are currently used in the server XMLRPC call handler.
+followed as are currently used in the server XMLRPC call handler. 
 
 Additional metadata would follow. Since there is none right now, 
-any extra lines should be ignored.
+any extra lines should be ignored. [cml done]
 
 MirroringRetriever.listOnlyPacketsThatWeWant will need to be updated to
 correctly filter which bulletins we want, using these new rules:
