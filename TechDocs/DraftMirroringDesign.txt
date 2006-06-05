@@ -116,10 +116,12 @@ any extra lines should be ignored. [cml done]
 
 MirroringRetriever.listOnlyPacketsThatWeWant will need to be updated to
 correctly filter which bulletins we want, using these new rules:
-  Sealed bulletins that we do not have should be retrieved
+  Sealed bulletins that we do not have should be retrieved regardless if it
+  has a DEL request packet for the draft version of this bulletin.
   Draft bulletins that are newer than what we have should be retrieved unless
   a DEL request packet exists for this draft.  If a DEL request packet exists
-  only retrieve the draft if it is newer than the DEL request.
+  only retrieve the draft if it is newer than the DEL request. [cml done]
+  
 
 If we want to get this new draft/sealed bulletin based on the rules above
 and a DEL request packet exists, ensure that the DEL request is deleted,
