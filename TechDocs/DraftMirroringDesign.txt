@@ -125,7 +125,7 @@ correctly filter which bulletins we want, using these new rules:
 
 If we want to get this new draft/sealed bulletin based on the rules above
 and a DEL request packet exists, ensure that the DEL request is deleted,
-this should use the same code as if a client uploaded the bulletin.
+this should use the same code as if a client uploaded the bulletin. [cml done]
 
 -------------------------------------------------------------------------
 2. PROPAGATING DELETES
