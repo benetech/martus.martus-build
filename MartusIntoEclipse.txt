@@ -17,10 +17,9 @@ PREREQUISITES:
 
 Lines preceded with a '$' denote commands that should be run from a terminal.
 
-
 Unzip the MartusClient zip archive:
-
   $ unzip MartusClient-2.9.zip
+This file (MartusClient-2.9.zip) can be found on the Martus main download website www.martus.org
 
 This will create a new dir called MartusClient-2.9 in the current dir. 
 From now on, we will refer to this directory as as $MARTUSCLIENT.
@@ -32,7 +31,9 @@ Create an eclipse directory:
 
 Unzip martus-client-2.9-src.zip into this dir:
 
+
   $ unzip ../martus-client-2.9-src.zip
+This file (martus-client-2.9-src.zip) is also found on SourceForge (www.SourceForge.net)
 
 The Velocity third-party library needs to be unpacked manually:
 
