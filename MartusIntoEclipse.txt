@@ -1,7 +1,7 @@
 HOWTO Import Martus Client Source Code into Eclipse
-2006-03-08
+2006-06-06
 
-NOTE: This is a first draft of this document, so there is room for improvement. 
+NOTE: This document is still rough, and there is room for improvement. 
 It is written from a GNU/Linux perspective, so if you are using MS Windows or 
 Mac OS X you will have to adjust accordingly. The basic process is the same on 
 all platforms.
@@ -71,10 +71,17 @@ Click 1.4.2 and then Edit
 Uncheck Use default system libraries
 Click Add External JARs. Browse to where the MartusClient-2.8.1.zip was 
 extracted, and then LibExt
-Highlight InfiniteMonkey.jar, bc-jce.jar, bcprov-jdk14-128.jar, 
-xmlrpc-1.2-b1.jar, junit.jar and velocity-1.4-rc1.jar
+Highlight the following jars:
+  bc-jce.jar
+  bcprov-jdk14-128.jar
+  icu4j_3_2_calendar.jar
+  junit.jar
+  InfiniteMonkey.jar
+  persiancalendar.jar
+  velocity-1.4-rc1.jar
+  xmlrpc-1.2-b1.jar
 Click OK
-The six libraries will now show up in the window
+Those libraries will now show up in the window
 Select bc-jce.jar, and click the Up button so that it comes _before_ Java's 
 own jce.jar
 Click OK
