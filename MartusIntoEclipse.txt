@@ -20,19 +20,19 @@ Lines preceded with a '$' denote commands that should be run from a terminal.
 
 Unzip the MartusClient zip archive:
 
-  $ unzip MartusClient-2.8.1.zip
+  $ unzip MartusClient-2.9.zip
 
-This will create a new dir called MartusClient-2.8.1 in the current dir. 
+This will create a new dir called MartusClient-2.9 in the current dir. 
 From now on, we will refer to this directory as as $MARTUSCLIENT.
 Create an eclipse directory:
 
-  $ cd MartusClient-2.8.1/Sources
+  $ cd MartusClient-2.9/Sources
   $ mkdir eclipse
   $ cd eclipse
 
-Unzip martus-client-2.8.1-src.zip into this dir:
+Unzip martus-client-2.9-src.zip into this dir:
 
-  $ unzip ../martus-client-2.8.1-src.zip
+  $ unzip ../martus-client-2.9-src.zip
 
 The Velocity third-party library needs to be unpacked manually:
 
@@ -54,7 +54,7 @@ Start Eclipse
 Choose or create an empty workspace
 Create a new Java Project:
   File -> New -> Project -> Java Project, then Next
-  Give the project a name (MartusClient-2.8.1 might be a good choice)
+  Give the project a name (MartusClient-2.9 might be a good choice)
   Now choose the Create project from existing source radio button
   Browse to the $MARTUSCLIENT/Sources/eclipse folder created earlier
   Click Next, and you should see all of the Martus Source listed
@@ -69,7 +69,7 @@ Within Eclipse, choose Window -> Preferences, expand Java, and click
 Installed JREs
 Click 1.4.2 and then Edit
 Uncheck Use default system libraries
-Click Add External JARs. Browse to where the MartusClient-2.8.1.zip was 
+Click Add External JARs. Browse to where the MartusClient-2.9.zip was 
 extracted, and then LibExt
 Highlight the following jars:
   bc-jce.jar
