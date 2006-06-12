@@ -75,6 +75,7 @@ Highlight the following jars:
   bc-jce.jar
   bcprov-jdk14-128.jar
   icu4j_3_2_calendar.jar
+  js.jar
   junit.jar
   InfiniteMonkey.jar
   persiancalendar.jar
