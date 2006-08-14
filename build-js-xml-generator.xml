@@ -25,7 +25,7 @@
 	
 	<!-- js-xml-generator doc files -->
    <fileset id="jsxmlgenerator.doc.files" dir="${martus.jsxmlgenerator.docs.root}">
-		<include name="*.*"/>
+		<include name="org/martus/martusjsxmlgenerator/docs/*.*"/>
     </fileset>
 	
     <target name="notify-js-xml-generator">
