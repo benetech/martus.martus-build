@@ -47,6 +47,8 @@
         <copy todir="${martus.jsxmlgenerator.class.root}" >
             <fileset refid="jsxmlgenerator.nosrc.files"/>
         </copy>
+  
+    	<mkdir dir="${martus.jsxmlgenerator.docs.root}"/>
         <!-- Copy doc files that are needed for the jars -->
         <copy todir="${martus.jsxmlgenerator.docs.root}" >
             <fileset refid="jsxmlgenerator.doc.files"/>

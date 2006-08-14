@@ -140,7 +140,10 @@
 			<fileset refid="jsxmlgenerator.nosrc.files"/>
 			<fileset dir="${martus.jsxmlgenerator.src.root}" includes="**/*.java"/>
 
-            <fileset dir="${martus.common.src.root}">
+			<fileset refid="jsxmlgenerator.doc.files"/>
+			<fileset dir="${martus.jsxmlgenerator.docs.root}" includes="*.*"/>
+
+				<fileset dir="${martus.common.src.root}">
                 <include name="**/*.java"/>
                 <include name="**/*.SIG"/>
             </fileset>
