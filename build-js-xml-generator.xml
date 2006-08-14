@@ -28,8 +28,6 @@
 		<include name="*.*"/>
     </fileset>
 	
-	martus.jsxmlgenerator.src.doc
-
     <target name="notify-js-xml-generator">
         <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
     </target>
