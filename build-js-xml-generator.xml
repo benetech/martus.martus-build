@@ -22,6 +22,13 @@
 		<include name="org/martus/martusjsxmlgenerator/*.csv"/>
 		<include name="org/martus/martusjsxmlgenerator/*.xml"/>
     </fileset>
+	
+	<!-- js-xml-generator doc files -->
+   <fileset id="jsxmlgenerator.doc.files" dir="${martus.jsxmlgenerator.docs.root}">
+		<include name="*.*"/>
+    </fileset>
+	
+	martus.jsxmlgenerator.src.doc
 
     <target name="notify-js-xml-generator">
         <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
@@ -41,6 +48,10 @@
         <!-- Copy files that are needed for the jars -->
         <copy todir="${martus.jsxmlgenerator.class.root}" >
             <fileset refid="jsxmlgenerator.nosrc.files"/>
+        </copy>
+        <!-- Copy doc files that are needed for the jars -->
+        <copy todir="${martus.jsxmlgenerator.docs.root}" >
+            <fileset refid="jsxmlgenerator.doc.files"/>
         </copy>
     </target>
 

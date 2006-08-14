@@ -29,6 +29,7 @@
     <property name="martus.jsxmlgenerator.module"  value="martus-js-xml-generator"/>
     <property name="martus.jsxmlgenerator.src.root" value="${build.basedir}/${martus.jsxmlgenerator.module}/source"/>
     <property name="martus.jsxmlgenerator.class.root" value="${build.basedir}/${martus.jsxmlgenerator.module}/bin"/>
+    <property name="martus.jsxmlgenerator.docs.root" value="${build.basedir}/${martus.jsxmlgenerator.module}/docs"/>
 
     <!-- hrdag module name and dirs -->
     <property name="martus.hrdag.module"  value="martus-hrdag"/>
