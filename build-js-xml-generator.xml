@@ -48,9 +48,5 @@
             <fileset refid="jsxmlgenerator.nosrc.files"/>
         </copy>
   
-        <!-- Copy doc files that are needed for the jars -->
-        <copy todir="${martus.jsxmlgenerator.docs.root}" >
-            <fileset refid="jsxmlgenerator.doc.files"/>
-        </copy>
     </target>
 </project>
