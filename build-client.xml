@@ -143,7 +143,7 @@
 			<fileset refid="jsxmlgenerator.doc.files"/>
 			<fileset dir="${martus.jsxmlgenerator.docs.root}" includes="**/*.*"/>
 
-				<fileset dir="${martus.common.src.root}">
+			<fileset dir="${martus.common.src.root}">
                 <include name="**/*.java"/>
                 <include name="**/*.SIG"/>
             </fileset>
@@ -153,7 +153,7 @@
             <fileset dir="${martus.logi.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.swing.src.root}" includes="**/*.java"/>
             <fileset dir="${build.basedir}">
-            	<!-- <exclude name="${martus.thirdparty.module}/**/bin/*"/> -->
+            	<!-- We now include jar's in source zip file <exclude name="${martus.thirdparty.module}/**/bin/*"/> -->
                 <exclude name="${martus.thirdparty.module}/client/Fonts/**/*"/>
 				
 				<exclude name="${martus.thirdparty.module}/client/RhinoJavaScript/docs/**/*"/>

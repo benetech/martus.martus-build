@@ -38,7 +38,9 @@
 
     <target name="build-js-xml-generator" depends="init" description="Compile martus-js-xml-generator">
         <mkdir dir="${martus.jsxmlgenerator.class.root}"/>
-        <javac target="1.4" optimize="on" srcdir="${martus.jsxmlgenerator.src.root}" destdir="${martus.jsxmlgenerator.class.root}" failonerror="true">
+    	<mkdir dir="${martus.jsxmlgenerator.docs.root}"/>
+
+    	<javac target="1.4" optimize="on" srcdir="${martus.jsxmlgenerator.src.root}" destdir="${martus.jsxmlgenerator.class.root}" failonerror="true">
             <classpath refid="jsxmlgenerator.class.path"/>
             <include name="**/*.java"/>
         </javac>
@@ -48,11 +50,9 @@
             <fileset refid="jsxmlgenerator.nosrc.files"/>
         </copy>
   
-    	<mkdir dir="${martus.jsxmlgenerator.docs.root}"/>
         <!-- Copy doc files that are needed for the jars -->
         <copy todir="${martus.jsxmlgenerator.docs.root}" >
             <fileset refid="jsxmlgenerator.doc.files"/>
         </copy>
     </target>
-
 </project>
