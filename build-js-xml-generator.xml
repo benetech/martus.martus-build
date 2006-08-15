@@ -24,9 +24,7 @@
     </fileset>
 	
 	<!-- js-xml-generator doc files -->
-   <fileset id="jsxmlgenerator.doc.files" dir="${martus.jsxmlgenerator.docs.root}">
-		<include name="org/martus/martusjsxmlgenerator/docs/*.*"/>
-    </fileset>
+   <fileset id="jsxmlgenerator.doc.files" dir="${martus.jsxmlgenerator.docs.root}"/>
 	
     <target name="notify-js-xml-generator">
         <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
