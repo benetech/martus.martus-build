@@ -1,5 +1,7 @@
 HOWTO Import Martus Client Source Code into Eclipse
-2006-06-06
+2006-08-23
+In the document to follow MartusClient-X.X with:
+MartusClient-3.0
 
 NOTE: This document is still rough, and there is room for improvement. 
 It is written from a GNU/Linux perspective, so if you are using MS Windows or 
@@ -18,22 +20,22 @@ PREREQUISITES:
 Lines preceded with a '$' denote commands that should be run from a terminal.
 
 Unzip the MartusClient zip archive:
-  $ unzip MartusClient-2.9.zip
-This file (MartusClient-2.9.zip) can be found on the Martus main download website www.martus.org
+  $ unzip MartusClient-X.X.zip
+This file (MartusClient-X.X.zip) can be found on the Martus main download website www.martus.org
 
-This will create a new dir called MartusClient-2.9 in the current dir. 
+This will create a new dir called MartusClient-X.X in the current dir. 
 From now on, we will refer to this directory as as $MARTUSCLIENT.
 Create an eclipse directory:
 
-  $ cd MartusClient-2.9/Sources
+  $ cd MartusClient-X.X/Sources
   $ mkdir eclipse
   $ cd eclipse
 
-Unzip martus-client-2.9-src.zip into this dir:
+Unzip MartusClient-X.X-src.zip into this dir:
 
 
-  $ unzip ../martus-client-2.9-src.zip
-This file (martus-client-2.9-src.zip) is also found on SourceForge (www.SourceForge.net)
+  $ unzip ../MartusClient-X.X-src.zip
+This file (MartusClient-X.X-src.zip) is also found on SourceForge (www.SourceForge.net)
 
 The Velocity third-party library needs to be unpacked manually:
 
@@ -55,7 +57,7 @@ Start Eclipse
 Choose or create an empty workspace
 Create a new Java Project:
   File -> New -> Project -> Java Project, then Next
-  Give the project a name (MartusClient-2.9 might be a good choice)
+  Give the project a name (MartusClient-X.X might be a good choice)
   Now choose the Create project from existing source radio button
   Browse to the $MARTUSCLIENT/Sources/eclipse folder created earlier
   Click Next, and you should see all of the Martus Source listed
@@ -70,7 +72,7 @@ Within Eclipse, choose Window -> Preferences, expand Java, and click
 Installed JREs
 Click 1.4.2 and then Edit
 Uncheck Use default system libraries
-Click Add External JARs. Browse to where the MartusClient-2.9.zip was 
+Click Add External JARs. Browse to where the MartusClient-X.X.zip was 
 extracted, and then LibExt
 Highlight the following jars:
   bc-jce.jar
