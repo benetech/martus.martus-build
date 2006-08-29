@@ -704,6 +704,7 @@ createInstallerCdImage()
 	
 	mkdir -p $CD_IMAGE_DIR
 	cp -v $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR
+	cp -v $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR
 	
 	mkdir -p $CD_IMAGE_DIR/Win95
 	cp -v $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
