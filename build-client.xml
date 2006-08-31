@@ -154,8 +154,8 @@
             <fileset dir="${martus.hrdag.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.logi.src.root}" includes="**/*.java"/>
             <fileset dir="${martus.swing.src.root}" includes="**/*.java"/>
-        	<fileset dir="${binary.module}" includes="BuildFiles/Documents/license.txt"/>
-        	<fileset dir="${binary.module}" includes="BuildFiles/Documents/gpl.txt"/>
+        	<fileset dir="${martus.binary.buildfiles.documentsdir}" includes="license.txt"/>
+        	<fileset dir="${martus.binary.buildfiles.documentsdir}" includes="gpl.txt"/>
         	
             <fileset dir="${build.basedir}">
             	<!-- We now include jar's in source zip file <exclude name="${martus.thirdparty.module}/**/bin/*"/> -->

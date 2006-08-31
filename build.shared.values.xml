@@ -14,7 +14,7 @@
 
     <property name="martus.module" value="martus"/>
     <property name="binary.module" value="binary-martus"/>
-
+	
     <!-- client module name and dirs -->
     <property name="martus.client.module"  value="martus-client"/>
     <property name="martus.client.src.root" value="${build.basedir}/${martus.client.module}/source"/>
@@ -113,6 +113,7 @@
     <property name="martus.binary.buildfiles.sourcesdir"  value="${martus.binary.installer}/BuildFiles/SourceFiles"/>
     <property name="martus.binary.buildfiles.licensesdir"  value="${martus.binary.installer}/BuildFiles/Documents/Licenses"/>
     <property name="martus.binary.buildfiles.programfilesdir"  value="${martus.binary.installer}/BuildFiles/ProgramFiles"/>
+    <property name="martus.binary.buildfiles.documentsdir"  value="${martus.binary.installer}/BuildFiles/Documents"/>
 
 </project>
 
