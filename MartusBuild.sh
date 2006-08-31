@@ -123,7 +123,8 @@ setCvsEnvVars()
 #################################################
 cleanCvsHome()
 {
-	echo
+	echo 
+	echo "MartusBuild.sh 8/31/2006"
 	echo "Cleaning the build environment $CVS_HOME (ignore mount/umount messages)...";
 	if [ -d "$CVS_HOME" ]; then
 		rm -Rf $CVS_HOME
