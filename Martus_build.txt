@@ -23,9 +23,9 @@ MS C++
 ###########################
 
 - Set your path so Java bin and Ant bin are included. Below assumes that Ant was installed under C:\apache-ant-1.6.2 and Java under C:\
-1.4.2_11:
+1.4.2_12:
 
-PATH=/cygdrive/c/j2sdk1.4.2_11/bin:/cygdrive/c/apache-ant-1.6.2/bin:$PATH
+PATH=/cygdrive/c/j2sdk1.4.2_12/bin:/cygdrive/c/apache-ant-1.6.2/bin:$PATH
 
 - set up build environment variables (HOMEDRIVE and HOMEPATH are where the martus projects are located and where the build will take place). Below assumes that the martus projects are under E:\CVS\Martus
 
@@ -88,4 +88,21 @@ ant -f build-meta.xml release
 
 - The build with client releases will create all items needed for a client release except the MartusSetupBuilder.exe for the Pieces. This will need to be done manually with Visual C++ 6 by opening the project CVS/binary-martus/Installer/BuildFiles/MartusSetupLauncher/MartusSetup.dsw and compiling it. The MartusSetup.exe will be placed under <CVS>/binary-martus/Installer/BuildFiles/MartusSetupLauncher/release/ . If the version has changed the file <CVS>/binary-martus/Installer/BuildFiles/MartusSetupLauncher/MartusSetup.cpp has filenames and version info that need updating.
 
-- 
+#MartusSetupBuilder.exe (Merges the separate download files to one exe. 
+
+-You must update the binary-martus\Installer\BuildFiles\MartusSetupLauncher\MartusSetup.cpp and then using dev studio rebuild a release of MartusSetupBuilder.exe
+-Adjust the following two lines of code in the cpp file above first before you re-compile the code
+//This is the name of the exe before it is split
+#define MARTUS_SETUP_FILENAME_BEFORE	"MartusClient-3_0_exe"
+//This is the name of the exe after it is joined
+#define MARTUS_SETUP_FILENAME_AFTER		"MartusClient-3_0.exe"
+
+Ideally this program should figure out the name of the file to merge on its own
+so this doesn't have to be re-compiled for each release
+
+After you recompile this file then save the file in the MartusReleases Directory for testing.
+
+#Release Candidate for Martus (Adjust the following files and update their version #'s)
+   martus\client\swingui\UiConstants.java
+   martus\build.properties
+   binary-martus\Installer\BuildFiles\MartusSetupLauncher\MartusSetup.cpp
