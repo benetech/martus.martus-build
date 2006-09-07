@@ -103,6 +103,8 @@ so this doesn't have to be re-compiled for each release
 After you recompile this file then save the file in the MartusReleases Directory for testing.
 
 #Release Candidate for Martus (Adjust the following files and update their version #'s)
+See martus\TechDocs\Install Version Numbers for Martus.txt for more information
    martus\client\swingui\UiConstants.java
    martus\build.properties
+   binary-martus\Installer\Win32_NSIS\common\NSIS_Martus_Installer_Details.nsi
    binary-martus\Installer\BuildFiles\MartusSetupLauncher\MartusSetup.cpp
