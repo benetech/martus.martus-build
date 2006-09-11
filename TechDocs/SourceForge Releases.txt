@@ -37,6 +37,7 @@ Upload to the FTP server the zip file.
 Use an FTP client upload.sourceforge.net
 go to the "incoming" directory
 upload the file.
+Add both the zip file and the sha1 value.
  
 Look for and check the file you uploaded to the ftp website. Make sure your FTP has finished uploading before adding the file. click on "Add Files and/or Refresh View"
  
@@ -50,7 +51,7 @@ click on "Update/Refresh"
  
 Step 4:   Email Release Notice
  
-Send Notice to users monitoring the package is any.
+Send Notice to users monitoring the package if any.
  
  
 Then go to 
