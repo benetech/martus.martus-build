@@ -1,0 +1,26 @@
+How to Create Martus On-Line Help
+
+Start with the Word doc of the “Martus User Guide.doc” for the language you want to create the online help for.
+Save the file as a UTF8 Text file.
+Close MS Word.
+Open MS Word and load the UTF8 document.
+Copy the Martus Version # info to the clipboard (Martus™ Software User Guide Version 3.0)
+Paste this text after the Table of contents right after (1. Introduction to the Martus™ Software)
+Delete from the top of the document to the first line of the Table of Contents (delete up to and including “TABLE OF CONTENTS”)
+Next, go to the end of the document and remove the trailing footer left behind.
+Now save the document, making sure it is still in UTF8.
+Save this document as (.\martus-client\help-xx.txt) (where xx is the language code of the help file)
+
+Now exit MS Word, bring up Eclipse and bring up “org.martus.client.tools.BuildHelp”
+In the command line arguments pass in the two character language code for the help file you wish to create.
+
+Run this program as a Java application with the command line argument provided.  This will look for the help-xx.txt file (where xx is the language code) in “.\martus-client\help-xx.txt”
+Then the program will create MartusHelp-xx.txt and MartusHelpToc-xx.txt” in this same directory.
+
+Put these new files either in the Martus Language Pack mlpFiles directory (e.g. .\binary-martus\Releases\ClientMLPs\fr\mlpFiles) or in (.\martus-client\source\org\martus\client\swingui) if you want these included in the next build.
+
+Delete all these files from “.\martus-client” once you are done.
+
+Remember you need to Refresh you workspace for eclipse to recognize that you updated files within this project.
+
+
