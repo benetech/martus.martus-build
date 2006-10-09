@@ -1,4 +1,4 @@
-How to Create Martus On-Line Help
+How to Create Martus OnLine Help
 
 Start with the Word doc of the “Martus User Guide.doc” for the language you want to create the online help for.
 Save the file as a UTF8 Text file.
