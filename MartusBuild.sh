@@ -123,7 +123,8 @@ setCvsEnvVars()
 #################################################
 cleanCvsHome()
 {
-	echo
+	echo 
+	echo "MartusBuild.sh 8/31/2006"
 	echo "Cleaning the build environment $CVS_HOME (ignore mount/umount messages)...";
 	if [ -d "$CVS_HOME" ]; then
 		rm -Rf $CVS_HOME
@@ -140,13 +141,13 @@ downloadSourcesFromCvs()
 	cd "$CVS_HOME" || error "unable to cd: err $?"
 	echo
 	echo "Downloading source from CVS...";	
-	cvs -q checkout -l -P martus || error "cvs checkout martus returned $?"
+	cvs -q checkout -l -P -r CanadaServer martus || error "cvs checkout martus returned $?"
 
 	martus_cvs_src_modules="client amplifier common jar-verifier hrdag meta server swing utils mspa logi bc-jce clientside js-xml-generator thirdparty"
 	
 	for cvs_module in $martus_cvs_src_modules
 		do
-		cvs -q checkout martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
+		cvs -q checkout -r CanadaServer martus-$cvs_module || error "cvs returned $? - for martus-$cvs_module"
 		echo
 	done
 
@@ -205,7 +206,7 @@ downloadMartusInstallerFromCvsAndSetup()
 	fi
 	echo
 	echo "CD Build necessary, downloading installer from CVS...";
-	cvs checkout binary-martus/Installer/ 2>&1 || error "cvs returned $?"
+	cvs checkout -r CanadaServer binary-martus/Installer/ 2>&1 || error "cvs returned $?"
 		
 	copyThirdPartyJarToCDBuild
 	copyThirdPartySourceToCDBuild
@@ -472,8 +473,8 @@ updateCvsTree()
 	cvs tag v${CVS_DATE}_build-$BUILD_NUMBER martus-thirdparty
 	
 	#check if ClientJar directory structure already exists, if not add it
-	cvs checkout -l binary-martus/Releases/ClientJar || error "cvs checkout -l binary-martus/Releases/ClientJar - returned $?"
-	cvs checkout -l binary-martus/Releases/ClientJar/$CVS_YEAR/$CVS_MONTH_DAY
+	cvs checkout -l -r CanadaServer binary-martus/Releases/ClientJar || error "cvs checkout -l binary-martus/Releases/ClientJar - returned $?"
+	cvs checkout -l -r CanadaServer binary-martus/Releases/ClientJar/$CVS_YEAR/$CVS_MONTH_DAY
 	if [ ! -d "$CVS_HOME/binary-martus/Releases/ClientJar/$CVS_YEAR" ]; then
 		# create fake CVS entries
 		if [ ! -d "$CVS_HOME/binary-martus/Releases/ClientJar/CVS" ]; then
@@ -515,8 +516,8 @@ updateCvsTree()
 
 	#check if ServerJar directory structure already exists, if not add it
 	cd "$CVS_HOME"
-	cvs checkout -l binary-martus/Releases/ServerJar || error "cvs returned $?"
-	cvs checkout -l binary-martus/Releases/ServerJar/$CVS_YEAR/$CVS_MONTH_DAY
+	cvs checkout -l -r CanadaServer binary-martus/Releases/ServerJar || error "cvs returned $?"
+	cvs checkout -l -r CanadaServer binary-martus/Releases/ServerJar/$CVS_YEAR/$CVS_MONTH_DAY
 	if [ ! -d "$CVS_HOME/binary-martus/Releases/ServerJar/$CVS_YEAR" ]; then
 		# create fake CVS entries
 		if [ ! -d "$CVS_HOME/binary-martus/Releases/ServerJar/CVS" ]; then
@@ -704,6 +705,7 @@ createInstallerCdImage()
 	
 	mkdir -p $CD_IMAGE_DIR
 	cp -v $MARTUSBUILDFILES/Documents/license.txt $CD_IMAGE_DIR
+	cp -v $MARTUSBUILDFILES/Documents/gpl.txt $CD_IMAGE_DIR
 	
 	mkdir -p $CD_IMAGE_DIR/Win95
 	cp -v $MARTUSBUILDFILES/Winsock95/* $CD_IMAGE_DIR/Win95/
