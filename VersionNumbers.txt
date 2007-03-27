@@ -1,0 +1,22 @@
+Martus Version Numbers
+2007-03-27
+
+Martus client version numbers are set in the following places:
+
+1. In the app (used in splash screen and Help/About):
+   martus-client/source/org/martus/client/swingui/UiConstants.java
+   
+2. Help files and MTF translations, multiple languages:
+   martus-client/source/org/martus/client/swingui/Martus-xx.mtf
+   martus-client/source/org/martus/client/swingui/Martus-Help-xx.txt
+   
+3. README files, multiple languages:
+   binary-martus/Installer/BuildFiles/Documents/README.txt
+   binary-martus/Installer/BuildFiles/Documents/README_xx.txt
+   
+4. Build process (used to name the jars):
+   martus/build.properties
+   
+5. Installer (shown to user and stored in registry):
+   binary-martus/Installer/Win32_NSIS/common/NSIS_Martus_Installer_Details.nsi
+   
