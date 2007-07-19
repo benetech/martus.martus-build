@@ -4,13 +4,10 @@
         Martus MLP Build File
     </description>
 
-<!-- ******************************************************* -->
-<!-- UPDATE THIS before you run for different Language Packs -->
-
-    <property name="LANGUAGE" value="fr"/>
-
-<!-- ******************************************************* -->
-
+    <input
+         message="Please enter Language Code:"
+         addproperty="LANGUAGE"
+     />
 
 
     <property name="BASEDIR" value="../binary-martus/Releases/ClientMLPs"/>
