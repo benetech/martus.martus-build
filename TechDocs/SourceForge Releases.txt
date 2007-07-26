@@ -38,6 +38,8 @@ Use an FTP client upload.sourceforge.net
 go to the "incoming" directory
 upload the file.
 Add both the zip file and the sha1 value.
+Eg. martus-client-3.1-src.zip and martus-client-3.1-src.zip.sh1
+The source zip file is located on the build machine, but if you don't have access to that machine, you can always download it since it is contained in the ISO image.
  
 Look for and check the file you uploaded to the ftp website. Make sure your FTP has finished uploading before adding the file. click on "Add Files and/or Refresh View"
  
