@@ -7,7 +7,7 @@ click on "Martus (TM) Human Rights Bulletin System <http://sourceforge.net/proje
  
 Martus (TM) Human Rights Bulletin System
 click on "Admin"
-then click on "File Releases"
+then click on "File Releases" (you may have to scroll down to see this option)
  
 File Release System
 scroll down to the section "File Release Packages"
@@ -28,12 +28,39 @@ Status: (Active)
 Instead of uploading the release notes we usually paste them in for both the Release Notes and the Change Log check the box "Preserve my pre-formatted text."
  
 You get the Change Log from the Readme file
-You get the Release Notes from the Readme file, everything but the Change Log goes in the Release Notes.  Also remove any header info which is not needed. Click on "Submit/Refresh"
- 
+i.e.
+--------------------------------------------------------
+A. Changes from version 3.0 to version 3.1
+...
+B. Changes from version 2.9 to version 3.0     
+...
 
+If you are curious, the following URL contains information 
+about how to determine if the Winsock 2.0 components are 
+installed on a Microsoft Windows 95 platform:
+
+http://support.microsoft.com/support/kb/articles/Q177/7/19.asp
+--------------------------------------------------------
+
+You get the Release Notes from the Readme file, everything but the Change Log goes in the Release Notes.  Also remove any header info which is not needed. Click on "Submit/Refresh"
+i.e.
+--------------------------------------------------------
+See http://www.martus.org for information about Martus 
+software.
+
+See the Martus User Guide for instructions on installing the 
+Martus software. 
+
+For all current translations of the user documentation, as well 
+as documentation for previous versions in various languages, 
+go to http://www.martus.org/downloads/.  
+--------------------------------------------------------
+
+
+ 
 Step 2:   Add Files To This Release
 
-Upload to the FTP server the zip file.
+Upload to the FTP server the files
 Use an FTP client upload.sourceforge.net
 go to the "incoming" directory
 upload the file.
@@ -46,7 +73,7 @@ Look for and check the file you uploaded to the ftp website. Make sure your FTP 
 Step 3:   Edit Files In This Release
  
 Processor "Platform Independent"
-File Type "Source Zip"
+File Type "Source Zip" for the zip file and "Text" for the sha1 file
 Release Version "Shouldn't need to adjust this"
 Release Date "Shouldn't need to adjust this"
 click on "Update/Refresh"
