@@ -14,6 +14,7 @@
         <pathelement path="${martus.swing.class.root}/"/>
         <pathelement path="${martus.hrdag.class.root}/"/>
         <pathelement path="${martus.utils.class.root}/"/>
+        <fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
     </path>
 
     <target name="notify-swing">

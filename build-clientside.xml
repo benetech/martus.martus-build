@@ -22,6 +22,7 @@
         <pathelement path="${martus.swing.class.root}"/>
         <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
     </path>
 
     <target name="notify-clientside">

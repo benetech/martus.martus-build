@@ -1,0 +1,17 @@
+How to add a new third-party library to Martus
+2007-08-08 Kevin Smith
+
+This is VERY VERY rough, so don't believe any of it!
+
+First, commit the compiled .jar, the source code file (e.g. .zip) and license to the 
+appropriate directory under martus-thirdparty.
+
+In build.shared.values.xml, add an entry for this new third-party jar, such as:
+
+    <property name="martus.thirdparty.lib.jhlabs"
+      value="${build.basedir}/${martus.thirdparty.module}/client/jhlabs/bin/"/>
+      
+Add a line to each build-xxx.xml in the path section, like:
+
+	<fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
+

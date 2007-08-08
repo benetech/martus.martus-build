@@ -97,6 +97,7 @@
     <property name="martus.thirdparty.lib.persiancalendar"  value="${build.basedir}/${martus.thirdparty.module}/common/PersianCalendar/bin/"/>
     
     <property name="martus.thirdparty.lib.rhino"  value="${build.basedir}/${martus.thirdparty.module}/client/RhinoJavaScript/bin/"/>
+    <property name="martus.thirdparty.lib.jhlabs"  value="${build.basedir}/${martus.thirdparty.module}/client/jhlabs/bin/"/>
 
     <property name="martus.thirdparty.lib.lucene"  value="${build.basedir}/${martus.thirdparty.module}/server/Lucene/bin/"/>
     <property name="martus.thirdparty.lib.jetty"  value="${build.basedir}/${martus.thirdparty.module}/server/Jetty/bin/"/>
