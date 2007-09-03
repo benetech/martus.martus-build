@@ -1,17 +1,34 @@
 How to add a new third-party library to Martus
-2007-08-08 Kevin Smith
+2007-09-03 Kevin Smith
 
 This is VERY VERY rough, so don't believe any of it!
 
 First, commit the compiled .jar, the source code file (e.g. .zip) and license to the 
 appropriate directory under martus-thirdparty.
 
-In build.shared.values.xml, add an entry for this new third-party jar, such as:
+In build.shared.values.xml:
+
+1. add an entry for this new third-party jar, such as:
 
     <property name="martus.thirdparty.lib.jhlabs"
       value="${build.basedir}/${martus.thirdparty.module}/client/jhlabs/bin/"/>
       
-Add a line to each build-xxx.xml in the path section, like:
+2. Add a line to each build-xxx.xml in the path section, like:
 
 	<fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
 
+In MartusBuild.sh:
+1. Add a line to inside the copyThirdPartyJarToCDBuild function, like:
+
+	cp -v $SRC_THIRDPARTY_JARS_CLIENT_DIR/jhlabs/bin/*.jar $BUILDFILES_JARS/
+
+2. Add two lines to the copyThirdPartySourceToCDBuild function, like:
+
+	mkdir -p $BUILDFILES_SRC_FILES/jhlabs
+	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/src/* $BUILDFILES_SRC_FILES/RhinoJavaScript/
+	
+3. Add two lines to the copyThirdPartyLicenseToCDBuild function, like:
+
+	mkdir -p $BUILDFILES_LICENSES/jhlabs
+	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/license/* $BUILDFILES_LICENSES/jhlabs/
+	
