@@ -234,7 +234,6 @@ copyThirdPartyJarToCDBuild()
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/BouncyCastle/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_LIBEXT_DIR/JUnit/bin/*.jar $BUILDFILES_JARS/
 	cp -v $SRC_THIRDPARTY_JARS_CLIENT_DIR/RhinoJavaScript/bin/*.jar $BUILDFILES_JARS/
-	cp -v $SRC_THIRDPARTY_JARS_CLIENT_DIR/jhlabs/bin/*.jar $BUILDFILES_JARS/
 	
 } # copyThirdPartyJarToCDBuild
 
@@ -264,9 +263,6 @@ copyThirdPartySourceToCDBuild()
 	
 	mkdir -p $BUILDFILES_SRC_FILES/Rhino
 	cp -v $CVS_HOME/martus-thirdparty/client/RhinoJavaScript/source/* $BUILDFILES_SRC_FILES/RhinoJavaScript/
-	
-	mkdir -p $BUILDFILES_SRC_FILES/jhlabs
-	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/src/* $BUILDFILES_SRC_FILES/RhinoJavaScript/
 	
 	mkdir -p $BUILDFILES_SRC_FILES/Sun
 	cp -v $CVS_HOME/martus-thirdparty/client/Sun/source/* $BUILDFILES_SRC_FILES/Sun/
@@ -310,9 +306,6 @@ copyThirdPartyLicenseToCDBuild()
 	
 	mkdir -p $BUILDFILES_LICENSES/Rhino
 	cp -v $CVS_HOME/martus-thirdparty/client/RhinoJavaScript/license/* $BUILDFILES_LICENSES/RhinoJavaScript/
-	
-	mkdir -p $BUILDFILES_LICENSES/jhlabs
-	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/license/* $BUILDFILES_LICENSES/jhlabs/
 	
 	mkdir -p $BUILDFILES_LICENSES/Xml-Rpc
 	cp -v $CVS_HOME/martus-thirdparty/common/XMLRPC/license/* $BUILDFILES_LICENSES/Xml-Rpc/
