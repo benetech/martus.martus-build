@@ -6,6 +6,7 @@ This is VERY VERY rough, so don't believe any of it!
 First, commit the compiled .jar, the source code file (e.g. .zip) and license to the 
 appropriate directory under martus-thirdparty.
 
+--------------------------------------------------------------------------------
 In build.shared.values.xml:
 
 1. add an entry for this new third-party jar, such as:
@@ -17,6 +18,7 @@ In build.shared.values.xml:
 
 	<fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
 
+--------------------------------------------------------------------------------
 In MartusBuild.sh:
 1. Add a line to inside the copyThirdPartyJarToCDBuild function, like:
 
@@ -32,3 +34,25 @@ In MartusBuild.sh:
 	mkdir -p $BUILDFILES_LICENSES/jhlabs
 	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/license/* $BUILDFILES_LICENSES/jhlabs/
 	
+
+--------------------------------------------------------------------------------
+If this jar needs to be included in the client install, then 
+in installer-build.xml:
+1. In the "Jars" section, add a line like:
+
+	<fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
+	
+2. In the "Sources" section, add a group of lines like:
+
+    <mkdir dir="${martus.binary.buildfiles.sourcesdir}/jhlabs"/>
+    <copy todir="${martus.binary.buildfiles.sourcesdir}/jhlabs">
+        <fileset dir="${martus.thirdparty.lib.jhlabs}/../source" defaultexcludes="yes" includes="**/*"/>
+    </copy>
+
+3. In the "Licenses" section, add a group of lines like:
+
+	<mkdir dir="${martus.binary.buildfiles.sourcesdir}/jhlabs"/>
+	<copy todir="${martus.binary.buildfiles.sourcesdir}/jhlabs">
+	    <fileset dir="${martus.thirdparty.lib.jhlabs}/../license" defaultexcludes="yes" includes="**/*"/>
+	</copy>
+--------------------------------------------------------------------------------

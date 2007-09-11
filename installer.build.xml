@@ -37,6 +37,7 @@
             <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
             <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
             <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
         </copy>
     </target>
 
@@ -91,6 +92,11 @@
         <copy todir="${martus.binary.buildfiles.sourcesdir}/xmlrpc">
             <fileset dir="${martus.thirdparty.lib.xmlrpc}/../source" defaultexcludes="yes" includes="**/*"/>
         </copy>
+	
+	    <mkdir dir="${martus.binary.buildfiles.sourcesdir}/jhlabs"/>
+	    <copy todir="${martus.binary.buildfiles.sourcesdir}/jhlabs">
+	        <fileset dir="${martus.thirdparty.lib.jhlabs}/../source" defaultexcludes="yes" includes="**/*"/>
+	    </copy>
     </target>
 
     <!--
@@ -136,6 +142,11 @@
         <copy todir="${martus.binary.buildfiles.sourcesdir}/xmlrpc">
             <fileset dir="${martus.thirdparty.lib.xmlrpc}/../license" defaultexcludes="yes" includes="**/*"/>
         </copy>
+
+		<mkdir dir="${martus.binary.buildfiles.sourcesdir}/jhlabs"/>
+		<copy todir="${martus.binary.buildfiles.sourcesdir}/jhlabs">
+		    <fileset dir="${martus.thirdparty.lib.jhlabs}/../license" defaultexcludes="yes" includes="**/*"/>
+		</copy>
     </target>
 
     <!--
