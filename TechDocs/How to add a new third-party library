@@ -71,3 +71,14 @@ In MartusBuild.sh:
 	mkdir -p $BUILDFILES_LICENSES/jhlabs
 	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/license/* $BUILDFILES_LICENSES/jhlabs/
 	
+***** NOTE *****
+After changing MartusBuild.sh, it will not automatically be used on the build machine. 
+On the build machine, go to the $CVS_HOME/martus directory, and run:
+
+  cvs update
+  
+Then copy MartusBuild.sh to Lewis's home directory, replacing the copy that is run to actually 
+initiate a build. When the build is run, it will copy MartusBuild.sh back to the $CVS_HOME/martus 
+directory, and (if it has changed) will re-commit it to CVS.
+
+--------------------------------------------------------------------------------
