@@ -56,3 +56,18 @@ in installer-build.xml:
 	    <fileset dir="${martus.thirdparty.lib.jhlabs}/../license" defaultexcludes="yes" includes="**/*"/>
 	</copy>
 --------------------------------------------------------------------------------
+In MartusBuild.sh:
+1. In copyThirdPartyJarToCDBuild(), add a line like:
+
+	cp -v $SRC_THIRDPARTY_JARS_CLIENT_DIR/jhlabs/bin/*.jar $BUILDFILES_JARS/
+
+2. In copyThirdPartySourceToCDBuild(), add two lines like:
+
+	mkdir -p $BUILDFILES_SRC_FILES/jhlabs
+	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/source/* $BUILDFILES_SRC_FILES/jhlabs/
+	
+3. In copyThirdPartyLicenseToCDBuild(), add two lines like:
+
+	mkdir -p $BUILDFILES_LICENSES/jhlabs
+	cp -v $CVS_HOME/martus-thirdparty/client/jhlabs/license/* $BUILDFILES_LICENSES/jhlabs/
+	
