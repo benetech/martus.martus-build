@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
-	<classpathentry exported="true" kind="lib" path="/martus-thirdparty/libext/JUnit/bin/junit.jar"/>
-	<classpathentry exported="true" kind="lib" path="/martus-thirdparty/common/Ant/bin/ant-junit.jar"/>
 	<classpathentry kind="src" path=""/>
 	<classpathentry kind="output" path=""/>
 </classpath>
