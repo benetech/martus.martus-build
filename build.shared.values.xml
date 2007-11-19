@@ -104,6 +104,9 @@
 
     <property name="martus.thirdparty.lib.junit"  value="${build.basedir}/${martus.thirdparty.module}/libext/JUnit/bin/"/>
     <property name="martus.thirdparty.lib.bouncycastle"  value="${build.basedir}/${martus.thirdparty.module}/libext/BouncyCastle/bin/"/>
+	
+	<property name="mspa.thirdparty.lib.jaf" value="${build.basedir}/${martus.mspa.module}/ThirdParty/sun-jaf/bin/"/>
+	<property name="mspa.thirdparty.lib.mail" value="${build.basedir}/${martus.mspa.module}/ThirdParty/sun-javamail/bin/"/>
 
     <!-- binary-martus module name and dirs -->
     <property name="martus.binary.module"  value="binary-martus"/>

@@ -17,6 +17,8 @@
         <pathelement path="${martus.utils.class.root}/"/>
         <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
+    	<fileset dir="${mspa.thirdparty.lib.jaf}" includes="**/*.jar"/>
+    	<fileset dir="${mspa.thirdparty.lib.mail}" includes="**/*.jar"/>
     </path>
 
     <fileset id="mspa.server.class.files" dir="${martus.mspa.class.root}">
