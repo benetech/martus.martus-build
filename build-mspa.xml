@@ -7,6 +7,7 @@
     <!-- imports -->
     <import file="build.shared.values.xml" />
     <import file="build-common.xml" />
+	<import file="dev-build.xml" />
 
     <!-- mspa classpath -->
     <path id="mspa.class.path">
@@ -106,4 +107,38 @@
         <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${mspa-filename}" />
     </target>
 
+	  <!-- ================================================================== -->
+	  <!-- Z I P                                                              -->
+	  <!-- ================================================================== -->
+	
+	<property name='xmlrpc-jar' value='${thirdparty-jar-dir}/common/XMLRPC/bin/xmlrpc-1.2-b1.jar' />
+	<property name='monkey-jar' value='${thirdparty-jar-dir}/common/InfiniteMonkey/bin/InfiniteMonkey.jar' />
+	<property name='monkey-dll' value='${thirdparty-jar-dir}/common/InfiniteMonkey/bin/infinitemonkey.dll' />
+	<property name='bcprov-jar' value='${thirdparty-jar-dir}/libext/BouncyCastle/bin/bcprov-jdk14-120.jar' />
+	<property name='bcjce-jar' value='${bc-jce-filename}' />
+	<property name='layout-jar' value='${thirdparty-jar-dir}/client/jhlabs/bin/layouts.jar' />
+	<property name='persiancalendar-jar' value='${thirdparty-jar-dir}/client/PersianCalendar/bin/icu4j*.jar' />
+	<property name='icu-jar' value='${thirdparty-jar-dir}/client/PersianCalendar/bin/persiancalendar.jar' />
+	<property name='mspa-userguide' value='${martus.binary.buildfiles.documentsdir}/mspa_user_guide.pdf' />
+	
+	
+	<target name='zip-mspa' depends='jar-mspa' description='Create MartusMSPA.zip'>
+		<zip destfile="${public.release.folder}/MartusMSPA.zip">
+			<zipfileset file='${mspa-client-jar}' prefix='' includes="" excludes=".svn" />
+			<zipfileset file='${mspa-userguide}' prefix='' />
+			<zipfileset file='${common-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${client-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${xmlrpc-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${bcprov-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${bcjce-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${layout-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${persiancalendar-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${icu-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${monkey-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${monkey-dll}' prefix='ThirdParty' includes="" excludes=".svn" />
+		</zip>
+
+	</target>
+	
+	
 </project>
