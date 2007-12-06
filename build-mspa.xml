@@ -97,7 +97,6 @@
       <target name="jar-mspa" depends="build-mspa" description="Create martus-mspa client jar">
           <mkdir dir="${public.release.folder}"/>
           <jar destfile="${public.release.folder}/martus-mspa-client-${DSTAMP}.${build.number}.jar" manifest="${martus.mspa.src.root}/org/martus/mspa/main/main-class.txt">
-          		<fileset dir="${martus.mspa.src.root}" prefix="META-INF" file="MANIFEST.MF" />
                 <fileset refid="mspa.client.class.files" />
                 <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
           </jar>
@@ -129,20 +128,20 @@
 	
 	<target name='zip-mspa' depends='jar-mspa' description='Create MartusMSPA.zip'>
 		<zip destfile="${public.release.folder}/MartusMSPA.zip">
-			<zipfileset file='${mspa-client-jar}' prefix='' includes="" excludes=".svn" />
+			<zipfileset file='${mspa-client-jar}' prefix='' excludes=".svn" />
 			<zipfileset file='${mspa-userguide}' prefix='' />
-			<zipfileset file='${martus-common-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${martus-swing-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${martus-utils-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${client-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${xmlrpc-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${monkey-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${monkey-dll}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${persiancalendar-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${icu-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${bcprov-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${layout-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
-			<zipfileset file='${bcjce-jar}' prefix='ThirdParty' includes="" excludes=".svn" />
+			<zipfileset file='${martus-common-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${martus-swing-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${martus-utils-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${client-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${xmlrpc-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${monkey-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${monkey-dll}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${persiancalendar-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${icu-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${bcprov-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${layout-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${bcjce-jar}' prefix='ThirdParty' excludes=".svn" />
 		</zip>
 
 	</target>
