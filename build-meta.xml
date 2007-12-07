@@ -246,7 +246,7 @@
 <!-- R E L E A S E                                                      -->
 <!-- ================================================================== -->
 
-    <target name="release" depends="jarsign,test,zip-mspa,zip-client-src,zip-server-src,checksum">
+    <target name="release" depends="jarsign,test,zip-client-src,zip-server-src,checksum">
         <echo message="Release Built."/>
     </target>
 

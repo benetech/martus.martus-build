@@ -695,6 +695,7 @@ createClientInstallers()
 	buildClientJarVerifier
 	createInstallerCdImage
 	createMacLinuxZip
+	createMSPAClientZip
 	createCdNsisInstaller
 	createSingleNsisInstaller
 	createUpgradeInstaller
@@ -796,6 +797,21 @@ function createMacLinuxZip()
 	fi
 	
 	rm -vfr /tmp/MartusClient-$CURRENT_VERSION
+}
+
+#################################################
+# 
+#################################################
+function createMSPAClientZip()
+{
+	echo
+	echo "Starting the ant MSPA Client Zip build (might take a minute)..."
+	cd "$CVS_HOME/martus"
+	ant -f build-mspa-client-zip.xml mspa-client-zip
+	status=$?
+	
+	echo
+	echo "Ant completed with status: $status"
 }
 
 #################################################
