@@ -7,7 +7,6 @@
     <!-- imports -->
     <import file="build.shared.values.xml" />
     <import file="build-common.xml" />
-	<import file="dev-build.xml" />
 
     <target name="notify-mspa-client-zip">
         <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
@@ -17,11 +16,13 @@
 	  <!-- Z I P                                                              -->
 	  <!-- ================================================================== -->
 	
+	<property name="mspa-client-jar" value= "../binary-martus/Installer/BuildFiles/Jars/martus-mspa-client.jar"/>
 	<property name='mspa-userguide' value='../${martus.binary.module}/Installer/mspa_user_guide.pdf' />
-	<property name="martus-common-jar" value= "${dist}/martus-common.jar"/>
+	<property name="martus-common-jar" value= "../binary-martus/Installer/BuildFiles/Jars/martus-common.jar"/>
+<!-- Removed below
 	<property name="martus-swing-jar" value= "${dist}/martus-swing.jar"/>
 	<property name="martus-utils-jar" value= "${dist}/martus-utils.jar"/>
-
+-->
 	<property name='xmlrpc-jar' value='../martus-thirdparty/common/XMLRPC/bin/xmlrpc-1.2-b1.jar' />
 	<property name='monkey-jar' value='../martus-thirdparty/common/InfiniteMonkey/bin/InfiniteMonkey.jar' />
 	<property name='monkey-dll' value='../martus-thirdparty/common/InfiniteMonkey/bin/infinitemonkey.dll' />
@@ -37,9 +38,11 @@
 			<zipfileset file='${mspa-client-jar}' prefix='' excludes=".svn" />
 			<zipfileset file='${mspa-userguide}' prefix='' />
 			<zipfileset file='${martus-common-jar}' prefix='ThirdParty' excludes=".svn" />
+<!-- I believe the following are included inside martus-common
 			<zipfileset file='${martus-swing-jar}' prefix='ThirdParty' excludes=".svn" />
-			<zipfileset file='${martus-utils-jar}' prefix='ThirdParty' excludes=".svn" />
-			<zipfileset file='${client-jar}' prefix='ThirdParty' excludes=".svn" />
+			<zipfileset file='${martus-utils-jar}' prefix='ThirdParty' excludes=".svn" />-->
+<!-- Rick says the following is not needed
+			<zipfileset file='${client-jar}' prefix='ThirdParty' excludes=".svn" />-->
 			<zipfileset file='${xmlrpc-jar}' prefix='ThirdParty' excludes=".svn" />
 			<zipfileset file='${monkey-jar}' prefix='ThirdParty' excludes=".svn" />
 			<zipfileset file='${monkey-dll}' prefix='ThirdParty' excludes=".svn" />
