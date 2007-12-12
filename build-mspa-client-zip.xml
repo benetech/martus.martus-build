@@ -16,9 +16,9 @@
 	  <!-- Z I P                                                              -->
 	  <!-- ================================================================== -->
 	
-	<property name="mspa-client-jar" value= "../binary-martus/Installer/BuildFiles/Jars/martus-mspa-client.jar"/>
+	<property name="mspa-client-jar" value= "dist/martus-mspa-client.jar"/>
 	<property name='mspa-userguide' value='../${martus.binary.module}/Installer/mspa_user_guide.pdf' />
-	<property name="martus-common-jar" value= "../binary-martus/Installer/BuildFiles/Jars/martus-common.jar"/>
+	<property name="martus-common-jar" value= "dist/martus-common.jar"/>
 <!-- Removed below
 	<property name="martus-swing-jar" value= "${dist}/martus-swing.jar"/>
 	<property name="martus-utils-jar" value= "${dist}/martus-utils.jar"/>
