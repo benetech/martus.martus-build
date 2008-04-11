@@ -1,5 +1,5 @@
 <!-- Ant build.xml - Needs Ant v1.5.1 or later -->
-<project name="martus" default="build" basedir=".">
+<project name="dev-martus" default="build" basedir=".">
 
   <!-- set global properties for this build -->
   <property file="build.properties" />
