@@ -5,7 +5,7 @@ Save the file as a UTF8 Text file.
 Close MS Word.
 Open MS Word and load the UTF8 document.
 Copy the Martus Version # info to the clipboard (Martus™ Software User Guide Version 3.0)
-Paste this text after the Table of contents right after (1. Introduction to the Martus™ Software)
+Paste this text after the Table of contents right after (1. Introduction to the Martus™ Software) in the body of the document.
 Delete from the top of the document to the first line of the Table of Contents (delete up to and including “TABLE OF CONTENTS”)
 Next, go to the end of the document and remove the trailing footer left behind.
 Now save the document, making sure it is still in UTF8.
@@ -13,6 +13,8 @@ Save this document as (.\martus-client\help-xx.txt) (where xx is the language co
 
 Now exit MS Word, bring up Eclipse and bring up “org.martus.client.tools.BuildHelp”
 In the command line arguments pass in the two character language code for the help file you wish to create.
+To do this you the Menu "Run" and submenu "Run..." to change the command line arguments.
+
 
 Run this program as a Java application with the command line argument provided.  This will look for the help-xx.txt file (where xx is the language code) in “.\martus-client\help-xx.txt”
 Then the program will create MartusHelp-xx.txt and MartusHelpToc-xx.txt” in this same directory.
