@@ -5,8 +5,12 @@
     </description>
 
     <input
-         message="Please enter Language Code:"
+         message="Please enter Language Code (Eg: fr, es, bur):"
          addproperty="LANGUAGE"
+     />
+   <input
+         message="Please enter KeyStore Location (Eg: A:, E:\MartusKS):"
+         addproperty="KSDIR"
      />
 
 
@@ -37,7 +41,7 @@
       <target name="mlp" depends="check_storepass, check_keypass" description="Create a Signed Martus Language Pack">
 		  <jar jarfile="${LANGUAGEDIR}/Martus-${LANGUAGE}.mlp" basedir="${LANGUAGEDIR}/mlpFiles" manifest="${BASEDIR}/manifest" includes="*.*">
           </jar>
-          <signjar keystore="A:/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+          <signjar keystore="${KSDIR}/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
             <fileset dir="${LANGUAGEDIR}">
                 <include name="Martus-${LANGUAGE}.mlp"/>
             </fileset>
