@@ -35,7 +35,18 @@ So now there are bogus Martus Server 2.6.0.0, and 2.6.0.0.0 and Developer docs 1
 which will show up in the Admin section.  
 These unused releases can be renamed in the future and used. 
 Once you Create a File Release it will take you to 
- 
+
+Step 0:   Obtain the source file(s) to be uploaded
+
+The source zip file and its corresponding SHA1 (.sh1) file is 
+contained in the ISO image as part of the Martus release, 
+so you can download the ISO file and retrieve it from there.
+
+DO NOT just use the files from the build machine, 
+as another build may have been performed after the release build, 
+so the source code may have changed.
+
+
 Step 1:   Edit Existing Release 
  
 Release Date: (You can update the date of the release.)
@@ -89,9 +100,6 @@ go to the "uploads" directory
 upload the files.
 Add both the zip file and the sha1 value.
 Eg. martus-client-3.3-src.zip and martus-client-3.3-src.zip.sh1
-The source zip file is located on the build machine, but if you 
-don't have access to that machine, you can always download it 
-since it is contained in the ISO image.
  
 Look for and check the file you uploaded to the ftp website. 
 Make sure your FTP has finished uploading before adding the file. 
