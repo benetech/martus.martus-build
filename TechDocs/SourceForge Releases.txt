@@ -3,9 +3,13 @@ http://sourceforge.net/account/login.php?return_to=%2Fmy%2Fmyprojects.php
 
 If that link doesn't work use http://sourceforge.net/ 
 <http://sourceforge.net/account/login.php?return_to=%2Fmy%2Fmyprojects.php>  
-and then click on "My Projects" Log in using "benetech" and the password given.  You can also click on "My Personal Pages" to get to a list of projects.
+and then click on "My Projects" Log in using "benetech" and the password given.  
+You can also click on "My Personal Pages" to get to a list of projects.
 
-Occationally when you log in it will ask you to change the password.  Change this to some temp password then you can go in to Account/Account Options and scroll down to change password to reset it back to the Benetech password which Scott has saved in the safe at Benetech.
+Occationally when you log in it will ask you to change the password.  
+Change this to some temp password then you can go in to Account/Account Options and 
+scroll down to change password to reset it back to the Benetech password which 
+Scott has saved in the safe at Benetech.
  
 My SourceForge.net Projects
 Scroll down to "Active Projects"
