@@ -124,7 +124,7 @@ setCvsEnvVars()
 cleanCvsHome()
 {
 	echo 
-	echo "MartusBuild.sh 8/31/2006"
+	echo "MartusBuild.sh 2007-12-07"
 	echo "Cleaning the build environment $CVS_HOME (ignore mount/umount messages)...";
 	if [ -d "$CVS_HOME" ]; then
 		rm -Rf $CVS_HOME
@@ -695,6 +695,7 @@ createClientInstallers()
 	buildClientJarVerifier
 	createInstallerCdImage
 	createMacLinuxZip
+	createMSPAClientZip
 	createCdNsisInstaller
 	createSingleNsisInstaller
 	createUpgradeInstaller
@@ -796,6 +797,21 @@ function createMacLinuxZip()
 	fi
 	
 	rm -vfr /tmp/MartusClient-$CURRENT_VERSION
+}
+
+#################################################
+# 
+#################################################
+function createMSPAClientZip()
+{
+	echo
+	echo "Starting the ant MSPA Client Zip build (might take a minute)..."
+	cd "$CVS_HOME/martus"
+	ant -f build-mspa-client-zip.xml mspa-client-zip
+	status=$?
+	
+	echo
+	echo "Ant completed with status: $status"
 }
 
 #################################################
