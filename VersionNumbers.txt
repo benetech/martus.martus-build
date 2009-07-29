@@ -5,6 +5,7 @@ Martus client version numbers are set in the following places:
 
 1. Installer (shown to user and stored in registry):
    binary-martus/Installer/Win32_NSIS/common/NSIS_Martus_Installer_Details.nsi
+   (Two places, one for the main version number and the other for the internal version number)
    
 2. README files, multiple languages:
    binary-martus/Installer/BuildFiles/Documents/README.txt
