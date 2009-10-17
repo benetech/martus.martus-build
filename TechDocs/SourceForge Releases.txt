@@ -1,42 +1,32 @@
 Go to 
-http://sourceforge.net/account/login.php?return_to=%2Fmy%2Fmyprojects.php
+https://sourceforge.net/projects/martus
 
 If that link doesn't work use http://sourceforge.net/ 
-<http://sourceforge.net/account/login.php?return_to=%2Fmy%2Fmyprojects.php>  
-and then click on "My Projects" Log in using "benetech" and the password given.  
-You can also click on "My Personal Pages" to get to a list of projects.
+Log in using "benetech" and the password given.  
+
 
 Occationally when you log in it will ask you to change the password.  
 Change this to some temp password then you can go in to Account/Account Options and 
 scroll down to change password to reset it back to the Benetech password which 
 Scott has saved in the safe at Benetech.
  
-My SourceForge.net Projects
-Scroll down to "Active Projects"
-click on "Martus (TM) Human Rights Bulletin System 
+"Martus (TM) Human Rights Bulletin System 
 <http://sourceforge.net/projects/martus>  (registered 2002-12-17 12:04)"
+Click on 'develop'.
  
 Martus (TM) Human Rights Bulletin System
 click on "Project Admin"
-then click on "Downloads" (you may have to scroll down to see this option)
+then click on "File Manager" 
  
-File Release System
-scroll down to the section "File Release Packages"
-click on "Add Release" or "Edit Release" (to update something) 
-beside either the "Developer Docs", "martus" (Client) or "Martus Server".
+File Manager System
+click on "Martus" or "Martus Server" to expand it 
  
 Create a File Release
-New release name: (type in version # eg. "3.3")
-click on "Create This Release"
+Right click on "Martus" folder and select 'New Folder': (type in version # eg. "3.3.2")
  
-NOTE: You can NOT delete a release once you create it, 
-you can only hide it which I found out.  
-So now there are bogus Martus Server 2.6.0.0, and 2.6.0.0.0 and Developer docs 1.01 releases 
-which will show up in the Admin section.  
-These unused releases can be renamed in the future and used. 
-Once you Create a File Release it will take you to 
+You can now easily delete folders by right clicking on them and selecting 'delete'
 
-Step 0:   Obtain the source file(s) to be uploaded
+Step 1:   Obtain the source file(s) to be uploaded
 
 The source zip file and its corresponding SHA1 (.sh1) file is 
 contained in the ISO image as part of the Martus release, 
@@ -47,14 +37,42 @@ as another build may have been performed after the release build,
 so the source code may have changed.
 
 
-Step 1:   Edit Existing Release 
+Step 2:   Add Files To This Release
+
+Right click on the folder you just created and select 'Upload Here'
+You will get confirmation that the new files uploaded will go into the correct release folder.
+Now scroll back up to the top of the page and click on 'Upload File' right under the 
+File Manager Header. 
+
+martus-client-3.3.2-src.zip
+martus-client-3.3.2-src.zip.sh1
+Instructions_Converting_CSV_to_Martus_Bulletin-v332.zip 
  
-Release Date: (You can update the date of the release.)
-Release Name: (You can change this here if you typed it wrong originally)
-Status: (Active)
+Step 3: Setting up NEWS
+
+Click on 'Develop' then 'News'
+
+To edit existing News click on 'Admin' where you can hid news or change what is displayed.
+
+To add new News click on 'Submit' and type in a subject line such as 'Martus Client 3.3.2 Released'
+Then add the details you want posted.
+You can even have this posted on Submit my news to the Slashdot.org Firehose by checking the checkbox.
+
  
-Instead of uploading the release notes we usually paste them in for both the 
-Release Notes and the Change Log check the box "Preserve my pre-formatted text."
+Eg: 
+
+Summary: 
+"Martus Client 3.3 Released"
+
+The description you can grab from the Martus website:
+Eg:
+"
+This release includes the ability to view image attachments directly inside bulletins, and new "batch update" features for more efficient processing of groups of bulletins at once (e.g. option to add a new Headquarters account or seal draft bulletins in bulk). The full release notes and download of the new version are available here. 
+ 
+Martus 3.3 is available in English and Spanish, with "Language Packs" placed on  
+http://www.martus.org/downloads as they become available.
+"
+
  
 You get the Change Log from the Readme file
 i.e.
@@ -87,59 +105,14 @@ as documentation for previous versions in various languages,
 go to http://www.martus.org/downloads/.  
 --------------------------------------------------------
 
-
- 
-Step 2:   Add Files To This Release
-
-Upload to the SFTP server the files.
-Use an SFTP client (FTP no longer is accepted) 
-A good SFTP client is WinSCP found at http://winscp.net/eng/index.php
-
-host: frs.sourceforge.net 
-go to the "uploads" directory
-upload the files.
-Add both the zip file and the sha1 value.
-Eg. martus-client-3.3-src.zip and martus-client-3.3-src.zip.sh1
- 
-Look for and check the file you uploaded to the ftp website. 
-Make sure your FTP has finished uploading before adding the file. 
-click on "Add Files and/or Refresh View"
- 
-Step 3:   Edit Files In This Release
- 
-Processor "Platform Independent"
-File Type "Source Zip" for the zip file and "Text" for the sha1 file
-Release Version "Shouldn't need to adjust this"
-Release Date "Shouldn't need to adjust this"
-click on "Update/Refresh"
- 
 Step 4:   Email Release Notice
  
-Send Notice to users monitoring the package if any.
+Not sure if this is done automatically now when you add new files/news.
  
  
-Setting up NEWS
+Step 5: Verify Release
 
-Login as a project administrator and go to the Project Summary page. 
-Click on the "Feature Settings" menu option under the "Project Admin" menu heading. 
-Click on the "Submit" link to the right of "Project News" and complete the form. 
-Existing news items may be edited or removed as follows: 
+Click on 'Summary' 
 
-Login as a project administrator and go to the Project Summary page. 
-Click on the "Feature Settings" menu option under the "Project Admin" menu heading. 
-Click on the "Manage" link to the right of "Project News" and edit/delete as desired. 
- 
- 
-Eg: 
+Verify the new files are able to be downloaded and the latest news is posted.
 
-Summary: 
-"Martus Client 3.3 Released"
-
-The description you can grab from the Martus website:
-Eg:
-"
-This release includes the ability to view image attachments directly inside bulletins, and new "batch update" features for more efficient processing of groups of bulletins at once (e.g. option to add a new Headquarters account or seal draft bulletins in bulk). The full release notes and download of the new version are available here. 
- 
-Martus 3.3 is available in English and Spanish, with "Language Packs" placed on  
-http://www.martus.org/downloads as they become available.
-"
