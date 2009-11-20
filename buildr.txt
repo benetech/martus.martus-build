@@ -1,0 +1,87 @@
+Notes about the new hudson/buildr build system for Martus
+
+Builds will continue to be identified by an incrementing build number
+
+Everything in martus-thirdparty will go in an artifact repository, 
+but the authoritative copy will be in version control, 
+to make it easy for developers to inject new third-party libraries 
+into the build machine without requiring ssh access.
+
+Any third-party artifacts that are available via standard maven repos
+should come from there, instead of from martus-thirtparty.
+See www.mvnbrowser.com for a search engine to see what is there. 
+
+Each of these will become its own buildr project 
+(source code sub-projects indicated with nested -)
+- martus-thirdparty
+	(no single artifact, so might be a rakefile instead of buildr)
+	it will just install all the third-party jars to the artifact repo
+	
+- martus-bc-jce
+	bc-jce.jar
+- martus-utils
+	martus-utils.jar
+- martus-common
+	martus-common.jar
+- martus-jar-verifier
+	[[NOT NEEDED??]]
+
+- martus-server-jar
+	martus-server.jar
+	- martus-amplifier
+- martus-server-source
+	martus-server-source.zip
+- martus-server
+	martus-server.zip
+
+- martus-swing
+	martus-swing.jar
+- martus-client
+	martus.jar
+	- martus-js-xml-generator
+	- martus-logi
+	- martus-hrdag
+- martus-client-windows
+	martus-setup.exe
+- martus-client-mac
+	martus-mac.zip (martus.dmg)
+- martus-client-linux
+	martus-linux.zip
+- martus-client-source
+	martus-client-source.zip
+- martus-client-iso
+	- martus-client.iso
+- martus-client-multipart
+	- martus-client-windows-multipart.zip
+
+- martus-mlp-xxx (several of these)
+	martus-xxx.jar
+- martus-mspa-client
+	martus-mspa-client.zip
+- martus-meta
+	martus-meta.jar
+
+	
+After each artifact is built, it will be pushed to an artifact repo on the build machine.
+That artifact repo must be backed up on a regular basis.
+
+There will be one hudson project: martus 
+which will build client, server, mspa, and meta. 
+This one master buildr project will contain several sub-projects.
+It will do a checkout of each sub, and run its buildr, 
+which will install the sub-project artifact into the repo.
+
+
+
+Each hudson build project will have two variations:
+1. One that builds automatically
+	environment "production"
+	ENV['VERSION']='SNAPSHOT'
+2. One that is run manually
+	environment "production"
+	ENV['VERSION'] not set
+
+If VERSION is set, it will replace the version number 
+that would normally be appended to the artifact name.
+If it is not set, then the build will fail if that artifact already exists.
+I think we can use File.exists(locate(spec)) to check
