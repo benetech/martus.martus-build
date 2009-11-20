@@ -41,6 +41,7 @@ Each of these will become its own buildr project
 	- martus-js-xml-generator
 	- martus-logi
 	- martus-hrdag
+	- martus-clientside
 - martus-client-windows
 	martus-setup.exe
 - martus-client-mac
@@ -58,6 +59,7 @@ Each of these will become its own buildr project
 	martus-xxx.jar
 - martus-mspa-client
 	martus-mspa-client.zip
+	- martus-clientside
 - martus-meta
 	martus-meta.jar
 
