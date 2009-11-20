@@ -6,11 +6,6 @@ define "martus" do
 			cvs_checkout("martus-thirdparty")
 		end
 
-		install do
-			install_common_artifacts
-			install_client_artifacts
-		end
-
 		def install_common_artifacts
 			infinite_monkey_jar_artifact_id = "infinitemonkey:infinitemonkey:jar:1.0"
 			infinite_monkey_jar_file = file(_("common/InfiniteMonkey/bin/InfiniteMonkey.jar"))
@@ -35,6 +30,10 @@ define "martus" do
 			install artifact(js_jar_artifact_id).from(js_jar_file)
 		
 		end
+
+		install_common_artifacts
+		install_client_artifacts
+
 	end
 
 	martus_utils_layout = Layout.new
@@ -70,5 +69,3 @@ def cvs_checkout(project)
 		raise "Error checking out #{project}"
 	end
 end
-
-
