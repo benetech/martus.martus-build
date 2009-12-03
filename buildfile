@@ -54,6 +54,7 @@ define "martus" do
 		
 	  compile.options.target = '1.5'
 	  compile.with(
+	  	'bouncycastle:bcprov-jdk14:jar:',
 	  )
 	
 	  package :jar
