@@ -36,9 +36,7 @@ define "martus" do
 
 	end
 
-	martus_utils_layout = Layout.new
-	martus_utils_layout[:source, :main, :java] = 'source'
-	define "martus-utils", :layout=>martus_utils_layout do
+	define "martus-utils", :layout=>create_layout_with_source_as_source do
 	  project.version = '1'
 	
 	  compile.options.target = '1.5'
@@ -51,7 +49,15 @@ define "martus" do
 	  package :jar
 	end
 
-	define "martus-bc-jce"
+	define "martus-bc-jce", :layout=>create_layout_with_source_as_source do
+		project.version = '1'
+		
+	  compile.options.target = '1.5'
+	  compile.with(
+	  )
+	
+	  package :jar
+	end
 
 	clean do
 		cvs_checkout("martus-utils")
@@ -60,6 +66,11 @@ define "martus" do
 
 end
 
+def create_layout_with_source_as_source
+	layout = Layout.new
+	layout[:source, :main, :java] = 'source'
+	return layout
+end
 
 def cvs_checkout(project)
 	if !system("cvs -d:extssh:kevins@cvs.benetech.org/var/local/cvs co #{project}")
