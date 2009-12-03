@@ -5,6 +5,12 @@ define "martus" do
 		clean do
 			cvs_checkout("martus-thirdparty")
 		end
+		
+		def install_libext_artifacts
+			bouncycastle_jar_artifact_id = "bouncycastle:bcprov-jdk14:jar:135"
+			bouncycastle_jar_file = file(_("libext/BouncyCastle/bin/bcprov-jdk14-135.jar"))
+			install artifact(bouncycastle_jar_artifact_id).from(bouncycastle_jar_file)
+		end
 
 		def install_common_artifacts
 			infinite_monkey_jar_artifact_id = "infinitemonkey:infinitemonkey:jar:1.0"
@@ -31,6 +37,7 @@ define "martus" do
 		
 		end
 
+		install_libext_artifacts
 		install_common_artifacts
 		install_client_artifacts
 
