@@ -5,40 +5,49 @@ def define_martus_thirdparty
 			cvs_checkout("martus-thirdparty")
 		end
 		
-		def install_libext_artifacts
+		def bouncycastle_artifact
 			bouncycastle_jar_artifact_id = "bouncycastle:bcprov-jdk14:jar:135"
 			bouncycastle_jar_file = file(_("libext/BouncyCastle/bin/bcprov-jdk14-135.jar"))
-			install artifact(bouncycastle_jar_artifact_id).from(bouncycastle_jar_file)
+			return artifact(bouncycastle_jar_artifact_id).from(bouncycastle_jar_file)
 		end
 
-		def install_common_artifacts
+		def infinitemonkey_jar_artifact
 			infinite_monkey_jar_artifact_id = "infinitemonkey:infinitemonkey:jar:1.0"
 			infinite_monkey_jar_file = file(_("common/InfiniteMonkey/bin/InfiniteMonkey.jar"))
-			install artifact(infinite_monkey_jar_artifact_id).from(infinite_monkey_jar_file)
-		
-			infinite_monkey_dll_artifact_id = "infinitemonkey:infinitemonkey:dll:1.0"
-			infinite_monkey_dll_file = file(_("common/InfiniteMonkey/bin/infinitemonkey.dll"))
-			install artifact(infinite_monkey_dll_artifact_id).from(infinite_monkey_dll_file)
-		
-			persian_calendar_jar_artifact_id = "com.ghasemkiani:persiancalendar:jar:2.1"
-			persian_calendar_jar_file = file(_("common/PersianCalendar/bin/persiancalendar.jar"))
-			install artifact(persian_calendar_jar_artifact_id).from(persian_calendar_jar_file)
+			return artifact(infinite_monkey_jar_artifact_id).from(infinite_monkey_jar_file)
 		end
 		
-		def install_client_artifacts
+		def infinitemonkey_dll_artifact
+			infinite_monkey_dll_artifact_id = "infinitemonkey:infinitemonkey:dll:1.0"
+			infinite_monkey_dll_file = file(_("common/InfiniteMonkey/bin/infinitemonkey.dll"))
+			return artifact(infinite_monkey_dll_artifact_id).from(infinite_monkey_dll_file)
+		end
+		
+		def persiancalendar_artifact
+			persian_calendar_jar_artifact_id = "com.ghasemkiani:persiancalendar:jar:2.1"
+			persian_calendar_jar_file = file(_("common/PersianCalendar/bin/persiancalendar.jar"))
+			return artifact(persian_calendar_jar_artifact_id).from(persian_calendar_jar_file)
+		end
+		
+		def layouts_artifact
 			layouts_jar_artifact_id = "com.jhlabs:layouts:jar:2006-08-10"
 			layouts_jar_file = file(_("client/jhlabs/bin/layouts.jar"))
-			install artifact(layouts_jar_artifact_id).from(layouts_jar_file)
+			return artifact(layouts_jar_artifact_id).from(layouts_jar_file)
+		end
 		
+		def rhino_artifact
 			js_jar_artifact_id = "org.mozilla.rhino:js:jar:2006-03-08"
 			js_jar_file = file(_("client/RhinoJavaScript/bin/js.jar"))
-			install artifact(js_jar_artifact_id).from(js_jar_file)
+			return artifact(js_jar_artifact_id).from(js_jar_file)
 		
 		end
 
-		install_libext_artifacts
-		install_common_artifacts
-		install_client_artifacts
+		install bouncycastle_artifact
+		install infinitemonkey_jar_artifact
+		install infinitemonkey_dll_artifact
+		install persiancalendar_artifact
+		install layouts_artifact
+		install rhino_artifact
 
 	end
 
