@@ -2,7 +2,7 @@ repositories.remote << 'http://www.ibiblio.org/maven2/'
 
 define "martus" do
 	define "martus-thirdparty" do
-		clean do
+		task :checkout do
 			cvs_checkout("martus-thirdparty")
 		end
 		
@@ -44,21 +44,25 @@ define "martus" do
 	end
 
 	define "martus-utils", :layout=>create_layout_with_source_as_source do
-	  project.version = '1'
+		project.version = '1'
 	
-	  compile.options.target = '1.5'
-	  compile.with(
-	  	'junit:junit:jar:3.8.2',
-	  	'persiancalendar:persiancalendar:jar:2.1',
-	  	'com.ibm.icu:icu4j:jar:3.4.4'
-	  )
+		task :checkout do
+			cvs_checkout("martus-utils")
+		end
+
+		compile.options.target = '1.5'
+		compile.with(
+	  		'junit:junit:jar:3.8.2',
+	  		'persiancalendar:persiancalendar:jar:2.1',
+	  		'com.ibm.icu:icu4j:jar:3.4.4'
+		)
 	  
-	  build do
-		puts "Building martus-utils"
-	  	task('martus:martus-thirdparty:install')
-	  end
+		build do
+			puts "Building martus-utils"
+	  		task('martus:martus-thirdparty:install')
+	  	end
 	  
-	  package :jar
+		package :jar
 	end
 
 	define "martus-bc-jce", :layout=>create_layout_with_source_as_source do
@@ -66,6 +70,10 @@ define "martus" do
 		project.version = '1'
 		jar_file = _('target/martus-bc-jce.jar')
 		
+		task :checkout do
+			cvs_checkout("martus-bc-jce")
+		end
+
 		compile.options.target = '1.5'
 		compile.with(
 			'bouncycastle:bcprov-jdk14:jar:135'
@@ -84,9 +92,14 @@ define "martus" do
 	
 	end
 
-	clean do
-		cvs_checkout("martus-utils")
-		cvs_checkout("martus-bc-jce")
+	sub_project_checkouts =	[
+		task('martus-thirdparty:checkout'),
+		task('martus-bc-jce:checkout'),
+		task('martus-utils:checkout')
+		]
+	task :checkout => sub_project_checkouts do
+		puts "checking out"
+		
 	end
 
 end
