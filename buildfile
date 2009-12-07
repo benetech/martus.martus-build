@@ -19,14 +19,11 @@ end
 task nil do
 end
 
-task :checkout => [
-		'martus-thirdparty:checkout',
-		'martus-bc-jce:checkout',
-		'martus-utils:checkout',
-		'martus-swing:checkout',
-		nil
-	] do
-		puts "checkout"
+task :checkout do
+	cvs_checkout 'martus-thirdparty'
+	cvs_checkout 'martus-bc-jce'
+	cvs_checkout 'martus-utils'
+	cvs_checkout 'martus-swing'
 end
 
 require 'buildfile-martus-thirdparty'

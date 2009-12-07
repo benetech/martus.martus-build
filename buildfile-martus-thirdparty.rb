@@ -1,8 +1,4 @@
 define "martus-thirdparty" do
-	task :checkout do
-		cvs_checkout("martus-thirdparty")
-	end
-	
 	def bouncycastle_artifact
 		bouncycastle_jar_artifact_id = "bouncycastle:bcprov-jdk14:jar:135"
 		bouncycastle_jar_file = file(_("libext/BouncyCastle/bin/bcprov-jdk14-135.jar"))

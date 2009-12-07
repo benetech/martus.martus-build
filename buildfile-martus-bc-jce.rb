@@ -3,10 +3,6 @@ define "martus-bc-jce", :layout=>create_layout_with_source_as_source do
 	project.version = '1'
 	jar_file = _('target/martus-bc-jce.jar')
 	
-	task :checkout do
-		cvs_checkout("martus-bc-jce")
-	end
-
 	compile.options.target = '1.5'
 	compile.with(
 		'bouncycastle:bcprov-jdk14:jar:135'
