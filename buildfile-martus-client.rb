@@ -24,5 +24,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).include(project('martus-logi').path_to('target', 'main', 'classes'), :as=>'.')
 	package(:jar).include(project('martus-swing').path_to('target', 'main', 'classes'), :as=>'.')
 	package(:jar).include(project('martus-clientside').path_to('target', 'main', 'classes'), :as=>'.')
+	package(:jar).include(project('martus-js-xml-generator').path_to('target', 'main', 'classes'), :as=>'.')
 
 end
