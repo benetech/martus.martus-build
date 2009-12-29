@@ -1,6 +1,7 @@
 repositories.remote << 'http://www.ibiblio.org/maven2/'
 repositories.remote << 'http://ftp.cica.es/mirrors/maven2'
 
+JUNIT_SPEC = 'junit:junit:jar:3.8.2'
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new

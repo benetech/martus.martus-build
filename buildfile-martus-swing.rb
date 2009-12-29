@@ -6,7 +6,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	compile.options.target = '1.5'
 	compile.with(
-		'junit:junit:jar:3.8.2',
+		JUNIT_SPEC,
 		"com.jhlabs:layouts:jar:2006-08-10",
 		'org.martus:martus-utils:jar:1'
 	)
