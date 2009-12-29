@@ -31,6 +31,7 @@ task :checkout do
 	cvs_checkout 'martus-utils'
 	cvs_checkout 'martus-swing'
 	cvs_checkout 'martus-common'
+	cvs_checkout 'martus-jar-verifier'
 	cvs_checkout 'martus-clientside'
 end
 
@@ -47,5 +48,6 @@ require 'buildfile-martus-logi'
 require 'buildfile-martus-utils'
 require 'buildfile-martus-swing'
 require 'buildfile-martus-common'
+require 'buildfile-martus-jar-verifier'
 require 'buildfile-martus-clientside'
 
