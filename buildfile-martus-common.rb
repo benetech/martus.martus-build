@@ -11,9 +11,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ICU4J_SPEC,
 		PERSIANCALENDAR_SPEC,
 		BCPROV_SPEC,
-		'org.martus:martus-logi:jar:1',
-		'org.martus:martus-utils:jar:1',
-		'org.martus:martus-swing:jar:1'
+		project('martus-logi').packages.first,
+		project('martus-utils').packages.first,
+		project('martus-swing').packages.first
 	)
   
 	package :jar

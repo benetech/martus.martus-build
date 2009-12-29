@@ -8,7 +8,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	compile.with(
 		JUNIT_SPEC,
 		LAYOUTS_SPEC,
-		'org.martus:martus-utils:jar:1'
+		project('martus-utils').packages.first
 	)
   
 	package :jar
