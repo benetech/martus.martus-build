@@ -7,7 +7,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	compile.options.target = '1.5'
 	compile.with(
-		'bouncycastle:bcprov-jdk14:jar:135'
+		BCPROV_SPEC
 	)
 
 	package :jar, :file=>jar_file
