@@ -28,11 +28,13 @@ task :checkout do
 	cvs_checkout 'martus-thirdparty'
 	cvs_checkout 'martus-bc-jce'
 	cvs_checkout 'martus-logi'
+	cvs_checkout 'martus-hrdag'
 	cvs_checkout 'martus-utils'
 	cvs_checkout 'martus-swing'
 	cvs_checkout 'martus-common'
 	cvs_checkout 'martus-jar-verifier'
 	cvs_checkout 'martus-clientside'
+	cvs_checkout 'martus-client'
 end
 
 define 'martus' do
@@ -45,9 +47,11 @@ end
 require 'buildfile-martus-thirdparty'
 require 'buildfile-martus-bc-jce'
 require 'buildfile-martus-logi'
+require 'buildfile-martus-hrdag'
 require 'buildfile-martus-utils'
 require 'buildfile-martus-swing'
 require 'buildfile-martus-common'
 require 'buildfile-martus-jar-verifier'
 require 'buildfile-martus-clientside'
+require 'buildfile-martus-client'
 
