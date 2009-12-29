@@ -17,13 +17,13 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	)
 
   
-	package(:jar).include(project('martus-jar-verifier').path_to('target', 'main', 'classes'), :as=>'.')
-	package(:jar).include(project('martus-common').path_to('target', 'main', 'classes'), :as=>'.')
-	package(:jar).include(project('martus-utils').path_to('target', 'main', 'classes'), :as=>'.')
-	package(:jar).include(project('martus-hrdag').path_to('target', 'main', 'classes'), :as=>'.')
-	package(:jar).include(project('martus-logi').path_to('target', 'main', 'classes'), :as=>'.')
-	package(:jar).include(project('martus-swing').path_to('target', 'main', 'classes'), :as=>'.')
-	package(:jar).include(project('martus-clientside').path_to('target', 'main', 'classes'), :as=>'.')
-	package(:jar).include(project('martus-js-xml-generator').path_to('target', 'main', 'classes'), :as=>'.')
+	package(:jar).merge(project('martus-jar-verifier').packages.first)
+	package(:jar).merge(project('martus-common').packages.first)
+	package(:jar).merge(project('martus-utils').packages.first)
+	package(:jar).merge(project('martus-hrdag').packages.first)
+	package(:jar).merge(project('martus-logi').packages.first)
+	package(:jar).merge(project('martus-swing').packages.first)
+	package(:jar).merge(project('martus-clientside').packages.first)
+	package(:jar).merge(project('martus-js-xml-generator').packages.first)
 
 end
