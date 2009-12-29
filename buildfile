@@ -36,6 +36,7 @@ task :checkout do
 	cvs_checkout 'martus-jar-verifier'
 	cvs_checkout 'martus-clientside'
 	cvs_checkout 'martus-client'
+	cvs_checkout 'martus-amplifier'
 end
 
 define 'martus' do
@@ -56,4 +57,5 @@ require 'buildfile-martus-js-xml-generator'
 require 'buildfile-martus-jar-verifier'
 require 'buildfile-martus-clientside'
 require 'buildfile-martus-client'
+require 'buildfile-martus-amplifier'
 
