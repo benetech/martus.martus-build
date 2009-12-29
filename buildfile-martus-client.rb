@@ -11,9 +11,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		'org.martus:martus-common:jar:1',
 		'org.martus:martus-swing:jar:1',
 		'org.martus:martus-clientside:jar:1',
-		'com.jhlabs:layouts:jar:2006-08-10',
+		LAYOUTS_SPEC,
 		'org.martus:martus-jar-verifier:jar:1',
-		'velocity:velocity:jar:1.4'
+		VELOCITY_SPEC
 	)
 
   

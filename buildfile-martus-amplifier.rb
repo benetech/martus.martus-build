@@ -9,10 +9,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		JUNIT_SPEC,
 		'org.martus:martus-utils:jar:1',
 		'org.martus:martus-common:jar:1',
-		'jetty:jetty:jar:4.2.27',
-		'jetty:javax.servlet:jar:5.1.12',
-		'lucene:lucene:jar:1.3-rc1',
-		'velocity:velocity:jar:1.4'
+		JETTY_SPEC,
+		JAVAX_SERVLET_SPEC,
+		LUCENE_SPEC,
+		VELOCITY_SPEC
 	)
   
 	package :jar

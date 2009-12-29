@@ -1,6 +1,6 @@
 define "martus-thirdparty" do
 	def bouncycastle_artifact
-		bouncycastle_jar_artifact_id = "bouncycastle:bcprov-jdk14:jar:135"
+		bouncycastle_jar_artifact_id = BCPROV_SPEC
 		bouncycastle_jar_file = file(_("libext/BouncyCastle/bin/bcprov-jdk14-135.jar"))
 		return artifact(bouncycastle_jar_artifact_id).from(bouncycastle_jar_file)
 	end
@@ -18,13 +18,13 @@ define "martus-thirdparty" do
 	end
 	
 	def persiancalendar_artifact
-		persian_calendar_jar_artifact_id = "com.ghasemkiani:persiancalendar:jar:2.1"
+		persian_calendar_jar_artifact_id = PERSIANCALENDAR_SPEC
 		persian_calendar_jar_file = file(_("common/PersianCalendar/bin/persiancalendar.jar"))
 		return artifact(persian_calendar_jar_artifact_id).from(persian_calendar_jar_file)
 	end
 	
 	def layouts_artifact
-		layouts_jar_artifact_id = "com.jhlabs:layouts:jar:2006-08-10"
+		layouts_jar_artifact_id = LAYOUTS_SPEC
 		layouts_jar_file = file(_("client/jhlabs/bin/layouts.jar"))
 		return artifact(layouts_jar_artifact_id).from(layouts_jar_file)
 	end

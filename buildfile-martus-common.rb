@@ -7,10 +7,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	compile.options.target = '1.5'
 	compile.with(
 		JUNIT_SPEC,
-		"xmlrpc:xmlrpc:jar:1.2-b1",
-		"com.ibm.icu:icu4j:jar:3.4.4",
-		"com.ghasemkiani:persiancalendar:jar:2.1",
-		"bouncycastle:bcprov-jdk14:jar:135",
+		XMLRPC_SPEC,
+		ICU4J_SPEC,
+		PERSIANCALENDAR_SPEC,
+		BCPROV_SPEC,
 		'org.martus:martus-logi:jar:1',
 		'org.martus:martus-utils:jar:1',
 		'org.martus:martus-swing:jar:1'
