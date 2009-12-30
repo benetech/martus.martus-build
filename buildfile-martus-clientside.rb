@@ -15,5 +15,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-jar-verifier').packages.first
 	)
   
+	test.with(
+		ICU4J_SPEC,
+		BCPROV_SPEC
+	)
+	
 	package :jar
 end

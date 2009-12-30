@@ -10,6 +10,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		PERSIANCALENDAR_SPEC,
 		ICU4J_SPEC
 	)
-  
+
+	test.exclude 'org.martus.util.TestCaseEnhanced'
+	
 	package :jar
 end
