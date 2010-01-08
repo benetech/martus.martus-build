@@ -12,6 +12,13 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-amplifier').packages.first
 	)
 
+	test.with(
+		BCPROV_SPEC,
+		JETTY_SPEC,
+		ICU4J_SPEC,
+		XMLRPC_SPEC
+	)
+
 	package(:jar).merge(project('martus-jar-verifier').packages.first)
 	package(:jar).merge(project('martus-common').packages.first)
 	package(:jar).merge(project('martus-utils').packages.first)
