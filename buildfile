@@ -15,6 +15,7 @@ BCPROV_SPEC = 'bouncycastle:bcprov-jdk14:jar:135'
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new
+	layout[:root] = "#{base}"
 	layout[:source, :main, :java] = "#{base}/source"
 	layout[:source, :test, :java] = "#{base}/source"
 	layout[:target] = "#{base}/target"
@@ -71,4 +72,3 @@ require 'buildfile-martus-clientside'
 require 'buildfile-martus-client'
 require 'buildfile-martus-amplifier'
 require 'buildfile-martus-server'
-

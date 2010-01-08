@@ -11,12 +11,13 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-common').packages.first,
 		project('martus-amplifier').packages.first
 	)
-  
+
 	package(:jar).merge(project('martus-jar-verifier').packages.first)
 	package(:jar).merge(project('martus-common').packages.first)
 	package(:jar).merge(project('martus-utils').packages.first)
 	package(:jar).merge(project('martus-hrdag').packages.first)
 	package(:jar).merge(project('martus-logi').packages.first)
 	package(:jar).merge(project('martus-swing').packages.first)
+	package(:jar).merge(project('martus-amplifier').packages.first)
 
 end
