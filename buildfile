@@ -1,5 +1,6 @@
 repositories.remote << 'http://www.ibiblio.org/maven2/'
 repositories.remote << 'http://ftp.cica.es/mirrors/maven2'
+repositories.remote << 'http://download.java.net/maven/2'
 
 JUNIT_SPEC = 'junit:junit:jar:3.8.2'
 XMLRPC_SPEC = 'xmlrpc:xmlrpc:jar:1.2-b1'
@@ -11,7 +12,7 @@ JAVAX_SERVLET_SPEC = 'jetty:javax.servlet:jar:5.1.12'
 LUCENE_SPEC = 'lucene:lucene:jar:1.3-rc1'
 PERSIANCALENDAR_SPEC = 'com.ghasemkiani:persiancalendar:jar:2.1'
 BCPROV_SPEC = 'bouncycastle:bcprov-jdk14:jar:135'
-
+MAIL_SPEC = 'javax.mail:mail:jar:1.4.3'
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new
@@ -48,6 +49,7 @@ task :checkout do
 	cvs_checkout 'martus-jar-verifier'
 	cvs_checkout 'martus-clientside'
 	cvs_checkout 'martus-client'
+	cvs_checkout 'martus-mspa'
 	cvs_checkout 'martus-amplifier'
 	cvs_checkout 'martus-server'
 end
@@ -70,5 +72,6 @@ require 'buildfile-martus-js-xml-generator'
 require 'buildfile-martus-jar-verifier'
 require 'buildfile-martus-clientside'
 require 'buildfile-martus-client'
+require 'buildfile-martus-mspa'
 require 'buildfile-martus-amplifier'
 require 'buildfile-martus-server'
