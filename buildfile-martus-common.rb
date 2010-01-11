@@ -24,4 +24,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude 'org.martus.common.test.TestMartusSecurity'
 
 	package :jar
+
+	# NOTE: Old build script signed this jar
+
+	
 end

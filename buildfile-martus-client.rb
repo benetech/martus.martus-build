@@ -5,8 +5,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.version = '1'
 
 	main_source_dir = _('source', 'main', 'java')
-	test_source_dir = _('source', 'test', 'java')
 	main_target_dir = _('target', 'main', 'classes')
+	test_source_dir = _('source', 'test', 'java')
 	test_target_dir = _('target', 'test', 'classes')
 
 
@@ -55,5 +55,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).merge(project('martus-swing').packages.first)
 	package(:jar).merge(project('martus-clientside').packages.first)
 	package(:jar).merge(project('martus-js-xml-generator').packages.first)
+
+	# NOTE: Old build script signed this jar
 
 end
