@@ -25,6 +25,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		XMLRPC_SPEC,
 		ICU4J_SPEC
 	)
-	
-	package :jar
+
+	jar_name = _("#{name}/target/martus-mspa-client-#{project.version}.jar")
+	puts jar_name
+	package :jar, :file=>jar_name
+
+	# NOTE: Old build script signed this jar
+
 end
