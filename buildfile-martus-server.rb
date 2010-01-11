@@ -19,6 +19,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		XMLRPC_SPEC
 	)
 
+	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.server.main.MartusServer')
+
 	package(:jar).merge(project('martus-jar-verifier').packages.first)
 	package(:jar).merge(project('martus-common').packages.first)
 	package(:jar).merge(project('martus-utils').packages.first)

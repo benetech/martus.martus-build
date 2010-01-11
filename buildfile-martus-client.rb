@@ -47,6 +47,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		VELOCITY_DEP_SPEC
 	)
 
+	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
+
 	package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
 	package(:jar).merge(project('martus-jar-verifier').packages.first)
 	package(:jar).merge(project('martus-common').packages.first)
