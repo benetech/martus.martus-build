@@ -14,6 +14,8 @@ LUCENE_SPEC = 'lucene:lucene:jar:1.3-rc1'
 PERSIANCALENDAR_SPEC = 'com.ghasemkiani:persiancalendar:jar:2.1'
 BCPROV_SPEC = 'bouncycastle:bcprov-jdk14:jar:135'
 MAIL_SPEC = 'javax.mail:mail:jar:1.4.3'
+INFINITEMONKEY_JAR_SPEC = 'infinitemonkey:infinitemonkey:jar:1.0'
+INFINITEMONKEY_DLL_SPEC = 'infinitemonkey:infinitemonkey:dll:1.0'
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new

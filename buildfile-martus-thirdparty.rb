@@ -6,13 +6,13 @@ define "martus-thirdparty" do
 	end
 
 	def infinitemonkey_jar_artifact
-		infinite_monkey_jar_artifact_id = "infinitemonkey:infinitemonkey:jar:1.0"
+		infinite_monkey_jar_artifact_id = INFINITEMONKEY_JAR_SPEC
 		infinite_monkey_jar_file = file(_("common/InfiniteMonkey/bin/InfiniteMonkey.jar"))
 		return artifact(infinite_monkey_jar_artifact_id).from(infinite_monkey_jar_file)
 	end
 	
 	def infinitemonkey_dll_artifact
-		infinite_monkey_dll_artifact_id = "infinitemonkey:infinitemonkey:dll:1.0"
+		infinite_monkey_dll_artifact_id = INFINITEMONKEY_DLL_SPEC
 		infinite_monkey_dll_file = file(_("common/InfiniteMonkey/bin/infinitemonkey.dll"))
 		return artifact(infinite_monkey_dll_artifact_id).from(infinite_monkey_dll_file)
 	end
