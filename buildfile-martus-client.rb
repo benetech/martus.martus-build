@@ -43,7 +43,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	test.with(
 		ICU4J_SPEC,
-		BCPROV_SPEC
+		BCPROV_SPEC,
+		VELOCITY_DEP_SPEC
 	)
 
 	package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))

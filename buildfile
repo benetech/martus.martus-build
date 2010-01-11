@@ -7,6 +7,7 @@ XMLRPC_SPEC = 'xmlrpc:xmlrpc:jar:1.2-b1'
 ICU4J_SPEC = 'com.ibm.icu:icu4j:jar:3.4.4'
 LAYOUTS_SPEC = 'com.jhlabs:layouts:jar:2006-08-10'
 VELOCITY_SPEC = 'velocity:velocity:jar:1.4'
+VELOCITY_DEP_SPEC = 'velocity:velocity-dep:jar:1.4'
 JETTY_SPEC = 'jetty:jetty:jar:4.2.27'
 JAVAX_SERVLET_SPEC = 'jetty:javax.servlet:jar:5.1.12'
 LUCENE_SPEC = 'lucene:lucene:jar:1.3-rc1'
@@ -45,13 +46,17 @@ task :checkout do
 	cvs_checkout 'martus-utils'
 	cvs_checkout 'martus-swing'
 	cvs_checkout 'martus-common'
+
 	cvs_checkout 'martus-js-xml-generator'
 	cvs_checkout 'martus-jar-verifier'
 	cvs_checkout 'martus-clientside'
 	cvs_checkout 'martus-client'
 	cvs_checkout 'martus-mspa'
+
 	cvs_checkout 'martus-amplifier'
 	cvs_checkout 'martus-server'
+
+	cvs_checkout 'martus-meta'
 end
 
 define 'martus' do
@@ -71,7 +76,9 @@ require 'buildfile-martus-common'
 require 'buildfile-martus-js-xml-generator'
 require 'buildfile-martus-jar-verifier'
 require 'buildfile-martus-clientside'
+require 'buildfile-martus-mlp'
 require 'buildfile-martus-client'
 require 'buildfile-martus-mspa'
 require 'buildfile-martus-amplifier'
 require 'buildfile-martus-server'
+require 'buildfile-martus-meta'
