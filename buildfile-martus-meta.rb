@@ -15,6 +15,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-amplifier').packages.first
 	)
 
+	#TODO: Failing tests in Meta
 	# No point in executing TestMeta or TestMetaQuick since they
 	# just execute all the other tests anyway
 	test.exclude('org.martus.meta.TestMeta')
@@ -41,6 +42,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	package :jar
 
-	# NOTE: Old build script signed this jar
+	# TODO: Old build script signed this jar
 
 end

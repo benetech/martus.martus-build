@@ -30,7 +30,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	puts jar_name
 	package :jar, :file=>jar_name
 
-	# NOTE: Old build script signed this jar
+	# TODO: Old build script signed this jar
 
 	zip_name = _("#{name}/target/MartusMSPA.zip")
 	package :zip, :file=>zip_name
@@ -44,6 +44,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:zip).include(artifact(INFINITEMONKEY_JAR_SPEC))
 	package(:zip).include(project('martus-common').packages.first)
 	package(:zip).include(project('martus-bc-jce').packages.first)
+	#TODO: Add mspa client user guide to mspa client zip
 #	package(:zip).include(mspa client user guide)
 
 end

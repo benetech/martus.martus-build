@@ -59,6 +59,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).merge(project('martus-clientside').packages.first)
 	package(:jar).merge(project('martus-js-xml-generator').packages.first)
 
-	# NOTE: Old build script signed this jar
+	# TODO: Old build script signed this jar
 
 end

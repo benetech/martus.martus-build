@@ -84,3 +84,17 @@ require 'buildfile-martus-mspa'
 require 'buildfile-martus-amplifier'
 require 'buildfile-martus-server'
 require 'buildfile-martus-meta'
+
+require 'buildfile-martus-client-linux-zip'
+
+#TODO: Need to create Javaless NSIS installer
+#TODO: Need to upgrade to Java 6 runtime
+#TODO: Need to create NSIS installer
+#TODO: Need to create ISO image
+#TODO: Need to create Multi-part NSIS installer
+#TODO: Need to create source zips
+#TODO: Need to add third-party licenses
+#TODO: Need to make sure all built artifacts are archived
+#TODO: Need to "clean up" (unix2dos) all the txt files
+
+#TODO: Would be nice to create friendly Mac installer
