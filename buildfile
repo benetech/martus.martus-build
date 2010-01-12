@@ -39,6 +39,15 @@ def cvs_checkout(project)
 	end
 end
 
+def update_packaged_zip(package)
+	package.enhance do | task |
+		task.enhance do
+			yield package.name
+		end
+	end
+end
+
+
 task nil do
 end
 
@@ -88,8 +97,8 @@ require 'buildfile-martus-server'
 require 'buildfile-martus-meta'
 
 require 'buildfile-martus-client-linux-zip'
+require 'buildfile-martus-client-nsis-upgrade'
 
-#TODO: Need to use build numbers (from Hudson)
 #TODO: Need to create Javaless NSIS installer
 #TODO: Need to upgrade to Java 6 runtime
 #TODO: Need to create NSIS installer
@@ -99,5 +108,7 @@ require 'buildfile-martus-client-linux-zip'
 #TODO: Need to add third-party licenses
 #TODO: Need to make sure all built artifacts are archived
 #TODO: Need to "clean up" (unix2dos) all the txt files
+#TODO: Need to use build numbers (from Hudson) [DONE??]
+#TODO: Need to create amplifier tarball (build.xml#release)
 
 #TODO: Would be nice to create friendly Mac installer
