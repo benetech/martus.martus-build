@@ -26,7 +26,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ICU4J_SPEC
 	)
 
-	jar_name = _("#{name}/target/martus-mspa-client-#{project.version}.jar")
+	jar_name = _("#{name}/target/martus-mspa-client-#{$build_number}.jar")
 	puts jar_name
 	package :jar, :file=>jar_name
 

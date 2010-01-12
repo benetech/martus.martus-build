@@ -2,6 +2,8 @@ repositories.remote << 'http://www.ibiblio.org/maven2/'
 repositories.remote << 'http://ftp.cica.es/mirrors/maven2'
 repositories.remote << 'http://download.java.net/maven/2'
 
+$build_number = ENV['BUILD_NUMBER'] || 'TEST'
+
 JUNIT_SPEC = 'junit:junit:jar:3.8.2'
 XMLRPC_SPEC = 'xmlrpc:xmlrpc:jar:1.2-b1'
 ICU4J_SPEC = 'com.ibm.icu:icu4j:jar:3.4.4'
@@ -87,6 +89,7 @@ require 'buildfile-martus-meta'
 
 require 'buildfile-martus-client-linux-zip'
 
+#TODO: Need to use build numbers (from Hudson)
 #TODO: Need to create Javaless NSIS installer
 #TODO: Need to upgrade to Java 6 runtime
 #TODO: Need to create NSIS installer
