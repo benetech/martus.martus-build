@@ -52,7 +52,7 @@ def unzip_file (file, destination)
 		zip_file.each do |f|
 			f_path=File.join(destination, f.name)
 			FileUtils.mkdir_p(File.dirname(f_path))
-			if File.exist?(f_path)
+			if File.exist?(f_path) && !File.directory?(f_path)
 				raise "Can't overwrite #{f_path}"
 			end
 			zip_file.extract(f, f_path) 
