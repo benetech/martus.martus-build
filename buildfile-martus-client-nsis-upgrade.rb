@@ -6,18 +6,19 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	package(:zip).include(_('BuildFiles/*.txt'), :path=>'BuildFiles')
 
-	# Need to include SourceFiles
+	#TODO: Need to include SourceFiles
 	package(:zip).include(_('BuildFiles/Windows/Winsock95'), :path=>'BuildFiles/Verifier')
 	package(:zip).include(_('martus-jar-verifier/*.txt'), :path=>'BuildFiles/Verifier')
 	package(:zip).include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/Verifier')
 	package(:zip).include(_('martus-jar-verifier/source'), :path=>'BuildFiles/Verifier')
-	# Need to include MartusWin32SetupLauncher?
+	#TODO: Need to include MartusWin32SetupLauncher?
 	package(:zip).include(_('BuildFiles/ProgramFiles'), :path=>'BuildFiles')
 	package(:zip).include(_('BuildFiles/SampleDir'), :path=>'BuildFiles')
-	# Need to include MartusSetupLauncher?
+	#TODO: Need to include MartusSetupLauncher?
 
 	#TODO: Should we really include the MSPA zip?
 	package(:zip).include(_('martus-mspa/target/MartusMSPA.zip'), :path=>'BuildFiles/Jars')
+	
 	package(:zip).include(project('martus-bc-jce').package(:jar), :path=>'BuildFiles/Jars')
 	package(:zip).include(artifact(RHINO_SPEC), :path=>'BuildFiles/Jars')
 	package(:zip).include(artifact(LAYOUTS_SPEC), :path=>'BuildFiles/Jars')
