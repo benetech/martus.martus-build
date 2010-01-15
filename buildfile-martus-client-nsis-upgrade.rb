@@ -4,9 +4,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
 	project.version = '1'
 
+	package(:zip).include(project('martus-client').package(:sources), :path=>'BuildFiles')
 	package(:zip).include(_('BuildFiles/*.txt'), :path=>'BuildFiles')
 
-	#TODO: Need to include SourceFiles
+	#TODO: Need to include SourceFiles directory
 	package(:zip).include(_('BuildFiles/Windows/Winsock95'), :path=>'BuildFiles/Verifier')
 	package(:zip).include(_('martus-jar-verifier/*.txt'), :path=>'BuildFiles/Verifier')
 	package(:zip).include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/Verifier')
@@ -32,7 +33,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:zip).include(artifact(XMLRPC_SPEC), :path=>'BuildFiles/Jars')
 	package(:zip).include(_('BuildFiles/JavaRedistributables/Win32'), :path=>'BuildFiles/Java redist/Win32')
 	package(:zip).include(_('BuildFiles/Documents'), :path=>'BuildFiles')
-	# Need to include Documents/Licenses
+
+	# Need to include ALL of the Documents/Licenses, not just one
+	package(:zip).include(artifact(BCPROV_LICENSE_SPEC), :path=>'BuildFiles/Documents/Licenses')
 
 	package(:zip).include(artifact(INFINITEMONKEY_DLL_SPEC), :path=>'BuildFiles/ProgramFiles')
 	package(:zip).include(project('martus-client').package(:jar), :path=>'BuildFiles/ProgramFiles', :as=>'martus.jar')
@@ -47,10 +50,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		
 		error_output = `makensis -V2 #{_(:target, '/Installer/Win32_NSIS/NSIS_Martus_Upgrade.nsi')}`
 		status = $?
-		if error_output.size > 0
+		if status.exitstatus > 0
 			raise "Error running makensis #{status.exitstatus}: #{error_output.split("\n").join("\n  ")}"
 		end
 		puts 'Finished makensis'
+		mv _(:target, 'Installer/Win32_NSIS/MartusSetupUpgrade.exe'), _(:target, 'MartusSetupUpgrade.exe')
 	end
 end
 

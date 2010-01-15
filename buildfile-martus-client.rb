@@ -61,4 +61,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	# TODO: Old build script signed this jar
 
+	#TODO: Merge in source code from sub-projects
+	package(:sources)
+
 end
