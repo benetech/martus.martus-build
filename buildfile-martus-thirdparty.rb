@@ -30,7 +30,7 @@ define "martus-thirdparty" do
 	end
 	
 	def rhino_artifact
-		js_jar_artifact_id = "org.mozilla.rhino:js:jar:2006-03-08"
+		js_jar_artifact_id = RHINO_SPEC
 		js_jar_file = file(_("client/RhinoJavaScript/bin/js.jar"))
 		return artifact(js_jar_artifact_id).from(js_jar_file)
 	

@@ -4,6 +4,8 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $build_number = ENV['BUILD_NUMBER'] || 'TEST'
 
+ANT_SPEC = 'ant:ant:jar:1.6.2'				# should switch to org.apache.ant
+ANT_JUNIT_SPEC = 'ant:ant-junit:jar:1.6.2'	# should switch to org.apache.ant
 JUNIT_SPEC = 'junit:junit:jar:3.8.2'
 XMLRPC_SPEC = 'xmlrpc:xmlrpc:jar:1.2-b1'
 ICU4J_SPEC = 'com.ibm.icu:icu4j:jar:3.4.4'
@@ -18,6 +20,7 @@ BCPROV_SPEC = 'bouncycastle:bcprov-jdk14:jar:135'
 MAIL_SPEC = 'javax.mail:mail:jar:1.4.3'
 INFINITEMONKEY_JAR_SPEC = 'infinitemonkey:infinitemonkey:jar:1.0'
 INFINITEMONKEY_DLL_SPEC = 'infinitemonkey:infinitemonkey:dll:1.0'
+RHINO_SPEC = 'org.mozilla.rhino:js:jar:2006-03-08'
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new

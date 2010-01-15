@@ -18,7 +18,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	)
   
 	build do
-		filter(_(:root, 'presentation')).into(_('target', 'presentation')).run
 		from_dir = _(:source, :main, :java)
 		to_dir = _(:target, :main, :classes)
 		puts "From: #{from_dir} to #{to_dir}"
@@ -30,6 +29,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	)
 
 	package :jar
+	package(:jar).include(_(:root, 'presentation'), :path=>'www/MartusAmplifier')
+	package(:jar).include(_(:root, 'presentationNonSSL'), :path=>'www/MartusAmplifier')
+	
 
 	# TODO: Old build script signed this jar
 
