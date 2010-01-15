@@ -16,4 +16,5 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	end
   
 	package :jar
+	package :sources
 end

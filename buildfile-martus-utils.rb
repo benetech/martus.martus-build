@@ -14,4 +14,5 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude 'org.martus.util.TestCaseEnhanced'
 	
 	package :jar
+	package :sources
 end

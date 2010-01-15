@@ -32,6 +32,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	# TODO: Old build script signed this jar
 
+	# TODO: Probably need to create a sources zip,
+	# which will probably mean pulling the zip creation out to its own buildfile
+	# (which probably makes sense anyway)
+#	package :sources 
+
 	zip_name = _("#{name}/target/MartusMSPA.zip")
 	package :zip, :file=>zip_name
 	package(:zip).include(jar_name)
@@ -42,8 +47,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:zip).include(artifact(LAYOUTS_SPEC))
 	package(:zip).include(artifact(INFINITEMONKEY_DLL_SPEC))
 	package(:zip).include(artifact(INFINITEMONKEY_JAR_SPEC))
-	package(:zip).include(project('martus-common').packages.first)
-	package(:zip).include(project('martus-bc-jce').packages.first)
+	package(:zip).include(project('martus-common').package(:jar))
+	package(:zip).include(project('martus-bc-jce').package(:jar))
 	#TODO: Add mspa client user guide to mspa client zip
 #	package(:zip).include(mspa client user guide)
 

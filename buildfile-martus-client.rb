@@ -50,18 +50,26 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
 
 	package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
-	package(:jar).merge(project('martus-jar-verifier').packages.first)
-	package(:jar).merge(project('martus-common').packages.first)
-	package(:jar).merge(project('martus-utils').packages.first)
-	package(:jar).merge(project('martus-hrdag').packages.first)
-	package(:jar).merge(project('martus-logi').packages.first)
-	package(:jar).merge(project('martus-swing').packages.first)
-	package(:jar).merge(project('martus-clientside').packages.first)
-	package(:jar).merge(project('martus-js-xml-generator').packages.first)
+	package(:jar).merge(project('martus-jar-verifier').package(:jar))
+	package(:jar).merge(project('martus-common').package(:jar))
+	package(:jar).merge(project('martus-utils').package(:jar))
+	package(:jar).merge(project('martus-hrdag').package(:jar))
+	package(:jar).merge(project('martus-logi').package(:jar))
+	package(:jar).merge(project('martus-swing').package(:jar))
+	package(:jar).merge(project('martus-clientside').package(:jar))
+	package(:jar).merge(project('martus-js-xml-generator').package(:jar))
 
 	# TODO: Old build script signed this jar
 
-	#TODO: Merge in source code from sub-projects
 	package(:sources)
+	package(:sources).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
+	package(:sources).merge(project('martus-jar-verifier').package(:sources))
+	package(:sources).merge(project('martus-common').package(:sources))
+	package(:sources).merge(project('martus-utils').package(:sources))
+	package(:sources).merge(project('martus-hrdag').package(:sources))
+	package(:sources).merge(project('martus-logi').package(:sources))
+	package(:sources).merge(project('martus-swing').package(:sources))
+	package(:sources).merge(project('martus-clientside').package(:sources))
+	package(:sources).merge(project('martus-js-xml-generator').package(:sources))
 
 end
