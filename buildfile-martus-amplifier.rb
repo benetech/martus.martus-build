@@ -20,7 +20,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	build do
 		from_dir = _(:source, :main, :java)
 		to_dir = _(:target, :main, :classes)
-		puts "From: #{from_dir} to #{to_dir}"
+		#puts "Amplifier copying from: #{from_dir} to #{to_dir}"
 		filter(from_dir).include('**/*.txt').into(to_dir).run
 	end
 	
