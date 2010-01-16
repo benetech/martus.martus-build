@@ -115,6 +115,7 @@ require 'buildfile-martus-meta'
 
 require 'buildfile-martus-client-linux-zip'
 require 'buildfile-martus-client-nsis-upgrade'
+require 'buildfile-martus-client-nsis-single'
 
 #TODO: Need to include MartusSetupLauncher?
 #TODO: Need to create Javaless NSIS installer
