@@ -116,6 +116,8 @@ require 'buildfile-martus-meta'
 require 'buildfile-martus-client-linux-zip'
 require 'buildfile-martus-client-nsis-upgrade'
 require 'buildfile-martus-client-nsis-single'
+require 'buildfile-martus-client-nsis-cd'
+require 'buildfile-martus-client-iso'
 
 #TODO: Need to set up proper dependency chains
 #TODO: Need to include MartusSetupLauncher?
