@@ -18,8 +18,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:zip).include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'LibExt')
 	package(:zip).include(artifact(JUNIT_SPEC), :path=>'LibExt')
 	package(:zip).include(artifact(XMLRPC_SPEC), :path=>'LibExt')
+	package(:zip).include(project('martus-client').package(:source))
 #TODO: Add files to Mac/Linux zip
-#	package(:zip).include(client source zip)
 #	package(:zip).include(docs)
 #	package(:zip).include(licenses)
 	
