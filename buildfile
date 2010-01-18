@@ -4,8 +4,8 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $build_number = ENV['BUILD_NUMBER'] || 'TEST'
 
-ANT_SPEC = 'ant:ant:jar:1.6.2'				# should switch to org.apache.ant
-ANT_JUNIT_SPEC = 'ant:ant-junit:jar:1.6.2'	# should switch to org.apache.ant
+ANT_SPEC = 'ant:ant:jar:1.6.2'				#TODO: should switch to org.apache.ant
+ANT_JUNIT_SPEC = 'ant:ant-junit:jar:1.6.2'	#TODO: should switch to org.apache.ant
 JUNIT_SPEC = 'junit:junit:jar:3.8.2'
 XMLRPC_SPEC = 'xmlrpc:xmlrpc:jar:1.2-b1'
 ICU4J_SPEC = 'com.ibm.icu:icu4j:jar:3.4.4'
@@ -117,17 +117,15 @@ require 'buildfile-martus-client-linux-zip'
 require 'buildfile-martus-client-nsis-upgrade'
 require 'buildfile-martus-client-nsis-single'
 
+#TODO: Need to set up proper dependency chains
 #TODO: Need to include MartusSetupLauncher?
-#TODO: Need to create Javaless NSIS installer
 #TODO: Need to upgrade to Java 6 runtime
-#TODO: Need to create NSIS installer
 #TODO: Need to create ISO image
 #TODO: Need to create Multi-part NSIS installer
-#TODO: Need to create source zips
-#TODO: Need to add third-party licenses
 #TODO: Need to make sure all built artifacts are archived
 #TODO: Need to "clean up" (unix2dos) all the txt files
 #TODO: Need to use build numbers (from Hudson) [DONE??]
 #TODO: Need to create amplifier tarball (build.xml#release)
+#TODO: Maybe need to create 'clean' targets everywhere
 
 #TODO: Would be nice to create friendly Mac installer

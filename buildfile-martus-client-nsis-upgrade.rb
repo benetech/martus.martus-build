@@ -34,7 +34,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:zip).include(_('BuildFiles/JavaRedistributables/Win32'), :path=>'BuildFiles/Java redist/Win32')
 	package(:zip).include(_('BuildFiles/Documents'), :path=>'BuildFiles')
 
-	# Need to include ALL of the Documents/Licenses, not just one
+	#TODO: Need to include ALL of the Documents/Licenses, not just one
 	package(:zip).include(artifact(BCPROV_LICENSE_SPEC), :path=>'BuildFiles/Documents/Licenses')
 
 	package(:zip).include(artifact(INFINITEMONKEY_DLL_SPEC), :path=>'BuildFiles/ProgramFiles')
