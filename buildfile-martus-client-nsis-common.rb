@@ -40,6 +40,7 @@ def define_nsis(nsi_name, exe_name)
 
 	update_packaged_zip(package(:zip)) do | filespec |
 		dest_dir = File.join(File.dirname(filespec), 'Installer')
+		dir.rmrf dest_dir
 		Dir.mkdir(dest_dir)
 		unzip_file(filespec, dest_dir)
 		
