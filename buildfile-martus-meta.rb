@@ -15,17 +15,16 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-amplifier').packages.first
 	)
 
-	#TODO: Failing tests in Meta
-	# No point in executing TestMeta or TestMetaQuick since they
+	#TODO: No point in executing TestMeta or TestMetaQuick since they
 	# just execute all the other tests anyway
 	test.exclude('org.martus.meta.TestMeta')
 	test.exclude('org.martus.meta.TestMetaQuick')
 
-	# This test fails due to a hard-coded Windows filename in
+	#TODO: Test Failure: This test fails due to a hard-coded Windows filename in
 	# /martus-js-xml-generator/source/org/martus/martusjsxmlgenerator/text_finalResultWithAttachments.xml
 	test.exclude('org.martus.martusjsxmlgenerator.TestImportCSV')
 
-	# Not sure why these tests fail
+	#TODO: Test Failures: Not sure why these tests fail
 	test.exclude('org.martus.meta.TestHeadQuartersTableModelConfiguration')
 	test.exclude('org.martus.meta.TestHeadQuartersTableModelEdit')
 	test.exclude('org.martus.meta.TestRetrieveHQTableModel')

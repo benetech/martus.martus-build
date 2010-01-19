@@ -16,7 +16,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	)
 
 
-	#TODO: The following test fails on Linux because:
+	#TODO: Test Failure: The following test fails on Linux because:
 	#  1. It refers to a relative path instead of absolute, and
 	#  2. There is a permissions error which I don't understand
 	test.exclude 'org.martus.mspa.roothelper.TestProcessStdinStdOut'
