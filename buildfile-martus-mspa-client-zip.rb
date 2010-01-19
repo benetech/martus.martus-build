@@ -16,7 +16,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:zip).include(project('martus-common').package(:jar))
 	package(:zip).include(project('martus-bc-jce').package(:jar))
 	package(:zip).include(project('martus-mspa').package(:jar))
-	#TODO: Add mspa client user guide to mspa client zip
+	#TODO: I can't find binary-martus/Installer/mspa_user_guide.pdf
 #	package(:zip).include(mspa client user guide)
 	#TODO: Should mspa zip include all source code too?
 	
