@@ -4,24 +4,95 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $build_number = ENV['BUILD_NUMBER'] || 'TEST'
 
-ANT_SPEC = 'ant:ant:jar:1.6.2'				#TODO: should switch to org.apache.ant
-ANT_JUNIT_SPEC = 'ant:ant-junit:jar:1.6.2'	#TODO: should switch to org.apache.ant
-JUNIT_SPEC = 'junit:junit:jar:3.8.2'
-XMLRPC_SPEC = 'xmlrpc:xmlrpc:jar:1.2-b1'
-ICU4J_SPEC = 'com.ibm.icu:icu4j:jar:3.4.4'
-LAYOUTS_SPEC = 'com.jhlabs:layouts:jar:2006-08-10'
-VELOCITY_SPEC = 'velocity:velocity:jar:1.4'
-VELOCITY_DEP_SPEC = 'velocity:velocity-dep:jar:1.4'
-JETTY_SPEC = 'jetty:jetty:jar:4.2.27'
-JAVAX_SERVLET_SPEC = 'jetty:javax.servlet:jar:5.1.12'
-LUCENE_SPEC = 'lucene:lucene:jar:1.3-rc1'
-PERSIANCALENDAR_SPEC = 'com.ghasemkiani:persiancalendar:jar:2.1'
-BCPROV_SPEC = 'bouncycastle:bcprov-jdk14:jar:135'
-BCPROV_LICENSE_SPEC = 'bouncycastle:bcprov-jdk14:license:135'
-MAIL_SPEC = 'javax.mail:mail:jar:1.4.3'
-INFINITEMONKEY_JAR_SPEC = 'infinitemonkey:infinitemonkey:jar:1.0'
-INFINITEMONKEY_DLL_SPEC = 'infinitemonkey:infinitemonkey:dll:1.0'
-RHINO_SPEC = 'org.mozilla.rhino:js:jar:2006-03-08'
+def build_spec(group, name, type, version)
+	return "#{group}:#{name}:#{type}:#{version}"
+end
+
+def build_ant_spec(type)
+	#TODO: should switch to org.apache.ant
+	return build_spec('ant', 'ant', type, '1.6.2')
+end
+
+def build_ant_junit_spec(type)
+	#TODO: should switch to org.apache.ant
+	return build_spec('ant', 'ant-junit', type, '1.6.2')
+end
+
+def build_junit_spec(type)
+	return build_spec('junit', 'junit', type, '3.8.2')
+end
+
+def build_xmlrpc_spec(type)
+	return build_spec('xmlrpc', 'xmlrpc', type, '1.2-b1')
+end
+
+def build_icu4j_spec(type)
+	return build_spec('com.ibm.icu', 'icu4j', type, '3.4.4')
+end
+
+def build_layouts_spec(type)
+	return build_spec('com.jhlabs', 'layouts', type, '2006-08-10')
+end
+
+def build_velocity_spec(type)
+	return build_spec('velocity', 'velocity', type, '1.4')
+end
+
+def build_velocity_dep_spec(type)
+	return build_spec('velocity', 'velocity-dep', type, '1.4')
+end
+
+def build_jetty_spec(type)
+	return build_spec('jetty', 'jetty', type, '4.2.27')
+end
+
+def build_javax_servlet_spec(type)
+	return build_spec('jetty', 'javax.servlet', type, '5.1.12')
+end
+
+def build_lucene_spec(type)
+	return build_spec('lucene', 'lucene', type, '1.3-rc1')
+end
+
+def build_persiancalendar_spec(type)
+	return build_spec('com.ghasemkiani', 'persiancalendar', type, '2.1')
+end
+
+def build_bcprov_spec(type)
+	return build_spec('bouncycastle', 'bcprov-jdk14', type, '135')
+end
+
+def build_mail_spec(type)
+	return build_spec('javax.mail', 'mail', type, '1.4.3')
+end
+
+def build_infinitemonkey_spec(type)
+	return build_spec('infinitemonkey', 'infinitemonkey', type, '1.0')
+end
+
+def build_rhino_spec(type)
+	return build_spec('org.mozilla.rhino', 'js', type, '2006-03-08')
+end
+
+
+ANT_SPEC = build_ant_spec('jar')
+ANT_JUNIT_SPEC = build_ant_junit_spec('jar')
+JUNIT_SPEC = build_junit_spec('jar')
+XMLRPC_SPEC = build_xmlrpc_spec('jar')
+ICU4J_SPEC = build_icu4j_spec('jar')
+LAYOUTS_SPEC = build_layouts_spec('jar')
+VELOCITY_SPEC = build_velocity_spec('jar')
+VELOCITY_DEP_SPEC = build_velocity_dep_spec('jar')
+JETTY_SPEC = build_jetty_spec('jar')
+JAVAX_SERVLET_SPEC = build_javax_servlet_spec('jar')
+LUCENE_SPEC = build_lucene_spec('jar')
+PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
+BCPROV_SPEC = build_bcprov_spec('jar')
+BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
+MAIL_SPEC = build_mail_spec('jar')
+INFINITEMONKEY_JAR_SPEC = build_infinitemonkey_spec('jar')
+INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
+RHINO_SPEC = build_rhino_spec('jar')
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new
