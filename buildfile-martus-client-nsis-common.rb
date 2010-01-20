@@ -15,16 +15,15 @@ def define_nsis(nsi_name, exe_name)
 	#TODO: Should we really include the MSPA zip?
 	package(:zip).include(_('martus-mspa/target/MartusMSPA.zip'), :path=>'BuildFiles/Jars')
 
-	package(:zip).include(project('martus-bc-jce').package(:jar), :path=>'BuildFiles/Jars')
+	package_artifacts(package(:zip), [project('martus-bc-jce').package(:jar)], 'BuildFiles/Jars')
 	package_artifacts(package(:zip), third_party_client_jars, 'BuildFiles/Jars')	
-
-	package(:zip).include(_('BuildFiles/JavaRedistributables/Win32'), :path=>'BuildFiles/Java redist/Win32')
-	package(:zip).include(_('BuildFiles/Documents'), :path=>'BuildFiles')
+	package_artifacts(package(:zip), [_('BuildFiles/JavaRedistributables/Win32')], 'BuildFiles/Java redist/Win32')
+	package_artifacts(package(:zip), [_('BuildFiles/Documents')], 'BuildFiles')
 
 	# Need to include ALL of the Documents/Licenses, not just one
 	package(:zip).include(artifact(BCPROV_LICENSE_SPEC), :path=>'BuildFiles/Documents/Licenses')
 
-	package(:zip).include(artifact(INFINITEMONKEY_DLL_SPEC), :path=>'BuildFiles/ProgramFiles')
+	package_artifacts(package(:zip), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
 	package(:zip).include(project('martus-client').package(:jar), :path=>'BuildFiles/ProgramFiles', :as=>'martus.jar')
 
 	package(:zip).include(_('BuildFiles/Windows/Win32_NSIS'))
