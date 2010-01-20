@@ -1,57 +1,45 @@
+def jar_file(project_name, directory, jar_name)
+	return file(_(project_name, "#{directory}/bin/#{jar_name}"))
+end
+
+def license_file(project_name, directory, license_name)
+	return file(_(project_name, "#{directory}/license/#{license_name}"))
+end
+
 define "martus-thirdparty" do
-	def bouncycastle_artifact
-		bouncycastle_jar_artifact_id = BCPROV_SPEC
-		bouncycastle_jar_file = file(_(name, "libext/BouncyCastle/bin/bcprov-jdk14-135.jar"))
-		return artifact(bouncycastle_jar_artifact_id).from(bouncycastle_jar_file)
-	end
-
-	def bouncycastle_license_artifact
-		bouncycastle_jar_artifact_id = BCPROV_LICENSE_SPEC
-		bouncycastle_jar_file = file(_(name, "libext/BouncyCastle/license/LICENSE.html"))
-		return artifact(bouncycastle_jar_artifact_id).from(bouncycastle_jar_file)
-	end
-
-	def infinitemonkey_jar_artifact
-		infinite_monkey_jar_artifact_id = INFINITEMONKEY_JAR_SPEC
-		infinite_monkey_jar_file = file(_(name, "common/InfiniteMonkey/bin/InfiniteMonkey.jar"))
-		return artifact(infinite_monkey_jar_artifact_id).from(infinite_monkey_jar_file)
-	end
-	
-	def infinitemonkey_dll_artifact
-		infinite_monkey_dll_artifact_id = INFINITEMONKEY_DLL_SPEC
-		infinite_monkey_dll_file = file(_(name, "common/InfiniteMonkey/bin/infinitemonkey.dll"))
-		return artifact(infinite_monkey_dll_artifact_id).from(infinite_monkey_dll_file)
-	end
-	
-	def persiancalendar_artifact
-		persian_calendar_jar_artifact_id = PERSIANCALENDAR_SPEC
-		persian_calendar_jar_file = file(_(name, "common/PersianCalendar/bin/persiancalendar.jar"))
-		return artifact(persian_calendar_jar_artifact_id).from(persian_calendar_jar_file)
-	end
-	
-	def layouts_artifact
-		layouts_jar_artifact_id = LAYOUTS_SPEC
-		layouts_jar_file = file(_(name, "client/jhlabs/bin/layouts.jar"))
-		return artifact(layouts_jar_artifact_id).from(layouts_jar_file)
-	end
-	
-	def rhino_artifact
-		js_jar_artifact_id = RHINO_SPEC
-		js_jar_file = file(_(name, "client/RhinoJavaScript/bin/js.jar"))
-		return artifact(js_jar_artifact_id).from(js_jar_file)
-	
-	end
-
 	install do
 		puts "Installing martus-thirdparty"
 	end
-	
-	install bouncycastle_artifact
-	install bouncycastle_license_artifact
-	install infinitemonkey_jar_artifact
-	install infinitemonkey_dll_artifact
-	install persiancalendar_artifact
-	install layouts_artifact
-	install rhino_artifact
 
+	#libext
+	install artifact(BCPROV_SPEC).from(jar_file(name, 'libext/BouncyCastle', 'bcprov-jdk14-135.jar'))
+	install artifact(BCPROV_LICENSE_SPEC).from(license_file(name, 'libext/BouncyCastle', 'LICENSE.html'))
+
+	#common
+	install artifact(INFINITEMONKEY_JAR_SPEC).from(jar_file(name, 'common/InfiniteMonkey', 'InfiniteMonkey.jar'))
+	install artifact(INFINITEMONKEY_DLL_SPEC).from(jar_file(name, 'common/InfiniteMonkey', 'infinitemonkey.dll'))
+	install artifact(INFINITEMONKEY_LICENSE_SPEC).from(license_file(name, 'common/InfiniteMonkey', 'license.txt'))
+	install artifact(PERSIANCALENDAR_SPEC).from(jar_file(name, 'common/PersianCalendar', 'persiancalendar.jar'))
+	install artifact(PERSIANCALENDAR_LICENSE_SPEC).from(license_file(name, 'common/PersianCalendar', 'gpl.txt'))
+
+	#client
+	install artifact(LAYOUTS_SPEC).from(jar_file(name, 'client/jhlabs', 'layouts.jar'))
+	install artifact(LAYOUTS_LICENSE_SPEC).from(license_file(name, 'client/jhlabs', 'LICENSE.TXT'))
+	install artifact(RHINO_SPEC).from(jar_file(name, 'client/RhinoJavaScript', 'js.jar'))
+	install artifact(RHINO_LICENSE_SPEC).from(license_file(name, 'client/RhinoJavaScript', 'license.txt'))
+
+	#TODO: Need to include license files for jars pulled from maven repositories
+	# fonts
+	# installer
+	# Sun Java
+	# Ant
+	# Logi
+	install artifact(VELOCITY_LICENSE_SPEC).from(license_file(name, 'common/Velocity', 'LICENSE.txt'))
+	install artifact(VELOCITY_DEP_LICENSE_SPEC).from(license_file(name, 'common/Velocity', 'LICENSE.txt'))
+	install artifact(XMLRPC_LICENSE_SPEC).from(license_file(name, 'common/XMLRPC', 'LICENSE.txt'))
+	install artifact(JUNIT_LICENSE_SPEC).from(license_file(name, 'libext/JUnit', 'cpl-v10.html'))
+	install artifact(ICU4J_LICENSE_SPEC).from(license_file(name, 'common/PersianCalendar', 'icu4j_3_2_license.html'))
+	# Jetty
+	# Lucene
+	
 end

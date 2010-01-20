@@ -78,23 +78,38 @@ end
 
 
 ANT_SPEC = build_ant_spec('jar')
+ANT_LICENSE_SPEC = build_ant_spec('license')
 ANT_JUNIT_SPEC = build_ant_junit_spec('jar')
+ANT_JUNIT_LICENSE_SPEC = build_ant_junit_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
+JUNIT_LICENSE_SPEC = build_junit_spec('license')
 XMLRPC_SPEC = build_xmlrpc_spec('jar')
+XMLRPC_LICENSE_SPEC = build_xmlrpc_spec('license')
 ICU4J_SPEC = build_icu4j_spec('jar')
+ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
 LAYOUTS_SPEC = build_layouts_spec('jar')
+LAYOUTS_LICENSE_SPEC = build_layouts_spec('license')
 VELOCITY_SPEC = build_velocity_spec('jar')
+VELOCITY_LICENSE_SPEC = build_velocity_spec('license')
 VELOCITY_DEP_SPEC = build_velocity_dep_spec('jar')
+VELOCITY_DEP_LICENSE_SPEC = build_velocity_dep_spec('license')
 JETTY_SPEC = build_jetty_spec('jar')
+JETTY_LICENSE_SPEC = build_jetty_spec('license')
 JAVAX_SERVLET_SPEC = build_javax_servlet_spec('jar')
+JAVAX_SERVLET_LICENSE_SPEC = build_javax_servlet_spec('license')
 LUCENE_SPEC = build_lucene_spec('jar')
+LUCENE_LICENSE_SPEC = build_lucene_spec('license')
 PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
+PERSIANCALENDAR_LICENSE_SPEC = build_persiancalendar_spec('license')
 BCPROV_SPEC = build_bcprov_spec('jar')
 BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 MAIL_SPEC = build_mail_spec('jar')
+MAIL_LICENSE_SPEC = build_mail_spec('license')
 INFINITEMONKEY_JAR_SPEC = build_infinitemonkey_spec('jar')
 INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
+INFINITEMONKEY_LICENSE_SPEC = build_infinitemonkey_spec('license')
 RHINO_SPEC = build_rhino_spec('jar')
+RHINO_LICENSE_SPEC = build_rhino_spec('license')
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new
@@ -149,6 +164,21 @@ def third_party_client_jars
 	jars << artifact(VELOCITY_DEP_SPEC)
 	jars << artifact(INFINITEMONKEY_JAR_SPEC)
 	jars << artifact(XMLRPC_SPEC)
+	return jars
+end
+
+def third_party_client_jar_licenses
+	jars = []
+	jars << artifact(RHINO_LICENSE_SPEC)
+	jars << artifact(LAYOUTS_LICENSE_SPEC)
+	jars << artifact(BCPROV_LICENSE_SPEC)
+	jars << artifact(JUNIT_LICENSE_SPEC)
+	jars << artifact(ICU4J_LICENSE_SPEC)
+	jars << artifact(PERSIANCALENDAR_LICENSE_SPEC)
+	jars << artifact(VELOCITY_LICENSE_SPEC)
+	jars << artifact(VELOCITY_DEP_LICENSE_SPEC)
+	jars << artifact(INFINITEMONKEY_LICENSE_SPEC)
+	jars << artifact(XMLRPC_LICENSE_SPEC)
 	return jars
 end
 

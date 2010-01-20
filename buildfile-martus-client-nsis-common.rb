@@ -19,10 +19,7 @@ def define_nsis(nsi_name, exe_name)
 	package_artifacts(package(:zip), third_party_client_jars, 'BuildFiles/Jars')	
 	package_artifacts(package(:zip), [_('BuildFiles/JavaRedistributables/Win32')], 'BuildFiles/Java redist/Win32')
 	package_artifacts(package(:zip), [_('BuildFiles/Documents')], 'BuildFiles')
-
-	#TODO: Need to include all licenses (avoid dupe code with buildfile-martus-client-iso)
-	package(:zip).include(artifact(BCPROV_LICENSE_SPEC), :path=>'BuildFiles/Documents/Licenses')
-
+	package_artifacts(package(:zip), third_party_client_jar_licenses, 'BuildFiles/Documents/Licenses')
 	package_artifacts(package(:zip), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
 	package(:zip).include(project('martus-client').package(:jar), :path=>'BuildFiles/ProgramFiles', :as=>'martus.jar')
 

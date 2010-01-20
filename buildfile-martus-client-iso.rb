@@ -33,10 +33,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	end
 
 	package(:zip).include(_('BuildFiles', 'Documents', 'LinuxJavaInstall.txt'), :path=>'BuildFiles/Martus/Docs')
-
-	#TODO: Need to include all licenses (avoid dupe code with buildfile-martus-client-nsis-common)
-	package_artifacts(package(:zip), [artifact(BCPROV_LICENSE_SPEC)], 'BuildFiles/Martus/Docs')
-
+	package_artifacts(package(:zip), third_party_client_jar_licenses, 'BuildFiles/Martus/Docs')
 	package_artifacts(package(:zip), [project('martus-bc-jce').package(:jar)], 'BuildFiles/LibExt')
 	package_artifacts(package(:zip), third_party_client_jars, 'BuildFiles/LibExt')	
 	package_artifacts(package(:zip), [project('martus-client').package(:sources)], 'BuildFiles/Sources')
