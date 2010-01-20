@@ -8,14 +8,16 @@ def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"
 end
 
+ANT_VERSION = '1.6.2'
+
 def build_ant_spec(type)
-	#TODO: should switch to org.apache.ant
-	return build_spec('ant', 'ant', type, '1.6.2')
+	#TODO: eventually, should switch to org.apache.ant
+	return build_spec('ant', 'ant', type, ANT_VERSION)
 end
 
 def build_ant_junit_spec(type)
-	#TODO: should switch to org.apache.ant
-	return build_spec('ant', 'ant-junit', type, '1.6.2')
+	#TODO: eventually, should switch to org.apache.ant
+	return build_spec('ant', 'ant-junit', type, ANT_VERSION)
 end
 
 def build_junit_spec(type)
