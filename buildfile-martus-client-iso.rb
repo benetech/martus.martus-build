@@ -40,16 +40,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	#TODO: Code duplicated with buildfile-martus-client-nsis-common
 	package(:zip).include(project('martus-bc-jce').package(:jar), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(RHINO_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(LAYOUTS_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(BCPROV_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(JUNIT_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(ICU4J_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(PERSIANCALENDAR_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(VELOCITY_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(VELOCITY_DEP_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'BuildFiles/LibExt')
-	package(:zip).include(artifact(XMLRPC_SPEC), :path=>'BuildFiles/LibExt')
+	
+	package_artifacts(package(:zip), third_party_client_jars, 'BuildFiles/LibExt')	
 
 	package(:zip).include(project('martus-client').package(:sources), :path=>'BuildFiles/Sources')
 	

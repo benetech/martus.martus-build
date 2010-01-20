@@ -64,6 +64,26 @@ def unzip_file (file, destination)
 	end
 end
 
+def third_party_client_jars
+	jars = []
+	jars << artifact(RHINO_SPEC)
+	jars << artifact(LAYOUTS_SPEC)
+	jars << artifact(BCPROV_SPEC)
+	jars << artifact(JUNIT_SPEC)
+	jars << artifact(ICU4J_SPEC)
+	jars << artifact(PERSIANCALENDAR_SPEC)
+	jars << artifact(VELOCITY_SPEC)
+	jars << artifact(VELOCITY_DEP_SPEC)
+	jars << artifact(INFINITEMONKEY_JAR_SPEC)
+	jars << artifact(XMLRPC_SPEC)
+	return jars
+end
+
+def package_artifacts(target, artifacts, path)
+	artifacts.each do | artifact |
+		target.include(artifact, :path=>path)
+	end
+end
 
 task nil do
 end

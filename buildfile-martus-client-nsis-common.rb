@@ -14,18 +14,10 @@ def define_nsis(nsi_name, exe_name)
 
 	#TODO: Should we really include the MSPA zip?
 	package(:zip).include(_('martus-mspa/target/MartusMSPA.zip'), :path=>'BuildFiles/Jars')
-	
+
 	package(:zip).include(project('martus-bc-jce').package(:jar), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(RHINO_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(LAYOUTS_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(BCPROV_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(JUNIT_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(ICU4J_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(PERSIANCALENDAR_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(VELOCITY_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(VELOCITY_DEP_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'BuildFiles/Jars')
-	package(:zip).include(artifact(XMLRPC_SPEC), :path=>'BuildFiles/Jars')
+	package_artifacts(package(:zip), third_party_client_jars, 'BuildFiles/Jars')	
+
 	package(:zip).include(_('BuildFiles/JavaRedistributables/Win32'), :path=>'BuildFiles/Java redist/Win32')
 	package(:zip).include(_('BuildFiles/Documents'), :path=>'BuildFiles')
 
