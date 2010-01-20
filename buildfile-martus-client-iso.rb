@@ -35,18 +35,14 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	package(:zip).include(_('BuildFiles', 'Documents', 'LinuxJavaInstall.txt'), :path=>'BuildFiles/Martus/Docs')
 
-	#TODO: Code duplicated with buildfile-martus-client-nsis-common
-	package(:zip).include(artifact(BCPROV_LICENSE_SPEC), :path=>'BuildFiles/Martus/Docs')
+	#TODO: Need to include all licenses (avoid dupe code with buildfile-martus-client-nsis-common)
+	package_artifacts(package(:zip), [artifact(BCPROV_LICENSE_SPEC)], 'BuildFiles/Martus/Docs')
 
-	#TODO: Code duplicated with buildfile-martus-client-nsis-common
-	package(:zip).include(project('martus-bc-jce').package(:jar), :path=>'BuildFiles/LibExt')
-	
+	package_artifacts(package(:zip), [project('martus-bc-jce').package(:jar)], 'BuildFiles/LibExt')
 	package_artifacts(package(:zip), third_party_client_jars, 'BuildFiles/LibExt')	
-
-	package(:zip).include(project('martus-client').package(:sources), :path=>'BuildFiles/Sources')
-	
-	package(:zip).include(_('BuildFiles/JavaRedistributables/Linux'), :path=>'BuildFiles/Java redist/Linux')
-	package(:zip).include(project('martus-client-nsis-cd').path_to(:target, 'MartusSetup.exe'), :path=>'BuildFiles')
+	package_artifacts(package(:zip), [project('martus-client').package(:sources)], 'BuildFiles/Sources')
+	package_artifacts(package(:zip), [_('BuildFiles/JavaRedistributables/Linux')], 'BuildFiles/Java redist/Linux')
+	package_artifacts(package(:zip), [project('martus-client-nsis-cd').path_to(:target, 'MartusSetup.exe')], 'BuildFiles')
 
 	update_packaged_zip(package(:zip)) do | filespec |
 		dest_dir = File.join(File.dirname(filespec), 'iso')
