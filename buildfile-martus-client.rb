@@ -47,6 +47,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		VELOCITY_DEP_SPEC
 	)
 
+	test.exclude('org.martus.client.test.TestImporterOfXmlFilesOfBulletins')
+	test.exclude('org.martus.client.test.TestLocalization')
+	test.exclude('org.martus.client.test.TestMartusApp_NoServer')
+
+
 	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
 
 	package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
