@@ -188,6 +188,12 @@ def package_artifacts(target, artifacts, path)
 	end
 end
 
+def fix_newlines(files)
+	Dir.glob(files).each do | file |
+		`unix2dos #{file}`
+	end
+end
+
 task nil do
 end
 
@@ -213,8 +219,11 @@ task :checkout do
 end
 
 define 'martus' do
-	compile.with [
-		project('martus-common'),
-	]
+	build do
+		fix_newlines(_('BuildFiles', 'Documents', '*.txt'))
+		fix_newlines(_('BuildFiles', 'Windows', 'Winsock95', '*.txt'))
+		fix_newlines(project('martus-jar-verifier').path_to('*.txt'))
+		#TODO: Need to combine license+gpl to form combined license
+	end
 end
 	

@@ -29,7 +29,6 @@ require 'buildfile-martus-mspa-client-zip'
 #TODO: Need to upgrade to Java 6 runtime
 #TODO: Need to create Multi-part NSIS installer
 #TODO: Need to make sure all built artifacts are archived
-#TODO: Need to "clean up" (unix2dos) all the txt files
 #TODO: Need to use build numbers (from Hudson) [DONE??]
 #TODO: Need to create amplifier tarball (build.xml#release)
 #TODO: Maybe need to create 'clean' targets everywhere

@@ -50,4 +50,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		output = "-o #{_(:target)}/Martus-#{$build_number}.iso"
 		`mkisofs #{options} #{volume} #{output} #{dest_dir}`
 	end
+
+	#TODO: Need to generate SHA1?
 end
