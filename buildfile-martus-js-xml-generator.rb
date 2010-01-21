@@ -7,6 +7,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	compile.options.target = '1.5'
 	compile.with(
 		JUNIT_SPEC,
+		RHINO_SPEC,
 		project('martus-utils').packages.first,
 		project('martus-common').packages.first
 	)

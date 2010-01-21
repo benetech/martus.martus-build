@@ -1,3 +1,5 @@
+require 'fileutils'
+
 require 'buildfile-martus'
 
 require 'buildfile-martus-thirdparty'
