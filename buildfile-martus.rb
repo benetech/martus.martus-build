@@ -194,6 +194,16 @@ def fix_newlines(files)
 	end
 end
 
+def create_combined_license
+	martus_license = File.readlines(_('BuildFiles', 'Documents', 'license.txt'))
+	gpl = File.readlines(_('BuildFiles', 'Documents', 'gpl.txt'))
+	File.open(_('BuildFiles', 'combined-license.txt'), "w") do | out |
+		out.write(martus_license)
+		out.write("\n\n\t**********************************\n\n")
+		out.write(gpl)
+	end
+end
+
 task nil do
 end
 
@@ -220,10 +230,12 @@ end
 
 define 'martus' do
 	build do
+		create_combined_license
+	
+		fix_newlines(_('BuildFiles', '*.txt'))
 		fix_newlines(_('BuildFiles', 'Documents', '*.txt'))
 		fix_newlines(_('BuildFiles', 'Windows', 'Winsock95', '*.txt'))
 		fix_newlines(project('martus-jar-verifier').path_to('*.txt'))
-		#TODO: Need to combine license+gpl to form combined license
 	end
 end
 	
