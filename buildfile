@@ -32,7 +32,9 @@ require 'buildfile-martus-mspa-client-zip'
 #TODO: Need to create Multi-part NSIS installer
 #TODO: Need to make sure all built artifacts are archived
 #TODO: Need to use build numbers (from Hudson) [DONE??]
-#TODO: Need to create amplifier tarball (build.xml#release)
 #TODO: Maybe need to create 'clean' targets everywhere
 
 #TODO: Would be nice to create friendly Mac installer
+
+#NOTE: Old script created amplifier tarball (build.xml#release) but
+# Scott confirms it is not needed/used
