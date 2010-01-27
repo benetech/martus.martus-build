@@ -124,10 +124,10 @@ end
 
 def cvs_checkout(project)
 	if !system("cvs -d:ext:cvs.benetech.org/var/local/cvs co #{project}")
-		raise "Unable to check out #{project}"
+		raise "Unable to check out #{project} (#{$?})"
 	end
 	if $? != 0
-		raise "Error checking out #{project}"
+		raise "Error checking out #{project} (#{$?})"
 	end
 end
 
