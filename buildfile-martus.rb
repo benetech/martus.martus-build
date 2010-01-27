@@ -123,11 +123,9 @@ def create_layout_with_source_as_source(base)
 end
 
 def cvs_checkout(project)
-	if !system("cvs -d:ext:cvs.benetech.org/var/local/cvs co #{project}")
-		raise "Unable to check out #{project} (#{$?})"
-	end
+	output = `cvs -d:ext:cvs.benetech.org/var/local/cvs co #{project}`
 	if $? != 0
-		raise "Error checking out #{project} (#{$?})"
+		raise "Error checking out #{project} (#{$?}):\n#{output}"
 	end
 end
 
