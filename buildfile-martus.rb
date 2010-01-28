@@ -123,9 +123,19 @@ def create_layout_with_source_as_source(base)
 end
 
 def cvs_checkout(project)
-	output = `cvs -d:ext:cvs.benetech.org/var/local/cvs co #{project}`
+	cmd = "cvs -d:ext:cvs.benetech.org/var/local/cvs co #{project}"
+	IO.popen("#{cmd} 2>&1") do |pipe|
+		out_err = ''
+		while((line = pipe.gets))
+			puts line
+			out_err << line
+		end
+		if(pipe.closed? || pipe.eof?)
+			break
+		end
+	end
 	if $? != 0
-		raise "Error checking out #{project} (#{$?}):\n#{output}"
+		raise "Error checking out #{project} (#{$?}):#{outerr}"
 	end
 end
 
