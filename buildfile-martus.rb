@@ -1,5 +1,5 @@
 repositories.remote << 'http://www.ibiblio.org/maven2/'
-repositories.remote << 'http://ftp.cica.es/mirrors/maven2'
+repositories.remote << 'http://repo1.maven.org/maven2/'
 repositories.remote << 'http://download.java.net/maven/2'
 
 $build_number = ENV['BUILD_NUMBER'] || 'TEST'
