@@ -8,7 +8,12 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		#TODO: Run filesplit utility
 		# /MartusSetupLauncher/filesplit-2.0.100/bin/filesplit.exe
 		#TODO: Need to generate SHA1's of pieces
-		#TODO: Need to package up the piece restorer?
+
 	end
+
+	exe = project('martus')._('BuildFiles', 'MartusSetupLauncher', 'Release', 'MartusSetupBuilder.exe')
+	package(:zip).include(exe)
+	package(:zip).include(_(:target, '*.cnk'))
+	package(:zip).include(_(:target, '*.sha'))
 	
 end
