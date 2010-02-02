@@ -23,7 +23,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:zip).include(_('BuildFiles', 'Documents', 'martus_user_guide.pdf'), :path=>'BuildFiles/Martus/Docs')
 	package(:zip).include(_('BuildFiles', 'Documents', 'quickstartguide.pdf'), :path=>'BuildFiles/Martus/Docs')
 
-	# TODO: Ask Anna about missing 'fa' user documents
 	martus_languages = ['es','ru','ar','fr','th','ne']
 	martus_languages.each do | language |
 		package(:zip).include(_('BuildFiles', 'Documents', "README_#{language}.txt"), :path=>'BuildFiles')
