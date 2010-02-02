@@ -12,9 +12,6 @@ def define_nsis(nsi_name, exe_name)
 	package(:zip).include(_('BuildFiles/SampleDir'), :path=>'BuildFiles')
 	#TODO: Need to include MartusSetupLauncher?
 
-	#TODO: Should we really include the MSPA zip?
-	#package(:zip).include(_('martus-mspa/target/MartusMSPA.zip'), :path=>'BuildFiles/Jars')
-
 	package_artifacts(package(:zip), [project('martus-bc-jce').package(:jar)], 'BuildFiles/Jars')
 	package_artifacts(package(:zip), third_party_client_jars, 'BuildFiles/Jars')	
 	package_artifacts(package(:zip), [_('BuildFiles/JavaRedistributables/Win32')], 'BuildFiles/Java redist/Win32')
