@@ -6,8 +6,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	zip_name = _("target/MartusClient-#{$build_number}-MacLinux.zip")
 	package :zip, :file=>zip_name
-	#TODO: Do we really want to include Java for Linux here??
-	package(:zip).include(_("BuildFiles/JavaRedistributables/Linux"), :path=>'Java')
 	package(:zip).include(_("BuildFiles/Documents/installing_martus.txt"))
 	package(:zip).include(_("BuildFiles/Documents/license.txt"))
 	package(:zip).include(_("BuildFiles/Documents/README*.txt"))
