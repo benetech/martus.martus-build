@@ -4,7 +4,7 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $build_number = ENV['BUILD_NUMBER'] || 'TEST'
 
-$client_version = '3.3.2'
+$client_version = 'pre-3.4'
 
 def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"

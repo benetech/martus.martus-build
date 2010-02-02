@@ -29,10 +29,8 @@ require 'buildfile-martus-mspa-client-zip'
 
 #TODO: Need to set up proper dependency chains
 #TODO: Need to upgrade to Java 6 runtime
-#TODO: Need to create Multi-part NSIS installer
 #TODO: Need to make sure all built artifacts are archived
 #TODO: Need to use build numbers (from Hudson) [DONE??]
-#TODO: Maybe need to create 'clean' targets everywhere
 
 #TODO: Would be nice to create friendly Mac installer
 
