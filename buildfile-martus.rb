@@ -4,6 +4,8 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $build_number = ENV['BUILD_NUMBER'] || 'TEST'
 
+$client_version = '3.3.2'
+
 def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"
 end
@@ -110,6 +112,7 @@ INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
 INFINITEMONKEY_LICENSE_SPEC = build_infinitemonkey_spec('license')
 RHINO_SPEC = build_rhino_spec('jar')
 RHINO_LICENSE_SPEC = build_rhino_spec('license')
+MARTUSSETUP_EXE_SPEC = build_spec('org.martus', 'martus_setup', 'exe', $client_version)
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new
