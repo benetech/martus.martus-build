@@ -78,6 +78,9 @@ def build_rhino_spec(type)
 	return build_spec('org.mozilla.rhino', 'js', type, '2006-03-08')
 end
 
+def build_logi_spec(type)
+	return build_spec('org.logi', 'logi', type, '1.1.2')
+end
 
 ANT_SPEC = build_ant_spec('jar')
 ANT_LICENSE_SPEC = build_ant_spec('license')
@@ -112,6 +115,7 @@ INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
 INFINITEMONKEY_LICENSE_SPEC = build_infinitemonkey_spec('license')
 RHINO_SPEC = build_rhino_spec('jar')
 RHINO_LICENSE_SPEC = build_rhino_spec('license')
+LOGI_LICENSE_SPEC = build_logi_spec('license')
 MARTUSSETUP_EXE_SPEC = build_spec('org.martus', 'martus_setup', 'exe', $client_version)
 
 def create_layout_with_source_as_source(base)

@@ -21,6 +21,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #	package(:zip).include(docs)
 #TODO: Add third-party licenses to Mac/Linux zip
 #	package(:zip).include(licenses)
+	package(:zip).include(artifact(LOGI_LICENSE_SPEC), :path=>'licenses/logi')
 	
 
 end
