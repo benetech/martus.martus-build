@@ -53,6 +53,4 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 		sha(iso)
 	end
-
-	#TODO: Need to generate SHA1?
 end
