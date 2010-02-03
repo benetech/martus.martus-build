@@ -5,5 +5,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.version = '1'
 
 	#TODO: Need to generate MLP files
+	#TODO: Be sure Burmese MLP is included
 	#TODO: Each MLP jar needs to be signed
 end
