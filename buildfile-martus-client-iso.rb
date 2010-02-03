@@ -37,12 +37,12 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	zip(zip_file).include(_('BuildFiles', 'Documents', 'LinuxJavaInstall.txt'), :path=>'BuildFiles/Martus/Docs')
 
-	package_artifacts(zip(zip_file), third_party_client_jar_licenses, 'BuildFiles/Martus/Docs')
-	package_artifacts(zip(zip_file), [project('martus-bc-jce').package(:jar)], 'BuildFiles/LibExt')
-	package_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/LibExt')	
-	package_artifacts(zip(zip_file), [project('martus-client').package(:sources)], 'BuildFiles/Sources')
-	package_artifacts(zip(zip_file), [_('BuildFiles/JavaRedistributables/Linux')], 'BuildFiles/Java redist/Linux')
-	package_artifacts(zip(zip_file), [project('martus-client-nsis-cd').path_to(:target, 'MartusSetup.exe')], 'BuildFiles')
+	include_artifacts(zip(zip_file), third_party_client_jar_licenses, 'BuildFiles/Martus/Docs')
+	include_artifacts(zip(zip_file), [project('martus-bc-jce').package(:jar)], 'BuildFiles/LibExt')
+	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/LibExt')	
+	include_artifacts(zip(zip_file), [project('martus-client').package(:sources)], 'BuildFiles/Sources')
+	include_artifacts(zip(zip_file), [_('BuildFiles/JavaRedistributables/Linux')], 'BuildFiles/Java redist/Linux')
+	include_artifacts(zip(zip_file), [project('martus-client-nsis-cd').path_to(:target, 'MartusSetup.exe')], 'BuildFiles')
 	
 	file iso_file => zip_file do
 		dest_dir = _(:target, 'iso')

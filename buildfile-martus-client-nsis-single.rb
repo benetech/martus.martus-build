@@ -8,12 +8,14 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	exe_name = 'MartusSetupSingle.exe'
 	exe_path = _(:target, exe_name)
-	file(exe_path) do
-		define_nsis('NSIS_Martus_Single.nsi', exe_name)
+
+	nsis_zip = create_nsis_zip_task
+	file exe_path => nsis_zip do
+		run_nsis_task(nsis_zip, 'NSIS_Martus_Single.nsi', exe_name)
 	end
 	
-	exe = artifact(MARTUSSETUP_EXE_SPEC).from(exe_path)
-	install exe
+	build(exe_path)
 
+	artifact(MARTUSSETUP_EXE_SPEC).from(exe_path)
 end
 

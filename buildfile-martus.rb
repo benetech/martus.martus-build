@@ -200,7 +200,7 @@ def third_party_client_jar_licenses
 	return jars
 end
 
-def package_artifacts(target, artifacts, path)
+def include_artifacts(target, artifacts, path)
 	artifacts.each do | artifact |
 		target.include(artifact, :path=>path)
 	end
