@@ -163,11 +163,10 @@ def unzip_file (file, destination)
 	end
 end
 
-def sha(file)
-	sha_file = "#{file}.sha"
-	`sha1sum #{file} > #{sha_file}`
+def sha(file_to_digest, sha_file)
+	`sha1sum #{file_to_digest} > #{sha_file}`
 	if $? != 0
-		raise "Error generating SHA of #{file}"
+		raise "Error generating SHA of #{file_to_digest}"
 	end
 end
 
