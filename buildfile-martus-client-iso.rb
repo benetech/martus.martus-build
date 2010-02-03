@@ -40,14 +40,18 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package_artifacts(package(:zip), [project('martus-client-nsis-cd').path_to(:target, 'MartusSetup.exe')], 'BuildFiles')
 
 	update_packaged_zip(package(:zip)) do | filespec |
-		dest_dir = File.join(File.dirname(filespec), 'iso')
+		iso = "#{_(:target)}/Martus-#{$build_number}.iso"
+		
+		dest_dir = _(:target, 'iso')
 		Dir.mkdir(dest_dir)
 		unzip_file(filespec, dest_dir)
 
 		options = '-J -r -T -hide-joliet-trans-tbl -l'
 		volume = "-V Martus-#{$build_number}"
-		output = "-o #{_(:target)}/Martus-#{$build_number}.iso"
+		output = "-o #{iso}"
 		`mkisofs #{options} #{volume} #{output} #{dest_dir}`
+
+		sha(iso)
 	end
 
 	#TODO: Need to generate SHA1?

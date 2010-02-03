@@ -163,6 +163,13 @@ def unzip_file (file, destination)
 	end
 end
 
+def sha(file)
+	`sha1sum #{file} > #{file}.sha`
+	if $? != 0
+		raise "Error generating SHA of #{file}"
+	end
+end
+
 def third_party_client_jars
 	jars = []
 	jars << artifact(RHINO_SPEC)
