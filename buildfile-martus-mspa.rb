@@ -31,5 +31,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	# TODO: Old build script signed this jar
 
-	package :sources 
+	package(:sources)
+	package(:sources).merge(project('martus-common').package(:sources))
+	package(:sources).merge(project('martus-utils').package(:sources))
+	package(:sources).merge(project('martus-hrdag').package(:sources))
+	package(:sources).merge(project('martus-logi').package(:sources))
+	package(:sources).merge(project('martus-swing').package(:sources))
+	package(:sources).merge(project('martus-clientside').package(:sources))
 end
