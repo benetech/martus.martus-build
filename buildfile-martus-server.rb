@@ -29,8 +29,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).merge(project('martus-swing').package(:jar))
 	package(:jar).merge(project('martus-amplifier').package(:jar))
 
-	package(:jar).include(artifact(ANT_JUNIT_SPEC), :path=>'ThirdPartyJars')
-	package(:jar).include(artifact(ANT_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(BCPROV_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(ICU4J_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'ThirdPartyJars')

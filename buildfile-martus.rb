@@ -10,18 +10,6 @@ def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"
 end
 
-ANT_VERSION = '1.6.2'
-
-def build_ant_spec(type)
-	#TODO: eventually, should switch to org.apache.ant
-	return build_spec('ant', 'ant', type, ANT_VERSION)
-end
-
-def build_ant_junit_spec(type)
-	#TODO: eventually, should switch to org.apache.ant
-	return build_spec('ant', 'ant-junit', type, ANT_VERSION)
-end
-
 def build_junit_spec(type)
 	return build_spec('junit', 'junit', type, '3.8.2')
 end
@@ -82,10 +70,6 @@ def build_logi_spec(type)
 	return build_spec('org.logi', 'logi', type, '1.1.2')
 end
 
-ANT_SPEC = build_ant_spec('jar')
-ANT_LICENSE_SPEC = build_ant_spec('license')
-ANT_JUNIT_SPEC = build_ant_junit_spec('jar')
-ANT_JUNIT_LICENSE_SPEC = build_ant_junit_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
 JUNIT_LICENSE_SPEC = build_junit_spec('license')
 XMLRPC_SPEC = build_xmlrpc_spec('jar')
