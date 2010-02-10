@@ -31,6 +31,7 @@ require 'buildfile-martus-mspa-client-zip'
 #TODO: Need to upgrade to Java 6 runtime
 #TODO: Need to make sure all built artifacts are archived
 #TODO: Need to use build numbers (from Hudson) [DONE??]
+#TODO: Should create a server tarball that contains source code and licenses
 
 #TODO: Would be nice to create friendly Mac installer
 

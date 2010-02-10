@@ -6,6 +6,10 @@ def license_file(project_name, directory, license_name)
 	return file(_(project_name, "#{directory}/license/#{license_name}"))
 end
 
+def source_file(project_name, directory, source_name)
+	return file(_(project_name, "#{directory}/source/#{source_name}"))
+end
+
 define "martus-thirdparty" do
 	install do
 		puts "Installing martus-thirdparty"
@@ -35,9 +39,26 @@ define "martus-thirdparty" do
 	install artifact(LAYOUTS_LICENSE_SPEC).from(license_file(name, 'client/jhlabs', 'LICENSE.TXT'))
 	install artifact(RHINO_SPEC).from(jar_file(name, 'client/RhinoJavaScript', 'js.jar'))
 	install artifact(RHINO_LICENSE_SPEC).from(license_file(name, 'client/RhinoJavaScript', 'license.txt'))
-	#TODO: Need to include client license files for fonts, installer, Sun Java
+	#NOTE: Would like to include license for khmer fonts, but there are no license files
+	#NOTE: Would like to include license for NSIS installer, but don't see any
+	#TODO: Need to include client license files for Sun Java (after upgrading to Java 6)
 
 	#server
-	#TODO: Need to include server license files for Jetty, Lucene, Sun Java
-	
+	build do
+		target_dir = _('target', 'jetty')
+		license_name = 'LICENSE.html'
+		unzip(target_dir=>artifact(JETTY_SPEC)).include("**/#{license_name}")
+		license_file = File.join(target_dir, license_name)
+		install artifact(JETTY_LICENSE_SPEC).from(license_file)
+		FileUtils::rm_rf target_dir
+	end
+
+	build do
+		target_dir = _('target', 'lucene')
+		license_name = 'LICENSE.txt'
+		unzip(target_dir=>source_file(name, 'server/Lucene')).include("**/#{license_name}")
+		license_file = File.join(target_dir, license_name)
+		install artifact(JETTY_LICENSE_SPEC).from(license_file)
+		FileUtils::rm_rf target_dir
+	end
 end
