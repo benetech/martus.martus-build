@@ -243,5 +243,11 @@ define 'martus' do
 		fix_newlines(_('BuildFiles', 'Windows', 'Winsock95', '*.txt'))
 		fix_newlines(project('martus-jar-verifier').path_to('*.txt'))
 	end
+
+	#TODO: Set up a task that depends on: client exe, client iso+sha,
+	# client chunks, client mac dmg, client linux zip, mlp files, 
+	# server jar, mspa zip, and any other products
+	# MAYBE have 'unsigned' and 'signed' tasks
+	#task 'foo' => [project('martus-utils').package(:jar), project('martus-swing').package(:sources)]
 end
 	
