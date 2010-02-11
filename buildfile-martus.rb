@@ -112,10 +112,12 @@ RHINO_LICENSE_SPEC = build_rhino_spec('license')
 
 # Server, from public repository
 JETTY_SPEC = build_jetty_spec('jar')
+JETTY_SOURCE_SPEC = build_jetty_spec('sources')
 JETTY_LICENSE_SPEC = build_jetty_spec('license')
 JAVAX_SERVLET_SPEC = build_javax_servlet_spec('jar')
 JAVAX_SERVLET_LICENSE_SPEC = build_javax_servlet_spec('license')
 LUCENE_SPEC = build_lucene_spec('jar')
+LUCENE_SOURCE_SPEC = build_lucene_spec('sources')
 LUCENE_LICENSE_SPEC = build_lucene_spec('license')
 MAIL_SPEC = build_mail_spec('jar')
 MAIL_LICENSE_SPEC = build_mail_spec('license')
@@ -169,6 +171,18 @@ def unzip_file (file, destination)
 			zip_file.extract(f, f_path) 
 		end
 	end
+end
+
+
+def extract_artifact_entry_task(artifact_spec, entry)
+	return extract_zip_entry_task(artifact(artifact_spec).to_s, entry)
+end
+
+def extract_zip_entry_task(zip_file, entry)
+	target_dir = _('target', 'temp')
+	license_file = File.join(target_dir, entry)
+	unzip_task = unzip(target_dir=>zip_file).include(entry)
+	return file license_file=>unzip_task
 end
 
 def sha(file_to_digest, sha_file)

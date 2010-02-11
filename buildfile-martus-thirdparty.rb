@@ -56,21 +56,14 @@ define "martus-thirdparty" do
 
 	#server
 	build do
-		target_dir = _('target', 'jetty')
+		target_dir = _('target', 'temp', 'jetty')
 		license_name = 'LICENSE.html'
 		unzip(target_dir=>artifact(JETTY_SPEC)).include("**/#{license_name}")
 		license_file = File.join(target_dir, license_name)
 		install artifact(JETTY_LICENSE_SPEC).from(license_file)
-		FileUtils::rm_rf target_dir
 	end
 
-	build do
-		target_dir = _('target', 'lucene')
-		license_name = 'LICENSE.txt'
-		unzip(target_dir=>source_file(name, 'server/Lucene', 'lucene-1.3-rc1-src.zip')).include("**/#{license_name}")
-		license_file = File.join(target_dir, license_name)
-		install artifact(JETTY_LICENSE_SPEC).from(license_file)
-		FileUtils::rm_rf target_dir
-	end
-
+	install artifact(LUCENE_SOURCE_SPEC).from(source_file(name, 'server/Lucene', 'lucene-1.3-rc1-src.zip'))
+	license_task = extract_artifact_entry_task(LUCENE_SOURCE_SPEC, 'lucene-1.3-rc1-src/LICENSE.txt')
+	install artifact(LUCENE_LICENSE_SPEC).from(license_task)
 end
