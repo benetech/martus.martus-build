@@ -55,15 +55,12 @@ define "martus-thirdparty" do
 	#TODO: Need to include client license files for Sun Java (after upgrading to Java 6)
 
 	#server
-	build do
-		target_dir = _('target', 'temp', 'jetty')
-		license_name = 'LICENSE.html'
-		unzip(target_dir=>artifact(JETTY_SPEC)).include("**/#{license_name}")
-		license_file = File.join(target_dir, license_name)
-		install artifact(JETTY_LICENSE_SPEC).from(license_file)
-	end
-
+	install artifact(JETTY_SOURCE_SPEC).from(source_file(name, 'server/Jetty', 'jetty-4.2.24-all.tar.gz'))
+	license_task = extract_artifact_entry_task(JETTY_SPEC, 'org/mortbay/LICENSE.html')
+	install artifact(JETTY_LICENSE_SPEC).from(license_task)
 	install artifact(LUCENE_SOURCE_SPEC).from(source_file(name, 'server/Lucene', 'lucene-1.3-rc1-src.zip'))
 	license_task = extract_artifact_entry_task(LUCENE_SOURCE_SPEC, 'lucene-1.3-rc1-src/LICENSE.txt')
 	install artifact(LUCENE_LICENSE_SPEC).from(license_task)
+	# TODO: Should include source/license for javax.servlet.jar
+	# TODO: Should include source/license for javax.mail.jar
 end
