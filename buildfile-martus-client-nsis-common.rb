@@ -6,6 +6,19 @@ def create_nsis_zip_task
 	zip(zip_file).include(_('BuildFiles/*.txt'), :path=>'BuildFiles')
 
 	#TODO: Need to include SourceFiles directory
+	zip(zip_file).include(artifact(BCPROV_SOURCE_SPEC), :path=>'SourceFiles')
+	zip(zip_file).include(artifact(JUNIT_SOURCE_SPEC), :path=>'SourceFiles')
+	zip(zip_file).include(artifact(INFINITEMONKEY_SOURCE_SPEC), :path=>'SourceFiles')
+	zip(zip_file).include(artifact(PERSIANCALENDAR_SOURCE_SPEC), :path=>'SourceFiles')
+	zip(zip_file).include(artifact(VELOCITY_SOURCE_SPEC), :path=>'SourceFiles')
+# TODO: Find velocity-dep source code
+#	zip(zip_file).include(artifact(VELOCITY_DEP_SOURCE_SPEC), :path=>'SourceFiles')
+	zip(zip_file).include(artifact(XMLRPC_SOURCE_SPEC), :path=>'SourceFiles')
+# TODO: Find ICU4J source code
+#	zip(zip_file).include(artifact(ICU4J_SOURCE_SPEC), :path=>'SourceFiles')
+	zip(zip_file).include(artifact(LAYOUTS_SOURCE_SPEC), :path=>'SourceFiles')
+	zip(zip_file).include(artifact(RHINO_SOURCE_SPEC), :path=>'SourceFiles')
+	
 	zip(zip_file).include(_('BuildFiles/Windows/Winsock95'), :path=>'BuildFiles/Win95')
 	zip(zip_file).include(_('martus-jar-verifier/*.txt'), :path=>'BuildFiles/Verifier')
 	zip(zip_file).include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/Verifier')

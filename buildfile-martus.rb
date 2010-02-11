@@ -72,32 +72,42 @@ end
 
 # LibExt, not in public repository
 BCPROV_SPEC = build_bcprov_spec('jar')
+BCPROV_SOURCE_SPEC = build_bcprov_spec('sources')
 BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
+JUNIT_SOURCE_SPEC = build_junit_spec('sources')
 JUNIT_LICENSE_SPEC = build_junit_spec('license')
 
 # Common, not in public repository
 INFINITEMONKEY_JAR_SPEC = build_infinitemonkey_spec('jar')
 INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
+INFINITEMONKEY_SOURCE_SPEC = build_infinitemonkey_spec('sources')
 INFINITEMONKEY_LICENSE_SPEC = build_infinitemonkey_spec('license')
 PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
+PERSIANCALENDAR_SOURCE_SPEC = build_persiancalendar_spec('sources')
 PERSIANCALENDAR_LICENSE_SPEC = build_persiancalendar_spec('license')
 LOGI_LICENSE_SPEC = build_logi_spec('license')
 
 # Common, from public repository
 VELOCITY_SPEC = build_velocity_spec('jar')
+VELOCITY_SOURCE_SPEC = build_velocity_spec('sources')
 VELOCITY_LICENSE_SPEC = build_velocity_spec('license')
 VELOCITY_DEP_SPEC = build_velocity_dep_spec('jar')
+VELOCITY_DEP_SOURCE_SPEC = build_velocity_dep_spec('sources')
 VELOCITY_DEP_LICENSE_SPEC = build_velocity_dep_spec('license')
 XMLRPC_SPEC = build_xmlrpc_spec('jar')
+XMLRPC_SOURCE_SPEC = build_xmlrpc_spec('sources')
 XMLRPC_LICENSE_SPEC = build_xmlrpc_spec('license')
 ICU4J_SPEC = build_icu4j_spec('jar')
+ICU4J_SOURCE_SPEC = build_icu4j_spec('sources')
 ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
 
 # Client, not in public repository
 LAYOUTS_SPEC = build_layouts_spec('jar')
+LAYOUTS_SOURCE_SPEC = build_layouts_spec('sources')
 LAYOUTS_LICENSE_SPEC = build_layouts_spec('license')
 RHINO_SPEC = build_rhino_spec('jar')
+RHINO_SOURCE_SPEC = build_rhino_spec('sources')
 RHINO_LICENSE_SPEC = build_rhino_spec('license')
 
 # Server, from public repository
