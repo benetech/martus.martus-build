@@ -70,36 +70,46 @@ def build_logi_spec(type)
 	return build_spec('org.logi', 'logi', type, '1.1.2')
 end
 
+# LibExt, not in public repository
+BCPROV_SPEC = build_bcprov_spec('jar')
+BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
 JUNIT_LICENSE_SPEC = build_junit_spec('license')
-XMLRPC_SPEC = build_xmlrpc_spec('jar')
-XMLRPC_LICENSE_SPEC = build_xmlrpc_spec('license')
-ICU4J_SPEC = build_icu4j_spec('jar')
-ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
-LAYOUTS_SPEC = build_layouts_spec('jar')
-LAYOUTS_LICENSE_SPEC = build_layouts_spec('license')
+
+# Common, not in public repository
+INFINITEMONKEY_JAR_SPEC = build_infinitemonkey_spec('jar')
+INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
+INFINITEMONKEY_LICENSE_SPEC = build_infinitemonkey_spec('license')
+PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
+PERSIANCALENDAR_LICENSE_SPEC = build_persiancalendar_spec('license')
+LOGI_LICENSE_SPEC = build_logi_spec('license')
+
+# Common, from public repository
 VELOCITY_SPEC = build_velocity_spec('jar')
 VELOCITY_LICENSE_SPEC = build_velocity_spec('license')
 VELOCITY_DEP_SPEC = build_velocity_dep_spec('jar')
 VELOCITY_DEP_LICENSE_SPEC = build_velocity_dep_spec('license')
+XMLRPC_SPEC = build_xmlrpc_spec('jar')
+XMLRPC_LICENSE_SPEC = build_xmlrpc_spec('license')
+ICU4J_SPEC = build_icu4j_spec('jar')
+ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
+
+# Client, not in public repository
+LAYOUTS_SPEC = build_layouts_spec('jar')
+LAYOUTS_LICENSE_SPEC = build_layouts_spec('license')
+RHINO_SPEC = build_rhino_spec('jar')
+RHINO_LICENSE_SPEC = build_rhino_spec('license')
+
+# Server, from public repository
 JETTY_SPEC = build_jetty_spec('jar')
 JETTY_LICENSE_SPEC = build_jetty_spec('license')
 JAVAX_SERVLET_SPEC = build_javax_servlet_spec('jar')
 JAVAX_SERVLET_LICENSE_SPEC = build_javax_servlet_spec('license')
 LUCENE_SPEC = build_lucene_spec('jar')
 LUCENE_LICENSE_SPEC = build_lucene_spec('license')
-PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
-PERSIANCALENDAR_LICENSE_SPEC = build_persiancalendar_spec('license')
-BCPROV_SPEC = build_bcprov_spec('jar')
-BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 MAIL_SPEC = build_mail_spec('jar')
 MAIL_LICENSE_SPEC = build_mail_spec('license')
-INFINITEMONKEY_JAR_SPEC = build_infinitemonkey_spec('jar')
-INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
-INFINITEMONKEY_LICENSE_SPEC = build_infinitemonkey_spec('license')
-RHINO_SPEC = build_rhino_spec('jar')
-RHINO_LICENSE_SPEC = build_rhino_spec('license')
-LOGI_LICENSE_SPEC = build_logi_spec('license')
+
 MARTUSSETUP_EXE_SPEC = build_spec('org.martus', 'martus_setup', 'exe', $client_version)
 
 def create_layout_with_source_as_source(base)
