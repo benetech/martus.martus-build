@@ -20,6 +20,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #TODO: Add docs to Mac/Linux zip
 #	zip(zip_name).include(docs)
 	include_artifacts(zip(zip_name), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
+	include_artifacts(zip(zip_name), third_party_client_source, 'SourceFiles')
+	include_artifacts(zip(zip_name), third_party_client_jars, 'ThirdParty')
 	
 	build(zip_name)
 end

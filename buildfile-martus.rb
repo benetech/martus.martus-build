@@ -223,6 +223,23 @@ def third_party_client_licenses
 	return licenses
 end
 
+def third_party_client_source
+	licenses = []
+	licenses << artifact(BCPROV_SOURCE_SPEC)
+	licenses << artifact(JUNIT_SOURCE_SPEC)
+	licenses << artifact(INFINITEMONKEY_SOURCE_SPEC)
+	licenses << artifact(PERSIANCALENDAR_SOURCE_SPEC)
+	licenses << artifact(VELOCITY_SOURCE_SPEC)
+# TODO: Find velocity-dep source code
+#	licenses << artifact(VELOCITY_DEP_SOURCE_SPEC)
+	licenses << artifact(XMLRPC_SOURCE_SPEC)
+# TODO: Find ICU4J source code
+#	licenses << artifact(ICU4J_SOURCE_SPEC)
+	licenses << artifact(LAYOUTS_SOURCE_SPEC)
+	licenses << artifact(RHINO_SOURCE_SPEC)
+	return licenses
+end
+
 def include_artifacts(target, artifacts, path)
 	artifacts.each do | artifact |
 		target.include(artifact, :path=>path)
