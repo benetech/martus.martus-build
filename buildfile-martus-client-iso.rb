@@ -37,7 +37,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	zip(zip_file).include(_('BuildFiles', 'Documents', 'LinuxJavaInstall.txt'), :path=>'BuildFiles/Martus/Docs')
 
-	include_artifacts(zip(zip_file), third_party_client_jar_licenses, 'BuildFiles/Martus/Docs')
+	# TODO: Should include third-party source code
+	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Martus/Docs')
 	include_artifacts(zip(zip_file), [project('martus-bc-jce').package(:jar)], 'BuildFiles/LibExt')
 	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/LibExt')	
 	include_artifacts(zip(zip_file), [project('martus-client').package(:sources)], 'BuildFiles/Sources')

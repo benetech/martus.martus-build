@@ -207,19 +207,20 @@ def third_party_client_jars
 	return jars
 end
 
-def third_party_client_jar_licenses
-	jars = []
-	jars << artifact(RHINO_LICENSE_SPEC)
-	jars << artifact(LAYOUTS_LICENSE_SPEC)
-	jars << artifact(BCPROV_LICENSE_SPEC)
-	jars << artifact(JUNIT_LICENSE_SPEC)
-	jars << artifact(ICU4J_LICENSE_SPEC)
-	jars << artifact(PERSIANCALENDAR_LICENSE_SPEC)
-	jars << artifact(VELOCITY_LICENSE_SPEC)
-	jars << artifact(VELOCITY_DEP_LICENSE_SPEC)
-	jars << artifact(INFINITEMONKEY_LICENSE_SPEC)
-	jars << artifact(XMLRPC_LICENSE_SPEC)
-	return jars
+def third_party_client_licenses
+	licenses = []
+	licenses << artifact(BCPROV_LICENSE_SPEC)
+	licenses << artifact(JUNIT_LICENSE_SPEC)
+	licenses << artifact(INFINITEMONKEY_LICENSE_SPEC)
+	licenses << artifact(PERSIANCALENDAR_LICENSE_SPEC)
+	licenses << artifact(LOGI_LICENSE_SPEC)
+	licenses << artifact(VELOCITY_LICENSE_SPEC)
+	licenses << artifact(VELOCITY_DEP_LICENSE_SPEC)
+	licenses << artifact(XMLRPC_LICENSE_SPEC)
+	licenses << artifact(ICU4J_LICENSE_SPEC)
+	licenses << artifact(LAYOUTS_LICENSE_SPEC)
+	licenses << artifact(RHINO_LICENSE_SPEC)
+	return licenses
 end
 
 def include_artifacts(target, artifacts, path)

@@ -19,9 +19,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	zip(zip_name).include(project('martus-client').package(:sources))
 #TODO: Add docs to Mac/Linux zip
 #	zip(zip_name).include(docs)
-#TODO: Add third-party licenses to Mac/Linux zip
-#	zip(zip_name).include(licenses)
-	zip(zip_name).include(artifact(LOGI_LICENSE_SPEC), :path=>'licenses/logi')
+	include_artifacts(zip(zip_name), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
 	
 	build(zip_name)
 end
