@@ -11,16 +11,18 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ICU4J_SPEC,
 		PERSIANCALENDAR_SPEC,
 		BCPROV_SPEC,
-		project('martus-logi').packages.first,
-		project('martus-utils').packages.first,
-		project('martus-swing').packages.first
+		project('martus-logi').package(:jar),
+		project('martus-utils').package(:jar),
+		project('martus-swing').package(:jar)
 	)
 
 	test.with(
-		project('martus-bc-jce').packages.first
+		project('martus-bc-jce').package(:jar)
 	)
 	bc_jce = project('martus-bc-jce').path_to('bc-jce.jar')
 	test.using :java_args => "-Xbootclasspath/a:#{bc_jce}"
+
+	#TODO: Failing test
 	test.exclude 'org.martus.common.test.TestMartusSecurity'
 
 	package :jar
