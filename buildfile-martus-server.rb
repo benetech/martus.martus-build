@@ -29,6 +29,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).merge(project('martus-swing').package(:jar))
 	package(:jar).merge(project('martus-amplifier').package(:jar))
 	package(:jar).merge(project('martus-mspa').package(:jar)).include('**/MSPAServer.class')
+	package(:jar).merge(project('martus-mspa').package(:jar)).include('**/RootHelper.class')
 
 	package(:jar).include(artifact(BCPROV_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(ICU4J_SPEC), :path=>'ThirdPartyJars')
