@@ -15,9 +15,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	zip(zip_name).include(artifact(INFINITEMONKEY_JAR_SPEC))
 	zip(zip_name).include(project('martus-common').package(:jar))
 	zip(zip_name).include(project('martus-bc-jce').package(:jar))
-	zip(zip_name).include(project('martus-mspa').package(:jar))
+	zip(zip_name).include(project('martus-mspa-client').package(:jar))
 	zip(zip_name).include(_('BuildFiles', 'Documents', 'mspa_user_guide.pdf'))
-	zip(zip_name).include(project('martus-mspa').package(:sources))
+	zip(zip_name).include(project('martus-mspa-client').package(:sources))
 	#TODO: mspa zip should include all third-party source code
 	#TODO: mspa zip should include martus and third-party license files
 

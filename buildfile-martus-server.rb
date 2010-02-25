@@ -43,4 +43,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).include(project('martus-bc-jce').package(:jar), :path=>'ThirdPartyJars')
 
 	# TODO: Old build script signed this jar
+
+	# TODO: ***URGENT*** Server jar needs to include org/martus/mspa/server/MSPAServer
+	# which probably means splitting mspa build script into server and client parts
 end
