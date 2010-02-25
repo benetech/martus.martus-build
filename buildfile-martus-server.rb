@@ -28,6 +28,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).merge(project('martus-logi').package(:jar))
 	package(:jar).merge(project('martus-swing').package(:jar))
 	package(:jar).merge(project('martus-amplifier').package(:jar))
+	package(:jar).merge(project('martus-mspa').package(:jar)).include('**/MSPAServer.class')
 
 	package(:jar).include(artifact(BCPROV_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(ICU4J_SPEC), :path=>'ThirdPartyJars')
@@ -43,7 +44,4 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).include(project('martus-bc-jce').package(:jar), :path=>'ThirdPartyJars')
 
 	# TODO: Old build script signed this jar
-
-	# TODO: ***URGENT*** Server jar needs to include org/martus/mspa/server/MSPAServer
-	# which probably means splitting mspa build script into server and client parts
 end
