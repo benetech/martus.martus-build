@@ -36,7 +36,6 @@
 	<target name='mspa-client-zip' description='Create MartusMSPA.zip'>
 		<zip destfile="../binary-martus/Installer/BuildFiles/Jars/MartusMSPA.zip">
 			<zipfileset file='${mspa-client-jar}' prefix='' excludes=".svn" />
-			<zipfileset file='${mspa-userguide}' prefix='' />
 			<zipfileset file='${martus-common-jar}' prefix='ThirdParty' excludes=".svn" />
 <!-- I believe the following are included inside martus-common
 			<zipfileset file='${martus-swing-jar}' prefix='ThirdParty' excludes=".svn" />
