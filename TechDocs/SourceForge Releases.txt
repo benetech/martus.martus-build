@@ -45,10 +45,19 @@ Now scroll back up to the top of the page and click on 'Upload File' right under
 File Manager Header. 
 
 martus-client-3.3.2-src.zip
-martus-client-3.3.2-src.zip.sh1
-Instructions_Converting_CSV_to_Martus_Bulletin-v332.zip 
+martus-client-3.3.2-src.zip.sh1 (may need to creat this using LLMD5Sum program (remember to switch to SHA1)
+Instructions_Converting_CSV_to_Martus_Bulletin-v332.zip (I usuaully download the previous version then change the version # in the zip file name)
+
+Step 3: Selecting this zip to be the default download
+
+Click on the zip file
+
+Platform
+Set as default download
+Select All
+
  
-Step 3: Setting up NEWS
+Step 4: Setting up NEWS
 
 Click on 'Develop' then 'News'
 
@@ -105,7 +114,7 @@ as documentation for previous versions in various languages,
 go to http://www.martus.org/downloads/.  
 --------------------------------------------------------
 
-Step 4:   Email Release Notice
+Step 5:   Email Release Notice
  
 Not sure if this is done automatically now when you add new files/news.
  
