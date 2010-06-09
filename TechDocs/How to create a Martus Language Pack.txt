@@ -6,6 +6,7 @@ In the Martus CVS directory tree the following is where all MLP’s live.
 
 Under that directory is the 2 letter language code for each language to be created.
 Eg. ar (Arabic), es (Spanish), fr (French), ne (Nepali), ru (Russia), and th (Thai)
+Charles NOTE: Burmese is 3 letters bur (there is a bu directory which I am not sure what this is at this time June 2010)
 
 Under those directories will be the current MLP and sha1, and a directory mlpFiles where all files you want to appear in the mlp are found.
 
@@ -33,7 +34,13 @@ And update the section:
 To use the same language code as the MLP you are trying to create. (i.e. “fr”) for French.
 Once you adjust this file then Run the xml as “Run As” Ant Build, 
 
-When you run this script it will ask you for 2 passwords
+When you run this script it will ask you for the language code
+This will then create the language pack and use the associated files in that 
+sub directory under .\binary-martus\Releases\ClientMLPs\<Language code you type in>
+
+Next it will ask you where the keystore files are located: ie where martusks and ssmartusclientks are found
+
+Then it will ask for 2 passwords
 “Please enter store pw:”
 And
 “Please enter key pw:”
