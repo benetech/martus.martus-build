@@ -26,6 +26,7 @@
         <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
         <fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
     </path>
 
     <!-- client files -->
