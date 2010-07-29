@@ -21,8 +21,8 @@
 ;Boston, MA 02111-1307, USA.
 
 !define PRODUCT_NAME "Martus"
-!define PRODUCT_VERSION "3.3.2"
-!define PRODUCT_EXTENDED_VERSION "3.3.2.0"
+!define PRODUCT_VERSION "3.4.1"
+!define PRODUCT_EXTENDED_VERSION "3.4.1.0"
 !define PRODUCT_PUBLISHER "The Benetech Initiative"
 !define PRODUCT_COPYRIGHT_DATE "2001-2009"
 !define PRODUCT_WEB_SITE "http://www.martus.org"
