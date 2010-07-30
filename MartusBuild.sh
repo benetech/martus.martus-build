@@ -18,7 +18,7 @@ set -u
 #set -n
 
 #NOTE: Add additional language-code and language-code to language-string mappings below
-MARTUS_LANGUAGES="en es ru ar fr th fa ne bur"
+MARTUS_LANGUAGES="en es ru ar fr th fa ne"
 export MARTUS_LANGUAGES
 
 #################################################
