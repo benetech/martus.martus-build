@@ -42,10 +42,6 @@ getLangNameFromCode()
 	   LANGUAGE_STRING="Thai";;
 	"fa")
 	   LANGUAGE_STRING="Farsi";;
-	"ne")
-	   LANGUAGE_STRING="Nepalese";;
-	"bur")
-	   LANGUAGE_STRING="Burmese";;
 	*)
 	   LANGUAGE_STRING="English";;
 	esac
