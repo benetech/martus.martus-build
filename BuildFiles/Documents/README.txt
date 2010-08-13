@@ -38,21 +38,23 @@ as documentation for previous versions in various languages,
 go to http://www.martus.org/downloads/. 
  
 
-A. Changes from version 3.3.2 to version 3.4
+A. Changes from version 3.4 to version 3.4.1
 
 This release is available in English and other languages as 
 indicated on the http://www.martus.org software download page.  
 Other languages will be available in the future, as language-packs 
 on the documentation page (http://www.martus.org/downloads)
 
-- Changed the Martus time-out when there is no activity to be more 
-  flexible, instead of always timing out at 10 minutes.  Different time-out 
-  lengths are allowed by setting a parameter in the command line used 
-  to run Martus.  The parameter is "--timeout-minutes=X" where X can 
-  be any number of minutes.  For example, to set the timeout length for 
-  Martus running on your computer in Windows to always be 5 minutes, 
-  change the command line in the desktop shortcut (right-click, and choose 
-  Properties) to the following: 
+- Changed the Martus time-out length when there is no activity to 
+  be more flexible, instead of always timing out at 10 minutes – 
+  this can help improve the performance of long operations (such 
+  as retrieval of bulletins from the server).  Different time-out 
+  lengths are allowed by setting a parameter in the command line 
+  used to run Martus.  The parameter is "--timeout-minutes=X" 
+  where X can be any number of minutes.  For example, to set 
+  the timeout length for Martus running on your computer in 
+  Windows to always be 5 minutes, change the command line in the 
+  desktop shortcut (right-click, and choose Properties) to the following: 
 C:\Martus\bin\java.exe -Xbootclasspath/p:C:\Martus\lib\ext\bc-jce.jar -jar C:\Martus\martus.jar --timeout-minutes=5
   For instructions on how to change the Martus command line for Mac or Linux, 
   see section 2a of the User Guide or email info@martus.org.
