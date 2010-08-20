@@ -86,6 +86,24 @@ Here's a brief summary:
 
 -----------------------------------------------------------------
 
+Discussion of font.properties, which is only used in Java 1.4:
+http://download.oracle.com/javase/1.4.2/docs/guide/intl/fontprop.html
+
+For newer Java versions, use font configurations instead.
+Also: 
+
+"For Sun's JRE 5.0, the easiest way is to install the font into the JRE's 
+lib/fonts/fallback directory - it will be automatically added as a 
+fallback font to all logical fonts for 2D rendering. "
+
+
+The Bangla Martus folks recommended the rupali font, which is now 
+available under a very free license:
+http://ekushey.org/index.php/blog/show/Rupalifontisupdatedwithhighqualityglyphs.html
+
+"Ekushey Fonts and Typing solutions will work without any problem on Windows 7."
+
+
 Unicode font resources:
 http://www.unicode.org/resources/fonts.html
 
@@ -97,8 +115,16 @@ You can first copy A, and paste it into a text entry field.
 Then copy BC (two glyphs) and paste them in right after A.
 If it is working properly, the three glyphs (ABC) will be merged into
 a single glyph (D).
-On Ubuntu 10.4, running Martus with Java 6, it works perfectly.
-  
+On Ubuntu 10.4, Java 6: Martus works perfectly out of the box.
+Java 4 and 5 are not easily available for Ubuntu so I won't test those.
+On Vista, Java 4:
+ In Martus, pasting the first glyph shows a box
+ With a correct font.properties, glyphs get pasted and combined
+On Vista, Java 6:
+ In Martus, pasting the first glyph shows a box
+ Copying Rupali font to jre6/lib/fonts/fallback/ causes glyphs to 
+    get pasted and combined
+
 
 
 
