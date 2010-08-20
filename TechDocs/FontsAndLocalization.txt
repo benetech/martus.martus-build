@@ -126,6 +126,8 @@ On Vista, Java 6:
     get pasted and combined
 
 
+Great summary of Indic language support and how to test it:
+http://en.wikipedia.org/wiki/Wikipedia:Multilingual_support_%28Indic%29
 
 
 Free Bangla fonts:
