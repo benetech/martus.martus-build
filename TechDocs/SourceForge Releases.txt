@@ -61,7 +61,7 @@ Step 4: Setting up NEWS
 
 Click on 'Develop' then 'News'
 
-To edit existing News click on 'Admin' where you can hid news or change what is displayed.
+To edit existing News click on 'Admin' where you can hide news or change what is displayed.
 
 To add new News click on 'Submit' and type in a subject line such as 'Martus Client 3.3.2 Released'
 Then add the details you want posted.
