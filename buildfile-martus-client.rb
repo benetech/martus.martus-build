@@ -17,6 +17,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-common').packages.first,
 		project('martus-swing').packages.first,
 		project('martus-clientside').packages.first,
+		BCPROV_SPEC,
 		LAYOUTS_SPEC,
 		project('martus-jar-verifier').packages.first,
 		VELOCITY_SPEC
