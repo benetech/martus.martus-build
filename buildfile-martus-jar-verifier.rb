@@ -9,6 +9,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	compile.options.target = '1.5'
 	compile.with(
+		BCPROV_SPEC,
 	)
 
 	build do
