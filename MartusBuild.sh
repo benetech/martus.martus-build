@@ -17,12 +17,12 @@
 set -u
 #set -n
 
-#NOTE: Add additional language-code and language-code to language-string mappings below
-MARTUS_LANGUAGES="en es ru ar fr th fa ne bur"
+#NOTE: Add additional language-code (for mtf/docs inclusion in client) and language-code to language-string mappings below
+MARTUS_LANGUAGES="en es ru ar fr th fa ne bur km"
 export MARTUS_LANGUAGES
 
 #################################################
-# language-code to language-name mapping
+# language-code to language-name mapping - FOR NSIS INSTALLER
 #################################################
 LANGUAGE_STRING="English"
 getLangNameFromCode()
@@ -124,7 +124,7 @@ setCvsEnvVars()
 cleanCvsHome()
 {
 	echo 
-	echo "MartusBuild.sh 2007-12-07"
+	echo "MartusBuild.sh 2010-10-18"
 	echo "Cleaning the build environment $CVS_HOME (ignore mount/umount messages)...";
 	if [ -d "$CVS_HOME" ]; then
 		rm -Rf $CVS_HOME
