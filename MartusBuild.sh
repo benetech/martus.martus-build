@@ -1129,7 +1129,7 @@ echo "The build completed succesfully. The Release files are located in $RELEASE
 if [ $burn_client_cd = 1 ]; then
 	echo "Ready to burn image onto CD. Make sure a blank CD is in the CD burner, then press Enter to start:"
 	read throw_away
-	cdrecord dev=0,1,0 -v -eject -dao -data "$RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso"
+	cdrecord dev=0,1,0 -v -eject -dao -data driveropts=burnfree "$RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso"
 fi
 
 cd "$INITIAL_DIR"
