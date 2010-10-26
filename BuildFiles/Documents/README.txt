@@ -45,12 +45,16 @@ indicated on the http://www.martus.org software download page.
 Other languages will be available in the future, as language-packs 
 on the documentation page (http://www.martus.org/downloads)
 
-- Added a new customization field type, multi-level dropdowns, 
-  that allows the user to define lower level values that are dependent 
-  on the higher level value (e.g. for locations, you can define state 
-  and city values where only cities that belong to a particular state 
-  are displayed once the state value is selected).
-- Allowed setting of default values for dropdown and text fields.
+- Added a new customization feature that allows multi-level 
+  dropdown lists, so that the user can define lower level values 
+  that are dependent on the higher level value (e.g. for locations, 
+  you can define state and city values where only cities that belong 
+  to a particular state are displayed once the state value is selected).  
+  The lists of choices you create for these dropdown fields are 
+  "reusable" so they do not have to be typed more than once in your 
+  customization definition.
+- Allowed setting of default values for dropdown and text fields for 
+  more efficient data entry.
 - Fixed issue where data entered in a grid cell would not be saved if 
   you did not tab out of the cell or hit enter to create a new row in 
   the grid.
