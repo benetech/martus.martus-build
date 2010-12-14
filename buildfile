@@ -1,4 +1,5 @@
 require 'fileutils'
+require 'English'
 
 require 'buildfile-martus'
 
@@ -26,14 +27,13 @@ require 'buildfile-martus-client-nsis-pieces'
 require 'buildfile-martus-client-nsis-cd'
 require 'buildfile-martus-client-iso'
 require 'buildfile-martus-mspa-client-zip'
+require 'buildfile-martus-client-mac-dmg'
 
 #TODO: Need to set up proper dependency chains
 #TODO: Need to eliminate optional files from Java 6 runtime
 #TODO: Need to make sure all built artifacts are archived
 #TODO: Need to use build numbers (from Hudson) [DONE??]
 #TODO: Should create a server tarball that contains source code and licenses
-
-#TODO: Would be nice to create friendly Mac installer
 
 #NOTE: Old script created amplifier tarball (build.xml#release) but
 # Scott confirms it is not needed/used
