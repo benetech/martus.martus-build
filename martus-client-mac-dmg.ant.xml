@@ -1,44 +1,6 @@
 <project name="martus-client-mac-dmg">
-    <!-- version number -->
-    <property name="version.full" value="3.5.1" />
-
-    <!-- destination directory where mac app was written -->
-    <property name="dist.mactree" value="/home/kevins/martus-mac/" />
-
-    <!-- directory to copy dmg file to -->
-    <property name="dmg.dest.dir" value="/home/kevins/" />
-
-    <!-- parent directory containing JavaApplicationStub -->
-    <property name="installer.mac" value="/home/kevins/work/miradi/hg/eclipse/miradi/build/installer/Mac/" />
-
-    <!-- name of the main application jar (e.g. miradi.jar) -->
-    <property name="app.jar" value="martus-client-20090826.1911.jar" />
-
-    <!-- directory containing app.jar -->
-    <property name="dist.dir" value="/home/kevins/work/martus/martus/0826-client/" />
-
-    <!-- destination directory where mac app will be written -->
-    <property name="dist.mactree" value="/home/kevins/martus-mac/" />
-
-    <!-- directory containing third-party jars -->
-    <property name="dist.temp.jars" value="/home/kevins/work/martus/martus/martus-thirdparty/" />
-
-    <!-- name of the app as it will appear to Mac users -->
-    <property name="mac.app.name" value="Martus" />
-
-    <!-- short name of the app as it will appear to Mac users -->
-    <property name="short.app.name" value="Martus" />
-
-    <!-- version number -->
-    <property name="version.full" value="3.5.1" />
-
-    <!-- build identifier (typically a timestamp) -->
-    <property name="version.timestamp" value="" />
-
-    <!-- options to be passed to the JRE VM -->
-    <property name="vm.options" value="-Xmx512m" />
-
     <target name="macappbundle" depends="" description="create a jar app bundle for the mac">
+        <echo message="installer.mac: ${installer.mac}" />
         <property name="macjavastubfile" value="${installer.mac}/JavaApplicationStub/JavaApplicationStub" />
         <taskdef name="jarbundler" 
             classname="net.sourceforge.jarbundler.JarBundler" 
@@ -62,10 +24,10 @@
             verbose="true"
             >
 
-            <jarfileset dir="${dist.dir}">
-                <include name="${app.jar}" />
+            <jarfileset dir="${app.jar.dir}">
+                <include name="${app.jar.name}" />
             </jarfileset>
-            <jarfileset dir="${dist.temp.jars}/">
+            <jarfileset dir="${thirdparty.jars.dir}/">
                 <include name="**/*.jar" />
                 <exclude name="junit*" />
             </jarfileset>
@@ -79,10 +41,6 @@
     </target>
 
     <target name="macdmgfile" depends="macappbundle" description="create a mac dmg file">
-        <property name="rawdmgfile" value="/home/kevins/Martus.dmg" />
-        <property name="dmgsizemegs" value="1" />
-        <property name="dmgmount" value="/mounts/Martus/dmgfile" />
-
         <exec os="Linux"  executable="umount" failonerror="false">
             <arg value="-d"/>
             <arg value="${dmgmount}"/>
@@ -94,7 +52,7 @@
             <arg value="if=/dev/zero"/>
             <arg value="of=${rawdmgfile}"/>
             <arg value="bs=1M"/>
-            <arg value="count=${dmgsizemegs}"/>
+            <arg value="count=${dmg.size.megs}"/>
         </exec>
         
         <!-- Format that file as an hfsplus disk image -->
