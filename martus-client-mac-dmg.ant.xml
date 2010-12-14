@@ -100,7 +100,7 @@
         <!-- Format that file as an hfsplus disk image -->
         <exec os="Linux"  executable="mkfs.hfsplus" failonerror="true">
             <arg value="-v"/>
-            <arg value="Miradi ${version.full} Mac Install"/>
+            <arg value="Miradi ${version.full}"/>
             <arg value="${rawdmgfile}"/>
         </exec>
         
