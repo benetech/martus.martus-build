@@ -6,6 +6,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
     version = "3.5.1"
     timestamp = "20101116.1964"
+    dmg_mount_point = "/mounts/Martus/dmgfile"
+    dmg_file = "/home/kevins/Martus.dmg"
+    production_zipfile = "/home/kevins/Download/MartusClient-#{version}-#{timestamp}-MacLinux.zip"
 
     tmpdir = Dir.mktmpdir
     puts "Using temp dir: #{tmpdir}"
@@ -14,12 +17,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     Dir.mkdir(dmg_contents_dir)
     Dir.mkdir(raw_production_zip_contents_dir)
 
-    production_zipfile = "/home/kevins/Download/MartusClient-#{version}-#{timestamp}-MacLinux.zip"
     unzip_file(production_zipfile, raw_production_zip_contents_dir)
     production_zip_contents_dir = File.join(raw_production_zip_contents_dir, "MartusClient-#{version}")
-puts production_zip_contents_dir
-puts "press enter"
-$stdin.gets
+#puts production_zip_contents_dir
+#puts "press enter"
+#$stdin.gets
 
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
@@ -34,10 +36,10 @@ $stdin.gets
     properties << " -Dvm.options=-Xmx512m"
 
     properties << " -Ddist.mactree=#{dmg_contents_dir}" #can be temp
-    properties << " -Ddmg.dest.dir=/home/kevins/"
-    properties << " -Drawdmgfile=/home/kevins/Martus.dmg"
-    properties << " -Ddmgmount=/mounts/Martus/dmgfile"
-    properties << " -Ddmg.size.megs=10"
+    properties << " -Ddmg.dest.dir=#{_('dist')}"
+    properties << " -Drawdmgfile=#{dmg_file}"
+    properties << " -Ddmgmount=#{dmg_mount_point}"
+    properties << " -Ddmg.size.megs=40"
 
     ant = "ant #{buildfile_option} macdmgfile #{properties}"
 puts ant
