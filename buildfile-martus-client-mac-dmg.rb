@@ -4,6 +4,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
 	project.version = '1'
 
+    tmpdir = Dir.mktmpdir
+    puts "Using temp dir: #{tmpdir}"
+
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
     properties << " -Dmac.app.name=Martus"
@@ -11,7 +14,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     properties << " -Dversion.full=3.5.1"
     properties << " -Dversion.timestamp="
 
-    properties << " -Ddist.mactree=/home/kevins/martus-mac/" #can be temp
+    properties << " -Ddist.mactree=#{tmpdir}" #can be temp
     properties << " -Ddmg.dest.dir=/home/kevins/"
     properties << " -Drawdmgfile=/home/kevins/Martus.dmg"
     properties << " -Ddmgmount=/mounts/Martus/dmgfile"
