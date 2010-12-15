@@ -14,7 +14,7 @@
         <jarbundler 
             dir="${dist.mactree}" 
             name="${mac.app.name}" 
-            mainclass="org.miradi.main.Miradi" 
+            mainclass="${main.class}" 
             jvmversion="1.5+" 
             stubfile="${macjavastubfile}" 
             shortname="${short.app.name}" 
@@ -24,12 +24,13 @@
             verbose="true"
             >
 
-            <jarfileset dir="${app.jar.dir}">
-                <include name="${app.jar.name}" />
-            </jarfileset>
-            <jarfileset dir="${thirdparty.jars.dir}/">
-                <include name="**/*.jar" />
-                <exclude name="junit*" />
+            <jarfileset dir="${app.dir}">
+                <include name="Martus/*" />
+                <include name="LibExt/*" />
+                <include name="Sources/*" />
+                <include name="verify/*" />
+                <include name="README*" />
+                <include name="*txt" />
             </jarfileset>
 
             <javaproperty name="apple.laf.useScreenMenuBar" value="true" />
@@ -40,6 +41,7 @@
         </jarbundler>
     </target>
 
+    <!--*****************************************************************-->
     <target name="macdmgfile" depends="macappbundle" description="create a mac dmg file">
         <exec os="Linux"  executable="umount" failonerror="false">
             <arg value="-d"/>
@@ -75,13 +77,6 @@
             <arg value="${dist.mactree}/${mac.app.name}.app" />
             <arg value="${dmgmount}" />
         </exec> 
-    <!--    
-        <copy todir="${dmgmount}">
-            <fileset dir="${installer.buildfiles.dir}" includes="README.txt" />
-            <fileset dir="${installer.buildfiles.dir}" includes="LICENSE.txt" />
-            <fileset dir="${installer.buildfiles.dir}" includes="${samples.marine.mpz}" />
-        </copy>
--->
         <exec os="Linux"  executable="umount" failonerror="true">
             <arg value="-d"/>
             <arg value="${dmgmount}"/>

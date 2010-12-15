@@ -4,29 +4,43 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
 	project.version = '1'
 
+    version = "3.5.1"
+    timestamp = "20101116.1964"
+
     tmpdir = Dir.mktmpdir
     puts "Using temp dir: #{tmpdir}"
+    dmg_contents_dir = File.join(tmpdir, "dmgcontents")
+    raw_production_zip_contents_dir = File.join(tmpdir, "production")
+    Dir.mkdir(dmg_contents_dir)
+    Dir.mkdir(raw_production_zip_contents_dir)
+
+    production_zipfile = "/home/kevins/Download/MartusClient-#{version}-#{timestamp}-MacLinux.zip"
+    unzip_file(production_zipfile, raw_production_zip_contents_dir)
+    production_zip_contents_dir = File.join(raw_production_zip_contents_dir, "MartusClient-#{version}")
+puts production_zip_contents_dir
+puts "press enter"
+$stdin.gets
 
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
     properties << " -Dmac.app.name=Martus"
     properties << " -Dshort.app.name=Martus"
-    properties << " -Dversion.full=3.5.1"
-    properties << " -Dversion.timestamp="
+    properties << " -Dversion.full=#{version}"
+    properties << " -Dversion.timestamp=#{timestamp}"
+    properties << " -Dmain.class=org.martus.swingui.martus"
 
-    properties << " -Ddist.mactree=#{tmpdir}" #can be temp
+    properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
+    properties << " -Dapp.dir=#{production_zip_contents_dir}"
+    properties << " -Dvm.options=-Xmx512m"
+
+    properties << " -Ddist.mactree=#{dmg_contents_dir}" #can be temp
     properties << " -Ddmg.dest.dir=/home/kevins/"
     properties << " -Drawdmgfile=/home/kevins/Martus.dmg"
     properties << " -Ddmgmount=/mounts/Martus/dmgfile"
     properties << " -Ddmg.size.megs=10"
 
-    properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
-    properties << " -Dapp.jar.name=martus-client-20090826.1911.jar"
-    properties << " -Dapp.jar.dir=/home/kevins/work/martus/martus/0826-client/"
-    properties << " -Dthirdparty.jars.dir=/home/kevins/work/martus/martus/martus-thirdparty/"
-    properties << " -Dvm.options=-Xmx512m"
-
     ant = "ant #{buildfile_option} macdmgfile #{properties}"
+puts ant
     `#{ant}`
     if $CHILD_STATUS != 0
         raise "Failed in dmg ant script #{$CHILD_STATUS}"
