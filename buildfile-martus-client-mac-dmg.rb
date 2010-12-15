@@ -17,7 +17,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     properties << " -Ddmgmount=/mounts/Martus/dmgfile"
     properties << " -Ddmg.size.megs=10"
 
-    properties << " -Dinstaller.mac=/home/kevins/work/miradi/hg/eclipse/miradi/build/installer/Mac/" #parent of JavaApplicationStub
+    properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.jar.name=martus-client-20090826.1911.jar"
     properties << " -Dapp.jar.dir=/home/kevins/work/martus/martus/0826-client/"
     properties << " -Dthirdparty.jars.dir=/home/kevins/work/martus/martus/martus-thirdparty/"
