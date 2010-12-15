@@ -9,7 +9,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     hudson_job_dir = "/var/lib/hudson/jobs/martus-client-unsigned"
     dmg_mount_point = File.join(hudson_job_dir, "mounts/dmg")
     dmg_file = File.join(hudson_job_dir, "Martus.dmg")
-    production_zipfile = "/home/kevins/Download/MartusClient-#{version}-#{timestamp}-MacLinux.zip"
+    production_zipfile_dir = File.join(hudson_job_dir, "artifacts")
+    production_zip_name = "/MartusClient-#{version}-#{timestamp}-MacLinux.zip"
+    production_zipfile = File.join(production_zipfile_dir, production_zip_name)
 
     tmpdir = Dir.mktmpdir
     puts "Using temp dir: #{tmpdir}"
