@@ -44,7 +44,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     properties << " -Ddmgmount=#{dmg_mount_point}"
     properties << " -Ddmg.size.megs=40"
 
-    ant = "ant #{buildfile_option} macdmgfile #{properties}"
+    ant = "/opt/java/tools/ant/bin/ant #{buildfile_option} macdmgfile #{properties}"
 puts ant
     `#{ant}`
     if $CHILD_STATUS != 0
