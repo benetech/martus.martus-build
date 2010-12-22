@@ -25,7 +25,7 @@
             >
 
             <jarfileset dir="${app.dir}">
-                <include name="martus.jar" />
+                <include name="Martus/martus.jar" />
                 <include name="LibExt/*" />
             </jarfileset>
 
