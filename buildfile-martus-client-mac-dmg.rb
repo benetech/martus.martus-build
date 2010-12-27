@@ -19,8 +19,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
     dmg_contents_dir = File.join(tmpdir, "dmgcontents")
     raw_production_zip_contents_dir = File.join(tmpdir, "production")
-    Dir.mkdir(dmg_contents_dir)
-    Dir.mkdir(raw_production_zip_contents_dir)
+    FileUtils::mkdir_p(dmg_contents_dir)
+    FileUtils::mkdir_p(raw_production_zip_contents_dir)
 
     unzip_file(production_zipfile, raw_production_zip_contents_dir)
     production_zip_contents_dir = File.join(raw_production_zip_contents_dir, "MartusClient-#{version}")
