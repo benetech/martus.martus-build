@@ -35,7 +35,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     properties << " -Dshort.app.name=Martus"
     properties << " -Dversion.full=#{version}"
     properties << " -Dversion.timestamp=#{timestamp}"
-    properties << " -Dmain.class=org.martus.swingui.martus"
+    properties << " -Dmain.class=org.martus.client.swingui.martus"
 
     properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.dir=#{production_zip_contents_dir}"
