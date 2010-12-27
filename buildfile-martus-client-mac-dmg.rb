@@ -15,7 +15,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
     tmpdir = File.join(_('dist', 'mactree')) #was Dir.mktmpdir
     puts "Using temp dir: #{tmpdir}"
-    Dir.mkdir(tmpdir)
+    if(!File.exists(tmpdir))
+	    Dir.mkdir(tmpdir)
 
     dmg_contents_dir = File.join(tmpdir, "dmgcontents")
     raw_production_zip_contents_dir = File.join(tmpdir, "production")
