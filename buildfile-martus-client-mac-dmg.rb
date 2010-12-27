@@ -15,6 +15,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
     tmpdir = File.join(_('dist', 'mactree')) #was Dir.mktmpdir
     puts "Using temp dir: #{tmpdir}"
+    FileUtils::rm_r(tmpdir)
     FileUtils::mkdir_p(tmpdir)
 
     dmg_contents_dir = File.join(tmpdir, "dmgcontents")
