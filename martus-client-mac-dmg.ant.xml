@@ -80,6 +80,8 @@
         
         <copy todir="${dmg.dest.dir}" file="${rawdmgfile}" />
 
+        <!-- Temporarily avoid deleting files so I can compare Martus to Miradi
         <delete dir="${dist.mactree}" />
+        -->
     </target>
 </project>
