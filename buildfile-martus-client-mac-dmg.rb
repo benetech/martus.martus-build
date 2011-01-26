@@ -39,6 +39,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	libext_dir = File.join(production_zip_contents_dir, "Contents/Resources/Java/LibExt")
 	FileUtils::mv(File.join(libext_dir, "bc-jce.jar"), extensions_dir)
 
+	FileUtils::cp(_('BuildFiles', 'Documents', 'README.mac'), dmg_contents_dir)
+	
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
     properties << " -Dmac.app.name=Martus"
