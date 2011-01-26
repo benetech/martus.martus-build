@@ -1,0 +1,30 @@
+Requirements to run Martus on a Macintosh
+-----------------------------------------
+- Mac OS X
+- Java Runtime Environment (JRE) version 1.4.2 or above
+- 75 MB hard disk space available (100 MB or more recommended)
+- Internet connection, to back up data to the Martus server. If you do not have an internet connection,
+see section ―9g. Enabling other accounts to send your bulletins to a server.‖
+- To send bulletins to a Martus Server, your Martus software must not be blocked by a firewall. If you
+have a software or hardware firewall, it must allow your computer to contact ports 987 and 988, or
+ports 80 and 443, on the Internet. If these ports are blocked when you try to select the server, you will
+see a message that the server is not responding.
+- CD drive (for CD installation only)
+- Screen resolution of 800x600 or greater
+
+
+To install Martus on Mac OS X
+-----------------------------
+Note: These instructions may vary depending on which version of the Mac OS you are running. If these
+instructions are not applicable to what you see on your computer, please email us at help@martus.org.
+1. Download the Martus DMG file, or find it on the CD-ROM, and double-click it.
+2. Open the Extensions folder, and copy the bc-jce.jar file to the /Library/Java/Extensions folder on your hard disk.
+3. We recommend that you copy the Martus app to your Applications folder, or elsewhere on your computer.
+4. If desired, you can also copy the Documents folder to elsewhere on your computer. 
+This folder contains files with helpful information about Martus.
+
+
+Running Martus on Mac OS X
+--------------------------
+Double-click the Martus application.
+
