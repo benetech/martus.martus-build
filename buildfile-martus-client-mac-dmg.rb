@@ -39,6 +39,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	libext_dir = File.join(production_zip_contents_dir, "LibExt")
 puts "Moving #{File.join(libext_dir, 'bc-jce.jar')}, #{extensions_dir}"
 	FileUtils::mv(File.join(libext_dir, 'bc-jce.jar'), extensions_dir)
+	exit 1
 
 	FileUtils::mv(File.join(other_files_dir, 'README.mac'), dmg_contents_dir)
 	
