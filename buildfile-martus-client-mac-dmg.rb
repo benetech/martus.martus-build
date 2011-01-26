@@ -40,7 +40,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 puts "Moving #{File.join(libext_dir, 'bc-jce.jar')}, #{extensions_dir}"
 	FileUtils::mv(File.join(libext_dir, 'bc-jce.jar'), extensions_dir)
 
-	FileUtils::cp(_('BuildFiles', 'Documents', 'README.mac'), "#{other_files_dir}")
+	FileUtils::cp([_('BuildFiles', 'Documents', 'README.mac')], "#{other_files_dir}")
 	FileUtils::mv(File.join(other_files_dir, 'README.mac'), dmg_contents_dir)
 	
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
