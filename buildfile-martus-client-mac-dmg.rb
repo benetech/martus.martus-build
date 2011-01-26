@@ -42,7 +42,6 @@ puts "Moving #{File.join(libext_dir, 'bc-jce.jar')}, #{extensions_dir}"
 
 	FileUtils::cp([_('BuildFiles', 'Documents', 'README.mac')], "#{other_files_dir}")
 	FileUtils::mv(File.join(other_files_dir, 'README.mac'), dmg_contents_dir)
-	exit 1
 	
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
