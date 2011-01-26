@@ -29,10 +29,15 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #puts "press enter"
 #$stdin.gets
 
-	other_files_dir = File.join(dmg_contents_dir, "README")
+	other_files_dir = File.join(dmg_contents_dir, "Documents")
 	FileUtils::mkdir_p(other_files_dir)
 	docs = Dir["#{production_zip_contents_dir}/*.txt"]
 	FileUtils::cp(docs, other_files_dir)
+	
+	extensions_dir = File.join(dmg_contents_dir, "Extensions")
+	FileUtils::mkdir_p(extensions_dir)
+	libext_dir = File.join(production_zip_contents_dir, "Contents/Resources/Java/LibExt")
+	FileUtils::mv(File.join(libext_dir, "bc-jce.jar"), extensions_dir)
 
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""

@@ -75,7 +75,12 @@
         </exec> 
         <exec executable="cp">
             <arg value="-r" />
-            <arg value="${dist.mactree}/README/" />
+            <arg value="${dist.mactree}/Documents/" />
+            <arg value="${dmgmount}" />
+        </exec> 
+        <exec executable="cp">
+            <arg value="-r" />
+            <arg value="${dist.mactree}/Extensions/" />
             <arg value="${dmgmount}" />
         </exec> 
         <exec os="Linux"  executable="umount" failonerror="true">
