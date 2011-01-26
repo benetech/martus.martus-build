@@ -28,6 +28,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #puts production_zip_contents_dir
 #puts "press enter"
 #$stdin.gets
+	FileUtils::rm_r(File.join(production_zip_contents_dir, 'Java'))
 
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
