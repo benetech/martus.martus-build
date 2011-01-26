@@ -28,10 +28,12 @@ NOTE: IF an earlier version of Martus has been installed on this computer,
 
 Installing Martus (new or upgrade):
 1. Download the Martus DMG file, or find it on the CD-ROM, and double-click it.
-2. Open the Extensions folder, and copy the bc-jce.jar file to the /Library/Java/Extensions folder on your hard disk.
-3. We recommend that you copy the Martus app to your Applications folder, or elsewhere on your computer.
-4. If desired, you can also copy the Documents folder to elsewhere on your computer. 
-This folder contains files with helpful information about Martus.
+   This will create a Martus icon on your desktop represented the mounted DMG.
+2. double-click on this Martus icon to view the contents of the DMG file.
+3. Open the Extensions folder, and copy the bc-jce.jar file to the /Library/Java/Extensions folder on your hard disk.
+4. We recommend that you copy the Martus app to your Applications folder, or elsewhere on your computer.
+5. If desired, you can also copy the Documents folder to elsewhere on your computer. 
+   This folder contains files with helpful information about Martus.
 
 After successfully installing Martus, if you had an earlier version, 
 we recommend that you delete it, along with any shortcuts you may have created.
