@@ -56,7 +56,7 @@
         <!-- Format that file as an hfsplus disk image -->
         <exec os="Linux"  executable="mkfs.hfsplus" failonerror="true">
             <arg value="-v"/>
-            <arg value="Miradi ${version.full}"/>
+            <arg value="${mac.app.name} ${version.full}"/>
             <arg value="${rawdmgfile}"/>
         </exec>
         
