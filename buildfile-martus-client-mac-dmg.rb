@@ -31,7 +31,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	other_files_dir = File.join(dmg_contents_dir, "Documents")
 	FileUtils::mkdir_p(other_files_dir)
-	docs = Dir["#{production_zip_contents_dir}/*.*"]
+	docs = Dir["#{production_zip_contents_dir}/*.txt"]
 	FileUtils::cp(docs, other_files_dir)
 	
 	extensions_dir = File.join(dmg_contents_dir, "Extensions")
@@ -39,9 +39,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	libext_dir = File.join(production_zip_contents_dir, "LibExt")
 puts "Moving #{File.join(libext_dir, 'bc-jce.jar')}, #{extensions_dir}"
 	FileUtils::mv(File.join(libext_dir, 'bc-jce.jar'), extensions_dir)
-	exit 1
 
+	FileUtils::cp([_('BuildFiles', 'Documents', 'README.mac')], "#{other_files_dir}")
 	FileUtils::mv(File.join(other_files_dir, 'README.mac'), dmg_contents_dir)
+	exit 1
 	
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
