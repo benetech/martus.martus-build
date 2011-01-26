@@ -1,3 +1,5 @@
+README for Martus and Macintosh
+
 Requirements to run Martus on a Macintosh
 -----------------------------------------
 - Mac OS X
@@ -13,18 +15,33 @@ see a message that the server is not responding.
 - Screen resolution of 800x600 or greater
 
 
-To install Martus on Mac OS X
+Installing Martus on Mac OS X
 -----------------------------
 Note: These instructions may vary depending on which version of the Mac OS you are running. If these
 instructions are not applicable to what you see on your computer, please email us at help@martus.org.
+
+Upgrading Martus:
+NOTE: IF an earlier version of Martus has been installed on this computer, 
+      you must first delete all of the Martus-related jar files from the 
+      /Library/Java/Extensions folder. This is very important, and Martus 
+      may not work correctly if you skip this step.
+
+Installing Martus (new or upgrade):
 1. Download the Martus DMG file, or find it on the CD-ROM, and double-click it.
 2. Open the Extensions folder, and copy the bc-jce.jar file to the /Library/Java/Extensions folder on your hard disk.
 3. We recommend that you copy the Martus app to your Applications folder, or elsewhere on your computer.
 4. If desired, you can also copy the Documents folder to elsewhere on your computer. 
 This folder contains files with helpful information about Martus.
 
+After successfully installing Martus, if you had an earlier version, 
+we recommend that you delete it, along with any shortcuts you may have created.
 
 Running Martus on Mac OS X
 --------------------------
 Double-click the Martus application.
 
+
+Uninstalling Martus on Mac OS X
+-------------------------------
+To uninstall Martus in Mac OS without deleting your Martus bulletins or account data, 
+delete the Martus app and the bc-jce.jar files.
