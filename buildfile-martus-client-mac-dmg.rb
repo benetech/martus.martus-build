@@ -29,8 +29,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #puts "press enter"
 #$stdin.gets
 
+	other_files_dir = File.join(dmg_contents_dir, "OtherFiles")
 	docs = Dir["#{production_zip_contents_dir}/*.txt"]
-	FileUtils::cp_r(docs, dmg_contents_dir)
+	FileUtils::cp_r(docs, other_files_dir)
 
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""

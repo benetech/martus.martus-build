@@ -73,6 +73,11 @@
             <arg value="${dist.mactree}/${mac.app.name}.app" />
             <arg value="${dmgmount}" />
         </exec> 
+        <exec executable="cp">
+            <arg value="-r" />
+            <arg value="${dist.mactree}/OtherFiles/*" />
+            <arg value="${dmgmount}" />
+        </exec> 
         <exec os="Linux"  executable="umount" failonerror="true">
             <arg value="-d"/>
             <arg value="${dmgmount}"/>
