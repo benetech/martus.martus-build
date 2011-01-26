@@ -7,9 +7,6 @@
             classpath="${installer.mac}/jarbundler-2.1.0/jarbundler-2.1.0.jar" />
 
         <mkdir dir="${dist.mactree}" />
-        <delete>
-            <fileset dir="${dist.mactree}" includes="*" />
-        </delete>
         
         <jarbundler 
             dir="${dist.mactree}" 
