@@ -29,7 +29,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #puts "press enter"
 #$stdin.gets
 
-	other_files_dir = File.join(dmg_contents_dir, "OtherFiles")
+	other_files_dir = File.join(dmg_contents_dir, "README")
 	FileUtils::mkdir_p(other_files_dir)
 	docs = Dir["#{production_zip_contents_dir}/*.txt"]
 	FileUtils::cp(docs, other_files_dir)
