@@ -33,7 +33,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	docs_dir = File.join(dmg_contents_dir, "Documents")
 	FileUtils::mkdir_p(docs_dir)
-	readmes = Dir[File.join(production_zip_contents_dir}, "*.txt")]
+	readmes = Dir[File.join(production_zip_contents_dir, "*.txt")]
 	FileUtils::cp(readmes, docs_dir)
 	pdfs = Dir[File.join(_('BuildFiles', 'Documents'), "*.pdf")]
 	FileUtils::cp(pdfs, docs_dir)
