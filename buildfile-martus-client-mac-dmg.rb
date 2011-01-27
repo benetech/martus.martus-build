@@ -29,20 +29,20 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #puts "press enter"
 #$stdin.gets
 
-	other_files_dir = File.join(dmg_contents_dir, "Documents")
-	FileUtils::mkdir_p(other_files_dir)
-	docs = Dir["#{production_zip_contents_dir}/*.txt"]
-	FileUtils::cp(docs, other_files_dir)
+	FileUtils::cp([_('BuildFiles', 'Documents', 'README.mac')], dmg_contents_dir)
+	
+	docs_dir = File.join(dmg_contents_dir, "Documents")
+	FileUtils::mkdir_p(docs_dir)
+	readmes = Dir[File.join(production_zip_contents_dir}, "*.txt")]
+	FileUtils::cp(readmes, docs_dir)
+	pdfs = Dir[File.join(_('BuildFiles', 'Documents'), "*.pdf")]
+	FileUtils::cp(pdfs, docs_dir)
 	
 	extensions_dir = File.join(dmg_contents_dir, "Extensions")
 	FileUtils::mkdir_p(extensions_dir)
 	libext_dir = File.join(production_zip_contents_dir, "LibExt")
-puts "Moving #{File.join(libext_dir, 'bc-jce.jar')}, #{extensions_dir}"
 	FileUtils::mv(File.join(libext_dir, 'bc-jce.jar'), extensions_dir)
 
-	FileUtils::cp([_('BuildFiles', 'Documents', 'README.mac')], "#{other_files_dir}")
-	FileUtils::mv(File.join(other_files_dir, 'README.mac'), dmg_contents_dir)
-	
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
     properties << " -Dmac.app.name=Martus"
