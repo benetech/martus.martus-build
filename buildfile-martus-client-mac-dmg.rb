@@ -41,6 +41,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	licenses_dir = File.join(production_zip_contents_dir, "Martus/Docs/Licenses")
 	FileUtils::cp_r(licenses_dir, docs_dir)
 	
+	fonts_dir = File.join(dmg_contents_dir, "Documents")
+	FileUtils::mkdir_p(fonts_dir)
+	fonts = Dir[File.join(, "Martus/Docs/*.pdf")]
+	FileUtils::cp_r(_('BuildFiles', 'Fonts'), dmg_contents_dir)
+
 	extensions_dir = File.join(dmg_contents_dir, "Extensions")
 	FileUtils::mkdir_p(extensions_dir)
 	libext_dir = File.join(production_zip_contents_dir, "LibExt")
