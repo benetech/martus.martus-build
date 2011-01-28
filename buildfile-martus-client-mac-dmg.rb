@@ -29,9 +29,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #puts "press enter"
 #$stdin.gets
 
-	FileUtils::cp([_('BuildFiles', 'MartusDocumentation', 'README.mac')], dmg_contents_dir)
+	FileUtils::cp([_('BuildFiles', 'Documents', 'README.mac')], dmg_contents_dir)
 	
-	docs_dir = File.join(dmg_contents_dir, "Documents")
+	docs_dir = File.join(dmg_contents_dir, "MartusDocumentation")
 	FileUtils::mkdir_p(docs_dir)
 	readmes = Dir[File.join(production_zip_contents_dir, "*.txt")]
 	FileUtils::cp(readmes, docs_dir)
