@@ -67,7 +67,7 @@
         <!-- USING cp to PRESERVE FILE PERMISSIONS! -->
         <exec executable="cp">
             <arg value="-r" />
-            <arg value="${dist.mactree}/" />
+            <arg value="${dist.mactree}/." />
             <arg value="${dmgmount}" />
         </exec> 
         <exec os="Linux"  executable="umount" failonerror="true">
