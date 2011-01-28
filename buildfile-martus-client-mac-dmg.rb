@@ -54,7 +54,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.dir=#{production_zip_contents_dir}"
     properties << " -Dvm.options=-Xbootclasspath/p:Contents/Resources/Java/LibExt/bc-jce.jar"
-    properties << " -DworkingDirectory=$APP_PACKAGE"
 
     properties << " -Ddist.mactree=#{dmg_contents_dir}" #can be temp
     properties << " -Ddmg.dest.dir=#{_('dist')}"
