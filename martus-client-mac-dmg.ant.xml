@@ -17,7 +17,8 @@
             shortname="${short.app.name}" 
             version="${version.full}"
             build="${version.timestamp}"
-            vmoptions="${vm.options}"
+            vmoptions="${vm.options};$APP_PACKAGE"
+        	workingDirectory="$APP_PACKAGE"
             verbose="true"
             >
 
