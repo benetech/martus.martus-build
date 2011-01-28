@@ -43,11 +43,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	FileUtils::cp_r(_('BuildFiles', 'Fonts'), dmg_contents_dir)
 
-	extensions_dir = File.join(dmg_contents_dir, "Extensions")
-	FileUtils::mkdir_p(extensions_dir)
-	libext_dir = File.join(production_zip_contents_dir, "LibExt")
-	FileUtils::mv(File.join(libext_dir, 'bc-jce.jar'), extensions_dir)
-
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
     properties << " -Dmac.app.name=Martus"
@@ -58,7 +53,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
     properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.dir=#{production_zip_contents_dir}"
-    properties << " -Dvm.options=-Xbootclasspath/p:/bc-jce.jar"
+    properties << " -Dvm.options=-Xbootclasspath/p:$APP_PACKAGE/Contents/Resources/Java/LibExt/bc-jce.jar"
 
     properties << " -Ddist.mactree=#{dmg_contents_dir}" #can be temp
     properties << " -Ddmg.dest.dir=#{_('dist')}"
