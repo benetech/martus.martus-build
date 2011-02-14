@@ -42,6 +42,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	FileUtils::cp_r(licenses_dir, docs_dir)
 	
 	FileUtils::cp_r(_('BuildFiles', 'Fonts'), dmg_contents_dir)
+	FileUtils::rm_f(File.join(dmg_contents_dir, "CVS"))
 
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
