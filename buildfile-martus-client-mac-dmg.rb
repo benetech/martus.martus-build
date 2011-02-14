@@ -16,7 +16,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	    tmpdir = File.join(_('dist', 'mactree')) #was Dir.mktmpdir
 	    puts "Using temp dir: #{tmpdir}"
-	    FileUtils::rm_r(tmpdir)
+	    if(File.exists?(tmpdir)
+		    FileUtils::rm_r(tmpdir)
+		end
 	    FileUtils::mkdir_p(tmpdir)
 	
 	    dmg_contents_dir = File.join(tmpdir, "dmgcontents")
@@ -45,7 +47,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		FileUtils::cp_r(_('BuildFiles', 'Fonts'), dmg_contents_dir)
 		dmg_fonts_dir = File.join(dmg_contents_dir, "Fonts")
 		dmg_fonts_cvs_dir = File.join(dmg_fonts_dir, "CVS")
-		FileUtils::rm_r(dmg_fonts_cvs_dir)
+		if(File.exists?(dmg_fonts_cvs_dir))
+			FileUtils::rm_r(dmg_fonts_cvs_dir)
+		end
 	
 	    buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
 	    properties = ""
