@@ -2,6 +2,7 @@ README for Martus and Macintosh
 
 See http://www.martus.org for information about Martus software.
 
+
 Requirements to run Martus on a Macintosh
 -----------------------------------------
 - Mac OS X
@@ -70,9 +71,9 @@ Installing Martus (new or upgrade):
    various languages. We also suggest that you copy this folder to your 
    computer where you can have easy access to it. 
 5. If you are using a Martus Language Pack (e.g. Martus-en.mlp), 
-   please copy the mlp file to the .Martus folder in your home folder.
-   Note that Finder must be configured to show hidden files for 
-   it to show the .Martus folder.
+   please copy the mlp file to your Martus data folder. For instructions
+   on how to access your Martus data folder, see the section below named 
+   "Viewing the Martus Data Folder".
 6. Burmese, Khmer, and Bangla/Bengali fonts are provided in the Fonts 
    folder. If you need any of these, you can install it by 
    double-clicking on the .ttf file and choosing "Install". 
@@ -95,8 +96,26 @@ helpful in diagnosing any problems in Mac OSX, you can run the
 As long as console is running, any console output from Martus 
 will appear there. You only have to run console once, and then 
 you can run (and stop) Martus as many times as you want. 
-  
 
+
+Viewing the Martus Data Folder
+-------------------------------
+The Martus data folder, which contains your account and bulletin 
+info, is named .Martus and is located in your Home folder. The 
+Martus data folder is also where you would place any language pack 
+files. Normally this is a hidden folder, so in order to be able to 
+see it with Finder, please follow these instructions:
+ 
+1. Open a Terminal window, under Applications > Utilities 
+   (or by hitting Command-Space to bring up the search, enter 
+   "terminal", and when it finds the Terminal app, launch it).  
+2. Type the following (exactly) and then press return/enter:
+   defaults write com.apple.Finder AppleShowAllFiles YES
+3. Restart the Finder by holding the Option key, and click and hold 
+   the Finder icon. When the context menu shows, select Relaunch.
+4. You should now see the .Martus folder within your home directory, 
+   and can copy files to/from there as needed.
+  
 
 Uninstalling Martus on Mac OS X
 -------------------------------
