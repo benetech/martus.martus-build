@@ -37,7 +37,10 @@ BEFORE YOU INSTALL:
 If an earlier version of Martus has been installed on this computer, 
 you must first delete all of the Martus-related jar files from the 
 /Library/Java/Extensions folder. This is very important, and Martus 
-may not work correctly if you skip this step. The Martus-related jars are:
+may not work correctly if you skip this step. You may be prompted to 
+enter the admin username/password to delete these files.
+
+The Martus-related jars are:
 - InfiniteMonkey.jar
 - bc-jce.jar
 - bcprov-jdk14-135.jar
