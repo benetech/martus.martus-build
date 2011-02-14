@@ -12,7 +12,7 @@
             dir="${dist.mactree}" 
             name="${mac.app.name}" 
             mainclass="${main.class}" 
-            jvmversion="1.5+" 
+            jvmversion="1.4+" 
             stubfile="${macjavastubfile}" 
             shortname="${short.app.name}" 
             version="${version.full}"
