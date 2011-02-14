@@ -51,6 +51,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 			FileUtils::rm_r(dmg_fonts_cvs_dir)
 		end
 	
+		mac_icon_file = _('BuildFiles', 'ProgramFiles', 'Martus-Mac.ico')
+
 	    buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
 	    properties = ""
 	    properties << " -Dmac.app.name=Martus"
@@ -58,6 +60,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	    properties << " -Dversion.full=#{version}"
 	    properties << " -Dversion.timestamp=#{timestamp}"
 	    properties << " -Dmain.class=org.martus.client.swingui.Martus"
+	    properties << " -Dmac.icon.file=#{dmg_mac_icon_file}"
 	
 	    properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
 	    properties << " -Dapp.dir=#{production_zip_contents_dir}"

@@ -19,6 +19,7 @@
             build="${version.timestamp}"
             vmoptions="${vm.options}"
         	workingDirectory="$APP_PACKAGE"
+        	icon="#{mac.icon.file}"
             verbose="true"
             >
 
