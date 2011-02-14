@@ -61,6 +61,10 @@ Installing Martus (new or upgrade):
    README files that describe the features in each version, all in 
    various languages. We also suggest that you copy this folder to your 
    computer where you can have easy access to it. 
+5. If you are using a Martus Language Pack (e.g. Martus-en.mlp), 
+   please copy the mlp file to the .Martus folder in your home folder.
+   Note that Finder must be configured to show hidden files for 
+   it to show the .Martus folder.
    
 
 Running Martus on Mac OS X
