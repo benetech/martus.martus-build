@@ -9,7 +9,7 @@ Requirements to run Martus on a Macintosh
 - 75 MB hard disk space available (100 MB or more recommended)
 - Internet connection, to back up data to the Martus server. 
   If you do not have an internet connection, see section 
-  "―9g. Enabling other accounts to send your bulletins to a server."
+  "9g. Enabling other accounts to send your bulletins to a server."
   in the Martus User Guide.
 - To send bulletins to a Martus Server, your Martus software 
   must not be blocked by a firewall. If you have a software or 
