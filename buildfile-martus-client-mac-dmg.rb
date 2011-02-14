@@ -43,7 +43,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	FileUtils::cp_r(_('BuildFiles', 'Fonts'), dmg_contents_dir)
 	dmg_fonts_dir = File.join(dmg_contents_dir, "Fonts")
-	FileUtils::rm_f(File.join(dmg_fonts_dir, "CVS"))
+	dmg_fonts_cvs_dir = File.join(dmg_fonts_dir, "CVS")
+puts "Deleting #{dmg_fonts_cvs_dir}"
+	FileUtils::rm_f(dmg_fonts_cvs_dir)
 
     buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
     properties = ""
