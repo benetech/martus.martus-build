@@ -5,7 +5,12 @@ See http://www.martus.org for information about Martus software.
 Requirements to run Martus on a Macintosh
 -----------------------------------------
 - Mac OS X
-- Java Runtime Environment (JRE) version 1.4.2 or above
+- One of the following Java Runtime Environment (JRE) versions:
+  (Best): Version 1.6.0_22 or later
+  (Next best): Version 1.5.0_22(rev-b07) or a later 1.5 version. 
+  (Acceptable): Version 1.4.2
+  NOTE: Java 1.5 and Java 1.6 earlier than the specific revisions
+  mentioned above will not work with Martus Language Pack (MLP) files.
 - 75 MB hard disk space available (100 MB or more recommended)
 - Internet connection, to back up data to the Martus server. 
   If you do not have an internet connection, see section 
