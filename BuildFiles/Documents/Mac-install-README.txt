@@ -65,6 +65,10 @@ Installing Martus (new or upgrade):
    please copy the mlp file to the .Martus folder in your home folder.
    Note that Finder must be configured to show hidden files for 
    it to show the .Martus folder.
+6. Burmese, Khmer, and Bangla/Bengali fonts are provided in the Fonts 
+   folder. If you need any of these, you can install it by 
+   double-clicking on the .ttf file and choosing "Install". 
+   If you have issues, please email help@martus.org.
    
 
 Running Martus on Mac OS X
