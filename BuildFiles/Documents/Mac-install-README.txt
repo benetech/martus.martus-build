@@ -83,6 +83,20 @@ Running Martus on Mac OS X
 --------------------------
 Double-click the Martus application.
 
+To display additional information as Martus runs that will be 
+helpful in diagnosing any problems in Mac OSX, you can run the 
+"Console" application. Launch it in one of two ways: 
+  
+1. Inside your Applications folder, find the Utilities folder, 
+   and double-click on Console. 
+2. Command-Space to bring up the search, enter "console", and 
+   when it finds the Console app, launch it. 
+  
+As long as console is running, any console output from Martus 
+will appear there. You only have to run console once, and then 
+you can run (and stop) Martus as many times as you want. 
+  
+
 
 Uninstalling Martus on Mac OS X
 -------------------------------
