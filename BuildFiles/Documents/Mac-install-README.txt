@@ -5,7 +5,7 @@ See http://www.martus.org for information about Martus software.
 
 Requirements to run Martus on a Macintosh
 -----------------------------------------
-- Mac OS X
+- Mac OS X (10.6.4 or later is recommended)
 - One of the following Java Runtime Environment (JRE) versions:
   (Best): Version 1.6.0_22 or later
   (Next best): Version 1.5.0_22(rev-b07) or a later 1.5 version. 
@@ -61,23 +61,26 @@ to the old Martus version, to avoid confusion.
 
 
 Installing Martus (new or upgrade):
-1. Download the Martus DMG file and double-click it as you would any DMG.
+1. Download the Martus DMG file and double-click it as you would for 
+   any DMG file.
 2. Double-click on the Martus icon to view the contents.
 3. We recommend that you copy the Martus application (Martus.app) 
    to your Applications folder. 
-4. The MartusDocumentation folder contains files with helpful information 
-   about Martus, including User Guides, Quick Start Guides, and 
-   README files that describe the features in each version, all in 
+4. The MartusDocumentation folder contains files with helpful 
+   information about Martus, including User Guides, Quick Start Guides, 
+   and README files that describe the features in each version, all in 
    various languages. We also suggest that you copy this folder to your 
    computer where you can have easy access to it. 
-5. If you are using a Martus Language Pack (e.g. Martus-en.mlp), 
-   please copy the mlp file to your Martus data folder. For instructions
-   on how to access your Martus data folder, see the section below named 
+5. If you are using a Martus Language Pack (e.g. Martus-en.mlp), please 
+   copy the mlp file to your Martus data folder. For instructions on 
+   how to access your Martus data folder, see the section below named 
    "Viewing the Martus Data Folder".
 6. Burmese, Khmer, and Bangla/Bengali fonts are provided in the Fonts 
    folder. If you need any of these, you can install it by 
    double-clicking on the .ttf file and choosing "Install". 
-   If you have issues, please email help@martus.org.
+   If you have issues running or entering text in Burmese, Khmer, or 
+   Bangla/Bengali, please see FAQs 40 - 42 in the Martus User Guide, 
+   or email help@martus.org.
    
 
 Running Martus on Mac OS X
@@ -100,10 +103,13 @@ you can run (and stop) Martus as many times as you want.
 
 Viewing the Martus Data Folder
 -------------------------------
-The Martus data folder, which contains your account and bulletin 
-info, is named .Martus and is located in your Home folder. The 
-Martus data folder is also where you would place any language pack 
-files. Normally this is a hidden folder, so in order to be able to 
+The Martus data folder is named .Martus and is located in your Home 
+folder. This folder contains your account and bulletin info, as well 
+as other files created while using Martus, such as report/search 
+templates, HQ information files, etc. The Martus data folder is also 
+where you would place any language pack files. 
+
+Normally the Martus data folder is hidden, so in order to be able to 
 see it with Finder, please follow these instructions:
  
 1. Open a Terminal window, under Applications > Utilities 
