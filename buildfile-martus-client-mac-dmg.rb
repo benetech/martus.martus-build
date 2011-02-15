@@ -51,7 +51,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 			FileUtils::rm_r(dmg_fonts_cvs_dir)
 		end
 	
-		# NOTE: Mac icon won't work if .icns extension is included
+		# NOTE: This does not appear to be working. We need to learn more 
+		# about mac app icons before spending more time on it.
 		mac_icon_file = _('BuildFiles', 'ProgramFiles', 'Martus-Mac')
 
 	    buildfile_option = "-buildfile martus-client-mac-dmg.ant.xml"
