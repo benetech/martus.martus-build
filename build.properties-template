@@ -1,0 +1,63 @@
+# -------------------------------------------------------------------
+# B U I L D  P R O P E R T I E S
+# -------------------------------------------------------------------
+# These properties are used by the Martus build
+# NOTE: Some of these entries are for passwords, it is not advisable to check
+# YOUR property file into CVS. Use this file as a template and keep 
+# your copy in a safe place
+#
+# NOTE: Comment out (#) those properties you will not use or they will
+#				be set to 0
+# -------------------------------------------------------------------
+
+name = martus
+project.names=martus,martus-amp,martus-client,martus-common,martus-hrdag,martus-jarverifier,martus-logi,martus-meta,martus-mspa,martus-server,martus-swing,martus-thirdparty,martus-utils
+martus.version=
+build.basedir=
+
+# ###############################
+# third party related properties
+# ###############################
+bouncycastle.version=
+
+# ############################
+# jarsigner related properties
+# ############################
+sign.keystore=
+sign.storepass=
+sign.keypass=
+
+# ############################
+# cvs related properties
+# ############################
+cvs.protocol=ext
+cvs.username=
+cvs.location=cvs.bookshare.org
+cvs.repository=/var/local/cvs
+cvs.home=
+cvs.port=822
+cvs.privatekey.location=
+
+# #####################################
+# email properties
+# #####################################
+
+MailLogger.mailhost=BENESBS
+MailLogger.success.subject=
+
+# comma separated list of senders/recipients
+MailLogger.from=
+MailLogger.replyto=
+MailLogger.failure.to=
+MailLogger.success.to=
+
+# #####################################
+# installer related properties
+# #####################################
+
+public.release.folder=E:/CVS_TEST/Build/martus/dist
+cd.image.dir.name=CD_IMAGE
+
+# #####################################
+# 
+# #####################################

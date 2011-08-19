@@ -1,0 +1,86 @@
+<project name="martus-client-mac-dmg">
+    <target name="macappbundle" depends="" description="create a jar app bundle for the mac">
+        <echo message="installer.mac: ${installer.mac}" />
+        <property name="macjavastubfile" value="${installer.mac}/JavaApplicationStub/JavaApplicationStub" />
+        <taskdef name="jarbundler" 
+            classname="net.sourceforge.jarbundler.JarBundler" 
+            classpath="${installer.mac}/jarbundler-2.1.0/jarbundler-2.1.0.jar" />
+
+        <mkdir dir="${dist.mactree}" />
+        
+        <jarbundler 
+            dir="${dist.mactree}" 
+            name="${mac.app.name}" 
+            mainclass="${main.class}" 
+            jvmversion="1.4+" 
+            stubfile="${macjavastubfile}" 
+            shortname="${short.app.name}" 
+            version="${version.full}"
+            build="${version.timestamp}"
+            vmoptions="${vm.options}"
+        	workingDirectory="$APP_PACKAGE"
+        	icon="${mac.icon.file}"
+            verbose="true"
+            >
+
+            <jarfileset dir="${app.dir}">
+                <include name="Martus/martus.jar" />
+                <include name="LibExt/*" />
+            </jarfileset>
+
+            <javaproperty name="apple.laf.useScreenMenuBar" value="true" />
+            <javaproperty name="apple.awt.brushMetal" value="true" />
+            <javaproperty name="apple.awt.showGrowBox" value="true" />
+            <javaproperty name="apple.awt.antialiasing" value="true" />
+            <javaproperty name="apple.awt.textantialiasing" value="true" />
+        </jarbundler>
+    </target>
+
+    <!--*****************************************************************-->
+    <target name="macdmgfile" depends="macappbundle" description="create a mac dmg file">
+        <exec os="Linux"  executable="umount" failonerror="false">
+            <arg value="-d"/>
+            <arg value="${dmgmount}"/>
+        </exec>
+
+        <!-- Create an empty .dmg file of the appropriate size -->
+        <delete file="${rawdmgfile}" />	
+        <exec os="Linux"  executable="dd" failonerror="true">
+            <arg value="if=/dev/zero"/>
+            <arg value="of=${rawdmgfile}"/>
+            <arg value="bs=1M"/>
+            <arg value="count=${dmg.size.megs}"/>
+        </exec>
+        
+        <!-- Format that file as an hfsplus disk image -->
+        <exec os="Linux"  executable="mkfs.hfsplus" failonerror="true">
+            <arg value="-v"/>
+            <arg value="${mac.app.name} ${version.full}"/>
+            <arg value="${rawdmgfile}"/>
+        </exec>
+        
+        <echo message="Mounting ${dmgmount} (must be in fstab)" />
+        <echo message="  ${rawdmgfile} ${dmgmount} hfsplus rw,user,loop 0 0" />
+        <exec os="Linux"  executable="mount" failonerror="true">
+            <arg value="${dmgmount}"/>
+        </exec>
+        
+        <!-- Copy .app directory to the disk image -->
+        <!-- USING cp to PRESERVE FILE PERMISSIONS! -->
+        <exec executable="cp">
+            <arg value="-r" />
+            <arg value="${dist.mactree}/." />
+            <arg value="${dmgmount}" />
+        </exec> 
+        <exec os="Linux"  executable="umount" failonerror="true">
+            <arg value="-d"/>
+            <arg value="${dmgmount}"/>
+        </exec>
+        
+        <copy todir="${dmg.dest.dir}" file="${rawdmgfile}" />
+
+        <!-- Temporarily avoid deleting files so I can compare Martus to Miradi
+        <delete dir="${dist.mactree}" />
+        -->
+    </target>
+</project>

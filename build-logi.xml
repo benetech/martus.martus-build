@@ -1,0 +1,26 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-logi" default="notify-logi" basedir=".">
+    <description>
+        Martus logi Build File
+    </description>
+
+    <!-- imports -->
+	<import file="build-meta.xml" />
+    <import file="build.shared.values.xml" />
+
+    <target name="notify-logi">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-logi" depends="init" description="Compile martus-logi">
+        <mkdir dir="${martus.logi.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.logi.src.root}" destdir="${martus.logi.class.root}" failonerror="true">
+              <include name="**/*.java"/>
+        </javac>
+    </target>
+
+</project>

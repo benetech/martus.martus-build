@@ -1,0 +1,30 @@
+RELEASE NOTES
+=============
+
+[09.03.2003]
+
+* filesplit V2.0.100 is compatible with previous versions of filesplit.
+
+* Updated SPLIT process:
+  1) New argument [<destination>] to specify where chunks should
+     arrive.
+  2) If no chunk size is specified it defaults to 1440k 
+     (floppy disk size).
+
+* Updated MERGE process:
+  1) New argument [<destination>] to specify where chunks should
+     arrive.
+  2) If filesplit is called with a single command line argument
+     that's a chunk file (e.g. "filesplit largefile.exe_001.cnk"),
+     then it will automatically merge it (regardless of which
+     chunk you pass as the argument).
+     This means that if you associate the extension ".cnk" with
+     filesplit in your operating system, whenever you open a chunk
+     file it will automatically merge it.
+     Obviously, if you use filesplit to split up log files for easy
+     reading, you'd associate ".cnk" files with your favorite text
+     editor.
+
+     If filesplit automerge process fails, it will generate a
+     file named FAILED.txt stating the error.
+ 
