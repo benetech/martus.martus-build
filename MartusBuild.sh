@@ -17,12 +17,12 @@
 set -u
 #set -n
 
-#NOTE: Add additional language-code and language-code to language-string mappings below
-MARTUS_LANGUAGES="en es ru ar fr th fa ne"
+#NOTE: Add additional language-code (for mtf/docs inclusion in client) and language-code to language-string mappings below
+MARTUS_LANGUAGES="en es ru ar fr th fa ne bur km"
 export MARTUS_LANGUAGES
 
 #################################################
-# language-code to language-name mapping
+# language-code to language-name mapping - FOR NSIS INSTALLER
 #################################################
 LANGUAGE_STRING="English"
 getLangNameFromCode()
@@ -124,7 +124,7 @@ setCvsEnvVars()
 cleanCvsHome()
 {
 	echo 
-	echo "MartusBuild.sh 8/31/2006"
+	echo "MartusBuild.sh 2010-10-18"
 	echo "Cleaning the build environment $CVS_HOME (ignore mount/umount messages)...";
 	if [ -d "$CVS_HOME" ]; then
 		rm -Rf $CVS_HOME
@@ -695,6 +695,7 @@ createClientInstallers()
 	buildClientJarVerifier
 	createInstallerCdImage
 	createMacLinuxZip
+	createMSPAClientZip
 	createCdNsisInstaller
 	createSingleNsisInstaller
 	createUpgradeInstaller
@@ -796,6 +797,21 @@ function createMacLinuxZip()
 	fi
 	
 	rm -vfr /tmp/MartusClient-$CURRENT_VERSION
+}
+
+#################################################
+# 
+#################################################
+function createMSPAClientZip()
+{
+	echo
+	echo "Starting the ant MSPA Client Zip build (might take a minute)..."
+	cd "$CVS_HOME/martus"
+	ant -f build-mspa-client-zip.xml mspa-client-zip
+	status=$?
+	
+	echo
+	echo "Ant completed with status: $status"
 }
 
 #################################################
@@ -1113,7 +1129,7 @@ echo "The build completed succesfully. The Release files are located in $RELEASE
 if [ $burn_client_cd = 1 ]; then
 	echo "Ready to burn image onto CD. Make sure a blank CD is in the CD burner, then press Enter to start:"
 	read throw_away
-	cdrecord dev=0,1,0 -v -eject -dao -data "$RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso"
+	cdrecord dev=0,1,0 -v -eject -dao -data driveropts=burnfree "$RELEASE_DIR/Martus-$BUILD_VERNUM_TAG.iso"
 fi
 
 cd "$INITIAL_DIR"
