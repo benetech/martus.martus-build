@@ -37,7 +37,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		filter(test_source_dir).include('**/test/MartusHelp-*.txt').into(test_target_dir).run
 		filter(test_source_dir).include('**/test/MartusHelpTOC-*.txt').into(test_target_dir).run
 
-    filter(main_source_dir).include(version_file).into(main_target_dir).run
+    filter(main_source_dir).include(version_file).run
 		filter(main_source_dir).include('**/*.png').into(main_target_dir).run
 		filter(main_source_dir).include('**/*.gif').into(main_target_dir).run
 		filter(main_source_dir).include('**/*.jpg').into(main_target_dir).run
