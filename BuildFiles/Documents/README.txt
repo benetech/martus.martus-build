@@ -1,46 +1,54 @@
-﻿Martus(tm) Software Version 3.5.1 README.txt
+﻿Martus(tm) Software Version 3.6.0 README.txt
 ---------------------------------------------------------
 
-Contents:
-A. Changes from version 3.5 to version 3.5.1   (11-2010)
-B. Changes from version 3.4.1 to version 3.5   (10-2010)
-C. Changes from version 3.4 to version 3.4.1   (08-2010)
-D. Changes from version 3.3.2 to version 3.4   (03-2010)
-E. Changes from version 3.3 to version 3.3.2   (08-2009)
-F. Changes from version 3.2 to version 3.3     (08-2008)
-G. Changes from version 3.1 to version 3.2     (09-2007)
-H. Changes from version 3.0 to version 3.1     (04-2007)
-I. Changes from version 2.9 to version 3.0     (09-2006)
-J. Changes from version 2.8.1 to version 2.9   (03-2006)
-K. Changes from version 2.8 to version 2.8.1   (11-2005)
-L. Changes from version 2.7.2 to version 2.8   (09-2005)
-M. Changes from version 2.7 to version 2.7.2   (08-2005)
-N. Changes from version 2.6 to version 2.7     (04-2005)
-O. Changes from version 2.5 to version 2.6     (02-2005)
-P. Changes from version 2.0.1 to version 2.5   (11-2004)
-Q. Changes from version 2.0 to version 2.0.1   (08-2004)
-R. Changes from version 1.5 to version 2.0     (07-2004)
-S. Changes from version 1.2.1 to version 1.5   (02-2004)
-T. Changes from version 1.2 to version 1.2.1   (12-2003)
-U. Changes from version 1.0.3 to version 1.2   (09-2003)
-V. Changes from version 1.0.2 to version 1.0.3 (05-2003)
-W. Changes from version 1.0.1 to version 1.0.2 (02-2003)
-X. Changes from version 1.0 to version 1.0.1   (01-2003)
-Y. Special instructions for updating Winsock if you have 
-   problems running Martus software on Windows 95:
 
-See http://www.martus.org for information about Martus 
-software.
+See http://www.martus.org for information about Martus software.
 
-See the Martus User Guide for instructions on installing the 
-Martus software. 
+See the Martus User Guide for instructions on installing the Martus software. 
 
 For all current translations of the user documentation, as well 
 as documentation for previous versions in various languages, 
 go to http://www.martus.org/downloads/. 
 
 
-A. Changes from version 3.5 to version 3.5.1   
+Martus release information by version and release date:
+ 
+
+Version 3.6.0             2011-09
+
+- Added data-driven dropdown fields (dropdown lists created by data entered 
+  in a bulletin grid) to list of available fields to search on in Search screen.
+- Added scanning for and loading values entered in bulletin fields in “Search for…”
+  box for text and data-driven dropdown field types in Search screen.  When 
+  picking text fields to search on in the field selection screen, users can select the 
+  “Load all possible values for selected field” checkbox to populate the “Search for…” 
+  box with the values that were entered in all the bulletins on the local computer if 
+  desired. For data-driven-dropdowns, the values that were entered in bulletins are 
+  automatically loaded when the field is chosen in the Search screen. There is also 
+  a “Load all possible values for selected field” button in the main Search screen, if 
+  users want to load field values without going into the field selection screen (for 
+  example, after loading a previously saved search, or if they did not select the 
+  checkbox in the field selection screen).  Loaded values are sorted alphabetically, 
+  not in the order they were entered in the data source grid. 
+- Changed data-driven dropdown values when editing bulletins to be sorted 
+  alphabetically instead of in the order they were entered in the data source grid, 
+  for easier data entry.
+- Headquarters accounts now can retrieve updated field draft bulletins without deleting 
+  prior versions.  
+- Fixed an error where Martus did not remember your previous Search criteria if the 
+  search criteria contained the “Last Saved Date” field 
+- Clarified error messages to user when Headquarters account tries to seal bulletins 
+  created by a field desk account.  A headquarters account cannot itself directly seal 
+  (either individually or in bulk) retrieved field draft bulletins, but can modify retrieved 
+  field draft bulletins, becoming the owner of those drafts, and then can seal them.  
+- Fixed an error that omitted data from reusable dropdown columns inside a grid when 
+  printing and sending any public portions of bulletins to the Martus Search Engine.  
+- Updated Dari user interface translation and added Afghan calendar preferences options 
+- Fixed display of reusable dropdown fields to be right-justified for right-to-left languages.  
+- Several other minor bug fixes, clarifications and clean-ups to the user screens.
+
+
+Version 3.5.1             2010-11   
 
 This release is available in English and other languages as 
 indicated on the http://www.martus.org software download page.  
@@ -59,7 +67,8 @@ on the documentation page (http://www.martus.org/downloads)
 - Fixed an issue that would reset entries to previous value when 
   appending rows to grids with dropdowns in expanded view.
 
-B. Changes from version 3.4.1 to version 3.5
+
+Version 3.5.0             2010-10
 
 - Added a new customization feature that allows multi-level 
   dropdown lists, so that the user can define lower level values 
@@ -79,7 +88,8 @@ B. Changes from version 3.4.1 to version 3.5
 - Added instructions for Bengali/Bangla, Burmese, and Khmer font 
   display in Martus to the User Guide.
 
-C. Changes from version 3.4 to version 3.4.1
+
+Version 3.4.1             2010-08
 
 - Changed the Martus time-out length when there is no activity to 
   be more flexible, instead of always timing out at 10 minutes. This 
@@ -100,7 +110,7 @@ C:\Martus\bin\java.exe -Xbootclasspath/p:C:\Martus\lib\ext\bc-jce.jar -jar C:\Ma
   load very slowly and result in various errors.
 
 
-D. Changes from version 3.3.2 to version 3.4
+Version 3.4.0             2010-03
 
 - Added the ability to require data entry in certain grid 
   columns before a bulletin can be saved. 
@@ -142,7 +152,7 @@ D. Changes from version 3.3.2 to version 3.4
 - Updated version of English User Guide 
 
 
-E. Changes from version 3.3 to version 3.3.2
+Version 3.3.2             2009-08
 
 - Fixed issues related to expanded grids that contain data-driven-
   dropdowns, such as user interface slowness or freezing when tabbing 
@@ -157,7 +167,7 @@ E. Changes from version 3.3 to version 3.3.2
   see the fix.
 
 
-F. Changes from version 3.2 to version 3.3
+Version 3.3.0             2008-08
 
 - Added the ability to 'batch' seal multiple drafts at once. To 
   do this, go to Edit > Seal bulletin(s).
@@ -177,7 +187,7 @@ F. Changes from version 3.2 to version 3.3
   the user screens.
 
 
-G. Changes from version 3.1 to version 3.2     
+Version 3.2.0             2007-09
 
 - New bulletin display functionality allows you to:  1) hide/unhide 
   fields in bulletins for long fields that take up a lot of space, 
@@ -206,7 +216,7 @@ G. Changes from version 3.1 to version 3.2
   the user screens.
 
 
-H. Changes from version 3.0 to version 3.1
+Version 3.1.0             2007-04
 
 - New functionality notifies HQs if there are field bulletins 
   to retrieve. To enable this in your Martus account, go to 
@@ -243,7 +253,7 @@ H. Changes from version 3.0 to version 3.1
   the user screens.
 
 
-I. Changes from version 2.9 to version 3.0     
+Version 3.0.0             2006-09
 
 - Added report functionality.  Reports display results for 
   bulletins that match a certain search criteria, and can 
@@ -274,7 +284,7 @@ I. Changes from version 2.9 to version 3.0
   multiple lines
 
 
-J. Changes from version 2.8.1 to version 2.9
+Version 2.9.0             2006-03
 
 - As of 2.6 Server release (March 2006), sped up several 
   major client/server operations.  Specifically, the following 
@@ -333,7 +343,7 @@ J. Changes from version 2.8.1 to version 2.9
   the user screens.
 
 
-K. Changes from version 2.8 to version 2.8.1
+Version 2.8.1             2005-11
 
 - Fixed a problem introduced in version 2.8 where dates and 
   date ranges with values earlier than January 1st 1970 were 
@@ -342,7 +352,7 @@ K. Changes from version 2.8 to version 2.8.1
   translations
 
 
-L. Changes from version 2.7.2 to version 2.8
+Version 2.8.0             2005-09
 
 - Added ability to create grid columns of different types 
   (drop-down lists, checkboxes, dates, and date ranges)
@@ -380,7 +390,7 @@ L. Changes from version 2.7.2 to version 2.8
   user screens.
 
 
-M. Changes from version 2.7 to version 2.7.2
+Version 2.7.2             2005-08
 
 - Removed incomplete/inaccurate Nepali 2.0.1 software user 
   interface translation, and placed an updated Nepali language 
@@ -405,7 +415,7 @@ and change the Target command to:
 C:\Martus\bin\javaw.exe -Dswing.useSystemFontSettings=false -jar C:\Martus\Martus.jar 
 
 
-N. Changes from version 2.6 to version 2.7
+Version 2.7.0             2005-04
 
 This release is only available in English and Persian.  
 Other languages will be available in the future, as language-packs 
@@ -431,7 +441,7 @@ on the documentation page (http://www.martus.org/downloads)
 - Export to XML now includes custom field type 
 
 
-O. Changes from version 2.5 to version 2.6
+Version 2.6.0             2005-02
 
 - Users can now search and view the full contents of all 
   versions of sealed bulletins stored on their computer, by 
@@ -452,7 +462,7 @@ O. Changes from version 2.5 to version 2.6
   Martus 2.6 in Arabic in a Mac OS.  
 
 
-P. Changes from version 2.0.1 to version 2.5
+Version 2.5.0             2004-11
 
 - Added ability to create new versions of sealed bulletins so 
   that changes or additions can be made to previously sealed 
@@ -490,7 +500,7 @@ P. Changes from version 2.0.1 to version 2.5
   on display of those languages when installing Martus.
 
 
-Q. Changes from version 2.0 to version 2.0.1
+Version 2.0.1             2004-08
 
 - Added a horizontal scroll-bar for custom field grids that are 
   wider than the screen width.
@@ -504,7 +514,7 @@ Q. Changes from version 2.0 to version 2.0.1
 - Addition of multi-file (floppy) option on download site
 
 
-R. Changes from version 1.5 to version 2.0
+Version 2.0.0             2004-07
 
 - You can now have multiple Headquarter accounts, and there is 
   an enhanced interface to set them up.  This is particularly 
@@ -551,8 +561,7 @@ R. Changes from version 1.5 to version 2.0
   user interface.
 
 
-S. Changes from version 1.2.1 to version 1.5
-
+Version 1.5.0             2004-02
 
 - Multiple accounts can now be set up on a computer.  This 
   changes the login screen in several ways:  You have a choice 
@@ -593,7 +602,7 @@ S. Changes from version 1.2.1 to version 1.5
   user interface.
 
 
-T. Changes from version 1.2 to version 1.2.1
+Version 1.2.1             2003-12
 
 - Russian version introduced, including special version of 
   Russian install program.
@@ -602,7 +611,7 @@ T. Changes from version 1.2 to version 1.2.1
   installation on GNU/Linux machines.
 
 
-U. Changes from version 1.0.3 to version 1.2
+Version 1.2.0             2003-09
 
 - You can now customize the fields of all subsequently created 
   bulletins.  Customizing fields is currently only intended to 
@@ -637,7 +646,7 @@ U. Changes from version 1.0.3 to version 1.2
   user interface, including more support for mouseless operation.
 
 
-V. Changes from version 1.0.2 to version 1.0.3
+Version 1.0.3             2003-05
 
 - Release Linux and Mac compatible Martus versions.
 - If you have installed a previous version of Martus software, 
@@ -682,7 +691,7 @@ V. Changes from version 1.0.2 to version 1.0.3
   and control- C, X, V, and A.
 
 
-W. Changes from version 1.0.1 to version 1.0.2
+Version 1.0.2             2003-02
 
 - When you choose to modify a sealed bulletin it makes a copy 
   of the bulletin, but if the original had attachments, the 
@@ -700,7 +709,7 @@ W. Changes from version 1.0.1 to version 1.0.2
   maintainability.
 
 
-X. Changes from version 1.0 to version 1.0.1
+Version 1.0.1             2003-01
 
 - Ask during program installation if the user wants the Martus
   program, the Martus uninstall, and the documentation files 
@@ -714,8 +723,8 @@ X. Changes from version 1.0 to version 1.0.1
 - Correct errors in the About Box and the documentation's 
   copyright notice.
 
-
-Y. Special instructions for updating Winsock if you have 
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+Special instructions for updating Winsock if you have 
    problems running Martus software on Windows 95:
 
 Java requires the Microsoft Winsock 2.0 library.  It is 
@@ -737,4 +746,8 @@ about how to determine if the Winsock 2.0 components are
 installed on a Microsoft Windows 95 platform:
 
 http://support.microsoft.com/support/kb/articles/Q177/7/19.asp
+
+
+
+
 
