@@ -24,13 +24,20 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	)
 
 	build do
-		filter(test_source_dir).include('**/test/*.mlp').into(test_target_dir).run
+	  version_file = _('target', 'version.txt') 
+    puts version_file
+    File.open(version_file, "w") do | file |
+      file.puts(Time.now)
+    end
+
+    filter(test_source_dir).include('**/test/*.mlp').into(test_target_dir).run
 		filter(test_source_dir).include('**/test/Sample*.*').into(test_target_dir).run
 		# TODO: Need to exclude unapproved mtf files like km
 		filter(test_source_dir).include('**/test/Martus-*.mtf').into(test_target_dir).run
 		filter(test_source_dir).include('**/test/MartusHelp-*.txt').into(test_target_dir).run
 		filter(test_source_dir).include('**/test/MartusHelpTOC-*.txt').into(test_target_dir).run
 
+    filter(main_source_dir).include(version_file).into(main_target_dir).run
 		filter(main_source_dir).include('**/*.png').into(main_target_dir).run
 		filter(main_source_dir).include('**/*.gif').into(main_target_dir).run
 		filter(main_source_dir).include('**/*.jpg').into(main_target_dir).run
