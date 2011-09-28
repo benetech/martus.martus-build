@@ -8,7 +8,7 @@ Save the file as a UTF8 Text file.
 
 NOTE: The rest of this should be performed by a developer
 
-Open the UTF8 text file
+Open the UTF8 text file in MS Word.
 Copy the Martus Version # info to the clipboard (Martus� Software User Guide Version x.x)
 Paste this text at the start of the main body of the document, after the Table of contents.
 Insert it right after (1. Introduction to the Martus� Software) in the body of the document,
