@@ -6,8 +6,8 @@ See http://www.martus.org for information about Martus software.
 
 See the Martus User Guide for instructions on installing the Martus software. 
 
-For all current translations of the user documentation, as well 
-as documentation for previous versions in various languages, 
+For all current language packs and translations of the user documentation, 
+as well as language packs/documentation for previous versions in various languages, 
 go to http://www.martus.org/downloads/. 
 
 
@@ -15,6 +15,11 @@ Martus release information by version and release date:
  
 
 Version 3.6.0             2011-09
+
+This release is available in English, Farsi/Dari and other languages as 
+indicated on the http://www.martus.org software download page.  
+Other languages will be available in the future, as language-packs 
+on the documentation page (http://www.martus.org/downloads)
 
 - Added data-driven dropdown fields (dropdown lists created by data entered 
   in a bulletin grid) to list of available fields to search on in Search screen.
@@ -49,11 +54,6 @@ Version 3.6.0             2011-09
 
 
 Version 3.5.1             2010-11   
-
-This release is available in English and other languages as 
-indicated on the http://www.martus.org software download page.  
-Other languages will be available in the future, as language-packs 
-on the documentation page (http://www.martus.org/downloads)
 
 - Fixed an issue with reusable choices dropdown lists where values 
   with overlapping labels were not distinguished during data entry.
