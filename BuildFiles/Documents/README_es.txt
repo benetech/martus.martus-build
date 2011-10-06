@@ -1,35 +1,38 @@
-﻿Martus(tm) Software Versión 3.4 README_es.txt
+﻿Martus(tm) Software Versión 3.5.1 README_es.txt
 ---------------------------------------------
 
 Contenido:
-A. Cambios de la versión 3.3.2 a la versión 3.4   (03-2010)
-B. Cambios de la versión 3.3 a la versión 3.3.2   (08-2009)
-C. Cambios de la versión 3.2 a la versión 3.3     (08-2008)
-D. Cambios de la versión 3.1 a la versión 3.2     (09-2007)
-E. Cambios de la versión 3.0 a la versión 3.1     (04-2007)
-F. Cambios de la versión 2.9 a la versión 3.0     (09-2006)
-G. Cambios de la versión 2.8.1 a la versión 2.9   (03-2006)
-H. Cambios de la versión 2.8 a la versión 2.8.1   (11-2005)
-I. Cambios de la versión 2.7.2 a la versión 2.8   (09-2005)
-J. Cambios de la versión 2.7 a la versión 2.7.2   (08-2005)
-K. Cambios de la versión 2.6 a la versión 2.7     (04-2005)
-L. Cambios de la versión 2.5 a la versión 2.6     (02-2005)
-M. Cambios de la versión 2.0.1 a la versión 2.5   (11-2004)
-N. Cambios de la versión 2.0 a la versión 2.0.1   (08-2004)
-O. Cambios de la versión 1.5 a la versión 2.0     (07-2004)
-P. Cambios de la versión 1.2.1 a la versión 1.5   (02-2004)
-Q. Cambios de la versión 1.2 a la versión 1.2.1   (12-2003)
-R. Cambios de la versión 1.0.3 a la versión 1.2   (09-2003)
-S. Cambios de la versión 1.0.2 a la versión 1.0.3 (05-2003)
-T. Cambios de la versión 1.0.1 a la versión 1.0.2 (02-2003)
-U. Cambios de la versión 1.0 a la versión 1.0.1   (01-2003)
-V. Instrucciones especiales para actualizar Winsock, si
+A. Cambios de la versión 3.5 a la versión 3.5.1  (11-2010)
+B. Cambios de la versión 3.4.1 a la versión 3.5   (10-2010)
+C. Cambios de la versión 3.4. a la versión 3.4.1 (08-2010)
+D. Cambios de la versión 3.3.2 a la versión 3.4   (03-2010)
+E. Cambios de la versión 3.3 a la versión 3.3.2   (08-2009)
+F. Cambios de la versión 3.2 a la versión 3.3     (08-2008)
+G. Cambios de la versión 3.1 a la versión 3.2     (09-2007)
+H. Cambios de la versión 3.0 a la versión 3.1     (04-2007)
+I. Cambios de la versión 2.9 a la versión 3.0     (09-2006)
+J. Cambios de la versión 2.8.1 a la versión 2.9   (03-2006)
+K. Cambios de la versión 2.8 a la versión 2.8.1   (11-2005)
+L. Cambios de la versión 2.7.2 a la versión 2.8   (09-2005)
+M. Cambios de la versión 2.7 a la versión 2.7.2   (08-2005)
+N. Cambios de la versión 2.6 a la versión 2.7     (04-2005)
+O. Cambios de la versión 2.5 a la versión 2.6     (02-2005)
+P. Cambios de la versión 2.0.1 a la versión 2.5   (11-2004)
+Q. Cambios de la versión 2.0 a la versión 2.0.1   (08-2004)
+R. Cambios de la versión 1.5 a la versión 2.0     (07-2004)
+S. Cambios de la versión 1.2.1 a la versión 1.5   (02-2004)
+T. Cambios de la versión 1.2 a la versión 1.2.1   (12-2003)
+U. Cambios de la versión 1.0.3 a la versión 1.2   (09-2003)
+V. Cambios de la versión 1.0.2 a la versión 1.0.3 (05-2003)
+W. Cambios de la versión 1.0.1 a la versión 1.0.2 (02-2003)
+X. Cambios de la versión 1.0 a la versión 1.0.1   (01-2003)
+Y. Instrucciones especiales para actualizar Winsock, si
    tiene problemas al ejecutar Martus en Windows 95:
 
 Visite el sitio web http://www.martus.org para mayor
 información sobre Martus.
 
-Consulte la Guía del Usuario para obtener instrucciones acerca
+Consulte el Manual del Usuario para obtener instrucciones acerca
 de cómo instalar Martus.
 
 Para obtener la documentación actual en todos los idiomas
@@ -37,7 +40,7 @@ disponibles, así como las versiones anteriores, visite el
 sitio web http://www.martus.org/downloads/.
 
 
-A. Cambios de la versión 3.3.2 a la versión 3.4
+A. Cambios de la versión 3.5 a la versión 3.5.1   
 
 Esta versión está disponible en inglés y en otros
 idiomas indicados en la página http://www.martus.org de
@@ -45,10 +48,77 @@ descargas del programa. En el futuro habrá versiones en otros
 idiomas, como paquetes de idioma en la página de documentación 
 (http://www.martus.org/downloads)
 
-- Se agregó la capacidad de requerir que ciertas columnas 
-  de tabla sean ingresados antes que un boletín pueda ser 
+- Se corrigió un defecto relacionado con las opciones reutilizables 
+  de las listas desplegables en que valores con títulos coincidentes 
+  no se distinguían al digitar los datos. 
+- Ahora la pantalla de búsqueda clasifica las entradas de una lista 
+  desplegable en orden alfabético, de tal manera que si múltiples 
+  personalizaciones tenían el mismo campo con diferentes valores de 
+  despliegue, se clasificarán las listas combinadas y no aparecerán 
+  nuevos valores en la parte inferior de la lista precedente. 
+- Se arregló un problema en el que al modificar un boletín no se 
+  detectaba si se había alterado una lista desplegable con opciones 
+  reutilizables. Ahora Martus correctamente pregunta si se desea usar 
+  los valores antiguos o los nuevos.
+- Se arregló un problema en que se restauraban las entradas a su 
+  valor anterior al agregarles filas a las tablas con listas desplegables 
+  con vista ampliada. 
+
+
+B. Cambios de la versión 3.4.1 a la versión 3.5
+
+- Se añadió una nueva característica de personalización que permite 
+  listas desplegables de varios niveles, de tal manera que el usuario 
+  puede definir valores de menor nivel que dependen de los valores 
+  de más alto nivel (por ej. para las ubicaciones, pueden definirse 
+  valores de región y ciudad en que sólo se despliegan las ciudades 
+  ubicadas en una determinada región cuando se selecciona el valor 
+  de región).  Las listas de opciones que se crean para estos campos 
+  desplegables son “reutilizables”, de tal forma que no tienen que 
+  digitarse más de una vez en la definición de la personalización.  
+- Se permitió ajustar los valores por defecto para los campos de 
+  despliegue y de texto para una digitación de datos más eficiente.
+- Se corrigió un defecto en que los datos digitados en una célula de 
+  tabla no se podian guardar si no se salía de la célula con la tecla 
+  de tabulación o de intro (“enter”) para crear una nueva fila en la tabla. 
+- Se corrigió un defecto en que ciertos campos aparecían más de una 
+  vez en las listas de selección de campos de búsqueda y reporte. 
+- Se añadieron instrucciones para la presentación en el Manual del Usuario 
+  en Martus de la fuente en idiomas bengalí/bangladesí, birmano y khmer.  
+
+
+C. Cambios de la versión 3.4 a la versión 3.4.1
+
+- Se cambió la duración en Martus de la desconexión por tiempo cuando 
+  no hay actividad para que sea más flexible y no se desconecte siempre 
+  a los 10 minutos. Esto puede ayudar a mejorar la seguridad si se trabaja 
+  en un lugar público o con un computador compartido, y también puede 
+  mejorar la ejecución de operaciones largas (como la recuperación de 
+  boletines del servidor). Se pueden permitir diferentes duraciones de la 
+  desconexión por tiempo fijando un parámetro en la línea de comando que 
+  se utiliza para ejecutar Martus.  El parámetro es “--timeout-minutes=X” 
+  (desconexión-minutos = X) en que X puede ser cualquier número de minutos.  
+  Por ejemplo, para fijar la duración de la desconexión por tiempo para Martus 
+  en su computador en Windows para que sea siempre de 5 minutos y así obtener 
+  un mayor nivel de seguridad, cambie la línea de comando en el atajo de el 
+  escritorio de su computador (clic derecho y seleccione Propiedades) como sigue: 
+
+C:\Martus\bin\java.exe -Xbootclasspath/p:C:\Martus\lib\ext\bc-jce.jar -jar C:\Martus\martus.jar --timeout-minutes=5
+
+  Para acceder a instrucciones sobre cómo cambiar la línea de commando de 
+  Martus en Mac o Linux, vaya a la sección 2a del Manual del Usuario o escriba 
+  a la dirección electrónica info@martus.org.
+
+- Se arregló un problema relacionado con personalizaciones muy grandes, que 
+  hacía que Martus se cargara muy lentamente y generara diversos errores. 
+
+
+D. Cambios de la versión 3.3.2 a la versión 3.4
+
+- Se agregó la capacidad que exije que ciertas columnas 
+  de tabla sean ingresadas antes que un boletín pueda ser 
   guardado. 
-- A la funcionalidad de hacer búsquedas se agregó la capacidad 
+- A la funcionalidad de búsquedas se agregó la capacidad 
   de satisfacer los parámetros de búsqueda que son columnas 
   de tabla en una sola fila de datos en una tabla de un 
   boletín. Si quiere satisfacer los parámetros de búsqueda 
@@ -57,54 +127,54 @@ idiomas, como paquetes de idioma en la página de documentación
   los parámetros de búsqueda que son columnas de tabla..." 
   Por ejemplo, si quiere buscar un nombre de víctima específico 
   en una fila sola en sus boletines creado después de una fecha 
-  específica, seleccione la casilla y ingresa los siguientes 
+  específica, seleccione la casilla e ingrese los siguientes 
   campos y parámetros en la ventana de Búsqueda: "Información 
   de la víctima: Nombre" = A y "Información de la víctima: 
   Apellido" = B y "Fecha de creación" >= AAAA-Mes-DD. Si no 
-  selecciona el campo de "Satisfacer los parámetros de 
+  selecciona el campo "Satisfacer los parámetros de 
   búsqueda que son columnas de tabla...", Martus encontrará 
-  boletines creado después de la fecha especificada, en que 
+  boletines creados después de la fecha especificada, en que 
   cualquier fila tiene el nombre especificado y cualquier 
   otra fila tiene el apellido especificado, pero no 
   necesariamente en la misma fila del boletín. Por ejemplo, 
   puede tener una fila con "Nombre" = A y "Apellido" = C, 
-  una otra fila con "Nombre" = D y "Apellido" = B, y Martus 
+  otra fila con "Nombre" = D y "Apellido" = B, y Martus 
   encontrará este boletín porque considerará que satisface 
-  los parámetros de la búsqueda porque no especificó que los 
-  parámetros deben ser satisfecho en una fila sola.
-- Se agregó la capacidad de requerir que Martus valide todas 
-  las fechas usando rangos de fechas específicado por usuario. 
-  (Por ejemplo, fechas de evento no pueden ser antes o después 
-  de una fecha específica. Incluye la capacidad de especificar 
-  que fechas no pueden ser después de "hoy" - los eventos no 
-  pueden ser en el futuro). Nota por favor que puede requerir 
-  la validación de fechas en los campos predeterminados y los 
+  los parámetros de la búsqueda pues no se especificó que los 
+  parámetros deben satisfacerse en una fila sola.
+- Se agregó la capacidad que exige que Martus valide todas 
+  las fechas usando rangos de fechas específicados por el usuario. 
+  (Por ejemplo, las fechas de eventos no pueden ser antes o después 
+  de una determinada fecha. Incluye la capacidad de especificar 
+  que no pueden ser fechas después de "hoy" – es decir, que los eventos no 
+  pueden ser en el futuro). Observe que se puede requerir 
+  la validación de fechas tanto en los campos predeterminados como en los 
   campos personalizados. En campos de fecha, las opciones en 
-  la lista desplegable reflejarán los rangos específicado por 
+  la lista desplegable reflejarán los rangos específicados por 
   usuario en la personalización de la plantilla. 
 - Se agregó la capacidad de capturar 'Historial extendido del 
-  boletín' a todos los usuarios que lo editan. Eso puede ver 
+  boletín' a todos los usuarios que lo editan. Esto puede verse 
   con el botón de 'Detalles de boletín'. Una cuenta central 
-  que crea una versión nueva del boletín puede ver el código 
-  público y identificación del boletín de las versiones del 
-  autor previo. La información del autor previo y de 
-  la identificación del boletín es agregado al XML de la 
-  exportación de cualquier boletines creado con historial 
+  que crea una nueva versión del boletín puede ver el código 
+  público y la identificación del boletín de las versiones del 
+  anterior autor. La información del anterior autor y de 
+  la identificación del boletín se agrega al XML de la 
+  exportación de cualquier boletín creado con historial 
   extendido.
-- Se corregió la funcionalidad de Modificar un boletín 
+- Se corregió la funcionalidad de modificar un boletín 
   existente para que Martus reconozca si la parte siempre 
-  Privada ha cambiado, y pregunte al usuario si quiere usar 
-  los campos viejos o los campos nuevos. 
+  privada ha cambiado, y pregunte al usuario si quiere usar 
+  los campos viejos o los nuevos. 
 - Se agregó un mensaje de advertencia que Martus muestra si 
   el usuario trata de importar un archivo de XML que es 
   incompatible porque fue creado por una versión diferente 
   de Martus. 
-- Se corrigió errores pequeños, aclaraciones y correcciones 
+- Se corrigieron errores pequeños, y se hicieronaclaraciones y arreglos 
   a la pantalla del usuario.
-- Se actualizó la versión del Manual Usuario en inglés. 
+- Se actualizó la versión del Manual del Usuario en inglés. 
 
 
-B. Cambios de la versión 3.3 a la versión 3.3.2
+E. Cambios de la versión 3.3 a la versión 3.3.2
 
 - Se solucionó varios temas relacionados a la ampliación 
   de tablas conteniendo listas desplegables con 
@@ -125,10 +195,10 @@ B. Cambios de la versión 3.3 a la versión 3.3.2
   de nuevo para ver la corrección.
  
 
-C. Cambios de la versión 3.2 a la versión 3.3
+F. Cambios de la versión 3.2 a la versión 3.3
 
 - Se agregó la capacidad de sellar muchos borradores al mismo 
-  tiempo en una "hornada." Para hacer este, vaya a Editar > 
+  tiempo en una "hornada." Para hacer esto, vaya a Editar > 
   Sellar boletín(es).
 - Nueva funcionalidad a agregar una cuenta central a un grupo 
   de boletines o a una carpeta entera de boletines, al mismo 
@@ -149,7 +219,7 @@ C. Cambios de la versión 3.2 a la versión 3.3
   a la pantalla del usuario.
 
 
-D.  Cambios de la versión 3.1 a la versión 3.2
+G.  Cambios de la versión 3.1 a la versión 3.2
 
 - Nueva funcionalidad que le permite mostrar el(los) 
   boletin(es) de las siguientes maneras: 1) Ocultar/Mostrar 
@@ -184,7 +254,7 @@ D.  Cambios de la versión 3.1 a la versión 3.2
   a la pantalla del usuario.
 
 
-E. Cambios de la versión 3.0 a la versión 3.1    
+H. Cambios de la versión 3.0 a la versión 3.1    
  
 - Se agregó una nueva funcionalidad que notifica a las 
   Oficinas Centrales si existen boletines de Oficina Regional 
@@ -230,7 +300,7 @@ E. Cambios de la versión 3.0 a la versión 3.1
   y limpieza de las pantallas del programa.
 
 
-F. Cambios de la versión 2.9 a la versión 3.0
+I. Cambios de la versión 2.9 a la versión 3.0
 
 - Se agregó la funcionalidad de reporte. Los reportes muestran 
   los resultados de los boletines que encajan con un cierto 
@@ -263,7 +333,7 @@ F. Cambios de la versión 2.9 a la versión 3.0
   personalizados en líneas múltiples.
 
 
-G. Cambios de la versión 2.8.1 a la versión 2.9
+J. Cambios de la versión 2.8.1 a la versión 2.9
 
 - Con el lanzamiento de la versión 2.6 del servidor (Marzo 2006),
   se aceleraron varias operaciones importantes del servidor /
@@ -331,22 +401,7 @@ G. Cambios de la versión 2.8.1 a la versión 2.9
   a la pantalla del usuario.
 
 
-H. Cambios de la versión 2.8 a la versión 2.8.1
-
-Hay un problema en la versión 2.8.1 con las búsquedas en
-campos personalizados al utilizar la opción listas
-desplegadas, cuando las opciones de la lista desplegada
-contienen espacios entre palabras. Martus encontrará
-correctamente los boletines si usted busca en "Todos
-los campos" "contenido" los valores que aparecen en la
-lista desplegada.  Sin embargo, el problema ocurre si
-usted realiza una búsqueda en un campo específico de la
-lista desplegada si ésta cuenta con espacios entre
-palabras. Ello se arreglará en la próxima versión,
-pero hasta entonces sugerimos que si usted personaliza
-los boletines, cree opciones en la lista desplegada que
-no tengan espacios entre palabras (si desea puede usar
-guiones para enlazarlas).
+K. Cambios de la versión 2.8 a la versión 2.8.1
 
 - Reparación del problema en la versión 2.8, en el que se
   mostraban y archivaban las fechas y los rangos de fechas
@@ -355,7 +410,7 @@ guiones para enlazarlas).
   la versión 2.8.
 
 
-I. Cambios de la versión 2.7.2 a la versión 2.8
+L. Cambios de la versión 2.7.2 a la versión 2.8
 
 Esta versión está disponible en inglés y en otros idiomas
 indicados en la página http://www.martus.org de descargas
@@ -407,7 +462,7 @@ como paquetes por idioma en la página de documentación (http://www.martus.org/
   pantallas de los usuarios.
 
 
-J. Cambios de la versión 2.7 a la versión 2.7.2
+M. Cambios de la versión 2.7 a la versión 2.7.2
 
 - Se removió la traducción incompleta e inexacta del idioma
   Nepalí 2.0.1 del programa y se colocó un paquete de idioma
@@ -434,7 +489,7 @@ botón derecho, elija Propiedades, y cambie el campo Commando a :
 C:\Martus\bin\javaw.exe -Dswing.useSystemFontSettings=false -jar C:\Martus\Martus.jar
 
 
-K. Cambios de la versión 2.6 a la versión 2.7
+N. Cambios de la versión 2.6 a la versión 2.7
 
 Esta versión sólo está disponible en inglés y en persa.
 Otros idiomas estarán disponibles en el futuro, como un
@@ -463,7 +518,7 @@ Otros idiomas estarán disponibles en el futuro, como un
 - El exportar a XML ahora incluye tipo de campo personalizado.
 
 
-L. Cambios de la versión 2.5 a la versión 2.6
+O. Cambios de la versión 2.5 a la versión 2.6
 
 - Usuarios pueden buscar y ver todo el contenido de todas las
   revisiones de boletines sellados almacenados en su ordenador
@@ -485,7 +540,7 @@ L. Cambios de la versión 2.5 a la versión 2.6
   tengan problemas al mostrar textos Árabes.
 
 
-M. Cambios de la versión 2.0.1 a la versión 2.5
+P. Cambios de la versión 2.0.1 a la versión 2.5
 
 - Se agregó la posibilidad de crear nuevas revisiones de boletines
   sellados y así poder hacer cambios o adiciones al boletín
@@ -523,7 +578,7 @@ M. Cambios de la versión 2.0.1 a la versión 2.5
   por favor notifíquenos si es que nota problemas en la instalación.
 
 
-N. Cambios de la versión 2.0 a la versión 2.0.1
+Q. Cambios de la versión 2.0 a la versión 2.0.1
 
 - Se agrego una barra de desplazamiento horizontal para los
   mapas en los campos personalizados que sean más anchos que
@@ -539,7 +594,7 @@ N. Cambios de la versión 2.0 a la versión 2.0.1
   programa en múltiples partes
 
 
-O. Cambios de la versión 1.5 a la versión 2.0
+R. Cambios de la versión 1.5 a la versión 2.0
 
 - Ahora puede configurar múltiples cuentas de Oficinas centrales
   usando un interfaz diferente. Esta característica es útil si tiene
@@ -587,7 +642,7 @@ O. Cambios de la versión 1.5 a la versión 2.0
   reconfiguración del interfaz del programa.
 
 
-P. Cambios de la versión 1.2.1 a la versión 1.5
+S. Cambios de la versión 1.2.1 a la versión 1.5
 
 Le recomendamos que use el software Martus Client versión 1.5
 con el servidor Martus versión 2.0 o más. Todos los servidores de
@@ -642,7 +697,7 @@ el sitio web www.martus.org.
   clarificado y ventanas del programa se han mejorado.
 
 
-Q. Cambios de la versión 1.2 a la versión 1.2.1
+T. Cambios de la versión 1.2 a la versión 1.2.1
 
 - El programa se a traducido al ruso, incluyendo una versión
   especial del programa de instalación para usuarios rusos.
@@ -651,7 +706,7 @@ Q. Cambios de la versión 1.2 a la versión 1.2.1
   la instalación en ordenadores con el sistema operativo GNU/Linux.
 
 
-R. Cambios de la versión 1.0.3 a la versión 1.2
+U. Cambios de la versión 1.0.3 a la versión 1.2
 
 - Ahora puede personalizar los campos de los boletines que crea
   en Martus. Esta característica solo es recomendada para usuarios
@@ -684,7 +739,7 @@ R. Cambios de la versión 1.0.3 a la versión 1.2
   programa sin un mouse se a mejorado.
 
 
-S. Cambios de la versión 1.0.2 a la versión 1.0.3
+V. Cambios de la versión 1.0.2 a la versión 1.0.3
 
 - Se han preparado versiones para sistema operativo Linux y Mac OS.
 - Si es que a instalado una versión anterior de Martus ahora puede
@@ -724,7 +779,7 @@ S. Cambios de la versión 1.0.2 a la versión 1.0.3
   control-C, X, V, y A.
 
 
-T. Cambios de la versión 1.0.1 a la versión 1.0.2
+W. Cambios de la versión 1.0.1 a la versión 1.0.2
 
 - Cuando intenta modificar un boletín, Martus crea una copia de
   este pero si el boletín original contiene archivos adjuntos
@@ -739,7 +794,7 @@ T. Cambios de la versión 1.0.1 a la versión 1.0.2
 - El código se a reorganizado para mantenerlo con mayor facilidad.
 
 
-U. Cambios de la versión 1.0 a la versión 1.0.1
+X. Cambios de la versión 1.0 a la versión 1.0.1
 
 - El programa de instalación pregunta en Windows si es que
   quiere enlaces a Martus, la documentación y al programa de
@@ -753,7 +808,7 @@ U. Cambios de la versión 1.0 a la versión 1.0.1
   documentación fueron corregidos.
 
 
-V. Instrucciones especiales si necesita actualizar Winsock al
+Y. Instrucciones especiales si necesita actualizar Winsock al
   intentar ejecutar Martus bajo Windows 95:
 
 Java requiere de la biblioteca Microsoft Winsock 2.0.  La gran
@@ -775,4 +830,5 @@ El siguiente sitio de web contiene información sobre los
 componentes de Winsock bajo Windows 95 y su uso:
 
 http://support.microsoft.com/support/kb/articles/Q177/7/19.asp
+
 
