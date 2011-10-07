@@ -1,4 +1,4 @@
-﻿Martus(tm) Software Version 3.6.0 README.txt
+﻿Martus(tm) Software Version 3.6.1 README.txt
 ---------------------------------------------------------
 
 
@@ -7,11 +7,24 @@ See http://www.martus.org for information about Martus software.
 See the Martus User Guide for instructions on installing the Martus software. 
 
 For all current language packs and translations of the user documentation, 
-as well as language packs/documentation for previous versions in various languages, 
-go to http://www.martus.org/downloads/. 
+as well as language packs/documentation for previous versions in various 
+languages, go to http://www.martus.org/downloads/. 
 
 
 Martus release information by version and release date:
+
+Version 3.6.1             2011-10
+
+This release is available in English, Farsi/Dari, Spanish and other 
+languages as indicated on the http://www.martus.org software download 
+page.  Other languages will be available in the future, as language-packs 
+on the documentation page (http://www.martus.org/downloads)
+
+- Minor updates to English documentation and search help screen
+- Minor updates to Farsi/Dari user interface translation and addition 
+  of Farsi/Dari README 
+- Updates to Spanish user interface translation and README
+
  
 
 Version 3.6.0             2011-09
