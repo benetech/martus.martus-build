@@ -5,18 +5,17 @@ If that link doesn't work use http://sourceforge.net/
 Log in using "benetech" and the password given.  
 
 
-Occationally when you log in it will ask you to change the password.  
+Occasionally when you log in it will ask you to change the password.  
 Change this to some temp password then you can go in to Account/Account Options and 
 scroll down to change password to reset it back to the Benetech password which 
 Scott has saved in the safe at Benetech.
+If you have to request a password change the password will go to sourcebenetech@benetech.org
+
  
 "Martus (TM) Human Rights Bulletin System 
 <http://sourceforge.net/projects/martus>  (registered 2002-12-17 12:04)"
-Click on 'develop'.
- 
-Martus (TM) Human Rights Bulletin System
-click on "Project Admin"
-then click on "File Manager" 
+Click on "Files"
+
  
 File Manager System
 click on "Martus" or "Martus Server" to expand it 
@@ -36,6 +35,10 @@ DO NOT just use the files from the build machine,
 as another build may have been performed after the release build, 
 so the source code may have changed.
 
+Better way is to download the ISO's directly from the HRDag Network
+https://hrdag.benetech.org/martus-client/Releases/Build/1977/ is 3.6.1
+You will need a user name / password to connect to this Network.
+Then burn the ISO to a CD rom then go and get the src zip file from the Source's directory on the CD rom.
 
 Step 2:   Add Files To This Release
 
@@ -50,12 +53,11 @@ Instructions_Converting_CSV_to_Martus_Bulletin-v332.zip (I usuaully download the
 
 Step 3: Selecting this zip to be the default download
 
-Click on the zip file
-
-Platform
-Set as default download
-Select All
-
+After you create the directory for the version #
+Eg. 3.6.1
+Then click on that directory then click on the button to "Add Files"
+Select the zip and the zip.sh1 files and upload both.
+Then click on the zip files i (View Details) button after files have been uploaded and select All for the Default Download for Platforms
  
 Step 4: Setting up NEWS
 
