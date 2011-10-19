@@ -13,6 +13,24 @@ languages, go to http://www.martus.org/downloads/.
 
 Martus release information by version and release date:
 
+
+Version 3.6.2             2011-10
+
+This release is available in English, Farsi/Dari, Spanish and other 
+languages as indicated on the http://www.martus.org software download 
+page.  Other languages will be available in the future, as language-packs 
+on the documentation page (http://www.martus.org/downloads)
+
+- Fixed issue when searching for entries in dropdown fields that have spaces 
+  at the beginning or end of the entry.
+- Fixed issue when loading a previously saved search that contains fields 
+  that no longer exist in any bulletins on your computer.  Instead of receiving 
+  an error that does not allow the user to search, the row in the search grid 
+  containing those fields will be reset to the default/new search row values 
+  (i.e. "Any Field contains")
+
+
+
 Version 3.6.1             2011-10
 
 This release is available in English, Farsi/Dari, Spanish and other 
