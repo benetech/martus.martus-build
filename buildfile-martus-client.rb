@@ -76,14 +76,14 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	# TODO: Old build script signed this jar
 
   package(:zip, :classifier=>'sources')
-	package(:zip).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
-	package(:zip).merge(project('martus-jar-verifier').package(:sources))
-	package(:zip).merge(project('martus-common').package(:sources))
-	package(:zip).merge(project('martus-utils').package(:sources))
-	package(:zip).merge(project('martus-hrdag').package(:sources))
-	package(:zip).merge(project('martus-logi').package(:sources))
-	package(:zip).merge(project('martus-swing').package(:sources))
-	package(:zip).merge(project('martus-clientside').package(:sources))
-	package(:zip).merge(project('martus-js-xml-generator').package(:sources))
+  package(:zip, :classifier=>'sources').include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
+  package(:zip, :classifier=>'sources').merge(project('martus-jar-verifier').package(:sources))
+  package(:zip, :classifier=>'sources').merge(project('martus-common').package(:sources))
+  package(:zip, :classifier=>'sources').merge(project('martus-utils').package(:sources))
+  package(:zip, :classifier=>'sources').merge(project('martus-hrdag').package(:sources))
+  package(:zip, :classifier=>'sources').merge(project('martus-logi').package(:sources))
+  package(:zip, :classifier=>'sources').merge(project('martus-swing').package(:sources))
+  package(:zip, :classifier=>'sources').merge(project('martus-clientside').package(:sources))
+  package(:zip, :classifier=>'sources').merge(project('martus-js-xml-generator').package(:sources))
 
 end
