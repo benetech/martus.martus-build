@@ -35,6 +35,7 @@ def run_nsis_task(nsis_zip, nsi_name, exe_name)
 		Dir.mkdir(dest_dir)
 		unzip_file(nsis_zip, dest_dir)
 		
+		puts "Running makensis from: #{Dir.pwd}"
 		error_output = `makensis -V2 #{_(:target, "/Installer/Win32_NSIS/#{nsi_name}")}`
 		status = $?
 		if status.exitstatus > 0
