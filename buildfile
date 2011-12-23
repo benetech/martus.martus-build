@@ -1,3 +1,7 @@
+# Usage:
+#   To build a client jar: 
+#		buildr clean checkout martus-client:package martus-client-mac-dmg:build test=no
+
 require 'fileutils'
 require 'English'
 require 'tmpdir'

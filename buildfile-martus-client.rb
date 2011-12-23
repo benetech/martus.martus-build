@@ -26,6 +26,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	build do
 	  version_file = _('target', 'version.txt') 
     puts version_file
+    FileUtils::mkdir_p(_('target'))
     File.open(version_file, "w") do | file |
       file.puts(Time.now)
     end

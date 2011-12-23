@@ -1,0 +1,44 @@
+Building Martus Using Buildr
+
+The Martus build process now uses Buildr, a build tool (like make or ant)
+that uses scripts written in Ruby. 
+
+Local builds can only be done on Linux, as far as I know.
+
+To install buildr on Ubuntu, I had to use their "easy" script. Even then, 
+it did not automatically create an entry in my bin path, so I had to 
+manually create a /usr/local/bin/buildr symlink. I don't know why.
+
+You will need to install nsis to complete a client build.
+
+Hudson is responsible for checking all the source code out of the source 
+repository. To do a build on a non-Hudson machine, you must run the 
+fakehudsonbuild script, which does the checkout, and then runs the 
+same buildr command that Hudson itself would run.
+
+Here is the CVS information as known in Hudson:
+CVSROOT: :ext:mart-hudson@cvs.benetech.org:/var/local/cvs
+module: martus
+
+Here are the commands to build an unsigned client jar:
+	buildr clean checkout build martus-client:package test=no
+	rsync /var/lib/hudson/jobs/martus-client-unsigned/workspace/martus-client/target/martus-client-1.jar hrdag:
+
+Here are the commands to package a Linux zip into a DMG:
+	buildr clean checkout martus-client:package martus-client-mac-dmg:build test=no
+	rsync /var/lib/hudson/jobs/martus-client-unsigned/workspace/dist/Martus.dmg hrdag:
+	
+Here are the commands to build the server:
+	buildr clean checkout martus-server:package test=no
+
+To complete a client build, you will need the appropriate Mac/Linux zip file, 
+at the correct path:
+	/var/lib/hudson/jobs/martus-client-unsigned/artifacts/
+The name would be something like:
+	MartusClient-3.6.2-20111020.1980-MacLinux.zip
+
+You can download this file from Martus.org (Linux, 3.6.2, single file).
+Note that it is 63 megs, and you will have to rename it.
+
+To dramatically speed up local testing, omit the "clean" parameter 
+from the buildr command.
