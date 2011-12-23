@@ -24,7 +24,7 @@ def create_nsis_zip_task
 	include_artifacts(zip(zip_file), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
 	zip(zip_file).include(project('martus-client').package(:jar), :path=>'BuildFiles/ProgramFiles', :as=>'martus.jar')
 
-	zip(zip_file).include(project('martus-client').package(:sources), :path=>'BuildFiles/ProgramFiles')
+	zip(zip_file).include(project('martus-client').package(:sources), :path=>'BuildFiles/SourceFiles')
 	
 	zip(zip_file).include(_('BuildFiles/Windows/Win32_NSIS'))
 
