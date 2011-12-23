@@ -24,6 +24,8 @@ def create_nsis_zip_task
 	include_artifacts(zip(zip_file), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
 	zip(zip_file).include(project('martus-client').package(:jar), :path=>'BuildFiles/ProgramFiles', :as=>'martus.jar')
 
+	zip(zip_file).include(project('martus-client').package(:sources), :path=>'BuildFiles/ProgramFiles')
+	
 	zip(zip_file).include(_('BuildFiles/Windows/Win32_NSIS'))
 
 	return zip_file
@@ -36,6 +38,7 @@ def run_nsis_task(nsis_zip, nsi_name, exe_name)
 		unzip_file(nsis_zip, dest_dir)
 		
 		puts "Running makensis from: #{Dir.pwd}"
+		puts ":target is #{_(:target)}"
 		error_output = `makensis -V2 #{_(:target, "/Installer/Win32_NSIS/#{nsi_name}")}`
 		status = $?
 		if status.exitstatus > 0
