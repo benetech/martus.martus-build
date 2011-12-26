@@ -62,7 +62,7 @@ Section "MainSection" SEC01
     SetOutPath "$MARTUS_INSTALLATION_DIR\lib\ext"
     File "..\BuildFiles\Jars\*.jar"
     SetOutPath "$MARTUS_INSTALLATION_DIR\src\"
-    File "..\BuildFiles\*.zip"
+    File "..\BuildFiles\SourceFiles\*.*"
     SetOutPath $MARTUS_INSTALLATION_DIR
     ; ------------------------------------------------
 
