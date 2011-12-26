@@ -46,7 +46,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	file iso_file => zip_file do
 		dest_dir = _(:target, 'iso')
-    FileUtils::rm_f(dest_dir)
+    FileUtils::rm_rf(dest_dir)
 		FileUtils::mkdir(dest_dir)
 		unzip_file(zip_file, dest_dir)
 
