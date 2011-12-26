@@ -71,6 +71,7 @@ Section "MainSection" SEC01
     SetOutPath $MARTUS_INSTALLATION_DIR
     ; ------------------------------------------------
 
+    ; ------------------------------------------------------------------------
     ; create defaultui.txt file with language code (http://www.w3.org/WAI/ER/IG/ert/iso639.htm)
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Create defaultui.txt...'
