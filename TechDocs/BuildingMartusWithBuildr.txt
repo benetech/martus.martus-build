@@ -11,6 +11,21 @@ manually create a /usr/local/bin/buildr symlink. I don't know why.
 
 You will need to install nsis to complete a client build.
 
+You will need to create a symlink at /opt/java/tools/ant/bin/ant that 
+points to your copy of ant.
+
+You will need to create these directories, and give yourself write rights:
+  /var/lib/hudson/jobs/martus-client-unsigned
+  /var/lib/hudson/jobs/martus-client-unsigned/mounts/dmg/
+  
+You will need the mkfs.hfsplus executable (which is in the hfsprogs package
+in Debian/Ubuntu).
+
+Add all of this as a single line to /etc/fstab:
+  /var/lib/hudson/jobs/martus-client-unsigned/Martus.dmg 
+    /var/lib/hudson/jobs/martus-client-unsigned/mounts/dmg 
+    hfsplus rw,user,loop,noauto 0 0
+
 Hudson is responsible for checking all the source code out of the source 
 repository. To do a build on a non-Hudson machine, you must run the 
 fakehudsonbuild script, which does the checkout, and then runs the 
