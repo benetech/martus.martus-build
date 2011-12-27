@@ -57,3 +57,14 @@ Note that it is 63 megs, and you will have to rename it.
 
 To dramatically speed up local testing, omit the "clean" parameter 
 from the buildr command.
+
+To test jar signing, create a keystore:
+  keytool -genkey -alias test -keyalg RSA -keystore keystore.jks -keysize 512
+  It is recommended to use the password "password" for both the keystore and key.
+  The fields like name, organization, country, etc can be left as their defaults.
+  
+To manually sign a jar, if you should need to do that:
+  jarsigner -keystore <path-to-keystore -signedjar <resulting-signed.jar> <unsigned.jar> test
+  (where "test" is the alias, and matches the alias you passed to keytool above).
+  You will be prompted for the password(s), which must match what you told keytool.
+  
