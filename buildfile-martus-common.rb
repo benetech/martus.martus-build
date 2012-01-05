@@ -17,9 +17,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	)
 
 	test.with(
-		project('martus-bc-jce').package(:jar)
 	)
-	bc_jce = project('martus-bc-jce').path_to('bc-jce.jar')
+	bc_jce = artifact(BCJCE_SPEC)
 	test.using :java_args => "-Xbootclasspath/a:#{bc_jce}"
 
 	#TODO: Failing test
