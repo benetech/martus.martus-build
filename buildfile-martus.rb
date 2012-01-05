@@ -54,7 +54,7 @@ def build_bcprov_spec(type)
 	return build_spec('bouncycastle', 'bcprov-jdk14', type, '135')
 end
 
-def build_bcprov_spec(type)
+def build_bcjce_spec(type)
   return build_spec('org.martus', 'bc-jce', type, '2012-01-05')
 end
 
