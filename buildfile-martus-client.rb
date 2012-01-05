@@ -48,6 +48,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessage.txt').into(main_target_dir).run
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessageRtoL.txt').into(main_target_dir).run
+		
+		#TODO: Need to extract SSMTSJAR.SF from bcjce.jar, and add it to the jar as SSMTSJAR.SIG
+		#TODO: Need to extract BCKEY.SF from bcprov-xxx.jar, and add it to the jar as BCKEY.SIG
 	end
 
 	test.with(
