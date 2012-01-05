@@ -54,6 +54,10 @@ def build_bcprov_spec(type)
 	return build_spec('bouncycastle', 'bcprov-jdk14', type, '135')
 end
 
+def build_bcprov_spec(type)
+  return build_spec('org.martus', 'bc-jce', type, '2012-01-05')
+end
+
 def build_mail_spec(type)
 	return build_spec('javax.mail', 'mail', type, '1.4.3')
 end
@@ -77,6 +81,8 @@ BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
 JUNIT_SOURCE_SPEC = build_junit_spec('sources')
 JUNIT_LICENSE_SPEC = build_junit_spec('license')
+BCJCE_SPEC = build_bcjce_spec('jar')
+BCJCE_LICENSE_SPEC = build_bcjce_spec('license')
 
 # Common, not in public repository
 INFINITEMONKEY_JAR_SPEC = build_infinitemonkey_spec('jar')

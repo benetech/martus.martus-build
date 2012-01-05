@@ -9,7 +9,6 @@ require 'tmpdir'
 require 'buildfile-martus'
 
 require 'buildfile-martus-thirdparty'
-require 'buildfile-martus-bc-jce'
 require 'buildfile-martus-logi'
 require 'buildfile-martus-hrdag'
 require 'buildfile-martus-utils'
