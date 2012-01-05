@@ -184,11 +184,11 @@ def extract_artifact_entry_task(artifact_spec, entry)
 	return extract_zip_entry_task(artifact(artifact_spec).to_s, entry)
 end
 
-def extract_zip_entry_task(zip_file, entry)
+def extract_zip_entry_task(zip_file, entry_to_extract)
 	target_dir = _('target', 'temp')
-	license_file = File.join(target_dir, entry)
-	unzip_task = unzip(target_dir=>zip_file).include(entry)
-	return file license_file=>unzip_task
+	extracted_file = File.join(target_dir, entry_to_extract)
+	unzip_task = unzip(target_dir=>zip_file).include(entry_to_extract)
+	return file extracted_file=>unzip_task
 end
 
 def sha(file_to_digest, sha_file)
