@@ -42,7 +42,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).include(artifact(VELOCITY_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(VELOCITY_DEP_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(XMLRPC_SPEC), :path=>'ThirdPartyJars')
-	package(:jar).include(project('martus-bc-jce').package(:jar), :path=>'ThirdPartyJars')
+	package(:jar).include(artifact(BCJCE_SPEC), :path=>'ThirdPartyJars')
 
 	# TODO: Old build script signed this jar
 end
