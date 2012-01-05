@@ -14,7 +14,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	zip(zip_name).include(artifact(INFINITEMONKEY_DLL_SPEC))
 	zip(zip_name).include(artifact(INFINITEMONKEY_JAR_SPEC))
 	zip(zip_name).include(project('martus-common').package(:jar))
-	zip(zip_name).include(project('martus-bc-jce').package(:jar))
+	zip(zip_name).include(artifact(BCJCE_SPEC))
 	zip(zip_name).include(project('martus-mspa').package(:jar))
 	zip(zip_name).include(_('BuildFiles', 'Documents', 'mspa_user_guide.pdf'))
 	zip(zip_name).include(project('martus-mspa').package(:sources))
