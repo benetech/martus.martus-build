@@ -16,7 +16,7 @@ def create_nsis_zip_task
 	zip(zip_file).include(_('BuildFiles/SampleDir'), :path=>'BuildFiles')
 	#TODO: Need to include MartusSetupLauncher?
 
-	include_artifacts(zip(zip_file), [project('martus-bc-jce').package(:jar)], 'BuildFiles/Jars')
+	include_artifacts(zip(zip_file), [artifact(BCJCE_JAR)], 'BuildFiles/Jars')
 	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/Jars')	
 	include_artifacts(zip(zip_file), [_('BuildFiles/JavaRedistributables/Win32/jre6')], 'BuildFiles/Java redist/Win32')
 	include_artifacts(zip(zip_file), [_('BuildFiles/Documents')], 'BuildFiles')
