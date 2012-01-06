@@ -179,8 +179,8 @@ def unzip_file (file, destination)
 	end
 end
 
-def unzip_one_entry(zip_file, entry, destination)
-  Zip::ZipFile.open(file) do |zip_file|
+def unzip_one_entry(artifact, entry, destination)
+  Zip::ZipFile.open(artifact.to_s) do |zip_file|
     zip_file.each do |f|
       puts f.name
       if entry == f.name
