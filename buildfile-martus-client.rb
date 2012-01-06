@@ -26,7 +26,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	build do
 	  version_file = _('target', 'version.txt') 
-    puts version_file
     FileUtils::mkdir_p(_('target'))
     File.open(version_file, "w") do | file |
       file.puts(Time.now)
@@ -54,10 +53,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     FileUtils.mkdir_p meta_inf_dir
     bcjce_sig_file = File.join(meta_inf_dir, "SSMTSJAR.SIG")
     FileUtils.rm_f bcjce_sig_file
-    puts "Moving #{bcjce_sf_file}"
+#    puts "Moving #{bcjce_sf_file}"
     file bcjce_sig_file => [bcjce_sf_file] do | t |
       FileUtils.move(bcjce_sf_file, t.path)
-      puts "Moved to #{t.path}"
+#      puts "Moved to #{t.path}"
     end
 
     #TODO: Need to extract BCKEY.SF from bcprov-xxx.jar, and add it to the jar as BCKEY.SIG
