@@ -14,15 +14,25 @@ def extract_sig_file_to_meta(jar_artifact, base_filename)
   FileUtils.move(sf_file, sig_file)
 end
 
+def main_source_dir
+  return _('source', 'main', 'java')
+end
+
+def main_target_dir
+  return _('target', 'main', 'classes')
+end
+
+def test_source_dir
+  return _('source', 'test', 'java')
+end
+
+def test_target_dir
+  return _('target', 'test', 'classes')
+end
+
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
 	project.version = '1'
-
-	main_source_dir = _('source', 'main', 'java')
-	main_target_dir = _('target', 'main', 'classes')
-	test_source_dir = _('source', 'test', 'java')
-	test_target_dir = _('target', 'test', 'classes')
-
 
 	compile.options.target = '1.5'
 	compile.with(
