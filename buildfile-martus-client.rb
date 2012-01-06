@@ -1,10 +1,14 @@
 name = 'martus-client'
 
 def extract_sig_file_to_meta(jar_artifact, base_filename)
+  meta_inf_dir = _(main_target_dir, 'META-INF')
+  FileUtils.mkdir_p meta_inf_dir
+
   sig_file = File.join(meta_inf_dir, "#{base_filename}.SIG")
-  sf_file = File.join(meta_inf_dir, "#{base_filename}.SF")
   FileUtils.rm_f sig_file
+  sf_file = File.join(meta_inf_dir, "#{base_filename}.SF")
   FileUtils.rm_f sf_file
+  
   unzip_one_entry(jar_artifact, "META-INF/#{manifest_sf_filename}", main_target_dir)
   puts "Moving #{sf_file} (#{File.exists?(sf_file)}) to #{sig_file}"
   FileUtils.move(sf_file, sig_file)
@@ -16,7 +20,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	main_source_dir = _('source', 'main', 'java')
 	main_target_dir = _('target', 'main', 'classes')
-	meta_inf_dir = _(main_target_dir, 'META-INF')
 	test_source_dir = _('source', 'test', 'java')
 	test_target_dir = _('target', 'test', 'classes')
 
@@ -59,7 +62,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessage.txt').into(main_target_dir).run
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessageRtoL.txt').into(main_target_dir).run
 
-    FileUtils.mkdir_p meta_inf_dir
     extract_sig_file_to_meta(artifact(BCJCE_SPEC), "SSMTSJAR")
     extract_sig_file_to_meta(artifact(BCPROV_SPEC), "BCKEY")
 	end
