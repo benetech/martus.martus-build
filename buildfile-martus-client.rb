@@ -50,12 +50,14 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessage.txt').into(main_target_dir).run
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessageRtoL.txt').into(main_target_dir).run
 
-    puts "here"
     bcjce_sf_file = extract_artifact_entry_task(artifact(BCJCE_SPEC), "META-INF/SSMTSJAR.SF")
+    FileUtils.mkdir_p meta_inf_dir
     bcjce_sig_file = File.join(meta_inf_dir, "SSMTSJAR.SIG")
     FileUtils.rm_f bcjce_sig_file
+    puts "Moving #{bcjce_sf_file}"
     file bcjce_sig_file => [bcjce_sf_file] do | t |
-      FileUtils.move(bcjce_sf_file, t.name)
+      FileUtils.move(bcjce_sf_file, t.path)
+      puts "Moved to #{t.path}"
     end
 
     #TODO: Need to extract BCKEY.SF from bcprov-xxx.jar, and add it to the jar as BCKEY.SIG
@@ -73,6 +75,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 
 	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
+	package(:jar).include(met_inf_dir, '*.SIG')
 
 	package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
 	package(:jar).merge(project('martus-jar-verifier').package(:jar))
