@@ -65,7 +65,5 @@ define "martus-thirdparty" do
 	# TODO: Should include source/license for javax.servlet.jar
 	# TODO: Should include source/license for javax.mail.jar
 	
-	package(:zip) do
-	  include(artifact(BCPROV_SPEC))
-	end
+	package(:zip).include(artifact(BCPROV_SPEC))
 end
