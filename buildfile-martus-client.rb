@@ -74,7 +74,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 
 	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
-	package(:jar).include(met_inf_dir, '*.SIG')
+	package(:jar).include(meta_inf_dir, '*.SIG')
 
 	package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
 	package(:jar).merge(project('martus-jar-verifier').package(:jar))
