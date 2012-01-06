@@ -5,7 +5,7 @@ def extract_sig_file_to_crypto(jar_artifact, base_filename)
   result = FileUtils.mkdir_p crypto_dir
   puts "Created #{crypto_dir} result=#{result} exists=#{File.exists?(crypto_dir)}"
 
-  sf_file = File.join(main_target_dir, "#{base_filename}.SF")
+  sf_file = File.join(main_target_dir, "META-INF/#{base_filename}.SF")
   FileUtils.rm_f sf_file
   unzip_one_entry(jar_artifact, "META-INF/#{base_filename}.SF", main_target_dir)
 
