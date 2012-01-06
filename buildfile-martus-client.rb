@@ -49,14 +49,16 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessage.txt').into(main_target_dir).run
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessageRtoL.txt').into(main_target_dir).run
 
-    bcjce_sig_file = File.join(meta_inf_dir, "SSMTSJAR.SIG")
-    bcjce_sf_file = File.join(meta_inf_dir, "SSMTSJAR.SF")
     FileUtils.mkdir_p meta_inf_dir
-    FileUtils.rm_f bcjce_sig_file
-    FileUtils.rm_f bcjce_sf_file
-    unzip_one_entry(artifact(BCJCE_SPEC), "META-INF/SSMTSJAR.SF", main_target_dir)
-    puts "Moving #{bcjce_sf_file} (#{File.exists?(bcjce_sf_file)}) to #{bcjce_sig_file}"
-    FileUtils.move(bcjce_sf_file, bcjce_sig_file)
+    jar_artifact = artifact(BCJCE_SPEC)
+    manifest_sf_filename = "SSMTSJAR.SF"
+    sig_file = File.join(meta_inf_dir, "SSMTSJAR.SIG")
+    sf_file = File.join(meta_inf_dir, manifest_sf_filename)
+    FileUtils.rm_f sig_file
+    FileUtils.rm_f sf_file
+    unzip_one_entry(jar_artifact, "META-INF/#{manifest_sf_filename}", main_target_dir)
+    puts "Moving #{sf_file} (#{File.exists?(sf_file)}) to #{sig_file}"
+    FileUtils.move(sf_file, sig_file)
 
     #TODO: Need to extract BCKEY.SF from bcprov-xxx.jar, and add it to the jar as BCKEY.SIG
 	end
