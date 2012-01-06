@@ -53,7 +53,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     bcjce_sf_file = File.join(meta_inf_dir, "SSMTSJAR.SF")
     FileUtils.mkdir_p meta_inf_dir
     FileUtils.rm_f bcjce_sig_file
-    unzip_one_entry(artifact(BCJCE_SPEC), "META-INF/SSMTSJAR.SF", meta_inf_dir)
+    FileUtils.rm_f bcjce_sf_file
+    unzip_one_entry(artifact(BCJCE_SPEC), "META-INF/SSMTSJAR.SF", main_target_dir)
     puts "Moving #{bcjce_sf_file} (#{File.exists?(bcjce_sf_file)}) to #{bcjce_sig_file}"
     FileUtils.move(bcjce_sf_file, bcjce_sig_file)
 
