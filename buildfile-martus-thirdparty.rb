@@ -11,6 +11,9 @@ def source_file(project_name, directory, source_name)
 end
 
 define "martus-thirdparty" do
+  project.group = 'org.martus'
+  project.version = '1'
+
 	install do
 		puts "Installing martus-thirdparty"
 	end
