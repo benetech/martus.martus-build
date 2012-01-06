@@ -53,11 +53,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     bcjce_sf_file = extract_artifact_entry_task(artifact(BCJCE_SPEC), "META-INF/SSMTSJAR.SF")
     bcjce_sig_file = File.join(_('target'), "META-INF/SSMTSJAR.SIG")
     FileUtils.rm_f bcjce_sig_file
-    file bcjce_sig_file => bcjce_sf_file do | t |
+    file bcjce_sig_file => [bcjce_sf_file] do | t |
       puts "moving from #{bcjce_sf_file} to #{t.name}"
       FileUtils.move(bcjce_sf_file, t.name)
     end
-    filter(_('target').include('*.SIG').into(main_target_dir).run
+    filter(_('target')).include('*.SIG').into(main_target_dir).run
 
     #TODO: Need to extract BCKEY.SF from bcprov-xxx.jar, and add it to the jar as BCKEY.SIG
 	end
