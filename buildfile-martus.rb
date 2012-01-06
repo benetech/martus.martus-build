@@ -182,7 +182,6 @@ end
 def unzip_one_entry(artifact, entry, destination)
   Zip::ZipFile.open(artifact.to_s) do |zip_file|
     zip_file.each do |f|
-      puts f.name
       if entry == f.name
         f_path=File.join(destination, f.name)
         FileUtils.mkdir_p(File.dirname(f_path))
