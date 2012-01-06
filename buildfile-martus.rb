@@ -179,6 +179,22 @@ def unzip_file (file, destination)
 	end
 end
 
+def unzip_one_entry(zip_file, entry, destination)
+  Zip::ZipFile.open(file) do |zip_file|
+    zip_file.each do |f|
+      puts f.name
+      if entry == f.name
+        f_path=File.join(destination, f.name)
+        FileUtils.mkdir_p(File.dirname(f_path))
+        if File.exist?(f_path) && !File.directory?(f_path)
+          raise "Can't overwrite #{f_path}"
+        end
+        zip_file.extract(f, f_path) 
+      end
+    end
+  end
+end
+
 
 def extract_artifact_entry_task(artifact_spec, entry)
 	return extract_zip_entry_task(artifact(artifact_spec).to_s, entry)
