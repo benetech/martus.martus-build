@@ -72,7 +72,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	package(:zip).include(artifact(BCPROV_SPEC))
   package(:zip).include(artifact(BCJCE_SPEC))
-  package(:zip).include(artifact(INFINITEMONKEY_SPEC))
+  package(:zip).include(artifact(INFINITEMONKEY_JAR_SPEC))
+  package(:zip).include(artifact(INFINITEMONKEY_DLL_SPEC))
   package(:zip).include(artifact(PERSIANCALENDAR_SPEC))
   package(:zip).include(artifact(VELOCITY_SPEC))
   package(:zip).include(artifact(XMLRPC_SPEC))
