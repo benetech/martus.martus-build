@@ -80,5 +80,4 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   package(:zip).include(artifact(ICU4J_SPEC))
   package(:zip).include(artifact(LAYOUTS_SPEC))
   package(:zip).include(artifact(RHINO_SPEC))
-  package(:zip).include(artifact(_SPEC))
 end
