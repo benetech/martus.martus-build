@@ -71,4 +71,13 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	# TODO: Should include source/license for javax.mail.jar
 	
 	package(:zip).include(artifact(BCPROV_SPEC))
+  package(:zip).include(artifact(BCJCE_SPEC))
+  package(:zip).include(artifact(INFINITEMONKEY_SPEC))
+  package(:zip).include(artifact(PERSIANCALENDAR_SPEC))
+  package(:zip).include(artifact(VELOCITY_SPEC))
+  package(:zip).include(artifact(XMLRPC_SPEC))
+  package(:zip).include(artifact(ICU4J_SPEC))
+  package(:zip).include(artifact(LAYOUTS_SPEC))
+  package(:zip).include(artifact(RHINO_SPEC))
+  package(:zip).include(artifact(_SPEC))
 end
