@@ -3,6 +3,7 @@ name = 'martus-client'
 def extract_sig_file_to_crypto(jar_artifact, base_filename)
   crypto_dir = _(main_target_dir, 'org', 'martus', 'common', 'crypto')
   FileUtils.mkdir_p crypto_dir
+  puts "Created #{crypto_dir}"
 
   sf_file = File.join(main_target_dir, "#{base_filename}.SF")
   FileUtils.rm_f sf_file
