@@ -1,3 +1,5 @@
+name = "martus-thirdparty"
+
 def jar_file(project_name, directory, jar_name)
 	return file(_(project_name, "#{directory}/bin/#{jar_name}"))
 end
@@ -10,7 +12,7 @@ def source_file(project_name, directory, source_name)
 	return file(_(project_name, "#{directory}/source/#{source_name}"))
 end
 
-define "martus-thirdparty" do
+define name, :layout=>create_layout_with_source_as_source(name) do
   project.group = 'org.martus'
   project.version = '1'
 
