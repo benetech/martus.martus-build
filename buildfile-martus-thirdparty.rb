@@ -64,4 +64,8 @@ define "martus-thirdparty" do
 	install artifact(LUCENE_LICENSE_SPEC).from(license_task)
 	# TODO: Should include source/license for javax.servlet.jar
 	# TODO: Should include source/license for javax.mail.jar
+	
+	package(:zip) do
+	  include(artifact(BCPROV_SPEC))
+	end
 end
