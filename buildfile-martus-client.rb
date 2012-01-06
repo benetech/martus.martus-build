@@ -9,7 +9,7 @@ def extract_sig_file_to_meta(jar_artifact, base_filename)
   sf_file = File.join(meta_inf_dir, "#{base_filename}.SF")
   FileUtils.rm_f sf_file
   
-  unzip_one_entry(jar_artifact, "META-INF/#{manifest_sf_filename}", main_target_dir)
+  unzip_one_entry(jar_artifact, "META-INF/#{base_filename}.SF", main_target_dir)
   puts "Moving #{sf_file} (#{File.exists?(sf_file)}) to #{sig_file}"
   FileUtils.move(sf_file, sig_file)
 end
