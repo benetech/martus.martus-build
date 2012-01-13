@@ -4,7 +4,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
 	project.version = '1'
 
-	def package_as_signed_jar(file_name)
+	def package_as_unsigned_jar(file_name)
 	  FileTask.define_task(file_name) do
       FileUtils.cp project('martus-client').package(:jar).to_s, file_name
 	  end
@@ -12,5 +12,5 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	
 	
 	
-  package(:signed_jar)
+  package(:unsigned_jar)
 end
