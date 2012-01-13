@@ -1,7 +1,6 @@
 name = 'martus-client'
 
 def extract_sig_file_to_crypto(jar_artifact, base_filename)
-  crypto_dir = _(main_target_dir, 'org', 'martus', 'common', 'crypto')
   result = FileUtils.mkdir_p crypto_dir
   puts "Created #{crypto_dir} result=#{result} exists=#{File.exists?(crypto_dir)}"
 
@@ -9,7 +8,7 @@ def extract_sig_file_to_crypto(jar_artifact, base_filename)
   FileUtils.rm_f sf_file
   unzip_one_entry(jar_artifact, "META-INF/#{base_filename}.SF", main_target_dir)
 
-  sig_file = File.join(crypto_dir, "#{base_filename}.SIG")
+  sig_file = sig_file(base_filename)
   FileUtils.rm_f sig_file
   FileUtils.move(sf_file, sig_file)
   puts "Moved #{sf_file} (#{File.exists?(sf_file)}) to #{sig_file}"
@@ -30,6 +29,14 @@ end
 
 def test_target_dir
   return _('target', 'test', 'classes')
+end
+
+def crypto_dir
+  return _(main_target_dir, 'org', 'martus', 'common', 'crypto')
+end
+
+def sig_file(base_filename)
+  return File.join(crypto_dir, "#{base_filename}.SIG")
 end
 
 define name, :layout=>create_layout_with_source_as_source(name) do
@@ -86,10 +93,17 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude('org.martus.client.test.TestLocalization')
 	test.exclude('org.martus.client.test.TestMartusApp_NoServer')
 
+	define_task(sig_file("SSMTSJAR")) do
+	  extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
+	end
+	
+	define_task(sig_file("BCKEY")) do
+    extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
+	end
 
 	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
-  package(:jar).include(extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR"))
-  package(:jar).include(extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY"))
+  package(:jar).include(bcjce_sig_file)
+  package(:jar).include(bcprov_sig_file)
 
   package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
 	package(:jar).merge(project('martus-jar-verifier').package(:jar))
