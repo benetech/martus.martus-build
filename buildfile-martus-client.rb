@@ -101,7 +101,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude('org.martus.client.test.TestLocalization')
 	test.exclude('org.martus.client.test.TestMartusApp_NoServer')
 
-	File bcjce_sig_file => project('martus-thirdparty') do
+	file bcjce_sig_file => project('martus-thirdparty') do
 	  extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
 	end
 	
