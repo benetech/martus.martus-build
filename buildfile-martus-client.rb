@@ -39,6 +39,14 @@ def sig_file(base_filename)
   return File.join(crypto_dir, "#{base_filename}.SIG")
 end
 
+def bcjce_sig_file
+  return sig_file("SSMTSJAR")
+end
+
+def bcprov_sig_file
+  return sig_file("BCKEY")
+end
+
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
 	project.version = '1'
@@ -93,11 +101,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude('org.martus.client.test.TestLocalization')
 	test.exclude('org.martus.client.test.TestMartusApp_NoServer')
 
-	FileTask.define_task(sig_file("SSMTSJAR")) do
+	FileTask.define_task(bcjce_sig_file) do
 	  extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
 	end
 	
-  FileTask.define_task(sig_file("BCKEY")) do
+  FileTask.define_task(bcprov_sig_file) do
     extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 	end
 
