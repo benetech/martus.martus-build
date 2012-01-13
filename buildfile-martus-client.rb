@@ -101,11 +101,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude('org.martus.client.test.TestLocalization')
 	test.exclude('org.martus.client.test.TestMartusApp_NoServer')
 
-	Rake::FileTask.define_task(bcjce_sig_file) => project('martus-thirdparty') do
+	File bcjce_sig_file => project('martus-thirdparty') do
 	  extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
 	end
 	
-  Rake::FileTask.define_task(bcprov_sig_file) => project('martus-thirdparty') do
+  file bcprov_sig_file => project('martus-thirdparty') do
     extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 	end
 
