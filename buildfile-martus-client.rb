@@ -93,11 +93,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude('org.martus.client.test.TestLocalization')
 	test.exclude('org.martus.client.test.TestMartusApp_NoServer')
 
-	define_task(sig_file("SSMTSJAR")) do
+	FileTask.define_task(sig_file("SSMTSJAR")) do
 	  extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
 	end
 	
-	define_task(sig_file("BCKEY")) do
+  FileTask.define_task(sig_file("BCKEY")) do
     extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 	end
 
