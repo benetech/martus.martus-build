@@ -1,6 +1,6 @@
 # Usage:
-#   To build a client jar: 
-#		buildr clean checkout martus-client:package martus-client-mac-dmg:build test=no
+#   To build an unsigned client jar: 
+#		buildr clean checkout martus-client-unsigned:package martus-client-mac-dmg:build test=no
 
 require 'fileutils'
 require 'English'
@@ -19,6 +19,7 @@ require 'buildfile-martus-jar-verifier'
 require 'buildfile-martus-clientside'
 require 'buildfile-martus-mlp'
 require 'buildfile-martus-client'
+require 'buildfile-martus-client-unsigned'
 require 'buildfile-martus-mspa'
 require 'buildfile-martus-amplifier'
 require 'buildfile-martus-server'
