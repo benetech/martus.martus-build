@@ -88,8 +88,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 
 	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
-  package(:jar).include(extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
-  package(:jar).include(extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
+  package(:jar).include(extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR"))
+  package(:jar).include(extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY"))
 
   package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
 	package(:jar).merge(project('martus-jar-verifier').package(:jar))
