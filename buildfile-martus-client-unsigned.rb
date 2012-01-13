@@ -6,6 +6,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	def package_as_unsigned_jar(file_name)
 	  file file_name => project('martus-client').package(:jar) do
+	    FileUtils.mkdir_p(_('target'))
       FileUtils.cp project('martus-client').package(:jar).to_s, file_name
 	  end
 	end
