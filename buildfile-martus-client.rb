@@ -13,6 +13,7 @@ def extract_sig_file_to_crypto(jar_artifact, base_filename)
   FileUtils.rm_f sig_file
   FileUtils.move(sf_file, sig_file)
   puts "Moved #{sf_file} (#{File.exists?(sf_file)}) to #{sig_file}"
+  return sig_file
 end
 
 def main_source_dir
@@ -73,8 +74,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessage.txt').into(main_target_dir).run
 		filter(main_source_dir).include('org/martus/client/swingui/UnofficialTranslationMessageRtoL.txt').into(main_target_dir).run
 
-    extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
-    extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 	end
 
 	test.with(
@@ -89,8 +88,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 
 	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
+  package(:jar).include(extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
+  package(:jar).include(extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 
-	package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
+  package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
 	package(:jar).merge(project('martus-jar-verifier').package(:jar))
 	package(:jar).merge(project('martus-common').package(:jar))
 	package(:jar).merge(project('martus-utils').package(:jar))
