@@ -109,31 +109,32 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 	end
 
-	package(:jar).with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
-  package(:jar).include(bcjce_sig_file)
-  package(:jar).include(bcprov_sig_file)
+	package(:jar, :file => _('target', "martus-client-unsigned-#{project.version}.jar")).tap do | p |
+	  p.with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
+    p.include(bcjce_sig_file)
+    p.include(bcprov_sig_file)
+  
+    p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
+    p.merge(project('martus-jar-verifier').package(:jar))
+    p.merge(project('martus-common').package(:jar))
+    p.merge(project('martus-utils').package(:jar))
+    p.merge(project('martus-hrdag').package(:jar))
+    p.merge(project('martus-logi').package(:jar))
+    p.merge(project('martus-swing').package(:jar))
+    p.merge(project('martus-clientside').package(:jar))
+    p.merge(project('martus-js-xml-generator').package(:jar))
+	end
 
-  package(:jar).include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
-	package(:jar).merge(project('martus-jar-verifier').package(:jar))
-	package(:jar).merge(project('martus-common').package(:jar))
-	package(:jar).merge(project('martus-utils').package(:jar))
-	package(:jar).merge(project('martus-hrdag').package(:jar))
-	package(:jar).merge(project('martus-logi').package(:jar))
-	package(:jar).merge(project('martus-swing').package(:jar))
-	package(:jar).merge(project('martus-clientside').package(:jar))
-	package(:jar).merge(project('martus-js-xml-generator').package(:jar))
-
-	# TODO: Old build script signed this jar
-
-  package(:zip, :classifier=>'sources')
-  package(:zip, :classifier=>'sources').include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
-  package(:zip, :classifier=>'sources').merge(project('martus-jar-verifier').package(:sources))
-  package(:zip, :classifier=>'sources').merge(project('martus-common').package(:sources))
-  package(:zip, :classifier=>'sources').merge(project('martus-utils').package(:sources))
-  package(:zip, :classifier=>'sources').merge(project('martus-hrdag').package(:sources))
-  package(:zip, :classifier=>'sources').merge(project('martus-logi').package(:sources))
-  package(:zip, :classifier=>'sources').merge(project('martus-swing').package(:sources))
-  package(:zip, :classifier=>'sources').merge(project('martus-clientside').package(:sources))
-  package(:zip, :classifier=>'sources').merge(project('martus-js-xml-generator').package(:sources))
+  package(:zip, :classifier=>'sources').tap do | p |
+    p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
+    p.merge(project('martus-jar-verifier').package(:sources))
+    p.merge(project('martus-common').package(:sources))
+    p.merge(project('martus-utils').package(:sources))
+    p.merge(project('martus-hrdag').package(:sources))
+    p.merge(project('martus-logi').package(:sources))
+    p.merge(project('martus-swing').package(:sources))
+    p.merge(project('martus-clientside').package(:sources))
+    p.merge(project('martus-js-xml-generator').package(:sources))
+  end
 
 end
