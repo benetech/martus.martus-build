@@ -80,6 +80,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	    if $CHILD_STATUS != 0
 	        raise "Failed in dmg ant script #{$CHILD_STATUS}"
 	    end
+	    
+	    #TODO: Create SHA-1 of this file
 	end
     
 end
