@@ -125,7 +125,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.merge(project('martus-js-xml-generator').package(:jar))
 	end
 
-  package(:zip, {:classifier=>'sources', :file => _('target', "martus-client-sources-#{project.version}.zip")).tap do | p |
+  options = {
+    :classifier=>'sources', 
+    :file => _('target', "martus-client-sources-#{project.version}.zip")}
+  }
+  package(:zip, options).tap do | p |
     p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
     p.merge(project('martus-jar-verifier').package(:sources))
     p.merge(project('martus-common').package(:sources))
