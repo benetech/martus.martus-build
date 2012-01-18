@@ -126,6 +126,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	end
 
   options = {
+    :type => :zip,
     :classifier=>'sources', 
     :file => _('target', "martus-client-sources-#{project.version}.zip"),
   }
