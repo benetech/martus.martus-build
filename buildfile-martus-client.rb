@@ -130,6 +130,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     :classifier=>'sources', 
     :file => _('target', "martus-client-sources-#{project.version}.zip"),
   }
+  package(:zip, options)
   package(:zip, options).tap do | p |
     p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
     p.merge(project('martus-jar-verifier').package(:sources))
