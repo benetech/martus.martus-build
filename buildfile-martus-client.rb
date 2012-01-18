@@ -127,7 +127,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
   options = {
     :classifier=>'sources', 
-    :file => _('target', "martus-client-sources-#{project.version}.zip")}
+    :file => _('target', "martus-client-sources-#{project.version}.zip"),
   }
   package(:zip, options).tap do | p |
     p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
