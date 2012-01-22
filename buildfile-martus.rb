@@ -141,23 +141,6 @@ def create_layout_with_source_as_source(base)
 	return layout
 end
 
-def cvs_checkout(project)
-	cmd = "cvs -d:ext:cvs.benetech.org/var/local/cvs co #{project}"
-	IO.popen("#{cmd} 2>&1") do |pipe|
-		out_err = ''
-		while((line = pipe.gets))
-			puts line
-			out_err << line
-		end
-		if(pipe.closed? || pipe.eof?)
-			break
-		end
-	end
-	if $? != 0
-		raise "Error checking out #{project} (#{$?}):#{outerr}"
-	end
-end
-
 def update_packaged_zip(package)
 	package.enhance do | task |
 		task.enhance do
@@ -284,27 +267,6 @@ def create_combined_license
 end
 
 task nil do
-end
-
-task :checkout do
-	cvs_checkout 'martus-thirdparty'
-	cvs_checkout 'martus-bc-jce'
-	cvs_checkout 'martus-logi'
-	cvs_checkout 'martus-hrdag'
-	cvs_checkout 'martus-utils'
-	cvs_checkout 'martus-swing'
-	cvs_checkout 'martus-common'
-
-	cvs_checkout 'martus-js-xml-generator'
-	cvs_checkout 'martus-jar-verifier'
-	cvs_checkout 'martus-clientside'
-	cvs_checkout 'martus-client'
-	cvs_checkout 'martus-mspa'
-
-	cvs_checkout 'martus-amplifier'
-	cvs_checkout 'martus-server'
-
-	cvs_checkout 'martus-meta'
 end
 
 define 'martus' do
