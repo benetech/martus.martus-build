@@ -1,4 +1,4 @@
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus
+#cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus
 cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-amplifier
 cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-client
 cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-clientside
