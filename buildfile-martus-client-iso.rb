@@ -2,9 +2,9 @@ name = 'martus-client-iso'
 
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
-	project.version = '1'
+  project.version = $BUILD_NUMBER
 
-	base_file = "#{_(:target)}/Martus-#{$build_number}"
+	base_file = "#{_(:target)}/Martus-#{$BUILD_NUMBER}"
 	zip_file = "#{base_file}.zip"
 	iso_file = "#{base_file}.iso"
 	sha_file = "#{iso_file}.iso"
@@ -51,7 +51,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		unzip_file(zip_file, dest_dir)
 
 		options = '-J -r -T -hide-joliet-trans-tbl -l'
-		volume = "-V Martus-#{$build_number}"
+		volume = "-V Martus-#{$BUILD_NUMBER}"
 		output = "-o #{iso_file}"
 		`mkisofs #{options} #{volume} #{output} #{dest_dir}`
 	end

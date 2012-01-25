@@ -2,7 +2,7 @@ name = 'martus-client-mac-dmg'
 
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
-	project.version = '1'
+  project.version = $BUILD_NUMBER
 
 	build do
 	    version = "3.6.2"

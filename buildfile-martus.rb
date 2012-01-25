@@ -2,7 +2,9 @@ repositories.remote << 'http://www.ibiblio.org/maven2/'
 repositories.remote << 'http://repo1.maven.org/maven2/'
 repositories.remote << 'http://download.java.net/maven/2'
 
-$build_number = ENV['BUILD_NUMBER'] || 'TEST'
+$BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
+
+puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
 $client_version = '3.6.1'
 

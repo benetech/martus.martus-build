@@ -2,7 +2,7 @@ name = "martus-mspa-client"
 
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
-	project.version = '1'
+  project.version = $BUILD_NUMBER
 
 	compile.options.target = '1.5'
 	compile.with(
@@ -26,7 +26,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ICU4J_SPEC
 	)
 
-	jar_name = _("#{name}/target/martus-mspa-client-#{$build_number}.jar")
+	jar_name = _("#{name}/target/martus-mspa-client-#{$BUILD_NUMBER}.jar")
 	package :jar, :file=>jar_name
 
 	# TODO: Old build script signed this jar

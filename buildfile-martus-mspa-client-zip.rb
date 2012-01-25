@@ -2,7 +2,7 @@ name = "martus-mspa-client-zip"
 
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
-	project.version = '1'
+  project.version = $BUILD_NUMBER
 
 	zip_name = _("#{name}/target/MartusMSPA.zip")
 	zip(zip_name)

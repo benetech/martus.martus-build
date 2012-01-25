@@ -2,7 +2,7 @@ name = "martus-jar-verifier"
 
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
-	project.version = '1'
+  project.version = $BUILD_NUMBER
 
 	main_source_dir = _('source', 'main', 'java')
 	main_target_dir = _('target', 'main', 'classes')
