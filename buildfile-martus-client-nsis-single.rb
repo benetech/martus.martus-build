@@ -4,7 +4,7 @@ require "#{File.dirname(__FILE__)}/buildfile-martus-client-nsis-common"
 
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
-	project.version = '1'
+  project.version = $BUILD_NUMBER
 
 	exe_name = 'MartusSetupSingle.exe'
 	exe_path = _(:target, exe_name)

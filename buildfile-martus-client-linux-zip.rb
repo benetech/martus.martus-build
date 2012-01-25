@@ -2,11 +2,11 @@ name = 'martus-client-linux-zip'
 
 define name, :layout=>create_layout_with_source_as_source('.') do
 	project.group = 'org.martus'
-	project.version = '1'
+  project.version = $BUILD_NUMBER
 	
 	puts "Defining package for linux-zip"
-#  package(:zip, :file => _("target", "MartusClient-Linux-#{$build_number}.zip")).include(_("BuildFiles", "Documents", "installing_martus.txt"))
-	package(:zip, :file => _("target", "MartusClient-Linux-#{$build_number}.zip")).tap do | p |
+#  package(:zip, :file => _("target", "MartusClient-Linux-#{$BUILD_NUMBER}.zip")).include(_("BuildFiles", "Documents", "installing_martus.txt"))
+	package(:zip, :file => _("target", "MartusClient-Linux-#{$BUILD_NUMBER}.zip")).tap do | p |
 	  puts "Packaging linux zip #{_("BuildFiles")} !"
     p.include(_("BuildFiles", "Documents", "installing_martus.txt"))
     p.include(_("BuildFiles", "Documents", "license.txt"))
