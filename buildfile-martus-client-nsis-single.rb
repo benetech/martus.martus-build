@@ -1,6 +1,6 @@
 name = 'martus-client-nsis-single'
 
-require 'buildfile-martus-client-nsis-common'
+require "#{File.dirname(__FILE__)}/buildfile-martus-client-nsis-common"
 
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'

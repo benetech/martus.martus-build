@@ -6,32 +6,33 @@ require 'fileutils'
 require 'English'
 require 'tmpdir'
 
-require 'buildfile-martus'
+main_dir = File.dirname(__FILE__)
+require "#{main_dir}/buildfile-martus"
 
-require 'buildfile-martus-thirdparty'
-require 'buildfile-martus-logi'
-require 'buildfile-martus-hrdag'
-require 'buildfile-martus-utils'
-require 'buildfile-martus-swing'
-require 'buildfile-martus-common'
-require 'buildfile-martus-js-xml-generator'
-require 'buildfile-martus-jar-verifier'
-require 'buildfile-martus-clientside'
-require 'buildfile-martus-mlp'
-require 'buildfile-martus-client'
-require 'buildfile-martus-mspa'
-require 'buildfile-martus-amplifier'
-require 'buildfile-martus-server'
-require 'buildfile-martus-meta'
+require "#{main_dir}/buildfile-martus-thirdparty"
+require"#{main_dir}/buildfile-martus-logi"
+require"#{main_dir}/buildfile-martus-hrdag"
+require"#{main_dir}/buildfile-martus-utils"
+require"#{main_dir}/buildfile-martus-swing"
+require"#{main_dir}/buildfile-martus-common"
+require"#{main_dir}/buildfile-martus-js-xml-generator"
+require"#{main_dir}/buildfile-martus-jar-verifier"
+require"#{main_dir}/buildfile-martus-clientside"
+require"#{main_dir}/buildfile-martus-mlp"
+require"#{main_dir}/buildfile-martus-client"
+require"#{main_dir}/buildfile-martus-mspa"
+require"#{main_dir}/buildfile-martus-amplifier"
+require"#{main_dir}/buildfile-martus-server"
+require"#{main_dir}/buildfile-martus-meta"
 
-require 'buildfile-martus-client-linux-zip'
-require 'buildfile-martus-client-nsis-upgrade'
-require 'buildfile-martus-client-nsis-single'
-require 'buildfile-martus-client-nsis-pieces'
-require 'buildfile-martus-client-nsis-cd'
-require 'buildfile-martus-client-iso'
-require 'buildfile-martus-mspa-client-zip'
-require 'buildfile-martus-client-mac-dmg'
+require"#{main_dir}/buildfile-martus-client-linux-zip"
+require"#{main_dir}/buildfile-martus-client-nsis-upgrade"
+require"#{main_dir}/buildfile-martus-client-nsis-single"
+require"#{main_dir}/buildfile-martus-client-nsis-pieces"
+require"#{main_dir}/buildfile-martus-client-nsis-cd"
+require"#{main_dir}/buildfile-martus-client-iso"
+require"#{main_dir}/buildfile-martus-mspa-client-zip"
+require"#{main_dir}/buildfile-martus-client-mac-dmg"
 
 #TODO: Need to set up proper dependency chains
 #TODO: Need to eliminate optional files from Java 6 runtime
