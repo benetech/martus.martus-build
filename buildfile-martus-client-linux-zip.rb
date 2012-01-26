@@ -6,7 +6,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
 	
 	puts "Defining package for linux-zip #{project.version} #{input_build_number}"
-	package(:zip, :file => _("target", "MartusClient-Linux-#{project.version}.zip")).tap do | p |
+	package(:zip, :file => _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}.zip")).path("MartusClient-#{project.version}").tap do | p |
 	  signed_jar = "/var/lib/hudson/jobs/martus-client/martus-client-signed-#{input_build_number}.jar"
 	  p.include(signed_jar, :as=>"martus.jar")
 
@@ -18,13 +18,14 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(_("martus-jar-verifier/*.bat"), :path=>'Verifier')
     p.include(_("martus-jar-verifier/*.txt"), :path=>'Verifier')
     
-    #TODO: Add docs to Mac/Linux zip
     p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
     p.include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'ThirdParty')
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
     p.include(third_party_client_jars, :path=>'ThirdParty')
-    p.include(third_party_client_licenses, :path=>'BuildFiles/Documents/Licenses')
+    
+    p.include(third_party_client_licenses, :path=>'Documents/Licenses')
+    #TODO: Add docs to Mac/Linux zip
 
     source_zip = _("martus-client", "target", "martus-client-sources-#{input_build_number}.zip")
 	  p.include(source_zip, :as=>"SourceFiles/martus-sources.zip")
