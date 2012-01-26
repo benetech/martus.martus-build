@@ -16,7 +16,7 @@
             stubfile="${macjavastubfile}" 
             shortname="${short.app.name}" 
             version="${version.full}"
-            build="${version.timestamp}"
+            build="${version.short}"
             vmoptions="${vm.options}"
         	workingDirectory="$APP_PACKAGE"
         	icon="${mac.icon.file}"
@@ -77,8 +77,6 @@
             <arg value="${dmgmount}"/>
         </exec>
         
-        <copy todir="${dmg.dest.dir}" file="${rawdmgfile}" />
-
         <!-- Temporarily avoid deleting files so I can compare Martus to Miradi
         <delete dir="${dist.mactree}" />
         -->
