@@ -80,9 +80,10 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	        raise "Failed in dmg ant script #{$CHILD_STATUS}"
 	    end
 	    
-	    FileUtils.cp dmg_file, _('target', "MartusClient-#{project.version}-#{input_build_number}.dmg")
-	    
-	    #TODO: Create SHA-1 of this file
+	    destination_filename = "MartusClient-#{project.version}-#{input_build_number}.dmg"
+	    destination = _(:target, destination_filename)
+	    FileUtils.cp dmg_file, destination
+	    create_sha_files(destination)
 	end
     
 end

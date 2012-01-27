@@ -191,10 +191,24 @@ def extract_zip_entry_task(zip_file, entry_to_extract)
 	return file extracted_file=>unzip_task
 end
 
-def sha(file_to_digest, sha_file)
-	`sha1sum #{file_to_digest} > #{sha_file}`
+def create_sha_files(filepath)
+  create_sha1(filepath)
+  create_sha2(filepath)
+end
+
+def create_sha1(filepath)
+  create_sha(filepath, 'sha1sum', '.sha1')
+end
+
+def create_sha2(filepath)
+  create_sha(filepath, 'sha256sum', '.sha2')
+end
+
+def create_sha(filepath, digester, extension)
+  sha_file = "#{filepath}#{extension}"
+	`#{digester} #{filepath} > #{sha_file}`
 	if $? != 0
-		raise "Error generating SHA of #{file_to_digest}"
+		raise "Error generating #{extension} of #{filepath}"
 	end
 end
 

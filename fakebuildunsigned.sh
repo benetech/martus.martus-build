@@ -4,4 +4,4 @@ buildr -f martus/buildfile clean martus-client:package martus-thirdparty:package
 
 # fake signing, when we are ready for that
 cd martus-client/target
-jarsigner -keystore ~/keystore.jks -signed-jar /var/lib/hudson/jobs/martus-client/martus-client-signed-TEST.jar martus-client-unsigned-TEST.jar SSMTSJAR
+jarsigner -keystore ~/keystore.jks -signed-jar /var/lib/hudson/input/martus-client-signed-TEST.jar martus-client-unsigned-TEST.jar SSMTSJAR

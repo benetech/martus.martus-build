@@ -6,8 +6,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
 	
 	puts "Defining package for linux-zip #{project.version} #{input_build_number}"
-	package(:zip, :file => _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}.zip")).path("MartusClient-#{project.version}").tap do | p |
-	  signed_jar = "/var/lib/hudson/jobs/martus-client/martus-client-signed-#{input_build_number}.jar"
+	zippath = _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}.zip")
+	package(:zip, :file => zippath).path("MartusClient-#{project.version}").tap do | p |
+	  signed_jar = "/var/lib/hudson/input/martus-client-signed-#{input_build_number}.jar"
 	  p.include(signed_jar, :as=>"martus.jar")
 
 	  p.include(_("martus", "BuildFiles", "Documents", "installing_martus.txt"))
@@ -32,5 +33,13 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(third_party_client_source, :path=>'SourceFiles')
 	end
 	
-	#TODO: Create SHA-1 of this file
+	sha1path = "#{zippath}.sha1"
+	task 'sha1' => zippath do
+	  create_sha1(zippath)
+	end
+
+  sha2path = "#{zippath}.sha2"
+  task 'sha2' => zippath do
+    create_sha2(zippath)
+  end
 end
