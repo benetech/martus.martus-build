@@ -5,7 +5,10 @@ def create_nsis_zip_task
   zip_file = _('temp', 'nsis.zip')
 
 	nsis_zip = zip(zip_file)
-	zip(zip_file).include(project('martus-client').package(:sources), :path=>'BuildFiles')
+
+  attic_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}/"
+  source_zip_name = "martus-client-sources-#{input_build_number}.zip"
+	zip(zip_file).include("#{attic_dir}/#{source_zip_name}", :path=>'BuildFiles')
 	zip(zip_file).include(_('martus', 'BuildFiles', '*.txt'), :path=>'BuildFiles')
 
 	include_artifacts(zip(zip_file), third_party_client_source, 'SourceFiles')	
@@ -26,10 +29,11 @@ def create_nsis_zip_task
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
 	include_artifacts(zip(zip_file), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
 
-	signed_jar = "/var/lib/hudson/input/martus-client-signed-#{input_build_number}.jar"
+	input_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}"
+	signed_jar = "#{input_dir}/martus-client-signed-#{input_build_number}.jar"
+	source_zip = "#{input_dir}/martus-client-sources-#{input_build_number}.zip"
 	zip(zip_file).include(signed_jar, :as=>"BuildFiles/ProgramFiles/martus.jar")
-
-	zip(zip_file).include(project('martus-client').package(:sources), :path=>'BuildFiles/SourceFiles')
+	zip(zip_file).include(source_zip, :path=>'BuildFiles/SourceFiles')
 	
 	zip(zip_file).include(_('martus', 'BuildFiles', 'Windows', 'Win32_NSIS'))
 

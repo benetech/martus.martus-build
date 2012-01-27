@@ -8,8 +8,12 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	puts "Defining package for linux-zip #{project.version} #{input_build_number}"
 	zippath = _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}.zip")
 	package(:zip, :file => zippath).path("MartusClient-#{project.version}").tap do | p |
-	  signed_jar = "/var/lib/hudson/input/martus-client-signed-#{input_build_number}.jar"
+	  input_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}"
+	  signed_jar = "#{input_dir}/martus-client-signed-#{input_build_number}.jar"
+	  source_zip_name = "martus-client-sources-#{input_build_number}.zip"
+    source_zip = "#{input_dir}/#{source_zip_name}"
 	  p.include(signed_jar, :as=>"martus.jar")
+    p.include(source_zip, :as=>"SourceFiles/martus-sources.zip")
 
 	  p.include(_("martus", "BuildFiles", "Documents", "installing_martus.txt"))
     p.include(_("martus", "BuildFiles", "Documents", "license.txt"))
@@ -24,13 +28,10 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
     p.include(third_party_client_jars, :path=>'ThirdParty')
-    
     p.include(third_party_client_licenses, :path=>'Documents/Licenses')
-    #TODO: Add docs to Mac/Linux zip
-
-    source_zip = _("martus-client", "target", "martus-client-sources-#{input_build_number}.zip")
-	  p.include(source_zip, :as=>"SourceFiles/martus-sources.zip")
     p.include(third_party_client_source, :path=>'SourceFiles')
+
+    #TODO: Add docs to Mac/Linux zip
 	end
 	
 	sha1path = "#{zippath}.sha1"

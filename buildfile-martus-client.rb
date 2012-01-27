@@ -109,7 +109,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 	end
 
-	package(:jar, :file => _('target', "martus-client-unsigned-#{project.version}.jar")).tap do | p |
+	jarpath = _('target', "martus-client-unsigned-#{project.version}.jar")
+	package(:jar, :file => jarpath).tap do | p |
 	  p.with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
     p.include(bcjce_sig_file)
     p.include(bcprov_sig_file)
@@ -125,9 +126,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.merge(project('martus-js-xml-generator').package(:jar))
 	end
 
+	sourcepath = _('target', "martus-client-sources-#{project.version}.zip")
   options = {
     :type => :sources,
-    :file => _('target', "martus-client-sources-#{project.version}.zip"),
+    :file => sourcepath,
   }
   package(options).tap do | p |
     p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
@@ -140,5 +142,13 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.merge(project('martus-clientside').package(:sources))
     p.merge(project('martus-js-xml-generator').package(:sources))
   end
-
+  
+  attic_dir = "/var/lib/hudson/martus-client/builds/#{project.version}/"
+  task 'build_unsigned' => [package(:jar, jarpath), package(options), project('martus-thirdparty').package] do
+    FileUtils.mkdir_p attic_dir
+    FileUtils.cp jarpath, attic_dir
+    FileUtils.cp sourcepath, attic_dir
+    FileUtils.cp project('martus-thirdparty').package.to_s, attic_dir 
+  end
+  
 end
