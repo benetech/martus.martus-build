@@ -1,32 +1,37 @@
 def create_nsis_zip_task
-	zip_file = _(:target, 'nsis.zip')
+  project.version = ENV['RELEASE_IDENTIFIER']
+  input_build_number = ENV['INPUT_BUILD_NUMBER']
+
+  zip_file = _('temp', 'nsis.zip')
 
 	nsis_zip = zip(zip_file)
 	zip(zip_file).include(project('martus-client').package(:sources), :path=>'BuildFiles')
-	zip(zip_file).include(_('BuildFiles/*.txt'), :path=>'BuildFiles')
+	zip(zip_file).include(_('martus', 'BuildFiles', '*.txt'), :path=>'BuildFiles')
 
 	include_artifacts(zip(zip_file), third_party_client_source, 'SourceFiles')	
 	
-	zip(zip_file).include(_('BuildFiles/Windows/Winsock95'), :path=>'BuildFiles/Win95')
+	zip(zip_file).include(_('martus', 'BuildFiles', 'Windows', 'Winsock95'), :path=>'BuildFiles/Win95')
 	zip(zip_file).include(_('martus-jar-verifier/*.txt'), :path=>'BuildFiles/Verifier')
 	zip(zip_file).include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/Verifier')
 	zip(zip_file).include(_('martus-jar-verifier/source'), :path=>'BuildFiles/Verifier')
 	#TODO: Need to include MartusWin32SetupLauncher?
-	zip(zip_file).include(_('BuildFiles/ProgramFiles'), :path=>'BuildFiles')
-	zip(zip_file).include(_('BuildFiles/SampleDir'), :path=>'BuildFiles')
+	zip(zip_file).include(_('martus', 'BuildFiles', 'ProgramFiles'), :path=>'BuildFiles')
+	zip(zip_file).include(_('martus', 'BuildFiles', 'SampleDir'), :path=>'BuildFiles')
 	#TODO: Need to include MartusSetupLauncher?
 
 	include_artifacts(zip(zip_file), [artifact(BCJCE_SPEC)], 'BuildFiles/Jars')
 	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/Jars')	
-	include_artifacts(zip(zip_file), [_('BuildFiles/JavaRedistributables/Win32/jre6')], 'BuildFiles/Java redist/Win32')
-	include_artifacts(zip(zip_file), [_('BuildFiles/Documents')], 'BuildFiles')
+	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6')], 'BuildFiles/Java redist/Win32')
+	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'Documents')], 'BuildFiles')
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
 	include_artifacts(zip(zip_file), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
-	zip(zip_file).include(project('martus-client').package(:jar), :path=>'BuildFiles/ProgramFiles', :as=>'martus.jar')
+
+	signed_jar = "/var/lib/hudson/input/martus-client-signed-#{input_build_number}.jar"
+	zip(zip_file).include(signed_jar, :as=>"BuildFiles/ProgramFiles/martus.jar")
 
 	zip(zip_file).include(project('martus-client').package(:sources), :path=>'BuildFiles/SourceFiles')
 	
-	zip(zip_file).include(_('BuildFiles/Windows/Win32_NSIS'))
+	zip(zip_file).include(_('martus', 'BuildFiles', 'Windows', 'Win32_NSIS'))
 
 	return zip_file
 end
@@ -46,5 +51,5 @@ def run_nsis_task(nsis_zip, nsi_name, exe_name)
 		end
 		puts 'Finished makensis'
 		mv _(:target, "Installer/Win32_NSIS/#{exe_name}"), _(:target, exe_name)
-
+		FileUtils.rm_rf dest_dir
 end
