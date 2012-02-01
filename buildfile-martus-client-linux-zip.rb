@@ -1,5 +1,13 @@
 name = 'martus-client-linux-zip'
 
+def include_artifacts_in_zip(package, artifacts, directory, extension)
+  artifacts.each do | artifact |
+    artifact_file = artifact.to_s
+    artifact_filename = File.basename(artifact_file)
+    package.include(artifact, :as=>"#{directory}/#{artifact_filename}.#{extension}")
+  end
+end
+
 define name, :layout=>create_layout_with_source_as_source('.') do
 	project.group = 'org.martus'
   project.version = ENV['RELEASE_IDENTIFIER']
@@ -28,12 +36,8 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
     p.include(third_party_client_jars, :path=>'ThirdParty')
-    third_party_client_source.each do | source_artifact |
-      artifact_file = source_artifact.to_s
-      artifact_filename = File.basename(artifact_file)
-      p.include(source_artifact, :as=>"SourceFiles/#{artifact_filename}.zip")
-    end
-    p.include(third_party_client_licenses, :path=>'Documents/Licenses')
+    include_artifacts_in_zip(p, third_party_client_source, "SourceFiles", "zip")
+    include_artifacts_in_zip(p, third_party_client_licenses, "ThirdParty/Licenses", "txt")
 
     #TODO: Add docs to Mac/Linux zip
 	end
@@ -47,4 +51,5 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   task 'sha2' => zippath do
     create_sha2(zippath)
   end
+  
 end

@@ -41,7 +41,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 		pdfs = Dir[File.join(production_zip_contents_dir, "Documents/*.pdf")]
 		FileUtils::cp(pdfs, docs_dir)
 		
-		licenses_dir = File.join(production_zip_contents_dir, "Documents/Licenses")
+		licenses_dir = File.join(production_zip_contents_dir, "ThirdParty/Licenses")
 		FileUtils::cp_r(licenses_dir, docs_dir)
 		
 		FileUtils::cp_r(_("martus", 'BuildFiles', 'Fonts'), dmg_contents_dir)
