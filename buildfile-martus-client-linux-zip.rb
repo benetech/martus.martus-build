@@ -28,8 +28,12 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
     p.include(third_party_client_jars, :path=>'ThirdParty')
+    third_party_client_source.each do | source_artifact |
+      artifact_file = source_artifact.to_s
+      artifact_filename = File.basename(artifact_file)
+      p.include(source_artifact, :as=>"SourceFiles/#{artifact_filename}.zip")
+    end
     p.include(third_party_client_licenses, :path=>'Documents/Licenses')
-    p.include(third_party_client_source, :path=>'SourceFiles')
 
     #TODO: Add docs to Mac/Linux zip
 	end
