@@ -11,9 +11,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	package :jar
 
-	# TODO: Old build script signed this jar,
-	# then extracted the .SF and .SIG files,
-	# so they would get embedded in org/martus/commmon/crypto
+	# NOTE: Old build script signed this jar
 
 	package :sources
 end
