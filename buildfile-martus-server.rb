@@ -44,5 +44,5 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	package(:jar).include(artifact(XMLRPC_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(BCJCE_SPEC), :path=>'ThirdPartyJars')
 
-	# TODO: Old build script signed this jar
+	# NOTE: Old build script signed this jar
 end
