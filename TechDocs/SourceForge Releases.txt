@@ -39,6 +39,7 @@ Better way is to download the ISO's directly from the HRDag Network
 https://hrdag.benetech.org/martus-client/Releases/Build/1977/ is 3.6.1
 You will need a user name / password to connect to this Network.
 Then burn the ISO to a CD rom then go and get the src zip file from the Source's directory on the CD rom.
+Or get the souces and sha1 directly from the HRDAG build directory and upload these.
 
 Step 2:   Add Files To This Release
 
