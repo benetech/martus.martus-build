@@ -24,7 +24,7 @@ def create_nsis_zip_task
 
 	include_artifacts(zip(zip_file), [artifact(BCJCE_SPEC)], 'BuildFiles/Jars')
 	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/Jars')	
-	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6')], 'BuildFiles/Java redist/Win32')
+	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6')], 'BuildFiles/jre6')
 	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'Documents')], 'BuildFiles')
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
 	include_artifacts(zip(zip_file), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
