@@ -21,10 +21,10 @@
 ;Boston, MA 02111-1307, USA.
 
 !define PRODUCT_NAME "Martus"
-!define PRODUCT_VERSION "3.6.2"
-!define PRODUCT_EXTENDED_VERSION "3.6.2.0"
+!define PRODUCT_VERSION "4.0.0"
+!define PRODUCT_EXTENDED_VERSION "4.0.0.0"
 !define PRODUCT_PUBLISHER "The Benetech Initiative"
-!define PRODUCT_COPYRIGHT_DATE "2001-2009"
+!define PRODUCT_COPYRIGHT_DATE "2001-2012"
 !define PRODUCT_WEB_SITE "http://www.martus.org"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
