@@ -24,8 +24,8 @@
             >
 
             <jarfileset dir="${app.dir}">
-                <include name="Martus/martus.jar" />
-                <include name="LibExt/*" />
+                <include name="martus.jar" />
+                <include name="ThirdParty/*.jar" />
             </jarfileset>
 
             <javaproperty name="apple.laf.useScreenMenuBar" value="true" />
