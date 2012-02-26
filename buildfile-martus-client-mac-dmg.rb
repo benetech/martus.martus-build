@@ -11,15 +11,15 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     dmg_file = File.join(hudson_job_dir, "Martus.dmg")
     production_zipfile = project('martus-client-linux-zip').package.to_s
 
-    mactree_dir = create_empty_mactree_directory
-
-    raw_production_zip_contents_dir = File.join(mactree_dir, "production")
+    raw_production_zip_contents_dir = _("temp", "production")
+    create_empty_directory(raw_production_zip_contents_dir)
+    
     FileUtils::mkdir_p(raw_production_zip_contents_dir)
     unzip_file(production_zipfile, raw_production_zip_contents_dir)
     production_zip_contents_dir = File.join(raw_production_zip_contents_dir, "MartusClient-#{project.version}")
 	
-    dmg_contents_dir = File.join(mactree_dir, "dmgcontents")
-    FileUtils::mkdir_p(dmg_contents_dir)
+    dmg_contents_dir = _("temp", "dmgcontents")
+    create_empty_directory(dmg_contents_dir)
     
     # COPY FILES FROM THE PRODUCTION ZIP
     # NOTE: The jars themselves are copied by jarbundler
@@ -79,14 +79,10 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     create_sha_files(destination)
 	end
 
-	def create_empty_mactree_directory
-    mactree_dir = File.join(_('dist', 'mactree')) #was Dir.mktmpdir
-    puts "Using temp dir: #{mactree_dir}"
-    if(File.exists?(mactree_dir))
-      FileUtils::rm_r(mactree_dir)
+	def create_empty_directory(dir)
+    if(File.exists?(dir))
+      FileUtils::rm_r(dir)
     end
-    FileUtils::mkdir_p(mactree_dir)
-    
-    return mactree_dir
+    FileUtils::mkdir_p(dir)
 	end
 end
