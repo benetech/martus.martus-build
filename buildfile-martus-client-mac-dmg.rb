@@ -33,6 +33,13 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     licenses_dir = File.join(production_zip_contents_dir, "ThirdParty/Licenses")
     FileUtils::cp_r(licenses_dir, docs_dir)
     
+    dmg_fonts_dir = File.join(production_zip_contents_dir, "Fonts")
+    FileUtils::cp_r(dmg_fonts_dir, dmg_contents_dir)
+    dmg_fonts_cvs_dir = File.join(dmg_fonts_dir, "CVS")
+    if(File.exists?(dmg_fonts_cvs_dir))
+      FileUtils::rm_r(dmg_fonts_cvs_dir)
+    end
+
     # COPY MAC-SPECIFIC FILES NOT IN THE ZIP
     mac_readme = _("martus", 'BuildFiles', 'Documents', 'Mac-install-README.txt')
 		FileUtils::cp([mac_readme], dmg_contents_dir)
@@ -40,14 +47,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 		# NOTE: This does not appear to be working. We need to learn more 
 		# about mac app icons before spending more time on it.
 		mac_icon_file = _("martus", 'BuildFiles', 'ProgramFiles', 'Martus-Mac')
-
-    # TODO: Shouldn't the fonts be in the zip??
-    FileUtils::cp_r(_("martus", 'BuildFiles', 'Fonts'), dmg_contents_dir)
-    dmg_fonts_dir = File.join(dmg_contents_dir, "Fonts")
-    dmg_fonts_cvs_dir = File.join(dmg_fonts_dir, "CVS")
-    if(File.exists?(dmg_fonts_cvs_dir))
-      FileUtils::rm_r(dmg_fonts_cvs_dir)
-    end
 
     buildfile_option = "-buildfile martus/martus-client-mac-dmg.ant.xml"
     properties = ""
