@@ -30,9 +30,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(_("martus", "BuildFiles", "Documents", "*.pdf"), :path=>'Documents')
     p.include(_("martus", "BuildFiles", "Fonts", '*.ttf'), :path=>'Fonts')
       
-    # TODO: Probably remove Windows 95 support
-    p.include(_("martus", "BuildFiles", "Windows", "Winsock95"), :path=>"Win95")
-    
     p.include(_("martus-jar-verifier/*.bat"), :path=>'Verifier')
     p.include(_("martus-jar-verifier/*.txt"), :path=>'Verifier')
     
