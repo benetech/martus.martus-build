@@ -130,7 +130,8 @@ LUCENE_LICENSE_SPEC = build_lucene_spec('license')
 MAIL_SPEC = build_mail_spec('jar')
 MAIL_LICENSE_SPEC = build_mail_spec('license')
 
-MARTUSSETUP_EXE_SPEC = build_spec('org.martus', 'martus_setup', 'exe', $client_version)
+MARTUSSETUP_EXE_SPEC = build_spec('org.martus', 'martus_single_setup', 'exe', $client_version)
+MARTUSSETUP_UPGRADE_EXE_SPEC = build_spec('org.martus', 'martus_upgrade_setup', 'exe', $client_version)
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new
