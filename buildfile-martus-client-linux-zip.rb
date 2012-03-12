@@ -25,9 +25,13 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
 	  p.include(_("martus", "BuildFiles", "Documents", "installing_martus.txt"))
     p.include(_("martus", "BuildFiles", "Documents", "license.txt"))
-    p.include(_("martus", "BuildFiles", "Documents", "README*.txt"))
+    p.include(_("martus", "BuildFiles", "Documents", "gpl.txt"))
+    p.include(_("martus", "BuildFiles", "Documents", "client", "README*.txt"))
+    p.include(_("martus", "BuildFiles", "Documents", "client" "*.pdf"), :path=>'Documents')
+    p.include(project('martus-jar-verifier').path_to(:root, "readme_verify*.txt"))
       
-    p.include(_("martus", "BuildFiles", "Documents", "*.pdf"), :path=>'Documents')
+    #TODO: Should we ship LinuxJavaInstall.txt?
+      
     p.include(_("martus", "BuildFiles", "Fonts", '*.ttf'), :path=>'Fonts')
       
     p.include(_("martus-jar-verifier/*.bat"), :path=>'Verifier')
