@@ -13,7 +13,6 @@ def create_nsis_zip_task
 
 	include_artifacts(zip(zip_file), third_party_client_source, 'SourceFiles')	
 	
-	zip(zip_file).include(_('martus', 'BuildFiles', 'Windows', 'Winsock95'), :path=>'BuildFiles/Win95')
 	zip(zip_file).include(_('martus-jar-verifier/*.txt'), :path=>'BuildFiles/Verifier')
 	zip(zip_file).include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/Verifier')
 	zip(zip_file).include(_('martus-jar-verifier/source'), :path=>'BuildFiles/Verifier')

@@ -12,8 +12,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	zip(zip_file).include(_('BuildFiles', 'Documents', 'license.txt'), :path=>'BuildFiles')
 	zip(zip_file).include(_('BuildFiles', 'Documents', 'gpl.txt'), :path=>'BuildFiles')
 		
-	zip(zip_file).include(_('BuildFiles/Windows/Winsock95'), :path=>'BuildFiles/Win95')
-	
 	zip(zip_file).include(_('BuildFiles', 'ProgramFiles', 'autorun.inf'), :path=>'BuildFiles')
 	
 	zip(zip_file).include(_('BuildFiles', 'ProgramFiles'), :path=>'BuildFiles/Martus').exclude('autorun.inf')

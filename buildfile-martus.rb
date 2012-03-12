@@ -292,7 +292,6 @@ define 'martus' do
 	
 		fix_newlines(_('BuildFiles', '*.txt'))
 		fix_newlines(_('BuildFiles', 'Documents', '*.txt'))
-		fix_newlines(_('BuildFiles', 'Windows', 'Winsock95', '*.txt'))
 		fix_newlines(project('martus-jar-verifier').path_to('*.txt'))
 	end
 

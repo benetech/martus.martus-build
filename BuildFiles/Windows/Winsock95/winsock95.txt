@@ -1,5 +1,0 @@
-Winsock Issues
-
-Martus uses the Java 2 SDK which requires but does not include the Microsoft Winsock 2.0 library. It is extremely likely that your system already has Winsock 2.0 or later. However, it is possible that some Microsoft Windows 95 systems have an older version of Winsock.
-
-If your Microsoft Windows 95 machine doesn't have Winsock 2.0 or later, you will notice that Martus will not run when the desktop icon is launched. To upgrade your system to use Winsock 2.0 and correct this problem, run the file W95ws2setup.exe included in the Win95 folder.
