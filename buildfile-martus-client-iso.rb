@@ -9,31 +9,21 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	iso_file = "#{base_file}.iso"
 	sha_file = "#{iso_file}.iso"
 	
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'license.txt'), :path=>'BuildFiles')
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'gpl.txt'), :path=>'BuildFiles')
-		
-	zip(zip_file).include(_('BuildFiles', 'ProgramFiles', 'autorun.inf'), :path=>'BuildFiles')
-	
-	zip(zip_file).include(_('BuildFiles', 'ProgramFiles'), :path=>'BuildFiles/Martus').exclude('autorun.inf')
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'license.txt'), :path=>'BuildFiles/Martus')
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'gpl.txt'), :path=>'BuildFiles/Martus')
-	
-	zip(zip_file).include(_('martus-jar-verifier/*.txt'), :path=>'BuildFiles/verify')
-	zip(zip_file).include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/verify')
+	zip(zip_file).include(project('martus').path_to('BuildFiles', 'ProgramFiles', 'autorun.inf'), :path=>'BuildFiles')
+	zip(zip_file).include(project('martus').path_to('BuildFiles', 'ProgramFiles'), :path=>'BuildFiles/Martus').exclude('autorun.inf')
 
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'README.txt'), :path=>'BuildFiles')
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'martus_user_guide.pdf'), :path=>'BuildFiles/Martus/Docs')
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'quickstartguide.pdf'), :path=>'BuildFiles/Martus/Docs')
+	zip(zip_file).include(project('martus').path_to('BuildFiles', 'Documents', 'license.txt'), :path=>'BuildFiles/Martus')
+	zip(zip_file).include(project('martus').path_to('BuildFiles', 'Documents', 'gpl.txt'), :path=>'BuildFiles/Martus')
+  zip(zip_file).include(project('martus').path_to("BuildFiles", "Documents", "installing_martus.txt"), :path=>'BuildFiles/Martus')
+  zip(zip_file).include(project('martus').path_to("BuildFiles", "Documents", "license.txt"), :path=>'BuildFiles/Martus')
+  zip(zip_file).include(project('martus').path_to("BuildFiles", "Documents", "gpl.txt"), :path=>'BuildFiles/Martus')
+	zip(zip_file).include(project('martus').path_to('BuildFiles', 'Documents', "client", 'README*.txt'), :path=>'BuildFiles/Martus')
 
-	martus_languages = ['es','ru','ar','fr','th','ne']
-	martus_languages.each do | language |
-		zip(zip_file).include(_('BuildFiles', 'Documents', "README_#{language}.txt"), :path=>'BuildFiles')
-		zip(zip_file).include(_('BuildFiles', 'Documents', "martus_user_guide_#{language}.pdf"), :path=>'BuildFiles/Martus/Docs')
-		zip(zip_file).include(_('BuildFiles', 'Documents', "quickstartguide_#{language}.pdf"), :path=>'BuildFiles/Martus/Docs')
-		zip(zip_file).include(project('martus-jar-verifier').path_to(:root, "readme_verify_#{language}.txt"), :path=>'BuildFiles')
-	end
+  zip(zip_file).include(project('martus-jar-verifier').path_to('*.bat'), :path=>'BuildFiles/verify')
+	zip(zip_file).include(project('martus-jar-verifier').path_to('*.txt'), :path=>'BuildFiles/verify')
+  zip(zip_file).include(project('martus-jar-verifier').path_to("readme_verify*.txt"), :path=>'BuildFiles/verify')
 
-	zip(zip_file).include(_('BuildFiles', 'Documents', 'LinuxJavaInstall.txt'), :path=>'BuildFiles/Martus/Docs')
+  zip(zip_file).include(project('martus').path_to('BuildFiles', 'Documents', "client", '*.pdf'), :path=>'BuildFiles/Martus/Docs')
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Martus/Docs')
 	include_artifacts(zip(zip_file), third_party_client_source, 'SourceFiles')	
 	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/LibExt')	
