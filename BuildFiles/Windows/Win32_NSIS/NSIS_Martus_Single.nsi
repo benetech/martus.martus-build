@@ -42,7 +42,16 @@ Section "MainSection" SEC01
     ; copy java redistributable
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy redistributable Java...'
-    File /r /x CVS "..\BuildFiles\jre6\*"
+    SetOutPath "$MARTUS_INSTALLATION_DIR\bin"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\bin"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\COPYRIGHT"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\LICENSE"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\LICENSE.txt"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\README.txt"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\THIRDPARTYLICENSEREADME.txt"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\Welcome.html"
+    SetOutPath "$MARTUS_INSTALLATION_DIR\lib"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\lib"
     
     ; -------------------------------------------
     ; uncomment below for single file distributions
@@ -52,10 +61,11 @@ Section "MainSection" SEC01
     File "..\BuildFiles\ProgramFiles\*.jar"
     File "..\BuildFiles\Documents\license.txt"
     File "..\BuildFiles\Documents\gpl.txt"
-    File "..\BuildFiles\Documents\README.txt"
-    File "..\BuildFiles\Documents\README_*.txt"
+    File "..\BuildFiles\Documents\client\README*.txt"
+
     SetOutPath "$MARTUS_INSTALLATION_DIR\Docs"
-    File "..\BuildFiles\Documents\*.pdf"
+    File "..\BuildFiles\Documents\client\*.pdf"
+
     SetOutPath "$MARTUS_INSTALLATION_DIR\Docs\Licenses"
     File /r "..\BuildFiles\Documents\Licenses\*"
 

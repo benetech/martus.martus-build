@@ -40,19 +40,23 @@ def create_nsis_zip_task
 end
 
 def run_nsis_task(nsis_zip, nsi_name, exe_name)
-		dest_dir = _(:target, 'Installer')
-		FileUtils.rm_rf dest_dir
-		Dir.mkdir(dest_dir)
-		unzip_file(nsis_zip, dest_dir)
-		
-		puts "Running makensis from: #{Dir.pwd}"
-		puts ":target is #{_(:target)}"
-		error_output = `makensis -V2 #{_(:target, "/Installer/Win32_NSIS/#{nsi_name}")}`
-		status = $?
-		if status.exitstatus > 0
-			raise "Error running makensis #{status.exitstatus}: #{error_output.split("\n").join("\n  ")}"
-		end
-		puts 'Finished makensis'
-		mv _(:target, "Installer/Win32_NSIS/#{exe_name}"), _(:target, exe_name)
-		FileUtils.rm_rf dest_dir
+  puts "Unzipping NSIS zip..."
+  unzipped_dir = 'FilesForWindowsInstaller'
+	dest_dir = _(:temp, unzipped_dir)
+	FileUtils.rm_rf dest_dir
+	FileUtils.mkdir_p(dest_dir)
+	unzip_file(nsis_zip, dest_dir)
+	
+	puts "Running makensis from: #{Dir.pwd}"
+	puts ":target is #{_(:temp)}"
+	error_output = `makensis -V2 #{_(:temp, unzipped_dir, "Win32_NSIS", "#{nsi_name}")}`
+	status = $?
+	if status.exitstatus > 0
+		raise "Error running makensis #{status.exitstatus}: #{error_output.split("\n").join("\n  ")}"
+	end
+	puts 'Finished makensis'
+	mv _(:temp, unzipped_dir, 'Win32_NSIS', "#{exe_name}"), _(:target, exe_name)
+	
+	# Uncomment 
+	#FileUtils.rm_rf dest_dir
 end
