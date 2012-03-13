@@ -45,10 +45,11 @@ Section "MainSection" SEC01
     File "..\BuildFiles\ProgramFiles\*.dll"
     File "..\BuildFiles\Documents\license.txt"
     File "..\BuildFiles\Documents\gpl.txt"
-    File "..\BuildFiles\Documents\README.txt"
-    File "..\BuildFiles\Documents\README_*.txt"
+    File "..\BuildFiles\Documents\client\README*.txt"
+    
     SetOutPath "$MARTUS_INSTALLATION_DIR\Docs"
-    File "..\BuildFiles\Documents\*.pdf"
+    File "..\BuildFiles\Documents\client\*.pdf"
+    
     SetOutPath "$MARTUS_INSTALLATION_DIR\Docs\Licenses"
     File /r "..\BuildFiles\Documents\Licenses\*"
     
