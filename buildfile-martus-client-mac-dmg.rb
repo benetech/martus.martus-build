@@ -35,7 +35,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     end
 
     # COPY MAC-SPECIFIC FILES NOT IN THE ZIP
-    mac_readme = _("martus", 'BuildFiles', 'Documents', 'Mac-install-README.txt')
+    mac_readme = _("martus", 'BuildFiles', 'Documents', 'client', 'Mac-install-README.txt')
 		FileUtils::cp([mac_readme], dmg_contents_dir)
 
 		# NOTE: This does not appear to be working. We need to learn more 
