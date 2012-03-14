@@ -37,6 +37,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(_("martus-jar-verifier/*.bat"), :path=>'Verifier')
     p.include(_("martus-jar-verifier/*.txt"), :path=>'Verifier')
     
+    p.include(artifact(BCJCE_SPEC), :path=>'ThirdParty');
     p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
     p.include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'ThirdParty')
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
@@ -44,8 +45,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(third_party_client_jars, :path=>'ThirdParty')
     include_artifacts_in_zip(p, third_party_client_source, "SourceFiles", "zip")
     include_artifacts_in_zip(p, third_party_client_licenses, "ThirdParty/Licenses", "txt")
-
-    #TODO: Add docs to Mac/Linux zip
 	end
 	
 	sha1path = "#{zippath}.sha1"
