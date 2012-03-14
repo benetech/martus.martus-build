@@ -36,10 +36,22 @@ Section "MainSection" SEC01
     SetOutPath "$MARTUS_INSTALLATION_DIR"
     SetOverwrite ifnewer
 
+    ; NOTE*** All the paths below are into the nsis.zip that gets created,
+    ; not into the raw martus directory as it is in CVS
+
     ; copy java redistributable
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy redistributable Java...'
-    File /r /x CVS "..\BuildFiles\Java redist\Win32\*"
+    SetOutPath "$MARTUS_INSTALLATION_DIR\bin"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\bin"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\COPYRIGHT"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\LICENSE"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\LICENSE.txt"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\README.txt"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\THIRDPARTYLICENSEREADME.txt"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\Welcome.html"
+    SetOutPath "$MARTUS_INSTALLATION_DIR\lib"
+    File /r /x CVS "..\BuildFiles\jre6\jre6\lib"
     
     ; -------------------------------------------
     ;copy program files
