@@ -6,9 +6,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
   release_build_number = $BUILD_NUMBER
 
-	base_file = _(:target, "MartusClientCD-#{project.version}-#{input_build_number}-#{release_build_number}")
-	zip_file = "#{base_file}.iso.zip"
-	iso_file = "#{base_file}.iso"
+  iso_name = "MartusClientCD-#{project.version}-#{input_build_number}-#{release_build_number}.iso"
+	zip_file = _(:temp, "#{iso_name}.zip")
+	iso_file = _(:target, iso_name)
 	
 	zip(zip_file).include(_('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'))
 	zip(zip_file).include(_('martus', 'BuildFiles', 'ProgramFiles'), :path=>'Martus').exclude('autorun.inf')
