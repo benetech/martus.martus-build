@@ -24,7 +24,7 @@
 
 ; Y = this installer delivers Java, N = it doesnt 
 !define IS_JAVA_DELIVERED  "Y"
-!define INSTALLER_EXE_NAME "MartusSetup.exe"
+!define INSTALLER_EXE_NAME "MartusClientCDSetup.exe"
 
 !include "common\NSIS_Martus_Installer_Details.nsi"
 !include "common\NSIS_Martus_Installer_Common_Defines.nsi"

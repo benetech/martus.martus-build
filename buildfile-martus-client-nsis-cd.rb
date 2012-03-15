@@ -8,16 +8,16 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
   release_build_number = $BUILD_NUMBER
 
-	exe_name = 'MartusSetup.exe'
-	exe_path = _(:target, exe_name)
+  temp_dir = _(:temp, 'iso')
+	exe_name = 'MartusClientCDSetup.exe'
+	exe_path = File.join(temp_dir, exe_name)
 
 	nsis_zip = create_nsis_zip_task
 	file exe_path => nsis_zip do
     puts "Building NSIS CD installer"
+    FileUtils.mkdir_p temp_dir
 		run_nsis_task(nsis_zip, 'NSIS_Martus.nsi', exe_name)
-    destination = _(:target, "MartusCDClientSetup-#{project.version}-#{input_build_number}-#{release_build_number}.exe")
-    FileUtils.mv exe_path, destination
-    create_sha_files(destination)
+		FileUtils.mv(_(:target, exe_name), exe_path)
 	end
 	
 	build(exe_path)
