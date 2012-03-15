@@ -4,6 +4,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	project.group = 'org.martus'
   project.version = ENV['RELEASE_IDENTIFIER']
   input_build_number = ENV['INPUT_BUILD_NUMBER']
+  release_build_number = $BUILD_NUMBER
 
 	build do
     hudson_job_dir = "/var/lib/hudson/jobs/martus-client-unsigned"
@@ -67,7 +68,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
       raise "Failed in dmg ant script #{$CHILD_STATUS}"
     end
     
-    destination_filename = "MartusClient-#{project.version}-#{input_build_number}.dmg"
+    destination_filename = "MartusClient-#{project.version}-#{input_build_number}-#{release_build_number}.dmg"
     destination = _(:target, destination_filename)
     FileUtils.cp dmg_file, destination
     create_sha_files(destination)

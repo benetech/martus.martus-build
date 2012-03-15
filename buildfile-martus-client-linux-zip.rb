@@ -12,9 +12,10 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	project.group = 'org.martus'
   project.version = ENV['RELEASE_IDENTIFIER']
   input_build_number = ENV['INPUT_BUILD_NUMBER']
+  release_build_number = $BUILD_NUMBER
 	
-	puts "Defining package for linux-zip #{project.version} #{input_build_number}"
-	zippath = _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}.zip")
+	puts "Defining package for linux-zip #{project.version} #{input_build_number}-#{release_build_number}"
+	zippath = _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}-#{release_build_number}.zip")
 	package(:zip, :file => zippath).path("MartusClient-#{project.version}").tap do | p |
 	  input_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}"
 	  signed_jar = "#{input_dir}/martus-client-signed-#{input_build_number}.jar"
