@@ -12,7 +12,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	
 	zip(zip_file).include(_('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'))
 	zip(zip_file).include(_('martus', 'BuildFiles', 'ProgramFiles'), :path=>'Martus').exclude('autorun.inf')
-
+	
 	zip(zip_file).include(_('martus', 'BuildFiles', 'Documents', 'license.txt'), :path=>'Martus')
 	zip(zip_file).include(_('martus', 'BuildFiles', 'Documents', 'gpl.txt'), :path=>'Martus')
   zip(zip_file).include(_('martus', "BuildFiles", "Documents", "installing_martus.txt"), :path=>'Martus')
@@ -23,6 +23,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   zip(zip_file).include(_('martus-jar-verifier', "readme_verify*.txt"), :path=>'verify')
 
   zip(zip_file).include(_('martus', 'BuildFiles', 'Documents', "client", '*.pdf'), :path=>'Martus/Docs')
+#NOTE: For now at least, don't include Linux zip
+#  include_artifacts(zip(zip_file), [project('martus-client-linux-zip').package(:zip)], '')
+  # TODO: Include Mac DMG here
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'Martus/Docs')
 	include_artifacts(zip(zip_file), third_party_client_source, 'SourceFiles')	
 	include_artifacts(zip(zip_file), third_party_client_jars, 'LibExt')	
