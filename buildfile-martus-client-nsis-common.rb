@@ -7,8 +7,12 @@ def create_nsis_zip_task
 	nsis_zip = zip(zip_file)
 
   attic_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}/"
-  source_zip_name = "martus-client-sources-#{input_build_number}.zip"
-	zip(zip_file).include("#{attic_dir}/#{source_zip_name}", :path=>'BuildFiles')
+
+  signed_jar = "#{attic_dir}/martus-client-signed-#{input_build_number}.jar"
+  zip(zip_file).include(signed_jar, :as=>"martus.jar")
+  source_zip = "#{attic_dir}/martus-client-sources-#{input_build_number}.zip"
+  zip(zip_file).include(source_zip, :path=>'BuildFiles/SourceFiles')
+
 	zip(zip_file).include(_('martus', 'BuildFiles', '*.txt'), :path=>'BuildFiles')
 
 	include_artifacts(zip(zip_file), third_party_client_source, 'SourceFiles')	
@@ -21,18 +25,12 @@ def create_nsis_zip_task
 	zip(zip_file).include(_('martus', 'BuildFiles', 'SampleDir'), :path=>'BuildFiles')
 	#TODO: Need to include MartusSetupLauncher?
 
-	include_artifacts(zip(zip_file), [artifact(BCJCE_SPEC)], 'BuildFiles/Jars')
+	include_artifact(zip(zip_file), artifact(BCJCE_SPEC), 'BuildFiles/Jars', 'bc-jce.jar')
 	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/Jars')	
 	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6')], 'BuildFiles/jre6')
 	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'Documents')], 'BuildFiles')
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
-	include_artifacts(zip(zip_file), [artifact(INFINITEMONKEY_DLL_SPEC)], 'BuildFiles/ProgramFiles')
 
-	input_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}"
-	signed_jar = "#{input_dir}/martus-client-signed-#{input_build_number}.jar"
-	source_zip = "#{input_dir}/martus-client-sources-#{input_build_number}.zip"
-	zip(zip_file).include(signed_jar, :as=>"BuildFiles/ProgramFiles/martus.jar")
-	zip(zip_file).include(source_zip, :path=>'BuildFiles/SourceFiles')
 	
 	zip(zip_file).include(_('martus', 'BuildFiles', 'Windows', 'Win32_NSIS'))
 

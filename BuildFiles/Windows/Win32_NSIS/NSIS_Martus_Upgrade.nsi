@@ -41,8 +41,6 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy documents...'
     File "..\BuildFiles\ProgramFiles\*.ico"
-    File "..\BuildFiles\ProgramFiles\*.jar"
-    File "..\BuildFiles\ProgramFiles\*.dll"
     File "..\BuildFiles\Documents\license.txt"
     File "..\BuildFiles\Documents\gpl.txt"
     File "..\BuildFiles\Documents\client\README*.txt"

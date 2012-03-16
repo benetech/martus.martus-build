@@ -64,10 +64,6 @@ def build_mail_spec(type)
 	return build_spec('javax.mail', 'mail', type, '1.4.3')
 end
 
-def build_infinitemonkey_spec(type)
-	return build_spec('infinitemonkey', 'infinitemonkey', type, '1.0')
-end
-
 def build_rhino_spec(type)
 	return build_spec('org.mozilla.rhino', 'js', type, '2006-03-08')
 end
@@ -87,10 +83,6 @@ BCJCE_SPEC = build_bcjce_spec('jar')
 BCJCE_LICENSE_SPEC = build_bcjce_spec('license')
 
 # Common, not in public repository
-INFINITEMONKEY_JAR_SPEC = build_infinitemonkey_spec('jar')
-INFINITEMONKEY_DLL_SPEC = build_infinitemonkey_spec('dll')
-INFINITEMONKEY_SOURCE_SPEC = build_infinitemonkey_spec('sources')
-INFINITEMONKEY_LICENSE_SPEC = build_infinitemonkey_spec('license')
 PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
 PERSIANCALENDAR_SOURCE_SPEC = build_persiancalendar_spec('sources')
 PERSIANCALENDAR_LICENSE_SPEC = build_persiancalendar_spec('license')
@@ -223,7 +215,6 @@ def third_party_client_jars
 	jars << artifact(PERSIANCALENDAR_SPEC)
 	jars << artifact(VELOCITY_SPEC)
 	jars << artifact(VELOCITY_DEP_SPEC)
-	jars << artifact(INFINITEMONKEY_JAR_SPEC)
 	jars << artifact(XMLRPC_SPEC)
 	return jars
 end
@@ -232,7 +223,6 @@ def third_party_client_licenses
 	licenses = []
 	licenses << artifact(BCPROV_LICENSE_SPEC)
 	licenses << artifact(JUNIT_LICENSE_SPEC)
-	licenses << artifact(INFINITEMONKEY_LICENSE_SPEC)
 	licenses << artifact(PERSIANCALENDAR_LICENSE_SPEC)
 	licenses << artifact(LOGI_LICENSE_SPEC)
 	licenses << artifact(VELOCITY_LICENSE_SPEC)
@@ -248,7 +238,6 @@ def third_party_client_source
 	licenses = []
 	licenses << artifact(BCPROV_SOURCE_SPEC)
 	licenses << artifact(JUNIT_SOURCE_SPEC)
-	licenses << artifact(INFINITEMONKEY_SOURCE_SPEC)
 	licenses << artifact(PERSIANCALENDAR_SOURCE_SPEC)
 	licenses << artifact(VELOCITY_SOURCE_SPEC)
 # TODO: Find velocity-dep source code
@@ -265,6 +254,10 @@ def include_artifacts(target, artifacts, path)
 	artifacts.each do | artifact |
 		target.include(artifact, :path=>path)
 	end
+end
+
+def include_artifact(target, artifact, path, name)
+  target.include(artifact, :path=>path, :as=>name)
 end
 
 def fix_newlines(files)
