@@ -33,7 +33,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	package(:jar).include(artifact(BCPROV_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(ICU4J_SPEC), :path=>'ThirdPartyJars')
-	package(:jar).include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(JAVAX_SERVLET_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(JUNIT_SPEC), :path=>'ThirdPartyJars')
 	package(:jar).include(artifact(LUCENE_SPEC), :path=>'ThirdPartyJars')

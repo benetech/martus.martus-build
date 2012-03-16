@@ -40,7 +40,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     
     p.include(artifact(BCJCE_SPEC), :path=>'ThirdParty');
     p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
-    p.include(artifact(INFINITEMONKEY_JAR_SPEC), :path=>'ThirdParty')
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
     p.include(third_party_client_jars, :path=>'ThirdParty')

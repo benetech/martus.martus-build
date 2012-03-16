@@ -29,10 +29,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   install artifact(BCJCE_LICENSE_SPEC).from(license_file(name, 'libext/bc-jce', 'LICENSE.html'))
 
 	#common
-	install artifact(INFINITEMONKEY_JAR_SPEC).from(jar_file(name, 'common/InfiniteMonkey', 'InfiniteMonkey.jar'))
-	install artifact(INFINITEMONKEY_DLL_SPEC).from(jar_file(name, 'common/InfiniteMonkey', 'infinitemonkey.dll'))
-	install artifact(INFINITEMONKEY_SOURCE_SPEC).from(source_file(name, 'common/InfiniteMonkey', 'InfiniteMonkey.zip'))
-	install artifact(INFINITEMONKEY_LICENSE_SPEC).from(license_file(name, 'common/InfiniteMonkey', 'license.txt'))
 	install artifact(PERSIANCALENDAR_SPEC).from(jar_file(name, 'common/PersianCalendar', 'persiancalendar.jar'))
 	install artifact(PERSIANCALENDAR_SOURCE_SPEC).from(source_file(name, 'common/PersianCalendar', 'PersianCalendar_2_1.zip'))
 	install artifact(PERSIANCALENDAR_LICENSE_SPEC).from(license_file(name, 'common/PersianCalendar', 'gpl.txt'))
@@ -74,8 +70,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(JUNIT_SPEC))
     p.include(artifact(BCPROV_SPEC))
     p.include(artifact(BCJCE_SPEC))
-    p.include(artifact(INFINITEMONKEY_JAR_SPEC))
-    p.include(artifact(INFINITEMONKEY_DLL_SPEC))
     p.include(artifact(PERSIANCALENDAR_SPEC))
     p.include(artifact(VELOCITY_SPEC))
     p.include(artifact(VELOCITY_DEP_SPEC))
