@@ -81,6 +81,8 @@ Section "MainSection" SEC01
     SetOutPath "$MARTUS_INSTALLATION_DIR\src\"
     File "..\BuildFiles\SourceFiles\*.*"
     SetOutPath $MARTUS_INSTALLATION_DIR
+    File "..\martus.jar"
+    
     ; ------------------------------------------------
 
     ; ------------------------------------------------------------------------
