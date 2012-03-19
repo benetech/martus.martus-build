@@ -266,16 +266,6 @@ def fix_newlines(files)
 	end
 end
 
-def create_combined_license
-	martus_license = File.readlines(_('BuildFiles', 'Documents', 'license.txt'))
-	gpl = File.readlines(_('BuildFiles', 'Documents', 'gpl.txt'))
-	File.open(_('BuildFiles', 'combined-license.txt'), "w") do | out |
-		out.write(martus_license)
-		out.write("\n\n\t**********************************\n\n")
-		out.write(gpl)
-	end
-end
-
 task nil do
 end
 
