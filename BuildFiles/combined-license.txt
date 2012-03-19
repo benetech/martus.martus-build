@@ -1,2 +1,0 @@
---- Sample File ---
---- Needs to be overwritten at build time ---

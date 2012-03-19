@@ -31,13 +31,30 @@ def create_nsis_zip_task
 	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'Documents')], 'BuildFiles')
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
 
+	zip(zip_file).include(create_combined_license)
 	
 	zip(zip_file).include(_('martus', 'BuildFiles', 'Windows', 'Win32_NSIS'))
 
 	return zip_file
 end
 
+def create_combined_license
+  martus_license = File.readlines(_('martus', 'BuildFiles', 'Documents', 'license.txt'))
+  gpl = File.readlines(_('martus', 'BuildFiles', 'Documents', 'gpl.txt'))
+  combined = _('martus', 'BuildFiles', 'combined-license.txt')
+  File.open(combined, "w") do | out |
+    out.write(martus_license)
+    out.write("\n\n\t**********************************\n\n")
+    out.write(gpl)
+  end
+  
+  return combined
+end
+
 def run_nsis_task(nsis_zip, nsi_name, exe_name)
+  puts "Creating combined license"
+  create_combined_license
+  
   puts "Unzipping NSIS zip..."
   unzipped_dir = 'FilesForWindowsInstaller'
 	dest_dir = _(:temp, unzipped_dir)
