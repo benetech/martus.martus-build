@@ -6,12 +6,14 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
   release_build_number = $BUILD_NUMBER
 
-	build do
+  production_zipfile = project('martus-client-linux-zip').package.to_s
+
+	build (production_zipfile) do
     hudson_job_dir = "/var/lib/hudson/jobs/martus-client-unsigned"
     dmg_mount_point = File.join(hudson_job_dir, "mounts/dmg")
     dmg_file = File.join(hudson_job_dir, "Martus.dmg")
 
-    production_zip_contents_dir = get_extracted_production_zip_contents_directory
+    production_zip_contents_dir = get_extracted_production_zip_contents_directory(production_zipfile)
 	
     dmg_contents_dir = _("temp", "dmgcontents")
     create_empty_directory(dmg_contents_dir)
@@ -83,9 +85,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     FileUtils::mkdir_p(dir)
 	end
 	
-	def get_extracted_production_zip_contents_directory
-    production_zipfile = project('martus-client-linux-zip').package.to_s
-
+	def get_extracted_production_zip_contents_directory(production_zipfile)
     raw_production_zip_contents_dir = _("temp", "production")
     create_empty_directory(raw_production_zip_contents_dir)
     

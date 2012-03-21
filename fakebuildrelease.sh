@@ -9,4 +9,4 @@ martus-client-linux-zip:package martus-client-linux-zip:sha1 martus-client-linux
 martus-client-nsis-single:build \
 martus-client-nsis-upgrade:build \
 martus-client-mac-dmg:package \
-martus-client-iso:package
+martus-client-iso:build
