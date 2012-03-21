@@ -6,7 +6,7 @@ $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
 
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
-$client_version = '3.6.1'
+$client_version = ENV['INPUT_BUILD_NUMBER']
 
 def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"
@@ -124,6 +124,7 @@ MAIL_LICENSE_SPEC = build_mail_spec('license')
 
 MARTUSSETUP_EXE_SPEC = build_spec('org.martus', 'martus_single_setup', 'exe', $client_version)
 MARTUSSETUP_UPGRADE_EXE_SPEC = build_spec('org.martus', 'martus_upgrade_setup', 'exe', $client_version)
+DMG_SPEC = build_spec('org.martus', 'martus_client_dmg', 'dmg', $client_version)
 
 def create_layout_with_source_as_source(base)
 	layout = Layout.new
