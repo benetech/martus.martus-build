@@ -58,12 +58,12 @@ Section "MainSection" SEC01
     ;copy program files
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy program files...'
-    CopyFiles "$EXEDIR\Martus\*" "$MARTUS_INSTALLATION_DIR"
+    CopyFiles "$EXEDIR\..\martus.jar" "$MARTUS_INSTALLATION_DIR"
 
     ; copy readmes
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy readme...'
-    CopyFiles "$EXEDIR\*.txt" "$MARTUS_INSTALLATION_DIR"
+    CopyFiles "$EXEDIR\..\BuildFiles\Documents\*.txt" "$MARTUS_INSTALLATION_DIR"
     
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
@@ -74,7 +74,7 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy lib/ext...'
     CreateDirectory "$INSTDIR\lib\ext\"
-    CopyFiles "$EXEDIR\LibExt\*" "$MARTUS_INSTALLATION_DIR\lib\ext\"
+    CopyFiles "$EXEDIR\BuildFiles\Jars\*.jar" "$MARTUS_INSTALLATION_DIR\lib\ext\"
     ; ------------------------------------------------
 
     ; create defaultui.txt file with language code (http://www.w3.org/WAI/ER/IG/ert/iso639.htm)
