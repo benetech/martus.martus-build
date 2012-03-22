@@ -72,10 +72,13 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", '*.pdf'))
     add_artifacts(docs_dir, third_party_client_licenses)
     
+    attic_dir = "/var/lib/hudson/martus-client/builds/#{$client_version}/"
+    source_zip = "#{attic_dir}/martus-client-sources-#{$client_version}.zip"
+
     source_dir = File.join(iso_dir, 'SourceFiles')
     FileUtils.mkdir(source_dir)
     add_artifacts(source_dir, third_party_client_source)  
-    add_artifacts(source_dir, [project('martus-client').package(:sources)])
+    add_file(source_dir, source_zip)
 
 	  return iso_dir
 	end
