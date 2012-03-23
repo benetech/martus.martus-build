@@ -65,7 +65,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     properties << " -Ddmg.size.megs=40"
 	
     ant = "ant #{buildfile_option} macdmgfile #{properties}"
-    puts `#{ant}`
+    puts ant
     if $CHILD_STATUS != 0
       raise "Failed in dmg ant script #{$CHILD_STATUS}"
     end
