@@ -21,24 +21,33 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     FileUtils.mkdir_p(temp_dir)
     FileUtils.cp original_exe_file, renamed_exe_file
     
-    puts "Copying #{original_merger_file} to #{renamed_merger_file}"
-    FileUtils.cp original_merger_file, renamed_merger_file
-
-    command = "filesplit -s #{renamed_exe_file} 1400 #{temp_dir}/"
+    #NOTE: filesplit won't compile with modern Linux C++, 
+    # so we will use GNU split, which is compatible, except for file naming
+    # which we can fix in post-processing (below)
+    command = "split --numeric-suffixes --suffix-length=3 --bytes=140K #{renamed_exe_file} #{temp_dir}/"
     puts command
     result = `#{command}` 
     puts "#{command}\n#{result}"
     if $CHILD_STATUS != 0
-      raise "Failed in filesplit #{$CHILD_STATUS}"
-    end
-    if result.index('Error: ') # filesplit does exit(0) on errors, unfortunately
-      raise "Failed in filesplit"
+      raise "Failed in split #{$CHILD_STATUS}"
     end
     
-    Dir.glob(File.join(temp_dir, '*.cnk')).each do | chunk |
+    parts = Dir.glob(File.join(temp_dir, '*')).sort
+    number = 1
+    print "Post-processing #{parts.size} chunks"
+    parts.each do | part |
+      new_number = sprintf('%03d', number)
+      number += 1
+      new_name = "#{base_name}_#{new_number}.cnk"
+      chunk = File.join(temp_dir, new_name)
+      FileUtils.mv part, chunk
       create_sha_files(chunk)
+      print "."
     end
+    puts "Done"
     
+    puts "Copying #{original_merger_file} to #{renamed_merger_file}"
+    FileUtils.cp original_merger_file, renamed_merger_file
   end
 
   package(:zip, :file=>zip_file).tap do | p | 
