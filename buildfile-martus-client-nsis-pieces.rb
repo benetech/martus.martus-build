@@ -31,6 +31,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     if $CHILD_STATUS != 0
       raise "Failed in filesplit #{$CHILD_STATUS}"
     end
+    if result.index('Error: ') # filesplit does exit(0) on errors, unfortunately
+      raise "Failed in filesplit"
+    end
     
     Dir.glob(File.join(temp_dir, '*.cnk')).each do | chunk |
       create_sha_files(chunk)
