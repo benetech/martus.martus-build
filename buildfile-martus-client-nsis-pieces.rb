@@ -13,12 +13,14 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   zip_file = _(:target, "#{base_name}.zip")
   original_exe_file = setup_artifact.to_s
   renamed_exe_file = _(:temp, "#{base_name}")
-  original_merger_file = _('martus', 'BuildFiles', 'MartusSetupLauncher', 'Release', 'MartusSetupBuilder.exe')
+  original_merger_file = _('martus', 'BuildFiles', 'MartusSetupLauncher', 'Release', 'MartusSetupBuilder-[Version_Number].exe')
   renamed_merger_file = File.join(temp_dir, "#{base_name}.exe")
 
   puts "Setting up build dependency: #{setup_artifact.to_s}"
   build(setup_artifact.to_s) do
     FileUtils.mkdir_p(temp_dir)
+    FileUtils.rm_f(Dir.glob(File.join(temp_dir, "*")))
+    puts "After deleting, there are #{Dir.glob(File.join(temp_dir, '*')).size} files in #{temp_dir}"
     FileUtils.cp original_exe_file, renamed_exe_file
     
     #NOTE: filesplit won't compile with modern Linux C++, 
