@@ -9,8 +9,18 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   cd_setup_exe = _(:temp, 'MartusClientCDSetup.exe')
   iso_name = "MartusClientCD-#{project.version}-#{input_build_number}-#{release_build_number}.iso"
 	iso_file = _(:target, iso_name)
+  iso_dir = _(:temp, 'iso')
 	volume_name = "Martus-#{project.version}-#{input_build_number}-#{release_build_number}"
 
+  attic_dir = File.join("/var/lib/hudson/martus-client/builds", $client_version)
+  signed_jar_file = File.join(attic_dir, 'martus-client-signed.jar')
+
+  martus_jar_file = _(:temp, 'martus.jar')
+  
+  file martus_jar_file => signed_jar_file do
+    FileUtils::cp(signed_jar_file, martus_jar_file)
+	end
+	
 	def add_file(dir, file)
 	  FileUtils::cp(file, dir)
 	end
@@ -36,12 +46,12 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	  end
 	end
 		
-	def create_and_populate_iso_dir(cd_setup_exe)
-    puts "Creating ISO tree"
-    iso_dir = _(:temp, 'iso')
+	file iso_dir do
+    puts "Creating ISO tree in #{iso_dir}"
     FileUtils::rm_rf(iso_dir)
     FileUtils::mkdir(iso_dir)
     
+    add_file(iso_dir, martus_jar_file)
     add_file(iso_dir, _('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'))
     add_artifacts(iso_dir, [cd_setup_exe])
     add_artifact_as(iso_dir, artifact(DMG_SPEC), "MartusClient-#{$client_version}.dmg")
@@ -72,9 +82,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", '*.pdf'))
     add_artifacts(docs_dir, third_party_client_licenses)
     
-    attic_dir = "/var/lib/hudson/martus-client/builds/#{$client_version}/"
     source_zip = "#{attic_dir}/martus-client-sources-#{$client_version}.zip"
-
     source_dir = File.join(iso_dir, 'SourceFiles')
     FileUtils.mkdir(source_dir)
     add_artifacts(source_dir, third_party_client_source)  
@@ -83,8 +91,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	  return iso_dir
 	end
 	
-	file iso_file => cd_setup_exe do
-	  iso_dir = create_and_populate_iso_dir(cd_setup_exe)
+	file iso_file => [cd_setup_exe, iso_dir] do
     puts "Creating ISO"
     options = '-J -r -T -hide-joliet-trans-tbl -l'
     volume = "-V #{volume_name}"
