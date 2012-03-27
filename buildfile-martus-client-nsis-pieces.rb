@@ -9,7 +9,8 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   setup_artifact = project('martus-client-nsis-single').artifact(MARTUSSETUP_EXE_SPEC)
   
   temp_dir = File.join(_(:temp), 'chunks')
-  base_name = "MartusClientSetupMultiPart-#{project.version}-#{input_build_number}-#{release_build_number}"
+  full_version = "#{project.version}-#{input_build_number}-#{release_build_number}"
+  base_name = "MartusClientSetupMultiPart-#{full_version}"
   zip_file = _(:target, "#{base_name}.zip")
   original_exe_file = setup_artifact.to_s
   renamed_exe_file = _(:temp, "#{base_name}")
@@ -40,7 +41,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     parts.each do | part |
       new_number = sprintf('%03d', number)
       number += 1
-      new_name = "#{base_name}_#{new_number}.cnk"
+      new_name = "MartusClient-#{full_version}_#{new_number}.cnk"
       chunk = File.join(temp_dir, new_name)
       FileUtils.mv part, chunk
       create_sha_files(chunk)
