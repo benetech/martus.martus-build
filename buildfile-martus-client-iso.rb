@@ -13,11 +13,11 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	volume_name = "Martus-#{project.version}-#{input_build_number}-#{release_build_number}"
 
   attic_dir = File.join("/var/lib/hudson/martus-client/builds", $client_version)
-  signed_jar_file = File.join(attic_dir, 'martus-client-signed.jar')
+  signed_jar_file = File.join(attic_dir, "martus-client-signed-#{input_build_number}.jar")
 
   martus_jar_file = _(:temp, 'martus.jar')
   
-  file martus_jar_file => signed_jar_file do
+  task martus_jar_file => signed_jar_file do
     FileUtils::cp(signed_jar_file, martus_jar_file)
 	end
 	
@@ -46,7 +46,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	  end
 	end
 		
-	file iso_dir do
+	file iso_dir => martus_jar_file do
     puts "Creating ISO tree in #{iso_dir}"
     FileUtils::rm_rf(iso_dir)
     puts "-iso directory removed"
@@ -95,8 +95,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     FileUtils.mkdir(source_dir)
     add_artifacts(source_dir, third_party_client_source)  
     add_file(source_dir, source_zip)
-
-	  return iso_dir
 	end
 	
 	file iso_file => [cd_setup_exe, iso_dir] do
@@ -110,5 +108,10 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	end
 	
 	build(iso_file)
+	
+	clean do
+	  FileUtils.rm_rf(iso_dir)
+	  FileUtils.rm_f(iso_file)
+	end
 	
 end
