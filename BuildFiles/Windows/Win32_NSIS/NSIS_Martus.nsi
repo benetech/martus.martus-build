@@ -51,7 +51,7 @@ Section "MainSection" SEC01
     File /r /x CVS "..\BuildFiles\jre6\jre6\README.txt"
     File /r /x CVS "..\BuildFiles\jre6\jre6\THIRDPARTYLICENSEREADME.txt"
     File /r /x CVS "..\BuildFiles\jre6\jre6\Welcome.html"
-    SetOutPath "$MARTUS_INSTALLATION_DIR\lib"
+    SetOutPath "$MARTUS_INSTALLATION_DIR"
     File /r /x CVS "..\BuildFiles\jre6\jre6\lib"
     
     ; -------------------------------------------
