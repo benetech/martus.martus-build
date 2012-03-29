@@ -64,7 +64,8 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy readme...'
     CopyFiles "$EXEDIR\..\BuildFiles\Documents\*.txt" "$MARTUS_INSTALLATION_DIR"
-    
+    CopyFiles "$EXEDIR\..\BuildFiles\ProgramFiles\*.ico" "$MARTUS_INSTALLATION_DIR"
+
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Attempting to move delete bcprov...'
