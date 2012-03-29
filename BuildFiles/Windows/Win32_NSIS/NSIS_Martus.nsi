@@ -67,14 +67,14 @@ Section "MainSection" SEC01
     
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
-    MessageBox MB_OK 'Attempting to move prev bcprov...'
-    Rename /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\bcprov-jdk14-120.jar" "$MARTUS_INSTALLATION_DIR\bcprov-jdk14-120.prev"
+    MessageBox MB_OK 'Attempting to move delete bcprov...'
+    Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\bcprov*.jar"
 
     ; copy jars into lib ext
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy lib/ext...'
     CreateDirectory "$INSTDIR\lib\ext\"
-    CopyFiles "$EXEDIR\BuildFiles\Jars\*.jar" "$MARTUS_INSTALLATION_DIR\lib\ext\"
+    CopyFiles "$EXEDIR\LibExt\*.jar" "$MARTUS_INSTALLATION_DIR\lib\ext\"
     ; ------------------------------------------------
 
     ; create defaultui.txt file with language code (http://www.w3.org/WAI/ER/IG/ert/iso639.htm)
