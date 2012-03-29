@@ -74,12 +74,15 @@ Section "MainSection" SEC01
     MessageBox MB_OK 'Attempting to delete prev bcprov...'
     Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\bcprov*.jar"
 
+    ; copy jars into lib ext
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy jars...'
     SetOutPath "$MARTUS_INSTALLATION_DIR\lib\ext"
     File "..\BuildFiles\Jars\*.jar"
     SetOutPath "$MARTUS_INSTALLATION_DIR\src\"
     File "..\BuildFiles\SourceFiles\*.*"
+    
+    ; copy martus jars
     SetOutPath $MARTUS_INSTALLATION_DIR
     File "..\martus.jar"
     
