@@ -56,20 +56,11 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     add_file(iso_dir, martus_jar_file)
     puts "-martus jar added"
     add_file(iso_dir, _('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'))
+    add_file(iso_dir, _('martus', 'BuildFiles', 'ProgramFiles', 'app.ico'))
     add_artifacts(iso_dir, [cd_setup_exe])
     add_artifact_as(iso_dir, artifact(DMG_SPEC), "MartusClient-#{$client_version}.dmg")
     #NOTE: For now at least, don't include Linux zip
     
-    puts "-adding Martus directory"
-    martus_dir = File.join(iso_dir, 'Martus')
-    FileUtils.mkdir(martus_dir)
-    add_files(martus_dir, _('martus', 'BuildFiles', 'ProgramFiles', '*.*'))
-    FileUtils::rm(File.join(martus_dir, 'autorun.inf'))
-    add_file(martus_dir, _('martus', 'BuildFiles', 'Documents', 'license.txt'))
-    add_file(martus_dir, _('martus', 'BuildFiles', 'Documents', 'gpl.txt'))
-    add_file(martus_dir, _('martus', "BuildFiles", "Documents", "installing_martus.txt"))
-    add_files(martus_dir, _('martus', 'BuildFiles', 'Documents', "client", 'README*.txt'))
-
     puts "-adding LibExt"
     lib_dir = File.join(iso_dir, 'LibExt')
     FileUtils.mkdir(lib_dir)
@@ -83,11 +74,19 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     add_files(verify_dir, _('martus-jar-verifier', '*.txt'))
     add_files(verify_dir, _('martus-jar-verifier', "readme_verify*.txt"))
   
-    puts "-adding Docs"
-    docs_dir = File.join(martus_dir, 'Docs')
+    puts "-adding Documents directory"
+    docs_dir = File.join(iso_dir, 'Documents')
     FileUtils.mkdir(docs_dir)
+    add_file(docs_dir, _('martus', 'BuildFiles', 'Documents', 'license.txt'))
+    add_file(docs_dir, _('martus', 'BuildFiles', 'Documents', 'gpl.txt'))
+    add_file(docs_dir, _('martus', "BuildFiles", "Documents", "installing_martus.txt"))
+    add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", 'README*.txt'))
     add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", '*.pdf'))
-    add_artifacts(docs_dir, third_party_client_licenses)
+
+    puts "-adding thirdparty docs"
+    thirdpartydocs_dir = File.join(docs_dir, 'ThirdParty')
+    FileUtils.mkdir(thirdpartydocs_dir)
+    add_artifacts(thirdpartydocs_dir, third_party_client_licenses)
     
     puts "-adding SourceFiles"
     source_dir = File.join(iso_dir, 'SourceFiles')
