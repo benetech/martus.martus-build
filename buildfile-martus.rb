@@ -6,7 +6,7 @@ $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
 
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
-$client_version = ENV['INPUT_BUILD_NUMBER']
+$client_version = ENV['INPUT_BUILD_NUMBER'] || 'NNN'
 
 def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"
