@@ -36,6 +36,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     if(File.exists?(dmg_fonts_cvs_dir))
       FileUtils::rm_r(dmg_fonts_cvs_dir)
     end
+    
+    xbootclasspath = "-Xbootclasspath/p:Contents/Resources/Java/ThirdParty/bc-jce-2012-01-05.jar"
+    memswitches = "-Xms256m -Xmx512m"
 
     # COPY MAC-SPECIFIC FILES NOT IN THE ZIP
     mac_readme = _("martus", 'BuildFiles', 'Documents', 'client', 'Mac-install-README.txt')
@@ -56,7 +59,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
     properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.dir=#{production_zip_contents_dir}"
-    properties << " -Dvm.options=-Xbootclasspath/p:Contents/Resources/Java/ThirdParty/bc-jce-2012-01-05.jar"
+    properties << " -Dvm.options=#{xbootclasspath} #{memswitches}"
 
     properties << " -Ddist.mactree=#{dmg_contents_dir}" #can be temp
     properties << " -Ddmg.dest.dir=#{_('dist')}"
