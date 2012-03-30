@@ -53,12 +53,17 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     FileUtils::mkdir(iso_dir)
     puts "-iso directory created"
     
+    puts "-adding jar, autorun, icon, and windows installer"
     add_file(iso_dir, martus_jar_file)
-    puts "-martus jar added"
     add_file(iso_dir, _('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'))
     add_file(iso_dir, _('martus', 'BuildFiles', 'ProgramFiles', 'app.ico'))
     add_artifacts(iso_dir, [cd_setup_exe])
-    add_artifact_as(iso_dir, artifact(DMG_SPEC), "MartusClient-#{$client_version}.dmg")
+
+    puts "-adding dmg"
+    dmg_filename = "MartusClient-#{project.version}-#{input_build_number}-#{release_build_number}.dmg"
+    dmg = _(:target, dmg_filename)
+    add_file(iso_dir, dmg)
+    
     #NOTE: For now at least, don't include Linux zip
     
     puts "-adding LibExt"
