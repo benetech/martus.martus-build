@@ -1,5 +1,5 @@
 echo INPUT_BUILD_NUMBER=$INPUT_BUILD_NUMBER
-buildr -f martus/buildfile test=no \
+buildr --trace -f martus/buildfile test=no \
 clean \
 martus-client-linux-zip:package martus-client-linux-zip:sha1 martus-client-linux-zip:sha2 \
 martus-client-nsis-single:build \
