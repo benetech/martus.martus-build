@@ -77,6 +77,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     destination = _(:target, destination_filename)
     FileUtils.cp dmg_file, destination
     install artifact(DMG_SPEC).from(destination)
+    puts "Installed DMG artifact: #{artifact(DMG_SPEC).to_s}"
     
     create_sha_files(destination)
 	end
