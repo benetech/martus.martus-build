@@ -55,7 +55,7 @@ Section "MainSection" SEC01
     File /r /x CVS "..\BuildFiles\jre6\jre6\lib"
     
     ; -------------------------------------------
-    ;copy program files
+    ;copy main jar
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy program files...'
     CopyFiles "$EXEDIR\..\martus.jar" "$MARTUS_INSTALLATION_DIR"
@@ -63,8 +63,13 @@ Section "MainSection" SEC01
     ; copy readmes
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy readme...'
-    CopyFiles "$EXEDIR\..\BuildFiles\Documents\*.txt" "$MARTUS_INSTALLATION_DIR"
-    CopyFiles "$EXEDIR\..\BuildFiles\ProgramFiles\*.ico" "$MARTUS_INSTALLATION_DIR"
+    CopyFiles "$EXEDIR\..\Documents\*.txt" "$MARTUS_INSTALLATION_DIR"
+    
+    ; copy program icon
+    CopyFiles "$EXEDIR\..\*.ico" "$MARTUS_INSTALLATION_DIR"
+    
+    ; copy other docs
+    CopyFiles "$EXEDIR\..\Documents\*.*" "$MARTUS_INSTALLATION_DIR\Documents"
 
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
