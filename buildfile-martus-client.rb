@@ -111,19 +111,19 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	jarpath = _('target', "martus-client-unsigned-#{project.version}.jar")
 	package(:jar, :file => jarpath).tap do | p |
-	  p.with :manifest=>manifest.merge('Main-Class'=>'org.martus.client.swingui.Martus')
+    p.with :manifest=>{'Main-Class'=>'org.martus.client.swingui.Martus'}
     p.include(bcjce_sig_file)
     p.include(bcprov_sig_file)
   
     p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))
-    p.merge(project('martus-jar-verifier').package(:jar))
-    p.merge(project('martus-common').package(:jar))
-    p.merge(project('martus-utils').package(:jar))
-    p.merge(project('martus-hrdag').package(:jar))
-    p.merge(project('martus-logi').package(:jar))
-    p.merge(project('martus-swing').package(:jar))
-    p.merge(project('martus-clientside').package(:jar))
-    p.merge(project('martus-js-xml-generator').package(:jar))
+    p.merge(project('martus-jar-verifier').package(:jar)).exclude('META-INF/MANIFEST.MF')
+    p.merge(project('martus-common').package(:jar)).exclude('META-INF/MANIFEST.MF')
+    p.merge(project('martus-utils').package(:jar)).exclude('META-INF/MANIFEST.MF')
+    p.merge(project('martus-hrdag').package(:jar)).exclude('META-INF/MANIFEST.MF')
+    p.merge(project('martus-logi').package(:jar)).exclude('META-INF/MANIFEST.MF')
+    p.merge(project('martus-swing').package(:jar)).exclude('META-INF/MANIFEST.MF')
+    p.merge(project('martus-clientside').package(:jar)).exclude('META-INF/MANIFEST.MF')
+    p.merge(project('martus-js-xml-generator').package(:jar)).exclude('META-INF/MANIFEST.MF')
 	end
 
 	sourcepath = _('target', "martus-client-sources-#{project.version}.zip")
