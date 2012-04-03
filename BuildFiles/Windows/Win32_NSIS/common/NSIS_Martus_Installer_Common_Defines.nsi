@@ -75,8 +75,14 @@
     !insertmacro LANG_STRING "un.${NAME}" "${VALUE}"
 !macroend
 
+; Since NSIS 2.26, the language selection dialog of Modern UI 
+; hides languages unsupported by the user's selected codepage 
+; by default. Define MUI_LANGDLL_ALLLANGUAGES to override that
+!define MUI_LANGDLL_ALLLANGUAGES
+
 ; -------------------------------------
 ; Language files
+
 !insertmacro LANG_LOAD "English"
 !insertmacro LANG_LOAD "Russian"
 !insertmacro LANG_LOAD "French"
