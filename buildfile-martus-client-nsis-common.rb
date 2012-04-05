@@ -28,6 +28,7 @@ def create_nsis_zip_task
 	include_artifact(zip(zip_file), artifact(BCJCE_SPEC), 'BuildFiles/Jars', 'bc-jce.jar')
 	include_artifacts(zip(zip_file), third_party_client_jars, 'BuildFiles/Jars')	
 	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6')], 'BuildFiles/jre6')
+	zip(zip_file).include(_('martus', 'BuildFiles', 'Fonts', '*.ttf'), :path=>'BuildFiles/jre6/jre6/lib/fonts/fallback')
 	include_artifacts(zip(zip_file), [_('martus', 'BuildFiles', 'Documents')], 'BuildFiles')
 	include_artifacts(zip(zip_file), third_party_client_licenses, 'BuildFiles/Documents/Licenses')
 
