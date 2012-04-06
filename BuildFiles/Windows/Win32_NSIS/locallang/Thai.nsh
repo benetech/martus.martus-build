@@ -25,7 +25,7 @@
 !insertmacro LANG_STRING LangDialog_Title "���ҵ�ǵԴ���"
 !insertmacro LANG_STRING LangDialog_Text "�ô���͡���ҵ�ǵԴ���"
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} �١�Դ������º��������.\r\n \r\n Visit http://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\n�ش���� (Language Pack) ������س�Դ��駡�������ҷ����������ѻവ �����͡��÷ء���ҵ����蹢ͧ����� Martus �ش���� (Language Pack) �Ǻ���������������ǹ�����ҹ�ͧ������١���� �����͡����ҹ �����ͩ�Ѻ��� ��� README ��С�ê�������� �ͧ����� Martus ����ѻവ �����駤�ش�����¢ͧ����� Martus ��蹷��س��ҹ��ҡ������ҹ��ҧ ��سҴ�ǹ���Ŵ��� (Martus-th.mlp) ����ҧ������硷����� Martus ����ͤس�Դ����� Martus ���駵����ѹ���ѻവ����� ���/���� ��ê�������� ������ء�͡��÷���ѻവ���á������ Martus\Docs"
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} �١�Դ������º��������.\r\n \r\n Visit http://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\n�ش���� (Language Pack) ������س�Դ��駡�������ҷ����������ѻവ �����͡��÷ء���ҵ����蹢ͧ����� Martus �ش���� (Language Pack) �Ǻ���������������ǹ�����ҹ�ͧ������١���� �����͡����ҹ �����ͩ�Ѻ��� ��� README ��С�ê�������� �ͧ����� Martus ����ѻവ \r\n \r\n���꡻��� ������� �����͡�ҡ�����."
 
 ; shortcuts
 !insertmacro LANG_STRING StartMenuShortcutQuestion_Text "�س��ͧ������ҧ�ҧ�Ѵ����� Start Menu �ͧ�س�������?"
