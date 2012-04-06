@@ -38,7 +38,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     end
     
     xbootclasspath = "-Xbootclasspath/p:Contents/Resources/Java/ThirdParty/bc-jce-2012-01-05.jar"
-    memswitches = "-Xms256m -Xmx512m"
 
     # COPY MAC-SPECIFIC FILES NOT IN THE ZIP
     mac_readme = _("martus", 'BuildFiles', 'Documents', 'client', 'Mac-install-README.txt')
@@ -59,7 +58,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
     properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.dir=#{production_zip_contents_dir}"
-    properties << " '-Dvm.options=#{xbootclasspath} #{memswitches}'"
+    properties << " -Dvm.options=#{xbootclasspath}"
+    properties << " -Dvm.minimumheap=256m"
+    properties << " -Dvm.maximumheap=512m"
 
     properties << " -Ddist.mactree=#{dmg_contents_dir}" #can be temp
     properties << " -Ddmg.dest.dir=#{_('dist')}"
