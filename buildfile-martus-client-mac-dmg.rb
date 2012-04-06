@@ -59,13 +59,13 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
     properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.dir=#{production_zip_contents_dir}"
-    properties << " -Dvm.options=\"#{xbootclasspath} #{memswitches}\""
+    properties << " '-Dvm.options=#{xbootclasspath} #{memswitches}'"
 
     properties << " -Ddist.mactree=#{dmg_contents_dir}" #can be temp
     properties << " -Ddmg.dest.dir=#{_('dist')}"
     properties << " -Drawdmgfile=#{dmg_file}"
     properties << " -Ddmgmount=#{dmg_mount_point}"
-    properties << " -Ddmg.size.megs=40"
+    properties << " -Ddmg.size.megs=20"
 	
     ant = "ant #{buildfile_option} macdmgfile #{properties}"
     puts ant
