@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "��� ������ �������"
 !insertmacro LANG_STRING LangDialog_Text "���� �� ������� ��� ������ �������."
 
-!insertmacro LANG_STRING FinishDialog_Text "��� �� ����� ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ��� ������.\r\n \r\n ������ ����� ���� http://www.martus.org/downloads ������ ��� ������� ����� ��� ������. \r\n��� �� ��� "���� �����" ������ ������ �� ������� ����� � ������� �� �� ��� ���� ������ ���� ������� Martus. �� ����� ����� ������� ��� ������� ������ ����� ������ ������ Martus ������ � ���� �������� � ���� ������ ������� � ��� ��������� � ������� �������� ��������.\r\n \r\n���� ����� ������ ���� �������."
+!insertmacro LANG_STRING FinishDialog_Text "��� �� ����� ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ��� ������.\r\n \r\n ������ ����� ���� http://www.martus.org/downloads ������ ��� ������� ����� ��� ������. \r\n��� �� ��� '���� �����' ������ ������ �� ������� ����� � ������� �� �� ��� ���� ������ ���� ������� Martus. �� ����� ����� ������� ��� ������� ������ ����� ������ ������ Martus ������ � ���� �������� � ���� ������ ������� � ��� ��������� � ������� �������� ��������.\r\n \r\n���� ����� ������ ���� �������."
 
 ; shortcuts
 !insertmacro LANG_STRING StartMenuShortcutQuestion_Text " �� ���� ����� ���� ����� �������  Martus  �� ����� ������� �� �����ҿ" 
