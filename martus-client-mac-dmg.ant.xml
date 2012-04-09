@@ -38,6 +38,7 @@
 
     <!--*****************************************************************-->
     <target name="macdmgfile" depends="macappbundle" description="create a mac dmg file">
+    	<echo message="Unmounting"/>
         <exec os="Linux"  executable="umount" failonerror="false">
             <arg value="-d"/>
             <arg value="${dmgmount}"/>
@@ -74,6 +75,8 @@
             <arg value="${dist.mactree}/." />
             <arg value="${dmgmount}" />
         </exec> 
+    	
+        <echo message="Unmounting" />
         <exec os="Linux"  executable="umount" failonerror="true">
             <arg value="-d"/>
             <arg value="${dmgmount}"/>
