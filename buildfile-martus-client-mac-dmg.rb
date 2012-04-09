@@ -12,6 +12,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     hudson_job_dir = "/var/lib/hudson/jobs/martus-client-unsigned"
     dmg_mount_point = File.join(hudson_job_dir, "mounts/dmg")
     dmg_file = File.join(hudson_job_dir, "Martus.dmg")
+    if(File.exists?(dmg_file))
+      FileUtils::rm(dmg_file)
+    end
 
     production_zip_contents_dir = get_extracted_production_zip_contents_directory(production_zipfile)
 	
@@ -52,6 +55,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     properties << " -Dmac.app.name=Martus"
     properties << " -Dshort.app.name=Martus"
     properties << " -Dversion.full=#{version}"
+    properties << " -Dversion.short=#{project.version}"
     properties << " -Dversion.build=#{input_build_number}"
     properties << " -Dmain.class=org.martus.client.swingui.Martus"
     properties << " -Dmac.icon.file=#{mac_icon_file}"
