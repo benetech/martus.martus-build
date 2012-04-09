@@ -7,17 +7,19 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   release_build_number = $BUILD_NUMBER
 
   production_zipfile = project('martus-client-linux-zip').package.to_s
+  ant_output = _(:temp, 'ant-output.txt')
 
-	build (production_zipfile) do
-    hudson_job_dir = "/var/lib/hudson/jobs/martus-client-unsigned"
+  hudson_job_dir = "/var/lib/hudson/jobs/martus-client-unsigned"
+  dmg_file = File.join(hudson_job_dir, "Martus.dmg")
+  if(File.exists?(dmg_file))
+    FileUtils::rm(dmg_file)
+  end
+
+  file dmg_file => production_zipfile do
     dmg_mount_point = File.join(hudson_job_dir, "mounts/dmg")
-    dmg_file = File.join(hudson_job_dir, "Martus.dmg")
-    if(File.exists?(dmg_file))
-      FileUtils::rm(dmg_file)
-    end
 
     production_zip_contents_dir = get_extracted_production_zip_contents_directory(production_zipfile)
-	
+  
     dmg_contents_dir = _("temp", "dmgcontents")
     create_empty_directory(dmg_contents_dir)
     
@@ -44,13 +46,12 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
     # COPY MAC-SPECIFIC FILES NOT IN THE ZIP
     mac_readme = _("martus", 'BuildFiles', 'Documents', 'client', 'Mac-install-README.txt')
-		FileUtils::cp([mac_readme], dmg_contents_dir)
+    FileUtils::cp([mac_readme], dmg_contents_dir)
 
-		# NOTE: This does not appear to be working. We need to learn more 
-		# about mac app icons before spending more time on it.
-		mac_icon_file = _("martus", 'BuildFiles', 'ProgramFiles', 'Martus-Mac')
+    # NOTE: This does not appear to be working. We need to learn more 
+    # about mac app icons before spending more time on it.
+    mac_icon_file = _("martus", 'BuildFiles', 'ProgramFiles', 'Martus-Mac')
 
-    buildfile_option = "-buildfile martus/martus-client-mac-dmg.ant.xml"
     properties = ""
     properties << " -Dmac.app.name=Martus"
     properties << " -Dshort.app.name=Martus"
@@ -70,12 +71,18 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     properties << " -Ddmg.dest.dir=#{_('dist')}"
     properties << " -Drawdmgfile=#{dmg_file}"
     properties << " -Ddmgmount=#{dmg_mount_point}"
-    properties << " -Ddmg.size.megs=20"
-	
-    ant = "ant #{buildfile_option} macdmgfile #{properties}"
+    properties << " -Ddmg.size.megs=25"
+  
+    buildfile = _('martus', 'martus-client-mac-dmg.ant.xml')
+    buildfile_option = "-buildfile #{buildfile}"
+
+    ant = "ant #{buildfile_option} macdmgfile -logfile #{ant_output} #{properties}"
     puts ant
-    if $CHILD_STATUS != 0
-      raise "Failed in dmg ant script #{$CHILD_STATUS}"
+    puts "ANT RESULTS:------------"
+    puts `#{ant}`
+    puts "------------------------"
+    if $CHILD_STATUS != 0 || !File.exists?(dmg_file)
+      raise "Failed in dmg ant script #{$CHILD_STATUS}. See #{ant_output}"
     end
     
     destination_filename = "MartusClient-#{project.version}-#{input_build_number}-#{release_build_number}.dmg"
@@ -85,6 +92,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "Installed DMG artifact: #{artifact(DMG_SPEC).to_s}"
     
     create_sha_files(destination)
+  end
+  
+	build (dmg_file) do
 	end
 
 	def create_empty_directory(dir)
