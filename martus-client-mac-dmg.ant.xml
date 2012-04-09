@@ -17,7 +17,7 @@
             shortname="${short.app.name}" 
             version="${version.full}"
             build="${version.short}"
-            vmoptions='"${vm.options} -Xms${vm.minimumheap} -Xmx${vm.maximumheap}"'
+            vmoptions="-Xms${vm.minimumheap} -Xmx${vm.maximumheap} ${vm.options}"
         	workingDirectory="$APP_PACKAGE"
         	icon="${mac.icon.file}"
             verbose="true"
