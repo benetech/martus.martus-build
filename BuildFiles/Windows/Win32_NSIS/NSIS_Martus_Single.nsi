@@ -155,8 +155,17 @@ preserve_existing_shortcuts:
     StrCpy $StartMenuShortcut "Y"
     CreateDirectory "$SMPROGRAMS\Martus"
     CreateShortCut "$SMPROGRAMS\Martus\Martus.lnk" "$INSTDIR\bin\javaw.exe" "-Xms256m -Xmx512m -Xbootclasspath/p:$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
+
+    IfFileExists "$MARTUS_INSTALLATION_DIR\Docs\$(MartusUserGuideShortcut_Filename)" shortcut_ug skip_shortcut_ug
+shortcut_ug:
     CreateShortCut "$SMPROGRAMS\Martus\$(MartusUserGuideShortcut_Text).lnk" "$MARTUS_INSTALLATION_DIR\Docs\$(MartusUserGuideShortcut_Filename)" "" "" "" "" "" "Martus $(MartusUserGuideShortcut_Text)"
+skip_shortcut_ug:
+
+    IfFileExists "$MARTUS_INSTALLATION_DIR\Docs\$(MartusQuickstartShortcut_Filename)" shortcut_qs skip_shortcut_qs
+shortcut_qs:
     CreateShortCut "$SMPROGRAMS\Martus\$(MartusQuickstartShortcut_Text).lnk" "$MARTUS_INSTALLATION_DIR\Docs\$(MartusQuickstartShortcut_Filename)" "" "" "" "" "" "Martus $(MartusQuickstartShortcut_Text)"
+skip_shortcut_qs:
+
     CreateShortCut "$SMPROGRAMS\Martus\$(MartusUninstallShortcut_Text) Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\uninst.exe" "" "" "" "" "" "$(MartusUninstallShortcut_Text) Martus"
 
 lbl_no_startmenu_shortcut:
