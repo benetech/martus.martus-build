@@ -199,9 +199,19 @@ def create_sha2(filepath)
 end
 
 def create_sha(filepath, digester, extension)
-  sha_file = "#{filepath}#{extension}"
-	`#{digester} #{filepath} > #{sha_file}`
-	if $? != 0
+  dir = File::dirname filepath
+  base = File::basename filepath
+  sha_file = "#{base}#{extension}"
+  working_dir = Dir::getwd
+  Dir::chdir dir
+  
+  cmd = "#{digester} #{base} > #{sha_file}"
+  puts cmd
+	`#{cmd}`
+	result = $?
+  Dir::chdir working_dir
+
+  if result != 0
 		raise "Error generating #{extension} of #{filepath}"
 	end
 end
