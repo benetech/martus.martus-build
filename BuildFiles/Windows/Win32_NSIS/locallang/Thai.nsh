@@ -25,7 +25,7 @@
 !insertmacro LANG_STRING LangDialog_Title "๏ฟฝ๏ฟฝ๏ฟฝาต๏ฟฝวติด๏ฟฝ๏ฟฝ๏ฟฝ"
 !insertmacro LANG_STRING LangDialog_Text "๏ฟฝรด๏ฟฝ๏ฟฝ๏ฟฝอก๏ฟฝ๏ฟฝ๏ฟฝาต๏ฟฝวติด๏ฟฝ๏ฟฝ๏ฟฝ"
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ๏ฟฝูก๏ฟฝิด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝยบ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ.\r\n \r\n Visit http://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\nชุดภาษา (Language Pack) ยอมให้คุณติดตั้งการแปลภาษาที่ใหม่และอัปเดต หรือเอกสารทุกเวลาตามรุ่นของโปรแกรม Martus ชุดภาษา (Language Pack) รวบรวมการแปลภาษาในส่วนการใช้งานของโปรแกรมลูกข่าย คู่มือการใช้งาน คู่มือฉบับย่อ ไพล์ README และการช่วยเหลือ ของโปรแกรม Martus ให้อัปเดต\r\n \r\n๏ฟฝ๏ฟฝ๏ฟฝ๊กป๏ฟฝ๏ฟฝ๏ฟฝ ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอก๏ฟฝาก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ."
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ๏ฟฝูก๏ฟฝิด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝยบ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ.\r\n \r\n Visit http://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\nA 'Language Pack' allows you to install new and updated translations or documentation at any time following a full Martus release. Language Packs can contain updates to the Martus Client User Interface translation, the User Guide, Quick Start Guide, README file, and in-program help.\r\n \r\n๏ฟฝ๏ฟฝ๏ฟฝ๊กป๏ฟฝ๏ฟฝ๏ฟฝ ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝอก๏ฟฝาก๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ."
 
 ; shortcuts
 !insertmacro LANG_STRING StartMenuShortcutQuestion_Text "๏ฟฝุณ๏ฟฝ๏ฟฝอง๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝาง๏ฟฝาง๏ฟฝัด๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ Start Menu ๏ฟฝอง๏ฟฝุณ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ๏ฟฝ?"
