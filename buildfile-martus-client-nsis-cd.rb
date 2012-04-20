@@ -12,8 +12,11 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	exe_name = 'MartusClientCDSetup.exe'
 	exe_path = File.join(temp_dir, exe_name)
 
-	nsis_zip = create_nsis_zip_task
-	file exe_path => nsis_zip do
+	file get_nsis_zip_file do
+	  create_nsis_zip
+	end
+	
+	file exe_path => get_nsis_zip_file do
     puts "Building NSIS CD installer"
     FileUtils.mkdir_p temp_dir
 		run_nsis_task(nsis_zip, 'NSIS_Martus.nsi', exe_name)
