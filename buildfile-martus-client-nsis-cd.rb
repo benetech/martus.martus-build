@@ -19,7 +19,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	file exe_path => get_nsis_zip_file do
     puts "Building NSIS CD installer"
     FileUtils.mkdir_p temp_dir
-		run_nsis_task(nsis_zip, 'NSIS_Martus.nsi', exe_name)
+		run_nsis_task(get_nsis_zip_file, 'NSIS_Martus.nsi', exe_name)
 		FileUtils.mv(_(:target, exe_name), exe_path)
 	end
 	

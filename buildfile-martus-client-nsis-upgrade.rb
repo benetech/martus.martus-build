@@ -17,7 +17,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   
   file exe_path => get_nsis_zip_file do
     puts "Building NSIS upgrade installer"
-		run_nsis_task(nsis_zip, 'NSIS_Martus_Upgrade.nsi', exe_name)
+		run_nsis_task(get_nsis_zip_file, 'NSIS_Martus_Upgrade.nsi', exe_name)
     destination = _(:target, "MartusClientUpgrade-#{project.version}-#{input_build_number}-#{release_build_number}.exe")
     FileUtils.mv exe_path, destination
     create_sha_files(destination)
