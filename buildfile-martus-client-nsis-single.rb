@@ -18,7 +18,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   
 	file exe_path => get_nsis_zip_file do
 	  puts "Building NSIS Single installer"
-		run_nsis_task(nsis_zip, 'NSIS_Martus_Single.nsi', exe_name)
+		run_nsis_task(get_nsis_zip_file, 'NSIS_Martus_Single.nsi', exe_name)
 		FileUtils.mv exe_path, destination
     create_sha_files(destination)
 	end
