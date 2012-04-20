@@ -24,7 +24,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	  p.include(signed_jar, :as=>"martus.jar")
     p.include(source_zip, :as=>"SourceFiles/martus-sources.zip")
 
-	  p.include(_("martus", "BuildFiles", "Documents", "installing_martus.txt"))
     p.include(_("martus", "BuildFiles", "Documents", "license.txt"))
     p.include(_("martus", "BuildFiles", "Documents", "gpl.txt"))
     p.include(_("martus", "BuildFiles", "Documents", "client", "README*.txt"))

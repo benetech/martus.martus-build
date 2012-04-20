@@ -84,7 +84,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     FileUtils.mkdir(docs_dir)
     add_file(docs_dir, _('martus', 'BuildFiles', 'Documents', 'license.txt'))
     add_file(docs_dir, _('martus', 'BuildFiles', 'Documents', 'gpl.txt'))
-    add_file(docs_dir, _('martus', "BuildFiles", "Documents", "installing_martus.txt"))
     add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", 'README*.txt'))
     add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", '*.pdf'))
 
