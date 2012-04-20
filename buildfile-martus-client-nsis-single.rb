@@ -12,8 +12,11 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	exe_path = _(:target, exe_name)
   destination = _(:target, "MartusClientSetup-#{project.version}-#{input_build_number}-#{release_build_number}.exe")
 
-	nsis_zip = create_nsis_zip_task
-	file exe_path => nsis_zip do
+  file get_nsis_zip_file do
+    create_nsis_zip
+  end
+  
+	file exe_path => get_nsis_zip_file do
 	  puts "Building NSIS Single installer"
 		run_nsis_task(nsis_zip, 'NSIS_Martus_Single.nsi', exe_name)
 		FileUtils.mv exe_path, destination

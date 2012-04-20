@@ -1,9 +1,12 @@
-def create_nsis_zip_task
+def get_nsis_zip_file
+  _('temp', 'nsis.zip')
+end
+
+def create_nsis_zip
   project.version = ENV['RELEASE_IDENTIFIER']
   input_build_number = ENV['INPUT_BUILD_NUMBER']
 
-  zip_file = _('temp', 'nsis.zip')
-
+  zip_file = get_nsis_zip_file
 	nsis_zip = zip(zip_file)
 
   attic_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}/"
