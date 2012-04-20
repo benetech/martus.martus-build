@@ -1,4 +1,4 @@
-﻿Martus(tm) Software Version 3.6.2 README.txt
+﻿Martus(tm) Software Version 4.0 README.txt
 ---------------------------------------------------------
 
 
@@ -12,6 +12,38 @@ languages, go to http://www.martus.org/downloads/.
 
 
 Martus release information by version and release date:
+ 
+Version 4.0 		2012-04
+This release is available in English, Farsi/Dari, Spanish and other 
+languages as indicated on the http://www.martus.org software download 
+page. Other languages will be available in the future, as language-packs 
+on the documentation page (http://www.martus.org/downloads)
+
+- Update to Java6 (sometimes called 1.6).  Java6 may improve performance 
+  in some instances, and improves font display for several languages 
+  (E.g. Burmese, Khmer, Nepali) and requires less manual effort by users for 
+  correct font display. The Windows installers automatically include Java6; on 
+  Mac/Linux you should make sure that you are running Java 1.6.0_30 or later, 
+  as earlier versions of Java6 could cause Martus to not work correctly.  You can 
+  check which version of Java is running on your machine for Mac/Linux by opening 
+  a terminal window and typing “java –version” and hitting enter/return.
+- Added initial “memory switches” to Windows and Mac shortcuts to help Martus run 
+  more smoothly for accounts with large numbers of bulletins or large bulletins.  User 
+  can still increase memory values if needed, but this should resolve issues for many 
+  cases that previously needed to be manually created.
+- Enhanced Martus user interface display in Windows, to use the default system 
+  “look and feel”. 
+- Due to security issues discovered in early versions of Windows and Java, Martus 4.0 
+  will only run on versions of that are newer than Windows 98 (ME, 2K, XP, 2003, 
+  Vista, 7). If you have Windows98/NT or older, you need to use Martus 3.6.2 or earlier, 
+  but we highly recommend that you try to upgrade to a more secure Windows version 
+  if possible.
+- Added additional information to the Martus console log for easier debugging / 
+  troubleshooting of problems reported by users. Information added includes the Martus 
+  public code for an account and current memory information.
+- Developed a new process for building (creating) Martus releases (for Windows, Mac, 
+  and Linux), that makes testing and deployment much faster and contains several other 
+  internal enhancements. 
 
 
 Version 3.6.2             2011-10
@@ -753,32 +785,5 @@ Version 1.0.1             2003-01
   installation.
 - Correct errors in the About Box and the documentation's 
   copyright notice.
-
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
-Special instructions for updating Winsock if you have 
-   problems running Martus software on Windows 95:
-
-Java requires the Microsoft Winsock 2.0 library.  It is 
-extremely likely that your system already has Winsock 2.0 or 
-later.  However, it is possible that some Microsoft Windows 95 
-systems have an older version of Winsock.
-
-To check which version of Winsock you have, search for 
-"winsock.dll".  Then choose "Properties" from the File menu 
-and click the Version tab.
-
-If your Microsoft Windows 95 machine doesn't have Winsock 2.0 
-or later, you can run the Winsock 2.0 installation program 
-located in the Martus\Win95 directory.
-
-
-If you are curious, the following URL contains information 
-about how to determine if the Winsock 2.0 components are 
-installed on a Microsoft Windows 95 platform:
-
-http://support.microsoft.com/support/kb/articles/Q177/7/19.asp
-
-
-
 
 
