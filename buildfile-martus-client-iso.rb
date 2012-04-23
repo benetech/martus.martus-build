@@ -21,18 +21,24 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     FileUtils::cp(signed_jar_file, martus_jar_file)
 	end
 	
-	def add_file(dir, file)
-	  FileUtils::cp(file, dir)
+	def add_file(from, to)
+	  puts "add_file: #{from} to #{to}"
+	  FileUtils::cp(from, to)
 	end
 	
-	def add_files(dir, pattern)
+	def add_files(pattern, dir)
+    puts "add_files: #{pattern} to #{dir}"
+	  if ! File.directory? dir
+	    raise "Can only copy multiple files to a directory, not to #{dir}"
+	  end
 	  Dir.glob(pattern).each do | file |
-	    add_file(dir, file)
+	    add_file(file, dir)
 	  end
 	end
 
 	def add_artifact(dir, artifact)
-	  add_file(dir, artifact.to_s)
+	  puts "add_artifact #{artifact} to #{dir}"
+	  add_file(artifact.to_s, dir)
 	end
 	
   def add_artifact_as(dir, artifact, new_name)
@@ -41,6 +47,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   end
   
 	def add_artifacts(dir, artifacts)
+	  puts "add_artifacts #{artifacts} to #{dir}"
 	  artifacts.each do | artifact |
 	    add_artifact(dir, artifact)
 	  end
@@ -54,15 +61,15 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "-iso directory created"
     
     puts "-adding jar, autorun, icon, and windows installer"
-    add_file(iso_dir, martus_jar_file)
-    add_file(iso_dir, _('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'))
-    add_file(iso_dir, _('martus', 'BuildFiles', 'ProgramFiles', 'app.ico'))
+    add_file(martus_jar_file, iso_dir)
+    add_file(_('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'), iso_dir)
+    add_file(_('martus', 'BuildFiles', 'ProgramFiles', 'app.ico'), iso_dir)
     add_artifacts(iso_dir, [cd_setup_exe])
 
     puts "-adding dmg"
     dmg_filename = "MartusClient-#{project.version}-#{input_build_number}-#{release_build_number}.dmg"
     dmg = _(:target, dmg_filename)
-    add_file(iso_dir, dmg)
+    add_file(dmg, iso_dir)
     
     #NOTE: For now at least, don't include Linux zip
     
@@ -75,17 +82,17 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "-adding verify"
     verify_dir = File.join(iso_dir, 'verify')
     FileUtils.mkdir(verify_dir)
-    add_files(verify_dir, _('martus-jar-verifier', '*.bat'))
-    add_files(verify_dir, _('martus-jar-verifier', '*.txt'))
-    add_files(verify_dir, _('martus-jar-verifier', "readme_verify*.txt"))
+    add_files(_('martus-jar-verifier', '*.bat'), verify_dir)
+    add_files(_('martus-jar-verifier', '*.txt'), verify_dir)
+    add_files(_('martus-jar-verifier', "readme_verify*.txt"), verify_dir)
   
     puts "-adding Documents directory"
     docs_dir = File.join(iso_dir, 'Documents')
     FileUtils.mkdir(docs_dir)
-    add_file(docs_dir, _('martus', 'BuildFiles', 'Documents', 'license.txt'))
-    add_file(docs_dir, _('martus', 'BuildFiles', 'Documents', 'gpl.txt'))
-    add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", 'README*.txt'))
-    add_files(docs_dir, _('martus', 'BuildFiles', 'Documents', "client", '*.pdf'))
+    add_file(_('martus', 'BuildFiles', 'Documents', 'license.txt'), docs_dir)
+    add_file(_('martus', 'BuildFiles', 'Documents', 'gpl.txt'), docs_dir)
+    add_files(_('martus', 'BuildFiles', 'Documents', "client", 'README*.txt'), docs_dir)
+    add_files(_('martus', 'BuildFiles', 'Documents', "client", '*.pdf'), docs_dir)
 
     puts "-adding thirdparty docs"
     thirdpartydocs_dir = File.join(docs_dir, 'ThirdParty')
@@ -97,7 +104,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     source_zip = "#{attic_dir}/martus-client-sources-#{$client_version}.zip"
     FileUtils.mkdir(source_dir)
     add_artifacts(source_dir, third_party_client_source)  
-    add_file(source_dir, source_zip)
+    add_file(source_zip, source_dir)
 	end
 	
 	file iso_file => [cd_setup_exe, iso_dir] do
