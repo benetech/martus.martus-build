@@ -7,8 +7,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   release_build_number = $BUILD_NUMBER
 
 
-  combined_license_file = _('martus', 'BuildFiles', 'combined-license.txt')
+  combined_license_file = _('temp', 'combined-license.txt')
   file combined_license_file do
+    FileUtils.mkdir_p File.dirname(combined_license_file)
     martus_license = File.readlines(_('martus', 'BuildFiles', 'Documents', 'license.txt'))
     gpl = File.readlines(_('martus', 'BuildFiles', 'Documents', 'gpl.txt'))
     File.open(combined_license_file, "w") do | out |
@@ -45,7 +46,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     include_artifacts(zip, [_('martus', 'BuildFiles', 'Documents')], 'BuildFiles')
     include_artifacts(zip, third_party_client_licenses, 'BuildFiles/Documents/Licenses')
   
-    zip.include(combined_license_file)
+    zip.include(combined_license_file, :path=>'BuildFiles')
     
     zip.include(_('martus', 'BuildFiles', 'Windows', 'Win32_NSIS'))
   end
