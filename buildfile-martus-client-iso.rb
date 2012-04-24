@@ -69,7 +69,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "-adding dmg"
     dmg_filename = "MartusClient-#{project.version}-#{input_build_number}-#{release_build_number}.dmg"
     dmg = _(:target, dmg_filename)
-    add_file(dmg, iso_dir)
+    add_file(dmg, File.join(iso_dir, "MartusClient-#{project.version}.dmg"))
     
     #NOTE: For now at least, don't include Linux zip
     
@@ -104,7 +104,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     source_zip = "#{attic_dir}/martus-client-sources-#{$client_version}.zip"
     FileUtils.mkdir(source_dir)
     add_artifacts(source_dir, third_party_client_source)  
-    add_file(source_zip, source_dir)
+    add_file(source_zip, File.join(source_dir, "MartusClientSources-#{project.version}.zip"))
 	end
 	
 	file iso_file => [cd_setup_exe, iso_dir] do
