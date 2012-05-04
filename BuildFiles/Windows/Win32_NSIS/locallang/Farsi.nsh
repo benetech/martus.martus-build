@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "����� ������� ��� �����"
 !insertmacro LANG_STRING LangDialog_Text "����� ������� ��� ����� �� ������ ����."
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} �� ��� ���?���� ��� ��� ��.\r\n \r\nVisit http://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\nA 'Language Pack' allows you to install new and updated translations or documentation at any time following a full Martus release. Language Packs can contain updates to the Martus Client User Interface translation, the User Guide, Quick Start Guide, README file, and in-program help.\r\n \r\n�� ��� ���� ?���� ���� ���� �� ��� ������ ���� ����."
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} �� ��� ���?���� ��� ��� ��.\r\n \r\nVisit https://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\nA 'Language Pack' allows you to install new and updated translations or documentation at any time following a full Martus release. Language Packs can contain updates to the Martus Client User Interface translation, the User Guide, Quick Start Guide, README file, and in-program help.\r\n \r\n�� ��� ���� ?���� ���� ���� �� ��� ������ ���� ����."
 
 ; shortcuts
 !insertmacro LANG_STRING StartMenuShortcutQuestion_Text "��� �� ��� �� ����� ������ Martus ���� ��� ���� �� ����� ����(Start) ��� ?��Ͽ"
