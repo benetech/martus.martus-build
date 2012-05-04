@@ -2,31 +2,33 @@
 ---------------------------------------------------------
 
 
-See http://www.martus.org for information about Martus software.
+See https://www.martus.org for information about Martus software.
 
 See the Martus User Guide for instructions on installing the Martus software. 
 
 For all current language packs and translations of the user documentation, 
 as well as language packs/documentation for previous versions in various 
-languages, go to http://www.martus.org/downloads/. 
+languages, go to https://www.martus.org/downloads/. 
 
 
 Martus release information by version and release date:
  
-Version 4.0 		2012-04
-This release is available in English, Farsi/Dari, Spanish and other 
-languages as indicated on the http://www.martus.org software download 
-page. Other languages will be available in the future, as language-packs 
-on the documentation page (http://www.martus.org/downloads)
+Version 4.0 		2012-05
+
+This release is available in English, Farsi/Dari, Spanish, Burmese and other languages as 
+indicated on the https://www.martus.org software download page. Other languages will 
+be available in the future, as language-packs on the documentation page 
+(https://www.martus.org/downloads)
 
 - Update to Java6 (sometimes called 1.6).  Java6 may improve performance 
   in some instances, and improves font display for several languages 
-  (E.g. Burmese, Khmer, Nepali) and requires less manual effort by users for 
-  correct font display. The Windows installers automatically include Java6; on 
-  Mac/Linux you should make sure that you are running Java 1.6.0_30 or later, 
-  as earlier versions of Java6 could cause Martus to not work correctly.  You can 
-  check which version of Java is running on your machine for Mac/Linux by opening 
-  a terminal window and typing “java –version” and hitting enter/return.
+  (E.g. Khmer, Farsi/Dari) and requires less manual effort by users for 
+  correct font display (E.g. Burmese, Khmer, Nepali). The Windows installers automatically 
+  include Java6; on Mac/Linux you should make sure that you are running Java 1.6.0_30 
+  or later, as earlier versions of Java6 could cause Martus to not work correctly.  You 
+  can check which version of Java is running on your machine for Mac/Linux by 
+  opening a terminal window and typing “java –version” (without the quotes) and hitting 
+  enter/return.
 - Added initial “memory switches” to Windows and Mac shortcuts to help Martus run 
   more smoothly for accounts with large numbers of bulletins or large bulletins.  User 
   can still increase memory values if needed, but this should resolve issues for many 
@@ -49,9 +51,9 @@ on the documentation page (http://www.martus.org/downloads)
 Version 3.6.2             2011-10
 
 This release is available in English, Farsi/Dari, Spanish and other 
-languages as indicated on the http://www.martus.org software download 
+languages as indicated on the https://www.martus.org software download 
 page.  Other languages will be available in the future, as language-packs 
-on the documentation page (http://www.martus.org/downloads)
+on the documentation page (https://www.martus.org/downloads)
 
 - Fixed issue when searching for entries in dropdown fields that have spaces 
   at the beginning or end of the entry.
@@ -66,9 +68,9 @@ on the documentation page (http://www.martus.org/downloads)
 Version 3.6.1             2011-10
 
 This release is available in English, Farsi/Dari, Spanish and other 
-languages as indicated on the http://www.martus.org software download 
+languages as indicated on the https://www.martus.org software download 
 page.  Other languages will be available in the future, as language-packs 
-on the documentation page (http://www.martus.org/downloads)
+on the documentation page (https://www.martus.org/downloads)
 
 - Minor updates to English documentation and search help screen
 - Minor updates to Farsi/Dari user interface translation and addition 
@@ -80,9 +82,9 @@ on the documentation page (http://www.martus.org/downloads)
 Version 3.6.0             2011-09
 
 This release is available in English, Farsi/Dari and other languages as 
-indicated on the http://www.martus.org software download page.  
+indicated on the https://www.martus.org software download page.  
 Other languages will be available in the future, as language-packs 
-on the documentation page (http://www.martus.org/downloads)
+on the documentation page (https://www.martus.org/downloads)
 
 - Added data-driven dropdown fields (dropdown lists created by data entered 
   in a bulletin grid) to list of available fields to search on in Search screen.
@@ -457,7 +459,7 @@ Version 2.7.2             2005-08
 
 - Removed incomplete/inaccurate Nepali 2.0.1 software user 
   interface translation, and placed an updated Nepali language 
-  pack on http://www.martus.org/downloads.   This language pack 
+  pack on https://www.martus.org/downloads.   This language pack 
   includes Nepali translations of the software user interface 
   (usable for versions 2.5 and later, with 90% of the strings 
   translated into Nepali), in-program help (version 2.0.1), 
@@ -482,7 +484,7 @@ Version 2.7.0             2005-04
 
 This release is only available in English and Persian.  
 Other languages will be available in the future, as language-packs 
-on the documentation page (http://www.martus.org/downloads)
+on the documentation page (https://www.martus.org/downloads)
 
 - Added ability to create single custom field "drop-down" 
   lists (not within a grid)
