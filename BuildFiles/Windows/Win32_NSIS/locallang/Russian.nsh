@@ -25,7 +25,7 @@
 !insertmacro LANG_STRING LangDialog_Title "���� ����������"
 !insertmacro LANG_STRING LangDialog_Text "�������� ���� ���������� ��������� ���������."
 
-!insertmacro LANG_STRING FinishDialog_Text "��������� ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ���������.\r\n \r\n ��������� ����������� �������������� ������ ������������ Martus � �����: http://www.martus.org/downloads. \r\n \r\nLanguage Pack\r\n \r\n������� ������ '������$' ��� ������ �� ��������� ���������."
+!insertmacro LANG_STRING FinishDialog_Text "��������� ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ���������.\r\n \r\n ��������� ����������� �������������� ������ ������������ Martus � �����: http://www.martus.org/downloads. \r\n \r\nLanguage Pack\r\n\r\nв�?троенна�? в программу �?правка.\r\n \r\n������� ������ '������$' ��� ������ �� ��������� ���������."
 !insertmacro LANG_STRING UnusedButFixesEncoding_Text "��������� ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ���������.\r\n \r\n ��������� ����������� �������������� ������ ������������ Martus � �����: http://www.martus.org/downloads. \r\n \r\nЛокализованный пакет документации ('Language Pack') позвол�?ет загружать и у�?танавливать новые и и�?правленные переводы документации в любое врем�? по�?ле выпу�?ка новой вер�?ии Martus. В локализованный пакет могут входить: и�?правленные вер�?ии локализованного клиент�?кого интерфей�?а Martus, Руковод�?тво пользовател�?, Эк�?пре�?�?-�?правка, файл README и в�?троенна�? в программу �?правка.\r\n \r\n������� ������ '������$' ��� ������ �� ��������� ���������."
  
 ; shortcuts
