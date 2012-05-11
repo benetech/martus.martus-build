@@ -21,45 +21,45 @@
 ;Boston, MA 02111-1307, USA.
 
 !define LANG "FRENCH" ; Required
-;!insertmacro LANG_STRING <STRING_DEFINE> "valeur de la chaï¿½ne"
+;!insertmacro LANG_STRING <STRING_DEFINE> "valeur de la chaîne"
 !insertmacro LANG_STRING LangDialog_Title "Langue d'Installation. "
-!insertmacro LANG_STRING LangDialog_Text "Veuillez sï¿½lectionner la langue d'installation."
+!insertmacro LANG_STRING LangDialog_Text "Veuillez sélectionner la langue d'installation."
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} a ï¿½tï¿½ installï¿½ sur votre ordinateur.\r\n \r\n Veuillez vous rendre sur https://www.martus.org/downloads pour tï¿½lï¿½charger les packs de langues Martus mis ï¿½ jour. \r\n \r\nUn 'Pack Langues' vous permet d'installer ï¿½ tout moment les nouvelles mises ï¿½ jour de traductions ou de documentation ï¿½ la suite d'une nouvelle publication de Martus. Les Packs Langues peuvent contenir les mises ï¿½ jour de la traduction de l'Interface Utilisateur Client Martus, du Guide de l'Utilisateur, du Guide de Dï¿½marrage Rapide, du fichier README (LISEZMOI) et de l'aide incluse dans le programme.\r\n \r\nCliquez sur Fermer pour quitter le programme d'installation."
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} a été installé sur votre ordinateur.\r\n \r\n Veuillez vous rendre sur http://www.martus.org/downloads pour télécharger les packs de langues Martus mis à jour. \r\n \r\nUn 'Pack Langues' vous permet d'installer à tout moment les nouvelles mises à jour de traductions ou de documentation à la suite d'une nouvelle publication de Martus. Les Packs Langues peuvent contenir les mises à jour de la traduction de l'Interface Utilisateur Client Martus, du Guide de l'Utilisateur, du Guide de Démarrage Rapide, du fichier README (LISEZMOI) et de l'aide incluse dans le programme.\r\n \r\nCliquez sur Fermer pour quitter le programme d'installation."
 
 ; shortcuts
-!insertmacro LANG_STRING StartMenuShortcutQuestion_Text "Voulez-vous installer un raccourci Martus dans votre menu dï¿½marrer Windows ?"
+!insertmacro LANG_STRING StartMenuShortcutQuestion_Text "Voulez-vous installer un raccourci Martus dans votre menu démarrer Windows ?"
 !insertmacro LANG_STRING DesktopShortcutQuestion_Text "Voulez-vous installer un raccourci Martus sur votre bureau ?"
-!insertmacro LANG_STRING LaunchProgramInfo_Text "Un raccourci Martus a ï¿½tï¿½ installï¿½ dans le dossier programme $INSTDIR. Utilisez ce raccourci, ou une copie, pour ouvrir Martus. "
+!insertmacro LANG_STRING LaunchProgramInfo_Text "Un raccourci Martus a été installé dans le dossier programme $INSTDIR. Utilisez ce raccourci, ou une copie, pour ouvrir Martus. "
 
-!insertmacro LANG_STRING MartusShortcutDescription_Text "Systï¿½me de Communiquï¿½s Martus pour les Droits Humains "
+!insertmacro LANG_STRING MartusShortcutDescription_Text "Système de Communiqués Martus pour les Droits Humains "
 
 !insertmacro LANG_STRING MartusUserGuideShortcut_Text "Guide de l'Utilisateur "
 !insertmacro LANG_STRING MartusUserGuideShortcut_Filename "martus_user_guide_fr.pdf"
 
-!insertmacro LANG_STRING MartusQuickstartShortcut_Text "Dï¿½marrage Rapide "
+!insertmacro LANG_STRING MartusQuickstartShortcut_Text "Démarrage Rapide "
 !insertmacro LANG_STRING MartusQuickstartShortcut_Filename "quickstartguide_fr.pdf"
 
-!insertmacro LANG_STRING MartusUninstallShortcut_Text "Dï¿½sinstaller "
+!insertmacro LANG_STRING MartusUninstallShortcut_Text "Désinstaller "
 
 ; file property for .mba
-!insertmacro LANG_STRING MartusMBAFileDesc_Text "Archives de Communiquï¿½s Martus "
+!insertmacro LANG_STRING MartusMBAFileDesc_Text "Archives de Communiqués Martus "
 
 ; uninstall strings
-!insertmacro LANG_STRING UninstallSuccess_Text "$(^Name) a ï¿½tï¿½ supprimï¿½ de votre ordinateur. "
+!insertmacro LANG_STRING UninstallSuccess_Text "$(^Name) a été supprimé de votre ordinateur. "
 
-!insertmacro LANG_STRING NeedAdminPrivileges_Text "Il vous faut un privilï¿½ge administratif sur cet ordinateur pour pouvoir installer $(^Name) "
-!insertmacro LANG_STRING NeedAdminPrivilegesError_Text "Erreur inconnue pendant la recherche de privilï¿½ges administratifs. Assurez-vous d'avoir les privilï¿½ges administratifs sur cet ordinateur, sinon l'installation de $(^Name) risque d'ï¿½chouer "
+!insertmacro LANG_STRING NeedAdminPrivileges_Text "Il vous faut un privilège administratif sur cet ordinateur pour pouvoir installer $(^Name) "
+!insertmacro LANG_STRING NeedAdminPrivilegesError_Text "Erreur inconnue pendant la recherche de privilèges administratifs. Assurez-vous d'avoir les privilèges administratifs sur cet ordinateur, sinon l'installation de $(^Name) risque d'échouer "
 
-!insertmacro LANG_STRING UninstallProgramRunning_Text "Veuillez vous assurer d'avoir quittï¿½ $(^Name) sinon le programme de dï¿½sinstallation ne pourra pas supprimer les fichiers utilisï¿½s. "
+!insertmacro LANG_STRING UninstallProgramRunning_Text "Veuillez vous assurer d'avoir quitté $(^Name) sinon le programme de désinstallation ne pourra pas supprimer les fichiers utilisés. "
 
-!insertmacro LANG_STRING NewerVersionInstalled_Text "Une version plus rï¿½cente  ($EXISTING_MARTUS_VERSION) de ${PRODUCT_NAME} est dï¿½jï¿½ installï¿½e. Il vous faut d'abord dï¿½sinstaller la version existante avant de pouvoir installer cette ancienne version. Si vous confirmez, vous perdrez cependant certaines fonctionnalitï¿½s et risquez de ne pas pouvoir lire les communiquï¿½s crï¿½ï¿½s avec la version rï¿½cente. Pour conserver la version rï¿½cente, tapez sur OK pour quitter cette installation. Si vous souhaitez quand mï¿½me passer ï¿½ l'ancienne version malgrï¿½ la perte de fonctionnalitï¿½, quittez cette installation, dï¿½sinstallez la version rï¿½cente, puis rï¿½installez l'ancienne version. "
-!insertmacro LANG_STRING SameVersionInstalled_Text "La version actuelle ($EXISTING_MARTUS_VERSION) de ${PRODUCT_NAME} est dï¿½jï¿½ installï¿½e. Voulez-vous la rï¿½installer ? "
-!insertmacro LANG_STRING UpgradeVersionInstalled_Text "Une version plus ancienne ($EXISTING_MARTUS_VERSION) de ${PRODUCT_NAME} est installï¿½e. Le programme d'installation va la remplacer par la version ${PRODUCT_EXTENDED_VERSION}. "
-!insertmacro LANG_STRING RemoveInstallShieldVersion_Text "Il existe une installation antï¿½rieure de ${PRODUCT_NAME} sur votre ordinateur. Nous allons tenter de lancer le programme d'installation pour celle-ci, et ensuite l'installation actuelle reprendra. Si vous n'avez pas effectuï¿½ une sauvegarde de clï¿½ dans votre version actuelle de Martus, nous vous conseillons de quitter cette installation et d'effectuer une sauvegarde avant de dï¿½sinstaller. Ensuite, vous pourrez relancer ce programme d'installation. "
-!insertmacro LANG_STRING CannotUpgradeNoJava_Text "La version de Martus que vous avez installï¿½e ne peut ï¿½tre mise ï¿½ jour qu'avec le programme d'installation complet qui contient Java. "
-!insertmacro LANG_STRING CannotRemoveInstallShieldVersion_Text "Nous n'avons pas pu supprimer de votre ordinateur l'ancienne version de Martus. Le programme d'installation va maintenant se fermer, veuillez supprimer votre copie de Martus ï¿½ l'aide de Ajout/Suppression de Programmes dans le Panneau de Configuration, puis relancez ce programme d'installation. Si vous n'avez pas effectuï¿½ une sauvegarde de clï¿½ dans votre version actuelle de Martus, nous vous conseillons de le faire avant la dï¿½sinstallation. "
-!insertmacro LANG_STRING CannotUpgradeNoMartus_Text "C'est une version de mise ï¿½ niveau de Martus. Tï¿½lï¿½chargez et veuillez installez le plein installateur de version qui porte Java."
+!insertmacro LANG_STRING NewerVersionInstalled_Text "Une version plus récente  ($EXISTING_MARTUS_VERSION) de ${PRODUCT_NAME} est déjà installée. Il vous faut d'abord désinstaller la version existante avant de pouvoir installer cette ancienne version. Si vous confirmez, vous perdrez cependant certaines fonctionnalités et risquez de ne pas pouvoir lire les communiqués créés avec la version récente. Pour conserver la version récente, tapez sur OK pour quitter cette installation. Si vous souhaitez quand même passer à l'ancienne version malgré la perte de fonctionnalité, quittez cette installation, désinstallez la version récente, puis réinstallez l'ancienne version. "
+!insertmacro LANG_STRING SameVersionInstalled_Text "La version actuelle ($EXISTING_MARTUS_VERSION) de ${PRODUCT_NAME} est déjà installée. Voulez-vous la réinstaller ? "
+!insertmacro LANG_STRING UpgradeVersionInstalled_Text "Une version plus ancienne ($EXISTING_MARTUS_VERSION) de ${PRODUCT_NAME} est installée. Le programme d'installation va la remplacer par la version ${PRODUCT_EXTENDED_VERSION}. "
+!insertmacro LANG_STRING RemoveInstallShieldVersion_Text "Il existe une installation antérieure de ${PRODUCT_NAME} sur votre ordinateur. Nous allons tenter de lancer le programme d'installation pour celle-ci, et ensuite l'installation actuelle reprendra. Si vous n'avez pas effectué une sauvegarde de clé dans votre version actuelle de Martus, nous vous conseillons de quitter cette installation et d'effectuer une sauvegarde avant de désinstaller. Ensuite, vous pourrez relancer ce programme d'installation. "
+!insertmacro LANG_STRING CannotUpgradeNoJava_Text "La version de Martus que vous avez installée ne peut être mise à jour qu'avec le programme d'installation complet qui contient Java. "
+!insertmacro LANG_STRING CannotRemoveInstallShieldVersion_Text "Nous n'avons pas pu supprimer de votre ordinateur l'ancienne version de Martus. Le programme d'installation va maintenant se fermer, veuillez supprimer votre copie de Martus à l'aide de Ajout/Suppression de Programmes dans le Panneau de Configuration, puis relancez ce programme d'installation. Si vous n'avez pas effectué une sauvegarde de clé dans votre version actuelle de Martus, nous vous conseillons de le faire avant la désinstallation. "
+!insertmacro LANG_STRING CannotUpgradeNoMartus_Text "C'est une version de mise à niveau de Martus. Téléchargez et veuillez installez le plein installateur de version qui porte Java."
 
 
 
