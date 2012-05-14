@@ -24,41 +24,41 @@
 ;!insertmacro LANG_STRING <STRING_DEFINE> "string_value"
 
 ; language selection dialog stuff
-!insertmacro LANG_STRING LangDialog_Title "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
-!insertmacro LANG_STRING LangDialog_Text "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½."
+!insertmacro LANG_STRING LangDialog_Title "áÛÉ ÈÑäÇãÌ ÇáÊËÈíÊ"
+!insertmacro LANG_STRING LangDialog_Text "áØÝÇ Þã ÈÇÎÊíÇÑ áÛÉ ÈÑäÇãÌ ÇáÊËÈíÊ."
 
-!insertmacro LANG_STRING FinishDialog_Text "ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½.\r\n \r\nVisit https://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\nA 'Language Pack' allows you to install new and updated translations or documentation at any time following a full Martus release. Language Packs can contain updates to the Martus Client User Interface translation, the User Guide, Quick Start Guide, README file, and in-program help.\r\n \r\nï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½."
+!insertmacro LANG_STRING FinishDialog_Text "áÞÏ Êã ÊäÕíÈ ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} Úáì ÇáÌåÇÒ.\r\n \r\n ÇáÑÌÇÁ ÒíÇÑÉ ãæÞÚ http://www.martus.org/downloads áÊäÒíá ÃíÉ ÊÍÏíËÇÊ áÍÒãÉ áÛÉ ãÇÑÊæÓ. \r\n \r\nØªØ³Ù…Ø­ Ù„Ùƒ Ø£ÙŠØ© 'Ø­Ø²Ù…Ø© Ù„ØºÙˆÙŠØ©' Ø¨ØªØ«Ø¨ÙŠØª ØªØ±Ø¬Ù…Ø§Øª Ø£Ùˆ ØªÙˆØ«ÙŠÙ‚Ø§Øª Ø¬Ø¯ÙŠØ¯Ø© Ùˆ Ù…Ù?Ø­Ø¯Ù‘Ø«Ø© Ù?ÙŠ Ø£ÙŠ ÙˆÙ‚Øª ÙŠØªØ¨Ø¹ Ø¥ØµØ¯Ø§Ø±Ù? ÙƒØ§Ù…Ù„ Ù„Ø¨Ø±Ù†Ø§Ù…Ø¬ Martus. Ù‚Ø¯ ØªØ­ØªÙˆÙŠ Ø§Ù„Ø­Ø²Ù… Ø§Ù„Ù„ØºÙˆÙŠØ© Ø¹Ù„Ù‰ ØªØ­Ø¯ÙŠØ«Ø§Øª Ù„ØªØ±Ø¬Ù…Ø© ÙˆØ§Ø¬Ù‡Ø© Ù…Ø³ØªØ®Ø¯Ù… Ø¨Ø±Ù†Ø§Ù…Ø¬ Martus Ø§Ù„Ø¹Ù…ÙŠÙ„ Ùˆ Ø¯Ù„ÙŠÙ„ Ø§Ù„Ù…Ø³ØªØ®Ø¯Ù… Ùˆ Ø¯Ù„ÙŠÙ„ Ø§Ù„Ù…Ø±Ø¬Ø¹ Ø§Ù„Ù…Ø®ØªØµØ± Ùˆ Ù…Ù„Ù? Ø§Ù„Ù…Ù„Ø§Ø­Ø¸Ø§Øª Ùˆ ØªØ¹Ù„ÙŠÙ…Ø§Øª Ø§Ù„Ø¨Ø±Ù†Ø§Ù…Ø¬ Ø§Ù„Ø¯Ø§Ø®Ù„ÙŠØ©.\r\n \r\nÅÖÛØ ÅäåÇÁ áÅÛáÇÞ ãÑÔÏ ÇáÅÚÏÇÏ."
 
 ; shortcuts
-!insertmacro LANG_STRING StartMenuShortcutQuestion_Text " ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  Martus  ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ò¿" 
-!insertmacro LANG_STRING DesktopShortcutQuestion_Text " ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  Martus ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ß¿ "
-!insertmacro LANG_STRING LaunchProgramInfo_Text "ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  Martus   ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½  .$INSTDIR ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Martus. "
+!insertmacro LANG_STRING StartMenuShortcutQuestion_Text " åá ÊÑíÏ ÊËÈíÊ æÕáÉ ÓÑíÚÉ áÈÑäÇãÌ  Martus  Ýí ÞÇÆãÉ ÇáÈÏÇíÉ Ýí æíäÏæÒ¿" 
+!insertmacro LANG_STRING DesktopShortcutQuestion_Text " åá ÊÑíÏ ÊËÈíÊ æÕáÉ ÓÑíÚÉ áÈÑäÇãÌ  Martus Úáì ÓØÍ ãßÊÈß¿ "
+!insertmacro LANG_STRING LaunchProgramInfo_Text "áÞÏ Êã ÊËÈíÊ æÕáÉ ÓÑíÚÉ áÈÑäÇãÌ  Martus   Ýí ãÌáÏ ÇáÈÑäÇãÌ  .$INSTDIR ÇÓÊÎÏã åÐå ÇáæÕáÉ Ãæ äÓÎÉ ãäåÇ áÊÔÛíá Martus. "
 
-!insertmacro LANG_STRING MartusShortcutDescription_Text "ï¿½ï¿½ï¿½ï¿½ Martus ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+!insertmacro LANG_STRING MartusShortcutDescription_Text "äÙÇã Martus áäÔÑÇÊ ÍÞæÞ ÇáÅäÓÇä"
 
-!insertmacro LANG_STRING MartusUserGuideShortcut_Text "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+!insertmacro LANG_STRING MartusUserGuideShortcut_Text "Ïáíá ÇáãÓÊÎÏã"
 !insertmacro LANG_STRING MartusUserGuideShortcut_Filename "martus_user_guide_ar.pdf"
 
-!insertmacro LANG_STRING MartusQuickstartShortcut_Text "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+!insertmacro LANG_STRING MartusQuickstartShortcut_Text "ÇáãÑÌÚ ÇáãÎÊÕÑ"
 !insertmacro LANG_STRING MartusQuickstartShortcut_Filename "quickstartguide_ar.pdf"
 
-!insertmacro LANG_STRING MartusUninstallShortcut_Text "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½"
+!insertmacro LANG_STRING MartusUninstallShortcut_Text "ÅÒÇáÉ ÇáÈÑäÇãÌ"
 
 ; file property for .mba
-!insertmacro LANG_STRING MartusMBAFileDesc_Text "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Martus"
+!insertmacro LANG_STRING MartusMBAFileDesc_Text "ÃÑÔíÝ äÔÑÇÊ Martus"
 
 ; uninstall strings
-!insertmacro LANG_STRING UninstallSuccess_Text "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ $(^Name) ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½."
+!insertmacro LANG_STRING UninstallSuccess_Text "áÞÏ ÊãÊ ÅÒÇáÉ $(^Name) ãä Úáì ÍÇÓæÈß ÈäÌÇÍ."
 
-!insertmacro LANG_STRING NeedAdminPrivileges_Text "ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ $(^Name)"
-!insertmacro LANG_STRING NeedAdminPrivilegesError_Text "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ $(^Name) ï¿½ï¿½ï¿½ï¿½ï¿½"
+!insertmacro LANG_STRING NeedAdminPrivileges_Text "ÇäÊ Ýí ÍÇÌÉ Åáì ÅãÊíÇÒÇÊ ÅÏÇÑíÉ Úáì ÇáÍÇÓæÈ ÇáãÍáí ßí ÊÓÊØíÚ ÊËÈíÊ $(^Name)"
+!insertmacro LANG_STRING NeedAdminPrivilegesError_Text "ÊæÌÏ ãÔßáÉ ÛíÑ ãÚÑæÝÉ ÊÚæÞ ÇáÍÕæá Úáì ÇáÇãÊíÇÒÇÊ ÇáÅÏÇÑíÉ. ÊÃßÏ Ãä áß ÇãÊíÇÒÇÊ ÅÏÇÑíÉ Úáì åÐÇ ÇáÍÇÓæÈ æ ÅáÇ ÝÞÏ áÇ íÊã ÊËÈíÊ $(^Name) ÈäÌÇÍ"
 
-!insertmacro LANG_STRING UninstallProgramRunning_Text "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ $(^Name)  ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½."
+!insertmacro LANG_STRING UninstallProgramRunning_Text "áØÝÇ ÊÍÞÞ ãä Ãäß ÃÛáÞÊ $(^Name)  æ ÅáÇ Ýáä íÊãßä ÈÑäÇãÌ ÇáÅÒÇáÉ ãä ÍÐÝ ÇáãáÝÇÊ ÇáÌÇÑí ÇÓÊÎÏÇãåÇ."
 
-!insertmacro LANG_STRING NewerVersionInstalled_Text "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ($EXISTING_MARTUS_VERSION) ï¿½ï¿½ ${PRODUCT_NAME} ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ ï¿½ï¿½ ï¿½ï¿½ß¡ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ë¡ ï¿½ï¿½ï¿½ï¿½ 'ï¿½ï¿½ï¿½ï¿½ï¿½' ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½É¡ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½."
-!insertmacro LANG_STRING SameVersionInstalled_Text "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ($EXISTING_MARTUS_VERSION) ï¿½ï¿½ ${PRODUCT_NAME} ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ê¿"
-!insertmacro LANG_STRING UpgradeVersionInstalled_Text "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ($EXISTING_MARTUS_VERSION) ï¿½ï¿½ ${PRODUCT_NAME} ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ${PRODUCT_EXTENDED_VERSION}."
-!insertmacro LANG_STRING RemoveInstallShieldVersion_Text "ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ${PRODUCT_NAME}  ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½  Martusï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½."
-!insertmacro LANG_STRING CannotUpgradeNoJava_Text "ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Martus ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Java."
-!insertmacro LANG_STRING CannotRemoveInstallShieldVersion_Text " ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Martus ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Martus ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ Add/Remove Programs ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½    Control Panel ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ Martusï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. "
-!insertmacro LANG_STRING CannotUpgradeNoMartus_Text "ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½. ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ Java"
+!insertmacro LANG_STRING NewerVersionInstalled_Text "ÊæÌÏ äÓÎÉ ÃÍÏË ($EXISTING_MARTUS_VERSION) ãä ${PRODUCT_NAME} Úáì ÇáÍÇÓæÈ ÈÇáÝÚá. íÌÈ Úáíß ÃæáÇ Ãä ÊÞæã ÈÅÒÇáÉ ÇáäÓÎÉ ÇáãæÌæÏÉ ÞÈáãÇ ÊÓÊØíÚ ÊËÈíÊ åÐÇ ÇáÅÕÏÇÑ ÇáÞÏíã. æ ãÚ Ðáß¡ ÝÇÐÇ ÞãÊ ÈÊËÈíÊ ÇáäÓÎÉ ÇáÃÞÏã ÝÓæÝ ÊÝÞÏ ÈÚÖ ÇáÎÕÇÆÕ ÇáæÙíÝíÉ æ ÞÏ áÇ ÊÊãßä ãä ÇáÅØáÇÚ Úáì ÇáäÔÑÇÊ ÇáÊí ÃõäÔÆÊ ÈÇÓÊÎÏÇã ÇáÅÕÏÇÑ ÇáÃÍÏË. áßí ÊÍÊÝÙ ÈÇáÅÕÏÇÑ ÇáÍÏíË¡ ÇäÞÑ 'ÇÓÊãÑ' áÅÌåÇÖ åÐÇ ÇáÊËÈíÊ. ÃãÇ ÅÐÇ ßäÊ ÊÑíÏ ÊËÈíÊ ÇáÅÕÏÇÑ ÇáÞÏíã ÈÛÖ ÇáäÙÑ Úä ÝÞÏÇä ÈÚÖ ÇáÎÕÇÆÕ ÇáæÙíÝíÉ¡ Þã ÈÇáÎÑæÌ ãä åÐÇ ÇáÊËÈíÊ Ëã ÅÒÇáÉ ÇáÅÕÏÇÑ ÇáÍÏíË Ëã Þã ÈÅÚÇÏÉ ÊËÈíÊ åÐÇ ÇáÅÕÏÇÑ ÇáÞÏíã."
+!insertmacro LANG_STRING SameVersionInstalled_Text "ÇáÅÕÏÇÑ ÇáÍÇáí ($EXISTING_MARTUS_VERSION) ãä ${PRODUCT_NAME} ãËÈÊ ÈÇáÝÚá. åá ÊÑíÏ ÅÚÇÏÉ ÇáÊËÈíÊ¿"
+!insertmacro LANG_STRING UpgradeVersionInstalled_Text "íæÌÏ ÅÕÏÇÑ ÞÏíã ($EXISTING_MARTUS_VERSION) ãä ${PRODUCT_NAME} ãËÈÊ ÈÇáÝÚá. ÓíÞæã ÈÑäÇãÌ ÇáÊËÈíÊ ÈÊÍÏíËå ááÅÕÏÇÑ ${PRODUCT_EXTENDED_VERSION}."
+!insertmacro LANG_STRING RemoveInstallShieldVersion_Text "æÌÏäÇ ÊËÈíÊ ${PRODUCT_NAME}  ÞÏíã Úáì åÐÇ ÇáÍÇÓæÈ. ÓæÝ äÞæã ÈÊÔÛíá ÈÑäÇãÌ ÇáÅÒÇáÉ ááÊÎáÕ ãäå¡ æ ÈãÌÑÏ ÇáÇäÊåÇÁ ãä Ðáß ÓæÝ ÊÓÊãÑ ÚãáíÉ ÇáÊËÈíÊ ÇáÍÇáíÉ. ÅÐÇ áã ÊÞã ÈäÓÎ ÔÝÑÉ ÏÎæáß ÇÍÊíÇØíÇ Ýí åÐÇ ÇáÅÕÏÇÑ ÇáÍÇáí ãä  Martus¡ äÞÊÑÍ Úáíß ÇáÎÑæÌ ãä åÐÇ ÇáÊËÈíÊ Ëã ÊÞæã ÈäÓÎ ÇáÔÝÑÉ ÇÍÊíÇØíÇ ÞÈá ÚãáíÉ ÇáÅÒÇáÉ. ÈÚÏåÇ íãßäß ÅÚÇÏÉ ÊÔÛíá ÈÑäÇãÌ ÇáÊËÈíÊ åÐÇ."
+!insertmacro LANG_STRING CannotUpgradeNoJava_Text "íãßä ÝÞØ ÊÍÏíË ÅÕÏÇÑ Martus ÇáÐí ÞãÊ ÈÊËÈíÊå ÈæÇÓØÉ ÇáÅÕÏÇÑ ÇáßÇãá áÈÑäÇãÌ ÇáÊËÈíÊ æ ÇáÐí íÍÊæí Úáì ÈíÆÉ ÇáÊÔÛíá Java."
+!insertmacro LANG_STRING CannotRemoveInstallShieldVersion_Text " áã äÊãßä ãä ÅÒÇáÉ ÅÕÏÇÑ Martus ÇáÞÏíã ãä Úáì ÍÇÓæÈß. ÓæÝ íäÛáÞ ÈÑäÇãÌ ÇáÊËÈíÊ ÇáÂä. áØÝÇ Þã ÈÅÒÇáÉ äÓÎÊß ãä Martus ÈÇÓÊÎÏÇã ÎÇÕíÉ Add/Remove Programs ÇáãæÌæÏÉ ÈáæÍÉ ÇáÊÍßã    Control Panel Ëã Þã ÈÅÚÇÏÉ ÊÔÛíá ÈÑäÇãÌ ÇáÊËÈíÊ åÐÇ. ÅÐÇ áã Êßä ÞÏ ÞãÊ ÈäÓÎ ÔÝÑÉ ÏÎæáß ÇÍÊíÇØíÇ Ýí åÐÇ ÇáÅÕÏÇÑ ãä Martus¡ äÞÊÑÍ Úáíß ÇáÞíÇã ÈÐáß ÞÈá ÚãáíÉ ÇáÅÒÇáÉ. "
+!insertmacro LANG_STRING CannotUpgradeNoMartus_Text "åÐÇ ÅÕÏÇÑ ÊÑÞíÉ áÈÑäÇãÌ ãÇÑÊæÓ. ÇáÑÌÇÁ ÊäÒíá æÊäÕíÈ äÓÎÉ ÈÑäÇãÌ ÇáÊäÕíÈ ÇáßÇãá ÇáÐí íÍãá Java"
