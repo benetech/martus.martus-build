@@ -18,6 +18,7 @@
             version="${version.full}"
             build="${version.short}"
             vmoptions="-Xms${vm.minimumheap} -Xmx${vm.maximumheap} ${vm.options}"
+        	arguments=" "
         	workingDirectory="$APP_PACKAGE"
         	icon="${mac.icon.file}"
             verbose="true"
