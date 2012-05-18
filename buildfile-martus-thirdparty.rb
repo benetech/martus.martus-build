@@ -69,7 +69,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   package(:zip, :file => _('target', "martus-thirdparty-#{project.version}.zip")).tap do | p |
     p.include(artifact(JUNIT_SPEC))
     p.include(artifact(BCPROV_SPEC))
-    p.include(artifact(BCJCE_SPEC))
+    p.include(artifact(BCJCE_SPEC), :as=>'bc-jce.jar')
     p.include(artifact(PERSIANCALENDAR_SPEC))
     p.include(artifact(VELOCITY_SPEC))
     p.include(artifact(VELOCITY_DEP_SPEC))
