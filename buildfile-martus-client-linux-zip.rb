@@ -36,7 +36,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(_("martus-jar-verifier", "*.bat"), :path=>'Verifier')
     p.include(_("martus-jar-verifier", "*.txt"), :path=>'Verifier')
     
-    p.include(artifact(BCJCE_SPEC), :path=>'ThirdParty');
+    p.include(artifact(BCJCE_SPEC), :as=>'ThirdParty/bc-jce.jar');
     p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
