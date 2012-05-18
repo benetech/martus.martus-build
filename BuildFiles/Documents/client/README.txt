@@ -14,21 +14,17 @@ languages, go to https://www.martus.org/downloads/.
 Martus release information by version and release date:
  
 Version 4.0 		2012-05
-
-This release is available in English, Farsi/Dari, Spanish, Burmese and other languages as 
-indicated on the https://www.martus.org software download page. Other languages will 
-be available in the future, as language-packs on the documentation page 
-(https://www.martus.org/downloads)
+This release is available in English, Farsi/Dari, Spanish, Burmese and other languages as indicated on the https://www.martus.org software download page. Other languages will be available in the future, as language-packs on the documentation page (https://www.martus.org/downloads)
 
 - Update to Java6 (sometimes called 1.6).  Java6 may improve performance 
   in some instances, and improves font display for several languages 
-  (E.g. Khmer, Farsi/Dari) and requires less manual effort by users for 
-  correct font display (E.g. Burmese, Khmer, Nepali). The Windows installers automatically 
-  include Java6; on Mac/Linux you should make sure that you are running Java 1.6.0_30 
-  or later, as earlier versions of Java6 could cause Martus to not work correctly.  You 
-  can check which version of Java is running on your machine for Mac/Linux by 
-  opening a terminal window and typing “java –version” (without the quotes) and hitting 
-  enter/return.
+  (E.g. Khmer, Farsi/Dari) and requires less manual effort by users for correct 
+  font display (E.g. Burmese, Khmer, Bengali/Bangla). The Windows installers 
+  automatically include Java6; on Mac/Linux you should make sure that you are 
+  running Java 1.6.0_30 or later, as earlier versions of Java6 could cause Martus 
+  to not work correctly.  You can check which version of Java is running on your 
+  machine for Mac/Linux by opening a terminal window and typing “java –version” 
+  (without the quotes) and hitting enter/return.
 - Added initial “memory switches” to Windows and Mac shortcuts to help Martus run 
   more smoothly for accounts with large numbers of bulletins or large bulletins.  User 
   can still increase memory values if needed, but this should resolve issues for many 
