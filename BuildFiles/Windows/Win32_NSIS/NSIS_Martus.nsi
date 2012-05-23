@@ -59,19 +59,19 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy program files...'
     CreateDirectory "$MARTUS_INSTALLATION_DIR"
-    CopyFiles "$EXEDIR\..\martus.jar" "$MARTUS_INSTALLATION_DIR"
+    CopyFiles "$EXEDIR\martus.jar" "$MARTUS_INSTALLATION_DIR"
 
     ; copy readmes
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy readme...'
-    CopyFiles "$EXEDIR\..\Documents\*.txt" "$MARTUS_INSTALLATION_DIR"
+    CopyFiles "$EXEDIR\Documents\*.txt" "$MARTUS_INSTALLATION_DIR"
     
     ; copy program icon
-    CopyFiles "$EXEDIR\..\*.ico" "$MARTUS_INSTALLATION_DIR"
+    CopyFiles "$EXEDIR\*.ico" "$MARTUS_INSTALLATION_DIR"
     
     ; copy other docs
     CreateDirectory "$MARTUS_INSTALLATION_DIR\Docs"
-    CopyFiles "$EXEDIR\..\Documents\*.pdf" "$MARTUS_INSTALLATION_DIR\Docs"
+    CopyFiles "$EXEDIR\Documents\*.pdf" "$MARTUS_INSTALLATION_DIR\Docs"
 
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
