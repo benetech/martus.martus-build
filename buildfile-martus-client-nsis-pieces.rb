@@ -13,7 +13,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   base_name = "MartusClientSetupMultiPart-#{full_version}"
   zip_file = _(:target, "#{base_name}.zip")
   original_exe_file = setup_artifact.to_s
-  renamed_exe_file = _(:temp, "#{base_name}")
+  renamed_exe_file = _(:temp, "#{base_name}.exe")
   original_merger_file = _('martus', 'BuildFiles', 'MartusSetupLauncher', 'Release', 'MartusSetupBuilder-[Version_Number].exe')
   renamed_merger_file = File.join(temp_dir, "#{base_name}.exe")
 
