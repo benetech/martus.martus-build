@@ -58,6 +58,7 @@ Section "MainSection" SEC01
     ;copy main jar
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy program files...'
+    CreateDirectory "$MARTUS_INSTALLATION_DIR"
     CopyFiles "$EXEDIR\..\martus.jar" "$MARTUS_INSTALLATION_DIR"
 
     ; copy readmes
@@ -69,6 +70,7 @@ Section "MainSection" SEC01
     CopyFiles "$EXEDIR\..\*.ico" "$MARTUS_INSTALLATION_DIR"
     
     ; copy other docs
+    CreateDirectory "$MARTUS_INSTALLATION_DIR\Docs"
     CopyFiles "$EXEDIR\..\Documents\*.pdf" "$MARTUS_INSTALLATION_DIR\Docs"
 
     ; remove previous bcprov jars
@@ -79,7 +81,7 @@ Section "MainSection" SEC01
     ; copy jars into lib ext
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy lib/ext...'
-    CreateDirectory "$INSTDIR\lib\ext\"
+    CreateDirectory "$MARTUS_INSTALLATION_DIR\lib\ext\"
     CopyFiles "$EXEDIR\LibExt\*.jar" "$MARTUS_INSTALLATION_DIR\lib\ext\"
     ; ------------------------------------------------
 
