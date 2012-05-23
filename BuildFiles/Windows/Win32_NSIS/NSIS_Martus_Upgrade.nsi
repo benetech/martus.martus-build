@@ -148,7 +148,7 @@ skip_shortcut_qs:
     CreateShortCut "$SMPROGRAMS\Martus\$(MartusUninstallShortcut_Text) Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\uninst.exe" "" "" "" "" "" "$(MartusUninstallShortcut_Text) Martus"
 
 lbl_no_startmenu_shortcut:
-    CreateShortCut "$MARTUS_INSTALLATION_DIR\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xbootclasspath/p:$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
+    CreateShortCut "$MARTUS_INSTALLATION_DIR\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m -Xbootclasspath/p:$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
 
     ; ask whether to install desktop shortcuts
     StrCpy $DesktopShortcut "N"
