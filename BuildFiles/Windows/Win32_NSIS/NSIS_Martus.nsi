@@ -69,7 +69,7 @@ Section "MainSection" SEC01
     CopyFiles "$EXEDIR\..\*.ico" "$MARTUS_INSTALLATION_DIR"
     
     ; copy other docs
-    CopyFiles "$EXEDIR\..\Documents\*.*" "$MARTUS_INSTALLATION_DIR\Documents"
+    CopyFiles "$EXEDIR\..\Documents\*.pdf" "$MARTUS_INSTALLATION_DIR\Docs"
 
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
