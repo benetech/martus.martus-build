@@ -62,8 +62,8 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     
     puts "-adding jar, autorun, icon, and windows installer"
     add_file(martus_jar_file, iso_dir)
-    add_file(_('martus', 'BuildFiles', 'ProgramFiles', 'autorun.inf'), iso_dir)
-    add_file(_('martus', 'BuildFiles', 'ProgramFiles', 'app.ico'), iso_dir)
+    add_file(_('martus-build', 'BuildFiles', 'ProgramFiles', 'autorun.inf'), iso_dir)
+    add_file(_('martus-build', 'BuildFiles', 'ProgramFiles', 'app.ico'), iso_dir)
     add_artifacts(iso_dir, [cd_setup_exe])
 
     puts "-adding dmg"
@@ -89,10 +89,10 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "-adding Documents directory"
     docs_dir = File.join(iso_dir, 'Documents')
     FileUtils.mkdir(docs_dir)
-    add_file(_('martus', 'BuildFiles', 'Documents', 'license.txt'), docs_dir)
-    add_file(_('martus', 'BuildFiles', 'Documents', 'gpl.txt'), docs_dir)
-    add_files(_('martus', 'BuildFiles', 'Documents', "client", 'README*.txt'), docs_dir)
-    add_files(_('martus', 'BuildFiles', 'Documents', "client", '*.pdf'), docs_dir)
+    add_file(_('martus-build', 'BuildFiles', 'Documents', 'license.txt'), docs_dir)
+    add_file(_('martus-build', 'BuildFiles', 'Documents', 'gpl.txt'), docs_dir)
+    add_files(_('martus-build', 'BuildFiles', 'Documents', "client", 'README*.txt'), docs_dir)
+    add_files(_('martus-build', 'BuildFiles', 'Documents', "client", '*.pdf'), docs_dir)
 
     puts "-adding thirdparty docs"
     thirdpartydocs_dir = File.join(docs_dir, 'ThirdParty')

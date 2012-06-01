@@ -10,8 +10,8 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   combined_license_file = _('temp', 'combined-license.txt')
   file combined_license_file do
     FileUtils.mkdir_p File.dirname(combined_license_file)
-    martus_license = File.readlines(_('martus', 'BuildFiles', 'Documents', 'license.txt'))
-    gpl = File.readlines(_('martus', 'BuildFiles', 'Documents', 'gpl.txt'))
+    martus_license = File.readlines(_('martus-build', 'BuildFiles', 'Documents', 'license.txt'))
+    gpl = File.readlines(_('martus-build', 'BuildFiles', 'Documents', 'gpl.txt'))
     File.open(combined_license_file, "w") do | out |
       out.write(martus_license)
       out.write("\n\n\t**********************************\n\n")
@@ -27,7 +27,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     zip.include(signed_jar, :as=>"martus.jar")
     zip.include(source_zip, :path=>'BuildFiles/SourceFiles')
   
-    zip.include(_('martus', 'BuildFiles', '*.txt'), :path=>'BuildFiles')
+    zip.include(_('martus-build', 'BuildFiles', '*.txt'), :path=>'BuildFiles')
   
     include_artifacts(zip, third_party_client_source, 'SourceFiles') 
     
@@ -35,19 +35,19 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     zip.include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/Verifier')
     zip.include(_('martus-jar-verifier/source'), :path=>'BuildFiles/Verifier')
     #TODO: Need to include MartusWin32SetupLauncher?
-    zip.include(_('martus', 'BuildFiles', 'ProgramFiles'), :path=>'BuildFiles')
-    zip.include(_('martus', 'BuildFiles', 'SampleDir'), :path=>'BuildFiles')
+    zip.include(_('martus-build', 'BuildFiles', 'ProgramFiles'), :path=>'BuildFiles')
+    zip.include(_('martus-build', 'BuildFiles', 'SampleDir'), :path=>'BuildFiles')
     #TODO: Need to include MartusSetupLauncher?
   
     include_artifact(zip, artifact(BCJCE_SPEC), 'BuildFiles/Jars', 'bc-jce.jar')
     include_artifacts(zip, third_party_client_jars, 'BuildFiles/Jars') 
-    include_artifacts(zip, [_('martus', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6')], 'BuildFiles/jre6')
-    zip.include(_('martus', 'BuildFiles', 'Fonts', '*.ttf'), :path=>'BuildFiles/jre6/jre6/lib/fonts/fallback')
-    include_artifacts(zip, [_('martus', 'BuildFiles', 'Documents')], 'BuildFiles')
+    include_artifacts(zip, [_('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6')], 'BuildFiles/jre6')
+    zip.include(_('martus-build', 'BuildFiles', 'Fonts', '*.ttf'), :path=>'BuildFiles/jre6/jre6/lib/fonts/fallback')
+    include_artifacts(zip, [_('martus-build', 'BuildFiles', 'Documents')], 'BuildFiles')
     include_artifacts(zip, third_party_client_licenses, 'BuildFiles/Documents/Licenses')
   
     zip.include(combined_license_file, :path=>'BuildFiles')
     
-    zip.include(_('martus', 'BuildFiles', 'Windows', 'Win32_NSIS'))
+    zip.include(_('martus-build', 'BuildFiles', 'Windows', 'Win32_NSIS'))
   end
 end
