@@ -24,14 +24,14 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	  p.include(signed_jar, :as=>"martus.jar")
     p.include(source_zip, :as=>"SourceFiles/martus-sources.zip")
 
-    p.include(_("martus", "BuildFiles", "Documents", "license.txt"))
-    p.include(_("martus", "BuildFiles", "Documents", "gpl.txt"))
-    p.include(_("martus", "BuildFiles", "Documents", "client", "README*.txt"))
-    p.include(_("martus", "BuildFiles", "Documents", "client", "*.pdf"), :path=>'Documents')
+    p.include(_('martus-build', "BuildFiles", "Documents", "license.txt"))
+    p.include(_('martus-build', "BuildFiles", "Documents", "gpl.txt"))
+    p.include(_('martus-build', "BuildFiles", "Documents", "client", "README*.txt"))
+    p.include(_('martus-build', "BuildFiles", "Documents", "client", "*.pdf"), :path=>'Documents')
       
     #TODO: Should we ship LinuxJavaInstall.txt?
       
-    p.include(_("martus", "BuildFiles", "Fonts", '*.ttf'), :path=>'Fonts')
+    p.include(_('martus-build', "BuildFiles", "Fonts", '*.ttf'), :path=>'Fonts')
       
     p.include(_("martus-jar-verifier", "*.bat"), :path=>'Verifier')
     p.include(_("martus-jar-verifier", "*.txt"), :path=>'Verifier')
