@@ -280,7 +280,7 @@ end
 task nil do
 end
 
-define 'martus' do
+define 'martus-build' do
 	build do
 		create_combined_license
 	
