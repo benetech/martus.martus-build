@@ -73,7 +73,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     properties << " -Ddmgmount=#{dmg_mount_point}"
     properties << " -Ddmg.size.megs=25"
   
-    buildfile = _('martus', 'martus-client-mac-dmg.ant.xml')
+    buildfile = _('martus-build', 'martus-client-mac-dmg.ant.xml')
     buildfile_option = "-buildfile #{buildfile}"
 
     ant = "ant #{buildfile_option} macdmgfile -logfile #{ant_output} #{properties}"
