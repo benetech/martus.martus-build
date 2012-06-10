@@ -72,6 +72,10 @@ def build_logi_spec(type)
 	return build_spec('org.logi', 'logi', type, '1.1.2')
 end
 
+def build_jortho_spec(type)
+  return build_spec('de.inetsoftware', 'jortho', type, '0.5')
+end
+
 # LibExt, not in public repository
 BCPROV_SPEC = build_bcprov_spec('jar')
 BCPROV_SOURCE_SPEC = build_bcprov_spec('sources')
