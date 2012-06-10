@@ -1,6 +1,6 @@
-cd /home/kevins/work/cvs/martus/temp
+cd /home/kevins/work/hg/martus/martus/temp
 
-buildr --trace -f martus/buildfile clean martus-client:build_unsigned test=no
+buildr --trace -f martus-build/buildfile clean martus-client:build_unsigned test=no
 
 # fake signing, when we are ready for that
 cd martus-client/target
