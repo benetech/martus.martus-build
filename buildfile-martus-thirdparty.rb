@@ -12,7 +12,7 @@ def source_file(project_name, directory, source_name)
 	return file(_(project_name, "#{directory}/source/#{source_name}"))
 end
 
-def source_file(project_name, directory, dictionary_name)
+def dictionary_file(project_name, directory, dictionary_name)
   return file(_(project_name, "#{directory}/dictionaries/#{dictionary_name}"))
 end
 
