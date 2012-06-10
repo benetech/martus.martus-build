@@ -12,6 +12,10 @@ def source_file(project_name, directory, source_name)
 	return file(_(project_name, "#{directory}/source/#{source_name}"))
 end
 
+def source_file(project_name, directory, dictionary_name)
+  return file(_(project_name, "#{directory}/dictionaries/#{source_name}"))
+end
+
 define name, :layout=>create_layout_with_source_as_source(name) do
   project.group = 'org.martus'
   project.version = $BUILD_NUMBER
@@ -52,6 +56,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(RHINO_SPEC).from(jar_file(name, 'client/RhinoJavaScript', 'js.jar'))
 	install artifact(RHINO_SOURCE_SPEC).from(source_file(name, 'client/RhinoJavaScript', 'Rhino-src.zip'))
 	install artifact(RHINO_LICENSE_SPEC).from(license_file(name, 'client/RhinoJavaScript', 'license.txt'))
+	install artifact(JORTHO_SPEC).from(jar_file(name, 'client/jortho', 'jortho.jar'))
+  install artifact(JORTHO_SOURCE_SPEC).from(source_file(name, 'client/jortho', 'JOrrtho_0.5.zip'))
+  install artifact(JORTHO_LICENSE_SPEC).from(license_file(name, 'client/jortho', 'license-jortho.txt'))
+  install artifact(JORTHO_ENGLISH_SPEC).from(dictionary_file(name, 'client/jortho', 'dictionary_en.ortho'))
+  install artifact(JORTHO_SPANISH_SPEC).from(dictionary_file(name, 'client/jortho', 'dictionary_es.ortho'))
 	#NOTE: Would like to include license for khmer fonts, but there are no license files
 	#NOTE: Would like to include license for NSIS installer, but don't see any
 	#TODO: Need to include client license files for Sun Java (after upgrading to Java 6)
@@ -77,5 +86,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(ICU4J_SPEC))
     p.include(artifact(LAYOUTS_SPEC))
     p.include(artifact(RHINO_SPEC))
+    p.include(artifact(JORTHO_SPEC))
   end
 end
