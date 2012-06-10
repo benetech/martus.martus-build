@@ -102,6 +102,13 @@ ICU4J_SPEC = build_icu4j_spec('jar')
 ICU4J_SOURCE_SPEC = build_icu4j_spec('sources')
 ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
 
+# Client
+JORTHO_SPEC = build_jortho_spec('jar')
+JORTHO_SOURCE_SPEC = build_jortho_spec('sources')
+JORTHO_LICENSESPEC = build_jortho_spec('license')
+JORTHO_ENGLISH_SPEC = build_jortho_spec('dict-en')
+JORTHO_SPANISH_SPEC = build_jortho_spec('dict-es')
+
 # Client, not in public repository
 LAYOUTS_SPEC = build_layouts_spec('jar')
 LAYOUTS_SOURCE_SPEC = build_layouts_spec('sources')
