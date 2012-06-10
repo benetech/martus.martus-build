@@ -1,5 +1,5 @@
 #cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus
-cd ..
+cd $WORKSPACE
 hg clone ssh://mvcs/martus/martus-amplifier
 hg clone ssh://mvcs/martus/martus-client
 hg clone ssh://mvcs/martus/martus-clientside
