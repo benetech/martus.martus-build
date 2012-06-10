@@ -62,7 +62,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		LAYOUTS_SPEC,
 		project('martus-jar-verifier').packages.first,
 		VELOCITY_SPEC,
-		JORTHO_SPEC,
+		JORTHO_SPEC
 	)
 
 	build do
