@@ -13,7 +13,7 @@ def source_file(project_name, directory, source_name)
 end
 
 def dictionary_file(project_name, directory, dictionary_name)
-  return file(_(project_name, "#{directory}/dictionaries/#{dictionary_name}"))
+  return file(_(project_name, "#{directory}/bin/dictionaries/#{dictionary_name}"))
 end
 
 define name, :layout=>create_layout_with_source_as_source(name) do
