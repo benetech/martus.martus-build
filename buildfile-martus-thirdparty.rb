@@ -56,7 +56,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(RHINO_SPEC).from(jar_file(name, 'client/RhinoJavaScript', 'js.jar'))
 	install artifact(RHINO_SOURCE_SPEC).from(source_file(name, 'client/RhinoJavaScript', 'Rhino-src.zip'))
 	install artifact(RHINO_LICENSE_SPEC).from(license_file(name, 'client/RhinoJavaScript', 'license.txt'))
-	install artifact(JORTHO_SPEC).from(jar_file(name, 'client/jortho', 'jortho.jar'))
+	install artifact(JORTHO_SPEC).from(jar_file(name, 'client/jortho', 'jortho-0.5.jar'))
   install artifact(JORTHO_SOURCE_SPEC).from(source_file(name, 'client/jortho', 'JOrrtho_0.5.zip'))
   install artifact(JORTHO_LICENSE_SPEC).from(license_file(name, 'client/jortho', 'license-jortho.txt'))
   install artifact(JORTHO_ENGLISH_SPEC).from(dictionary_file(name, 'client/jortho', 'dictionary_en.ortho'))
