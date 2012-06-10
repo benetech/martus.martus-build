@@ -76,16 +76,16 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	# TODO: Should include source/license for javax.mail.jar
 	
   package(:zip, :file => _('target', "martus-thirdparty-#{project.version}.zip")).tap do | p |
-    p.include(artifact(JUNIT_SPEC))
-    p.include(artifact(BCPROV_SPEC))
-    p.include(artifact(BCJCE_SPEC), :as=>'bc-jce.jar')
-    p.include(artifact(PERSIANCALENDAR_SPEC))
-    p.include(artifact(VELOCITY_SPEC))
-    p.include(artifact(VELOCITY_DEP_SPEC))
-    p.include(artifact(XMLRPC_SPEC))
-    p.include(artifact(ICU4J_SPEC))
-    p.include(artifact(LAYOUTS_SPEC))
-    p.include(artifact(RHINO_SPEC))
-    p.include(artifact(JORTHO_SPEC))
+    p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
+    p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
+    p.include(artifact(BCJCE_SPEC), :as=>'ThirdParty->bc-jce.jar')
+    p.include(artifact(PERSIANCALENDAR_SPEC), :path=>'ThirdParty')
+    p.include(artifact(VELOCITY_SPEC), :path=>'ThirdParty')
+    p.include(artifact(VELOCITY_DEP_SPEC), :path=>'ThirdParty')
+    p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
+    p.include(artifact(ICU4J_SPEC), :path=>'ThirdParty')
+    p.include(artifact(LAYOUTS_SPEC), :path=>'ThirdParty')
+    p.include(artifact(RHINO_SPEC), :path=>'ThirdParty')
+    p.include(artifact(JORTHO_SPEC), :path=>'ThirdParty')
   end
 end
