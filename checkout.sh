@@ -1,17 +1,17 @@
 #cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus
 cd ..
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-amplifier
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-client
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-clientside
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-common
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-docs
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-hrdag
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-jar-verifier
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-js-xml-generator
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-logi
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-meta
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-mspa
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-server
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-swing
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-thirdparty
-cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus-utils
+hg clone ssh://mvcs/martus/martus-amplifier
+hg clone ssh://mvcs/martus/martus-client
+hg clone ssh://mvcs/martus/martus-clientside
+hg clone ssh://mvcs/martus/martus-common
+hg clone ssh://mvcs/martus/martus-docs
+hg clone ssh://mvcs/martus/martus-hrdag
+hg clone ssh://mvcs/martus/martus-jar-verifier
+hg clone ssh://mvcs/martus/martus-js-xml-generator
+hg clone ssh://mvcs/martus/martus-logi
+hg clone ssh://mvcs/martus/martus-meta
+hg clone ssh://mvcs/martus/martus-mspa
+hg clone ssh://mvcs/martus/martus-server
+hg clone ssh://mvcs/martus/martus-swing
+hg clone ssh://mvcs/martus/martus-thirdparty
+hg clone ssh://mvcs/martus/martus-utils
