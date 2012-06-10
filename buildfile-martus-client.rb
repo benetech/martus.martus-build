@@ -125,8 +125,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.merge(project('martus-swing').package(:jar)).exclude('META-INF/MANIFEST.MF')
     p.merge(project('martus-clientside').package(:jar)).exclude('META-INF/MANIFEST.MF')
     p.merge(project('martus-js-xml-generator').package(:jar)).exclude('META-INF/MANIFEST.MF')
-    p.include(JORTHO_ENGLISH_SPEC, :as => 'dictionary_en.ortho')
-    p.include(JORTHO_SPANISH_SPEC, :as => 'dictionary_es.ortho')
+    p.include(JORTHO_ENGLISH_SPEC, :as => 'org/martus/client/swingui/dictionary_en.ortho')
+    p.include(JORTHO_SPANISH_SPEC, :as => 'org/martus/client/swingui/dictionary_es.ortho')
     
 	end
 
