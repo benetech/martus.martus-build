@@ -242,6 +242,7 @@ def third_party_client_licenses
 	licenses << artifact(ICU4J_LICENSE_SPEC)
 	licenses << artifact(LAYOUTS_LICENSE_SPEC)
 	licenses << artifact(RHINO_LICENSE_SPEC)
+	licenses << artifact(JORTHO_LICENSE_SPEC)
 	return licenses
 end
 
@@ -258,6 +259,7 @@ def third_party_client_source
 #	licenses << artifact(ICU4J_SOURCE_SPEC)
 	licenses << artifact(LAYOUTS_SOURCE_SPEC)
 	licenses << artifact(RHINO_SOURCE_SPEC)
+	licenses << artifact(JORTHO_SOURCE_SPEC)
 	return licenses
 end
 
