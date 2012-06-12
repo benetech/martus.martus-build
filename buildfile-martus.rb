@@ -238,6 +238,7 @@ def third_party_client_jars
 	jars << artifact(VELOCITY_SPEC)
 	jars << artifact(VELOCITY_DEP_SPEC)
 	jars << artifact(XMLRPC_SPEC)
+	jars << artifact(JORTHO_SPEC)
 	return jars
 end
 
