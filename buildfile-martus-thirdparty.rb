@@ -61,6 +61,12 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   install artifact(JORTHO_LICENSE_SPEC).from(license_file(name, 'client/jortho', 'license-jortho.txt'))
   install artifact(JORTHO_ENGLISH_SPEC).from(dictionary_file(name, 'client/jortho', 'dictionary_en.ortho'))
   install artifact(JORTHO_SPANISH_SPEC).from(dictionary_file(name, 'client/jortho', 'dictionary_es.ortho'))
+  install artifact(JFREECHART_SPEC).from(jar_file(name, 'client/JFreeChart', 'jfreechart-1.0.14.jar'))
+  install artifact(JFREECHART_SOURCE_SPEC).from(source_file(name, 'client/JFreeChart', 'jfreechart-1.0.14.zip'))
+  install artifact(JFREECHART_LICENSE_SPEC).from(license_file(name, 'client/JFreeChart', 'License-JFreeChart.txt'))
+  install artifact(JCOMMON_SPEC).from(jar_file(name, 'client/JFreeChart', 'jcommon-1.0.17.jar'))
+  install artifact(JCOMMON_SOURCE_SPEC).from(source_file(name, 'client/JFreeChart', 'jcommon-1.0.17.zip'))
+  install artifact(JCOMMON_LICENSE_SPEC).from(license_file(name, 'client/JFreeChart', 'License-JCommon.txt'))
 	#NOTE: Would like to include license for khmer fonts, but there are no license files
 	#NOTE: Would like to include license for NSIS installer, but don't see any
 	#TODO: Need to include client license files for Sun Java (after upgrading to Java 6)

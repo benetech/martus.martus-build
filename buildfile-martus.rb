@@ -76,6 +76,14 @@ def build_jortho_spec(type)
   return build_spec('de.inetsoftware', 'jortho', type, '0.5')
 end
 
+def build_jfreechart_spec(type)
+  return build_spec('org.jfree', 'jfreechart', type, '1.0.14')
+end
+
+def build_jfreechart_spec(type)
+  return build_spec('org.jfree', 'jcommon', type, '1.0.17')
+end
+
 # LibExt, not in public repository
 BCPROV_SPEC = build_bcprov_spec('jar')
 BCPROV_SOURCE_SPEC = build_bcprov_spec('sources')
@@ -112,6 +120,12 @@ JORTHO_SOURCE_SPEC = build_jortho_spec('sources')
 JORTHO_LICENSE_SPEC = build_jortho_spec('license')
 JORTHO_ENGLISH_SPEC = build_jortho_spec('dict-en')
 JORTHO_SPANISH_SPEC = build_jortho_spec('dict-es')
+JFREECHART_SPEC = build_jfreechart_spec('jar')
+JFREECHART_SOURCE_SPEC = build_jfreechart_spec('sources')
+JFREECHART_LICENSE_SPEC = build_jfreechart_spec('license')
+JCOMMON_SPEC = build_jcommon_spec('jar')
+JCOMMON_SOURCE_SPEC = build_jcommon_spec('sources')
+JCOMMON_LICENSE_SPEC = build_jcommon_spec('license')
 
 # Client, not in public repository
 LAYOUTS_SPEC = build_layouts_spec('jar')
@@ -239,6 +253,8 @@ def third_party_client_jars
 	jars << artifact(VELOCITY_DEP_SPEC)
 	jars << artifact(XMLRPC_SPEC)
 	jars << artifact(JORTHO_SPEC)
+	jars << artifact(JFREECHART_SPEC)
+	jars << artifact(JCOMMON_SPEC)
 	return jars
 end
 
@@ -255,24 +271,28 @@ def third_party_client_licenses
 	licenses << artifact(LAYOUTS_LICENSE_SPEC)
 	licenses << artifact(RHINO_LICENSE_SPEC)
 	licenses << artifact(JORTHO_LICENSE_SPEC)
+	licenses << artifact(JFREECHART_LICENSE_SPEC)
+	licenses << artifact(JCOMMON_LICENSE_SPEC)
 	return licenses
 end
 
 def third_party_client_source
-	licenses = []
-	licenses << artifact(BCPROV_SOURCE_SPEC)
-	licenses << artifact(JUNIT_SOURCE_SPEC)
-	licenses << artifact(PERSIANCALENDAR_SOURCE_SPEC)
-	licenses << artifact(VELOCITY_SOURCE_SPEC)
+  sources = []
+  sources << artifact(BCPROV_SOURCE_SPEC)
+  sources << artifact(JUNIT_SOURCE_SPEC)
+  sources << artifact(PERSIANCALENDAR_SOURCE_SPEC)
+  sources << artifact(VELOCITY_SOURCE_SPEC)
 # TODO: Find velocity-dep source code
-#	licenses << artifact(VELOCITY_DEP_SOURCE_SPEC)
-	licenses << artifact(XMLRPC_SOURCE_SPEC)
+#	sources << artifact(VELOCITY_DEP_SOURCE_SPEC)
+  sources << artifact(XMLRPC_SOURCE_SPEC)
 # TODO: Find ICU4J source code
-#	licenses << artifact(ICU4J_SOURCE_SPEC)
-	licenses << artifact(LAYOUTS_SOURCE_SPEC)
-	licenses << artifact(RHINO_SOURCE_SPEC)
-	licenses << artifact(JORTHO_SOURCE_SPEC)
-	return licenses
+#	sources << artifact(ICU4J_SOURCE_SPEC)
+  sources << artifact(LAYOUTS_SOURCE_SPEC)
+  sources << artifact(RHINO_SOURCE_SPEC)
+  sources << artifact(JORTHO_SOURCE_SPEC)
+	sources << artifact(JFREECHART_SOURCE_SPEC)
+	sources << artifact(JCOMMON_SOURCE_SPEC)
+	return sources
 end
 
 def include_artifacts(target, artifacts, path)
