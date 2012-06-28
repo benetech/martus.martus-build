@@ -80,7 +80,7 @@ def build_jfreechart_spec(type)
   return build_spec('org.jfree', 'jfreechart', type, '1.0.14')
 end
 
-def build_jfreechart_spec(type)
+def build_jcommon_spec(type)
   return build_spec('org.jfree', 'jcommon', type, '1.0.17')
 end
 
