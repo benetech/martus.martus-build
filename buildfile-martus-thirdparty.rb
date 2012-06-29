@@ -68,6 +68,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   install artifact(JCOMMON_SOURCE_SPEC).from(source_file(name, 'client/JFreeChart', 'jcommon-1.0.17.zip'))
   install artifact(JCOMMON_LICENSE_SPEC).from(license_file(name, 'client/JFreeChart', 'License-JCommon.txt'))
 	#NOTE: Would like to include license for khmer fonts, but there are no license files
+  #NOTE: Would like to include license for Armenian fonts, but there are no license files
 	#NOTE: Would like to include license for NSIS installer, but don't see any
 	#TODO: Need to include client license files for Sun Java (after upgrading to Java 6)
 
