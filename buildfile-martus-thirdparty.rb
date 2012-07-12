@@ -93,7 +93,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(ICU4J_SPEC), :path=>'ThirdParty')
     p.include(artifact(LAYOUTS_SPEC), :path=>'ThirdParty')
     p.include(artifact(RHINO_SPEC), :path=>'ThirdParty')
-    p.include(artifact(JORTHO_SPEC), :path=>'ThirdParty')
     p.include(artifact(JCOMMON_SPEC), :path=>'ThirdParty')
     p.include(artifact(JFREECHART_SPEC), :path=>'ThirdParty')
   end
