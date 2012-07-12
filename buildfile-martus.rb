@@ -252,7 +252,9 @@ def third_party_client_jars
 	jars << artifact(VELOCITY_SPEC)
 	jars << artifact(VELOCITY_DEP_SPEC)
 	jars << artifact(XMLRPC_SPEC)
-	jars << artifact(JORTHO_SPEC)
+	# NOTE: JOrtho is being included in martus.jar, so exclude it here,
+	# but keep it in the licenses and source code sections
+	#jars << artifact(JORTHO_SPEC)
 	jars << artifact(JFREECHART_SPEC)
 	jars << artifact(JCOMMON_SPEC)
 	return jars
