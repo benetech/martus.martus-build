@@ -9,7 +9,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   production_zipfile = project('martus-client-linux-zip').package.to_s
   ant_output = _(:temp, 'ant-output.txt')
 
-  hudson_job_dir = "/var/lib/hudson/jobs/martus-client-unsigned"
+  hudson_job_dir = "/var/lib/hudson/jobs/MartusClient-Unsigned-Mercurial"
   dmg_file = File.join(hudson_job_dir, "Martus.dmg")
   if(File.exists?(dmg_file))
     FileUtils::rm(dmg_file)
