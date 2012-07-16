@@ -65,6 +65,12 @@ martus_not_running:
     DeleteRegKey /ifempty "HKLM" "Software\Benetech\${PRODUCT_NAME}"
     DeleteRegKey /ifempty "HKLM" "Software\Benetech"
 
+	; This should not be necessary, but the start menu entries are not being
+	; deleted under Vista/Win7, so we'll try explicitly deleting them (TT 4588)    
+    StrCmp $DEBUG_INFO "Y" 0 +2
+    MessageBox MB_OK 'Deleting previous start menu entries...'
+    RMDir /r "$SMPROGRAMS\Martus"
+
     ReadRegStr $8 HKCR ".mba" ""
     StrCmp $8 "martusfile" 0 skip_mba_deletion
     DeleteRegKey HKCR ".mba"
