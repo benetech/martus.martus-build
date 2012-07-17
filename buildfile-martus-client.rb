@@ -23,10 +23,6 @@ def main_target_dir
   return _('target', 'main', 'classes')
 end
 
-def test_target_dir
-  return _('target', 'test', 'classes')
-end
-
 def crypto_dir
   return _(main_target_dir, 'org', 'martus', 'common', 'crypto')
 end
@@ -70,12 +66,12 @@ define name, :layout=>create_layout_with_source_as_source(name) do
       file.puts(Time.now)
     end
 
-    filter(main_source_dir_dir).include('**/test/*.mlp').into(test_target_dir).run
-		filter(main_source_dir).include('**/test/Sample*.*').into(test_target_dir).run
+    filter(main_source_dir_dir).include('**/test/*.mlp').into(main_target_dir).run
+		filter(main_source_dir).include('**/test/Sample*.*').into(main_target_dir).run
 		# TODO: Need to exclude unapproved mtf files like km
-		filter(main_source_dir).include('**/test/Martus-*.mtf').into(test_target_dir).run
-		filter(main_source_dir).include('**/test/MartusHelp-*.txt').into(test_target_dir).run
-		filter(main_source_dir).include('**/test/MartusHelpTOC-*.txt').into(test_target_dir).run
+		filter(main_source_dir).include('**/test/Martus-*.mtf').into(main_target_dir).run
+		filter(main_source_dir).include('**/test/MartusHelp-*.txt').into(main_target_dir).run
+		filter(main_source_dir).include('**/test/MartusHelpTOC-*.txt').into(main_target_dir).run
 
 		filter(main_source_dir).include('**/*.png').into(main_target_dir).run
 		filter(main_source_dir).include('**/*.gif').into(main_target_dir).run
