@@ -66,7 +66,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
       file.puts(Time.now)
     end
 
-    filter(main_source_dir_dir).include('**/test/*.mlp').into(main_target_dir).run
+    filter(main_source_dir).include('**/test/*.mlp').into(main_target_dir).run
 		filter(main_source_dir).include('**/test/Sample*.*').into(main_target_dir).run
 		# TODO: Need to exclude unapproved mtf files like km
 		filter(main_source_dir).include('**/test/Martus-*.mtf').into(main_target_dir).run
