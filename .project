@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>martus</name>
+	<name>martus-build</name>
 	<comment></comment>
 	<projects>
 		<project>martus-common</project>

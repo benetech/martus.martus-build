@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <registration_data version="1.0">
    <environment>
-      <hostname>GQ8BVJ1</hostname>
+      <hostname>Samsung-NF310</hostname>
       <hostId/>
-      <osName>Windows Vista</osName>
-      <osVersion>6.0</osVersion>
+      <osName>Windows 7</osName>
+      <osVersion>6.1</osVersion>
       <osArchitecture>x86</osArchitecture>
-      <systemModel>Inspiron 1545</systemModel>
-      <systemManufacturer>Dell Inc.</systemManufacturer>
+      <systemModel>NF110/NF210/NF310</systemModel>
+      <systemManufacturer>SAMSUNG ELECTRONICS CO., LTD.</systemManufacturer>
       <cpuManufacturer>GenuineIntel</cpuManufacturer>
-      <serialNumber>GQ8BVJ1</serialNumber>
+      <serialNumber>ZWSS93KB300163</serialNumber>
    </environment>
-   <registry urn="urn:st:0bb43d6e-90ed-4bc7-ad19-dca6ebfacb86" version="1.0">
+   <registry urn="urn:st:183ee5d0-7b16-4200-bfba-3634ada8a71e" version="1.0">
       <service_tag>
-         <instance_urn>urn:st:8a2fa7f7-93f7-4096-9730-4e9973449d39</instance_urn>
+         <instance_urn>urn:st:66d715b1-a8d8-4b4c-acfe-8706a5f78cdf</instance_urn>
          <product_name>Java SE 6 Development Kit</product_name>
-         <product_version>1.6.0_31</product_version>
+         <product_version>1.6.0_33</product_version>
          <product_urn>urn:uuid:b58ef9a8-5ae8-11db-a023-080020a9ed93</product_urn>
          <product_parent_urn>urn:uuid:fdc90b21-018d-4cab-b866-612c7c119ed3</product_parent_urn>
          <product_parent>Java Platform Standard Edition 6 (Java SE 6)</product_parent>
-         <product_defined_inst_id>id=1.6.0_31-b05 x86,dir=C:\Program Files\Java\jdk1.6.0_31\jre</product_defined_inst_id>
+         <product_defined_inst_id>id=1.6.0_33-b05 x86,dir=C:\Program Files\Java\jdk1.6.0_33\jre</product_defined_inst_id>
          <product_vendor>Sun Microsystems</product_vendor>
          <platform_arch>x86</platform_arch>
-         <timestamp>2012-02-23 23:58:24 GMT</timestamp>
+         <timestamp>2012-07-20 13:23:01 GMT</timestamp>
          <container>global</container>
          <source>Windows JDK i586 installer</source>
          <installer_uid>-1</installer_uid>
