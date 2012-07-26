@@ -151,7 +151,7 @@ same_version_present:
 older_version_present:
     StrCmp ${IS_JAVA_DELIVERED} "Y" replace_older_version check_for_ancient_version
 
-check_for_ancient_version
+check_for_ancient_version:
      Push $EXISTING_MARTUS_VERSION
      Push ${PRODUCT_OLDEST_UPGRADEABLE_EXTENDED_VERSION}
      Call ${UN}VersionCheck
