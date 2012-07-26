@@ -62,4 +62,3 @@
 !insertmacro LANG_STRING CannotUpgradeNoJava_Text "The version of Martus you have installed can only be upgraded by the full version installer that carries Java."
 !insertmacro LANG_STRING CannotRemoveInstallShieldVersion_Text "We were unable to remove the older version of Martus in your computer. The installer will now exit, please remove your copy of Martus using Add/Remove Programs in the Control Panel, and then rerun this installer.  If you have not done a key backup in your current version of Martus, we suggest you do so before uninstalling."
 !insertmacro LANG_STRING CannotUpgradeNoMartus_Text "This is an upgrade version of Martus. Please download and install the full version installer that carries Java."
-!insertmacro LANG_STRING CannotUpgradeOldVersion_Text "The version of Martus you have installed is too old for this upgrade installer to work. Please download and install the full version installer."

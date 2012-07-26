@@ -161,7 +161,7 @@ check_for_ancient_version:
      StrCmp $0 "0" 0 replace_older_version
 	 
 too_old_to_upgrade:
-     MessageBox MB_OK "$(CannotUpgradeOldVersion_Text)"  /SD IDOK
+     MessageBox MB_OK "$(CannotUpgradeNoMartus_Text)"  /SD IDOK
      Goto abort_installation
 
 replace_older_version:
