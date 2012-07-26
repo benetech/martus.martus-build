@@ -162,7 +162,7 @@ too_old_to_upgrade:
      MessageBox MB_OK "$(CannotUpgradeOldVersion_Text)"  /SD IDOK
      Goto abort_installation
 
-replace_older_version
+replace_older_version:
      MessageBox MB_OK "$(UpgradeVersionInstalled_Text)"  /SD IDOK
      StrCpy $INSTALLER_ACTION ${ACTION_UPGRADE_OLDER}
      Goto continue_installation
