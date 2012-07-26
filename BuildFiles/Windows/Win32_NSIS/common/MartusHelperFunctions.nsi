@@ -156,7 +156,9 @@ check_for_ancient_version:
      Push ${PRODUCT_OLDEST_UPGRADEABLE_EXTENDED_VERSION}
      Call ${UN}VersionCheck
      Pop $0
-     StrCmp $0 "1" too_old_to_upgrade replace_older_version
+     StrCmp $0 "2" 0 replace_older_version
+     StrCmp $0 "1" 0 too_old_to_upgrade
+     StrCmp $0 "0" 0 replace_older_version
 	 
 too_old_to_upgrade:
      MessageBox MB_OK "$(CannotUpgradeOldVersion_Text)"  /SD IDOK
