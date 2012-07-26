@@ -23,6 +23,7 @@
 !define PRODUCT_NAME "Martus"
 !define PRODUCT_VERSION "4.1.0"
 !define PRODUCT_EXTENDED_VERSION "4.1.0.0"
+!define PRODUCT_OLDEST_UPGRADEABLE_EXTENDED_VERSION "4.0.0.0"
 !define PRODUCT_PUBLISHER "The Benetech Initiative"
 !define PRODUCT_COPYRIGHT_DATE "2001-2012"
 !define PRODUCT_WEB_SITE "http://www.martus.org"

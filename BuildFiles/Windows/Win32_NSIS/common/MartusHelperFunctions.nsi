@@ -149,6 +149,20 @@ same_version_present:
      Goto continue_installation
 
 older_version_present:
+    StrCmp ${IS_JAVA_DELIVERED} "Y" replace_older_version check_for_ancient_version
+
+check_for_ancient_version
+     Push $EXISTING_MARTUS_VERSION
+     Push ${PRODUCT_OLDEST_UPGRADEABLE_EXTENDED_VERSION}
+     Call ${UN}VersionCheck
+     Pop $0
+     StrCmp $0 "1" too_old_to_upgrade replace_older_version
+	 
+too_old_to_upgrade:
+     MessageBox MB_OK "$(CannotUpgradeOldVersion_Text)"  /SD IDOK
+     Goto abort_installation
+
+replace_older_version
      MessageBox MB_OK "$(UpgradeVersionInstalled_Text)"  /SD IDOK
      StrCpy $INSTALLER_ACTION ${ACTION_UPGRADE_OLDER}
      Goto continue_installation
