@@ -1,4 +1,4 @@
-﻿Martus(tm) Software Version 4.1 README.txt
+﻿Martus(tm) Software Version 4.1.1 README.txt
 ---------------------------------------------------------
 
 
@@ -12,6 +12,18 @@ languages, go to https://www.martus.org/downloads/.
 
 
 Martus release information by version and release date:
+
+Version 4.1.1 		2012-08
+
+This release is available in English and other languages as indicated on 
+the https://www.martus.org software download page. Other languages will be 
+available in the future, as language-packs on the documentation page 
+(https://www.martus.org/downloads)
+
+- Fixed an issue when running Martus 4.1 in languages other than English, that 
+  cut off initial wording in Charts and Spell Check Dictionary screens.
+- Added 4.0 Burmese and Armenian translation updates. 
+
 
 Version 4.1 		2012-07
 
