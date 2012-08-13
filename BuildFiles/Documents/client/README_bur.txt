@@ -1,13 +1,55 @@
-﻿Martus(tm) ေဆာ့ဖ္ဝဲ Version 3.6.2 (၃.၆.၂) ဖတ္ပၝ README_bur.txt
+﻿Martus(tm) ေဆာ့ဖ္ဝဲ Version 4.0 (၄.၀)  ဖတ္ပၝ README_bur.txt
+---------------------------------------------------------
 
 
 Martus ေဆာ့ဖ္ဝဲႎႀင့္ ပတ္သက္ေသာ သတင္းးအခဵက္အလက္မဵားအတၾက္ http://www.martus.org ကုိ ၀င္ေရာက္ဳကည့္ရႁပၝ။
+
 Martus ေဆာ့ဖ္ဝဲ တပ္ဆင္ဴခင္းႎႀင့္ ပတ္သက္သည့္ ညၿန္ဳကားခဵက္မဵားအတၾက္ Martus သုံးစဲၾသူလက္စၾဲကုိ ဳကည့္ရႁပၝ။
+
 လက္ရႀိဘာသာဴပန္ထားေသာအသုံးဴပႂသူ မႀတ္တမ္းမႀတ္ရာမဵားအဴပင္ ဘာသာစကားအမဵိႂးမဵႂိးဴဖင့္ ဘာသာဴပန္ထားေသာယခင္ဗားရႀင္းမဵား၏မႀတ္တမ္းမႀတ္ရာမဵားအားလုံးအတၾက္ 
 http://www.martus.org/downloads/ သုိႛ သၾားပၝ။
 
 ဗားရႀင္း ႎႀင့္ ထုတ္ဴပန္မႀႂ ရက္စဲၾ အလုိက္ Martus ထုတ္ဴပန္မႀႂ အခဵက္အလက္မဵား-
 
+
+Version 4.0 (၄.၀)		2012-05 (၂၀၁၂-၀၅)
+
+ယခုဴဖန္ႛခဵိမႁကို ေဆာ့ဖ္ဝဲ download စာမဵက္ႎႀာ https://www.martus.org တၾင္ ေဖာ္ဴပထားသည့္အတိုင္း အဂႆလိပ္၊ 
+ဖာဆီ/ဒၝရီ၊ စပိန္၊ ဴမန္မာႎႀင့္ အဴခားဘာသာစကားမဵားဴဖင့္ ရရႀိႎိုင္ပၝသည္။ အဴခားဘာသာစကားမဵားအတၾက္ မႀတ္တမ္းစာမဵက္ႎႀာ 
+(https://www.martus.org/downloads) ေပၞရႀိ ဘာသာစကားစုတၾင္ေတၾႛရသည့္ အတိုင္း မဳကာခင္ ရရႀိႎိုင္မည္ 
+ဴဖစ္ပၝသည္။ 
+
+- Java6 (တခၝတရံ ၁.၆ ဟုေခၞသည္) ေနာက္ဆံုးအေဴခအေန။ Java6 သည္ အခဵိႂႛေနရာမဵားတၾင္ လုပ္ေဆာင္မႁ 
+  ပိုမိုတိုးတက္လာႎိုင္သည္။ မဵားစၾာေသာဘာသာစကားမဵားအတၾက္လည္း စာလံုးရုပ္ထၾက္ပိုေကာင္းလာမည္ (ဥပမာ - ခမဲ၊ ဖာဆီ/ဒၝရီ)။
+  မႀန္ကန္ေသာ စာလံုးစာလံုးရုပ္ထၾက္အတၾက္ အသံုးဴပႂသူမဵား၏ ကိုယ္တိုင္လုပ္ေဆာင္ရမႁအနည္းငယ္သာ လိုအပ္မည္ဴဖစ္သည္ (ဥပမာ - 
+  ဴမန္မာ၊ ခမဲ၊ နီေပၝ)။ Windows အင္စေတာ္လာမဵားတၾင္ Java6 သည္ အလိုအေလဵာက္ ပၝဝင္ဴပီး၊ Mac/Linux တို့တၾင္ 
+  Java 1.6.0_30 သိုႛမဟုတ္ ေနာက္ပိုင္းကဵေသာ versions မဵားဴဖစ္ေဳကာင္း ေသခဵာေအာင္လုပ္ရမည္။ ေရႀးကဵေသာ 
+  Java6 versions မဵားသည္ Martus ၏လုပ္ေဆာင္မႁ ကုိမမႀန္မကန္ ဴဖစ္ေစတတ္သည္။  သင့္၏ Mac/Linux တၾင္ 
+  မည္သည့္ Java version ရႀိေနသည္ကို terminal window အားဖၾင့္ဴပီး java–version ဟုရိုက္ထည့္ကာ 
+  အန္းတား/ရိတန္း (enter/return) ခလုတ္ႎႀိပ္ စစ္ေဆးႎိုင္သည္။  
+
+- ဘူလက္တင္(Bulletin) အမဵားအဴပား သိုႛမဟုတ္ ဳကီးမားေသာဘူလက္တင္မဵားရႀိသည့္ အေကာင့္မဵားအတၾက္ Martus 
+  လုပ္ေဆာင္မႁ ပိုမိုေခဵာေမၾႛေစရန္ “memory switches” ကို Windows ႎႀင့္ Mac ေရႀာ့့ကပ္တိုႛတၾင္ ထည့္သၾင္းထားသည္။ 
+  လိုအပ္ပၝက အသံုးဴပႂသူအေနဴဖင့္ မန္မိုရီ (Memory) ကို တိုးႎိုင္ေသးသည္။ သိုႛေသာ္ ယခင္က ကိုယ္တိုင္တီထၾင္ရန္ လိုအပ္ေသာ 
+  အေဴခအေနမဵားကို ေဴပလည္မႁေပးႎိုင္သည္။   
+
+- Windows တၾင္ Martus အသံုးဴပႂသူ၏ အင္တာေဖ့စ္ပံုထၾက္ကို အားေကာင္းေစသည္။ မူလစနစ္ဴဖစ္သည့္ 
+  "look and feel" ကို အသံုးဴပႂရန္ ဴဖစ္သည္။
+
+- အေစာပိုင္း Windows ႎႀင့္ Java versions တိုႛတၾင္ေတၾႛရႀိရေသာ လံုဴခံႂမႁအေဴခအေနတိုႛေဳကာင့္ Martus 4.0 သည္ 
+  Windows 98 (ME, 2K, XP, 2003, Vista, 7) တိုႛထက္ ပိုေနာက္ကဵေသာ versions မဵားတၾင္သာ 
+  လုပ္ေဆာင္ႎိုင္မည္ ဴဖစ္သည္။ သင့္တၾင္ရႀိသည္မႀာ Windows98/NT သိုႛမဟုတ္ ယင္းထက္ေရႀးကဵပၝက Martus 3.6.2 
+  သိုႛမဟုတ္ ယင္းထက္ေရႀးကဵေသာအရာကို သံုးဖိုႛလုိသည္။ သုိႛေသာ္ ဴဖစ္ႎိုင္ပၝက ပိုဴပီးလံုဴခံႂစိတ္ခဵရေသာ Windows version ကို 
+  အဆင့္ဴမႀင့္ရန္ အေလးအနက္ အဳကံဴပႂပၝသည္။ 
+
+- အသံုးဴပႂသူမဵားတင္ဴပလာေသာ ဴပႍနာမဵားေဴဖရႀင္းဴခင္း၊ ဒီဘပ္ဂ္ လုပ္ဴခင္းမဵား (Debugging) ပိုမိုလၾယ္ကူေစရန္ Martus 
+  console log အတၾက္ ထပ္ေဆာင္းသတင္းအခဵက္အလက္မဵား ထည့္သၾင္းထားသည္။ ထည့္သၾင္းထားေသာ 
+  သတင္းအခဵက္အလက္မဵားတၾင္ အေကာင့္တစ္ခုအတၾက္ Martus public code ႎႀင့္ လက္ရႀိမန္မိုရီႎႀင့္ ပတ္သက္ေသာ 
+  အခဵက္အလက္မဵား ပၝဝင္သည္။ 
+
+- Martus ဴဖန္ႛခဵိမႁ တည္ေဆာက္ဴခင္း (ဖန္တီးဴခင္း) အတၾက္ (Windows, Mac ႎႀင့္ Linux အတၾက္) နည္းစနစ္ 
+  အသစ္တစ္ခုကို ဴပႂလုပ္ထားသည္။ ယင္းသည္ စမ္းသပ္စစ္ေဆးဴခင္းႎႀင့္ ထိေရာက္စၾာအသံုးခဵဴခင္းတိုႛကို ပိုမိုဴမန္ဆန္ေစဴပီး၊ မဵားစၾားေသာ 
+  အဴခားအတၾင္းပိုင္း အဆင့္ဴမႀင့္တင္မႁမဵားလည္း ပၝဝင္သည္။ 
 
 
 ဗာရႀင္ 3.6.2 (၃.၆.၂)             (2011-10 / ၂၀၁၁-၁၀)
@@ -40,7 +82,6 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 အ႑ခားဘာသာစကားမဵား႑ဖင့္ ေတၾ.ရႀိနုိင္သည္။ အ႑ခား ဘာသာစကားမဵား႑ဖင့္ ေနာင္အနာဂၝတ္တၾင္ ဘာသာစကားအတၾဲမဵား႑ဖင့္ 
 http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသည့္ စာမဵက္နႀာေပၚတၾင္ ေတၾ.ရိႀနုိင္မည္။ 
 
-
 - ဖန္ဴပင္ရႀာေဖၾမႁ ဴပႂလုပ္ဴခင္းအတၾက္ ေတၾ.ရႀိနုိင္ေသာ သက္ဆိုင္ရာအကၾက္မဵားကို စာရင္းဴပႂစုရန္ ေအာက္သို့ဆၾဲခဵနုိင္သည့္ အကၾက္မဵားတၾင္ ရိုက္သၾင္းထားေသာ   
   အခဵက္အလက္ (ေဳကဴငာခဵက္ အကၾက္တၾင္းရႀိ ထည့္သၾင္းထားေသာ အခဵက္အလက္မႀ ဖန္တီးထားေသာ စာရင္းဴပႂစုခဵက္အတန္း)ကို ထပ္ေပၝင္းထည့္ဴခင္း။
 - ဴဖန္ဳကတ္ရုိက္ကူးရန္အတၾက္ နႀင့္ စာသားနႀင့္ အခဵက္အလက္ရုိက္သၾင္းရန္ ေဳကဴငာခဵက္ ဂရစ္ကၾက္မဵားရႀိ ေအာက္သို့ဆၾဲခဵနုိင္သည့္ အကၾက္မဵား “ရႀာေဖၾရန္...”  
@@ -69,7 +110,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 - အသံုးဴပႂသူ ဖန္ဴပင္မဵားအတၾက္ အဴခားအေသးစား ခဵၾတ္ယၾင္းမႁမဵားကို ဴပႂဴပင္ဴခင္း၊ ရႀင္းလင္းေအာင္လုပ္ဴခင္း နႀင့္ ရႀင္းလင္းဴခင္း
 
 
-တင္ဆက္မႁ  3.5.1  (11-2010)
+တင္ဆက္မႁ  3.5.1  (2010-11)
 
 ေဆာ့ဖ္ဝဲ ေဒၝင္းလုပ္ စာမဵက္ႎႀာ http://www.martus.org တၾင္ ညၿန္ဴပထားသည့္အတုိင္း ဤဗားရႀင္းကုိ အဂ္လိပ္ႎႀင့္ အဴခားဘာသာ စကားမဵားးဴဖင့္လည္း 
 ရရႀိႎုိင္ပၝသည္။ အဴခားဘာသာ စကားမဵားကုိ မႀတ္တမ္းမႀတ္ရာဴပႂ စာမဵက္ႎႀာ (http://www.martus.org/downloads) တၾင္ ဘာသာစကား 
@@ -85,7 +126,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
   ဴပန္ေဴပာင္းပစ္ေသာ ဴပႍနာအား ဴပႂဴပင္ဴပီးဴဖစ္သည္။
 
 
-တင္ဆက္မႁ 3.5  (10-2010)
+တင္ဆက္မႁ 3.5  (2010-10)
 
 - တစ္ခုထက္ပိုေသာ အဆင့္မဵားပၝသည့္ ေရၾးခဵယ္ရန္စာရင္းမဵား ဴပႂလုပ္ႎိုင္ေသာ စိတ္ဳကိႂက္ဴပႂဴပင္ႎိုင္ခၾင့္ကို ထည့္သၾင္းေပးထားသည္။ ထိုႛေဳကာင့္ အသံုးဴပႂသူအေနဴဖင့္ 
   အဆင့္ဴမင့္ေသာ တန္ဖိုးမဵားေပၞတၾင္ မႀီခိုေနရေသာ အဆင့္နိမ့္သည့္ တန္ဖိုးမဵားကို သတ္မႀတ္ထည့္သၾင္းလာႎိုင္သည္။ (ဥပမာ - ေနရာေဒသမဵားအတၾက္ သင့္အေနဴဖင့္ 
@@ -99,7 +140,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 - ဘဂႆလား၊ ဘဂႆလီ၊ ဴမန္မာႎႀင့္ ခမာစာလံုးမဵားအား Martus အတၾင္းတၾင္ဴမင္ႎိုင္ရန္ ထည့္သၾင္းနည္းလမ္းညၿန္ကိုလည္း အသံုးဴပႂသူလက္စၾဲတၾင္ ထည့္သၾင္းဴပီးဴဖစ္သည္။
 
 
-တင္ဆက္မႁ 3.4.1  (08-2010)
+တင္ဆက္မႁ 3.4.1  (2010-08)
 
 - Martus အသံုးဴပႂမႁ မရႀိသည့္အခၝတၾင္ ပိုမိုလၾယ္ကူေစရန္ အခဵိန္ကုန္သတ္မႀတ္ခဵိန္အား မူလအခဵိန္ကုန္သတ္မႀတ္ခဵက္၁၀မိနစ္မႀ ေဴပာင္းေပးထားသည္။ 
   ထိုသိုႛေဴပာင္းေပးထားဴခင္းေဳကာင့္ အမဵားသံုးေနရာမဵားႎႀင့္ စုေပၝင္းသံုးကၾန္ဴပႃတာမဵားသံုးရာတၾင္ ပိုမိုလံုဴခံႂမႁ ရႀိေစသည္။ ထိုႛအဴပင္ အခဵိန္ဳကာဴမင့္စၾာ 
@@ -113,7 +154,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 - အလၾန္ဳကီးမားေသာ စိတ္ဳကိႂက္ဴပႂဴပင္ခဵက္မဵား ဴပႂလုပ္ဴခင္းေဳကာင့္ Martus ကိုေႎႀးေကၾးေစဴခင္းႎႀင့္ ဴပႍနာအမဵိႂးမဵိႂးဴဖစ္ေပၞေစဴခင္းမဵားကို ဴပႂဴပင္ဴပီးဴဖစ္သည္။
 
 
-တင္ဆက္မႁ 3.4  (03-2010)
+တင္ဆက္မႁ 3.4  (2010-03)
 
 - စာေစာင္ကုိ မသိမ္းဆည္းႎုိင္မီ အခဵိႂ့ေသာ ဂရစ္ေကာ္လံမဵားတၾင္ အခဵက္အလက္ ထည့္သၾင္းရန္ လုိအပ္မႁ စၾမ္းရည္ကုိ ထပ္ေဆာင္းထားသည္။
 - ရႀာေဖၾ မဵက္ႎႀာဴပင္တၾင္ အားလုံးေသာ ဂရစ္ေကာ္လံ သတ္မႀတ္ခဵက္မဵားသည္ စာေစာင္ဂရစ္ အခဵက္အလက္၏ တန္းတစ္ခုတည္းႎႀင့္ ကုိက္ညီေဳကာင္း သတ္မႀတ္ရန္ စၾမ္းရည္ 
@@ -139,7 +180,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 - အဂ္လိပ္ဘာသာဴဖင့္ သုံးစဲၾသူလက္စဲၾကုိ ထပ္မံဴဖည့္စၾက္ထားေသာ ဗားရႀင္း
 
 
-တင္ဆက္မႁ 3.3.2  (08-2009)
+တင္ဆက္မႁ 3.3.2  (2009-08)
 
 - ေဒတာ ေမာင္းႎႀင္ ဆဲၾခဵ(data-driven-dropdown)တစ္ခုပၝ၀င္သည့္ ဂရစ္ကုိ ဴပိႂလဲေစလဵက္ သုိႛမဟုတ္ ေဒတာ ေမာင္းႎႀင္ ဆဲၾခဵ(data-driven-dropdown) 
   တစ္ခုပၝ၀င္သည့္ ခဵဲ့ထားေသာ ဂရစ္တစ္ခုႎႀင့္အတူ စာေစာင္ကုိ သိမ္းဆည္းဴခင္းဴဖင့္ ေဒတာ ေမာင္းႎႀင္ ဆဲၾခဵရင္းဴမစ္(data-driven-dropdown source) တစ္ခုဴဖစ္သည့္ 
@@ -149,7 +190,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
   ဖန္တီးသည့္ စာမဵက္ႎႀာ အစီရင္ခံစာမဵားသည္ ဴပႍနာ ရႀိေနလိမ့္မည္။ဴပင္ဆင္မႁကုိ ဳကည့္ရႁရန္ အသုံးဴပႂသူသည္ အသစ္ဴဖစ္ေသာ စာမဵက္ႎႀာ အစီရင္ခံစာမဵားကုိ ဖန္တီးရန္လုိအပ္လိမ့္မည္။
 
 
-တင္ဆက္မႁ 3.3  (08-2008)
+တင္ဆက္မႁ 3.3  (2008-08)
 
 - ခဵိတ္ပိတ္ထားသည့္ မူဳကမ္းမဵားစၾာကုိ ခဵက္ခဵင္း`စုစည္းရန္´အတၾက္ လုပ္ႎုိင္စၾမ္းကုိ ထပ္ေဆာင္းထားသည္။ ဤသုိႛဴပႂလုပ္ရန္ အတၾက္ တည္းဴဖတ္ဴပင္ဆင္ပၝ > ခဵိတ္ပိတ္စာေစာင္မဵား ကုိ သၾားပၝ။
 - ပင္မမဵား(Headquarters)ကုိ စာေစာင္အုပ္စုတၾင္ ေပၝင္းထည့္ရန္ သိုႛမဟုတ္ စာေစာင္မဵား၏ ဖုိလ္ဒၝ (folder) တစ္ခုလုံးသိုႛ ေပၝင္းထည့္ရန္ သၾင္ဴပင္သစ္မဵား ပၝဝင္သည္။ 
@@ -169,7 +210,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 ပၝရိႀဴခင္းသည္ စဖၾင့္စဥ္ႎႀင့္ Martus အတၾင္းရႀိ  ဖုိလ္ဒၝသစ္မဵားကုိ ဝင္ေရာက္ ေသာအခၝ အခဵိန္ကုန္သက္သာေစပၝ လိမ့္မည္။
 
 
-တင္ဆက္မႁ ႀ 3.2  (09-2007)
+တင္ဆက္မႁ ႀ 3.2  (2007-09)
      
 - စာေစာင္သစ္ဴပသႎုိင္မႁသည္ သင့္အား ေအာက္ပၝတုိႛကုိ ေဆာင္ရၾက္ႎုိင္ေစသည္။ ၁) ေနရာမဵားစၾာယူသည့္ ရႀည္ လဵားေသာနယ္ပယ္မဵား အတၾက္ စာေစာင္တၾင္္းရႀိ  နယ္ပယ္မဵားကုိ ဝႀက္ႎုိင္/ေဖာ္ႎုိင္ေစသည္။ 
   ၂) သင္ ဝႀက္ႎုိင္ /ေဖာ္ႎုိင္သည့္ စာေစာင္မဵားထဲတၾင္  အပုိင္းမဵားဖန္တီးႎုိင္သည္။ ၃)ခဵဲကားထားသည့္ ဴမင္ကၾင္းထဲ တၾင္ ဂရစ္ကၾက္မဵားကုိ ဴပႎုိင္္သည္။(ထုိဴမင္ကၾင္း တၾင္းမႀ အတန္းမဵားေပၝင္းထည့္ႎုိင္မႁအပၝအဝင္) 
@@ -186,7 +227,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 
 
 
-တင္ဆက္မႁ ႀ 3.1  (04-2007)
+တင္ဆက္မႁ ႀ 3.1  (2007-04)
 
 - နယ္ပယ္စာေစာင္မဵား ဴပန္လည္ရယူရန္ရႀိပၝက လုပ္ေဆာင္ႎုိင္မႁအသစ္က ပင္မမဵား(HQs)ကုိ အသိေပး အေဳကာင္း ဳကားသည္။  Martus အေကာင့္ တၾင္ ဤသိုႛဴပႂလုပ္ရန္အတၾက္ 
   ေရၾးခဵယ္ရန္ အခၾင့္အလမ္းမဵား > စိတ္႒ကိႂက္အေနအထားမဵား ကုိ သၾားပၝ။ "(စာေစာင္သစ္မဵားကို အလုိအေလဵာက္ စစ္ေဆးပၝ )" ကုိ ေရၾးပၝ
@@ -216,7 +257,7 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 သန္ႛရႀင္းေရး ဴပႂလုပ္မႁမဵား၊
 
 
-တင္ဆက္မႁ ႀ 3.0  (09-2006)
+တင္ဆက္မႁ ႀ 3.0  (2006-09)
     
 - ထပ္ေဆာင္းထားသည့္ အစီရင္ခံႎုိင္စၾမ္း ရႀာေဖၾစံတစ္ခုႎႀင့္ ကုိက္ညီသည့္ စာေစာင္အတၾက္ ရလဒ္ဴပသမႁကုိ အစီရင္ခံ႓ပီး၄င္းကုိ ပုံႎႀိပ္ႎုိင္သည္ သိုႛမဟုတ္ ဖုိင္တစ္ခုတၾင္ သိမ္းဆည္းထားႎုိင္္သည္။ 
   အစီရင္ခံစာသည္ စာေစာင္နယ္ပယ္၏ အဖဲၾဝင္ခဲၾမဵား ပၝဝင္ႎုိင္႓ပီး စာေစာင္တစ္ခုစီအတၾက္ တန္းတစ္ခု ပၝသည့္ဇယားအဴဖစ္ ေဖာမတ္ (format) ခဵႎုိင္သည္။ အစီရင္ခံစာကုိ နယ္ပယ္မဵားစၾာဴဖင့္ 
@@ -230,4 +271,445 @@ http://www.martus.org/downloads မႀတ္တမ္းတင္ ထားသ�
 - စာေစာင္မဵားစၾာရႀိသည့္ အေကာင့္မဵားအတၾက္  ထူး ဴခားသိသာေသာ စၾမ္းေဆာင္ရည္ အထူးသဴဖင့္ ဴပန္လည္ ရယူမဵက္ႎႀာဴပင္ကုိ ဖၾင့္ဴခင္း။ ဳကာရႀည္ႎုိင္သည့္ လုပ္ငန္းေဆာင္မႁမဵားအတၾင္း 
   အသုံးဴပႂသူမဵားအတၾက္ ထပ္ေဆာင္း အေဴခအေနဴပ သတင္းစကား။
 - အသုံးဴပႂသူမဵားအတၾက္ ထပ္ေဆာင္းသတင္းစကားမဵားႎႀင့္ လုိင္းအမဵိႂးမဵိႂးေပၞတၾင္ ရႀည္လဵားသည့္ စိတ္႒ကိႂက္ နယ္ပယ္ တံဆိပ္မဵားဴပသဴခင္းတုိႛပၝဝင္သည့္ စိတ္႒ကိႂက္ဴပႂမႁ တုိးတက္ေအာင္ဴပႂလုပ္ဴခင္း။
+
+
+Version 2.9.0             2006-03
+
+- As of 2.6 Server release (March 2006), sped up several 
+  major client/server operations.  Specifically, the following 
+  operations are now faster: uploading/sending bulletins, 
+  retrieving your own bulletins or field office bulletins, 
+  initialization when connecting to the server at account login.
+- Performance improvements for accounts with a large number of 
+  bulletins.  Impacts the speed of the following actions:  
+  display of folders/sorting/moving bulletins etc
+- Changed Retrieve operations so that they happen in the 
+  background (similar to sending bulletins to a server), so that 
+  you can continue to work in Martus while that is happening 
+  without waiting for the retrieval to finish.  When it is 
+  complete, bulletins are displayed in the appropriate 
+  "Retrieved" folder.  To cancel a Retrieve, go back into the 
+  Retrieve dialog.
+- Improved messages to the user about server status.
+- Added the ability to search on columns within a grid (instead 
+  of the entire text of the grid) when specifying field in an 
+  Advanced Search, and added the option to search only on the 
+  most recent version of bulletins.
+- Fixed search bugs introduced in 2.8 and 2.8.1.  Specifically, 
+  addressed incorrect search results on dropdown fields with 
+  spaces in the choice values, and incorporated the 
+  customization tags in the search field list where labels were 
+  left blank (e.g. for section headers) so that there are no 
+  empty values in the field list. 
+- Added ability to insert and delete rows in customized grids 
+  and search screen
+- Use all available screen space when displaying bulletin data 
+  and the Contact info dialog.
+- Moved "Resend Bulletins" to be under the Server menu (for HQs 
+  that back up bulletins to servers for field offices that do not 
+  have access to the internet)
+- Removed misleading "not all bulletins were retrieved" 
+  messages that appeared when a HQ account did not have 
+  permission to view old versions of certain bulletins
+- Several updates to date preferences:  localization of date 
+  formats, additional format choices, changes to correctly 
+  display (and convert previously entered) Thai and Persian 
+  dates.  Persian dates use a well-known arithmetic algorithm 
+  for calculating leap years.  Also created tool to help diagnose 
+  date settings.  
+- Made change to help word processing programs correctly 
+  display accents in html report files.
+- Added Kurdish to the language dropdown list.  If you need 
+  help with the display of Kurdish fonts in Martus, please 
+  contact help@martus.org .
+- Initial implementation of data import tool to allow 
+  conversion of electronic text files (in .csv or .xml format) 
+  to Martus bulletin format.  This initial version does not 
+  handle import of customized grids or attachments, but will 
+  handle all other field types.  For instructions/help on 
+  running this utility, please contact help@martus.org .
+- Numerous minor bug fixes, clarifications and clean-ups to 
+  the user screens.
+
+
+Version 2.8.1             2005-11
+
+- Fixed a problem introduced in version 2.8 where dates and 
+  date ranges with values earlier than January 1st 1970 were 
+  displayed, and could be stored, incorrectly.
+- Incorporated Thai and Russian 2.8 software user interface 
+  translations
+
+
+Version 2.8.0             2005-09
+
+- Added ability to create grid columns of different types 
+  (drop-down lists, checkboxes, dates, and date ranges)
+- Advanced search capability now allows users to specify 
+  particular fields in which to search (including custom fields), 
+  in addition to searching the entire text of bulletins.  Searches 
+  can combine searches in different fields using and/or options.
+- Enhanced printing functionality to be able to print multiple 
+  selected bulletins at once
+- Added ability to save selected bulletin(s) to a html text file, 
+  with option to include or exclude private data
+- Created a new "Organize Folders" menu option to allow users to 
+  put folders in any order
+- Added warnings to users if the translation they are running is 
+  not the same version as the software, and display the date of 
+  any language packs in the About box
+- Bring up Martus logo as soon as program is started so users know 
+  that it is loading 
+- Updated encryption libraries to use Bouncy Castle Java 
+  Cryptography Extension
+- Additional improvements to display and printing of right-to-left 
+  languages
+- Incorporated system fonts for menu display of certain languages 
+  (e.g. Nepali)
+- Changed bulletin behavior so that modifications to drafts pick 
+  up newly configured Headquarter and customization settings
+- As of the 2.4 Martus Server release, added ability for Martus 
+  Client users to receive news from a Martus backup server when 
+  they connect (e.g. messages about new versions available for 
+  download, or server maintenance downtime)
+- Modified method of verification for downloaded files from MD5 
+  to SHA1
+- Updated English user documentation (Quick Start and User Guides) 
+- Numerous minor bug fixes, clarifications and clean-ups to the 
+  user screens.
+
+
+Version 2.7.2             2005-08
+
+- Removed incomplete/inaccurate Nepali 2.0.1 software user 
+  interface translation, and placed an updated Nepali language 
+  pack on https://www.martus.org/downloads.   This language pack 
+  includes Nepali translations of the software user interface 
+  (usable for versions 2.5 and later, with 90% of the strings 
+  translated into Nepali), in-program help (version 2.0.1), 
+  Quick Start Guide (version 2.0.1), User Guide (version 2.0.1), 
+  and README file (partially translated up to version 2.6).  
+
+In Windows, to run Martus in Nepali for version 2.7.2 and earlier 
+so that all the menus will show up correctly, you must make a minor 
+modification to the command used to start Martus (from the command 
+prompt, and in any desktop/Start Menu shortcuts or aliases that were 
+created when you installed).  
+
+To run from the command line, go to your Martus directory and type:
+C:\Martus\bin\javaw.exe -Dswing.useSystemFontSettings=false -jar C:\Martus\Martus.jar 
+
+To change your shortcuts, right-click on them, choose Properties, 
+and change the Target command to:
+C:\Martus\bin\javaw.exe -Dswing.useSystemFontSettings=false -jar C:\Martus\Martus.jar 
+
+
+Version 2.7.0             2005-04
+
+This release is only available in English and Persian.  
+Other languages will be available in the future, as language-packs 
+on the documentation page (https://www.martus.org/downloads)
+
+- Added ability to create single custom field "drop-down" 
+  lists (not within a grid)
+- Added ability to create custom field "messages" to give 
+  guidance on how to enter data, and to create comments/notes 
+  that will be displayed in every bulletin (e.g. on-screen help)
+- Added ability for a Headquarters account to export customization 
+  templates to give to field users, or users to export their own 
+  templates.  Users can then import customization settings from a 
+  choice of templates.
+- Each configured Headquarters account can now be enabled or disabled 
+  for each bulletin that is created or modified.  Users can also 
+  designate certain Headquarters accounts to be assigned to all 
+  newly created bulletins by default.
+- Searches now scan previous versions of each bulletin in addition 
+  to the latest version 
+- Additional improvements to display of right-to-left languages
+- Persian translation of user interface included
+- Export to XML now includes custom field type 
+
+
+Version 2.6.0             2005-02
+
+- Users can now search and view the full contents of all 
+  versions of sealed bulletins stored on their computer, by 
+  clicking on the Bulletin Details button.  
+- Added ability to choose whether to retrieve all versions or 
+  only the most recent version of a sealed bulletin from the 
+  server.  Users with small disk drives or slow internet 
+  connections may choose to only retrieve the most recent 
+  version for large bulletins. 
+- Attachment filenames are now included in searches. 
+- Changed XML export functionality to further support custom 
+  fields and sealed bulletin versions.
+- Enhancements to display of Right-to-Left languages (e.g. Arabic)
+- Inclusion of Arabic User Guide and Quick Start Guide.
+- Several minor bug fixes, clarifications and clean-ups to the 
+  user screens.
+- There may be issues with the display of some screens when running 
+  Martus 2.6 in Arabic in a Mac OS.  
+
+
+Version 2.5.0             2004-11
+
+- Added ability to create new versions of sealed bulletins so 
+  that changes or additions can be made to previously sealed 
+  bulletins.  In this release of Martus you will only be able 
+  to search and view the full contents of the most current 
+  version (you will be able to view the title/bulletin-id/
+  saved-date of any previous versions that are stored on your 
+  computer, by clicking on the Bulletin Details button).  
+- Added ability to install new and updated translations at 
+  any time following a full Martus release.  A Language pack 
+  for each language (including English) can contain the Martus 
+  Client User Interface translation, the User Guide, QuickStart 
+  Guide, README file, and online help.  Language packs will be 
+  made available for download on the Martus website.
+- Several changes were made to increase speed when managing 
+  bulletins and folders (e.g. sorting, moving bulletins)
+- Enhancements to custom field functionality (e.g. grid column 
+  sizing)
+- Thai translation introduced 
+- Arabic translation introduced 
+- Changes made to appropriately display Right-to-Left languages 
+  (e.g. Arabic)
+- Several improvements to display of the Martus Client User 
+  Interface in Linux.
+- Fixed a problem when retrieving or importing bulletins with very
+  large attachments that could cause Martus to exit with an
+  "out of memory" error. Any attachment smaller than 20 megabytes
+  is unlikely to trigger this error.
+- Numerous minor bug fixes, clarifications and clean-ups to the 
+  user screens.
+- There may be issues with the display of some screens in the 
+  Martus 2.5 installation program when using the Nepali or Thai 
+  language.  Because it is difficult to test this on all versions 
+  of Windows in those languages, we would appreciate any feedback 
+  on display of those languages when installing Martus.
+
+
+Version 2.0.1             2004-08
+
+- Added a horizontal scroll-bar for custom field grids that are 
+  wider than the screen width.
+- French translation introduced
+- Russian and Spanish User documentation updated with 2.0 
+  functionality
+- Minor clarifications and clean-ups to the English User 
+  documentation
+- Installer changes to deal with upgrade issues in non-English 
+  Windows 98 and ME
+- Addition of multi-file (floppy) option on download site
+
+
+Version 2.0.0             2004-07
+
+- You can now have multiple Headquarter accounts, and there is 
+  an enhanced interface to set them up.  This is particularly 
+  useful if you want multiple people in your organization to 
+  review your bulletins. 
+- Headquarters accounts can now send bulletins to a server on 
+  behalf of a field desk that lacks internet access.
+- Custom Fields functionality has been extended so that you can 
+  now create custom fields of different types  (e.g. date, grid, 
+  Yes/No).  
+- We are using a new open source Windows installer (NSIS) which 
+  can be run in non-latin alphabets.  
+- A new "Saved Bulletins" folder replaces the Outbox, Sent 
+  Bulletins and Draft bulletins folders
+- Each bulletin list now displays a column showing whether or 
+  not the bulletin was successfully sent to server or not
+- The date a bulletin was last saved is now displayed in 
+  bulletin preview lists and in the bulletin header
+- When creating/modifying a bulletin, the "Send" button has 
+  been changed to "Save Sealed" 
+- The Martus 1.5 Quick Erase functionality has been replaced by 
+  two menu items:  "Delete My Data" which removes this account's 
+  bulletins and key pair; and "Delete All Data and Remove Martus" 
+  which uninstalls Martus and removes the entire Martus directory 
+  including other accounts' data  this is meant to only be used 
+  in emergency cases
+- Enhanced key backup functionality - you do not have to do a 
+  backup before you have created any bulletins, but are reminded 
+  to backup your key at a later point if you have not done so.
+- For bulletin searching, the user can use either English 'and' 
+  and 'or', or the translated equivalents.  This allows users who 
+  do not have access to native-language keyboard to still perform 
+  'and' and 'or' searches.
+- A new "Bulletin Details" button shows a unique bulletin-id and 
+  the Headquarters accounts that can view the private data in 
+  this bulletin
+- When printing, you now have option to hide or include private 
+  data 
+- Online help is now searchable 
+- You can set a flag to disallow public bulletins for security 
+  reasons
+- Improvements to folder renaming functionality
+- Numerous minor bug fixes, clarifications and clean-ups to the 
+  user interface.
+
+
+Version 1.5.0             2004-02
+
+- Multiple accounts can now be set up on a computer.  This 
+  changes the login screen in several ways:  You have a choice 
+  between signing in to an already setup account, creating a 
+  new account, or restoring from a key pair backup.  There will 
+  be a sub-directory for each account under the Martus directory.
+- The ability to select the language in which you want to run 
+  Martus is now available on the signin screen.
+- Improved key pair backup functionality, and the ability to back 
+  up into multiple "secret share" files to be distributed to friends.  
+- Extended Quick Erase functionality to allow removal of key pair, 
+  scrubbing of bulletin and key pair data before deletion, and the 
+  ability to complete the Quick Erase operation and exit Martus 
+  without user-interaction/prompting.
+- A new Tools Menu (for Quick Erase, key pair, and HeadQuarters 
+  actions)
+- Improved communication with Martus backup servers, and clearer 
+  messages to user about server status
+- Additional language options added to bulletin selection list
+- A bug was fixed that prevented previous versions of the Martus 
+  program from successfully retrieving bulletins from a backup 
+  server if the bulletins contained public information with 
+  non-English letters.  This bug did not affect the ability for 
+  bulletins to be securely backed up to a Martus server.  The 
+  problem would only be noticed if the bulletins were not present 
+  on your machine, and you tried to retrieve your own or your 
+  field office sealed bulletins containing non-English language 
+  public data (the message received in this case was "Errors 
+  occurred while retrieving bulletin summaries.  Some of the 
+  bulletins on the server will not be shown.")  The bug did not 
+  affect the retrieval of all-private or draft bulletins.  You 
+  must also be accessing a production Martus backup server, or 
+  upgrade your own server to run Martus Server Software version 
+  2.0 or later, to be able to retrieve bulletins with non-English 
+  language public data.
+- Update to Java version to 1.4.2_03
+- Numerous minor bug fixes, clarifications and clean-ups to the 
+  user interface.
+
+
+Version 1.2.1             2003-12
+
+- Russian version introduced, including special version of 
+  Russian install program.
+- English and Spanish User Guides updated with 1.2 functionality
+- LinuxJavaInstall.txt script created to simplify Java 
+  installation on GNU/Linux machines.
+
+
+Version 1.2.0             2003-09
+
+- You can now customize the fields of all subsequently created 
+  bulletins.  Customizing fields is currently only intended to 
+  be used by "advanced" users.  When you choose that menu option, 
+  you are warned about this, and told that if you don't know what 
+  you're doing, you should turn back or risk messing up your 
+  system.  When you do get there, you're provided with a list
+  of the existing standard field tags, separated by semi-colons.  
+  You can remove any of those, except for four "required" fields: 
+  entrydate, language, author, and title.  You can change the 
+  sequence.  You can also insert your own new custom fields.  
+  Each custom field must have a "tag", which is a string of 
+  lower-case ASCII letters, followed by a comma, followed by the 
+  prompt that will be shown on screen, which can contain mixed 
+  case letters and spaces.  If you try to save a custom field
+  definition string that violates any of the rules, you'll be 
+  told that it is invalid, but you currently are given no 
+  indication of which rule you have broken.
+- You now have the option of entering a date range (a time 
+  period between two dates), for the bulletin event date.
+- Russian UI added, with over 90% of the messages translated 
+  into Russian.
+- You can now specify an entire folder for export.
+- If the normal Martus ports are not available for 
+  communication with a backup server because of problems such 
+  as firewall configuration issues, the Martus program falls 
+  back to using ports 80/443.
+- The usability of the keypair backup process has been improved.
+- CD image and full download include a newer version of Java, 
+  v 1.4.1_03.
+- Numerous minor bug fixes, clarifications and clean-ups to the 
+  user interface, including more support for mouseless operation.
+
+
+Version 1.0.3             2003-05
+
+- Release Linux and Mac compatible Martus versions.
+- If you have installed a previous version of Martus software, 
+  you can download a smaller version of Martus software 
+  without having to download the full, larger file containing 
+  all of Java.
+- Bulletins may be exported from the program in an XML text 
+  format.
+- Check for compatible Java version during installation and 
+  startup.
+- Improve speed of manipulating bulletins with attachments.
+- Change to busy-cursor during time consuming operations.
+- You can now view attachments when running in Windows.
+- Changes to the GNU GPL compatible license agreement, relaxing 
+  user-notification requirements when borrowing code for uses 
+  unrelated to Martus software, and extending coverage to 
+  Martus server applications.
+- You are now able to receive messages from a Martus server, 
+  including a server compliance statement.
+- There's a new Welcome dialog that appears when you start 
+  the program, indicating whether this is an official version 
+  of the program.
+- Simplify Martus software installation when downloading the 
+  install program. The Jar verification program is now available 
+  as a separate download.
+- A new Quick Erase feature will delete all local copies of 
+  bulletins from your hard drive.
+- Fixed a bug where a bulletin could become corrupted if you 
+  retrieved it from a server and then modified a copy of it by 
+  adding a new attachment.
+- Updated some Spanish translation strings.
+- Fixed a problem with the window needing the current focus 
+  when the user times out.
+- Force the signin dialog to be the top window, and add it to 
+  the task bar.
+- Hide main window during editing.
+- Include an updated crypto library, and a new version of Java, 
+  v 1.4.1_02, that supports entry of foreign characters using 
+  the numeric keypad and fixes a memory leak that gradually 
+  depletes available memory.
+- Add standard Windows hot keys in obvious places, such as del, 
+  and control- C, X, V, and A.
+
+
+Version 1.0.2             2003-02
+
+- When you choose to modify a sealed bulletin it makes a copy 
+  of the bulletin, but if the original had attachments, the 
+  system could become confused and end up damaging the copy, 
+  the original, or both. This has been fixed.
+- Allow CD distribution of default contents that can pre-
+  populate the Details field of every bulletin.  If 
+  DefaultDetails.txt is on the CD it will be copied to the 
+  Martus directory upon installation.  Then, if 
+  DefaultDetails.txt is found in the Martus directory when 
+  a new account is created, it will give the user the 
+  opportunity to use this as their default Details contents 
+  for any bulletins they create.
+- Reorganize code and internal package structure for easier
+  maintainability.
+
+
+Version 1.0.1             2003-01
+
+- Ask during program installation if the user wants the Martus
+  program, the Martus uninstall, and the documentation files 
+  added to the Windows Start menu.
+- Update from Java Runtime Environment version 1.4.1 to 
+  version 1.4.1_01, gaining minor Java security improvements.
+- Make sure all required third party sources, third party 
+  runtime licenses, documentation files, and Winsock programs 
+  for Windows 95, are copied to the hard drive during 
+  installation.
+- Correct errors in the About Box and the documentation's 
+  copyright notice.
+
 
