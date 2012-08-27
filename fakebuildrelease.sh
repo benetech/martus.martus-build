@@ -3,4 +3,4 @@ export INPUT_BUILD_NUMBER=TEST
 export BUILD_NUMBER=NNN
 
 cd /home/kevins/temp/martus/
-sh martus/buildrelease.sh
+sh martus-build/buildrelease.sh
