@@ -24,8 +24,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	#TODO: Failing test
 	test.exclude 'org.martus.common.test.TestMartusSecurity'
 
-  task 'insert_build_version' do
-    version_file = _('martus-common', 'source', 'org', 'martus', 'common', 'VersionBuildDate.java')
+  version_file = _('martus-common', 'source', 'org', 'martus', 'common', 'VersionBuildDate.java')
+  file (version_file) do
     date = Time.now.strftime('%F')  # %F is ISO date YYYY-MM-DD
     contents = File.read(version_file)
     contents.gsub!('#{BUILDDATE}', "#{date}.#{$BUILD_NUMBER}")
@@ -34,7 +34,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     end
   end
   
-	build ('insert_build_version') 
+	build ( version_file ) 
 	package :jar
 
 	# NOTE: Old build script signed this jar
