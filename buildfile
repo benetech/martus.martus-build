@@ -38,7 +38,6 @@ require"#{main_dir}/buildfile-martus-client-mac-dmg"
 #TODO: Need to set up proper dependency chains
 #TODO: Need to eliminate optional files from Java 6 runtime
 #TODO: Need to make sure all built artifacts are archived
-#TODO: Need to use build numbers (from Hudson) [DONE??]
 #TODO: Should create a server tarball that contains source code and licenses
 
 #NOTE: Old script created amplifier tarball (build.xml#release) but
