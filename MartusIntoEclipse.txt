@@ -3,7 +3,12 @@ HOWTO Import Martus Client Source Code into Eclipse
 In the document to follow MartusClient-X.X with:
 MartusClient-3.0
 
-NOTE: This document is still rough, and there is room for improvement. 
+NOTE: This document is outdated, and needs to be updated to describe 
+how to download the Martus source code from the Mercurial source code 
+repository (currently on Google Code), into eclipse.
+
+
+ 
 It is written from a GNU/Linux perspective, so if you are using MS Windows or 
 Mac OS X you will have to adjust accordingly. The basic process is the same on 
 all platforms.
