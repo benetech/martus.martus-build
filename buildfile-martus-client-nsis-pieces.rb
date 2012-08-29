@@ -51,6 +51,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     
     puts "Copying #{original_merger_file} to #{renamed_merger_file}"
     FileUtils.cp original_merger_file, renamed_merger_file
+    create_sha_files(renamed_merger_file)
   end
 
   package(:zip, :file=>zip_file).tap do | p | 
