@@ -316,6 +316,8 @@ end
 task nil do
 end
 
+task :always
+
 define 'martus-build' do
 	build do
 		create_combined_license
