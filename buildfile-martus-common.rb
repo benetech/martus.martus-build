@@ -25,13 +25,16 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude 'org.martus.common.test.TestMartusSecurity'
 
   version_file = _('martus-common', 'source', 'org', 'martus', 'common', 'VersionBuildDate.java')
-  file (version_file) do
+  file (version_file) => :always do
     date = Time.now.strftime('%F')  # %F is ISO date YYYY-MM-DD
+    build_date = "#{date}.#{$BUILD_NUMBER}"
+
     contents = File.read(version_file)
-    contents.gsub!('#{BUILDDATE}', "#{date}.#{$BUILD_NUMBER}")
+    contents.gsub!('#{BUILDDATE}', build_date)
     File.open(version_file, "w") do | f |
       f.write contents
     end
+    puts "BuildDate set to: #{build_date}"
   end
   
 	build ( version_file ) 
