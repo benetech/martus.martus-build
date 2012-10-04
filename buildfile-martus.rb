@@ -241,6 +241,10 @@ def create_sha(filepath, digester, extension)
 	end
 end
 
+def today_as_iso_date
+  return Time.now.strftime('%F')  # %F is ISO date YYYY-MM-DD
+end
+
 def third_party_client_jars
 	jars = []
 	jars << artifact(RHINO_SPEC)
