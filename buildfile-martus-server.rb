@@ -3,7 +3,7 @@ name = "martus-server"
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
   project.version = $BUILD_NUMBER
-  jarpath = package(:jar).to_s
+  jarpath = _(:target, "martus-server-#{today_as_iso_date}-#{project.version}.jar")
 
 	compile.options.target = '1.5'
 	compile.with(
@@ -20,7 +20,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		XMLRPC_SPEC
 	)
 
-  package(:jar).tap do | p |
+  package(:jar, :file => jarpath).tap do | p |
     puts "Packaging server #{p.to_s}"
     p.with :manifest=>manifest.merge('Main-Class'=>'org.martus.server.main.MartusServer')
 

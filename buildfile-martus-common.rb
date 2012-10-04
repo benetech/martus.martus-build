@@ -26,7 +26,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
   version_file = _('martus-common', 'source', 'org', 'martus', 'common', 'VersionBuildDate.java')
   file (version_file) => :always do
-    date = Time.now.strftime('%F')  # %F is ISO date YYYY-MM-DD
+    date = today_as_iso_date
     build_date = "#{date}.#{$BUILD_NUMBER}"
 
     contents = File.read(version_file)
