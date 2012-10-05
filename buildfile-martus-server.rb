@@ -3,7 +3,8 @@ name = "martus-server"
 define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
   project.version = $BUILD_NUMBER
-  jarpath = _(:target, "martus-server-#{today_as_iso_date}-Build#{project.version}.jar")
+  date = today_as_iso_date.gsub(/-/, '')
+  jarpath = _(:target, "martus-server-#{date}-#{project.version}.jar")
 
 	compile.options.target = '1.5'
 	compile.with(
