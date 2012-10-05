@@ -47,13 +47,11 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(BCJCE_SPEC), :as=>'ThirdPartyJars/bc-jce.jar')
   end
   
-  sha1path = "#{jarpath}.sha1"
-  task 'sha1' => jarpath do
-    create_sha1(jarpath)
+  task 'sha1' => package(:jar) do
+    create_server_sha1(jarpath)
   end
 
-  sha2path = "#{jarpath}.sha2"
-  task 'sha2' => jarpath do
+  task 'sha2' => package(:jar) do
     create_sha2(jarpath)
   end
   

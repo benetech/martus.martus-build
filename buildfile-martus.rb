@@ -219,6 +219,10 @@ def create_sha1(filepath)
   create_sha(filepath, 'sha1sum', '.sha1')
 end
 
+def create_server_sha1(filepath)
+  create_sha(filepath, 'sha1sum', '.sha')
+end
+
 def create_sha2(filepath)
   create_sha(filepath, 'sha256sum', '.sha2')
 end
