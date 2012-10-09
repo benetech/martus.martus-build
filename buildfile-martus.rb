@@ -236,12 +236,12 @@ def create_sha(filepath, digester, extension)
   
   cmd = "#{digester} #{base} > #{full_sha_path}"
   puts cmd
-	`#{cmd}`
+	output = `#{cmd} 2>&1`
 	result = $?
   Dir::chdir working_dir
 
   if result != 0
-		raise "Error generating #{extension} of #{filepath}"
+		raise "Error generating #{extension} of #{filepath}\n#{output}"
 	end
 	
 	return full_sha_path
