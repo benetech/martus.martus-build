@@ -51,13 +51,13 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   task 'sha1' => package(:jar) do
     sha = create_server_sha1(jarpath)
     sha_dest_dir = get_sha_dest_dir
-    FileUtils.cp(sha, File.join(sha_dest_dir))
+    FileUtils::cp(sha, File.join(sha_dest_dir, File::basename(sha)))
   end
 
   task 'sha2' => package(:jar) do
     sha = create_sha2(jarpath)
     sha_dest_dir = get_sha_dest_dir
-    FileUtils.cp(sha, File.join(sha_dest_dir))
+    FileUtils::cp(sha, File.join(sha_dest_dir, File::basename(sha)))
   end
   
   def get_sha_dest_dir
