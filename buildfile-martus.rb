@@ -216,25 +216,25 @@ def create_sha_files(filepath)
 end
 
 def create_sha1(filepath)
-  create_sha(filepath, 'sha1sum', '.sha1')
+  return create_sha(filepath, 'sha1sum', '.sha1')
 end
 
 def create_server_sha1(filepath)
-  create_sha(filepath, 'sha1sum', '.sha')
+  return create_sha(filepath, 'sha1sum', '.sha')
 end
 
 def create_sha2(filepath)
-  create_sha(filepath, 'sha256sum', '.sha2')
+  return create_sha(filepath, 'sha256sum', '.sha2')
 end
 
 def create_sha(filepath, digester, extension)
+  full_sha_path = "#{filepath}#{extension}"
   dir = File::dirname filepath
   base = File::basename filepath
-  sha_file = "#{base}#{extension}"
   working_dir = Dir::getwd
   Dir::chdir dir
   
-  cmd = "#{digester} #{base} > #{sha_file}"
+  cmd = "#{digester} #{base} > #{full_sha_path}"
   puts cmd
 	`#{cmd}`
 	result = $?
@@ -243,6 +243,8 @@ def create_sha(filepath, digester, extension)
   if result != 0
 		raise "Error generating #{extension} of #{filepath}"
 	end
+	
+	return full_sha_path
 end
 
 def today_as_iso_date

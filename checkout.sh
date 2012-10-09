@@ -15,3 +15,4 @@ hg clone ssh://mvcs/martus/martus-server
 hg clone ssh://mvcs/martus/martus-swing
 hg clone ssh://mvcs/martus/martus-thirdparty
 hg clone ssh://mvcs/martus/martus-utils
+hg clone ssh://mvcs/martus-sha
