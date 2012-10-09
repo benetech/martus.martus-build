@@ -76,21 +76,21 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   task 'push-sha-files' => ['sha1', 'sha2'] do
     cmd = "hg -R #{sha_root_dir} add ."
     puts cmd
-    result = `#{cmd}`
+    result = `#{cmd} 2>&1`
     if $? != 0
       raise "Error adding new sha files to hg: #{cmd}\n#{result}"
     end
 
     cmd = "hg -R #{sha_root_dir} commit -m'New sha files from build #{project.version}'"
     puts cmd
-    result = `#{cmd}`
+    result = `#{cmd} 2>&1`
     if $? != 0
       raise "Error committing new sha files to hg: #{cmd}\n#{result}"
     end
 
     cmd = "hg -R #{sha_root_dir} push"
     puts cmd
-    result = `#{cmd}`
+    result = `#{cmd} 2>&1`
     if $? != 0
       raise "Error pushing new sha files to hg: #{cmd}\n#{result}"
     end
