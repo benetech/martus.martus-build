@@ -49,14 +49,58 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   end
   
   task 'sha1' => package(:jar) do
-    create_server_sha1(jarpath)
+    sha = create_server_sha1(jarpath)
+    sha_dest_dir = get_sha_dest_dir
+    FileUtils.cp(sha, File.join(sha_dest_dir))
   end
 
   task 'sha2' => package(:jar) do
-    create_sha2(jarpath)
+    sha = create_sha2(jarpath)
+    sha_dest_dir = get_sha_dest_dir
+    FileUtils.cp(sha, File.join(sha_dest_dir))
   end
   
-  task 'everything' => [package(:jar), 'sha1', 'sha2']
+  def get_sha_dest_dir
+    now = today_as_iso_date
+    year = now[0,4]
+    month = now[5,2]
+    day = now[8,2]
+    year_dir = File.join(sha_root_dir, year)
+    month_dir = File.join(year_dir, month)
+    day_dir = File.join(month_dir, day)
+    puts "Creating sha dir: #{day_dir}"
+    FileUtils.mkdir_p(day_dir)
+    return day_dir
+  end
+  
+  task 'push-sha-files' => ['sha1', 'sha2'] do
+    cmd = "hg -R #{sha_root_dir} add ."
+    puts cmd
+    `#{cmd}`
+    if $? != 0
+      raise "Error adding new sha files to hg: #{cmd}"
+    end
+
+    cmd = "hg -R #{sha_root_dir} commit -m'New sha files from build #{project.version}'"
+    puts cmd
+    `#{cmd}`
+    if $? != 0
+      raise "Error committing new sha files to hg: #{cmd}"
+    end
+
+    cmd = "hg -R #{sha_root_dir} push"
+    puts cmd
+    `#{cmd}`
+    if $? != 0
+      raise "Error pushing new sha files to hg: #{cmd}"
+    end
+  end
+  
+  def sha_root_dir 
+    return File.join(ENV['WORKSPACE'], 'martus-sha')
+  end
+
+  task 'everything' => [package(:jar), 'push-sha-files']
   
 	# NOTE: Old build script signed this jar
 end
