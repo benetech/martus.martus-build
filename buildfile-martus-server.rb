@@ -74,7 +74,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   end
   
   task 'push-sha-files' => ['sha1', 'sha2'] do
-    cmd = "echo hg -R #{sha_root_dir} -S add ."
+    cmd = "hg -R #{sha_root_dir} -S add ."
     puts cmd
     result = `#{cmd} 2>&1`
     if $? != 0
