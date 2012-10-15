@@ -87,7 +87,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
     p.include(artifact(BCJCE_SPEC), :as=>'ThirdParty/bc-jce.jar')
     p.include(artifact(PERSIANCALENDAR_SPEC), :path=>'ThirdParty')
-    p.include(artifact(VELOCITY_SPEC), :path=>'ThirdParty')
     p.include(artifact(VELOCITY_DEP_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
     p.include(artifact(ICU4J_SPEC), :path=>'ThirdParty')

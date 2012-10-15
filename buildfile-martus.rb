@@ -259,7 +259,6 @@ def third_party_client_jars
 	jars << artifact(JUNIT_SPEC)
 	jars << artifact(ICU4J_SPEC)
 	jars << artifact(PERSIANCALENDAR_SPEC)
-	jars << artifact(VELOCITY_SPEC)
 	jars << artifact(VELOCITY_DEP_SPEC)
 	jars << artifact(XMLRPC_SPEC)
 	# NOTE: JOrtho is being included in martus.jar, so exclude it here,
