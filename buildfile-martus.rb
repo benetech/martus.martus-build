@@ -53,7 +53,7 @@ def build_persiancalendar_spec(type)
 end
 
 def build_bcprov_spec(type)
-	return build_spec('bouncycastle', 'bcprov-jdk14', type, '135')
+	return build_spec('bouncycastle', 'bcprov-jdk15on', type, '147')
 end
 
 def build_bcjce_spec(type)
@@ -249,6 +249,10 @@ end
 
 def today_as_iso_date
   return Time.now.strftime('%F')  # %F is ISO date YYYY-MM-DD
+end
+
+def today_without_dashes
+  return today_as_iso_date.gsub(/-/, '')
 end
 
 def third_party_client_jars
