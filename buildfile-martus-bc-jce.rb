@@ -4,7 +4,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
   project.version = $BUILD_NUMBER
   date = today_without_dashes
-  jarpath = _(:target, "martus-bc-jce-#{date}.#{project.version}.jar")
+  jarpath = _(:target, "bc-jce-#{date}.#{project.version}.jar")
 	
 	compile.options.target = '1.5'
 	compile.with(
