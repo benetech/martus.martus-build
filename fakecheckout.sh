@@ -1,6 +1,7 @@
 rsync -rp /home/kevins/work/hg/martus/martus/martus-build /home/kevins/temp/martus/
 
 rsync -rp /home/kevins/work/hg/martus/martus/martus-amplifier /home/kevins/temp/martus/
+rsync -rp /home/kevins/work/hg/martus/martus/martus-bc-jce /home/kevins/temp/martus/
 rsync -rp /home/kevins/work/hg/martus/martus/martus-client /home/kevins/temp/martus/
 rsync -rp /home/kevins/work/hg/martus/martus/martus-clientside /home/kevins/temp/martus/
 rsync -rp /home/kevins/work/hg/martus/martus/martus-common /home/kevins/temp/martus/
