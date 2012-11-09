@@ -29,7 +29,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(BCPROV_SOURCE_SPEC).from(source_file(name, 'libext/BouncyCastle', 'bcprov-jdk15on-147.zip'))
 	install artifact(BCPROV_LICENSE_SPEC).from(license_file(name, 'libext/BouncyCastle', 'LICENSE.html'))
 	install artifact(JUNIT_SOURCE_SPEC).from(source_file(name, 'libext/JUnit', 'junit3.8.1.zip'))
-  install artifact(BCJCE_SPEC).from(jar_file(name, 'libext/bc-jce', 'bc-jce-2012-01-05.jar'))
+  install artifact(BCJCE_SPEC).from(jar_file(name, 'libext/bc-jce', 'bc-jce-2012-11-08.jar'))
   install artifact(BCJCE_LICENSE_SPEC).from(license_file(name, 'libext/bc-jce', 'LICENSE.html'))
 
 	#common
