@@ -24,6 +24,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   
 	# TODO: Old build script signed this jar
 
-	package (:sources, :file => jarpath)
+	package :sources, :file => jarpath
 	
 end
