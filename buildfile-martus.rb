@@ -16,6 +16,14 @@ def build_junit_spec(type)
 	return build_spec('junit', 'junit', type, '3.8.2')
 end
 
+def build_commons_logging_spec(type)
+	return build_spec('commons-logging', 'commons-logging', type, '1.1')
+end
+
+def build_ws_commons_util_spec(type)
+	return build_spec('ws-commons-util', 'ws-commons-util', type, '1.0.2')
+end
+
 def build_xmlrpc_spec(name, type)
 	return build_spec('xmlrpc', name, type, '3.1.3')
 end
@@ -110,8 +118,8 @@ VELOCITY_DEP_LICENSE_SPEC = build_velocity_dep_spec('license')
 XMLRPC_COMMON_SPEC = build_xmlrpc_spec('xmlrpc-common', 'jar')
 XMLRPC_CLIENT_SPEC = build_xmlrpc_spec('xmlrpc-client', 'jar')
 XMLRPC_SERVER_SPEC = build_xmlrpc_spec('xmlrpc-server', 'jar')
-XMLRPC_COMMONS_LOGGING_SPEC = build_xmlrpc_spec('commons-logging', 'jar')
-XMLRPC_WS_COMMONS_UTIL_SPEC = build_xmlrpc_spec('ws-commons-util', 'jar')
+XMLRPC_COMMONS_LOGGING_SPEC = build_xmlrpc_commons_logging_spec('jar')
+XMLRPC_WS_COMMONS_UTIL_SPEC = build_xmlrpc_ws_commons_utilspec('jar')
 XMLRPC_SOURCE_SPEC = build_xmlrpc_spec('apache-xmlrpc', 'sources')
 XMLRPC_LICENSE_SPEC = build_xmlrpc_spec('LICENSE.txt', 'license')
 ICU4J_SPEC = build_icu4j_spec('jar')
