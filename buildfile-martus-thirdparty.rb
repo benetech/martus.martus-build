@@ -43,7 +43,12 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(VELOCITY_DEP_LICENSE_SPEC).from(license_file(name, 'common/Velocity', 'LICENSE.txt'))
 # TODO: Find velocity-dep source code
 #	install artifact(VELOCITY_DEP_SOURCE_SPEC).from(source_file(name, 'common/Velocity', ''))
-	install artifact(XMLRPC_SOURCE_SPEC).from(source_file(name, 'common/XMLRPC', 'xmlrpc-1.2-b1-src.zip'))
+	install artifact(XMLRPC_COMMON_SPEC).from(jar_file(name, 'common/XMLRPC', 'xmlrpc-common-3.1.3.jar'))
+	install artifact(XMLRPC_SERVER_SPEC).from(jar_file(name, 'common/XMLRPC', 'xmlrpc-server-3.1.3.jar'))
+	install artifact(XMLRPC_CLIENT_SPEC).from(jar_file(name, 'common/XMLRPC', 'xmlrpc-client-3.1.3.jar'))
+	install artifact(XMLRPC_COMMONS_LOGGING_SPEC).from(jar_file(name, 'common/XMLRPC', 'commons-logging-1.1.jar'))
+	install artifact(XMLRPC_WS_COMMONS_UTIL_SPEC).from(jar_file(name, 'common/XMLRPC', 'ws-commons-util-1.0.2.jar'))
+	install artifact(XMLRPC_SOURCE_SPEC).from(source_file(name, 'common/XMLRPC', 'apache-xmlrpc-3.1.3-src.zip'))
 	install artifact(XMLRPC_LICENSE_SPEC).from(license_file(name, 'common/XMLRPC', 'LICENSE.txt'))
 # TODO: Find ICU4J source code
 #	install artifact(ICU4J_SOURCE_SPEC).from(source_file(name, 'common/PersianCalendar', 'icu4j_3_2_license.html'))
