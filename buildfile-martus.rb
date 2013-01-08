@@ -16,16 +16,8 @@ def build_junit_spec(type)
 	return build_spec('junit', 'junit', type, '3.8.2')
 end
 
-def build_xmlrpc_client_spec(type)
-	return build_spec('xmlrpc', 'xmlrpc-client', type, '3.1.3')
-end
-
-def build_xmlrpc_server_spec(type)
-	return build_spec('xmlrpc', 'xmlrpc-server', type, '3.1.3')
-end
-
-def build_xmlrpc_common_spec(type)
-	return build_spec('xmlrpc', 'xmlrpc-common', type, '3.1.3')
+def build_xmlrpc_spec(name, type)
+	return build_spec('xmlrpc', name, type, '3.1.3')
 end
 
 def build_icu4j_spec(type)
@@ -115,9 +107,11 @@ VELOCITY_LICENSE_SPEC = build_velocity_spec('license')
 VELOCITY_DEP_SPEC = build_velocity_dep_spec('jar')
 VELOCITY_DEP_SOURCE_SPEC = build_velocity_dep_spec('sources')
 VELOCITY_DEP_LICENSE_SPEC = build_velocity_dep_spec('license')
-XMLRPC_COMMON_SPEC = build_xmlrpc_common_spec('jar')
-XMLRPC_CLIENT_SPEC = build_xmlrpc_client_spec('jar')
-XMLRPC_SERVER_SPEC = build_xmlrpc_server_spec('jar')
+XMLRPC_COMMON_SPEC = build_xmlrpc_spec('xmlrpc-common', 'jar')
+XMLRPC_CLIENT_SPEC = build_xmlrpc_spec('xmlrpc-client', 'jar')
+XMLRPC_SERVER_SPEC = build_xmlrpc_spec('xmlrpc-server', 'jar')
+XMLRPC_COMMONS_LOGGING_SPEC = build_xmlrpc_spec('commons-logging', 'jar')
+XMLRPC_WS_COMMONS_UTIL_SPEC = build_xmlrpc_spec('ws-commons-util', 'jar')
 XMLRPC_SOURCE_SPEC = build_xmlrpc_spec('sources')
 XMLRPC_LICENSE_SPEC = build_xmlrpc_spec('license')
 ICU4J_SPEC = build_icu4j_spec('jar')
@@ -274,6 +268,8 @@ def third_party_client_jars
 	jars << artifact(ICU4J_SPEC)
 	jars << artifact(PERSIANCALENDAR_SPEC)
 	jars << artifact(VELOCITY_DEP_SPEC)
+	jars << artifact(XMLRPC_COMMONS_LOGGING_SPEC)
+	jars << artifact(XMLRPC_WS_COMMONS_UTIL_SPEC)
 	jars << artifact(XMLRPC_COMMON_SPEC)
 	jars << artifact(XMLRPC_CLIENT_SPEC)
 	# NOTE: JOrtho is being included in martus.jar, so exclude it here,
