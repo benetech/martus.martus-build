@@ -6,7 +6,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	zip_name = _("#{name}/target/MartusMSPA.zip")
 	zip(zip_name)
-	zip(zip_name).include(artifact(XMLRPC_SPEC))
+	zip(zip_name).include(artifact(XMLRPC_COMMON_SPEC))
+	zip(zip_name).include(artifact(XMLRPC_CLIENT_SPEC))
 	zip(zip_name).include(artifact(PERSIANCALENDAR_SPEC))
 	zip(zip_name).include(artifact(ICU4J_SPEC))
 	zip(zip_name).include(artifact(BCPROV_SPEC))

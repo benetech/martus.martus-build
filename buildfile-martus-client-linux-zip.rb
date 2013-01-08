@@ -39,7 +39,8 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     p.include(artifact(BCJCE_SPEC), :as=>'ThirdParty/bc-jce.jar');
     p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
-    p.include(artifact(XMLRPC_SPEC), :path=>'ThirdParty')
+    p.include(artifact(XMLRPC_CLIENT_SPEC), :path=>'ThirdParty')
+    p.include(artifact(XMLRPC_COMMON_SPEC), :path=>'ThirdParty')
     p.include(third_party_client_jars, :path=>'ThirdParty')
     include_artifacts_in_zip(p, third_party_client_source, "SourceFiles", "zip")
     include_artifacts_in_zip(p, third_party_client_licenses, "ThirdParty/Licenses", "txt")

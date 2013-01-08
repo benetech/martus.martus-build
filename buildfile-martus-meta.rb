@@ -34,7 +34,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.with(
 		ICU4J_SPEC,
 		BCPROV_SPEC,
-		XMLRPC_SPEC,
+		XMLRPC_COMMON_SPEC,
+		XMLRPC_SERVER_SPEC,
+		XMLRPC_CLIENT_SPEC,
 		JETTY_SPEC,
 		VELOCITY_DEP_SPEC
 	)
