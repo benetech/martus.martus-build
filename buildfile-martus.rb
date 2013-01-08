@@ -16,11 +16,11 @@ def build_junit_spec(type)
 	return build_spec('junit', 'junit', type, '3.8.2')
 end
 
-def build_commons_logging_spec(type)
+def build_xmlrpc_commons_logging_spec(type)
 	return build_spec('commons-logging', 'commons-logging', type, '1.1')
 end
 
-def build_ws_commons_util_spec(type)
+def build_xmlrpc_ws_commons_util_spec(type)
 	return build_spec('ws-commons-util', 'ws-commons-util', type, '1.0.2')
 end
 
