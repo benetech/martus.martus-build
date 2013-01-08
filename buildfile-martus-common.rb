@@ -7,7 +7,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	compile.options.target = '1.5'
 	compile.with(
 		JUNIT_SPEC,
-		XMLRPC_SPEC,
+		XMLRPC_COMMON_SPEC,
+		XMLRPC_SERVER_SPEC,
+		XMLRPC_CLIENT_SPEC,
 		ICU4J_SPEC,
 		PERSIANCALENDAR_SPEC,
 		BCPROV_SPEC,

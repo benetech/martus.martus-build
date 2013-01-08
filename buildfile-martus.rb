@@ -16,8 +16,16 @@ def build_junit_spec(type)
 	return build_spec('junit', 'junit', type, '3.8.2')
 end
 
-def build_xmlrpc_spec(type)
-	return build_spec('xmlrpc', 'xmlrpc', type, '1.2-b1')
+def build_xmlrpc_client_spec(type)
+	return build_spec('xmlrpc', 'xmlrpc-client', type, '3.1.3')
+end
+
+def build_xmlrpc_server_spec(type)
+	return build_spec('xmlrpc', 'xmlrpc-server', type, '3.1.3')
+end
+
+def build_xmlrpc_common_spec(type)
+	return build_spec('xmlrpc', 'xmlrpc-common', type, '3.1.3')
 end
 
 def build_icu4j_spec(type)
