@@ -12,13 +12,15 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-utils').packages.first,
 		project('martus-common').packages.first,
 		project('martus-amplifier').packages.first
+		XMLRPC_COMMON_SPEC,
+		XMLRPC_CLIENT_SPEC,
+		XMLRPC_SERVER_SPEC
 	)
 
 	test.with(
 		BCPROV_SPEC,
 		JETTY_SPEC,
-		ICU4J_SPEC,
-		XMLRPC_SPEC
+		ICU4J_SPEC
 	)
 
   package(:jar, :file => jarpath).tap do | p |
