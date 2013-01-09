@@ -64,8 +64,9 @@ def build_bcprov_spec(type)
 	return build_spec('bouncycastle', 'bcprov-jdk15on', type, '147')
 end
 
+BC_JCE_DATE = '2012-11-08'
 def build_bcjce_spec(type)
-  return build_spec('org.martus', 'bc-jce', type, '2012-01-05')
+  return build_spec('org.martus', 'bc-jce', type, BC_JCE_DATE)
 end
 
 def build_mail_spec(type)
@@ -92,23 +93,25 @@ def build_jcommon_spec(type)
   return build_spec('org.jfree', 'jcommon', type, '1.0.17')
 end
 
-# LibExt, not in public repository
+# LibExt, from public repository
 BCPROV_SPEC = build_bcprov_spec('jar')
 BCPROV_SOURCE_SPEC = build_bcprov_spec('sources')
 BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
 JUNIT_SOURCE_SPEC = build_junit_spec('sources')
 JUNIT_LICENSE_SPEC = build_junit_spec('license')
+
+# LibExt, not in public repository
 BCJCE_SPEC = build_bcjce_spec('jar')
 BCJCE_LICENSE_SPEC = build_bcjce_spec('license')
 
 # Common, not in public repository
-PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
-PERSIANCALENDAR_SOURCE_SPEC = build_persiancalendar_spec('sources')
-PERSIANCALENDAR_LICENSE_SPEC = build_persiancalendar_spec('license')
 LOGI_LICENSE_SPEC = build_logi_spec('license')
 
 # Common, from public repository
+PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
+PERSIANCALENDAR_SOURCE_SPEC = build_persiancalendar_spec('sources')
+PERSIANCALENDAR_LICENSE_SPEC = build_persiancalendar_spec('license')
 VELOCITY_SPEC = build_velocity_spec('jar')
 VELOCITY_SOURCE_SPEC = build_velocity_spec('sources')
 VELOCITY_LICENSE_SPEC = build_velocity_spec('license')
@@ -126,7 +129,7 @@ ICU4J_SPEC = build_icu4j_spec('jar')
 ICU4J_SOURCE_SPEC = build_icu4j_spec('sources')
 ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
 
-# Client
+# Client, from public repository
 JORTHO_SPEC = build_jortho_spec('jar')
 JORTHO_SOURCE_SPEC = build_jortho_spec('sources')
 JORTHO_LICENSE_SPEC = build_jortho_spec('license')
@@ -138,8 +141,6 @@ JFREECHART_LICENSE_SPEC = build_jfreechart_spec('license')
 JCOMMON_SPEC = build_jcommon_spec('jar')
 JCOMMON_SOURCE_SPEC = build_jcommon_spec('sources')
 JCOMMON_LICENSE_SPEC = build_jcommon_spec('license')
-
-# Client, not in public repository
 LAYOUTS_SPEC = build_layouts_spec('jar')
 LAYOUTS_SOURCE_SPEC = build_layouts_spec('sources')
 LAYOUTS_LICENSE_SPEC = build_layouts_spec('license')
