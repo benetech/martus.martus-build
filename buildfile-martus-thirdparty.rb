@@ -22,15 +22,26 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	install do
 		puts "Installing martus-thirdparty"
-	end
 
 	#libext
 	install artifact(BCPROV_SPEC).from(jar_file(name, 'libext/BouncyCastle', 'bcprov-jdk15on-147.jar'))
 	install artifact(BCPROV_SOURCE_SPEC).from(source_file(name, 'libext/BouncyCastle', 'bcprov-jdk15on-147.zip'))
 	install artifact(BCPROV_LICENSE_SPEC).from(license_file(name, 'libext/BouncyCastle', 'LICENSE.html'))
 	install artifact(JUNIT_SOURCE_SPEC).from(source_file(name, 'libext/JUnit', 'junit3.8.1.zip'))
-  install artifact(BCJCE_SPEC).from(jar_file(name, 'libext/bc-jce', 'bc-jce-2012-11-08.jar'))
-  install artifact(BCJCE_LICENSE_SPEC).from(license_file(name, 'libext/bc-jce', 'LICENSE.html'))
+	
+	official_jar = jar_file(name, 'libext/bc-jce', "bc-jce-#{BC_JCE_DATE}.jar")
+	bc_jce_artifact = artifact(BCJCE_SPEC)
+	puts "Installing #{official_jar} as #{BCJCE_SPEC}"
+
+	install bc_jce_artifact.from(official_jar) do
+		puts "======================================================="
+	end
+	
+	install artifact(BCJCE_LICENSE_SPEC).from(license_file(name, 'libext/bc-jce', 'LICENSE.html'))
+
+	filespec_in_repo = bc_jce_artifact.to_s
+	puts "  in repository: #{filespec_in_repo}? #{File.exists?(filespec_in_repo)}"
+	puts "************************************************************************************"
 
 	#common
 	install artifact(PERSIANCALENDAR_SPEC).from(jar_file(name, 'common/PersianCalendar', 'persiancalendar.jar'))
@@ -86,6 +97,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(LUCENE_LICENSE_SPEC).from(license_task)
 	# TODO: Should include source/license for javax.servlet.jar
 	# TODO: Should include source/license for javax.mail.jar
+	end
 	
   package(:zip, :file => _('target', "martus-thirdparty-#{project.version}.zip")).tap do | p |
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
