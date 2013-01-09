@@ -5,7 +5,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   project.version = $BUILD_NUMBER
   jarpath = _(:target, "bc-jce-unsigned.#{project.version}.jar")
 	
-	compile.options.target = '1.5'
+	compile.options.source = '1.5'
+	compile.options.target = compile.options.source
 	compile.with(
 		BCPROV_SPEC
 	)

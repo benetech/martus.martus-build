@@ -43,7 +43,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	project.group = 'org.martus'
 	project.version = $BUILD_NUMBER
 
-	compile.options.target = '1.5'
+	compile.options.source = '1.5'
+	compile.options.target = compile.options.source
 	compile.with(
 		JUNIT_SPEC,
 		project('martus-utils').packages.first,
@@ -147,7 +148,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   end
   
   attic_dir = "/var/lib/hudson/martus-client/builds/#{project.version}/"
-  task 'build_unsigned' => [package(:jar, jarpath), package(options), project('martus-thirdparty').package] do
+  task 'build_unsigned' => [project('martus-thirdparty').install, package(:jar, jarpath), package(options), project('martus-thirdparty').package] do
     FileUtils.mkdir_p attic_dir
     FileUtils.cp jarpath, attic_dir
     FileUtils.cp sourcepath, attic_dir

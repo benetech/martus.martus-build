@@ -7,7 +7,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	main_source_dir = _('source', 'main', 'java')
 	main_target_dir = _('target', 'main', 'classes')
 
-	compile.options.target = '1.5'
+	compile.options.source = '1.5'
+	compile.options.target = compile.options.source
 	compile.with(
 	)
 
