@@ -106,7 +106,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     return File.join(ENV['WORKSPACE'], 'martus-sha')
   end
 
-  task 'everything' => [package(:jar), 'push-sha-files']
+  task 'everything' => [project('martus-thirdparty').install, package(:jar), 'push-sha-files']
   
 	# NOTE: Old build script signed this jar
 end
