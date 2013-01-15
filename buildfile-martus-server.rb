@@ -13,9 +13,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-utils').packages.first,
 		project('martus-common').packages.first,
 		project('martus-amplifier').packages.first,
-		XMLRPC_COMMON_SPEC,
-		XMLRPC_CLIENT_SPEC,
-		XMLRPC_SERVER_SPEC
+		XMLRPC_COMMON_SPEC #,
+#		XMLRPC_CLIENT_SPEC,
+#		XMLRPC_SERVER_SPEC
 	)
 
 	test.with(
@@ -47,10 +47,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(PERSIANCALENDAR_SPEC), :path=>'ThirdPartyJars')
     p.include(artifact(VELOCITY_DEP_SPEC), :path=>'ThirdPartyJars')
     p.include(artifact(XMLRPC_COMMON_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_SERVER_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_CLIENT_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_COMMONS_LOGGING_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_WS_COMMONS_UTIL_SPEC), :path=>'ThirdPartyJars')
+#    p.include(artifact(XMLRPC_SERVER_SPEC), :path=>'ThirdPartyJars')
+#    p.include(artifact(XMLRPC_CLIENT_SPEC), :path=>'ThirdPartyJars')
+#    p.include(artifact(XMLRPC_COMMONS_LOGGING_SPEC), :path=>'ThirdPartyJars')
+#    p.include(artifact(XMLRPC_WS_COMMONS_UTIL_SPEC), :path=>'ThirdPartyJars')
     p.include(artifact(BCJCE_SPEC), :as=>'ThirdPartyJars/bc-jce.jar')
   end
   
