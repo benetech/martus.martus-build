@@ -12,7 +12,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-common').packages.first,
 		project('martus-swing').packages.first,
 		LAYOUTS_SPEC,
-		XMLRPC_CLIENT_SPEC,
+#		XMLRPC_CLIENT_SPEC,
 		XMLRPC_COMMON_SPEC,
 		project('martus-jar-verifier').packages.first
 	)
