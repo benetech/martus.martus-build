@@ -11,7 +11,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ICU4J_SPEC,
 		project('martus-utils').packages.first,
 		project('martus-common').packages.first,
-		XMLRPC_CLIENT_SPEC,
+#		XMLRPC_CLIENT_SPEC,
 		XMLRPC_COMMON_SPEC,
 		JETTY_SPEC,
 		JAVAX_SERVLET_SPEC,
