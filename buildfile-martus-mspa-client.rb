@@ -11,7 +11,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		LAYOUTS_SPEC,
 		MAIL_SPEC,
 		XMLRPC_COMMON_SPEC,
-		XMLRPC_CLIENT_SPEC,
+#		XMLRPC_CLIENT_SPEC,
 #		XMLRPC_COMMONS_LOGGING_SPEC,
 #		XMLRPC_WS_COMMONS_UTIL_SPEC,
 		project('martus-utils').packages.first,
