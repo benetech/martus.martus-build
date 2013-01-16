@@ -16,4 +16,4 @@ hg clone --rev Branch_Server_4.4 ssh://mvcs/martus/martus-server
 hg clone --rev Branch_Server_4.4 ssh://mvcs/martus/martus-swing
 hg clone --rev Branch_Server_4.4 ssh://mvcs/martus/martus-thirdparty
 hg clone --rev Branch_Server_4.4 ssh://mvcs/martus/martus-utils
-hg clone --rev Branch_Server_4.4 ssh://mvcs/martus-sha
+hg clone ssh://mvcs/martus-sha
