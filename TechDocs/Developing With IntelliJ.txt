@@ -9,4 +9,4 @@ Remove the system jce.jar file (should be somewhere near the top) and re-add it 
 
 3. In order to run the desktop client, change the Run Configuration for the org.martus.client.swingui.Martus class.
 Add the following under VM Options: -Xbootclasspath/p:/Users/roms/boss/martus-main/martus-bc-jce/bc-jce.jar
-where the path is the fully qualified path to that jar in your machine.
+where the path is the fully qualified path to that jar in your machine .
