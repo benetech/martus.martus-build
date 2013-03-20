@@ -61,7 +61,7 @@ def build_persiancalendar_spec(type)
 end
 
 def build_bcprov_spec(type)
-	return build_spec('bouncycastle', 'bcprov-jdk15on', type, '147')
+	return build_spec('bouncycastle', 'bcprov-jdk15on', type, '148')
 end
 
 BC_JCE_DATE = '2012-11-08'
