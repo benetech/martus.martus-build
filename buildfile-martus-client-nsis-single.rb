@@ -22,8 +22,8 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	end
 	
 	build(exe_path) do
-	  artifact(MARTUSSETUP_EXE_SPEC).from(destination)
-	  puts "Created artifact #{MARTUSSETUP_EXE_SPEC}"
+	  artifact(MARTUS_SINGLE_SETUP_EXE_SPEC).from(destination)
+	  puts "Created artifact #{MARTUS_SINGLE_SETUP_EXE_SPEC}"
 	end
 	
 end

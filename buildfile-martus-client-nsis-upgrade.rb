@@ -23,5 +23,5 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   
   build(exe_path)
 
-  artifact(MARTUSSETUP_UPGRADE_EXE_SPEC).from(exe_path)
+  artifact(MARTUS_UPGRADE_SETUP_EXE_SPEC).from(exe_path)
 end
