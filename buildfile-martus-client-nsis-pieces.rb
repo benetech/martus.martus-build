@@ -6,7 +6,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
   release_build_number = $BUILD_NUMBER
 
-  setup_artifact = project('martus-client-nsis-single').artifact(MARTUSSETUP_EXE_SPEC)
+  setup_artifact = project('martus-client-nsis-single').artifact(MARTUS_SINGLE_SETUP_EXE_SPEC)
   
   temp_dir = File.join(_(:temp), 'chunks')
   full_version = "#{project.version}-#{input_build_number}-#{release_build_number}"

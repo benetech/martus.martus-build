@@ -13,7 +13,7 @@ def build_spec(group, name, type, version)
 end
 
 def build_junit_spec(type)
-	return build_spec('junit', 'junit', type, '3.8.2')
+	return build_spec('junit', 'junit', type, '3.8.1')
 end
 
 def build_xmlrpc_commons_logging_spec(type)
@@ -94,14 +94,14 @@ def build_jcommon_spec(type)
 end
 
 # LibExt, from public repository
+
+# LibExt, not in public repository
 BCPROV_SPEC = build_bcprov_spec('jar')
 BCPROV_SOURCE_SPEC = build_bcprov_spec('sources')
 BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
 JUNIT_SOURCE_SPEC = build_junit_spec('sources')
 JUNIT_LICENSE_SPEC = build_junit_spec('license')
-
-# LibExt, not in public repository
 BCJCE_SPEC = build_bcjce_spec('jar')
 BCJCE_LICENSE_SPEC = build_bcjce_spec('license')
 
@@ -160,8 +160,8 @@ LUCENE_LICENSE_SPEC = build_lucene_spec('license')
 MAIL_SPEC = build_mail_spec('jar')
 MAIL_LICENSE_SPEC = build_mail_spec('license')
 
-MARTUSSETUP_EXE_SPEC = build_spec('org.martus', 'martus_single_setup', 'exe', $client_version)
-MARTUSSETUP_UPGRADE_EXE_SPEC = build_spec('org.martus', 'martus_upgrade_setup', 'exe', $client_version)
+MARTUS_SINGLE_SETUP_EXE_SPEC = build_spec('org.martus', 'martus_single_setup', 'exe', 'JustOneVersion')
+MARTUS_UPGRADE_SETUP_EXE_SPEC = build_spec('org.martus', 'martus_upgrade_setup', 'exe', 'JustOneVersion')
 DMG_SPEC = build_spec('org.martus', 'martus_client_dmg', 'dmg', $client_version)
 
 def create_layout_with_source_as_source(base)
@@ -191,7 +191,10 @@ def unzip_file (file, destination)
 			if File.exist?(f_path) && !File.directory?(f_path)
 				raise "Can't overwrite #{f_path}"
 			end
-			zip_file.extract(f, f_path) 
+			if(! f.directory?)
+				puts "unzip_file #{file}.#{f} (#{f.name}, #{f_path})"
+				zip_file.extract(f.name, f_path)
+			end 
 		end
 	end
 end
