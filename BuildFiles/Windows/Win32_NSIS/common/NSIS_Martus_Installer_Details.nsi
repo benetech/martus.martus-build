@@ -25,7 +25,7 @@
 !define PRODUCT_EXTENDED_VERSION "4.2.0.0"
 !define PRODUCT_OLDEST_UPGRADEABLE_EXTENDED_VERSION "4.0.0.0"
 !define PRODUCT_PUBLISHER "The Benetech Initiative"
-!define PRODUCT_COPYRIGHT_DATE "2001-2012"
+!define PRODUCT_COPYRIGHT_DATE "2001-2013"
 !define PRODUCT_WEB_SITE "http://www.martus.org"
 !define PRODUCT_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 !define PRODUCT_UNINST_ROOT_KEY "HKLM"
