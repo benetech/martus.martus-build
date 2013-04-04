@@ -51,6 +51,11 @@ Section "MainSection" SEC01
     SetOutPath "$MARTUS_INSTALLATION_DIR\Docs\Licenses"
     File /r "..\BuildFiles\Documents\Licenses\*"
     
+    StrCmp $DEBUG_INFO "Y" 0 +2
+    MessageBox MB_OK 'Copy fonts...'
+    SetOutPath "$MARTUS_INSTALLATION_DIR\lib\fonts\fallback"
+    File "..\BuildFiles\Fonts\*.*"
+
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Attempting to delete prev bcprov...'
