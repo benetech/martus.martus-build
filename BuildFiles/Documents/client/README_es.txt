@@ -1,144 +1,216 @@
-﻿Martus(tm) Software Versión 3.6.1 README_es.txt
+﻿Martus(tm) Software Versión 4.1.1 README_es.txt
 ---------------------------------------------
 
 
 Visite el sitio web http://www.martus.org para mayor
 información sobre Martus.
 
-Consulte el Manual del Usuario para obtener instrucciones acerca
-de cómo instalar Martus.
+Consulte el Manual del Usuario para obtener instrucciones acerca de
+cómo instalar Martus.
 
-Para obtener la documentación actual en todos los idiomas
-disponibles, así como las versiones anteriores, visite el
-sitio web http://www.martus.org/downloads/.
-
-
-
-Información de las versiones de Martus por número de versión y 
-la fecha de lanzamiento
+Para obtener la documentación actual en todos los idiomas disponibles,
+así como las versiones anteriores, visite el sitio web
+http://www.martus.org/downloads/.
+‎
 
 
+Información de las versiones de Martus por número de versión y la
+fecha de lanzamiento:
+
+Versión 4.1.1 		2012-08
+
+Esta versión está disponible en inglés y en otros idiomas indicados en 
+la página https://www.martus.org de descargas del programa. En el futuro 
+habrá versiones en otros idiomas, como paquetes de idioma en la página de
+documentación (https://www.martus.org/downloads)
+
+- Se corrigió un problema de que se cortó las palabras inciales en y las pantallas 
+  de Gráficos y del Diccionario de Corrector Ortográfico, cuando use Martus 4.1 en 
+  otros idiomas que inglés.
+- Se añadió las actualizaciones a la versión 4.0 traducidas a birmano y armenio. 
+
+
+Versión 4.1 		2012-07
+
+Esta versión está disponible en inglés y en otros idiomas indicados en 
+la página https://www.martus.org de descargas del programa. En el futuro 
+habrá versiones en otros idiomas, como paquetes de idioma en la página de
+documentación (https://www.martus.org/downloads)
+
+- Se añadió la funcionalidad inicial de corrección ortográfica para los 
+  campos de texto en boletines en inglés. Cuando esté editando un boletín, 
+  los errores ortográficas serian notados por subrayas rojas, y se puede 
+  ver sugerencías o añadir la palabra al diccionario del usuario por clic 
+  derecho en la palabra. Favor de notar que el corrector ortográfico pasará
+  por alto las palabras que son o todas en mayúscula o que contienen números.
+  El corrector ortográfico en esta versión no comprueba ninguno de los campos
+  fuera de boletines (por ej. datos de contacto, títulos de HQ, nombres de 
+  carpetas), y el corrector ortográfico se muestra solamente los errores
+  ortográficos en campos de boletines cuando está en el modo de Editar (no 
+  son mostrados en el modo de Ver). Para las palabras que son mal escritas a
+  dentro de campos de texto de Tablas, tiene que clic izquierdo primero en 
+  la célula (como que fuera editandola) antes de clic derecho para mostrar el
+  menú para ver sugerencias o añadir al diccionario del usuario. También se 
+  puede ver el diccionario del corrector ortográfico y añadir o borrar palabras
+  bajo el menú Opciones > Corrección ortográfica.
+- Se añadió la funcionalidad inicial de gráficos - las opciones son gráfico de 
+  barras, 3d gráfico de barras, o gráfico circular (se muestra %s) en un solo
+  campo del boletín de Martus que aparece en cualquiera de sus boletines. 
+  IMPORTANTE: Favor de notar que los gráficos cuentan la cantidad de boletines 
+  de Martus que coincidan con el criterio de búsqueda definido al momento de 
+  crear el gráfico, en el reportaje Martus se muestra solamente los datos 
+  de la versión más reciente de cada boletín en su computadora, y Ud. verá un 
+  mensaje de advertencia que todos los datos en los gráficos no serán cifrados 
+  (así que cualquiera que ve el gráfico o en forma impresa o en forma 
+  electrónica se puede leer todos los datos).
+- Se añadió al sitio web de Martus los principios tutoriales en vídeo: Usando
+  Martus, Instalando Martus (Windows y Mac), Solucionar Problemas en Martus
+  (Windows y Mac).
+- Se añadió prueba implementación alfa de la exportación XML de versiones 
+  múltiples de boletines de Martus. Esta función todavía no se ha completado, 
+  pero será útil para los usuarios quienes quieran exportar de todas sus 
+  historias de versiones a otras herramientas. Favor de notar que si intenta
+  importar un archivo exportado de Martus de versión múltiple XML, los 
+  boletines importados no estarán conectados de uno a otro en ninguna manera,
+  y no tendrán ninguna información previa del autór. Para accesar esta 
+  función, tiene que añadir la opción " --alpha-tester" a su línea de comandos
+  de Martus. Para más información, ve la sección "11. Preguntas frecuentes” (FAQ) 
+  número 50 (¿Es posible exportar más que la versión final de mis boletines a XML?) 
+  en el Manual del Usuario de Martus versión 4.1.
+- Se añadió armenio a la lista de idiomas para boletines, y una fuente armenia
+  en unicódigo para el uso de Martus a los instaladores.
+- Se añadió los menús de clic derecho Cortar/Copiar/Pegar/Borrar/Seleccionar Todo
+  para las células de tablas de campos personalizados.
+- Se corrigió varios otros errores pequeños, y se hizo aclaraciones y arreglos
+  a la pantalla del usuario.
+
+
+Versión 4.0.0		2012-05
+
+Esta versión está disponible en inglés, persa/dari, español, birmano y
+en otros idiomas indicados en la página https://www.martus.org de
+descargas del programa. En el futuro habrá versiones en otros idiomas,
+como paquetes de idioma en la página de documentación 
+(https://www.martus.org/downloads)
+
+- Actualización a la Java6 (a veces se llaman 1.6). Java6 puede mejorar
+  ejecución en algunos casos, mejora la presentación de la fuente para
+  varios idiomas (por ej. jemer, persa/dari) y requiere que los usuarios
+  hagan menos esfuerzo manual para corregir la presentación de la fuente
+  (por ej. birmano, jemer, Bengalí). Los programas de instalación de 
+  Windows incluyen automáticamente Java6. En Mac/Linux debe asegúrese de
+  que esté usando Java 1.6.0_30 o mayor, como versiones anteriores pueden
+  causar que Martus no funcione correctamente. Para controlar cual
+  versión de Java está en su ordenador con Mac/Linux, abre una ventana en
+  terminal y escriba "java -version" (sin las comillas) y pulsando la
+  tecla Entrar/Intro.
+- Se añadió iniciales "conmutadoras de memoria" a los atajos de Windows y
+  de Mac para ayudar que Martus funcione mejor para cuentas o con grandes 
+  cantidades de boletines o con boletines grandes. El usuario todavía 
+  puede aumentar los valores de memoria si sea necesario, pero debe 
+  solucionar en muchos casos algunos problemas que anteriormente
+  necesitaban creación manual.
+- Se ha mejorada la Martus interfaz gráfica pantalla en Windows para usar
+  el diseño de la configuración por defecto.
+- Debido a problemas de seguridad descubiertos en versiones tempranos de
+  Windows y Java, Martus 4.0 ejecutará solamente en versiones que sean mas
+  nuevos que Windows 98 (ME, 2K, XP, 2003, Vista, 7). Si tenga 
+  Windows98/NT o mayor se necesite usar Martus 3.6.2 o más temprano, pero
+  a lo más le recomendamos que intente actualizar a una Windows versión
+  más segura, si sea posible.
+- Se añadió información adicional al registro de la consola de Martus para
+  facilitar depurando / corrigiendo los problemas reportados por los 
+  usuarios. La información añadida incluye el Martus código público para 
+  una cuenta y información de la memoria actual.
+- Se desarrolló un proceso nuevo para construyendo (creando) versiones de
+  Martus (para Windows, Mac, y Linux), que hace más rápido pruebas y 
+  despliegue, y que contiene varias otras mejoras internas.
+
+
+Versión 3.6.2             2011-10
+
+Esta versión está disponible en inglés, persa/dari, español, y en otros 
+idiomas indicados en la página https://www.martus.org de descargas del 
+programa. En el futuro habrá versiones en otros idiomas, como paquetes 
+de idioma en la página de documentación (https://www.martus.org/downloads)
+
+- Se corrigió el defecto de buscando en campos de listas desplegables para 
+  las entradas que tienen espacios o al su principio o al su final.
+- Se corrigió el defecto de cargando una búsqueda anteriormente guardada 
+  que tiene campos cuales no existen más en ningún boletín en su 
+  computadora. En vez de recibir un error que no permite al usuario buscar,
+  en la tabla de búsqueda la fila que contiene ésos campos será restaurada 
+  a los valores por defecto/nuevos (por ej. "Cualquier Campo contiene").
 
 
 Versión 3.6.1			2011-10
 
-
-
 Esta versión está disponible en inglés, persa/dari, español y en otros
 idiomas indicados en la página http://www.martus.org de descargas del 
-
 programa.  En el futuro habrá versiones en otros idiomas, como paquetes 
-
 de idioma en la página de documentación (http://www.martus.org/downloads)
 
-
-
 - Actualizaciones menores a la documentación de inglés y la pantalla de 
-  
   ayuda de búsqueda.
-
 - Actualizaciones menores a la traducción al persa/dari de la interfaz 
-  
   de usuario, se agregó el README de persa/dari.
-
 - Actualizaciones a la traducción al español de la interfaz de usuario y 
-  
   el README.
 
 
+Versión 3.6.0			2011-09
 
-
-
-Versión 3.6			2011-09
-
-
+Esta versión está disponible en inglés, persa/dari, español y en otros
+idiomas indicados en la página http://www.martus.org de descargas del 
+programa.  En el futuro habrá versiones en otros idiomas, como paquetes 
+de idioma en la página de documentación (http://www.martus.org/downloads)
 
 - Se agregó campos de listas desplegables con procesamiento de 
-  
   "datos-derivados" (donde los valores en un campo de la lista desplegable 
-  
   se basan en los datos ingresados en otro campo de una tabla en otra parte 
-
   del boletín) a la lista de campos disponible para hacer búsquedas en la 
-
   pantalla de Buscar, que aparece con el botón "Seleccionar campos".
-
 - Se agregó, a la pantalla de Buscar, la capacidad de escanear y cargar 
-
   todos los valores ingresado en campos de texto y listas desplegables con 
-
   procesamiento de "datos-derivados" incluídos en los "Términos de búsqueda". 
-
   Cuando seleccione campos de texto de la lista de todos campos en la 
-  personalización ("Seleccionar campo") para incluir en los Términos, 
-puede
+  personalización ("Seleccionar campo") para incluir en los Términos, puede
   seleccionar la opción "Cargar todos los valores posibles para el campo 
   seleccionado" para popular la caja "Términos de búsqueda" con una lista
-
   de todos los valores ingresados en todos los boletines guardados en la cuenta. 
-
   Para campos de listas desplegables con procesamiento de "datos-derivados", 
-
   los valores ingresados en los boletines son cargados automáticamente 
-
   cuando el campo es seleccionado para incluir en los "Términos de búsqueda". 
-
   Tambíen hay un botón en la pantalla de buscar, "Cargar todos los valores 
-
   posibles para el campo seleccionado", si quiere cargar valores del campo 
-
   sin usar "Seleccionar campos" (por ejemplo, después de cargar una búsqueda 
-
   previa, o si no seleccionó la opción en "Seleccionar campos"). 
-
 - Cuando edite un boletín, se cambió los valores en campos de 
-
   listas desplegables con procesamiento de "datos-derivados" a ser 
-
   organizado por orden alfabético, en vez de aparecer en el orden en que 
-
   los usuarios los ingresaron en la tabla de la fuente de datos, para 
-
   facilitar la ingresa de datos.
-
 - Cuentas centrales ahora pueden bajar los borradores actualizados de una 
-
   cuenta regional, sin tener que desechar los borradores viejos de su cuenta. 
-
 - Se corrigió un defecto en que Martus no recordaba los términos de la 
-
   búsqueda previa si los términos contuvieron el campo de Última modificación.
-
 - Se aclaró mensajes de error al usuario cuando una cuenta central trata 
-
   a sellar boletines creado por una cuenta regional. Una cuenta central no 
-
   puede sellar (individualmente o en grupo) boletines bajado por una cuenta 
-
   regional, pero puede modificar estos boletines bajados para ser autor de 
-
   de ellos, y entonces puede sellarlos. 
-
 - Se corrigió un error en que Martus omitió los datos de columnas con listas 
-
   desplegables “reutilizables” adentro de una tabla, cuando se imprime o se
   envie partes públicas al Motor de Búsqueda de Martus.
-
 - Se actualizó la traducción al dari de la interfaz de usuario, y se agregó el
   calendario afgano a las opciones en la pantalla de preferencias. 
-
-- Se corrigió como muestra campos de listas desplegables "reutilizables" 
-a
+- Se corrigió como muestra campos de listas desplegables "reutilizables" a
   justifica a derecha para idiomas que aparecen de derecha a izquierda 
-
   (como persa/dari).
-
 - Se corrigió errores pequeños, aclaraciones y correcciones a la pantalla del usuario.
 
 
-
 Versión 3.5.1			2010-11
-
 
 - Se corrigió un defecto relacionado con las opciones reutilizables 
   de las listas desplegables en que valores con títulos coincidentes 
@@ -157,7 +229,7 @@ Versión 3.5.1			2010-11
   con vista ampliada. 
 
 
-Versión 3.5			2010-10
+Versión 3.5.0			2010-10
 
 - Se añadió una nueva característica de personalización que permite 
   listas desplegables de varios niveles, de tal manera que el usuario 
@@ -181,7 +253,6 @@ Versión 3.5			2010-10
 
 Versión 3.4.1			2010-08
 
-
 - Se cambió la duración en Martus de la desconexión por tiempo cuando 
   no hay actividad para que sea más flexible y no se desconecte siempre 
   a los 10 minutos. Esto puede ayudar a mejorar la seguridad si se trabaja 
@@ -195,19 +266,15 @@ Versión 3.4.1			2010-08
   en su computador en Windows para que sea siempre de 5 minutos y así obtener 
   un mayor nivel de seguridad, cambie la línea de comando en el atajo de el 
   escritorio de su computador (clic derecho y seleccione Propiedades) como sigue: 
-
 C:\Martus\bin\java.exe -Xbootclasspath/p:C:\Martus\lib\ext\bc-jce.jar -jar C:\Martus\martus.jar --timeout-minutes=5
-
   Para acceder a instrucciones sobre cómo cambiar la línea de commando de 
   Martus en Mac o Linux, vaya a la sección 2a del Manual del Usuario o escriba 
   a la dirección electrónica info@martus.org.
-
 - Se arregló un problema relacionado con personalizaciones muy grandes, que 
   hacía que Martus se cargara muy lentamente y generara diversos errores. 
 
 
-Versión 3.4			2010-03
-
+Versión 3.4.0			2010-03
 
 - Se agregó la capacidad que exije que ciertas columnas 
   de tabla sean ingresadas antes que un boletín pueda ser 
@@ -263,13 +330,12 @@ Versión 3.4			2010-03
   el usuario trata de importar un archivo de XML que es 
   incompatible porque fue creado por una versión diferente 
   de Martus. 
-- Se corrigieron errores pequeños, y se hicieronaclaraciones y arreglos 
+- Se corrigieron errores pequeños, y se hicieron aclaraciones y arreglos 
   a la pantalla del usuario.
 - Se actualizó la versión del Manual del Usuario en inglés. 
 
 
 Versión 3.3.2			2009-08
-
 
 - Se solucionó varios temas relacionados a la ampliación 
   de tablas conteniendo listas desplegables con 
@@ -290,8 +356,7 @@ Versión 3.3.2			2009-08
   de nuevo para ver la corrección.
  
 
-Versión 3.3			2008-08
-
+Versión 3.3.0			2008-08
 
 - Se agregó la capacidad de sellar muchos borradores al mismo 
   tiempo en una "hornada." Para hacer esto, vaya a Editar > 
@@ -315,8 +380,7 @@ Versión 3.3			2008-08
   a la pantalla del usuario.
 
 
-Versión 3.2			2007-09
-
+Versión 3.2.0			2007-09
 
 - Nueva funcionalidad que le permite mostrar el(los) 
   boletin(es) de las siguientes maneras: 1) Ocultar/Mostrar 
@@ -351,8 +415,7 @@ Versión 3.2			2007-09
   a la pantalla del usuario.
 
 
-Versión 3.1			2007-04
- 
+Versión 3.1.0			2007-04
 
 - Se agregó una nueva funcionalidad que notifica a las 
   Oficinas Centrales si existen boletines de Oficina Regional 
@@ -398,8 +461,7 @@ Versión 3.1			2007-04
   y limpieza de las pantallas del programa.
 
 
-Versión 3.0			2006-09
-
+Versión 3.0.0			2006-09
 
 - Se agregó la funcionalidad de reporte. Los reportes muestran 
   los resultados de los boletines que encajan con un cierto 
@@ -432,8 +494,7 @@ Versión 3.0			2006-09
   personalizados en líneas múltiples.
 
 
-Versión 2.9			2006-03
-
+Versión 2.9.0			2006-03
 
 - Con el lanzamiento de la versión 2.6 del servidor (Marzo 2006),
   se aceleraron varias operaciones importantes del servidor /
@@ -503,7 +564,6 @@ Versión 2.9			2006-03
 
 Versión 2.8.1			2005-11
 
-
 - Reparación del problema en la versión 2.8, en el que se
   mostraban y archivaban las fechas y los rangos de fechas
   anteriores al 1 de enero de 1970, de manera incorrecta.
@@ -511,8 +571,7 @@ Versión 2.8.1			2005-11
   la versión 2.8.
 
 
-Versión 2.8			2005-09
-
+Versión 2.8.0			2005-09
 
 - Se agregó la posibilidad de crear columnas de diferentes
   tipos en los mapas (listas desplegadas, casillas de
@@ -548,7 +607,7 @@ Versión 2.8			2005-09
   centrales y campos personalizados que se hayan agregado.
 - El Martus Server 2.4 y versiones posteriores pueden enviar
   noticias y mensajes a los usuarios de Martus Client cuando
-  éstos se conecten (por ej. mensajes sobre nuevas versiones
+  éstos se conecten (por ej. mensajes sobre nuevas versiones0
   disponibles o advertencias de que el servidor no va a estar
   en línea por mantenimiento).
 - Se modificó el método de verificación de archivos bajados
@@ -560,7 +619,6 @@ Versión 2.8			2005-09
 
 
 Versión 2.7.2			2005-08
-
 
 - Se removió la traducción incompleta e inexacta del idioma
   Nepalí 2.0.1 del programa y se colocó un paquete de idioma
@@ -587,7 +645,7 @@ botón derecho, elija Propiedades, y cambie el campo Commando a :
 C:\Martus\bin\javaw.exe -Dswing.useSystemFontSettings=false -jar C:\Martus\Martus.jar
 
 
-Versión 2.7			2005-04
+Versión 2.7.0			2005-04
 
 Esta versión sólo está disponible en inglés y en persa.
 Otros idiomas estarán disponibles en el futuro, como un
@@ -616,8 +674,7 @@ Otros idiomas estarán disponibles en el futuro, como un
 - El exportar a XML ahora incluye tipo de campo personalizado.
 
 
-Versión 2.6			2005-02
-
+Versión 2.6.0			2005-02
 
 - Usuarios pueden buscar y ver todo el contenido de todas las
   revisiones de boletines sellados almacenados en su ordenador
@@ -639,8 +696,7 @@ Versión 2.6			2005-02
   tengan problemas al mostrar textos Árabes.
 
 
-Versión 2.5			2004-11
-
+Versión 2.5.0			2004-11
 
 - Se agregó la posibilidad de crear nuevas revisiones de boletines
   sellados y así poder hacer cambios o adiciones al boletín
@@ -680,7 +736,6 @@ Versión 2.5			2004-11
 
 Versión 2.0.1			2004-08
 
-
 - Se agrego una barra de desplazamiento horizontal para los
   mapas en los campos personalizados que sean más anchos que
   la pantalla.
@@ -695,8 +750,7 @@ Versión 2.0.1			2004-08
   programa en múltiples partes
 
 
-Versión 2.0			2004-07
-
+Versión 2.0.0			2004-07
 
 - Ahora puede configurar múltiples cuentas de Oficinas centrales
   usando un interfaz diferente. Esta característica es útil si tiene
@@ -744,8 +798,7 @@ Versión 2.0			2004-07
   reconfiguración del interfaz del programa.
 
 
-Versión 1.5			2004-02
-
+Versión 1.5.0			2004-02
 
 Le recomendamos que use el software Martus Client versión 1.5
 con el servidor Martus versión 2.0 o más. Todos los servidores de
@@ -802,7 +855,6 @@ el sitio web www.martus.org.
 
 Versión 1.2.1			2003-12
 
-
 - El programa se a traducido al ruso, incluyendo una versión
   especial del programa de instalación para usuarios rusos.
 - Las guias de usuario en inglés y español han sido actualizadas
@@ -810,8 +862,7 @@ Versión 1.2.1			2003-12
   la instalación en ordenadores con el sistema operativo GNU/Linux.
 
 
-Versión 1.2			2003-09
-
+Versión 1.2.0			2003-09
 
 - Ahora puede personalizar los campos de los boletines que crea
   en Martus. Esta característica solo es recomendada para usuarios
@@ -845,7 +896,6 @@ Versión 1.2			2003-09
 
 
 Versión 1.0.3			2003-05
-
 
 - Se han preparado versiones para sistema operativo Linux y Mac OS.
 - Si es que a instalado una versión anterior de Martus ahora puede
@@ -887,7 +937,6 @@ Versión 1.0.3			2003-05
 
 Versión 1.0.2			2003-02
 
-
 - Cuando intenta modificar un boletín, Martus crea una copia de
   este pero si el boletín original contiene archivos adjuntos
   el programa se confundía y dañaba la copia o el original o
@@ -903,7 +952,6 @@ Versión 1.0.2			2003-02
 
 Versión 1.0.1			2003-01
 
-
 - El programa de instalación pregunta en Windows si es que
   quiere enlaces a Martus, la documentación y al programa de
   desinstalación en su menú Inicio.
@@ -914,29 +962,4 @@ Versión 1.0.1			2003-01
   disco duro.
 - Errores en la ventana 'Acerca de Martus' y en la
   documentación fueron corregidos.
-
-
-Instrucciones especiales si necesita actualizar Winsock al
-intentar ejecutar Martus bajo Windows 95:
-
-Java requiere de la biblioteca Microsoft Winsock 2.0.  La gran
-mayoría de instalaciones de Windows ya poseen esta librería.
-Es posible que versiones de Windows 95 tengan una versión de
-Winsock anterior.
-
-Para verificar que versión de Winsock tiene instalada busque
-
-el archivo "winsock.dll".
-Abra las propiedades del archivo a través del menú 'Archivo' y
-verifique la versión.
-
-Si su sistema no tiene la versión 2.0 o mayor de Winsock,
-utilice el programa de instalación que esta en el CD bajo la
-carpeta Martus\Win95.
-
-El siguiente sitio de web contiene información sobre los
-componentes de Winsock bajo Windows 95 y su uso:
-
-http://support.microsoft.com/support/kb/articles/Q177/7/19.asp
-
 
