@@ -1,0 +1,110 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-mspa" default="notify-mspa" basedir=".">
+    <description>
+        Martus MSPA Build File
+    </description>
+
+    <!-- imports -->
+    <import file="build.shared.values.xml" />
+    <import file="build-common.xml" />
+	<import file="dev-build.xml" />
+
+    <!-- mspa classpath -->
+    <path id="mspa.class.path">
+        <pathelement path="${martus.common.class.root}/"/>
+        <pathelement path="${martus.clientside.class.root}/"/>
+        <pathelement path="${martus.mspa.class.root}/"/>
+        <pathelement path="${martus.swing.class.root}/"/>
+        <pathelement path="${martus.utils.class.root}/"/>
+        <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.jhlabs}" includes="**/*.jar"/>
+    	<fileset dir="${mspa.thirdparty.lib.jaf}" includes="**/*.jar"/>
+    	<fileset dir="${mspa.thirdparty.lib.mail}" includes="**/*.jar"/>
+    </path>
+
+    <fileset id="mspa.server.class.files" dir="${martus.mspa.class.root}">
+        <include name="org/martus/mspa/common/**/*.class"/>
+        <include name="org/martus/mspa/roothelper/**/*.class"/>
+        <include name="org/martus/mspa/server/**/*.class"/>
+    </fileset>
+
+    <fileset id="mspa.server.src.files" dir="${martus.mspa.src.root}">
+        <include name="org/martus/mspa/common/**/*.java"/>
+        <include name="org/martus/mspa/roothelper/**/*.java"/>
+        <include name="org/martus/mspa/server/**/*.java"/>
+    </fileset>
+
+    <fileset id="mspa.client.class.files" dir="${martus.mspa.class.root}">
+        <include name="org/martus/mspa/client/**/*.class"/>
+        <include name="org/martus/mspa/main/**/*.class"/>
+        <include name="org/martus/mspa/common/**/*.class"/>
+    </fileset>
+
+    <fileset id="mspa.client.src.files" dir="${martus.mspa.src.root}">
+        <include name="org/martus/mspa/client/**/*.java"/>
+        <include name="org/martus/mspa/main/**/*.java"/>
+        <include name="org/martus/mspa/common/**/*.java"/>
+    </fileset>
+
+    <target name="notify-mspa">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-mspa" depends="build-common,build-clientside" description="Compile martus-mspa">
+        <mkdir dir="${martus.mspa.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.mspa.src.root}" destdir="${martus.mspa.class.root}" failonerror="true">
+            <classpath refid="mspa.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+        <rmic classname="org.martus.mspa.roothelper.MessengerImpl" base="${martus.mspa.class.root}"/>
+    </target>
+
+<!-- ================================================================== -->
+<!-- T E S T S                                                          -->
+<!-- ================================================================== -->
+
+  <target name="test-mspa" depends="jar-mspa,jar-server">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            </classpath>
+        </taskdef>
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <classpath>
+                <fileset dir="${public.release.folder}" >
+                    <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
+                    <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+                </fileset>
+                <pathelement path="${java.class.path}"/>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="org.martus.mspa.client.test.TestAll"/>
+            <test name="org.martus.mspa.server.test.TestAllServer"/>
+        </junit>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                              -->
+  <!-- ================================================================== -->
+
+      <!-- create mspa jar -->
+      <target name="jar-mspa" depends="build-mspa" description="Create martus-mspa client jar">
+          <mkdir dir="${public.release.folder}"/>
+          <jar destfile="${public.release.folder}/martus-mspa-client-${DSTAMP}.${build.number}.jar" manifest="${martus.mspa.src.root}/org/martus/mspa/main/main-class.txt">
+                <fileset refid="mspa.client.class.files" />
+                <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
+          </jar>
+    </target>
+    
+    <target name="jarsign-mspa" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-mspa" description="Sign MSPA jar">
+    	<property name="mspa-filename" value="${public.release.folder}/martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${mspa-filename}" />
+    </target>
+
+</project>
