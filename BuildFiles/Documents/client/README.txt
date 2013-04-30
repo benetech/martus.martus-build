@@ -1,4 +1,4 @@
-﻿Martus(tm) Software Version 4.1.1 README.txt
+﻿Martus(tm) Software Version 4.2 README.txt
 ---------------------------------------------------------
 
 
@@ -12,6 +12,41 @@ languages, go to https://www.martus.org/downloads/.
 
 
 Martus release information by version and release date:
+
+
+Version 4.2 		2013-04
+
+This release is available in English and other languages as indicated on 
+the https://www.martus.org software download page. Other languages will be 
+available in the future, as language-packs on the documentation page 
+(https://www.martus.org/downloads)
+
+- Performance improvements:  Dramatically increased speed for loading the retrieve screen .
+- Burmese font updates:  allow data entry and display in commonly-used Zawgyi font automatically 
+  when runing Martus in Burmese.  If you are running Martus in a language other than Burmese 
+  and want to type or view Burmese data in your bulletin fields, choose Options > Preferences, and 
+  check the "Use Zawgyi font for Burmese display and input" box.  Added Zawgyi font to Martus install.
+- Security enhancements: 1) added additional clarification in software and documentation about 
+  how account contact information is used/accessed on the servers; 2) increased the RSA key size 
+  for new accounts; 3) improved the random number generation used in creating multi-file key "share" 
+  backups (if you had already created a multi-file key backup, you will be prompted to recreate 
+  the pieces using the new method); 4) added Field Desk approval mechanism so that you are 
+  warned if you (as a Headquarters account) are sent bulletins from a field desk account you have 
+  not verified.  You are also warned if you try to open attachments or modify bulletins from an unverifed 
+  Field Desk account; 5) added instructions to User Guide on how to run Martus more securely with 
+  Tor (to make sending your data to the servers harder to recognize) and TAILS (bootable/live USB).
+- Updated translations:  Spanish and Burmese software translations were updated to include 
+  the new features in 4.1 (Charts, Spellcheck)
+- Upgraded to latest versions of BouncyCastle and XMLRPC
+- Fixed issues when trying to save reports and other files when running Martus directly from a 
+  Mac dmg file
+- Removed MESSAGE fields from list of fields for creating Charts
+- Added Armenian font to upgrade Windows Martus install
+- Java updates:  Upgraded Windows install to include latest version of Java6.  Updated Linux install to be 
+  able to run on OpenJDK (6 or 7), which also applies to running Martus with Tails (see User Guide FAQs).
+- Several other minor bug fixes, clarifications and clean-ups to the user screens.   
+
+
 
 Version 4.1.1 		2012-08
 
@@ -71,7 +106,9 @@ available in the future, as language-packs on the documentation page
 
 Version 4.0 		2012-05
 
-This release is available in English, Farsi/Dari, Spanish, Burmese and other languages as indicated on the https://www.martus.org software download page. Other languages will be available in the future, as language-packs on the documentation page (https://www.martus.org/downloads)
+This release is available in English, Farsi/Dari, Spanish, Burmese and other languages as indicated 
+on the https://www.martus.org software download page. Other languages will be available in the future, 
+as language-packs on the documentation page (https://www.martus.org/downloads)
 
 - Update to Java6 (sometimes called 1.6).  Java6 may improve performance 
   in some instances, and improves font display for several languages 
