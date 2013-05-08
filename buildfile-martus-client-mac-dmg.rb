@@ -81,8 +81,9 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "ANT RESULTS:------------"
     puts `#{ant}`
     puts "------------------------"
-    if $CHILD_STATUS != 0 || !File.exists?(dmg_file)
-      raise "Failed in dmg ant script #{$CHILD_STATUS}. See #{ant_output}"
+    result = $CHILD_STATUS
+    if result != 0 || !File.exists?(dmg_file)
+      raise "Failed in dmg ant script (#{format("%X", result)}). Exit code=#{result / 256}. See #{ant_output}"
     end
     
     destination_filename = "MartusClient-#{project.version}-#{input_build_number}-#{release_build_number}.dmg"
