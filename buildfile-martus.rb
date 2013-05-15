@@ -93,6 +93,10 @@ def build_jcommon_spec(type)
   return build_spec('org.jfree', 'jcommon', type, '1.0.17')
 end
 
+def build_orchid_spec(type)
+  return build_spec('com.subgraph.orchid', 'orchid', type, '0.9.0')
+end
+
 # LibExt, from public repository
 
 # LibExt, not in public repository
@@ -107,6 +111,9 @@ BCJCE_LICENSE_SPEC = build_bcjce_spec('license')
 
 # Common, not in public repository
 LOGI_LICENSE_SPEC = build_logi_spec('license')
+ORCHID_SPEC = build_orchid_spec('jar') 
+ORCHID_SOURCE_SPEC = build_orchid_spec('sources') 
+ORCHID_LICENSE_SPEC = build_orchid_spec('license') 
 
 # Common, from public repository
 PERSIANCALENDAR_SPEC = build_persiancalendar_spec('jar')
@@ -289,6 +296,7 @@ def third_party_client_jars
 	#jars << artifact(JORTHO_SPEC)
 	jars << artifact(JFREECHART_SPEC)
 	jars << artifact(JCOMMON_SPEC)
+	jars << artifact(ORCHID_SPEC)
 	return jars
 end
 
@@ -307,6 +315,7 @@ def third_party_client_licenses
 	licenses << artifact(JORTHO_LICENSE_SPEC)
 	licenses << artifact(JFREECHART_LICENSE_SPEC)
 	licenses << artifact(JCOMMON_LICENSE_SPEC)
+	licenses << artifact(ORCHID_LICENSE_SPEC)
 	return licenses
 end
 
@@ -326,6 +335,7 @@ def third_party_client_source
   sources << artifact(JORTHO_SOURCE_SPEC)
 	sources << artifact(JFREECHART_SOURCE_SPEC)
 	sources << artifact(JCOMMON_SOURCE_SPEC)
+	sources << artifact(ORCHID_SOURCE_SPEC)
 	return sources
 end
 

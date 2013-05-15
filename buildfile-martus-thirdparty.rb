@@ -66,6 +66,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 # TODO: Find ICU4J source code
 #	install artifact(ICU4J_SOURCE_SPEC).from(source_file(name, 'common/PersianCalendar', 'icu4j_3_2_license.html'))
 	install artifact(ICU4J_LICENSE_SPEC).from(license_file(name, 'common/PersianCalendar', 'icu4j_3_2_license.html'))
+	
+	install artifact(ORCHID_SPEC).from(jar_file(name, 'common/orchid', 'orchid-0.9.0.jar'))
+	install artifact(ORCHID_SOURCE_SPEC).from(source_file(name, 'common/orchid', 'orchid-src-0.9.0.zip'))
+	install artifact(ORCHID_LICENSE_SPEC).from(license_file(name, 'common/orchid', 'LICENSE'))
 
 	#client
 	install artifact(LAYOUTS_SPEC).from(jar_file(name, 'client/jhlabs', 'layouts.jar'))
@@ -117,5 +121,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(RHINO_SPEC), :path=>'ThirdParty')
     p.include(artifact(JCOMMON_SPEC), :path=>'ThirdParty')
     p.include(artifact(JFREECHART_SPEC), :path=>'ThirdParty')
+    p.include(artifact(ORCHID_SPEC), :path=>'ThirdParty')
   end
 end
