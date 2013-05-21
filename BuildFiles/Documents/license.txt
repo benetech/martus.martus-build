@@ -110,7 +110,7 @@ detail.  You may not use or distribute the software in a way that violates any t
 license until after you have requested and received written permission from Benetech to 
 do so.
 
-Because the Software includes Sun Microsystems Java programs, we need to include 
+Because the Software includes Oracle Java programs, we need to include 
 some special license terms because of the use of this Java technology.  The Martus 
 software continues to be free, but we need to tell you the details of how this works.  
 
@@ -120,7 +120,7 @@ GNU General Public License cover the whole combination.
 
 As a special exception, the copyright owners of the Martus software give you permission 
 to link our software with the Java(TM) Runtime Environment (JRE) for Java 2 Platform Standard 
-Edition (J2SE TM) v 1.4.1_01 or later from Sun Microsystems (java.sun.com), regardless of the 
+Edition (J2SE TM) v 1.5 or later from Oracle (java.com), regardless of the 
 license terms of this module, and to copy and distribute the resulting combined work under 
 terms of your choice; provided that every copy of the combined work is accompanied by a complete 
 copy of the source code of that combined work (excluding the above-mentioned module).  Use of 
