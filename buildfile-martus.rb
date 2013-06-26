@@ -13,7 +13,7 @@ def build_spec(group, name, type, version)
 end
 
 def build_junit_spec(type)
-	return build_spec('junit', 'junit', type, '3.8.1')
+	return build_spec('junit', 'junit', type, '4.11')
 end
 
 def build_xmlrpc_commons_logging_spec(type)

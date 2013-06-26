@@ -27,9 +27,9 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(BCPROV_SPEC).from(jar_file(name, 'libext/BouncyCastle', 'bcprov-jdk15on-148.jar'))
 	install artifact(BCPROV_SOURCE_SPEC).from(source_file(name, 'libext/BouncyCastle', 'bcprov-jdk15on-148.zip'))
 	install artifact(BCPROV_LICENSE_SPEC).from(license_file(name, 'libext/BouncyCastle', 'LICENSE.html'))
-	install artifact(JUNIT_SPEC).from(jar_file(name, 'libext/JUnit', 'junit.jar'))
-	install artifact(JUNIT_SOURCE_SPEC).from(source_file(name, 'libext/JUnit', 'junit3.8.1.zip'))
-	install artifact(JUNIT_LICENSE_SPEC).from(license_file(name, 'libext/JUnit', 'cpl-v10.html'))
+	install artifact(JUNIT_SPEC).from(jar_file(name, 'libext/JUnit', 'junit-4.11.jar'))
+	install artifact(JUNIT_SOURCE_SPEC).from(source_file(name, 'libext/JUnit', 'junit-4.11-sources.zip'))
+	install artifact(JUNIT_LICENSE_SPEC).from(license_file(name, 'libext/JUnit', 'LICENSE.txt'))
 	
 	official_jar = jar_file(name, 'libext/bc-jce', "bc-jce-#{BC_JCE_DATE}.jar")
 	bc_jce_artifact = artifact(BCJCE_SPEC)
