@@ -41,13 +41,13 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   
     include_artifact(zip, artifact(BCJCE_SPEC), 'BuildFiles/Jars', 'bc-jce.jar')
     include_artifacts(zip, third_party_client_jars, 'BuildFiles/Jars')
-    jre_zip = _('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre6.zip')
-    jre_tree = _('temp', 'jre6')
+    jre_zip = _('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre7.zip')
+    jre_tree = _('temp', 'jre7')
     FileUtils.rm_rf(jre_tree)
     FileUtils.mkdir_p(jre_tree)
     unzip_file(jre_zip, jre_tree)
     zip.include(jre_tree, :path=>'BuildFiles')
-    zip.include(_('martus-build', 'BuildFiles', 'Fonts', '*.ttf'), :path=>'BuildFiles/jre6/jre6/lib/fonts/fallback')
+    zip.include(_('martus-build', 'BuildFiles', 'Fonts', '*.ttf'), :path=>'BuildFiles/jre7/jre7/lib/fonts/fallback')
     include_artifacts(zip, [_('martus-build', 'BuildFiles', 'Documents')], 'BuildFiles')
     include_artifacts(zip, third_party_client_licenses, 'BuildFiles/Documents/Licenses')
   

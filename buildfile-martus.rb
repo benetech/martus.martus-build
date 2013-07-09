@@ -199,7 +199,7 @@ def unzip_file (file, destination)
 				raise "Can't overwrite #{f_path}"
 			end
 			if(! f.directory?)
-				puts "unzip_file #{file}.#{f} (#{f.name}, #{f_path})"
+				puts "unzip_file #{file}: #{f} (#{f.name}, #{f_path})"
 				zip_file.extract(f.name, f_path)
 			end 
 		end

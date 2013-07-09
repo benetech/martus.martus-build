@@ -43,16 +43,15 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy redistributable Java...'
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\bin"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\bin"
     SetOutPath "$MARTUS_INSTALLATION_DIR\bin"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\COPYRIGHT"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\LICENSE"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\LICENSE.txt"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\README.txt"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\THIRDPARTYLICENSEREADME.txt"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\Welcome.html"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\COPYRIGHT"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\LICENSE"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\README.txt"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\THIRDPARTYLICENSEREADME.txt"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\Welcome.html"
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "..\BuildFiles\jre6\jre6\lib"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\lib"
     
     ; -------------------------------------------
     ; uncomment below for single file distributions
