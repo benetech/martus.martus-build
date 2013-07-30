@@ -29,7 +29,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   
     zip.include(_('martus-build', 'BuildFiles', '*.txt'), :path=>'BuildFiles')
   
-    include_artifacts(zip, third_party_client_source, 'SourceFiles') 
+    include_artifacts(zip, third_party_client_source, 'BuildFiles/SourceFiles') 
     
     zip.include(_('martus-jar-verifier/*.txt'), :path=>'BuildFiles/Verifier')
     zip.include(_('martus-jar-verifier/*.bat'), :path=>'BuildFiles/Verifier')
