@@ -44,32 +44,31 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy redistributable Java...'
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "..\..\jre7\jre7\bin"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\bin"
     SetOutPath "$MARTUS_INSTALLATION_DIR\bin"
-    File /r /x CVS "..\..\jre7\jre7\COPYRIGHT"
-    File /r /x CVS "..\..\jre7\jre7\LICENSE"
-    File /r /x CVS "..\..\jre7\jre7\README.txt"
-    File /r /x CVS "..\..\jre7\jre7\THIRDPARTYLICENSEREADME.txt"
-    File /r /x CVS "..\..\jre7\jre7\Welcome.html"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\COPYRIGHT"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\LICENSE"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\README.txt"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\THIRDPARTYLICENSEREADME.txt"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\Welcome.html"
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "..\..\jre7\jre7\lib"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\lib"
     
     ; -------------------------------------------
     ; uncomment below for single file distributions
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy documents...'
-    File "..\..\ProgramFiles\*.ico"
-    File "..\..\Documents\license.txt"
-    File "..\..\Documents\gpl.txt"
-    File "..\..\Documents\client\README*.txt"
+    File "..\BuildFiles\ProgramFiles\*.ico"
+    File "..\BuildFiles\Documents\license.txt"
+    File "..\BuildFiles\Documents\gpl.txt"
+    File "..\BuildFiles\Documents\client\README*.txt"
 
     SetOutPath "$MARTUS_INSTALLATION_DIR\Docs"
-    File "..\..\Documents\client\*.pdf"
+    File "..\BuildFiles\Documents\client\*.pdf"
 
     SetOutPath "$MARTUS_INSTALLATION_DIR\Docs\Licenses"
-   ;cml2013 cant find this directory  File /r "..\..\Documents\Licenses\*"
-    File /r "..\..\Documents\*.txt" ;cml2013 added in its place
-    
+    File /r "..\BuildFiles\Documents\Licenses\*"
+
     ; remove old jars from lib/ext
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Attempting to delete old lib/ext jars...'
@@ -82,13 +81,13 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy jars...'
     SetOutPath "$MARTUS_INSTALLATION_DIR\lib\ext"
-;cml2013 doesn't exist    File "..\..\Jars\*.jar"
+    File "..\BuildFiles\Jars\*.jar"
     SetOutPath "$MARTUS_INSTALLATION_DIR\src\"
-;    File "..\..\SourceFiles\*.*"
+    File "..\BuildFiles\SourceFiles\*.*"
     
     ; copy martus jars
     SetOutPath $MARTUS_INSTALLATION_DIR
-;    File "..\martus.jar"
+    File "..\martus.jar"
     
     ; ------------------------------------------------
 

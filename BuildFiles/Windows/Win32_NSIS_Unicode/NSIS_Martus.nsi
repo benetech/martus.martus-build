@@ -45,16 +45,15 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy redistributable Java...'
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "jre7\jre7\bin"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\bin"
     SetOutPath "$MARTUS_INSTALLATION_DIR\bin"
-    File /r /x CVS "jre7\jre7\COPYRIGHT"
-    File /r /x CVS "jre7\jre7\LICENSE"
-    File /r /x CVS "jre7\jre7\LICENSE.txt"
-    File /r /x CVS "jre7\jre7\README.txt"
-    File /r /x CVS "jre7\jre7\THIRDPARTYLICENSEREADME.txt"
-    File /r /x CVS "jre7\jre7\Welcome.html"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\COPYRIGHT"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\LICENSE"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\README.txt"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\THIRDPARTYLICENSEREADME.txt"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\Welcome.html"
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "jre7\jre7\lib"
+    File /r /x CVS "..\BuildFiles\jre7\jre7\lib"
     
     ; -------------------------------------------
     ;copy main jar
@@ -108,10 +107,10 @@ write_default_ui:
         ${Case} ${LANG_FARSI}
             StrCpy $MARTUS_LANGUAGE_CODE "fa"
 
-     ;   ${Case} ${LANG_NEPALI}
-      ;      StrCpy $MARTUS_LANGUAGE_CODE "ne"
-  ;      ${Case} ${LANG_BENGALI}
-   ;         StrCpy $MARTUS_LANGUAGE_CODE "bn"
+;       ${Case} ${LANG_NEPALI}
+;           StrCpy $MARTUS_LANGUAGE_CODE "ne"
+;       ${Case} ${LANG_BENGALI}
+;           StrCpy $MARTUS_LANGUAGE_CODE "bn"
         ${Case} ${LANG_KHMER}
             StrCpy $MARTUS_LANGUAGE_CODE "km"
         ${CaseElse}
