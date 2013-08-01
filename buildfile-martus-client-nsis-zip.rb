@@ -53,7 +53,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   
     zip.include(combined_license_file, :path=>'BuildFiles')
     
-    zip.include(_('martus-build', 'BuildFiles', 'Windows', 'Win32_NSIS'))
+    zip.include(_('martus-build', 'BuildFiles', 'Windows', $nsis_script_dir))
     
     zip.include(_('martus-build', 'BuildFiles', 'Fonts'), :path=>'BuildFiles')
   end
