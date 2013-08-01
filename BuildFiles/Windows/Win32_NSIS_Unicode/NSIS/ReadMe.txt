@@ -10,7 +10,7 @@ you can see all the install languages in their native language on the same compu
 Once installed copy these files 
 
 D:\Benetech\martus-build\BuildFiles\Windows\Win32_NSIS\NSIS\Contrib\Language files\*.* 
-o your installed NSIS\Contrib\Language files\ directory.
+to your installed NSIS\Contrib\Language files\ directory.  Make sure the Build machine has these files too!
 
 The changes here allow for you to see the foreign language as well as the English equivalent in the "Installer Language Drop down".
 Note: If you get a newer version of any one of these language files when you install a newer version of NSIS
