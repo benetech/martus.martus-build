@@ -4,6 +4,15 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
 
+unicode = false
+
+$nsis_script_dir = "Win32_NSIS#{unicode ? '_Unicode' : ''}"	
+if unicode
+	$nsis_command = 'wine "c:/Program Files (x86)/NSIS/makensis" /V2'
+else
+	$nsis_command = 'makensis -V2'
+end
+
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
 $client_version = ENV['INPUT_BUILD_NUMBER'] || 'NNN'
