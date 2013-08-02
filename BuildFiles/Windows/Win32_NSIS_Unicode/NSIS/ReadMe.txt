@@ -22,9 +22,9 @@ on the same computer without having to switch your OS to that language.
 
 3. Copy customized language files into the NSIS directory
 The customized files are located in:
-  martus-build\BuildFiles\Windows\Win32_NSIS_Unicode\NSIS\Contrib\Language files
+  martus-build/BuildFiles/Windows/Win32_NSIS_Unicode/NSIS/Contrib/Language files
 
-Copy all of them to your installed NSIS\Contrib\Language files\ directory.  
+Copy all of them to your installed NSIS/Contrib/Language files/ directory.  
 Under Linux, this may be something like:
   ~/.wine/drive_c/Program Files (x86)/NSIS/Contrib/Language Files/
 
