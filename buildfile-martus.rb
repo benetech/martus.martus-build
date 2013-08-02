@@ -4,11 +4,21 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
 
-unicode = false
+unicode = true
 
-$nsis_script_dir = "Win32_NSIS#{unicode ? '_Unicode' : ''}"	
+$nsis_script_dir = "Win32_NSIS#{unicode ? '_Unicode' : ''}"
 if unicode
-	$nsis_command = 'wine "c:/Program Files (x86)/NSIS/makensis" /V2'
+	nsis_dir = "Program Files/NSIS"
+	full_nsis = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
+	if !File.exists? full_nsis
+		puts "NSIS not found at #{full_nsis}"
+		nsis_dir = "Program Files (x86)/NSIS"
+	end
+	full_nsis = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
+	if !File.exists? full_nsis
+		raise "Unable to find NSIS at #{full_nsis}"
+	end
+	$nsis_command = "wine \"c:/#{nsis_dir}/makensis\" /V2"
 else
 	$nsis_command = 'makensis -V2'
 end
