@@ -36,10 +36,10 @@
 
 !insertmacro LANG_STRING MartusShortcutDescription_Text "سيستمِ بولتنِ خبريِ حقوقِ بشرMartus"
 
-!insertmacro LANG_STRING MartusUserGuideShortcut_Text "User Guide (in English, no Farsi\Dari version available)"
+!insertmacro LANG_STRING MartusUserGuideShortcut_Text "User Guide (in English, no translated version available)"
 !insertmacro LANG_STRING MartusUserGuideShortcut_Filename "martus_user_guide.pdf"
 
-!insertmacro LANG_STRING MartusQuickstartShortcut_Text "Quick Start Guide (in English, no Farsi\Dari version available)"
+!insertmacro LANG_STRING MartusQuickstartShortcut_Text "Quick Start Guide (in English, no translated version available)"
 !insertmacro LANG_STRING MartusQuickstartShortcut_Filename "quickstartguide.pdf"
 
 !insertmacro LANG_STRING MartusUninstallShortcut_Text "حذفِ برنامه"
