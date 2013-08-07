@@ -27,6 +27,8 @@ puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
 $client_version = ENV['INPUT_BUILD_NUMBER'] || 'NNN'
 
+$ORCHID_VERSION = '0.9.1'
+
 def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"
 end
@@ -113,7 +115,7 @@ def build_jcommon_spec(type)
 end
 
 def build_orchid_spec(type)
-  return build_spec('com.subgraph.orchid', 'orchid', type, '0.9.0')
+  return build_spec('com.subgraph.orchid', 'orchid', type, $ORCHID_VERSION)
 end
 
 # LibExt, from public repository
