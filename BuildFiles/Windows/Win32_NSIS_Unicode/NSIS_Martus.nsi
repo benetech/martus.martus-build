@@ -164,7 +164,7 @@ shortcut_qs:
     CreateShortCut "$SMPROGRAMS\Martus\$(MartusQuickstartShortcut_Text).lnk" "$MARTUS_INSTALLATION_DIR\Docs\$(MartusQuickstartShortcut_Filename)" "" "" "" "" "" "Martus $(MartusQuickstartShortcut_Text)"
 skip_shortcut_qs:
 
-    CreateShortCut "$SMPROGRAMS\Martus\$(MartusUninstallShortcut_Text) Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\uninst.exe" "" "" "" "" "" "$(MartusUninstallShortcut_Text) Martus"
+    CreateShortCut "$SMPROGRAMS\Martus\$(MartusUninstallShortcut_Text) Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\uninst.exe" "" "$MARTUS_INSTALLATION_DIR\app.ico" "" "" "" "$(MartusUninstallShortcut_Text) Martus"
 
 lbl_no_startmenu_shortcut:
     CreateShortCut "$MARTUS_INSTALLATION_DIR\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m -Xbootclasspath/p:$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
