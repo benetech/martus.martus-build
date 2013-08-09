@@ -149,7 +149,19 @@ same_version_present:
      Goto continue_installation
 
 older_version_present:
+     Push $EXISTING_MARTUS_VERSION
+     Push ${PRODUCT_OLDEST_NSIS_UPGRADEABLE_EXTENDED_VERSION}
+     Call ${UN}VersionCheck
+     Pop $0
+     StrCmp $0 "1" 0 uninstall_manually_and_remove_startmenuitems
+    
     StrCmp ${IS_JAVA_DELIVERED} "Y" replace_older_version check_for_ancient_version
+    Goto check_for_ancient_version
+    
+uninstall_manually_and_remove_startmenuitems:
+     MessageBox MB_OK "$(UninstallMartusManuallyAndRemoveLinks_Text)"  /SD IDOK
+     Goto abort_installation
+
 
 check_for_ancient_version:
      Push $EXISTING_MARTUS_VERSION

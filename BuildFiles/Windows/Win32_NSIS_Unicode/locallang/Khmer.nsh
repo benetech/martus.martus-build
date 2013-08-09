@@ -24,7 +24,7 @@
 !insertmacro LANG_STRING LangDialog_Title "ភាសា​សម្រាប់​កម្មវិធី​ដំឡើង"
 !insertmacro LANG_STRING LangDialog_Text "សូម​ជ្រើសភាសា​សម្រាប់​កម្មវិធី​ដំឡើង"
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} has been installed on your computer.\r\n \r\n Visit https://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\nA (Language Pack) allows you to install new and updated translations or documentation at any time following a full Martus release. Language Packs can contain updates to the Martus Client User Interface translation, the User Guide, Quick Start Guide, README file, and in-program help.\r\n \r\nClick Finish to close this Wizard"
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ត្រូវបានដំឡើងនៅលើកុំព្យូទ័ររបស់អ្នក.\r\n \r\n ទស្សនា https://www.martus.org/downloads/ ដើម្បីមើលថាតើណាមួយខ្ចប់ធ្វើឱ្យទាន់សម័យ Martus ភាសាគឺអាចប្រើបាន។ \r\n \r\nមួយ (កញ្ចប់ភាសា) អនុញ្ញាតឱ្យអ្នកដំឡើងការបកប្រែថ្មីនិងបានធ្វើឱ្យទាន់សម័យឬឯកសារនៅពេលណាមួយបន្ទាប់ពីការចេញផ្សាយ Martus មួយពេញលេញ។ កញ្ចប់ភាសាអាចមានភាពទាន់សម័យដើម្បីឱ្យអតិថិជនអ្នកប្រើ Martus ការបកប្រែចំណុចប្រទាក់មគ្គុទ្ទេសអ្នកប្រើ, មគ្គុទ្ទេសក៍ចាប់ផ្ដើមរហ័ស, ឯកសារឯកសារ README និងជំនួយនៅក្នុងកម្មវិធី។\r\n \r\nចុចបញ្ចប់ដើម្បីបិទអ្នកជំនួយការនេះ"
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts
@@ -58,5 +58,7 @@
 !insertmacro LANG_STRING RemoveInstallShieldVersion_Text "​ការ​ដំឡើង​​​កំណែ​មុន​នៃ ${PRODUCT_NAME} មាន​នៅក្នុង​កុំព្យូទ័រ​របស់​អ្នក​រួច​ហើយ។ យើង​នឹង​ប៉ុនប៉ង​ចាប់​ផ្តើម​លុប​វា​ចេញ ហើយ​ពេល​ដែល​លុប​វា​រួច ការ​ដំឡើង​បច្ចុប្បន្ន​នឹង​បន្ត។ បើ​អ្នក​ពុំ​ទាន់​បានចម្លង​កំណែ​បច្ចុប្បន្ន​របស់ Martus ទុក​ជា​ព័ត៌មាន​បម្រុងទេ​ យើង​ស្នើ​អោយ​អ្នក​ចាក​ចេញ​ពី​ការ​ដំឡើង​នេះ​ ហើយ​ចម្លង​ជា​ព័ត៌មានបម្រុង​ ​មុន​ពេល​លុប​វា​ចេញ។​ អ្នកអាច​ដំណើរ​ការដំឡើង​​នេះ​ម្តង​ទៀត​បាន។" 
 !insertmacro LANG_STRING CannotUpgradeNoJava_Text "កំណែ​របស់ Martus ដែល​អ្នក​បាន​ដំឡើង​​រួច​ហើយ​នេះ​ ​អាច​ត្រូវ​បាន​អភិវឌ្ឍ​ដោយ​កម្មវិធីដំឡើង​​នៃ​កំណែ​ចុង​ក្រោយ​ដែល​មាន​រួម​បញ្ចូល​កម្មវិធី​ Java។"
 !insertmacro LANG_STRING CannotRemoveInstallShieldVersion_Text "យើង​មិន​អាច​យក​កំណែ​ចាស់​នៃ Martus ចេញ​ពី​កុំព្យូទ័រ​របស់​អ្នក​បាន​ទេ។​ អ្នក​ដំឡើង ​នឹង​ចាក​ចេញ​ពេល​នេះ​ហើយ​ សូម​យក​ច្បាប់​ចម្លង​នៃ Martus ចេញ​ដោយ​ប្រើ​ប្រាស់​ Add/Remove Programs ក្នុង Control Panel ហើយ​ដំណើរ​ការ​ដំឡើង​នេះ​ម្តង​ទៀត។​ បើ​អ្នក​ពុំ​ទាន់​បាន​ចម្លង​កំណែ​បច្ចុប្បន្ន​របស់ Martus ទុកជា​ព័ត៌មាន​បម្រុង​ទេ​ យើង​ស្នើ​អោយ​អ្នក​​ចម្លង​​វា​ទុក​ជា​មុន​សិន ​មុន​ពេល​លុប​វា​ចេញ។"
-!insertmacro LANG_STRING CannotUpgradeNoMartus_Text "This is an upgrade version of Martus. Please download and install the full version installer that carries Java."
+!insertmacro LANG_STRING CannotUpgradeNoMartus_Text "នេះគឺជាកំណែដែលបានធ្វើឱ្យប្រសើរឡើងនៃការ Martus ។ សូមទាញយកនិងដំឡើងកម្មវិធីដំឡើងកំណែពេញលេញថាការអនុវត្ដចា។"
+
+!insertmacro LANG_STRING UninstallMartusManuallyAndRemoveLinks_Text "អ្នកមិនអាចធ្វើឱ្យប្រសើរឡើងពីកំណែចាស់ជាងរបស់ Martus 4.3 ទៅកំណែបច្ចុប្បន្ន។ អ្នកត្រូវការដើម្បីលុបកំណែរពីមុនរបស់អ្នក Martus (មានទាំងនៅក្រោមការចាប់ផ្តើមកម្មវិធី>> Martus> លុប Martus ឬដោយប្រើការបន្ថែម / យកចេញកម្មវិធីនៅក្នុងផ្ទាំងបញ្ជា) ។ ប្រសិនបើអ្នកកំពុងរត់លើ Windows ម៉ាស៊ីន Vista ឬ Windows 7 និងមានផ្លូវកាត់ Martus នៅក្នុងម៉ឺនុយចាប់ផ្ដើមរបស់អ្នកអ្នកក៏ប្រហែលជាត្រូវការដើម្បីយកក្រុម Martus ដោយចូលទៅកាន់កម្មវិធីចាប់ផ្តើម> ចុចកណ្ដុរខាងស្ដាំលើក្រុម Martus និងការជ្រើសរើស 'លុប' ។ បើមិនដូច្នោះទេតំណភ្ជាប់ទាំងនោះនឹងនៅតែមាននៅពេលដែលអ្នកដំឡើងកំណែបច្ចុប្បន្នរបស់ផ្នែក Martus ដែលអាចជាបញ្ហាសុវត្ថិភាព។"
 
