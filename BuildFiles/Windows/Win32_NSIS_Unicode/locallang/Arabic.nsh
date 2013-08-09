@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "لغة برنامج التثبيت"
 !insertmacro LANG_STRING LangDialog_Text "لطفا قم باختيار لغة برنامج التثبيت."
 
-!insertmacro LANG_STRING FinishDialog_Text "لقد تم تنصيب ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} على الجهاز.\r\n \r\n Visit https://www.martus.org/downloads/ to download Martus Language Packs. \r\n \r\nتسمح لك أية 'حزمة لغوية' بتثبيت ترجمات أو توثيقات جديدة و مُحدّثة في أي وقت يتبع إصدارٍ كامل لبرنامج Martus. قد تحتوي الحزم اللغوية على تحديثات لترجمة واجهة مستخدم برنامج Martus العميل و دليل المستخدم و دليل المرجع المختصر و ملف الملاحظات و تعليمات البرنامج الداخلية. إذا كانت هناك وصلة لحزمة لغوية عربية تُلائم إصدارك من برنامج Martus بالأسفل، لطفا قم بتحميل ملف (Martus-ar.mlp) و ضعه في مجلد تثبيت Martus. و عندما تقوم بتشغيل Martus بعد ذلك، سوف تقوم الحزمة بتحميل أية ترجمات و/ أو تعليمات مُحدّثة، و سوف تضع أية توثيق مُحدّث في مجلد Martus\Docs.\r\n \r\nإضغط إنهاء لإغلاق مرشد الإعداد"
+!insertmacro LANG_STRING FinishDialog_Text "لقد تم تنصيب ${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} على الجهاز.\r\n \r\n زار https://www.martus.org/downloads/ لتحميل حزم اللغة برنامج Martus. \r\n \r\nتسمح لك أية 'حزمة لغوية' بتثبيت ترجمات أو توثيقات جديدة و مُحدّثة في أي وقت يتبع إصدارٍ كامل لبرنامج Martus. قد تحتوي الحزم اللغوية على تحديثات لترجمة واجهة مستخدم برنامج Martus العميل و دليل المستخدم و دليل المرجع المختصر و ملف الملاحظات و تعليمات البرنامج الداخلية. إذا كانت هناك وصلة لحزمة لغوية عربية تُلائم إصدارك من برنامج Martus بالأسفل، لطفا قم بتحميل ملف (Martus-ar.mlp) و ضعه في مجلد تثبيت Martus. و عندما تقوم بتشغيل Martus بعد ذلك، سوف تقوم الحزمة بتحميل أية ترجمات و/ أو تعليمات مُحدّثة، و سوف تضع أية توثيق مُحدّث في مجلد Martus\Docs.\r\n \r\nإضغط إنهاء لإغلاق مرشد الإعداد"
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts
@@ -50,6 +50,9 @@
 
 ; uninstall strings
 !insertmacro LANG_STRING UninstallSuccess_Text "لقد تمت إزالة $(^Name) من على حاسوبك بنجاح."
+
+!insertmacro LANG_STRING UninstallMartusManuallyAndRemoveLinks_Text "لا يمكنك الترقية من الإصدارات من برنامج Martus أقدم من 4.3 إلى الإصدار الحالي. تحتاج إلى إلغاء تثبيت الإصدار السابق من برنامج Martus الخاص (إما تحت ابدأ> البرامج> برنامج Martus> إلغاء تثبيت برنامج Martus، أو باستخدام إضافة / إزالة البرامج في لوحة التحكم). إذا كنت تقوم بتشغيل Windows Vista أو Windows 7، وكان اختصار لبرنامج Martus في قائمة ابدأ الخاصة بك، فإنك قد تحتاج أيضا إلى إزالة مجموعة برنامج Martus من خلال الذهاب الى ابدأ> البرامج، والنقر بزر الماوس الأيمن على مجموعة Martus و اختيار 'حذف'. وإلا هذه الروابط ستظل عند إزالة تثبيت الإصدار الحالي من برنامج Martus، التي يمكن أن تكون قضية أمنية."
+
 
 !insertmacro LANG_STRING NeedAdminPrivileges_Text "انت في حاجة إلى إمتيازات إدارية على الحاسوب المحلي كي تستطيع تثبيت $(^Name)"
 !insertmacro LANG_STRING NeedAdminPrivilegesError_Text "توجد مشكلة غير معروفة تعوق الحصول على الامتيازات الإدارية. تأكد أن لك امتيازات إدارية على هذا الحاسوب و إلا فقد لا يتم تثبيت $(^Name) بنجاح"
