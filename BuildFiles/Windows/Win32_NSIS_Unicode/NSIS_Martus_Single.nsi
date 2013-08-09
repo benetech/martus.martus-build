@@ -32,6 +32,7 @@ unicode "true"
 ;--------------------------------
 ; main file section
 Section "MainSection" SEC01
+    SetShellVarContext all
 	StrCpy $MARTUS_INSTALLATION_DIR $INSTDIR
     SetOutPath "$MARTUS_INSTALLATION_DIR"
     SetOverwrite ifnewer

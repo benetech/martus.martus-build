@@ -45,6 +45,7 @@ FunctionEnd
 ;--------------------------------
 ; uninstallation
 Section Uninstall
+    SetShellVarContext all
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Checking if program is running...'
     IfFileExists "$MARTUS_INSTALLATION_DIR\lock" 0 martus_not_running
