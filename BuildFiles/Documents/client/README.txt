@@ -20,12 +20,19 @@ the https://www.martus.org software download page. Other languages will be
 available in the future, as language-packs on the documentation page 
 (https://www.martus.org/downloads)
 
+Note for Windows users:  
+  You cannot upgrade from earlier versions of Martus to the 4.3 version.  You need to uninstall your 
+  earlier version of Martus (either under Start > Programs > Martus > Uninstall Martus, or using 
+  Add/Remove Programs in the Control Panel).  If you are running Windows Vista or Windows 7 and 
+  had a Martus shortcut in your Start menu, you may also need to remove the Martus group by going 
+  to Start > Programs, right-clicking on the Martus group, and picking "Delete".  Otherwise those 
+  links will remain when you uninstall Martus 4.3, which could be a security issue.
+
 - Security: 
   1) Integrated Tor into Martus, via the Orchid software, developed by Subgraph.  You can 
   turn on Tor in Martus by going to Options > Preferences. Tor can improve security, but may 
   making sending bulletins slower.  You can learn more about Tor at  https://www.torproject.org/. 
-  2) The Windows installer now includes Java 7, and Martus will run with Java 7 on 
-  other operating systems (including OpenJDK 7 on Linux).
+  2) Upgraded to Java 7.  
   3) Added ability to view full Public Account ID of Headquarters or Field Desk accounts you have configured, so 
   that you can check with the owners of those accounts to make sure you have the correct information.  
   4) Updated Uninstaller to delete the Martus group in the Start menu in Windows 7 and Vista.
@@ -48,8 +55,8 @@ Translations:
   1) Corrected display of several items in Burmese, including "Load Values", section headers, and page reports.  
   2) Added additional instructions for translators to Martus Translation File (.mtf).
   3) Fixed issues with font display on final page of Windows installer for Russian, Arabic, Farsi, and Thai.
-  4) You can now install Martus in any supported language regardless of what 
-  language your Windows OS is set to and it will display correctly.
+  4) You can now install Martus in any language regardless of what language your Windows OS is set to and it 
+  will display correctly.
   5) Added the Khmer translation of the Windows Installer.
 - Updated to new Martus logo.
 - Several other minor bug fixes, clarifications and clean-ups to the user screens.   
