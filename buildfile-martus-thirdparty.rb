@@ -67,8 +67,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 #	install artifact(ICU4J_SOURCE_SPEC).from(source_file(name, 'common/PersianCalendar', 'icu4j_3_2_license.html'))
 	install artifact(ICU4J_LICENSE_SPEC).from(license_file(name, 'common/PersianCalendar', 'icu4j_3_2_license.html'))
 
-	install artifact(ORCHID_SPEC).from(jar_file(name, 'common/orchid', "orchid-#{$ORCHID_VERSION}.cfcc9f3.jar"))
-	install artifact(ORCHID_SOURCE_SPEC).from(source_file(name, 'common/orchid', "orchid-#{$ORCHID_VERSION}.cfcc9f3-src.zip"))
+	install artifact(ORCHID_SPEC).from(jar_file(name, 'common/orchid', "orchid-#{$ORCHID_VERSION}.6280ed9.jar"))
+	install artifact(ORCHID_SOURCE_SPEC).from(source_file(name, 'common/orchid', "orchid-#{$ORCHID_VERSION}.6280ed9-src.zip"))
 	install artifact(ORCHID_LICENSE_SPEC).from(license_file(name, 'common/orchid', 'LICENSE'))
 
 	#client
