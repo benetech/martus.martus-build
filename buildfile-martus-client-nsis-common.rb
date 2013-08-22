@@ -16,7 +16,8 @@ def run_nsis_task(nsis_zip, nsi_name, exe_name)
 	error_output = `#{nsis_cmd}`
 	status = $?
 	if status.exitstatus > 0
-		raise "Error running makensis #{status.exitstatus}: #{error_output.split("\n").join("\n  ")}"
+		error = error_output.split("\n").join("\n  ")
+		raise "Error running makensis #{status.exitstatus}: #{error}"
 	end
 	puts 'Finished makensis'
 	
