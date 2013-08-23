@@ -34,7 +34,7 @@
 !endif
 
 !ifdef MUI_LICENSEPAGE | MUI_UNLICENSEPAGE
-  ${LangFileString} MUI_INNERTEXT_LICENSE_TOP "សូម​ចុច "ទំព័រក្រោម" ដើម្បី​មើល​ដល់​ចុង​បញ្ចប់​នៃ​កិច្ច​ព្រមព្រៀង ។"
+  ${LangFileString} MUI_INNERTEXT_LICENSE_TOP "សូម​ចុច ទំព័រក្រោម ដើម្បី​មើល​ដល់​ចុង​បញ្ចប់​នៃ​កិច្ច​ព្រមព្រៀង ។"
 !endif
   
 !ifdef MUI_COMPONENTSPAGE
