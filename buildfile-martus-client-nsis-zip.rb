@@ -10,8 +10,8 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   combined_license_file = _('temp', 'combined-license.txt')
   file combined_license_file do
     FileUtils.mkdir_p File.dirname(combined_license_file)
-    martus_license = File.readlines(_('martus-build', 'BuildFiles', 'Documents', 'license.txt'))
-    gpl = File.readlines(_('martus-build', 'BuildFiles', 'Documents', 'gpl.txt'))
+    martus_license = File.readlines(_('martus-build', 'BuildFiles', 'Documents', 'license.txt')).join
+    gpl = File.readlines(_('martus-build', 'BuildFiles', 'Documents', 'gpl.txt')).join
     File.open(combined_license_file, "w") do | out |
       out.write(martus_license)
       out.write("\n\n\t**********************************\n\n")
