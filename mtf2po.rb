@@ -38,10 +38,13 @@ end
 def process_entry(english, translated)
 	filler, english_text = get_stuff_before_and_after_equals(english)
 	hash_and_context, translated_text = get_stuff_before_and_after_equals(translated)
-	
-	hash = hash_and_context[1,4]
-	context = hash_and_context[6..-1]
-	
+	if hash_and_context.index('-') == 0
+		hash = hash_and_context[1,4]
+		context = hash_and_context[6..-1]
+	else
+		hash = ''
+		context = hash_and_context 
+	end	
 	
 	puts
 	puts "#: #{hash}"
@@ -96,7 +99,7 @@ def process_entry(english, translated)
 		puts "#. Change the \"ddd\" in \"<DefaultValue>ddd</DefaultValue>\" to whatever letter the translation of \"default\" begins with."
 	end
 	if(context.index("CreateCustomFieldsHelp3"))
-		puts "#. Leave field types in English in examples (e.g. BOOLEAN, DATE)
+		puts "#. Leave field types in English in examples (e.g. BOOLEAN, DATE)"
 		puts "#. do not translate words between angle brackets in the XML for custom fields, such as: " +
 		"<Field type='SECTION'>, <Field type='STRING'>, <Field type='BOOLEAN'>, <Field type='DATE'>, " + 
 		"<Field type='DATERANGE'>, <Field type='DROPDOWN'>, <Field type='MULTILINE'>  " +
@@ -112,6 +115,19 @@ def process_entry(english, translated)
 		"For Reusable choices sections, translate anything within single quotes '...', but not  " +
 		"<UseReusableChoices code= , </UseReusableChoices> " +
 		"<ReusableChoices code= , </ReusableChoices>, label= , <Choice code= ."
+	end
+	untranslated = (/^<(.*?)>$/.match translated_text)
+	if(untranslated)
+		if(untranslated[1] == english_text)
+			puts "#. Translate this string and remove the surrounding < >."
+		else
+			puts "#. Verify this translation and remove the surrounding < >."
+			puts "#, fuzzy"
+			translated_text = untranslated[1]
+		end
+	end 
+	if(english_text.empty?)
+		english_text = ' '
 	end
 	puts "#. #{context}"
 	puts "msgid  \"#{english_text}\""
@@ -168,7 +184,7 @@ def write_header
 	puts
 end
 
-mtf_filename = "/home/kevins/work/hg/martus/martus/martus-client/source/org/martus/client/swingui/Martus-es.mtf"
+mtf_filename = "/home/kevins/work/hg/martus/martus/martus-client/source/org/martus/client/swingui/Martus-ru.mtf"
 File.open(mtf_filename) do | input |
 	process_header(input)
 	write_header
