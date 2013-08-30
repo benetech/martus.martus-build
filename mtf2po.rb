@@ -121,7 +121,7 @@ def process_entry(english, translated)
 		if(untranslated[1] == english_text)
 			puts "#. Translate this string and remove the surrounding < >."
 		else
-			puts "#. Verify this translation and remove the surrounding < >."
+			puts "#. This English string has changed, so this translation need to be updated and then marked non-fuzzy."
 			puts "#, fuzzy"
 			translated_text = untranslated[1]
 		end
