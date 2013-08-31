@@ -116,19 +116,20 @@ def process_entry(english, translated)
 		"<UseReusableChoices code= , </UseReusableChoices> " +
 		"<ReusableChoices code= , </ReusableChoices>, label= , <Choice code= ."
 	end
+	if(english_text.empty?)
+		english_text = ' '
+		translated_text = ' '
+	end
 	untranslated = (/^<(.*?)>$/.match translated_text)
 	if(untranslated)
 		if(untranslated[1] == english_text)
-			puts "#. Translate this string and remove the surrounding < >."
+			translated_text = ""
 		else
 			puts "#. This English string has changed, so this translation need to be updated and then marked non-fuzzy."
 			puts "#, fuzzy"
 			translated_text = untranslated[1]
 		end
 	end 
-	if(english_text.empty?)
-		english_text = ' '
-	end
 	puts "#. #{context}"
 	puts "msgid  \"#{english_text}\""
 	puts "msgstr \"#{translated_text}\""
