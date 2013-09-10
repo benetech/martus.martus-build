@@ -140,7 +140,32 @@ def process_entry(output, english, translated)
 	if $pot
 		translated_text = "" 
 	end
+
+	# Transifex fails if original starts with newline and translated doesn't	
+	if english_text[0,2] == "\\n" && translated_text[0,2] != "\\n"
+		translated_text = "\\n" + translated_text
+	end
 	
+	# Transifex fails if original doesn't start with newline but translated does	
+	if translated_text[0,2] == "\\n" && english_text[0,2] != "\\n"
+		translated_text = translated_text[2..-1]
+	end
+
+	# Transifex fails if original ends with newline and translated doesn't	
+	if english_text[-2,2] == "\\n" && translated_text[-2,2] != "\\n"
+		translated_text = translated_text + "\\n"
+	end
+	
+	# Transifex fails if original doesn't end with newline but translated does	
+	if translated_text[-2,2] == "\\n" && english_text[-2,2] != "\\n"
+		translated_text = translated_text[0..-3]
+	end
+
+	# Special case for a poor Arabic translation
+	if translated_text == "\\n" && english_text[0,2] != "\\n"
+		translated_text = " \\n"
+	end
+
 	output.puts "msgctxt \"#{context}\""
 	output.puts "msgid \"\""
 	output.puts "\"#{english_text}\""
