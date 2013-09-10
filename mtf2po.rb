@@ -45,6 +45,12 @@ def process_entry(english, translated)
 		hash = ''
 		context = hash_and_context 
 	end	
+
+	english_text.gsub!(/\\\//, "\\\\\\/") # why are 3 pairs of \ needed here?
+	translated_text.gsub!(/\\\//, "\\\\\\/")
+
+	english_text.gsub!(/\"/, "\\\"")
+	translated_text.gsub!(/\"/, "\\\"")
 	
 	puts
 	puts "#: #{hash}"
@@ -130,9 +136,11 @@ def process_entry(english, translated)
 			translated_text = untranslated[1]
 		end
 	end 
-	puts "#. #{context}"
-	puts "msgid  \"#{english_text}\""
-	puts "msgstr \"#{translated_text}\""
+	puts "msgctxt \"#{context}\""
+	puts "msgid \"\""
+	puts "\"#{english_text}\""
+	puts "msgstr \"\""
+	puts "\"#{translated_text}\""
 end
 
 def get_stuff_before_and_after_equals(text)
@@ -143,7 +151,7 @@ def get_stuff_before_and_after_equals(text)
 end
 
 def write_quoted(text)
-	puts "  \"#{text}\""
+	puts "\"#{text}\""
 end
 
 def process_header(input)
@@ -173,7 +181,7 @@ def write_header
 	write_quoted "Project-Id-Version: Martus #{$version}\\n"
 	write_quoted "Report-Msgid-Bugs-To: info@martus.org\\n"
 	write_quoted "POT-Creation-Date: #{Time.now}\\n"
-	#write_quoted "PO-Revision-Date: \\n"
+	#write_quoted "PO-Revision-Date: #{Time.now}\\n"
 	#write_quoted "Last-Translator: Jeremy <jeremyy@miradi.org>\\n"
 	write_quoted "Language-Team: #{$language_name}\\n"
 	write_quoted "MIME-Version: 1.0\\n"
@@ -185,7 +193,8 @@ def write_header
 	puts
 end
 
-mtf_filename = "/home/kevins/work/hg/martus/martus/martus-client/source/org/martus/client/swingui/Martus-ru.mtf"
+$language = 'es'
+mtf_filename = "/home/kevins/work/hg/martus/martus/martus-client/source/org/martus/client/swingui/Martus-#{$language}.mtf"
 File.open(mtf_filename) do | input |
 	process_header(input)
 	write_header
