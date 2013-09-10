@@ -81,21 +81,19 @@ class TranslationEntry
 	
 	def append(mode, text)
 		case mode
+			when :msgctxt then
+				@context << text
 			when :msgid then
 				@msgid << text
 			when :msgstr then
 				@msgstr << text
 			else
-				raise "Unknown mode: #{mode}"
+				raise "Unknown mode: #{mode} (#{text})"
 		end
 	end
 	
 	def set_hex(hex)
 		@hex = hex
-	end
-	
-	def set_context(context)
-		@context = context
 	end
 	
 	def set_fuzzy
@@ -149,6 +147,8 @@ class PoEntryReader
 					mode = :msgid
 				elsif line.match(/^msgstr /)
 					mode = :msgstr
+				elsif line.match(/^msgctxt /)
+					mode = :msgctxt
 				end
 				
 				text = extract_text(line)
@@ -177,9 +177,6 @@ class PoEntryReader
 			if(hex)
 				entry.set_hex(hex[1])
 			end
-		elsif line.match /^#\./
-			context = (/\s+(.*)/.match line)
-			entry.set_context(context[1])
 		elsif line.match /^#,\s+fuzzy/
 			entry.set_fuzzy
 		else
@@ -250,6 +247,6 @@ class MtfWriter
 	end
 end
 
-language_code = 'ru'
+language_code = 'es'
 contents = PoReader.read(language_code, File.open("/home/kevins/Downloads/Martus-#{language_code}.po"))
 MtfWriter.write(STDOUT, contents)
