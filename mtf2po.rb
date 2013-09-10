@@ -24,18 +24,18 @@ Boston, MA 02111-1307, USA.
 =end
 
 
-def process_file(input)
+def process_file(input, output)
 	while(!input.eof?)
 		line = input.gets.strip
 		if line.index('#_') == 0
 			english = line
 			translated = input.gets.strip
-			process_entry(english, translated)
+			process_entry(output, english, translated)
 		end
 	end
 end
 
-def process_entry(english, translated)
+def process_entry(output, english, translated)
 	filler, english_text = get_stuff_before_and_after_equals(english)
 	hash_and_context, translated_text = get_stuff_before_and_after_equals(translated)
 	if hash_and_context.index('-') == 0
@@ -52,22 +52,22 @@ def process_entry(english, translated)
 	english_text.gsub!(/\"/, "\\\"")
 	translated_text.gsub!(/\"/, "\\\"")
 	
-	puts
-	puts "#: #{hash}"
+	output.puts
+	output.puts "#: #{hash}"
 	if(english_text.index("\\n"))
-		puts "#. Do NOT translate the \\n because they represent newlines."
+		output.puts "#. Do NOT translate the \\n because they represent newlines."
 	end
 	if(english_text.index("Benetech"))
-		puts "#. Do NOT translate the word Benetech."
+		output.puts "#. Do NOT translate the word Benetech."
 	end
 	if(english_text.index("Martus"))
-		puts "#. Do NOT translate the word Martus."
+		output.puts "#. Do NOT translate the word Martus."
 	end
 	if(english_text.index("Tor"))
-		puts "#. Do NOT translate the word Tor."
+		output.puts "#. Do NOT translate the word Tor."
 	end
 	if(english_text =~ /#.*#/)
-		puts "#. Do not translate words that are surrounded by #'s, but you may move " + 
+		output.puts "#. Do not translate words that are surrounded by #'s, but you may move " + 
 		"them around as grammatically appropriate. " +
 		"Example: #TotalNumberOfFilesInBackup#, #Titles#, #FieldLabel#, etc. " +
 		"as these words will be replaced when the program runs with " +
@@ -76,37 +76,37 @@ def process_entry(english, translated)
 		"#Titles# = 'A list of bulletin titles' "
 	end
 	if(english_text =~ /\(\..*\)/)
-		puts "#. For file filters like 'Martus Report Format (.mrf), " +
+		output.puts "#. For file filters like 'Martus Report Format (.mrf), " +
 		"The descriptive names should be translated, but the (.mrf) must not be translated."
 	end
 	if(context == "field:VirtualKeyboardKeys")
-		puts "#. Keep the english alphabet, but include any " + 
+		output.puts "#. Keep the english alphabet, but include any " + 
 		"non-english characters at the end of the english alphabet/numbers/special " + 
 		"characters (e.g. attach entire Thai alphabet at the end of the line)."
 	end
 	if(context == "field:translationVersion")
-		puts "#. Do not translate the numbers."
+		output.puts "#. Do not translate the numbers."
 	end
 	if(context == "field:ErrorCustomFields")
-		puts "#. Do not translate the numbers."
+		output.puts "#. Do not translate the numbers."
 	end
 	if(context.index("CreateCustomFieldsHelp"))
-		puts "#. You can translate tags into foreign characters (but without punctuation or spaces)."
-		puts "#. Check the User Guide section 10b to see if the text has already been translated and use the same translation for consistency."
+		output.puts "#. You can translate tags into foreign characters (but without punctuation or spaces)."
+		output.puts "#. Check the User Guide section 10b to see if the text has already been translated and use the same translation for consistency."
 	end
 	if(context.index("CreateCustomFieldsHelp1") || context.index("CreateCustomFieldsHelp2"))
-		puts "#. Leave standard field tags in English, but put translation in parentheses after " + 
+		output.puts "#. Leave standard field tags in English, but put translation in parentheses after " + 
 		"english : e.g.  'author' (translation-of-author from mtf, e.g. autor in spanish), " +
 		"so users know what they refer to."
 	end
 	if(context.index("CreateCustomFieldsHelp2"))
-		puts "#. Leave field types in English (e.g. BOOLEAN, DATE), " + 
+		output.puts "#. Leave field types in English (e.g. BOOLEAN, DATE), " + 
 		"but put translation in parentheses after english, so users know what they refer to."
-		puts "#. Change the \"ddd\" in \"<DefaultValue>ddd</DefaultValue>\" to whatever letter the translation of \"default\" begins with."
+		output.puts "#. Change the \"ddd\" in \"<DefaultValue>ddd</DefaultValue>\" to whatever letter the translation of \"default\" begins with."
 	end
 	if(context.index("CreateCustomFieldsHelp3"))
-		puts "#. Leave field types in English in examples (e.g. BOOLEAN, DATE)"
-		puts "#. do not translate words between angle brackets in the XML for custom fields, such as: " +
+		output.puts "#. Leave field types in English in examples (e.g. BOOLEAN, DATE)"
+		output.puts "#. do not translate words between angle brackets in the XML for custom fields, such as: " +
 		"<Field type='SECTION'>, <Field type='STRING'>, <Field type='BOOLEAN'>, <Field type='DATE'>, " + 
 		"<Field type='DATERANGE'>, <Field type='DROPDOWN'>, <Field type='MULTILINE'>  " +
 		"<Field type='LANGUAGE'>, <Field type='MESSAGE'>, <Field type='GRID'>,  " +
@@ -131,16 +131,21 @@ def process_entry(english, translated)
 		if(untranslated[1] == english_text)
 			translated_text = ""
 		else
-			puts "#. This English string has changed, so this translation need to be updated and then marked non-fuzzy."
-			puts "#, fuzzy"
+			output.puts "#. This English string has changed, so this translation need to be updated and then marked non-fuzzy."
+			output.puts "#, fuzzy"
 			translated_text = untranslated[1]
 		end
-	end 
-	puts "msgctxt \"#{context}\""
-	puts "msgid \"\""
-	puts "\"#{english_text}\""
-	puts "msgstr \"\""
-	puts "\"#{translated_text}\""
+	end
+	
+	if $pot
+		translated_text = "" 
+	end
+	
+	output.puts "msgctxt \"#{context}\""
+	output.puts "msgid \"\""
+	output.puts "\"#{english_text}\""
+	output.puts "msgstr \"\""
+	output.puts "\"#{translated_text}\""
 end
 
 def get_stuff_before_and_after_equals(text)
@@ -150,8 +155,8 @@ def get_stuff_before_and_after_equals(text)
 	return [before, after]
 end
 
-def write_quoted(text)
-	puts "\"#{text}\""
+def write_quoted(output, text)
+	output.puts "\"#{text}\""
 end
 
 def process_header(input)
@@ -175,29 +180,46 @@ def extract_after_colon(line)
 	return line[colon+1..-1].strip
 end
 
-def write_header
-	puts "msgid \"\""
-	puts "msgstr \"\""
-	write_quoted "Project-Id-Version: Martus #{$version}\\n"
-	write_quoted "Report-Msgid-Bugs-To: info@martus.org\\n"
-	write_quoted "POT-Creation-Date: #{Time.now}\\n"
-	#write_quoted "PO-Revision-Date: #{Time.now}\\n"
-	#write_quoted "Last-Translator: Jeremy <jeremyy@miradi.org>\\n"
-	write_quoted "Language-Team: #{$language_name}\\n"
-	write_quoted "MIME-Version: 1.0\\n"
-	write_quoted "Content-Type: text/plain; charset=UTF-8\\n"
-	write_quoted "Content-Transfer-Encoding: 8bit\\n"
-	#write_quoted "Plural-Forms: nplurals=2; plural=(n != 1);\\n"
-	#write_quoted "X-Poedit-Bookmarks: 874,-1,-1,-1,-1,-1,-1,-1,-1,-1\\n"
-	puts
-	puts
+def write_header(output)
+	output.puts "msgid \"\""
+	output.puts "msgstr \"\""
+	write_quoted output, "Project-Id-Version: Martus #{$version}\\n"
+	write_quoted output, "Report-Msgid-Bugs-To: info@martus.org\\n"
+	write_quoted output, "POT-Creation-Date: #{Time.now}\\n"
+	if(!$pot)
+		#write_quoted output, "PO-Revision-Date: #{Time.now}\\n"
+		#write_quoted output, "Last-Translator: Jeremy <jeremyy@miradi.org>\\n"
+		write_quoted output, "Language-Team: #{$language_name}\\n"
+	end
+	write_quoted output, "MIME-Version: 1.0\\n"
+	write_quoted output, "Content-Type: text/plain; charset=UTF-8\\n"
+	write_quoted output, "Content-Transfer-Encoding: 8bit\\n"
+	#write_quoted output, "Plural-Forms: nplurals=2; plural=(n != 1);\\n"
+	output.puts
+	output.puts
 end
 
-$language = 'es'
-mtf_filename = "/home/kevins/work/hg/martus/martus/martus-client/source/org/martus/client/swingui/Martus-#{$language}.mtf"
-File.open(mtf_filename) do | input |
-	process_header(input)
-	write_header
-	process_file(input)
+def convert(language, out)
+	mtf_filename = "/home/kevins/work/hg/martus/martus/martus-client/source/org/martus/client/swingui/Martus-#{language}.mtf"
+	File.open(mtf_filename) do | input |
+		process_header(input)
+		write_header(out)
+		process_file(input, out)
+	end
 end
- 
+
+def create_pot_from(language)
+	$pot = true
+	File.open("Martus.pot", "w") do | out |
+		convert(language, out)
+	end
+	$pot = false
+end
+
+languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
+languages.each do | language |
+	File.open("Martus-#{language}.po", "w") do | out |
+		convert(language, out)
+	end
+	create_pot_from('es')
+end
