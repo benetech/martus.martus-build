@@ -32,7 +32,7 @@ Boston, MA 02111-1307, USA.
          addproperty="LANGUAGE"
      />
 
-    <property name="CLIENTDIR" value="martus-client/source/org/martus/client/swingui"/>
+    <property name="CLIENTDIR" value="../martus-client/source/org/martus/client/swingui"/>
     <!-- imports -->
     <target name="check_keypass" unless="sign.keypass">
         <input
