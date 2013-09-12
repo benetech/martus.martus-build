@@ -142,22 +142,27 @@ def process_entry(output, english, translated)
 	end
 
 	# Transifex fails if original starts with newline and translated doesn't	
-	if english_text[0,2] == "\\n" && translated_text[0,2] != "\\n"
+	while english_text[0,2] == "\\n" && translated_text[0,2] != "\\n"
 		translated_text = "\\n" + translated_text
 	end
 	
 	# Transifex fails if original doesn't start with newline but translated does	
-	if translated_text[0,2] == "\\n" && english_text[0,2] != "\\n"
+	while translated_text[0,2] == "\\n" && english_text[0,2] != "\\n"
 		translated_text = translated_text[2..-1]
 	end
 
+	if $language == 'th' && english_text.index("WARNING:  ") == 0
+		puts english_text
+		puts translated_text
+	end
 	# Transifex fails if original ends with newline and translated doesn't	
-	if english_text[-2,2] == "\\n" && translated_text[-2,2] != "\\n"
+	while english_text[-2,2] == "\\n" && translated_text[-2,2] != "\\n"
 		translated_text = translated_text + "\\n"
 	end
 	
 	# Transifex fails if original doesn't end with newline but translated does	
-	if translated_text[-2,2] == "\\n" && english_text[-2,2] != "\\n"
+	while translated_text[-2,2] == "\\n" && english_text[-2,2] != "\\n"
+	puts "Removing trailing newline"
 		translated_text = translated_text[0..-3]
 	end
 
@@ -243,6 +248,7 @@ end
 
 languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
 languages.each do | language |
+	$language = language
 	File.open("Martus-#{language}.po", "w") do | out |
 		convert(language, out)
 	end
