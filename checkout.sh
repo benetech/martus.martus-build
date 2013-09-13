@@ -2,6 +2,7 @@
 
 function clone_or_fetch_martus {
 cd $WORKSPACE
+echo "Fetching $1"
 if [ -d "$1" ]; then
 	hg --repository $1 pull --update
 else
@@ -11,6 +12,7 @@ fi
 
 function clone_or_fetch {
 cd $WORKSPACE
+echo "Fetching $1"
 if [ -d "$1" ]; then
 	hg --repository $1 pull --update
 else
