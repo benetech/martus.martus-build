@@ -27,33 +27,14 @@ Boston, MA 02111-1307, USA.
         Martus MLP Build File
     </description>
 
-    <input
-         message="Please enter Language Code (Eg: fr, es, bur):"
-         addproperty="LANGUAGE"
-     />
-
     <property name="CLIENTDIR" value="../martus-client/source/org/martus/client/swingui"/>
-    <!-- imports -->
-    <target name="check_keypass" unless="sign.keypass">
-        <input
-            message="Please enter key pw:"
-            addproperty="sign.keypass"
-        />
-    </target>
-
-    <target name="check_storepass" unless="sign.storepass">
-        <input
-            message="Please enter store pw:"
-            addproperty="sign.storepass"
-        />
-    </target>
     
   <!-- ================================================================== -->
-  <!-- J A R                                                              -->
+  <!-- mlp                                                                -->
   <!-- ================================================================== -->
 
       <!-- create mlp signed jar -->
-      <target name="mlp" depends="check_storepass, check_keypass" description="Create a Signed Martus Language Pack">
+      <target name="mlp" description="Create a Signed Martus Language Pack">
 		  <jar jarfile="target/Martus-${LANGUAGE}.mlp">
 		  	<fileset dir="${CLIENTDIR}" includes="Martus-${LANGUAGE}.mtf" />
 		  	<fileset dir="${CLIENTDIR}" includes="MartusHelp-${LANGUAGE}.txt" />
@@ -62,16 +43,42 @@ Boston, MA 02111-1307, USA.
 		  	<fileset dir="BuildFiles/Documents/client" includes="quickstartguide_${LANGUAGE}.pdf" />
 		  	<fileset dir="BuildFiles/Documents/client" includes="martus_user_guide_${LANGUAGE}.pdf" />
           </jar>
-          <signjar storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
-            <fileset dir="target">
-                <include name="Martus-${LANGUAGE}.mlp"/>
-            </fileset>
-        </signjar>
-        <checksum algorithm="SHA" fileext=".sha1">
-            <fileset dir="target">
-                <include name="Martus-${LANGUAGE}.mlp"/>
-            </fileset>
-        </checksum>
       </target>
 
+  <!-- ================================================================== -->
+  <!-- AllLanguages                                                       -->
+  <!-- ================================================================== -->
+
+	<target name="AllLanguages" description="Create MLP files for all languages">
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="ar"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="arm"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="bur"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="es"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="fa"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="fr"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="km"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="ne"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="ru"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="th"/>
+		</antcall>
+	</target>
 </project>
