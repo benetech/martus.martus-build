@@ -27,7 +27,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     #NOTE: filesplit won't compile with modern Linux C++, 
     # so we will use GNU split, which is compatible, except for file naming
     # which we can fix in post-processing (below)
-    command = "split --numeric-suffixes --suffix-length=3 --bytes=1400K #{renamed_exe_file} #{temp_dir}/"
+    command = "split --numeric-suffixes --suffix-length=3 --bytes=5M #{renamed_exe_file} #{temp_dir}/"
     puts command
     result = `#{command}` 
     puts "#{command}\n#{result}"
