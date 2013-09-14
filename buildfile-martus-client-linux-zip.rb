@@ -14,36 +14,36 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
   release_build_number = $BUILD_NUMBER
 	
-	puts "Defining package for linux-zip #{project.version} #{input_build_number}-#{release_build_number}"
 	zippath = _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}-#{release_build_number}.zip")
 	package(:zip, :file => zippath).path("MartusClient-#{project.version}").tap do | p |
-	  input_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}"
-	  signed_jar = "#{input_dir}/martus-client-signed-#{input_build_number}.jar"
-	  source_zip_name = "martus-client-sources-#{input_build_number}.zip"
-    source_zip = "#{input_dir}/#{source_zip_name}"
-	  p.include(signed_jar, :as=>"martus.jar")
-    p.include(source_zip, :as=>"SourceFiles/martus-sources.zip")
+		puts "Defining package for linux-zip #{project.version} #{input_build_number}-#{release_build_number}"
+		input_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}"
+		signed_jar = "#{input_dir}/martus-client-signed-#{input_build_number}.jar"
+		source_zip_name = "martus-client-sources-#{input_build_number}.zip"
+    	source_zip = "#{input_dir}/#{source_zip_name}"
+		p.include(signed_jar, :as=>"martus.jar")
+    	p.include(source_zip, :as=>"SourceFiles/martus-sources.zip")
 
-    p.include(_('martus-build', "BuildFiles", "Documents", "license.txt"))
-    p.include(_('martus-build', "BuildFiles", "Documents", "gpl.txt"))
-    p.include(_('martus-build', "BuildFiles", "Documents", "client", "README*.txt"))
-    p.include(_('martus-build', "BuildFiles", "Documents", "client", "*.pdf"), :path=>'Documents')
+    	p.include(_('martus-build', "BuildFiles", "Documents", "license.txt"))
+    	p.include(_('martus-build', "BuildFiles", "Documents", "gpl.txt"))
+    	p.include(_('martus-build', "BuildFiles", "Documents", "client", "README*.txt"))
+    	p.include(_('martus-build', "BuildFiles", "Documents", "client", "*.pdf"), :path=>'Documents')
       
-    #TODO: Should we ship LinuxJavaInstall.txt?
+    	#TODO: Should we ship LinuxJavaInstall.txt?
       
-    p.include(_('martus-build', "BuildFiles", "Fonts", '*.ttf'), :path=>'Fonts')
+    	p.include(_('martus-build', "BuildFiles", "Fonts", '*.ttf'), :path=>'Fonts')
       
-    p.include(_("martus-jar-verifier", "*.bat"), :path=>'Verifier')
-    p.include(_("martus-jar-verifier", "*.txt"), :path=>'Verifier')
+    	p.include(_("martus-jar-verifier", "*.bat"), :path=>'Verifier')
+    	p.include(_("martus-jar-verifier", "*.txt"), :path=>'Verifier')
     
-    p.include(artifact(BCJCE_SPEC), :as=>'ThirdParty/bc-jce.jar');
-    p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
-    p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
-    p.include(artifact(XMLRPC_CLIENT_SPEC), :path=>'ThirdParty')
-    p.include(artifact(XMLRPC_COMMON_SPEC), :path=>'ThirdParty')
-    p.include(third_party_client_jars, :path=>'ThirdParty')
-    include_artifacts_in_zip(p, third_party_client_source, "SourceFiles", "zip")
-    include_artifacts_in_zip(p, third_party_client_licenses, "ThirdParty/Licenses", "txt")
+    	p.include(artifact(BCJCE_SPEC), :as=>'ThirdParty/bc-jce.jar');
+    	p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
+    	p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
+    	p.include(artifact(XMLRPC_CLIENT_SPEC), :path=>'ThirdParty')
+    	p.include(artifact(XMLRPC_COMMON_SPEC), :path=>'ThirdParty')
+    	p.include(third_party_client_jars, :path=>'ThirdParty')
+    	include_artifacts_in_zip(p, third_party_client_source, "SourceFiles", "zip")
+    	include_artifacts_in_zip(p, third_party_client_licenses, "ThirdParty/Licenses", "txt")
 	end
 	
 	sha1path = "#{zippath}.sha1"
