@@ -8,12 +8,12 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
   setup_artifact = project('martus-client-nsis-single').artifact(MARTUS_SINGLE_SETUP_EXE_SPEC)
   
-  temp_dir = File.join(_(:temp), 'chunks')
+  temp_dir = File.join(_(:target, :temp), 'chunks')
   full_version = "#{project.version}-#{input_build_number}-#{release_build_number}"
   base_name = "MartusClientSetupMultiPart-#{full_version}"
   zip_file = _(:target, "#{base_name}.zip")
   original_exe_file = setup_artifact.to_s
-  renamed_exe_file = _(:temp, "#{base_name}.exe")
+  renamed_exe_file = _(:target, :temp, "#{base_name}.exe")
   original_merger_file = _('martus-build', 'BuildFiles', 'MartusSetupLauncher', 'Release', 'MartusSetupBuilder-[Version_Number].exe')
   renamed_merger_file = File.join(temp_dir, "#{base_name}.exe")
 
@@ -27,7 +27,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     #NOTE: filesplit won't compile with modern Linux C++, 
     # so we will use GNU split, which is compatible, except for file naming
     # which we can fix in post-processing (below)
-    command = "split --numeric-suffixes --suffix-length=3 --bytes=1400K #{renamed_exe_file} #{temp_dir}/"
+    command = "split --numeric-suffixes --suffix-length=3 --bytes=5M #{renamed_exe_file} #{temp_dir}/"
     puts command
     result = `#{command}` 
     puts "#{command}\n#{result}"

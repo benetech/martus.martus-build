@@ -8,7 +8,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
   release_build_number = $BUILD_NUMBER
 
-  temp_dir = _(:temp)
+  temp_dir = _(:target, :temp)
 	exe_name = 'MartusClientCDSetup.exe'
 	exe_path = File.join(temp_dir, exe_name)
 

@@ -7,7 +7,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   release_build_number = $BUILD_NUMBER
 
   production_zipfile = project('martus-client-linux-zip').package.to_s
-  ant_output = _(:temp, 'ant-output.txt')
+  ant_output = _(:target, :temp, 'ant-output.txt')
 
   hudson_job_dir = "/var/lib/hudson/jobs/MartusClient-Unsigned-Mercurial"
   dmg_file = File.join(hudson_job_dir, "Martus.dmg")
@@ -20,7 +20,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
     production_zip_contents_dir = get_extracted_production_zip_contents_directory(production_zipfile)
   
-    dmg_contents_dir = _("temp", "dmgcontents")
+    dmg_contents_dir = _(:target, :temp, "dmgcontents")
     create_empty_directory(dmg_contents_dir)
     
     # COPY FILES FROM THE PRODUCTION ZIP
@@ -106,13 +106,13 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	end
 	
 	def get_extracted_production_zip_contents_directory(production_zipfile)
-    raw_production_zip_contents_dir = _("temp", "production")
-    create_empty_directory(raw_production_zip_contents_dir)
-    
-    FileUtils::mkdir_p(raw_production_zip_contents_dir)
-    unzip_file(production_zipfile, raw_production_zip_contents_dir)
-    production_zip_contents_dir = File.join(raw_production_zip_contents_dir, "MartusClient-#{project.version}")
-    return production_zip_contents_dir 
+	    raw_production_zip_contents_dir = _(:target, :temp, "production")
+	    create_empty_directory(raw_production_zip_contents_dir)
+	    
+	    FileUtils::mkdir_p(raw_production_zip_contents_dir)
+	    unzip_file(production_zipfile, raw_production_zip_contents_dir)
+	    production_zip_contents_dir = File.join(raw_production_zip_contents_dir, "MartusClient-#{project.version}")
+	    return production_zip_contents_dir 
 	end
 	  
 end
