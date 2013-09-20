@@ -1,0 +1,174 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-server" default="notify-server" basedir=".">
+    <description>
+        Martus Server Build File
+    </description>
+
+    <!-- imports -->
+    <import file="build.shared.values.xml" />
+    <import file="build-thirdparty.xml" />
+    <import file="build-amp.xml" />
+    <import file="build-mspa.xml" />
+
+    <!-- server classpath -->
+    <path id="server.class.path">
+        <pathelement path="${martus.server.class.root}/"/>
+        <pathelement path="${martus.common.class.root}/"/>
+        <pathelement path="${martus.amplifier.class.root}/"/>
+        <pathelement path="${martus.utils.class.root}/"/>
+        <pathelement path="${martus.hrdag.class.root}/"/>
+        <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+        <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+    </path>
+
+    <fileset id="server.nosrc.files" dir="${martus.server.class.root}">
+        <include name="**/*.jar"/>
+    </fileset>
+
+    <target name="notify-server">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+  <target name="build-server" depends="init,build-common,build-amp,build-mspa" description="Compile martus-server">
+        <mkdir dir="${martus.server.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.server.src.root}" destdir="${martus.server.class.root}" failonerror="true">
+            <classpath refid="server.class.path"/>
+            <include name="**/*.java"/>
+        </javac>
+  </target>
+
+<!-- ================================================================== -->
+<!-- T E S T S                                                          -->
+<!-- ================================================================== -->
+
+  <target name="test-server" depends="jar-server">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            </classpath>
+        </taskdef>
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr">
+            <jvmarg value="-Xbootclasspath/p:${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
+            <jvmarg value="-Xbootclasspath/p:${martus.thirdparty.lib.bouncycastle}/bcprov-jdk14-${bouncycastle.version}.jar"/>
+            <classpath>
+                <fileset dir="${public.release.folder}" >
+                    <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
+                </fileset>
+                <pathelement path="${java.class.path}"/>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="org.martus.server.main.TestAll"/>
+        </junit>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="jar-server" depends="build-server,jar-bc-jce" description="Create martus-server jar">
+
+        <!-- copy third party jars -->
+        <mkdir dir="${martus.server.class.root}/ThirdPartyJars"/>
+        <copy todir="${martus.server.class.root}/ThirdPartyJars" flatten="true">
+            <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.bouncycastle}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+            <fileset dir="${martus.thirdparty.lib.persiancalendar}" includes="**/*.jar"/>
+            <fileset dir="${public.release.folder}" includes="bc-jce-${DSTAMP}.${build.number}.jar"/>
+        </copy>
+        <copy todir="${martus.server.class.root}">
+            <fileset dir="${martus.server.src.root}" includes="**/LanguageNames_*.txt"/>
+            <fileset dir="${martus.server.src.root}" includes="org/martus/amplifier/presentation/index.html"/>
+        </copy>
+
+        <mkdir dir="${public.release.folder}"/>
+        <jar destfile="${public.release.folder}/martus-server-${DSTAMP}.${build.number}.jar" manifest="${martus.server.src.root}/org/martus/server/main/main-class.txt">
+                <fileset refid="server.nosrc.files"/>
+                <fileset dir="${martus.server.class.root}" includes="**/*.class"/>
+
+                <fileset refid="amp.nosrc.files"/>
+                <fileset dir="${martus.amplifier.class.root}" includes="www/**/*"/>
+                <fileset dir="${martus.amplifier.class.root}" includes="**/*.class"/>
+
+                <fileset refid="jarverifier.nosrc.files"/>
+                <fileset dir="${martus.jarverifier.class.root}" includes="**/*.class"/>
+
+                <fileset refid="mspa.server.class.files"/>
+	            <fileset dir="${martus.common.class.root}">
+	                <include name="**/*.class"/>
+	                <include name="**/*.SIG"/>
+	            </fileset>
+                <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
+        </jar>
+    </target>
+    
+    <target name="jarsign-server" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar-server" description="Sign Server jar">
+    	<property name="server-filename" value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${server-filename}" />
+    </target>
+
+<!-- ================================================================== -->
+<!-- Z I P  -  S O U R C E S                                            -->
+<!-- ================================================================== -->
+    <target name="zip-server-src" depends="init,zip-bcjce-src">
+        <mkdir dir="${public.release.folder}"/>
+        <property name="zip-servre-filename"  value="${public.release.folder}/martus-server-${DSTAMP}.${build.number}-src.zip"/>
+
+        <zip zipfile="${zip-servre-filename}">
+            <fileset dir="${martus.server.src.root}" includes="**/*.java"/>
+
+            <fileset dir="${martus.amplifier.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.amplifier.src.root}" includes="org/martus/amplifier/presentation/index.html"/>
+            <fileset dir="${build.basedir}/${martus.amplifier.module}" >
+                <include name="presentation/**/*"/>
+                <include name="presentationNonSSL/**/*"/>
+            </fileset>
+
+            <fileset dir="${martus.amplifier.src.root}">
+                <include name="**/common/LanguageNames_*.txt"/>
+            </fileset>
+
+            <fileset refid="jarverifier.nosrc.files"/>
+            <fileset dir="${martus.jarverifier.src.root}" includes="**/*.java"/>
+
+            <fileset refid="mspa.server.src.files"/>
+            <fileset dir="${martus.common.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.utils.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.hrdag.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.logi.src.root}" includes="**/*.java"/>
+            <fileset dir="${martus.swing.src.root}" includes="**/*.java"/>
+
+            <fileset dir="${build.basedir}">
+                <exclude name="${martus.thirdparty.module}/**/bin/*"/>
+                <exclude name="${martus.thirdparty.module}/client/**/*"/>
+
+                <include name="${martus.thirdparty.module}/libext/**/*"/>
+                <include name="${martus.thirdparty.module}/common/**/*"/>
+                <include name="${martus.thirdparty.module}/server/**/*"/>
+            </fileset>
+            <fileset dir="${public.release.folder}" includes="bc-jce-src.zip"/>
+        </zip>
+    </target>
+
+</project>
