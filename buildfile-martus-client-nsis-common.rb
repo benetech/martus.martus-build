@@ -1,22 +1,23 @@
 def run_nsis_task(nsis_zip, nsi_name, exe_name)
-	puts "Unzipping NSIS zip..."
+	puts "Unzipping #{nsis_zip}..."
 	previous_pwd = Dir.pwd
     
     unzipped_dir = 'FilesForWindowsInstaller'
-	dest_dir = _(:temp, unzipped_dir)
+	dest_dir = _(:target, :temp, unzipped_dir)
 	FileUtils.rm_rf dest_dir
 	FileUtils.mkdir_p(dest_dir)
 	unzip_file(nsis_zip, dest_dir)
 	
 	FileUtils.chdir File.join(dest_dir, $nsis_script_dir)
-	puts "temp is #{_(:temp)}"
+	puts "dest_dir is #{dest_dir}"
 	puts "Running makensis from: #{Dir.pwd}"
 	nsis_cmd = "#{$nsis_command} #{nsi_name}"
 	puts "Running: #{nsis_cmd}"
 	error_output = `#{nsis_cmd}`
 	status = $?
 	if status.exitstatus > 0
-		raise "Error running makensis #{status.exitstatus}: #{error_output.split("\n").join("\n  ")}"
+		error = error_output.split("\n").join("\n  ")
+		raise "Error running makensis #{status.exitstatus}: #{error}"
 	end
 	puts 'Finished makensis'
 	

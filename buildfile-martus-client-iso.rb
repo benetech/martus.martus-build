@@ -6,16 +6,16 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   input_build_number = ENV['INPUT_BUILD_NUMBER']
   release_build_number = $BUILD_NUMBER
 
-  cd_setup_exe = _(:temp, 'MartusClientCDSetup.exe')
+  cd_setup_exe = _(:target, :temp, 'MartusClientCDSetup.exe')
   iso_name = "MartusClientCD-#{project.version}-#{input_build_number}-#{release_build_number}.iso"
 	iso_file = _(:target, iso_name)
-  iso_dir = _(:temp, 'iso')
+  iso_dir = _(:target, :temp, 'iso')
 	volume_name = "Martus-#{project.version}-#{input_build_number}-#{release_build_number}"
 
   attic_dir = File.join("/var/lib/hudson/martus-client/builds", $client_version)
   signed_jar_file = File.join(attic_dir, "martus-client-signed-#{input_build_number}.jar")
 
-  martus_jar_file = _(:temp, 'martus.jar')
+  martus_jar_file = _(:target, :temp, 'martus.jar')
   
   task martus_jar_file => signed_jar_file do
     FileUtils::cp(signed_jar_file, martus_jar_file)

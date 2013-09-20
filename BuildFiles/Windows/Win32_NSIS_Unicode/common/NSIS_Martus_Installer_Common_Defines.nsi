@@ -49,8 +49,8 @@ unicode "true"
 
 ; ----------------------------------------
 ; Modern UI pages
-;CML!insertmacro MUI_PAGE_LICENSE "..\BuildFiles\combined-license.txt"
 !insertmacro MUI_PAGE_WELCOME
+!insertmacro MUI_PAGE_LICENSE "..\BuildFiles\combined-license.txt"
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
 !insertmacro MUI_UNPAGE_WELCOME
