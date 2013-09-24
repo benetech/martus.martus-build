@@ -230,7 +230,7 @@ def write_header(output)
 end
 
 def convert(language, out)
-	mtf_filename = "/home/kevins/work/hg/martus/martus/martus-client/source/org/martus/client/swingui/Martus-#{language}.mtf"
+	mtf_filename = "/home/kevins/Downloads/Martus-4.4-#{language}.mtf"
 	File.open(mtf_filename) do | input |
 		process_header(input)
 		write_header(out)
@@ -240,7 +240,7 @@ end
 
 def create_pot_from(language)
 	$pot = true
-	File.open("Martus.pot", "w") do | out |
+	File.open("Martus-4.4.pot", "w") do | out |
 		convert(language, out)
 	end
 	$pot = false
@@ -249,8 +249,13 @@ end
 languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
 languages.each do | language |
 	$language = language
-	File.open("Martus-#{language}.po", "w") do | out |
-		convert(language, out)
+	mtf = "Martus-4.4-#{language}.mtf"
+	po = "Martus-4.4-#{language}.po"
+	if File.exists? mtf
+		File.open(po, "w") do | out |
+			convert(language, out)
+		end
 	end
-	create_pot_from('es')
 end
+
+create_pot_from('es')
