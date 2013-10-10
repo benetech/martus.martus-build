@@ -12,180 +12,180 @@ xxxx
 -
 # Translation by ..... (any credits should go here)
 # ^Branding
-Nullsoft Install System %s
+Nullsoft စနစ္ တပ္ဆင္ %မ်ား
 # ^SetupCaption
-$(^Name) Setup
+$(^Name) စတင္တပ္ဆင္မႈ
 # ^UninstallCaption
-$(^Name) Uninstall
+$(^Name) ျပန္ျဖဳတ္
 # ^LicenseSubCaption
-: License Agreement
+: လုိင္စင္ သေဘာတူညီခ်က္
 # ^ComponentsSubCaption
-: Installation Options
+: တပ္ဆင္ေရး ေရြးစရာမ်ား
 # ^DirSubCaption
-: Installation Folder
+: တပ္ဆင္မႈ ဖုိင္တြဲ
 # ^InstallingSubCaption
-: Installing
+: တပ္ဆင္မႈ
 # ^CompletedSubCaption
-: Completed
+: လုပ္ၿပီးၿပီ
 # ^UnComponentsSubCaption
-: Uninstallation Options
+:   ျပန္ျဖဳတ္ေရး ေရြးစရာမ်ား
 # ^UnDirSubCaption
-: Uninstallation Folder
+: ျပန္ျဖဳတ္ေရး ဖုိင္တြဲ
 # ^ConfirmSubCaption
-: Confirmation
+: အတည္ျပဳခ်က္
 # ^UninstallingSubCaption
-: Uninstalling
+: ျပန္ျဖဳတ္ေန
 # ^UnCompletedSubCaption
-: Completed
+: လုပ္ၿပီးၿပီ
 # ^BackBtn
-< &Back
+< ေ&နာက္ကုိ
 # ^NextBtn
-&Next >
+&ေနာက္တခု >
 # ^AgreeBtn
-I &Agree
+ကြၽႏ္ုပ္ &သေဘာတူ
 # ^AcceptBtn
-I &accept the terms of the License Agreement
+ကြၽႏ္ုပ္ &လုိင္စင္ သေဘာတူညီခ်က္ စည္းကမ္းခ်က္မ်ား ကုိ လက္ခံသည္
 # ^DontAcceptBtn
-I &do not accept the terms of the License Agreement
+ကြၽႏ္ုပ္ &လုိင္စင္ သေဘာတူညီခ်က္ စည္းကမ္းခ်က္မ်ား ကုိ လက္မခံပါ
 # ^InstallBtn
-&Install
+&တပ္ဆင္
 # ^UninstallBtn
-&Uninstall
+&ျပန္ျဖဳတ္
 # ^CancelBtn
-Cancel
+ပယ္ဖ်က္
 # ^CloseBtn
-&Close
+&ပိတ္
 # ^BrowseBtn
-B&rowse...
+ရွာ&ေဖြၾကည့္...
 # ^ShowDetailsBtn
-Show &details
+ျပပါ &အေသးစိတ္မ်ား
 # ^ClickNext
-Click Next to continue.
+ဆက္လုပ္ရန္ ေရွ႕ဆက္ ကုိ ႏွိပ္ပါ။ 
 # ^ClickInstall
-Click Install to start the installation.
+တပ္ဆင္မႈကုိ စတင္ရန္ တပ္ဆင္ ကုိ ႏွိပ္ပါ။
 # ^ClickUninstall
-Click Uninstall to start the uninstallation.
+ျပန္ျဖဳတ္မႈကုိ စတင္ရန္ ျပန္ျဖဳတ္ ကုိ ႏွိပ္ပါ။
 # ^Name
-Name
+အမည္
 # ^Completed
-Completed
+လုပ္ၿပီးၿပီ
 # ^LicenseText
-Please review the license agreement before installing $(^NameDA). If you accept all terms of the agreement, click I Agree.
+ေက်းဇူးျပဳၿပီး $(^NameDA) ကုိ မတပ္ဆင္မီမွာ လုိင္စင္ သေဘာတူညီခ်က္ကုိ ဆန္းစစ္ၾကည့္ပါ။ သင္က သေဘာတူညီခ်က္ထဲက စည္းကမ္းခ်က္မ်ား အားလံုးကုိ လက္ခံလွ်င္၊ ကြၽႏ္ုပ္ သေဘာတူကုိ ႏွိပ္ပါ။
 # ^LicenseTextCB
-Please review the license agreement before installing $(^NameDA). If you accept all terms of the agreement, click the check box below. $_CLICK
+ေက်းဇူးျပဳၿပီး $(^NameDA) ကုိ မတပ္ဆင္မီမွာ လုိင္စင္ သေဘာတူညီခ်က္ကုိ ဆန္းစစ္ၾကည့္ပါ။ သင္က သေဘာတူညီခ်က္ထဲက စည္းကမ္းခ်က္မ်ား အားလံုးကုိ လက္ခံလွ်င္၊ ေအာက္ရွိ အကြက္ ကုိ မွတ္ေပးပါ။ $_CLICK
 # ^LicenseTextRB
-Please review the license agreement before installing $(^NameDA). If you accept all terms of the agreement, select the first option below. $_CLICK
+ေက်းဇူးျပဳၿပီး $(^NameDA) ကုိ မတပ္ဆင္မီမွာ လုိင္စင္ သေဘာတူညီခ်က္ကုိ ဆန္းစစ္ၾကည့္ပါ။ သင္က သေဘာတူညီခ်က္ထဲက စည္းကမ္းခ်က္မ်ား အားလံုးကုိ လက္ခံလွ်င္၊ ေအာက္ရွိ ပထမ ေရြးစရာ ကုိ ေရြးပါ။ $_CLICK
 # ^UnLicenseText
-Please review the license agreement before uninstalling $(^NameDA). If you accept all terms of the agreement, click I Agree.
+ေက်းဇူးျပဳၿပီး (^NameDA) ကုိ ျပန္မျဖဳတ္မီမွာ လုိင္စင္ သေဘာတူညီခ်က္ကုိ ဆန္းစစ္ၾကည့္ပါ။ သင္က သေဘာတူညီခ်က္ထဲက စည္းကမ္းခ်က္မ်ား အားလံုးကုိ လက္ခံလွ်င္၊ ကြၽႏ္ုပ္ သေဘာတူ ကုိ ႏွိပ္ပါ။
 # ^UnLicenseTextCB
-Please review the license agreement before uninstalling $(^NameDA). If you accept all terms of the agreement, click the check box below. $_CLICK
+ေက်းဇူးျပဳၿပီး $(^NameDA) ကုိ ျပန္မျဖဳတ္မီမွာ လုိင္စင္ သေဘာတူညီခ်က္ကုိ ဆန္းစစ္ၾကည့္ပါ။ သင္က သေဘာတူညီခ်က္ထဲက စည္းကမ္းခ်က္မ်ား အားလံုးကုိ လက္ခံလွ်င္၊ ေအာက္ရွိ အကြက္ ကုိ မွတ္ေပးပါ။  $_CLICK
 # ^UnLicenseTextRB
-Please review the license agreement before uninstalling $(^NameDA). If you accept all terms of the agreement, select the first option below. $_CLICK
+ေက်းဇူးျပဳၿပီး (^NameDA) ကုိ ျပန္မျဖဳတ္မီမွာ လုိင္စင္ သေဘာတူညီခ်က္ကုိ ဆန္းစစ္ၾကည့္ပါ။  သင္က သေဘာတူညီခ်က္ထဲက စည္းကမ္းခ်က္မ်ား အားလံုးကုိ လက္ခံလွ်င္၊ ေအာက္ရွိ ပထမ ေရြးစရာ ကုိ ေရြးပါ။ $_CLICK
 # ^Custom
-Custom
+စိတ္ႀကိဳက္
 # ^ComponentsText
-Check the components you want to install and uncheck the components you don't want to install. $_CLICK
+သင္က တပ္ဆင္လုိသည့္ အစိတ္အပုိင္းမ်ားကုိ မွတ္ေပးလ်က္ သင္က မတပ္ဆင္လုိသည့္ အစိတ္အပုိင္းမ်ားကုိ     မွတ္မေပးပါႏွင့္။ $_CLICK
 # ^ComponentsSubText1
-Select the type of install:
+တပ္ဆင္မႈ ပံုစံ ကုိ ေရြးပါ:
 # ^ComponentsSubText2_NoInstTypes
-Select components to install:
+တပ္ဆင္လုိသည့္ အစိတ္အပုိင္းမ်ား ကုိ ေရြးပါ:
 # ^ComponentsSubText2
-Or, select the optional components you wish to install:
+သုိ႔မဟုတ္္၊ သင္က တပ္ဆင္လုိသည့္ ေရြးစရာ အစိတ္အပုိင္းမ်ား ကုိ ေရြးပါ:
 # ^UnComponentsText
-Check the components you want to uninstall and uncheck the components you don't want to uninstall. $_CLICK
+သင္က ျပန္ျဖဳတ္လုိသည့္ အစိတ္အပုိင္းမ်ားကုိ မွတ္ေပးလ်က္ သင္က ျပန္မျဖဳတ္လုိသည့္ အစိတ္အပုိင္းမ်ား ကုိ     မွတ္မေပးပါႏွင့္။ $_CLICK
 # ^UnComponentsSubText1
-Select the type of uninstall:
+ျပန္ျဖဳတ္မႈ ပံုစံ ကုိ ေရြးပါ:
 # ^UnComponentsSubText2_NoInstTypes
-Select components to uninstall:
+ျပန္ျဖဳတ္လုိသည့္ အစိတ္အပုိင္းမ်ား ကုိ ေရြးပါ:
 # ^UnComponentsSubText2
-Or, select the optional components you wish to uninstall:
+သုိ႔မဟုတ္၊ သင္က ျပန္ျဖဳတ္လုိသည့္ ေရြးစရာ အစိတ္အပုိင္းကုိ ေရြးပါ:
 # ^DirText
-Setup will install $(^NameDA) in the following folder. To install in a different folder, click Browse and select another folder. $_CLICK
+စတင္တပ္ဆင္မႈက  $(^NameDA) ကုိ ေအာက္ပါ ဖုိင္တြဲထဲကုိ တပ္ဆင္ေပးမည္။ အျခား ဖုိင္တြဲထဲကုိ တပ္ဆင္ဖုိ႔အတြက္၊ ရွာေဖြၾကည့္ (Browse) ကုိ ႏွိပ္ၿပီး ေနာက္ဖုိင္တြဲကုိ ေရြးပါ။ $_CLICK
 # ^DirSubText
-Destination Folder
+ရည္မွန္းခ်က္ ဖုိင္တြဲ
 # ^DirBrowseText
-Select the folder to install $(^NameDA) in:
+$(^NameDA) ကုိ တပ္ဆင္ေပးဖုိ႔ ဖုိင္တြဲ ကုိ ေရြး:
 # ^UnDirText
-Setup will uninstall $(^NameDA) from the following folder. To uninstall from a different folder, click Browse and select another folder. $_CLICK
+စတင္တပ္ဆင္မႈက $(^NameDA) ကုိ ေအာက္ပါ ဖုိင္တြဲမွ ျပန္ျဖဳတ္မည္။ အျခား ဖုိင္တြဲထဲမွ ျပန္ျဖဳတ္ရန္အတြက္၊ ရွာေဖြၾကည့္ (Browse) ကုိ ႏွိပ္လ်က္ အျခား ဖုိင္တြဲ ကုိ ေရြးပါ။ $_CLICK
 # ^UnDirSubText
 ""
 # ^UnDirBrowseText
-Select the folder to uninstall $(^NameDA) from:
+မည္သည္ဖုိင္တြဲထဲမွ ျပန္ျဖဳတ္ရမည္ကုိ ေရြးပါ $(^NameDA) :
 # ^SpaceAvailable
-"Space available: "
+"ရွိေနသည့္ ေနရာ: "
 # ^SpaceRequired
-"Space required: "
+"လုိအပ္သည့္ ေနရာ: "
 # ^UninstallingText
-$(^NameDA) will be uninstalled from the following folder. $_CLICK
+$(^NameDA) ကုိ ေအာက္ပါ ဖုိင္တြဲထဲမွ ျပန္ျဖဳတ္မည္။ $_CLICK
 # ^UninstallingSubText
-Uninstalling from:
+ထဲမွ ျပန္ျဖဳတ္ေန:
 # ^FileError
-Error opening file for writing: \r\n\r\n$0\r\n\r\nClick Abort to stop the installation,\r\nRetry to try again, or\r\nIgnore to skip this file.
+ေရးသားရန္ အဖြင့္ ဖုိင္ အမွား: \r\n\r\n$0\r\n\r\nတပ္ဆင္မႈကုိ ရပ္စဲရန္ ရုပ္သိမ္း (Abort)၊\r\nထပ္စမ္းရန္ ျပန္စမ္း (Retry)၊ သုိ႔မဟုတ္ \r\nယခု ဖုိင္ကုိ ေက်ာ္ရန္ လ်စ္လ်ဴ႐ႈ (Ignore)ကုိ ႏွိပ္ပါ။
 # ^FileError_NoIgnore
-Error opening file for writing: \r\n\r\n$0\r\n\r\nClick Retry to try again, or\r\nCancel to stop the installation.
+ေရးသားရန္ အဖြင့္ ဖုိင္ အမွား: \r\n\r\n$0\r\n\r\nထပ္စမ္းရန္ ျပန္စမ္း (Retry)၊ သုိ႔မဟုတ္\r\n တပ္ဆင္မႈကုိ ရပ္စဲရန္ ဖ်က္သိမ္း (Cancel) ကုိ ႏွိပ္ပါ။
 # ^CantWrite
-"Can't write: "
+"မေရးႏုိင္: "
 # ^CopyFailed
-Copy failed
+မိတၱဴကူးမႈ မေအာင္ျမင္
 # ^CopyTo
-"Copy to "
+"သုိ႔ မိတၱဴကူး "
 # ^Registering
-"Registering: "
+"မွတ္ပံုတင္ေန: "
 # ^Unregistering
-"Unregistering: "
+"မွတ္ပံုတင္မႈ ဖ်က္ေန: "
 # ^SymbolNotFound
-"Could not find symbol: "
+"သေကၤတကုိ ရွာမရ: "
 # ^CouldNotLoad
-"Could not load: "
+"တင္ မေပးႏုိင္: "
 # ^CreateFolder
-"Create folder: "
+"ဖုိင္တြဲကုိ ဖန္တီးပါ: "
 # ^CreateShortcut
-"Create shortcut: "
+"ျဖတ္လမ္းကုိ ဖန္တီးပါ: "
 # ^CreatedUninstaller
-"Created uninstaller: "
+"ဖန္တီးခဲ့သည့္ အန္အင္စေတာ္လာ: "
 # ^Delete
-"Delete file: "
+"ဖုိင္ကုိ ဖ်က္ပါ: "
 # ^DeleteOnReboot
-"Delete on reboot: "
+"စက္ျပန္ဖြင့္စဥ္ ဖ်က္ပါ: "
 # ^ErrorCreatingShortcut
-"Error creating shortcut: "
+"ျဖတ္လမ္း ဖန္တီးမႈ အမွား: "
 # ^ErrorCreating
-"Error creating: "
+"ဖန္တီးမႈ အမွား: "
 # ^ErrorDecompressing
-Error decompressing data! Corrupted installer?
+ေဒတာဖိသိပ္မႈ ျပန္ေျဖေလ်ာေပးမႈ (decompressing) အမွား! အင္စေတာ္လာ ခြၽတ္ယြင္းမႈလား?
 # ^ErrorRegistering
-Error registering DLL
+DLL မွတ္ပံုတင္မႈ အမွား
 # ^ExecShell
 "ExecShell: "
 # ^Exec
-"Execute: "
+"လုပ္ကုိင္ပါ: "
 # ^Extract
-"Extract: "
+"ထုတ္ယူပါ: "
 # ^ErrorWriting
-"Extract: error writing to file "
+"ထုတ္ယူပါ: ဖုိင္သုိ႔ ေရးသားမႈ အမွား "
 # ^InvalidOpcode
-Installer corrupted: invalid opcode
+အင္စေတာ္လာ ခြၽတ္ယြင္းမႈ: opcode မမွန္
 # ^NoOLE
-"No OLE for: "
+"အတြက္ OLE မရွိ: "
 # ^OutputFolder
-"Output folder: "
+"ထုတ္ေပးေရး ဖုိင္တြဲ: "
 # ^RemoveFolder
-"Remove folder: "
+"ဖုိင္တြဲကုိ ဖယ္ရွားပါ: "
 # ^RenameOnReboot
-"Rename on reboot: "
+"စက္ျပန္ႏႈိးစဥ္ အမည္ေျပာင္းပါ: "
 # ^Rename
-"Rename: "
+"အမည္ေျပာင္းပါ: "
 # ^Skipped
-"Skipped: "
+"ေက်ာ္သြားခဲ့: "
 # ^CopyDetails
-Copy Details To Clipboard
+ယာယီသင္ပုန္း (Clipboard) သုိ႔ အေသးစိတ္ကုိ ကူးယူပါ 
 # ^LogInstall
-Log install process
+တပ္ဆင္မုႈ လုပ္ငန္းစဥ္ကုိ ေလာ့ဂ္ လုပ္ပါ
 # ^Byte
-B
+Byte
 # ^Kilo
-K
+Kilo
 # ^Mega
-M
+Mega
 # ^Giga
-G
+Giga
