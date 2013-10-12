@@ -1,9 +1,9 @@
-;NSIS Modern User Interface - Language File
+﻿;NSIS Modern User Interface - Language File
 ;Compatible with Modern UI 1.68
-
-﻿;Language: Burmese (1117) <- arbitrary language number that hopefully doesn't conflict with others
+;Language: Burmese (1117) <- arbitrary language number that hopefully doesn't conflict with others
 ;Updated to NSIS 3 by Kevin Smith
-;--------------------------------
+;File needs to be saved in UTF8 with BOM
+;This commented language # above doesn't seem to matter at all by Charles LaPierre
 !insertmacro LANGFILE "Burmese" = "ျမန္မာ, Burmese" =
 
 !ifdef MUI_WELCOMEPAGE

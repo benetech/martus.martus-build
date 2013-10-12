@@ -113,6 +113,8 @@ write_default_ui:
 ;           StrCpy $MARTUS_LANGUAGE_CODE "bn"
         ${Case} ${LANG_KHMER}
             StrCpy $MARTUS_LANGUAGE_CODE "km"
+        ${Case} ${LANG_BURMESE}
+            StrCpy $MARTUS_LANGUAGE_CODE "my"
         ${CaseElse}
             StrCpy $MARTUS_LANGUAGE_CODE "en"
     ${EndSelect}
