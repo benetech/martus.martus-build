@@ -1,4 +1,5 @@
 ﻿July 31, 2013
+Updated Oct. 12, 2013
 By: Charles LaPierre (and updated by Kevin Smith)
 
 These instructions cover 3 cases:
@@ -28,6 +29,28 @@ Copy all of them to your installed NSIS/Contrib/Language files/ directory.
 Under Linux, this may be something like:
   ~/.wine/drive_c/Program Files (x86)/NSIS/Contrib/Language Files/
 
+Important: Make sure all .nsh and .nsi files are UTF8 with BOM.
+
+Next you need to update the following .nsi files to include the new language to the dropdown list of languages
+in files NSIS_Martus.nsi, NSIS_Martus_Single.nsi, and NSIS_Martus_Upgrade.nis the section
+(Add your LANG_<LANGUAGE NAME> below
+write_default_ui:
+        ${Case} ${LANG_BURMESE}
+            StrCpy $MARTUS_LANGUAGE_CODE "my"
+
+<LANGUAGE NAME> is defined in the Martus locallang Language.NSH file
+.\martus-build\BuildFiles\Windows\Win32_NSIS_Unicode\locallang\Burmese.nsh
+EG: !define LANG "BURMESE" ; Required
+
+The final Step is to have the NSIS installer itself load the new Language file from the NSIS directory
+IE: the files found in .\NSIS\Contrib\Language files\Burmese.nlf & Burmese.nsh
+To do this modify the nis file 
+.\martus-build\BuildFiles\Windows\Win32_NSIS_Unicode\common\NSIS_Martus_Installer_Common_Defines.nsi
+; Language files
+!insertmacro LANG_LOAD "Burmese"
+
+Again make sure the "language" name is the same here as in the LANG_"laungage" and in !define LANG "language"
+  
 The changes here allow for you to see the foreign language 
 as well as the English equivalent in the "Installer Language Drop down".
 
