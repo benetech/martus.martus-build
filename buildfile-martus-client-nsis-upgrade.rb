@@ -11,6 +11,11 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   exe_name = "MartusSetupUpgrade.exe"
   exe_path = _(:target, exe_name)
 
+	task :configure_nsis do
+		from = get_nsis_contrib_language_directory(File.dirname(__FILE__))
+		copy_files_to_nsis(from)
+	end
+
   nsis_zip_file = project('martus-client-nsis-zip').package(:zip)
 
   file exe_path => nsis_zip_file do

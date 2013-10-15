@@ -1,3 +1,16 @@
+def get_nsis_contrib_language_directory(base)
+	return File.join(base, 'BuildFiles', 'Windows', 'Win32_NSIS_Unicode', 'NSIS', 'Contrib', 'Language files')
+end
+
+def copy_files_to_nsis(from)
+	nlf_files = Dir.glob(File.join(from, '*.nlf'))
+	nsh_files = Dir.glob(File.join(from, '*.nsh'))
+	nsis_files = [] + nlf_files + nsh_files
+	nsis_language_directory = File.join($full_nsis_dir, 'Contrib', 'Language files')
+	puts "Updating NSIS files, copying from #{from} to #{nsis_language_directory}"
+	FileUtils.cp(nsis_files, nsis_language_directory, {:preserve => true})
+end
+
 def run_nsis_task(nsis_zip, nsi_name, exe_name)
 	puts "Unzipping #{nsis_zip}..."
 	previous_pwd = Dir.pwd
