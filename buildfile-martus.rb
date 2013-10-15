@@ -9,14 +9,14 @@ unicode = true
 $nsis_script_dir = "Win32_NSIS#{unicode ? '_Unicode' : ''}"
 if unicode
 	nsis_dir = "Program Files/NSIS"
-	full_nsis = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
-	if !File.exists? full_nsis
-		puts "NSIS not found at #{full_nsis}"
+	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
+	if !File.exists? $full_nsis_dir
+		puts "NSIS not found at #{$full_nsis_dir}"
 		nsis_dir = "Program Files (x86)/NSIS"
 	end
-	full_nsis = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
-	if !File.exists? full_nsis
-		raise "Unable to find NSIS at #{full_nsis}"
+	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
+	if !File.exists? $full_nsis_dir
+		raise "Unable to find NSIS at #{$full_nsis_dir}"
 	end
 	$nsis_command = "wine \"c:/#{nsis_dir}/makensis\" /V2"
 else
