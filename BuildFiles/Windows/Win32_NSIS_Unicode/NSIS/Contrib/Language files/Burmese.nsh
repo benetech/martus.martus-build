@@ -38,12 +38,12 @@
 
 !ifdef MUI_COMPONENTSPAGE
   ${LangFileString} MUI_TEXT_COMPONENTS_TITLE "အစိတ္အပုိင္းမ်ားကုိ ေရြးပါ"
-  ${LangFileString} MUI_TEXT_COMPONENTS_SUBTITLE "$(^NameDA) ထဲက သင္ တပ္ဆင္လုိသည့္  အဂၤါရပ္မ်ားကုိ ေရြးပါ။"
+  ${LangFileString} MUI_TEXT_COMPONENTS_SUBTITLE "$(^NameDA) ထဲက သင္ တပ္ဆင္လုိသည့္ အဂၤါရပ္မ်ားကုိ ေရြးပါ။"
 !endif
 
 !ifdef MUI_UNCOMPONENTSPAGE
   ${LangFileString} MUI_UNTEXT_COMPONENTS_TITLE "အစိတ္အပုိင္းမ်ားကုိ ေရြးပါ"
-  ${LangFileString} MUI_UNTEXT_COMPONENTS_SUBTITLE "$(^NameDA) ထဲက သင္ ျပန္ျဖဳတ္လုိသည့္  အဂၤါရပ္မ်ားကုိ ေရြးပါ။"
+  ${LangFileString} MUI_UNTEXT_COMPONENTS_SUBTITLE "$(^NameDA) ထဲက သင္ ျပန္ျဖဳတ္လုိသည့္ အဂၤါရပ္မ်ားကုိ ေရြးပါ။"
 !endif
 
 !ifdef MUI_COMPONENTSPAGE | MUI_UNCOMPONENTSPAGE
@@ -99,7 +99,7 @@
   ${LangFileString} MUI_TEXT_FINISH_REBOOTNOW "ယခု ျပန္ဖြင့္ပါ"
   ${LangFileString} MUI_TEXT_FINISH_REBOOTLATER "ကြၽႏ္ုပ္သည္ ေနာက္မွာ လက္ျဖင့္ ျပန္ဖြင့္မည္"
   ${LangFileString} MUI_TEXT_FINISH_RUN "&ဖြင့္ပါ $(^NameDA)"
-  ${LangFileString} MUI_TEXT_FINISH_SHOWREADME "&ဖတ္ရန္ကုိ ျပပါ"
+  ${LangFileString} MUI_TEXT_FINISH_SHOWREADME "ဖတ္&ရန္ကုိ ျပပါ"
   ${LangFileString} MUI_BUTTONTEXT_FINISH "&အဆံုးသတ္"  
 !endif
 
