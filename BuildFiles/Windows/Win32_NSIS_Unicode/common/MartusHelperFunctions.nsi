@@ -153,8 +153,11 @@ older_version_present:
      Push ${PRODUCT_OLDEST_NSIS_UPGRADEABLE_EXTENDED_VERSION}
      Call ${UN}VersionCheck
      Pop $0
+     StrCmp $0 "2" 0 check_java
      StrCmp $0 "1" 0 uninstall_manually_and_remove_startmenuitems
-    
+     StrCmp $0 "0" 0 check_java
+
+check_java:	 
     StrCmp ${IS_JAVA_DELIVERED} "Y" replace_older_version check_for_ancient_version
     Goto check_for_ancient_version
     
