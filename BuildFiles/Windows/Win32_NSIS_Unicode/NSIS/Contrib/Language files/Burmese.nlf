@@ -5,7 +5,7 @@ NLF v6
 1117
 # Font and size - dash (-) means default
 Zawgyi-One
-8
+9
 # Codepage - dash (-) means ANSI code page
 -
 # RTL - anything else than RTL means LTR
@@ -42,7 +42,7 @@ $(^Name) ျပန္ျဖဳတ္
 # ^NextBtn
 &ေနာက္တခု >
 # ^AgreeBtn
-ကြၽႏ္ုပ္ &သေဘာတူ
+   ကြၽႏ္ုပ္ &သေဘာတူ   
 # ^AcceptBtn
 ကြၽႏ္ုပ္ လုိင္စင္ သေဘာတူညီခ်က္ စည္းကမ္းခ်က္မ်ား ကုိ လက္&ခံသည္
 # ^DontAcceptBtn
