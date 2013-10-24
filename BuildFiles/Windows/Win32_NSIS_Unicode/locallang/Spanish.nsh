@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "Idioma de la instalación"
 !insertmacro LANG_STRING LangDialog_Text "Por favor escoja el idioma del programa de instalación."
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ha sido instalado en su sistema.\r\n \r\nVisite el sitio web https://www.martus.org/downloads/ para verificar si hay nuevos Paquetes de Idiomas (Language Packs) para ${PRODUCT_NAME} disponibles. \r\n \r\nUn (Paquete de idioma) le permite instalar traducciones o documentación nuevas y actualizadas en cualquier momento enseguida que esté disponible una nueva versión de Martus. Los 'Paquetes de idioma' pueden contener actualizaciones a las traducciones de la interfaz gráfica del cliente Martus, el Manual de Usuario, la Guía rápida/ Tarjeta de referencia, el archivo LÉAME, y ayuda dentro del programa.\r\n \r\nPresione Terminar para cerrar este asistente"
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ha sido instalado en su sistema.\r\n \r\nVisite el sitio web https://www.martus.org/downloads/ para verificar si hay nuevos Paquetes de Idiomas (Language Packs) para ${PRODUCT_NAME} disponibles. \r\n \r\nUn Paquete de idioma le permite instalar traducciones o documentación nuevas y actualizadas en cualquier momento enseguida que esté disponible una nueva versión de Martus. Los 'Paquetes de idioma' pueden contener actualizaciones a las traducciones de la interfaz gráfica del cliente Martus, el Manual de Usuario, la Guía rápida/ Tarjeta de referencia, el archivo LÉAME, y ayuda dentro del programa.\r\n \r\nPresione Terminar para cerrar este asistente"
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts
