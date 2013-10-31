@@ -1,6 +1,5 @@
-﻿Martus(tm) Software Version 4.3 README.txt
+﻿Martus(tm) Software Version 4.4 README.txt
 ---------------------------------------------------------
-
 
 See https://www.martus.org for information about Martus software.
 
@@ -12,6 +11,27 @@ languages, go to https://www.martus.org/downloads/.
 
 
 Martus release information by version and release date:
+
+Version 4.4 		2013-11
+
+This release is available in English, Burmese, and other languages as indicated on 
+the https://www.martus.org software download page. Other languages will be 
+available in the future, as language-packs on the documentation page 
+(https://www.martus.org/downloads)
+
+- If sending a bulletin to the server is interrupted due to connectivity issues, Martus will now resume 
+  from the point where it left off, instead of starting over, which will make sending faster, especially 
+  when the bulletin has large attachments.
+- Added the Burmese translation of the Windows Installer, and updated Burmese translation of user 
+  interface and documentation to the 4.3 version.
+- Corrected display of several items in Burmese, including in Date Ranges, Search, Customization, and 
+  Retrieve dialogs.  
+- Adjusted the size of the Windows "Incremental" Installer download files on the website so that there 
+  aren't so many files to download, but they are still significantly smaller than the full download (if you 
+  have a slow or unreliable internet connection, you may prefer to download Martus in smaller pieces, 
+  so that a download interruption will only affect the piece being currently downloaded).
+- Several other minor bug fixes, clarifications and clean-ups to the user screens.   
+
 
 Version 4.3 		2013-08
 
