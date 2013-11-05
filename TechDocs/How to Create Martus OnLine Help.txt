@@ -4,7 +4,9 @@ You must use MS Word. The Open Office Word Processor will not work, nor will Abi
 
 NOTE: This initial step can be performed by anyone
 Start with the Word doc of the 'Martus User Guide.doc' for the language you want to create the online help for.
-Save the file as a UTF8 Text file.
+
+Important: Go to the Table of Contents and Press F9, and select Update Entire Table of Contents.
+Next: Save the file as a UTF8 Text file.
 
 NOTE: The rest of this should be performed by a developer
 
