@@ -1,0 +1,35 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-thirdparty" basedir=".">
+    <description>
+        Martus ThirdParty Build File
+    </description>
+
+    <!-- imports -->
+    <import file="build.shared.values.xml" />
+
+    <fileset id="thirdparty.server.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="${martus.thirdparty.lib.jetty}/**/*.jar"/>
+        <include name="${martus.thirdparty.lib.lucene}/**/*.jar"/>
+    </fileset>
+
+    <fileset id="thirdparty.common.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="${martus.thirdparty.lib.ant}/**/*.jar"/>
+        <include name="${martus.thirdparty.lib.infinitemonkey}/**/*.jar"/>
+        <include name="${martus.thirdparty.lib.xmlrpc}/**/*.jar"/>
+        <include name="${martus.thirdparty.lib.velocity}/**/*.jar"/>
+        <include name="${martus.thirdparty.lib.persiancalendar}/**/*.jar"/>
+    </fileset>
+
+    <fileset id="thirdparty.libext.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="${martus.thirdparty.lib.bouncycastle}/**/*.jar"/>
+        <include name="${martus.thirdparty.lib.junit}/**/*.jar"/>
+    </fileset>
+
+    <fileset id="thirdparty.files" dir="${build.basedir}/${martus.thirdparty.module}" >
+        <include name="**/*.jar"/>
+        <exclude name="Entries"/>
+        <exclude name="Root"/>
+        <exclude name="Repository"/>
+    </fileset>
+
+</project>
