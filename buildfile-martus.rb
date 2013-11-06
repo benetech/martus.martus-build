@@ -7,21 +7,34 @@ $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
 unicode = true
 
 $nsis_script_dir = "Win32_NSIS#{unicode ? '_Unicode' : ''}"
-if unicode
-	nsis_dir = "Program Files/NSIS"
-	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
-	if !File.exists? $full_nsis_dir
-		puts "NSIS not found at #{$full_nsis_dir}"
-		nsis_dir = "Program Files (x86)/NSIS"
-	end
-	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
-	if !File.exists? $full_nsis_dir
-		raise "Unable to find NSIS at #{$full_nsis_dir}"
-	end
-	$nsis_command = "wine \"c:/#{nsis_dir}/makensis\" /V2"
+if ENV['NSIS_HOME']
+  $full_nsis_dir = ENV['NSIS_HOME'] 
+  $nsis_command = 'makensis -V2'
 else
-	$nsis_command = 'makensis -V2'
+  if unicode
+  	nsis_dir = "Program Files/NSIS"
+  	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
+  	if !File.exists? $full_nsis_dir
+  		puts "NSIS not found at #{$full_nsis_dir}"
+  		nsis_dir = "Program Files (x86)/NSIS"
+  	end
+  	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
+  	if !File.exists? $full_nsis_dir
+  		raise "Unable to find NSIS at #{$full_nsis_dir}"
+  	end
+  	$nsis_command = "wine \"c:/#{nsis_dir}/makensis\" /V2"
+  else
+  	$nsis_command = 'makensis -V2'
+  end
 end
+
+if ENV['ATTIC_DIR']
+  $attic_dir = ENV['ATTIC_DIR']
+else
+  $attic_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}/"
+end
+
+puts "NSIS found at #{$full_nsis_dir}"
 
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 

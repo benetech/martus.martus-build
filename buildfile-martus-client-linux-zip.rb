@@ -17,7 +17,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	zippath = _("target", "MartusClient-Linux-#{project.version}-#{input_build_number}-#{release_build_number}.zip")
 	package(:zip, :file => zippath).path("MartusClient-#{project.version}").tap do | p |
 		puts "Defining package for linux-zip #{project.version} #{input_build_number}-#{release_build_number}"
-		input_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}"
+		input_dir = $attic_dir
 		signed_jar = "#{input_dir}/martus-client-signed-#{input_build_number}.jar"
 		source_zip_name = "martus-client-sources-#{input_build_number}.zip"
     	source_zip = "#{input_dir}/#{source_zip_name}"
