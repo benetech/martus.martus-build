@@ -28,18 +28,18 @@ else
   end
 end
 
+$client_version = ENV['INPUT_BUILD_NUMBER'] || 'NNN'
+
 if ENV['ATTIC_DIR']
   $attic_dir = ENV['ATTIC_DIR']
 else
-  input_build_number = ENV['INPUT_BUILD_NUMBER']
-  $attic_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}/"
+  $attic_dir = "/var/lib/hudson/martus-client/builds/#{$client_version}/"
 end
 
 puts "NSIS found at #{$full_nsis_dir}"
 
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
-$client_version = ENV['INPUT_BUILD_NUMBER'] || 'NNN'
 
 $ORCHID_VERSION = '0.9.1'
 
