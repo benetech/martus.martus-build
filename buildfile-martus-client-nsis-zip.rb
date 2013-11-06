@@ -19,7 +19,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     end
   end
 
-	attic_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}/"
+	attic_dir = $attic_dir
 	signed_jar = "#{attic_dir}/martus-client-signed-#{input_build_number}.jar"
 	source_zip = "#{attic_dir}/martus-client-sources-#{input_build_number}.zip"
     jre_tree = _(:target, :temp, 'jre7')
