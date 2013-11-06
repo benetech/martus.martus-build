@@ -31,6 +31,7 @@ end
 if ENV['ATTIC_DIR']
   $attic_dir = ENV['ATTIC_DIR']
 else
+  input_build_number = ENV['INPUT_BUILD_NUMBER']
   $attic_dir = "/var/lib/hudson/martus-client/builds/#{input_build_number}/"
 end
 
