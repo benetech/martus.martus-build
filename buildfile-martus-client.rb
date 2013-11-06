@@ -147,7 +147,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.merge(project('martus-js-xml-generator').package(:sources))
   end
   
-  attic_dir = "/var/lib/hudson/martus-client/builds/#{project.version}/"
+  attic_dir = $attic_dir
   task 'build_unsigned' => [project('martus-thirdparty').install, package(:jar, jarpath), package(options), project('martus-thirdparty').package] do
     FileUtils.mkdir_p attic_dir
     FileUtils.cp jarpath, attic_dir

@@ -12,7 +12,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
   iso_dir = _(:target, :temp, 'iso')
 	volume_name = "Martus-#{project.version}-#{input_build_number}-#{release_build_number}"
 
-  attic_dir = File.join("/var/lib/hudson/martus-client/builds", $client_version)
+  attic_dir = $attic_dir
   signed_jar_file = File.join(attic_dir, "martus-client-signed-#{input_build_number}.jar")
 
   martus_jar_file = _(:target, :temp, 'martus.jar')
