@@ -1,0 +1,261 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus" default="release" basedir=".">
+    <description>
+        Martus Main Build File
+    </description>
+
+    <!-- import build files -->
+    <import file="build.shared.values.xml" />
+    <import file="build-common.xml" />
+    <import file="build-client.xml" />
+    <import file="build-clientside.xml" />
+    <import file="build-server.xml" />
+    <import file="build-bcjce.xml" />
+    <import file="build-js-xml-generator.xml" />
+
+    <!-- meta classpath -->
+    <path id="meta.class.path">
+        <pathelement path="${martus.meta.class.root}/"/>
+        <pathelement path="${martus.client.class.root}/"/>
+        <pathelement path="${martus.clientside.class.root}/"/>
+        <pathelement path="${martus.server.class.root}/"/>
+        <pathelement path="${martus.common.class.root}/"/>
+        <pathelement path="${martus.amplifier.class.root}/"/>
+        <pathelement path="${martus.utils.class.root}/"/>
+        <pathelement path="${martus.hrdag.class.root}/"/>
+        <pathelement path="${martus.logi.class.root}/"/>
+        <pathelement path="${martus.swing.class.root}/"/>
+        <fileset refid="thirdparty.common.files"/>
+        <fileset refid="thirdparty.server.files"/>
+        <fileset dir="${build.basedir}/${martus.thirdparty.module}" >
+            <include name="libext/JUnit/**/*.jar"/>
+        </fileset>
+    </path>
+
+    <!-- ================================================================== -->
+    <!-- I N I T                                                            -->
+    <!-- ================================================================== -->
+
+    <target name="init" unless="init.complete" description="Initialize build number, timestamp and version">
+        <tstamp>
+            <format property="cvs.year" pattern="yyyy"/>
+        </tstamp>
+
+        <tstamp>
+            <format property="cvs.month.day" pattern="MMdd"/>
+        </tstamp>
+        <tstamp/>
+
+        <buildnumber/>
+
+        <echo message="Timestamp for cvs will be ${DSTAMP}" />
+        <echo message="Build number is ${build.number}" />
+        <echo message="Version is ${martus.version}" />
+        <property name="init.complete" value="true"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- C L E A N                                                          -->
+    <!-- ================================================================== -->
+
+  <target name="clean" description="Remove all class files and jars">
+
+    <!-- Remove dis jars & folder -->
+    <delete dir="${public.release.folder}"/>
+
+    <!-- Remove class dirs -->
+    <delete>
+        <fileset dir="${martus.jarverifier.class.root}" includes="**/*"/>
+        <fileset dir="${martus.swing.class.root}" includes="**/*"/>
+        <fileset dir="${martus.server.class.root}" includes="**/*"/>
+        <fileset dir="${martus.mspa.class.root}" includes="**/*"/>
+        <fileset dir="${martus.meta.class.root}" includes="**/*"/>
+        <fileset dir="${martus.logi.class.root}" includes="**/*"/>
+        <fileset dir="${martus.hrdag.class.root}" includes="**/*"/>
+        <fileset dir="${martus.common.class.root}" includes="**/*"/>
+        <fileset dir="${martus.client.class.root}" includes="**/*"/>
+        <fileset dir="${martus.amplifier.class.root}" includes="**/*"/>
+        <fileset dir="${martus.utils.class.root}" includes="**/*"/>
+        <fileset dir="${martus.bcjce.class.root}" includes="**/*"/>
+        <fileset dir="${martus.clientside.class.root}" includes="**/*"/>
+        <fileset dir="${martus.jsxmlgenerator.class.root}" includes="**/*"/>
+    </delete>
+
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+  <target name="build" depends="build-bc-jce,build-common,build-server,build-client,build-mspa" description="Compile martus-meta">
+    <mkdir dir="${martus.meta.class.root}"/>
+    <javac target="1.4" optimize="on" srcdir="${martus.meta.src.root}" destdir="${martus.meta.class.root}" failonerror="true">
+            <classpath refid="meta.class.path"/>
+            <include name="**/*.java"/>
+    </javac>
+  </target>
+
+  <!-- ================================================================== -->
+  <!-- J A R                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="jar-meta" depends="build" description="Create martus-meta jar">
+        <mkdir dir="${public.release.folder}"/>
+        <jar destfile="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar">
+                <fileset dir="${martus.meta.class.root}" includes="**/*.class"/>
+
+                <fileset refid="server.nosrc.files"/>
+                <fileset dir="${martus.server.class.root}" includes="**/*.class"/>
+
+                <fileset refid="mspa.server.class.files"/>
+
+                <fileset refid="amp.nosrc.files"/>
+                <fileset dir="${martus.amplifier.class.root}" includes="www/**/*"/>
+                <fileset dir="${martus.amplifier.class.root}" includes="**/*.class"/>
+
+                <fileset refid="jarverifier.nosrc.files"/>
+                <fileset dir="${martus.jarverifier.class.root}" includes="**/*.class"/>
+
+                <fileset refid="client.nosrc.files"/>
+                <fileset dir="${martus.client.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.clientside.class.root}" includes="**/*.class"/>
+
+                <fileset dir="${martus.common.class.root}">
+                    <include name="**/*.class"/>
+                    <include name="**/*.SIG"/>
+                </fileset>
+                <fileset dir="${martus.utils.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.hrdag.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.logi.class.root}" includes="**/*.class"/>
+                <fileset dir="${martus.swing.class.root}" includes="**/*.class"/>
+        </jar>
+    </target>
+
+    <target name="jarsign-meta" depends="check_keystore,check_keystore_location,fail_keystore_missing,check_storepass,check_keypass,jar" description="Sign Meta jar">
+        <property name="meta-filename" value="${public.release.folder}/martus-meta-${DSTAMP}.${build.number}.jar"/>
+        <signjar keystore="${sign.keystore}" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" jar="${meta-filename}" />
+    </target>
+
+    <target name="jar" depends="build,jar-bc-jce,jar-common,jar-client,jar-server,jar-meta" description="Create all jars">
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- T E S T S                                                          -->
+    <!-- ================================================================== -->
+
+    <target name="test" depends="jar" description="Run all tests from the jars">
+        <taskdef name="junit" classname="org.apache.tools.ant.taskdefs.optional.junit.JUnitTask">
+            <classpath>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+            </classpath>
+        </taskdef>
+
+        <junit fork="true" haltonfailure="yes" printsummary="withOutAndErr" showoutput="yes">
+            <jvmarg value="-Xbootclasspath/p:${public.release.folder}/bc-jce-${DSTAMP}.${build.number}.jar"/>
+            <jvmarg value="-Xbootclasspath/p:${martus.thirdparty.lib.bouncycastle}/bcprov-jdk14-${bouncycastle.version}.jar"/>
+            <classpath>
+                <fileset dir="${public.release.folder}" >
+                    <include name="bc-jce-${DSTAMP}.${build.number}.jar"/>
+                    <include name="martus-meta-${DSTAMP}.${build.number}.jar"/>
+                </fileset>
+                <pathelement path="${java.class.path}"/>
+                <fileset dir="${martus.thirdparty.lib.jetty}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.lucene}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.velocity}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.junit}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.persiancalendar}" includes="**/*.jar"/>
+
+                <fileset dir="${martus.thirdparty.lib.ant}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.infinitemonkey}" includes="**/*.jar"/>
+                <fileset dir="${martus.thirdparty.lib.xmlrpc}" includes="**/*.jar"/>
+
+            </classpath>
+            <formatter type="brief" usefile="no" />
+            <test name="org.martus.meta.TestAll"/>
+        </junit>
+    </target>
+
+<!-- ================================================================== -->
+<!-- C H E C K  V A R S                                                  -->
+<!-- ================================================================== -->
+    <target name="check_keypass" unless="sign.keypass">
+        <input
+            message="Please enter key pw:"
+            addproperty="sign.keypass"
+        />
+    </target>
+
+    <target name="check_storepass" unless="sign.storepass">
+        <input
+            message="Please enter store pw:"
+            addproperty="sign.storepass"
+        />
+    </target>
+
+    <target name="check_keystore" unless="sign.keystore">
+        <input
+            message="Please enter keystore location:"
+            addproperty="sign.keystore"
+        />
+    </target>
+
+    <target name="check_cvspass" unless="cvs.pass">
+        <input
+            message="Please enter CVS password:"
+            addproperty="cvs.pass"
+        />
+    </target>
+
+    <target name="check_cvsroot" unless="cvs.cvsroot">
+        <input
+            message="Please enter CVS location (:protocol:username@server:path) :"
+            addproperty="cvs.cvsroot"
+        />
+    </target>
+
+    <target name="check_keystore_location">
+        <available file="${sign.keystore}" type="file" property="keystore.exists"/>
+    </target>
+
+    <target name="fail_keystore_missing" unless="keystore.exists">
+        <fail message="FAILURE: ${sign.keystore} doesn't exist."/>
+    </target>
+
+<!-- ================================================================== -->
+<!-- J A R S I G N                                                      -->
+<!-- ================================================================== -->
+
+    <target name="jarsign" depends="jarsign-bc-jce,jarsign-common,jarsign-server,jarsign-client,jarsign-mspa,jarsign-meta" description="Sign jars">
+    </target>
+
+<!-- ================================================================== -->
+<!-- C H E C K S U M                                                              -->
+<!-- ================================================================== -->
+
+    <target name="checksum" depends="jar" description="Generate sha checksum of jars and zips">
+        <checksum algorithm="SHA" fileext=".sha">
+            <fileset dir="${public.release.folder}">
+                <include name="*.jar"/>
+                <include name="*.zip"/>
+            </fileset>
+        </checksum>
+    </target>
+
+<!-- ================================================================== -->
+<!-- R E L E A S E                                                      -->
+<!-- ================================================================== -->
+
+    <target name="release" depends="jarsign,test,zip-client-src,zip-server-src,checksum">
+        <echo message="Release Built."/>
+    </target>
+
+    <target name="nosign.release" depends="test,zip-client-src,zip-server-src,checksum">
+        <echo message="Unsigned Release Built."/>
+    </target>
+
+    <target name="nosign.notest.release" depends="jar,zip-client-src,zip-server-src,checksum">
+        <echo message="Unsigned Release Built."/>
+    </target>
+
+</project>

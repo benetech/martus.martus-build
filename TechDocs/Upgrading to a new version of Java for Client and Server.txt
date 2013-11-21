@@ -1,0 +1,33 @@
+Instructions for bundling Martus with Java.
+Updated June 12, 2006
+
+1.	Download and Install the Windows SDK version, and make sure Eclipse will point to and use in order to build Martus.  Also Download the Linux version of the JRE.  We download the SDK for Windows so we can develop with it, and we use the JRE sub directory in the SDK for actual deployment on windows Machines.  During install of the SDK I usually don’t install the separate JRE in the ProgramFiles\Java directory.
+
+2.	Copy the files from 
+C:\ j2sdk1.4.2_XX\jre\ to .\martus-thirdparty\client\Sun\license\
+Be sure to include the license*.*, Readme.*, COPYRIGHT, and THIRDPARTYLICENSEREADME.txt
+
+3.	Do the same for .\martus-thirdparty\server\Sun\license\ (If updating server at the same time)
+
+4.	Edit the Readme files in .\martus-thirdparty\client\Sun\Source and .\martus-thirdparty\server\Sun\Souce to adjust the version of Java we are using and update the URL’s to the Sun download site.
+
+5.	Copy the Linux JRE version of Java to .\binary-martus\Installer\BuildFiles\Java redist\Linux\i586\j2re-1_4_2_XX-linux-i586-rpm.bin
+
+6. 	Copy the Folders (lib & bin) under the Java SDK’s JRE directory to .\binary-martus\Installer\BuildFiles\Java redist\Win32\, we do not distribute javaws (Java Web Start) directory.
+
+6a. We do not include the following directories (lib\ext), (lib\audio), (lib\applet), (bin\server).
+
+7. 	Install the new Java on the build machine, modify %JAVA_HOME%, update the %PATH% so it points to the bin folder in the new java 
+
+8.  Update the build script so it points to the new java bin path: MartusBuild.sh (	PATH=/cygdrive/c/j2sdk1.4.2_11/bin:/cygdrive/c/java/apache-ant-1.6.2/bin:"/cygdrive/c/Program Files/NSIS":$PATH)
+
+8a. Update the build script on the build machine (MartusBuild.sh) C:\Documents and Settings\(User Name)\Build\MartusBuild.sh
+
+9.  Look at the Martus_Build.txt file for other info.
+
+10. Zone Alarm on the build machine may have issues and a SSL test might fail until you acept that Java can run unrestricted.
+
+11.  Do a build on the Build machine and make sure the new Java gets put onto the install CD.
+
+12.  Tell Scott to update the Java on the Martus Servers. (If updating the server's Java)
+
