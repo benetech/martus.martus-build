@@ -16,7 +16,7 @@ if !$full_nsis_dir
 	exit(1)
 end
 
-if !Dir.exists? $full_nsis_dir
+if !File.directory? $full_nsis_dir
 	puts "ERROR: NSIS_HOME must exist: #{$full_nsis_dir}"
 	exit(1)
 end
