@@ -4,28 +4,41 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
 
+on_windows = (RUBY_PLATFORM == 'mswin')
 unicode = true
+use_wine = (!on_windows && unicode)
 
 $nsis_script_dir = "Win32_NSIS#{unicode ? '_Unicode' : ''}"
-if ENV['NSIS_HOME']
-  $full_nsis_dir = ENV['NSIS_HOME'] 
-  $nsis_command = 'makensis -V2'
+
+$full_nsis_dir = ENV['NSIS_HOME']
+if !$full_nsis_dir
+	puts "ERROR: NSIS_HOME must be defined"
+	exit(1)
+end
+
+if !Dir.exists? $full_nsis_dir
+	puts "ERROR: NSIS_HOME must exist: #{$full_nsis_dir}"
+	exit(1)
+end
+
+DRIVE = "drive_"
+drive_at = $full_nsis_dir.index(DRIVE)
+if !drive_at
+	puts "ERROR: NSIS_HOME must contain #{DRIVE}: #{$full_nsis_dir}"
+	exit(1)
+end
+
+nsis_exe = 'makensis'
+
+if use_wine
+  drive_letter_at = drive_at + DRIVE.length
+  drive = $full_nsis_dir[drive_letter_at, 1]
+  relative = $full_nsis_dir[drive_letter_at+1..-1]
+  wine_nsis_home = File.join("#{drive}:", relative)
+  nsis_exe_path = File.join(wine_nsis_home, nsis_exe)
+  $nsis_command = "wine \"#{nsis_exe_path}\" /V2"
 else
-  if unicode
-  	nsis_dir = "Program Files/NSIS"
-  	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
-  	if !File.exists? $full_nsis_dir
-  		puts "NSIS not found at #{$full_nsis_dir}"
-  		nsis_dir = "Program Files (x86)/NSIS"
-  	end
-  	$full_nsis_dir = "#{ENV['HOME']}/.wine/drive_c/#{nsis_dir}"
-  	if !File.exists? $full_nsis_dir
-  		raise "Unable to find NSIS at #{$full_nsis_dir}"
-  	end
-  	$nsis_command = "wine \"c:/#{nsis_dir}/makensis\" /V2"
-  else
-  	$nsis_command = 'makensis -V2'
-  end
+  $nsis_command = "#{nsis_exe} -V2"
 end
 
 $client_version = ENV['INPUT_BUILD_NUMBER'] || 'NNN'
