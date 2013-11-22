@@ -1,4 +1,4 @@
-export RELEASE_IDENTIFIER=4.5.0
+export RELEASE_IDENTIFIER=pre-4.5.0
 export NSIS_HOME="$HOME/.wine/drive_c/Program Files/NSIS/"
 export ATTIC_DIR="/var/lib/hudson/martus-client/builds/$INPUT_BUILD_NUMBER/"
 # INPUT_BUILD_NUMBER is set interactively (e.g. 3011)
