@@ -153,6 +153,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     FileUtils.cp jarpath, attic_dir
     FileUtils.cp sourcepath, attic_dir
     FileUtils.cp project('martus-thirdparty').package.to_s, attic_dir 
+    puts "Copied unsigned built files to #{attic_dir}"
   end
   
 end
