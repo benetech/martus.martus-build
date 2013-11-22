@@ -49,11 +49,6 @@ if !$attic_dir
 	exit(1)
 end
 
-if !File.directory?($attic_dir)
-	puts "ERROR: ATTIC_DIR must exist: #{$attic_dir}"
-	exit(1)
-end
-
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
 
