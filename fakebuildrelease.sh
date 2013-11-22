@@ -4,9 +4,7 @@ export BUILD_NUMBER=NNN
 export ATTIC_DIR=/var/lib/hudson/martus-client/builds/$INPUT_BUILD_NUMBER
 
 # fake signing
-pwd
-cd martus-client/target
-jarsigner -signed-jar /var/lib/hudson/martus-client/builds/TEST/martus-client-signed-TEST.jar martus-client-unsigned-TEST.jar SSMTSJAR
+jarsigner -signed-jar $ATTIC_DIR/martus-client-signed-$INPUT_BUILD_NUMBER.jar $ATTIC_DIR/martus-client-unsigned-$INPUT_BUILD_NUMBER.jar SSMTSJAR
 
 
 cd /home/kevins/temp/martus/
