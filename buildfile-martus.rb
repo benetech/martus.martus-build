@@ -43,13 +43,16 @@ end
 
 $client_version = ENV['INPUT_BUILD_NUMBER'] || 'NNN'
 
-if ENV['ATTIC_DIR']
-  $attic_dir = ENV['ATTIC_DIR']
-else
-  $attic_dir = "/var/lib/hudson/martus-client/builds/#{$client_version}/"
+$attic_dir = ENV['ATTIC_DIR']
+if !$attic_dir
+	puts "ERROR: ATTIC_DIR must be set"
+	exit(1)
 end
 
-puts "NSIS found at #{$full_nsis_dir}"
+if !File.directory?($attic_dir)
+	puts "ERROR: ATTIC_DIR must exist: #{$attic_dir}"
+	exit(1)
+end
 
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
