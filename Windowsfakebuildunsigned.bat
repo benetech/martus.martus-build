@@ -3,7 +3,7 @@ call buildr --trace -f martus-build/buildfile clean martus-client:build_unsigned
 
 cd D:\temp\martus\martus-client\target
 mkdir D:\temp\martus\martus-client\builds\TEST
-jarsigner -signed-jar D:/temp/martus/martus-client/builds/TEST/martus-client-signed-TEST.jar martus-client-unsigned-TEST.jar SSMTSJAR
+
 copy *.zip D:\Temp\martus\martus-client\builds\TEST
 pause
 pause
