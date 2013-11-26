@@ -4,9 +4,10 @@ repositories.remote << 'http://download.java.net/maven/2'
 
 $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
 
-on_windows = (RUBY_PLATFORM == 'mswin')
+on_windows = (RUBY_PLATFORM.index('mswin') || RUBY_PLATFORM.index("mingw"))
 unicode = true
 use_wine = (!on_windows && unicode)
+
 
 $nsis_script_dir = "Win32_NSIS#{unicode ? '_Unicode' : ''}"
 
@@ -21,16 +22,15 @@ if !File.directory? $full_nsis_dir
 	exit(1)
 end
 
-DRIVE = "drive_"
-drive_at = $full_nsis_dir.index(DRIVE)
-if !drive_at
-	puts "ERROR: NSIS_HOME must contain #{DRIVE}: #{$full_nsis_dir}"
-	exit(1)
-end
-
 nsis_exe = 'makensis'
 
 if use_wine
+  DRIVE = "drive_"
+  drive_at = $full_nsis_dir.index(DRIVE)
+  if !drive_at
+    puts "ERROR: NSIS_HOME must contain #{DRIVE}: #{$full_nsis_dir}"
+    exit(1)
+  end
   drive_letter_at = drive_at + DRIVE.length
   drive = $full_nsis_dir[drive_letter_at, 1]
   relative = $full_nsis_dir[drive_letter_at+1..-1]
