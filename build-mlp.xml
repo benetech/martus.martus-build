@@ -76,7 +76,7 @@ Boston, MA 02111-1307, USA.
 		  	<fileset dir="${CLIENTDIR}" includes="Martus-${LANGUAGE}.mtf" />
 		  	<fileset dir="${CLIENTDIR}" includes="MartusHelp-${LANGUAGE}.txt" />
 		  	<fileset dir="${CLIENTDIR}" includes="MartusHelpTOC-${LANGUAGE}.txt" />
-		  	<fileset dir="BuildFiles/Documents/client" includes="README_${LANGUAGE}.pdf" />
+		  	<fileset dir="BuildFiles/Documents/client" includes="README_${LANGUAGE}.txt" />
 		  	<fileset dir="BuildFiles/Documents/client" includes="quickstartguide_${LANGUAGE}.pdf" />
 		  	<fileset dir="BuildFiles/Documents/client" includes="martus_user_guide_${LANGUAGE}.pdf" />
           </jar>
