@@ -6,7 +6,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   date = today_without_dashes
   jarpath = _(:target, "martus-server-#{date}.#{project.version}.jar")
 
-	compile.options.source = '1.5'
+	compile.options.source = $JAVAC_VERSION
 	compile.options.target = compile.options.source
 	compile.with(
 		JUNIT_SPEC,

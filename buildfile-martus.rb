@@ -3,6 +3,7 @@ repositories.remote << 'http://repo1.maven.org/maven2/'
 repositories.remote << 'http://download.java.net/maven/2'
 
 $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
+$JAVAC_VERSION = '7'
 
 on_windows = (RUBY_PLATFORM.index('mswin') || RUBY_PLATFORM.index("mingw"))
 unicode = true
