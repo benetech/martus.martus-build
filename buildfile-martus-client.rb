@@ -45,6 +45,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 
 	compile.options.source = $JAVAC_VERSION
 	compile.options.target = compile.options.source
+	compile.options.other = "-version"
 	compile.with(
 		JUNIT_SPEC,
 		project('martus-utils').packages.first,
