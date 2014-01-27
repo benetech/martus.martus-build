@@ -46,6 +46,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	compile.options.source = $JAVAC_VERSION
 	compile.options.target = compile.options.source
 	compile.options.other = "-version"
+	
+	# TODO: This is a hack required by Java 7. It will probably fail with Java 8.
 	JFX_JAR = ENV['JAVA_HOME'] + "/jre/lib/jfxrt.jar"
 	compile.with(
 		JFX_JAR,
