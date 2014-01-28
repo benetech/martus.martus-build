@@ -83,6 +83,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		filter(main_source_dir).include('**/*.gif').into(main_target_dir).run
 		filter(main_source_dir).include('**/*.jpg').into(main_target_dir).run
 		filter(main_source_dir).include('**/*.fxml').into(main_target_dir).run
+		filter(main_source_dir).include('**/*.css').into(main_target_dir).run
 
 		filter(main_source_dir).include('org/martus/client/swingui/Martus-*.mtf').into(main_target_dir).run
 		filter(main_source_dir).include('org/martus/client/swingui/MartusHelp-*.txt').into(main_target_dir).run
