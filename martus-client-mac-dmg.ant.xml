@@ -2,16 +2,23 @@
     <target name="macappbundle" depends="" description="create a jar app bundle for the mac">
         <echo message="installer.mac: ${installer.mac}" />
         <property name="macjavastubfile" value="${installer.mac}/JavaApplicationStub/JavaApplicationStub" />
-        <taskdef name="jarbundler" 
-            classname="net.sourceforge.jarbundler.JarBundler" 
-            classpath="${installer.mac}/jarbundler-2.1.0/jarbundler-2.1.0.jar" />
+        <taskdef name="bundleapp" 
+		    classname="com.oracle.appbundler.AppBundlerTask" 
+		    classpath="${installer.mac}/appbundler-1.0/appbundler-1.0.jar" />
 
         <mkdir dir="${dist.mactree}" />
         
-        <jarbundler 
-            dir="${dist.mactree}" 
-            name="${mac.app.name}" 
-            mainclass="${main.class}" 
+        <bundleapp 
+            outputdirectory="${dist.mactree}" 
+            name="${mac.app.name}"
+            displayname="Martus"
+            identifier="org.martus.Martus" 
+        	icon="${mac.icon.file}"
+            shortversion="${version.full}"
+            mainclassname="${main.class}"             
+            >
+<!-- These were valid in jarbundler but not in appbundler
+	        mainclass="${main.class}" 
             jvmversion="1.7+" 
             stubfile="${macjavastubfile}" 
             shortname="${short.app.name}" 
@@ -21,20 +28,21 @@
         	arguments=" "
         	workingDirectory="$APP_PACKAGE"
         	icon="${mac.icon.file}"
-            verbose="true"
-            >
+            verbose="true" -->
 
-            <jarfileset dir="${app.dir}">
+            <option value="-Xms${vm.minimumheap} -Xmx${vm.maximumheap} ${vm.options}" />
+
+            <classpath dir="${app.dir}">
                 <include name="martus.jar" />
                 <include name="ThirdParty/*.jar" />
-            </jarfileset>
+            </classpath>
 
-            <javaproperty name="apple.laf.useScreenMenuBar" value="true" />
-            <javaproperty name="apple.awt.brushMetal" value="true" />
-            <javaproperty name="apple.awt.showGrowBox" value="true" />
-            <javaproperty name="apple.awt.antialiasing" value="true" />
-            <javaproperty name="apple.awt.textantialiasing" value="true" />
-        </jarbundler>
+            <option value="-Dapple.laf.useScreenMenuBar=true" />
+            <option value="-Dapple.awt.brushMetal=true" />
+            <option value="-Dapple.awt.showGrowBox=true" />
+            <option value="-Dapple.awt.antialiasing=true" />
+            <option value="-Dapple.awt.textantialiasing=true" />
+        </bundleapp>
     </target>
 
     <!--*****************************************************************-->
