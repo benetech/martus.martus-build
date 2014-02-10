@@ -42,7 +42,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
       FileUtils::rm_r(dmg_fonts_cvs_dir)
     end
     
-    xbootclasspath = "-Xbootclasspath/p:Contents/Resources/Java/ThirdParty/bc-jce.jar"
+    xbootclasspath = "-Xbootclasspath/p:Contents/Java/bc-jce.jar"
 
     # COPY MAC-SPECIFIC FILES NOT IN THE ZIP
     mac_readme = _('martus-build', 'BuildFiles', 'Documents', 'client', 'Mac-install-README.txt')
