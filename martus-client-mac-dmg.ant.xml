@@ -30,7 +30,9 @@
         	icon="${mac.icon.file}"
             verbose="true" -->
 
-            <option value="-Xms${vm.minimumheap} -Xmx${vm.maximumheap} ${vm.options}" />
+            <option value="-Xms${vm.minimumheap}" />
+            <option value="-Xmx${vm.maximumheap}" />
+            <option value="${vm.options}" />
 
             <classpath dir="${app.dir}">
                 <include name="martus.jar" />
