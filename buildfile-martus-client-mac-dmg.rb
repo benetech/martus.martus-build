@@ -42,8 +42,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
       FileUtils::rm_r(dmg_fonts_cvs_dir)
     end
     
-    xbootclasspath = "-Xbootclasspath/p:$APP_ROOT/bc-jce.jar"
-
     # COPY MAC-SPECIFIC FILES NOT IN THE ZIP
     mac_readme = _('martus-build', 'BuildFiles', 'Documents', 'client', 'Mac-install-README.txt')
     FileUtils::cp([mac_readme], dmg_contents_dir)
@@ -63,7 +61,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 
     properties << " -Dinstaller.mac=BuildFiles/Mac/" #parent of JavaApplicationStub
     properties << " -Dapp.dir=#{production_zip_contents_dir}"
-    properties << " -Dvm.options=#{xbootclasspath}"
     properties << " -Dvm.minimumheap=256m"
     properties << " -Dvm.maximumheap=512m"
 

@@ -1,6 +1,9 @@
 <project name="martus-client-mac-dmg">
     <target name="macappbundle" depends="" description="create a jar app bundle for the mac">
         <echo message="installer.mac: ${installer.mac}" />
+        
+        <!-- I couldn't find a way to pass $APP_ROOT in from ruby to ant -->
+		<property name="vm.options" value="-Xbootclasspath/p:$APP_ROOT/bc-jce.jar" />
         <property name="macjavastubfile" value="${installer.mac}/JavaApplicationStub/JavaApplicationStub" />
         <taskdef name="bundleapp" 
 		    classname="com.oracle.appbundler.AppBundlerTask" 
@@ -8,6 +11,8 @@
 
         <mkdir dir="${dist.mactree}" />
         
+        <echo message="vm.options=${vm.options}" />
+
         <bundleapp 
             outputdirectory="${dist.mactree}" 
             name="${mac.app.name}"
@@ -33,7 +38,7 @@
             <option value="-Xms${vm.minimumheap}" />
             <option value="-Xmx${vm.maximumheap}" />
             <option value="${vm.options}" />
-
+            
             <classpath dir="${app.dir}">
                 <include name="martus.jar" />
                 <include name="ThirdParty/*.jar" />
