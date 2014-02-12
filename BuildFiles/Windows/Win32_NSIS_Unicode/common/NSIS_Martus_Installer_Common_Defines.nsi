@@ -95,6 +95,7 @@ unicode "true"
 ;!insertmacro LANG_LOAD "Bengali"
 !insertmacro LANG_LOAD "Khmer"
 !insertmacro LANG_LOAD "Burmese"
+!insertmacro LANG_LOAD "Vietnamese"
 
 ; ---------------------------------------
 ; language selection dialog
