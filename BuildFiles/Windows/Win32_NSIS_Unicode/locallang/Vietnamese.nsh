@@ -31,9 +31,9 @@
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts
-!insertmacro LANG_STRING StartMenuShortcutQuestion_Text "Bạn có cần cài đặt lối tắt vào Martus trong menu Bắt Đầu của Windows?”
-!insertmacro LANG_STRING DesktopShortcutQuestion_Text "Bạn có cần cài đặt lối tắt vào Martus trên Bàn làm việc?”
-!insertmacro LANG_STRING LaunchProgramInfo_Text "Lối tắt vào Martus được cài đặt trong thư mục chương trình $INSTDIR. Dùng lối tắt này, hoặc bản sao, để khởi động Martus.”
+!insertmacro LANG_STRING StartMenuShortcutQuestion_Text "Bạn có cần cài đặt lối tắt vào Martus trong menu Bắt Đầu của Windows?"
+!insertmacro LANG_STRING DesktopShortcutQuestion_Text "Bạn có cần cài đặt lối tắt vào Martus trên Bàn làm việc?"
+!insertmacro LANG_STRING LaunchProgramInfo_Text "Lối tắt vào Martus được cài đặt trong thư mục chương trình $INSTDIR. Dùng lối tắt này, hoặc bản sao, để khởi động Martus."
 
 !insertmacro LANG_STRING MartusShortcutDescription_Text "Hệ Thống Bản Tin Nhân Quyền Martus"
 
