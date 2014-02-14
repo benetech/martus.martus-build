@@ -9,7 +9,10 @@ To install buildr on Ubuntu, I had to use their "easy" script. Even then,
 it did not automatically create an entry in my bin path, so I had to 
 manually create a /usr/local/bin/buildr symlink. I don't know why.
 
-You will need to install nsis to complete a client build.
+You will need to install nsis to complete a client build. NOTE: Currently 
+we require Unicode NSIS, which has not yet been released for Linux. So 
+you have to install Wine, and then install the Windows version of Unicode 
+NSIS. We will change that after Unicode NSIS is available for Linux.
 
 You will need to create a symlink at /opt/java/tools/ant/bin/ant that 
 points to your copy of ant.
