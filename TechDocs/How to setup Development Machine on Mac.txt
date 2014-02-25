@@ -73,7 +73,7 @@ Instructions on setting up a development environment on a MAC.
     Then Add external Jar from martus-thirdparty/libext/bc-jce/bin/bc-jce-2012-11-08.jar (or whatever is newer)
 14. Now you should be able to run both the unit tests, Martus, and Martus Server.
     Test all is located in meta, Martus is under martus-client/swingui, and Martus Server is martus-server/main
-    
+15. You will need to adjust the Eclipse/Preferences/General/Workspace Text File Encoding as UTF-8.     
 
  
    
