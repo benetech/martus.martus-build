@@ -1,3 +1,4 @@
+export ATTIC_DIR="/var/lib/hudson/martus-client/builds/$INPUT_BUILD_NUMBER/"
 export WORKSPACE=/home/kevins/temp/
 cd $WORKSPACE/martus
 pwd
