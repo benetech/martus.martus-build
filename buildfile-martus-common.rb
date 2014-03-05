@@ -20,6 +20,21 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-swing').package(:jar)
 	)
 
+	version_file = _('martus-common', 'source', 'org', 'martus', 'common', 'VersionBuildDate.java')
+	compile ( version_file ) 
+
+	file (version_file) => :always do
+		date = today_as_iso_date
+		build_date = "#{date}.#{$BUILD_NUMBER}"
+
+		contents = File.read(version_file)
+		contents.gsub!('#{BUILDDATE}', build_date)
+		File.open(version_file, "w") do | f |
+			f.write contents
+		end
+		puts "BuildDate set to: #{build_date}"
+	end
+  
 	test.with(
 	)
 	bc_jce = artifact(BCJCE_SPEC)
@@ -28,20 +43,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	#TODO: Failing test
 	test.exclude 'org.martus.common.test.TestMartusSecurity'
 
-  version_file = _('martus-common', 'source', 'org', 'martus', 'common', 'VersionBuildDate.java')
-  file (version_file) => :always do
-    date = today_as_iso_date
-    build_date = "#{date}.#{$BUILD_NUMBER}"
-
-    contents = File.read(version_file)
-    contents.gsub!('#{BUILDDATE}', build_date)
-    File.open(version_file, "w") do | f |
-      f.write contents
-    end
-    puts "BuildDate set to: #{build_date}"
-  end
-  
-	build ( version_file ) 
 	package :jar
 
 	# NOTE: Old build script signed this jar
