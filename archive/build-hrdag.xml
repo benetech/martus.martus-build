@@ -1,0 +1,26 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-hrdag" default="notify-hrdag" basedir=".">
+    <description>
+        Martus hrdag Build File
+    </description>
+
+    <!-- imports -->
+	<import file="build-meta.xml" />
+    <import file="build.shared.values.xml" />
+
+    <target name="notify-hrdag">
+        <echo message="This is not a standalone build file. Please run these tasks thru the main build-meta.xml."/>
+    </target>
+
+  <!-- ================================================================== -->
+  <!-- B U I L D                                                          -->
+  <!-- ================================================================== -->
+
+    <target name="build-hrdag" depends="init" description="Compile martus-hrdag">
+        <mkdir dir="${martus.hrdag.class.root}"/>
+        <javac target="1.4" optimize="on" srcdir="${martus.hrdag.src.root}" destdir="${martus.hrdag.class.root}" failonerror="true">
+              <include name="**/*.java"/>
+        </javac>
+    </target>
+
+</project>

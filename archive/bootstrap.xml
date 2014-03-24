@@ -1,0 +1,66 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="bootstrap">
+    <description>
+        Martus Bootstrap Build File
+    </description>
+
+    <!-- imports -->
+    <import file="build.shared.values.xml" />
+
+    <!-- download from CVS -->
+    <target name="cvs.checkout">
+        <delete dir="${cvs.home}"/>
+        <mkdir dir="${cvs.home}"/>
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true">
+            <commandline>
+                <argument value="-q"/>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="-P"/>
+                <argument value="${martus.module}"/>
+            </commandline>
+        </cvs>
+
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true">
+            <commandline>
+                <argument value="-q"/>
+                <argument value="checkout"/>
+                <argument value="-P"/>
+                <argument value="${martus.amplifier.module}"/>
+                <argument value="${martus.client.module}"/>
+                <argument value="${martus.common.module}"/>
+                <argument value="${martus.hrdag.module}"/>
+                <argument value="${martus.jarverifier.module}"/>
+                <argument value="${martus.logi.module}"/>
+                <argument value="${martus.meta.module}"/>
+                <argument value="${martus.mspa.module}"/>
+                <argument value="${martus.server.module}"/>
+                <argument value="${martus.swing.module}"/>
+                <argument value="${martus.thirdparty.module}"/>
+                <argument value="${martus.utils.module}"/>
+                <argument value="${martus.clientside.module}"/>
+            </commandline>
+        </cvs>
+    </target>
+
+    <!-- run martus build file with signing of jars -->
+    <target name="build.martus.and.sign" depends="cvs.checkout">
+        <ant antfile="${cvs.home}/${martus.module}/cvs.build.xml" dir="${cvs.home}/${martus.module}" target="release.and.checkin"/>
+        <!-- notify via email of success -->
+    </target>
+
+    <!-- run martus build file without signing of jars -->
+    <target name="build.martus" depends="cvs.checkout">
+        <ant antfile="${cvs.home}/${martus.module}/cvs.build.xml" dir="${cvs.home}/${martus.module}" target="nosign.release.and.checkin"/>
+        <!-- notify via email of success -->
+    </target>
+
+<!--
+    <target name="build.martus.and.installer" depends="cvs.checkout,cvs.checkout.installers">
+        <ant antfile="${cvs.home}/${martus.module}/cvs.build.xml" dir="${cvs.home}/${martus.module}" target="release.and.checkin"/>
+        <ant antfile="${cvs.home}/${martus.module}/installer.build.xml" dir="${cvs.home}" target="build.installers"/>
+    </target>
+-->
+
+
+</project>
