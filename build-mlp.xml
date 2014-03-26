@@ -75,7 +75,7 @@ Boston, MA 02111-1307, USA.
 
       <!-- create mlp signed jar -->
       <target name="mlp" description="Create a Signed Martus Language Pack">
-		  <jar jarfile="target/Martus-${LANGUAGE}.mlp">
+		  <jar jarfile="target/Martus-${LANGUAGE}.mlp" manifest="./BuildFiles/MLP/sealedManifest.txt">
 		  	<fileset dir="${CLIENTDIR}" includes="Martus-${LANGUAGE}.mtf" />
 		  	<fileset dir="${CLIENTDIR}" includes="MartusHelp-${LANGUAGE}.txt" />
 		  	<fileset dir="${CLIENTDIR}" includes="MartusHelpTOC-${LANGUAGE}.txt" />
