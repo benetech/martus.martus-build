@@ -1,7 +1,7 @@
-﻿Martus(tm) Software Version 4.4 README.txt
+Martus(tm) Desktop Software Version 4.5 README.txt
 ---------------------------------------------------------
 
-See https://www.martus.org for information about Martus software.
+See https://www.martus.org for information about the Martus software.
 
 See the Martus User Guide for instructions on installing the Martus software. 
 
@@ -10,7 +10,26 @@ as well as language packs/documentation for previous versions in various
 languages, go to https://www.martus.org/downloads/. 
 
 
-Martus release information by version and release date:
+Martus desktop release information by version and release date:
+
+
+PRE-RELEASE Version 4.5		2014-03
+
+- Added Martus Configuration Wizard for account setup, using JavaFX for newer look and feel.
+  1) Simplified server setup with integrated Martus default server information. (also included in Select Server screen outside of wizard)
+  2) Add and verify Contacts (formerly Headquarters and Field Desk accounts) during setup. To improve usability, contact key information
+   can be saved to and loaded from Martus servers (in addition to via a file if access to a server is not available). Increased account 
+  public codes to 40 digits for security, but allow identification of accounts via a short access token with visual verification of the longer 
+  public codes for usability. (also included in Manage Contacts screen outside of wizard)
+  3) Import forms (Martus generic bulletin templates and custom templates from Contacts) during setup.  Also added ability to import 
+  templates from any Martus user (not only Contacts), and to save templates to and load templates from Martus servers (in addition to 
+  via a file if access to a server is not available).
+  4) Other items in Configuration wizard include:  single encrypted file key backup and setting of preferences (including Tor).
+- Added the Vietnamese translation of version 4.4 user interface and Windows Installer.
+- Updated Farsi/Dari, Russian and Spanish translation of user interface to the 4.4 version.
+- Fixed bug so that you cannot add yourself as a contact (in earlier versions, an account could add itself as its own Headquarters or Field Desk, 
+  which could cause confusion)
+
 
 Version 4.4 		2013-11
 
