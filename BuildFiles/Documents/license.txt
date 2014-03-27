@@ -1,6 +1,6 @@
 The Martus(TM) Software License
 
-Copyright 2001-2013, Beneficent Technology, Inc. ("Benetech" or " Licensor"), Palo 
+Copyright 2001-2014, Beneficent Technology, Inc. ("Benetech" or " Licensor"), Palo 
 Alto, California.  This software is expressly subject to the accompanying GNU GPL 
 License (attached in the file GPL.TXT), and these additional terms, all of which 
 constitute the full Martus license, and all of which you should read carefully.   Both the 
