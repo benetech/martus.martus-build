@@ -18,6 +18,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 		p.merge(project('martus-common').package).include('org/martus/common/packet/*.class')
 		p.merge(project('martus-common').package).include('org/martus/common/utilities/*.class')
 		p.merge(project('martus-common').package).include('org/martus/common/xmlrpc/*.class')
+		p.merge(project('martus-common').package).include('org/miradi/utils/*.class')
 		p.merge(project('martus-utils').package).include('org/martus/util/*.class')
 		p.merge(project('martus-utils').package).include('org/martus/util/inputstreamwithseek/*.class')
 		p.merge(project('martus-utils').package).include('org/martus/util/language/*.class')
