@@ -31,18 +31,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(JUNIT_SOURCE_SPEC).from(source_file(name, 'libext/JUnit', 'junit-4.11-sources.zip'))
 	install artifact(JUNIT_LICENSE_SPEC).from(license_file(name, 'libext/JUnit', 'LICENSE.txt'))
 	
-	official_jar = jar_file(name, 'libext/bc-jce', "bc-jce-#{BC_JCE_DATE}.jar")
-	bc_jce_artifact = artifact(BCJCE_SPEC)
-	puts "Installing #{official_jar} as #{BCJCE_SPEC}"
-
-	install bc_jce_artifact.from(official_jar) do
-		puts "======================================================="
-	end
-	
-	install artifact(BCJCE_LICENSE_SPEC).from(license_file(name, 'libext/bc-jce', 'LICENSE.html'))
-
-	filespec_in_repo = bc_jce_artifact.to_s
-	puts "  in repository: #{filespec_in_repo}? #{File.exists?(filespec_in_repo)}"
 	puts "************************************************************************************"
 
 	#common
@@ -108,7 +96,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   package(:zip, :file => _('target', "martus-thirdparty-#{project.version}.zip")).tap do | p |
     p.include(artifact(JUNIT_SPEC), :path=>'ThirdParty')
     p.include(artifact(BCPROV_SPEC), :path=>'ThirdParty')
-    p.include(artifact(BCJCE_SPEC), :as=>'ThirdParty/bc-jce.jar')
     p.include(artifact(PERSIANCALENDAR_SPEC), :path=>'ThirdParty')
     p.include(artifact(VELOCITY_DEP_SPEC), :path=>'ThirdParty')
     p.include(artifact(XMLRPC_COMMON_SPEC), :path=>'ThirdParty')

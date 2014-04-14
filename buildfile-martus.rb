@@ -3,7 +3,7 @@ repositories.remote << 'http://repo1.maven.org/maven2/'
 repositories.remote << 'http://download.java.net/maven/2'
 
 $BUILD_NUMBER = ENV['BUILD_NUMBER'] || 'TEST'
-$JAVAC_VERSION = '7'
+$JAVAC_VERSION = '8'
 
 on_windows = (RUBY_PLATFORM.index('mswin') || RUBY_PLATFORM.index("mingw"))
 unicode = true
@@ -111,11 +111,6 @@ def build_bcprov_spec(type)
 	return build_spec('bouncycastle', 'bcprov-jdk15on', type, '148')
 end
 
-BC_JCE_DATE = '2012-11-08'
-def build_bcjce_spec(type)
-  return build_spec('org.martus', 'bc-jce', type, BC_JCE_DATE)
-end
-
 def build_mail_spec(type)
 	return build_spec('javax.mail', 'mail', type, '1.4.3')
 end
@@ -153,8 +148,6 @@ BCPROV_LICENSE_SPEC = build_bcprov_spec('license')
 JUNIT_SPEC = build_junit_spec('jar')
 JUNIT_SOURCE_SPEC = build_junit_spec('sources')
 JUNIT_LICENSE_SPEC = build_junit_spec('license')
-BCJCE_SPEC = build_bcjce_spec('jar')
-BCJCE_LICENSE_SPEC = build_bcjce_spec('license')
 
 # Common, not in public repository
 LOGI_LICENSE_SPEC = build_logi_spec('license')

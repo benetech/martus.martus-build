@@ -31,10 +31,6 @@ def sig_file(base_filename)
   return File.join(crypto_dir, "#{base_filename}.SIG")
 end
 
-def bcjce_sig_file
-  return sig_file("SSMTSJAR")
-end
-
 def bcprov_sig_file
   return sig_file("BCKEY")
 end
@@ -47,10 +43,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	compile.options.target = compile.options.source
 	compile.options.other = "-version"
 	
-	# TODO: This is a hack required by Java 7. It will probably fail with Java 8.
-	JFX_JAR = ENV['JAVA_HOME'] + "/jre/lib/jfxrt.jar"
 	compile.with(
-		JFX_JAR,
 		JUNIT_SPEC,
 		project('martus-utils').packages.first,
 		project('martus-common').packages.first,
@@ -105,10 +98,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	test.exclude('org.martus.client.test.TestLocalization')
 	test.exclude('org.martus.client.test.TestMartusApp_NoServer')
 
-	file bcjce_sig_file => project('martus-thirdparty') do
-	  extract_sig_file_to_crypto(artifact(BCJCE_SPEC), "SSMTSJAR")
-	end
-	
   file bcprov_sig_file => project('martus-thirdparty') do
     extract_sig_file_to_crypto(artifact(BCPROV_SPEC), "BCKEY")
 	end
@@ -116,7 +105,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	jarpath = _('target', "martus-client-unsigned-#{project.version}.jar")
 	package(:jar, :file => jarpath).tap do | p |
     p.with :manifest=>{'Main-Class'=>'org.martus.client.swingui.Martus'}
-    p.include(bcjce_sig_file)
     p.include(bcprov_sig_file)
   
     p.include(File.join(_('source', 'test', 'java'), '**/*.mlp'))

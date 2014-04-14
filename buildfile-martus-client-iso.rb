@@ -77,7 +77,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     lib_dir = File.join(iso_dir, 'LibExt')
     FileUtils.mkdir(lib_dir)
     add_artifacts(lib_dir, third_party_client_jars) 
-    add_artifact_as(lib_dir, artifact(BCJCE_SPEC), 'bc-jce.jar')
   
     puts "-adding verify"
     verify_dir = File.join(iso_dir, 'verify')
