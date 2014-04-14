@@ -51,7 +51,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(XMLRPC_CLIENT_SPEC), :path=>'ThirdPartyJars')
     p.include(artifact(XMLRPC_COMMONS_LOGGING_SPEC), :path=>'ThirdPartyJars')
     p.include(artifact(XMLRPC_WS_COMMONS_UTIL_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(BCJCE_SPEC), :as=>'ThirdPartyJars/bc-jce.jar')
   end
   
   task 'sha1' => package(:jar) do
