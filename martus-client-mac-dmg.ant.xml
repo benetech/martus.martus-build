@@ -3,7 +3,6 @@
         <echo message="installer.mac: ${installer.mac}" />
         
         <!-- I couldn't find a way to pass $APP_ROOT in from ruby to ant -->
-		<property name="vm.options" value="-Xbootclasspath/p:$APP_ROOT/Contents/Java/bc-jce.jar" />
         <property name="macjavastubfile" value="${installer.mac}/JavaApplicationStub/JavaApplicationStub" />
         <taskdef name="bundleapp" 
 		    classname="com.oracle.appbundler.AppBundlerTask" 

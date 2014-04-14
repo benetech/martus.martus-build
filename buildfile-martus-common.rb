@@ -37,8 +37,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
   
 	test.with(
 	)
-	bc_jce = artifact(BCJCE_SPEC)
-	test.using :java_args => "-Xbootclasspath/a:#{bc_jce}"
 
 	#TODO: Failing test
 	test.exclude 'org.martus.common.test.TestMartusSecurity'
