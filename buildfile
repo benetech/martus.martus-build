@@ -9,7 +9,6 @@ require 'tmpdir'
 main_dir = File.dirname(__FILE__)
 require "#{main_dir}/buildfile-martus"
 require "#{main_dir}/buildfile-martus-api"
-require "#{main_dir}/buildfile-martus-bc-jce"
 require "#{main_dir}/buildfile-martus-thirdparty"
 require "#{main_dir}/buildfile-martus-logi"
 require "#{main_dir}/buildfile-martus-hrdag"
