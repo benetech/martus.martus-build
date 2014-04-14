@@ -46,7 +46,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	    
 	    #TODO: Need to include MartusSetupLauncher?
 	  
-	    include_artifact(zip, artifact(BCJCE_SPEC), 'BuildFiles/Jars', 'bc-jce.jar')
 	    include_artifacts(zip, third_party_client_jars, 'BuildFiles/Jars')
 	    include_artifacts(zip, [_('martus-build', 'BuildFiles', 'Documents')], 'BuildFiles')
 	    include_artifacts(zip, third_party_client_licenses, 'BuildFiles/Documents/Licenses')
