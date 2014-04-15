@@ -43,15 +43,15 @@ Section "MainSection" SEC01
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy redistributable Java...'
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "..\BuildFiles\jre7\jre7\bin"
+    File /r /x CVS "..\BuildFiles\jre8\jre\bin"
     SetOutPath "$MARTUS_INSTALLATION_DIR\bin"
-    File /r /x CVS "..\BuildFiles\jre7\jre7\COPYRIGHT"
-    File /r /x CVS "..\BuildFiles\jre7\jre7\LICENSE"
-    File /r /x CVS "..\BuildFiles\jre7\jre7\README.txt"
-    File /r /x CVS "..\BuildFiles\jre7\jre7\THIRDPARTYLICENSEREADME.txt"
-    File /r /x CVS "..\BuildFiles\jre7\jre7\Welcome.html"
+    File /r /x CVS "..\BuildFiles\jre8\jre\COPYRIGHT"
+    File /r /x CVS "..\BuildFiles\jre8\jre\LICENSE"
+    File /r /x CVS "..\BuildFiles\jre8\jre\README.txt"
+    File /r /x CVS "..\BuildFiles\jre8\jre\THIRDPARTYLICENSEREADME.txt"
+    File /r /x CVS "..\BuildFiles\jre8\jre\Welcome.html"
     SetOutPath "$MARTUS_INSTALLATION_DIR"
-    File /r /x CVS "..\BuildFiles\jre7\jre7\lib"
+    File /r /x CVS "..\BuildFiles\jre8\jre\lib"
     
     ; -------------------------------------------
     ;copy main jar

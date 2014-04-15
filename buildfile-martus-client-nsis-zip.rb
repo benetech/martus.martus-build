@@ -22,7 +22,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	attic_dir = $attic_dir
 	signed_jar = File.join(attic_dir, "martus-client-signed-#{input_build_number}.jar")
 	source_zip = File.join(attic_dir, "martus-client-sources-#{input_build_number}.zip")
-    jre_tree = _(:target, :temp, 'jre7')
+    jre_tree = _(:target, :temp, 'jre8')
 	
 	
 	package(:zip).include(signed_jar, :as=>"martus.jar")
@@ -38,7 +38,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	package(:zip).include(combined_license_file, :path=>'BuildFiles')
 	package(:zip).include(_('martus-build', 'BuildFiles', 'Windows', $nsis_script_dir))
 	package(:zip).include(_('martus-build', 'BuildFiles', 'Fonts'), :path=>'BuildFiles')
-	package(:zip).include(_('martus-build', 'BuildFiles', 'Fonts', '*.ttf'), :path=>'BuildFiles/jre7/jre7/lib/fonts/fallback')
+	package(:zip).include(_('martus-build', 'BuildFiles', 'Fonts', '*.ttf'), :path=>'BuildFiles/jre8/jre/lib/fonts/fallback')
 
 	package(:zip).tap do | zip |
 		puts "Adding files to #{zip}"
@@ -53,7 +53,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	end
 	
 	file jre_tree do
-	    jre_zip = _('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre7.zip')
+	    jre_zip = _('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre8.zip')
 	    FileUtils.rm_rf(jre_tree)
 	    FileUtils.mkdir_p(jre_tree)
 	    unzip_file(jre_zip, jre_tree)
