@@ -76,8 +76,13 @@ Section "MainSection" SEC01
 
     ; remove previous bcprov jars
     StrCmp $DEBUG_INFO "Y" 0 +2
-    MessageBox MB_OK 'Attempting to move delete bcprov...'
+    MessageBox MB_OK 'Attempting to delete bcprov...'
     Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\bcprov*.jar"
+
+    ; remove bc-jce jar
+    StrCmp $DEBUG_INFO "Y" 0 +2
+    MessageBox MB_OK 'Attempting to delete bc-jce...'
+    Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar"
 
     ; copy jars into lib ext
     StrCmp $DEBUG_INFO "Y" 0 +2

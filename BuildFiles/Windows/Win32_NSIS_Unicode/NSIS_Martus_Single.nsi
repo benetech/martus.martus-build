@@ -76,6 +76,7 @@ Section "MainSection" SEC01
     Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\xmlrpc-1.2-b1.jar"
     Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\velocity-1.4.jar"
     Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\junit-3*.jar"
+    Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar"
 
     ; copy jars into lib ext
     StrCmp $DEBUG_INFO "Y" 0 +2
