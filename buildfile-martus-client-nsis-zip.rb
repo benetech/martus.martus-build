@@ -53,7 +53,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	end
 	
 	file jre_tree do
-	    jre_zip = _('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre8.zip')
+	    jre_zip = _('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre8u5.zip')
 	    FileUtils.rm_rf(jre_tree)
 	    FileUtils.mkdir_p(jre_tree)
 	    unzip_file(jre_zip, jre_tree)
