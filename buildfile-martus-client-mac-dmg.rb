@@ -46,8 +46,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     mac_readme = _('martus-build', 'BuildFiles', 'Documents', 'client', 'Mac-install-README.txt')
     FileUtils::cp([mac_readme], dmg_contents_dir)
 
-    # NOTE: This does not appear to be working. We need to learn more 
-    # about mac app icons before spending more time on it.
     mac_icon_file = _('martus-build', 'BuildFiles', 'ProgramFiles', 'Martus-Mac')
 
     properties = ""

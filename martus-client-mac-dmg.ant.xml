@@ -45,6 +45,7 @@
             <option value="-Dapple.awt.showGrowBox=true" />
             <option value="-Dapple.awt.antialiasing=true" />
             <option value="-Dapple.awt.textantialiasing=true" />
+        	<option value="-Xdock:icon=Contents/Resources/Martus-Mac" />
         </bundleapp>
     </target>
 
