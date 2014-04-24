@@ -84,12 +84,16 @@
         </exec>
         
         <!-- Copy .app directory to the disk image -->
-        <!-- USING cp to PRESERVE FILE PERMISSIONS! -->
-        <exec executable="cp">
-            <arg value="-r" />
+        <!-- USING cp -p to PRESERVE FILE PERMISSIONS! -->
+        <exec executable="cp" failonerror="true">
+            <arg value="-rp" />
             <arg value="${dist.mactree}/." />
             <arg value="${dmgmount}" />
         </exec> 
+    	
+    	<exec os="Linux" executable="df" failonerror="true">
+    		<arg value="${dmgmount}" />
+    	</exec>
     	
         <echo message="Unmounting" />
         <exec os="Linux"  executable="umount" failonerror="true">
