@@ -68,7 +68,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     properties << " -Ddmg.dest.dir=#{_('dist')}"
     properties << " -Drawdmgfile=#{dmg_file}"
     properties << " -Ddmgmount=#{dmg_mount_point}"
-    properties << " -Ddmg.size.megs=35"
+    properties << " -Ddmg.size.megs=38"
   
     buildfile = _('martus-build', 'martus-client-mac-dmg.ant.xml')
     buildfile_option = "-buildfile #{buildfile}"
@@ -79,7 +79,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts `#{ant}`
     puts "------------------------"
     result = $CHILD_STATUS
-    if result.exitstatus > 0 || !File.exists?(dmg_file)
+    if result.exitstatus != 0 || !File.exists?(dmg_file)
       raise "Failed in dmg ant script (#{format("%X", result)}). Exit code=#{result ? result.exitstatus : "???"}. See #{ant_output}"
     end
     
