@@ -10,8 +10,6 @@
 
         <mkdir dir="${dist.mactree}" />
         
-        <echo message="vm.options=${vm.options}" />
-
         <bundleapp 
             outputdirectory="${dist.mactree}" 
             name="${mac.app.name}"
@@ -36,7 +34,6 @@
 
             <option value="-Xms${vm.minimumheap}" />
             <option value="-Xmx${vm.maximumheap}" />
-            <option value="${vm.options}" />
             
             <classpath dir="${app.dir}">
                 <include name="martus.jar" />
