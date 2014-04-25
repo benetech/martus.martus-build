@@ -53,7 +53,7 @@ end
 puts "BUILD_NUMBER: #{$BUILD_NUMBER}"
 
 
-$ORCHID_VERSION = '0.9.1'
+$ORCHID_VERSION = '1.0.0'
 
 def build_spec(group, name, type, version)
 	return "#{group}:#{name}:#{type}:#{version}"
