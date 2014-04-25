@@ -1,4 +1,4 @@
-export ATTIC_DIR="/var/lib/hudson/martus-client/builds/$INPUT_BUILD_NUMBER/"
+export ATTIC_DIR="/var/lib/jenkins/martus-client/builds/$INPUT_BUILD_NUMBER/"
 
 cd /home/kevins/temp/martus
 pwd
