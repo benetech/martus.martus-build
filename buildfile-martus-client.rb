@@ -55,7 +55,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		VELOCITY_SPEC,
 		JORTHO_SPEC,
 		JFREECHART_SPEC,
-		JCOMMON_SPEC
+		JCOMMON_SPEC,
+		ORCHID_SPEC
 	)
 
 	build do
