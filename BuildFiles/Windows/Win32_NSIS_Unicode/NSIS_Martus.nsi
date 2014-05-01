@@ -84,6 +84,11 @@ Section "MainSection" SEC01
     MessageBox MB_OK 'Attempting to delete bc-jce...'
     Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar"
 
+    ; remove previous orchid jars
+    StrCmp $DEBUG_INFO "Y" 0 +2
+    MessageBox MB_OK 'Attempting to delete orchid...'
+    Delete /REBOOTOK "$MARTUS_INSTALLATION_DIR\lib\ext\orchid*.jar"
+
     ; copy jars into lib ext
     StrCmp $DEBUG_INFO "Y" 0 +2
     MessageBox MB_OK 'Copy lib/ext...'
