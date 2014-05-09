@@ -148,7 +148,7 @@ preserve_existing_shortcuts:
     MessageBox MB_YESNO "$(StartMenuShortcutQuestion_Text)" /SD IDYES IDYES 0 IDNO lbl_no_startmenu_shortcut
     StrCpy $StartMenuShortcut "Y"
     CreateDirectory "$SMPROGRAMS\Martus"
-    CreateShortCut "$SMPROGRAMS\Martus\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m -Xbootclasspath/p:$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
+    CreateShortCut "$SMPROGRAMS\Martus\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
 
     IfFileExists "$MARTUS_INSTALLATION_DIR\Docs\$(MartusUserGuideShortcut_Filename)" shortcut_ug skip_shortcut_ug
 shortcut_ug:
@@ -163,13 +163,13 @@ skip_shortcut_qs:
     CreateShortCut "$SMPROGRAMS\Martus\$(MartusUninstallShortcut_Text) Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\uninst.exe" "" "$MARTUS_INSTALLATION_DIR\bin\uninst.exe" "" "" "" "$(MartusUninstallShortcut_Text) Martus"
 
 lbl_no_startmenu_shortcut:
-    CreateShortCut "$MARTUS_INSTALLATION_DIR\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m -Xbootclasspath/p:$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
+    CreateShortCut "$MARTUS_INSTALLATION_DIR\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
 
     ; ask whether to install desktop shortcuts
     StrCpy $DesktopShortcut "N"
     MessageBox MB_YESNO "$(DesktopShortcutQuestion_Text)" /SD IDYES IDYES 0 IDNO lbl_no_desktopmenu_shortcut
     StrCpy $DesktopShortcut "Y"
-    CreateShortCut "$DESKTOP\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m -Xbootclasspath/p:$MARTUS_INSTALLATION_DIR\lib\ext\bc-jce.jar -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
+    CreateShortCut "$DESKTOP\Martus.lnk" "$MARTUS_INSTALLATION_DIR\bin\javaw.exe" "-Xms256m -Xmx512m -jar $MARTUS_INSTALLATION_DIR\martus.jar" "$MARTUS_INSTALLATION_DIR\app.ico" 0 "" "" "$(MartusShortcutDescription_Text)"
     
 lbl_no_desktopmenu_shortcut:
     StrCmp $DesktopShortcut "N" 0 no_launch_info_display
