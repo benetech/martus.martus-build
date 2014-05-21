@@ -239,6 +239,7 @@ def convert(language, out)
 end
 
 def create_pot_from(language)
+	puts("Creating .pot")
 	$pot = true
 	File.open("Martus-4.5.pot", "w") do | out |
 		convert(language, out)
@@ -246,16 +247,20 @@ def create_pot_from(language)
 	$pot = false
 end
 
-languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
-languages.each do | language |
+def convert_po_for(language)
 	$language = language
 	mtf = "Martus-#{language}.mtf"
 	po = "Martus-4.5-#{language}.po"
 	if File.exists? mtf
+		puts("Converting #{language}")
 		File.open(po, "w") do | out |
 			convert(language, out)
 		end
 	end
 end
 
-create_pot_from('es')
+create_pot_from('en')
+languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
+languages.each do | language |
+	convert_po_for(language)
+end
