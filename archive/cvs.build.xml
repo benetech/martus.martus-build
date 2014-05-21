@@ -1,0 +1,275 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="builder">
+    <description>
+        Martus Control Build File
+    </description>
+
+    <!-- imports -->
+    <import file="build.shared.values.xml" />
+
+    <!-- ================================================================== -->
+    <!-- I N I T                                                            -->
+    <!-- ================================================================== -->
+
+    <target name="init" unless="init.complete" description="Initialize build number, timestamp and version">
+        <tstamp>
+            <format property="cvs.year" pattern="yyyy"/>
+        </tstamp>
+
+        <tstamp>
+            <format property="cvs.month.day" pattern="MMdd"/>
+        </tstamp>
+        <tstamp/>
+
+        <buildnumber/>
+
+        <echo message="Timestamp for cvs will be ${DSTAMP}" />
+        <echo message="Build number is ${build.number}" />
+        <echo message="Version is ${martus.version}" />
+
+        <property name="server.binary.cvs.dir" value="${cvs.home}/binary-martus/Releases/ServerJar"/>
+        <property name="client.binary.cvs.dir" value="${cvs.home}/binary-martus/Releases/ClientJar"/>
+
+        <property name="init.complete" value="true"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- B U I L D                                                          -->
+    <!-- ================================================================== -->
+    <target depends="init" name="make.release" description="Executes subproject that builds martus">
+        <ant antfile="build-meta.xml" dir="." target="release"/>
+    </target>
+
+    <target depends="init" name="make.release.nosign" description="Executes subproject that builds martus">
+        <ant antfile="build-meta.xml" dir="." target="nosign.release"/>
+    </target>
+
+    <!-- ================================================================== -->
+    <!-- C V S                                                              -->
+    <!-- ================================================================== -->
+    <!-- run build and check in results -->
+    <target name="release.and.checkin" depends="make.release,checkin.cvs">
+    </target>
+
+    <target name="nosign.release.and.checkin" depends="make.release.nosign,checkin.cvs">
+    </target>
+
+    <target name="checkin.cvs" depends="create.client.cvs.dirs,create.server.cvs.dirs" description="Tag CVS projects and check-in results">
+        <!-- check in build number -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true" noexec="false">
+            <commandline>
+                <argument value="commit"/>
+                <argument value="-m"/>
+                <argument value="v${DSTAMP}_build-${build.number}"/>
+                <argument value="${martus.module}/build.number"/>
+            </commandline>
+        </cvs>
+
+        <!-- tag results -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="true" noexec="false">
+            <commandline>
+                <argument value="tag"/>
+                <argument value="v${DSTAMP}_build-${build.number}"/>
+                <argument value="${cvs.home}/${martus.amplifier.module}"/>
+                <argument value="${cvs.home}/${martus.common.module}"/>
+                <argument value="${cvs.home}/${martus.client.module}"/>
+                <argument value="${cvs.home}/${martus.hrdag.module}"/>
+                <argument value="${cvs.home}/${martus.jarverifier.module}"/>
+                <argument value="${cvs.home}/${martus.logi.module}"/>
+                <argument value="${cvs.home}/${martus.meta.module}"/>
+                <argument value="${cvs.home}/${martus.mspa.module}"/>
+                <argument value="${cvs.home}/${martus.server.module}"/>
+                <argument value="${cvs.home}/${martus.swing.module}"/>
+                <argument value="${cvs.home}/${martus.utils.module}"/>
+                <argument value="${cvs.home}/${martus.clientside.module}"/>
+            </commandline>
+        </cvs>
+
+        <!-- tag results: these might fail -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="true" reallyquiet="true" dest="${cvs.home}" failonerror="false" noexec="false">
+            <commandline>
+                <argument value="tag"/>
+                <argument value="v${DSTAMP}_build-${build.number}"/>
+                <argument value="${cvs.home}/${martus.thirdparty.module}"/>
+            </commandline>
+        </cvs>
+
+        <!-- copy Client jars to CVS location -->
+        <copy todir="${client.binary.cvs.dir}/${cvs.year}/${cvs.month.day}">
+            <fileset dir="${public.release.folder}">
+                <include name="martus-client-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-client-${DSTAMP}.${build.number}.jar.*"/>
+            </fileset>
+        </copy>
+
+        <!-- check in Client results -->
+        <exec dir="${client.binary.cvs.dir}/${cvs.year}/${cvs.month.day}" executable="cvs.exe" failonerror="true">
+            <arg line="-d${cvs.cvsroot}"/>
+            <!-- <arg line="-n"/> -->
+            <arg line="add"/>
+            <arg line="martus-client-${DSTAMP}.${build.number}.jar"/>
+            <arg line="martus-client-${DSTAMP}.${build.number}.jar.*"/>
+        </exec>
+
+        <!-- copy Server jars to CVS location -->
+        <copy todir="${server.binary.cvs.dir}/${cvs.year}/${cvs.month.day}">
+            <fileset dir="${public.release.folder}">
+                <include name="martus-server-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-server-${DSTAMP}.${build.number}.jar.*"/>
+                <include name="martus-meta-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-meta-${DSTAMP}.${build.number}.jar.*"/>
+                <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+                <include name="martus-mspa-client-${DSTAMP}.${build.number}.jar.*"/>
+            </fileset>
+        </copy>
+
+        <!-- check in Server results -->
+        <exec dir="${server.binary.cvs.dir}/${cvs.year}/${cvs.month.day}" executable="cvs.exe" failonerror="true">
+            <arg line="-d${cvs.cvsroot}"/>
+            <!-- <arg line="-n"/> -->
+            <arg line="add"/>
+            <arg line="martus-server-${DSTAMP}.${build.number}.jar"/>
+            <arg line="martus-server-${DSTAMP}.${build.number}.jar.*"/>
+            <arg line="martus-meta-${DSTAMP}.${build.number}.jar"/>
+            <arg line="martus-meta-${DSTAMP}.${build.number}.jar.*"/>
+            <arg line="martus-mspa-client-${DSTAMP}.${build.number}.jar"/>
+            <arg line="martus-mspa-client-${DSTAMP}.${build.number}.jar.*"/>
+        </exec>
+
+        <!-- commit cvs changes -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true" noexec="false">
+            <commandline>
+                <argument value="commit"/>
+                <argument value="-m"/>
+                <argument value="v-${CVS_DATE}_build-${BUILD_NUMBER}"/>
+                <argument value="binary-martus"/>
+            </commandline>
+        </cvs>
+
+    </target>
+
+    <target name="check.binary.cvs.dirs" description="Checks whether necessary directories for checkin exist">
+
+        <!-- Client binary locations -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true">
+            <commandline>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="binary-martus/Releases/ClientJar"/>
+            </commandline>
+        </cvs>
+        <available file="${client.binary.cvs.dir}" type="dir" property="client.binary.location.present"/>
+
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false">
+            <commandline>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="binary-martus/Releases/ClientJar/${cvs.year}"/>
+            </commandline>
+        </cvs>
+        <available file="${client.binary.cvs.dir}/${cvs.year}" type="dir" property="client.binary.year.location.present"/>
+
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false">
+            <commandline>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="binary-martus/Releases/ClientJar/${cvs.year}/${cvs.month.day}"/>
+            </commandline>
+        </cvs>
+        <available file="${client.binary.cvs.dir}/${cvs.year}/${cvs.month.day}" type="dir" property="client.binary.month.location.present"/>
+
+        <!-- Server binary locations -->
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="true">
+            <commandline>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="binary-martus/Releases/ServerJar"/>
+            </commandline>
+        </cvs>
+        <available file="${server.binary.cvs.dir}" type="dir" property="server.binary.location.present"/>
+
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false">
+            <commandline>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="binary-martus/Releases/ServerJar/${cvs.year}"/>
+            </commandline>
+        </cvs>
+        <available file="${server.binary.cvs.dir}/${cvs.year}" type="dir" property="server.binary.year.location.present"/>
+
+        <cvs cvsRoot="${cvs.cvsroot}" quiet="false" dest="${cvs.home}" failonerror="false">
+            <commandline>
+                <argument value="checkout"/>
+                <argument value="-l"/>
+                <argument value="binary-martus/Releases/ServerJar/${cvs.year}/${cvs.month.day}"/>
+            </commandline>
+        </cvs>
+        <available file="${server.binary.cvs.dir}/${cvs.year}/${cvs.month.day}" type="dir" property="server.binary.month.location.present"/>
+    </target>
+
+    <target name="create.client.binary.cvs.dirs" unless="client.binary.location.present" description="Creates client binary CVS dirs">
+        <mkdir dir="${client.binary.cvs.dir}/CVS"/>
+        <echo message="" file="${client.binary.cvs.dir}/CVS/Entries"/>
+        <echo message="binary-martus/Releases/ClientJar" file="${client.binary.cvs.dir}/CVS/Repository"/>
+        <echo message="${cvs.cvsroot}" file="${client.binary.cvs.dir}/CVS/Root"/>
+    </target>
+
+    <target name="create.client.binary.year.cvs.dirs" unless="client.binary.year.location.present" description="Creates client binary year CVS dirs">
+        <mkdir dir="${client.binary.cvs.dir}/${cvs.year}"/>
+        <exec dir="${client.binary.cvs.dir}" executable="cvs.exe" failonerror="true">
+            <arg line="-d${cvs.cvsroot}"/>
+            <!-- <arg line="-n"/> -->
+            <arg line="add"/>
+            <arg line="${cvs.year}"/>
+        </exec>
+    </target>
+
+    <target name="create.client.binary.month.cvs.dirs" unless="client.binary.month.location.present" description="Creates client month binary CVS dirs">
+        <mkdir dir="${client.binary.cvs.dir}/${cvs.year}/${cvs.month.day}"/>
+        <exec dir="${client.binary.cvs.dir}/${cvs.year}" executable="cvs.exe" failonerror="true">
+            <arg line="-d${cvs.cvsroot}"/>
+            <!-- <arg line="-n"/> -->
+            <arg line="add"/>
+            <arg line="${cvs.month.day}"/>
+        </exec>
+    </target>
+
+    <target name="create.client.cvs.dirs" depends="check.binary.cvs.dirs,create.client.binary.cvs.dirs,create.client.binary.year.cvs.dirs,create.client.binary.month.cvs.dirs" description="Creates all client binary CVS dirs">
+        <echo message="Client CVS dirs created."/>
+    </target>
+
+    <target name="create.server.binary.cvs.dirs" unless="server.binary.location.present" description="Creates server binary CVS dirs">
+        <mkdir dir="${server.binary.cvs.dir}/CVS"/>
+        <echo message="" file="${server.binary.cvs.dir}/CVS/Entries"/>
+        <echo message="binary-martus/Releases/ServerJar" file="${server.binary.cvs.dir}/CVS/Repository"/>
+        <echo message="${cvs.cvsroot}" file="${server.binary.cvs.dir}/CVS/Root"/>
+    </target>
+
+    <target name="create.server.binary.year.cvs.dirs" unless="server.binary.year.location.present" description="Creates server binary year CVS dirs">
+        <mkdir dir="${server.binary.cvs.dir}/${cvs.year}"/>
+        <exec dir="${server.binary.cvs.dir}" executable="cvs.exe" failonerror="true">
+            <arg line="-d${cvs.cvsroot}"/>
+            <!-- <arg line="-n"/> -->
+            <arg line="add"/>
+            <arg line="${cvs.year}"/>
+        </exec>
+    </target>
+
+    <target name="create.server.binary.month.cvs.dirs" unless="server.binary.month.location.present" description="Creates server month binary CVS dirs">
+        <mkdir dir="${server.binary.cvs.dir}/${cvs.year}/${cvs.month.day}"/>
+        <exec dir="${server.binary.cvs.dir}/${cvs.year}" executable="cvs.exe" failonerror="true">
+            <arg line="-d${cvs.cvsroot}"/>
+            <!-- <arg line="-n"/> -->
+            <arg line="add"/>
+            <arg line="${cvs.month.day}"/>
+        </exec>
+    </target>
+
+    <target name="create.server.cvs.dirs" depends="check.binary.cvs.dirs,create.server.binary.cvs.dirs,create.server.binary.year.cvs.dirs,create.server.binary.month.cvs.dirs" description="Creates all server binary CVS dirs">
+        <echo message="Server CVS dirs created."/>
+    </target>
+
+    <target name="create.cvs.dirs" depends="init,create.server.cvs.dirs,create.client.cvs.dirs" description="Creates all server binary CVS dirs">
+        <echo message=""/>
+    </target>
+</project>
