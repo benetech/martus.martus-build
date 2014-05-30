@@ -1,0 +1,80 @@
+Instructions on setting up a development environment on a MAC.
+
+1. Download Eclipse and install (version I had insisted on installing Java 6, which I did as well)
+2. Download HG Mercurial and install (Typing HG from terminal will confirm this)  HG requires Python 2.7 or greater, 
+   but this was already installed on my Mac.
+   To bring up the Terminal easily press Command + Space (to bring up a search feature)
+   Then start typing "terminal" you should only need a couple letters then press return on Terminal.
+   Otherwise Terminal is located in Applications/Utilities
+3. Set up a VPN connection to Benetech  https://wiki.benetech.org/display/Main/VPN+Instructions
+   Scott will have to give you your user name & password.  If you don't want to have to retype your password
+   each time during the setup there will be an Authentication button, here you can enter your password once.
+   The VPN connection status will be on your toolbar at the top left of your homescreen, here you can connect/disconnect.
+4. You will need to be able to see Hidden files on your system, to do this bring up the Terminal,
+   defaults write com.apple.Finder AppleShowAllFiles TRUE
+   then relaunch Finder (killall Finder)
+5. If Finder doesn't show you your "root directory" you can add this to the left hand column of Finder by going into
+   Finder/Preferences (Tab: SideBar, and enable Home Directory)  Should now see a House Icon under Favorites in Finder. 
+6. Set up your SSH key (Give Scott your public key https://wiki.martus.org/CVS-svn-SSH-setup
+   Even if you have a key for Linux/Windows its best to create a new key.
+   Its best to follow Scott's instructions here since if the .ssh directory isn't set up correctly you won't be allowed
+   to add keys etc.
+        Then append the appended stanza to ~/.ssh/config
+        use nano ~/.ssh/config (if you have to use sudo nano ~/.ssh/config, then you will have to get back permission afterwards)
+        ------------------------------------------------------------------
+        Host mvcs mart-vcs mart-vcs.benetech.org
+            HostKeyAlias mart-vcs
+            Hostname 10.10.220.72
+            User <YourUserNameFromScott>
+   You may need to change the ownership from admin back to your mac account for /.ssh/config 
+        sudo chown <MACUserName> config
+7. To test that you set up your VPN connection correctly
+   First make sure you are connected to the Benetech VPN 
+   Bring up the Terminal and next you can type Ping mvcs (this should ping 10.10.220.72) (If that fails try ping 10.10.220.72)
+8. To test that you set up your SSH correctly try the following in Terminal
+   SSH mvcs
+   It should connect but you should receive a warning saying this repository should be accessed via HG.
+9. If that doesn't work you may have to add mvcs to your hosts file, 
+   From inside Terminal type
+   sudo nano /private/etc/Hosts
+   add mvcs  mart-vcs.benetech.org   
+10. If things are still not working, you should contact Scott, he will want you to show you the permissions and file contents of .ssh
+   ls -la ~/.ssh
+   as well as the contents of your /.ssh/config file
+   cat ~/.ssh/config
+11. Once you verify that you can ssh to mvcs then you can go to Eclipse and start cloning the Benetech projects.
+    In Eclipse go to Project / New
+    expand Mercurial
+    Clone existing Mercurial Project
+    URL = ssh://mvcs/martus/martus-utils
+    Authentication use your user name/password scott gave you for the repository
+    Select Next, and use the "default" branch.
+    Do this for all the projects
+        martus-amplifier
+        martus-bcjce
+        martus-build
+        martus-client
+        martus-clientside
+        martus-common
+        martus-hrdag
+        martus-jar-verifier
+        martus-js-xml-generator
+        martus-logi
+        martus-meta
+        martus-mspa
+        martus-server
+        martus-swing
+        martus-thirdparty
+        martus-utils
+
+12. Now to a Clean and Rebuild all projects.
+13. You will need to add bc-jce.jar to the Installed JREs, and move the newly added jar up infront of the Java's native jce jar.
+    Eclipse / Preferences / Java / Installed JREs / Edit
+    Then Add external Jar from martus-thirdparty/libext/bc-jce/bin/bc-jce-2012-11-08.jar (or whatever is newer)
+14. Now you should be able to run both the unit tests, Martus, and Martus Server.
+    Test all is located in meta, Martus is under martus-client/swingui, and Martus Server is martus-server/main
+15. You will need to adjust the Eclipse/Preferences/General/Workspace Text File Encoding as UTF-8.     
+
+ 
+   
+   
