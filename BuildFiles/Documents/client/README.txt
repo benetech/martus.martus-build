@@ -1,4 +1,4 @@
-Martus(tm) Desktop Software Version 4.5 README.txt
+﻿Martus(tm) Desktop Software Version 4.5 README.txt
 ---------------------------------------------------------
 
 See https://www.martus.org for information about the Martus software.
@@ -13,7 +13,7 @@ languages, go to https://www.martus.org/downloads/.
 Martus desktop release information by version and release date:
 
 
-Version 4.5		2014-04
+Version 4.5		2014-05
 
 - Added Martus Configuration Wizard for account setup, using JavaFX for newer look and feel.
   1) Simplified server setup with integrated Martus default server information. (also included in 
@@ -35,7 +35,8 @@ Version 4.5		2014-04
   updating the Russian User Guide and in-program help.
 - Fixed bug so that you cannot add yourself as a contact (in earlier versions, an account could add 
    itself as its own Headquarters or Field Desk, which could cause confusion)
-- Upgraded to Java8, which is included in the Martus Windows Installer 
+- Upgraded to Java8, which is included in the Martus Windows Installer
+- Account contact information is no longer sent to a Martus server. 
 
 
 Version 4.4 		2013-11
