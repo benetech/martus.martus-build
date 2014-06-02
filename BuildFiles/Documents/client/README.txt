@@ -13,7 +13,7 @@ languages, go to https://www.martus.org/downloads/.
 Martus desktop release information by version and release date:
 
 
-Version 4.5		2014-05
+Version 4.5		2014-06
 
 - Added Martus Configuration Wizard for account setup, using JavaFX for newer look and feel.
   1) Simplified server setup with integrated Martus default server information. (also included in 
