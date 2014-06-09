@@ -65,6 +65,8 @@ repository should be accessed via HG.
    From inside Terminal type
    sudo nano /private/etc/Hosts
    add mvcs  mart-vcs.benetech.org
+   or 
+   add mvcs 10.10.220.72
 
 12. If things are still not working, you should contact Scott, he will
 want you to show you the permissions and file contents of .ssh
