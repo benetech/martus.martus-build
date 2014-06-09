@@ -1,0 +1,58 @@
+<!-- Ant build file - Needs Ant v1.6.x or later -->
+<project name="martus-mlp" default="mlp" basedir=".">
+    <description>
+        Martus MLP Build File
+    </description>
+
+    <input
+         message="Please enter Language Code (Eg: fr, es, bur):"
+         addproperty="LANGUAGE"
+     />
+   <input
+         message="Please enter KeyStore Location (Eg: A:, E:\MartusKS):"
+         addproperty="KSDIR"
+     />
+
+
+    <property name="BASEDIR" value="../binary-martus/Releases/ClientMLPs"/>
+    <property name="LANGUAGEDIR" value="${BASEDIR}/${LANGUAGE}"/>
+    <!-- imports -->
+    <target name="check_keypass" unless="sign.keypass">
+        <input
+            message="Please enter key pw:"
+            addproperty="sign.keypass"
+        />
+    </target>
+
+    <target name="check_storepass" unless="sign.storepass">
+        <input
+            message="Please enter store pw:"
+            addproperty="sign.storepass"
+        />
+    </target>
+    
+    <import file="build.shared.values.xml" />
+  
+  <!-- ================================================================== -->
+  <!-- J A R                                                              -->
+  <!-- ================================================================== -->
+
+      <!-- create mlp signed jar -->
+      <target name="mlp" depends="check_storepass, check_keypass" description="Create a Signed Martus Language Pack">
+		  <jar jarfile="${LANGUAGEDIR}/Martus-${LANGUAGE}.mlp" basedir="${LANGUAGEDIR}/mlpFiles" manifest="${BASEDIR}/manifest" includes="*.*">
+          </jar>
+          <signjar keystore="${KSDIR}/martusks" storepass="${sign.storepass}" keypass="${sign.keypass}" alias="ssmtsjar" >
+            <fileset dir="${LANGUAGEDIR}">
+                <include name="Martus-${LANGUAGE}.mlp"/>
+            </fileset>
+        </signjar>
+        <checksum algorithm="SHA" fileext=".sha">
+            <fileset dir="${LANGUAGEDIR}">
+                <include name="Martus-${LANGUAGE}.mlp"/>
+            </fileset>
+        </checksum>
+      </target>
+
+</project>
+	    
+	    
