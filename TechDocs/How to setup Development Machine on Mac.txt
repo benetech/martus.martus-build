@@ -93,6 +93,7 @@ repository
         ssh://mvcs/martus/martus-client
         ssh://mvcs/martus/martus-clientside
         ssh://mvcs/martus/martus-common
+        ssh://mvcs/martus/martus-docs
         ssh://mvcs/martus/martus-hrdag
         ssh://mvcs/martus/martus-jar-verifier
         ssh://mvcs/martus/martus-js-xml-generator

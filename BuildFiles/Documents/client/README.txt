@@ -3,8 +3,6 @@
 
 See https://www.martus.org for information about the Martus software.
 
-See the Martus User Guide for instructions on installing the Martus software. 
-
 For all current language packs and translations of the user documentation, 
 as well as language packs/documentation for previous versions in various 
 languages, go to https://www.martus.org/downloads/. 
@@ -15,6 +13,34 @@ Martus desktop release information by version and release date:
 
 Version 4.5		2014-06
 
+System Requirements:
+  * Internet connection, to back up data to the Martus server
+  * To be able to upload to a Martus Server you need unrestricted web access thru ports 987 or 443. Note: This is only an issue if operating Martus software from behind a firewall.
+  *  Screen resolution of 960x480 or greater
+- Windows
+  * Windows XP, Windows Vista, Windows 7, or Windows 8. 
+- Mac
+  *Officially supported on Mac OS 10.8 and above, and tested on 10.7.3 (Lion) and above.
+  *Java Runtime Environment (JRE) version 1.8 (sometimes called Java8).
+- Linux 
+  *Version 4.5 of Martus does not fully support Linux (there are several display issues, etc.). For a fully supported version of Martus, download version 4.4 of Martus and refer to the version 4.3 Martus User Guide available in the Docs folder of your Martus directory or here: https://www.martus.org/downloads/4.3/martus_user_guide-v43.pdf.
+
+Installing and Running Martus:
+
+- Windows
+  1) Insert the Martus CD into your CD-ROM drive or download the Martus installer from https://www.martus.org and run it.
+  2) Follow the step-by-step Martus installer instructions.
+  3) To start Martus in Windows, choose Start > Programs > Martus > Martus, or double-click the Martus shortcut on the desktop or in the Martus directory, or choose Start > Run and then type the following text: 
+   C:\Martus\bin\javaw.exe -jar C:\Martus\martus.jar
+- Mac
+  1) If an earlier, non-DMG, version of Martus has been installed on this computer you must first delete all of the Martus-related jar files from the /Library/Java/Extensions folder. After deleting these files, the Extensions folder may be empty. We also recommend that you delete any shortcuts you may have created to the old Martus version, to avoid confusion. 
+  2) Obtain the Martus DMG file from the Martus website or CD, and double-click it. 
+  3) If the Martus folder was not automatically opened, double-click on it to view the contents. 
+  4) To run Martus installed from a DMG file, double-click the Martus icon/application (Martus.app file).While you can copy the Martus application (Martus.app) to your Applications folder, please note that if you do so, it will not be removed when you uninstall Martus, which may be a security concern. 
+- Linux
+  * See note above about Martus compatibility with Linux.
+
+Changes in this release:  
 - Added Martus Configuration Wizard for account setup, using JavaFX for newer look and feel.
   1) Simplified server setup with integrated Martus default server information. (also included in 
       Select Server screen outside of wizard)
