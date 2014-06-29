@@ -4,9 +4,6 @@ define name, :layout=>create_layout_with_source_as_source('.') do
 	project.group = 'org.martus'
 	project.version =$BUILD_NUMBER
 	
-	compile.options.source = '6'
-	compile.options.target = '6'
-
 	jarname = _('target', "martus-api-#{project.version}.jar")
 	package(:zip, :file=>jarname).tap do | p |
 		p.merge(project('martus-common').package).include('org/martus/common/*.class')
