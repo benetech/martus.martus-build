@@ -15,7 +15,23 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		project('martus-amplifier').packages.first,
 		XMLRPC_COMMON_SPEC,
 		XMLRPC_CLIENT_SPEC,
-		XMLRPC_SERVER_SPEC
+		XMLRPC_SERVER_SPEC,
+		BLUEPRINT_CORE_SPEC,
+		COMMONS_BEANUTILS_SPEC,
+		COMMONS_BEANUTILS_CORE_SPEC,
+		COMMONS_COLLECTIONS_SPEC,
+		COMMONS_CONFIGURATION_SPEC,
+		COMMONS_DIGESTER_SPEC,
+		COMMONS_LANG_SPEC,
+		CONCURRENT_LINKED_HASHMAP_LRU_SPEC,
+		JNA_SPEC,
+		JNA_PLATFORM_SPEC,
+		ORIENT_COMMONS_SPEC,
+		ORIENTDB_CORE_SPEC,
+		ORIENTDB_GRAPHDB_SPEC,
+		ORIENTDB_NATIVEOS_SPEC,
+		SNAPPY_JAVA_SPEC
+		
 	)
 
 	test.with(
@@ -38,19 +54,39 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.merge(project('martus-mspa').package(:jar)).include('**/MSPAServer.class')
     p.merge(project('martus-mspa').package(:jar)).include('**/RootHelper.class')
 
-    p.include(artifact(BCPROV_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(ICU4J_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(JAVAX_SERVLET_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(JUNIT_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(LUCENE_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(JETTY_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(PERSIANCALENDAR_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(VELOCITY_DEP_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_COMMON_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_SERVER_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_CLIENT_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_COMMONS_LOGGING_SPEC), :path=>'ThirdPartyJars')
-    p.include(artifact(XMLRPC_WS_COMMONS_UTIL_SPEC), :path=>'ThirdPartyJars')
+	thirdparty_jars = [
+		BCPROV_SPEC,
+		ICU4J_SPEC,
+    	JAVAX_SERVLET_SPEC,
+    	JUNIT_SPEC,
+    	LUCENE_SPEC,
+    	JETTY_SPEC,
+    	PERSIANCALENDAR_SPEC,
+    	VELOCITY_DEP_SPEC,
+    	XMLRPC_COMMON_SPEC,
+    	XMLRPC_SERVER_SPEC,
+    	XMLRPC_CLIENT_SPEC,
+    	XMLRPC_COMMONS_LOGGING_SPEC,
+    	XMLRPC_WS_COMMONS_UTIL_SPEC,
+		BLUEPRINT_CORE_SPEC,
+		COMMONS_BEANUTILS_SPEC,
+		COMMONS_BEANUTILS_CORE_SPEC,
+		COMMONS_COLLECTIONS_SPEC,
+		COMMONS_CONFIGURATION_SPEC,
+		COMMONS_DIGESTER_SPEC,
+		COMMONS_LANG_SPEC,
+		CONCURRENT_LINKED_HASHMAP_LRU_SPEC,
+		JNA_SPEC,
+		JNA_PLATFORM_SPEC,
+		ORIENT_COMMONS_SPEC,
+		ORIENTDB_CORE_SPEC,
+		ORIENTDB_GRAPHDB_SPEC,
+		ORIENTDB_NATIVEOS_SPEC,
+		SNAPPY_JAVA_SPEC,
+	]
+	thirdparty_jars.each do | spec | 
+		p.include(artifact(spec), :path=>'ThirdPartyJars')
+	end
   end
   
   task 'sha1' => package(:jar) do
