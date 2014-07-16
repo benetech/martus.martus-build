@@ -1,9 +1,10 @@
 name = 'martus-api'
 
-# NOTE: This is a crude hack. This file is loaded right after buildfile-martus
+# FIXME: This is a crude hack. This file is loaded right after buildfile-martus
 # (which sets the Java version to 8). So if we set it to 7 here, it will get used 
 # by all the other buildfiles which are included after this one.
-$JAVAC_VERSION = '7'
+# Comment out for normal builds; uncomment for api builds
+#$JAVAC_VERSION = '7'
 
 define name, :layout=>create_layout_with_source_as_source('.') do
 	project.group = 'org.martus'

@@ -91,6 +91,24 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(LUCENE_LICENSE_SPEC).from(license_task)
 	# TODO: Should include source/license for javax.servlet.jar
 	# TODO: Should include source/license for javax.mail.jar
+	install artifact(BLUEPRINT_CORE_SPEC).from(jar_file(name, 'server/OrientDB', 'blueprints-core-2.5.0.jar'))
+	install artifact(COMMONS_BEANUTILS_SPEC).from(jar_file(name, 'server/OrientDB', 'commons-beanutils-1.7.0.jar'))
+	install artifact(COMMONS_BEANUTILS_CORE_SPEC).from(jar_file(name, 'server/OrientDB', 'commons-beanutils-core-1.8.0.jar'))
+	install artifact(COMMONS_COLLECTIONS_SPEC).from(jar_file(name, 'server/OrientDB', 'commons-collections-3.2.1.jar'))
+	install artifact(COMMONS_CONFIGURATION_SPEC).from(jar_file(name, 'server/OrientDB', 'commons-configuration-1.6.jar'))
+	install artifact(COMMONS_DIGESTER_SPEC).from(jar_file(name, 'server/OrientDB', 'commons-digester-1.8.jar'))
+	install artifact(COMMONS_LANG_SPEC).from(jar_file(name, 'server/OrientDB', 'commons-lang-2.4.jar'))
+	install artifact(CONCURRENT_LINKED_HASHMAP_LRU_SPEC).from(jar_file(name, 'server/OrientDB', 'concurrentlinkedhashmap-lru-1.4.jar'))
+	install artifact(JNA_SPEC).from(jar_file(name, 'server/OrientDB', 'jna-4.0.0.jar'))
+	install artifact(JNA_PLATFORM_SPEC).from(jar_file(name, 'server/OrientDB', 'jna-platform-4.0.0.jar'))
+	install artifact(ORIENT_COMMONS_SPEC).from(jar_file(name, 'server/OrientDB', 'orient-commons-1.7.4.jar'))
+	install artifact(ORIENTDB_CORE_SPEC).from(jar_file(name, 'server/OrientDB', 'orientdb-core-1.7.4.jar'))
+	install artifact(ORIENTDB_GRAPHDB_SPEC).from(jar_file(name, 'server/OrientDB', 'orientdb-graphdb-1.7.4.jar'))
+	install artifact(ORIENTDB_NATIVEOS_SPEC).from(jar_file(name, 'server/OrientDB', 'orientdb-nativeos-1.7.4.jar'))
+	install artifact(SNAPPY_JAVA_SPEC).from(jar_file(name, 'server/OrientDB', 'snappy-java-1.1.0.1.jar'))
+	
+	install artifact(ORIENTDB_SOURCE_SPEC).from(source_file(name, 'server/OrientDB', 'orientdb-1.7.4-source.zip'))
+	install artifact(ORIENTDB_LICENSE_SPEC).from(license_file(name, 'server/OrientDB', 'license.txt'))
 	end
 	
   package(:zip, :file => _('target', "martus-thirdparty-#{project.version}.zip")).tap do | p |
