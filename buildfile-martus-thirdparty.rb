@@ -105,7 +105,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(ORIENTDB_CORE_SPEC).from(jar_file(name, 'server/OrientDB', 'orientdb-core-1.7.4.jar'))
 	install artifact(ORIENTDB_GRAPHDB_SPEC).from(jar_file(name, 'server/OrientDB', 'orientdb-graphdb-1.7.4.jar'))
 	install artifact(ORIENTDB_NATIVEOS_SPEC).from(jar_file(name, 'server/OrientDB', 'orientdb-nativeos-1.7.4.jar'))
-	install artifact(SNAPPY_JAVA_SPEC).from(jar_file(name, 'server/OrientDB', 'snappy-java-1.1.0.1.jar'))
 	
 	install artifact(ORIENTDB_SOURCE_SPEC).from(source_file(name, 'server/OrientDB', 'orientdb-1.7.4-source.zip'))
 	install artifact(ORIENTDB_LICENSE_SPEC).from(license_file(name, 'server/OrientDB', 'license.txt'))

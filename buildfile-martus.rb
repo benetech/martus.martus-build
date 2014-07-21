@@ -220,7 +220,6 @@ ORIENT_COMMONS_SPEC = build_spec('com.orienttechnologies.orient', 'orient-common
 ORIENTDB_CORE_SPEC = build_spec('com.orienttechnologies.orient', 'orientdb-core', 'jar', '1.7.4')
 ORIENTDB_GRAPHDB_SPEC = build_spec('com.orienttechnologies.orient', 'orientdb-graphdb', 'jar', '1.7.4')
 ORIENTDB_NATIVEOS_SPEC = build_spec('com.orienttechnologies.orient', 'orientdb-nativeos', 'jar', '1.7.4')
-SNAPPY_JAVA_SPEC = build_spec('com.orienttechnologies.orient', 'snappy-java', 'jar', '1.1.0.1')
 ORIENTDB_SOURCE_SPEC = build_spec('com.orienttechnologies.orient', 'orientdb', 'source', '1.7.4')
 ORIENTDB_LICENSE_SPEC = build_spec('com.orienttechnologies.orient', 'orientdb', 'license', '1.7.4')
 
