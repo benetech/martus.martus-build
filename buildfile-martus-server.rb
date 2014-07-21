@@ -29,7 +29,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ORIENT_COMMONS_SPEC,
 		ORIENTDB_CORE_SPEC,
 		ORIENTDB_GRAPHDB_SPEC,
-		ORIENTDB_NATIVEOS_SPEC,
+		ORIENTDB_NATIVEOS_SPEC
 		
 	)
 
