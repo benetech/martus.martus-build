@@ -30,7 +30,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ORIENTDB_CORE_SPEC,
 		ORIENTDB_GRAPHDB_SPEC,
 		ORIENTDB_NATIVEOS_SPEC,
-		SNAPPY_JAVA_SPEC
 		
 	)
 
@@ -82,7 +81,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		ORIENTDB_CORE_SPEC,
 		ORIENTDB_GRAPHDB_SPEC,
 		ORIENTDB_NATIVEOS_SPEC,
-		SNAPPY_JAVA_SPEC,
 	]
 	thirdparty_jars.each do | spec | 
 		p.include(artifact(spec), :path=>'ThirdPartyJars')
