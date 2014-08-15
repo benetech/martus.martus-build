@@ -37,7 +37,7 @@ if use_wine
   relative = $full_nsis_dir[drive_letter_at+1..-1]
   wine_nsis_home = File.join("#{drive}:", relative)
   nsis_exe_path = File.join(wine_nsis_home, nsis_exe)
-  $nsis_command = "wine \"#{nsis_exe_path}\" /V2"
+  $nsis_command = "wine \"#{nsis_exe_path}\" /V3 /NOCD"
 else
   $nsis_command = "#{nsis_exe} -V2"
 end
