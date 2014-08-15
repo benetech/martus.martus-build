@@ -26,6 +26,7 @@ def run_nsis_task(nsis_zip, nsi_name, exe_name)
 	puts "Running makensis from: #{Dir.pwd}"
 	nsis_cmd = "#{$nsis_command} #{nsi_name}"
 	puts "Running: #{nsis_cmd}"
+	STDOUT.flush
 	error_output = `#{nsis_cmd}`
 	status = $?
 	if status.exitstatus > 0
