@@ -3,18 +3,18 @@
 function clone_or_fetch_martus {
 cd $WORKSPACE
 if [ -d "$1" ]; then
-	hg --repository $1 pull --update --rev Client-4.5-branch
+	hg --repository $1 pull --update --branch Client-4.5-branch
 else
-	hg clone ssh://mvcs/martus/$1 --rev Client-4.5-branch
+	hg clone ssh://mvcs/martus/$1 --branch Client-4.5-branch
 fi
 }
 
 function clone_or_fetch {
 cd $WORKSPACE
 if [ -d "$1" ]; then
-	hg --repository $1 pull --update --rev Client-4.5-branch
+	hg --repository $1 pull --update
 else
-	hg clone ssh://mvcs/$1 --rev Client-4.5-branch
+	hg clone ssh://mvcs/$1
 fi
 }
 
