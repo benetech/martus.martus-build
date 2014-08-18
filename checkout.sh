@@ -2,6 +2,7 @@
 
 function clone_or_fetch_martus {
 cd $WORKSPACE
+echo $1
 if [ -d "$1" ]; then
 	hg --repository $1 pull --update --branch Client-4.5-branch
 else
