@@ -1,5 +1,5 @@
-﻿Martus(tm) Desktop Software Version 4.5 README.txt
----------------------------------------------------------
+﻿Martus(tm) Desktop Software Version 4.5.1 README.txt
+----------------------------------------------------------------
 
 See https://www.martus.org for information about the Martus software.
 
@@ -9,6 +9,17 @@ languages, go to https://www.martus.org/downloads/.
 
 
 Martus desktop release information by version and release date:
+
+Version 4.5.1 		2014-08
+
+This release is available in English, Burmese, Chinese, Vietnamese, Spanish, Arabic, 
+and other languages as indicated on the https://www.martus.org software download page. 
+Other languages will be available in the future, as language-packs on the documentation page 
+(https://www.martus.org/downloads) 
+
+- Added the Chinese translation of the user interface and Windows Installer.
+- Updated Spanish, Vietnamese, and Arabic translations of the user interface.
+- Updated Spanish and Vietnamese in-program help and documentation.
 
 
 Version 4.5		2014-06
