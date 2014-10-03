@@ -78,6 +78,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "------------------------"
     result = $CHILD_STATUS
     if result.exitstatus != 0 || !File.exists?(dmg_file)
+      puts `du -s #{dmg_contents_dir}/`
       raise "Failed in dmg ant script (#{format("%X", result)}). Exit code=#{result ? result.exitstatus : "???"}. See #{ant_output}"
     end
     
