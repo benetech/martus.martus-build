@@ -35,7 +35,7 @@
 !insertmacro LANG_STRING DesktopShortcutQuestion_Text "Do you need a Martus shortcut installed on your Desktop?"
 !insertmacro LANG_STRING LaunchProgramInfo_Text "A Martus shortcut was installed in the program folder $INSTDIR. Use this shortcut, or a copy, to launch Martus."
 
-!insertmacro LANG_STRING MartusShortcutDescription_Text "Martus Human Rights Bulletin System"
+!insertmacro LANG_STRING MartusShortcutDescription_Text "Martus Information Management and Data Collection Framework"
 
 !insertmacro LANG_STRING MartusUserGuideShortcut_Text "User Guide"
 !insertmacro LANG_STRING MartusUserGuideShortcut_Filename "martus_user_guide.pdf"
