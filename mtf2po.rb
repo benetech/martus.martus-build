@@ -214,7 +214,7 @@ def write_header(output)
 	output.puts "msgid \"\""
 	output.puts "msgstr \"\""
 	write_quoted output, "Project-Id-Version: Martus #{$version}\\n"
-	write_quoted output, "Report-Msgid-Bugs-To: info@martus.org\\n"
+	write_quoted output, "Report-Msgid-Bugs-To: martus@benetech.org\\n"
 	write_quoted output, "POT-Creation-Date: #{Time.now}\\n"
 	if(!$pot)
 		#write_quoted output, "PO-Revision-Date: #{Time.now}\\n"
