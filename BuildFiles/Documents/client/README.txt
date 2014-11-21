@@ -54,6 +54,7 @@ Installing and Running Martus:
 - Linux
   * See note above about Martus compatibility with Linux.
 
+
 Changes in this release:  
 
 - Improved UI/UX, including new look and feel, more icons, fewer popup windows and password checking, 
@@ -68,7 +69,7 @@ Changes in this release:
    XML files with custom data entry field definitions into Martus, to allow for easier editing outside of Martus.
 - More obvious indication of which fields are required (asterisks) when doing data entry (and visual guidance when 
    try to save without them, i.e. red boxes)  
-- Ability to create a new bulletin based off an old one (“Copy”, along with “Move” as ability to put records in 
+- Ability to create a new record based off an old one (“Copy”, along with “Move” as ability to put records in 
    different folders) 
 - No public section in records 
 - Easier to use calendar widgets for dates
@@ -85,6 +86,8 @@ Known Issues:
 - Several display issues in right-to-left languages (e.g. Arabic, Farsi) and in other languages (e.g. Burmese) for some 
    OSs/screen resolutions
 - User must change language separately for login screen and main UI
+- Text in the user interface in languages that have not been translated (or where wording has changed from earlier 
+   translations) will be marked with brackets
 - Very first menu click when opening Martus must be repeated for menu to load
 - User is able to open multiple view windows for same record
 - User is not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
@@ -93,11 +96,18 @@ Known Issues:
    with lower-case letters)
 - In Windows, some dialogs do not show that Martus is still working as they load (which makes the screen look blank 
    if they take a long time)
+- If you have a newer version of a record that is not on the server (but there are earlier versions on the server), 
+   downloading records in the Sync Manager or automatic downloads (configured under Server Settings) will cause 
+   an error.  You can avoid this by making sure all versions of records are backed up to the server.  If you need assistance, 
+   email martus@benetech.org
+- If you have not selected the "Have Server Default On?" option under Server Settings, you will need to click the "Server 
+   On/Off" button at the top of the main Martus screen twice to turn on your server connection
 - Martus may crash with certain behaviors on certain versions of Mac OSX with certain hardware/graphics/video drivers.  
    If this happens, see the Martus User Guide FAQs for help, or email martus@benetech.org
 
 Features from earlier releases that are not in 5.0:
 - Spellcheck
+- Option to download only final versions of records from the server (5.0 will always download all versions)
 - The “keep with previous” setting in customizations to put fields on a single line
 - Table view for grids (repeating multi-item lists inside records)
 - Direct printing of records (can do by creating a page report with all record fields)
