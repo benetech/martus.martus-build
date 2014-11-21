@@ -85,12 +85,14 @@ Changes in this release:
 Known Issues:
 - Several display issues in right-to-left languages (e.g. Arabic, Farsi) and in other languages (e.g. Burmese) for some 
    OSs/screen resolutions
-- User must change language separately for login screen and main UI
+- In right-to-left languages (e.g. Arabic, Farsi), during the account setup wizard, the date format sequence field defaults 
+   to blank, so you must pick a value explicitly before going to the next step in the wizard or you will receive an error
+- You must change language separately for login screen and main UI
 - Text in the user interface in languages that have not been translated (or where wording has changed from earlier 
    translations) will be marked with brackets
 - Very first menu click when opening Martus must be repeated for menu to load
-- User is able to open multiple view windows for same record
-- User is not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
+- You are able to open multiple view windows for same record
+- You are not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
 - Imported records folder created with each account, not only when importing records
 - Sorting in record lists is case-sensitive (e.g. titles that start with upper-case letters are sorted before any that start 
    with lower-case letters)
