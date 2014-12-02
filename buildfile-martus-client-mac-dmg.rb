@@ -67,6 +67,10 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     properties << " -Drawdmgfile=#{dmg_file}"
     properties << " -Ddmgmount=#{dmg_mount_point}"
     properties << " -Ddmg.size.megs=58"
+    
+    # MARTUSDEV-952: Frequent crashing on certain Macs
+    # The following seems to avoid that problem
+    properties << " -Dprism.order=sw"
   
     buildfile = _('martus-build', 'martus-client-mac-dmg.ant.xml')
     buildfile_option = "-buildfile #{buildfile}"
