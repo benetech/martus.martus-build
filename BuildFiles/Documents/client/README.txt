@@ -1,4 +1,4 @@
-﻿Martus(tm) Desktop Software Version 5.0 README.txt
+﻿Martus(tm) Desktop Software Version 5.0.1 README.txt
 ----------------------------------------------------------------
 
 See https://www.martus.org for information about the Martus software.
@@ -7,14 +7,7 @@ For all current language packs and translations of the user documentation,
 as well as language packs/documentation for previous versions in various languages, 
 go to https://www.martus.org. 
 
-
-Martus desktop release information by version and release date:
-
-Version 5.0 		2014-11
-
-This release is available in English, with partial translations in several other languages. 
-Other languages will be available in the future, as language-packs on https://www.martus.org 
-
+For assistance with Martus, please email martus@benetech.org
 
 System Requirements:
   * Internet connection, if you want to back up data to the Martus servers. To be able to upload to a 
@@ -23,7 +16,7 @@ System Requirements:
   *  Screen resolution of 960x480 or greater
 
 - Windows
-  * Windows XP, Windows Vista, Windows 7, or Windows 8. 
+  * Windows XP, Windows Vista, Windows 7, or Windows 8 (Window 7 or higher recommended). 
 
 - Mac
   * Officially supported on Mac OS 10.8 and above, and tested on 10.7.5 and above.
@@ -33,7 +26,10 @@ System Requirements:
   * This version of Martus does not fully support Linux (there are several display issues, etc.). 
      For a fully supported version of Martus, download version 4.4 of Martus and refer to the 
      version 4.3 Martus User Guide available in the Docs folder of your Martus directory or at 
-     https://www.martus.org.  Email martus@benetech.org if you need assistance.
+     https://www.martus.org.  If you want to run Martus 5.0.1 on Linux, you need Java Runtime 
+     Environment (JRE) version 1.8.0_25 (sometimes called Java8) and graphic library gtk2 2.18+ 
+     (required for supporting JavaFX). 
+
 
 Installing and Running Martus:
 
@@ -53,6 +49,57 @@ Installing and Running Martus:
 
 - Linux
   * See note above about Martus compatibility with Linux.
+
+
+Martus desktop release information by version and release date:
+
+Version 5.0.1 		2014-12
+
+This release is available in English, with partial translations in several other languages. 
+Other languages will be available in the future, as language-packs on https://www.martus.org 
+
+Changes in this release:  
+
+Bug fixes and cleanup, including:
+- You no longer must select language separately for login screen and main UI
+- Added a graphics setting to avoid Martus crashes on certain versions of Mac OSX with certain 
+   hardware/graphics/video drivers.  
+- Fixed issue running in right-to-left languages (e.g. Arabic, Farsi) where data entered could be displayed 
+  outside of field boxes when editing a record
+- Improved behavior when creating a copy of a record that had versions
+- Improved behavior when importing template or record files without standard filenames
+- Clarified/simplified instructions in multi-part key backup screens
+
+Known Issues:
+- Several display issues in right-to-left languages (e.g. Arabic, Farsi) and in other languages (e.g. Burmese) for some 
+   OSs/screen resolutions
+- In right-to-left languages (e.g. Arabic, Farsi), during the account setup wizard, the date format sequence field defaults 
+   to blank, so you must pick a value explicitly before going to the next step in the wizard or you will receive an error
+- Text in the user interface in languages that have not been translated (or where wording has changed from earlier 
+   translations) will be marked with brackets
+- Very first menu click when opening Martus must be repeated for menu to load
+- You are able to open multiple view windows for same record
+- You are not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
+- Imported records folder created with each account, not only when importing records
+- Sorting in record lists is case-sensitive (e.g. titles that start with upper-case letters are sorted before any that start 
+   with lower-case letters)
+- In Windows, some dialogs do not show that Martus is still working as they load (which makes the screen look blank 
+   if they take a long time)
+- If you have a newer version of a record that is not on the server (but there are earlier versions on the server), 
+   downloading records in the Sync Manager or automatic downloads (configured under Server Settings) will cause 
+   an error.  You can avoid this by making sure all versions of records are backed up to the server.  If you need assistance, 
+   email martus@benetech.org
+- If you have not selected the "Have Server Default On?" option under Server Settings, you will need to click the "Server 
+   On/Off" button at the top of the main Martus screen twice to turn on your server connection
+- In some cases on Mac, when restoring a Martus account from backup files, the user interface will go blank when bringing 
+   up the file selection dialog.  If this happens, restart Martus and try again.
+
+
+Version 5.0 		2014-11
+
+This release is available in English, with partial translations in several other languages. 
+Other languages will be available in the future, as language-packs on https://www.martus.org 
+
 
 
 Changes in this release:  
