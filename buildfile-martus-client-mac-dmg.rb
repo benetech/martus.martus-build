@@ -70,6 +70,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     
     # MARTUSDEV-952: Frequent crashing on certain Macs
     # The following seems to avoid that problem
+    # This didn't make it into the plist, so where does this go?
     properties << " -Dprism.order=sw"
   
     buildfile = _('martus-build', 'martus-client-mac-dmg.ant.xml')
