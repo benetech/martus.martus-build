@@ -241,7 +241,7 @@ end
 def create_pot_from(language)
 	puts("Creating .pot")
 	$pot = true
-	File.open("Martus-4.5.pot", "w") do | out |
+	File.open("Martus-5.0.2.pot", "w") do | out |
 		convert(language, out)
 	end
 	$pot = false
@@ -260,7 +260,9 @@ def convert_po_for(language)
 end
 
 create_pot_from('en')
-languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
-languages.each do | language |
-	convert_po_for(language)
-end
+
+# Transifex doesn't need a PO for each language, so don't bother creating them
+#languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
+#languages.each do | language |
+#	convert_po_for(language)
+#end
