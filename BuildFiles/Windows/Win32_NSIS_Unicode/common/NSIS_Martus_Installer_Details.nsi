@@ -21,8 +21,11 @@
 ;Boston, MA 02111-1307, USA.
 unicode "true"
 !define PRODUCT_NAME "Martus"
+
+;NOTE: PRODUCT_VERSION and PRODUCT_EXTENDED_VERSION must be numbers only, no 'pre-' can be added.
 !define PRODUCT_VERSION "5.0.3"
 !define PRODUCT_EXTENDED_VERSION "5.0.3.0"
+
 !define PRODUCT_OLDEST_UPGRADEABLE_EXTENDED_VERSION "4.0.0.0"
 !define PRODUCT_OLDEST_NSIS_UPGRADEABLE_EXTENDED_VERSION "4.3.0.0"
 !define PRODUCT_PUBLISHER "The Benetech Initiative"
