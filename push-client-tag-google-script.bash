@@ -1,4 +1,4 @@
-tag="Client-5.0.1"
+tag="Client-5.0.2"
 echo "Pushing $tag to Google"
 
 hg --repository ../martus-build push --new-branch google --rev $tag

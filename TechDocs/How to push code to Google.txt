@@ -44,5 +44,11 @@ Now edit the bash script with the correct tag you wish to push.
 and once you are satisfied with the output
 6. run ./push-client-tag-google-script.bash from the terminal
 
+---------------------------------------
+NOTE: if you are receiving certificate fingerprint warnings 
+warning: code.google.com certificate with fingerprint 76:9a:5d:41:30:bd:48:c6:93:56:16:1d:e7:c3:89:ff:62:60:ca:f3 not verified (check hostfingerprints or web.cacerts config setting)
+
+Follow the instructions here to remove these warnings
+http://mercurial.selenic.com/wiki/CACertificates
 
 
