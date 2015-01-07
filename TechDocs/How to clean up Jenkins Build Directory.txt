@@ -30,7 +30,7 @@ but Scott could change this at any time.
 	2C) Now that you have the build # you can list all associated files with that build
 	(i.e.: ls *-3482-*)
 	Now move this release to 'archive'
-	mv *-3482-* archive
+	mv *-3482-* archive/
 	
 	2D) You should also move the .jar and .zip files associated with this release
 	(i.e.: ls *-3482.*)
