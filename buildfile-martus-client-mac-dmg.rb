@@ -66,7 +66,12 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     properties << " -Ddmg.dest.dir=#{_('dist')}"
     properties << " -Drawdmgfile=#{dmg_file}"
     properties << " -Ddmgmount=#{dmg_mount_point}"
-    properties << " -Ddmg.size.megs=40"
+    properties << " -Ddmg.size.megs=58"
+    
+    # MARTUSDEV-952: Frequent crashing on certain Macs
+    # The following seems to avoid that problem
+    # This didn't make it into the plist, so where does this go?
+    properties << " -Dprism.order=sw"
   
     buildfile = _('martus-build', 'martus-client-mac-dmg.ant.xml')
     buildfile_option = "-buildfile #{buildfile}"
@@ -78,6 +83,7 @@ define name, :layout=>create_layout_with_source_as_source('.') do
     puts "------------------------"
     result = $CHILD_STATUS
     if result.exitstatus != 0 || !File.exists?(dmg_file)
+      puts `du -s #{dmg_contents_dir}/`
       raise "Failed in dmg ant script (#{format("%X", result)}). Exit code=#{result ? result.exitstatus : "???"}. See #{ant_output}"
     end
     
