@@ -5,18 +5,18 @@ echo Checking out $BRANCH
 function clone_or_fetch_martus {
 cd $WORKSPACE
 if [ -d "$1" ]; then
-	hg --repository $1 pull --update --rev $BRANCH
+	hg --repository $1 pull --update --branch $BRANCH
 else
-	hg clone ssh://mvcs/martus/$1 --rev $BRANCH
+	hg clone ssh://mvcs/martus/$1 --branch $BRANCH
 fi
 }
 
 function clone_or_fetch {
 cd $WORKSPACE
 if [ -d "$1" ]; then
-	hg --repository $1 pull --update --rev $BRANCH
+	hg --repository $1 pull --update --branch $BRANCH
 else
-	hg clone ssh://mvcs/$1 --rev $BRANCH
+	hg clone ssh://mvcs/$1 --branch $BRANCH
 fi
 }
 
