@@ -3,6 +3,7 @@ BRANCH=`hg --repository martus-build branch`
 echo Checking out $BRANCH
 
 function clone_or_fetch_martus {
+echo clone_or_fetch_martus $WORKSPACE
 cd $WORKSPACE
 if [ -d "$1" ]; then
 	hg --repository $1 pull --update --branch $BRANCH
@@ -12,6 +13,7 @@ fi
 }
 
 function clone_or_fetch {
+echo clone_or_fetch $WORKSPACE
 cd $WORKSPACE
 if [ -d "$1" ]; then
 	hg --repository $1 pull --update --branch $BRANCH
