@@ -1,20 +1,24 @@
 #cvs -d :ext:cvs.benetech.org:/var/local/cvs checkout martus
+BRANCH=`hg --repository martus-build branch`
+echo Checking out $BRANCH
 
 function clone_or_fetch_martus {
+echo clone_or_fetch_martus $1
 cd $WORKSPACE
 if [ -d "$1" ]; then
-	hg --repository $1 pull --update
+	hg --repository $1 pull --update --branch $BRANCH
 else
-	hg clone ssh://mvcs/martus/$1
+	hg clone ssh://mvcs/martus/$1 --branch $BRANCH
 fi
 }
 
 function clone_or_fetch {
+echo clone_or_fetch $1
 cd $WORKSPACE
 if [ -d "$1" ]; then
-	hg --repository $1 pull --update
+	hg --repository $1 pull --update --branch $BRANCH
 else
-	hg clone ssh://mvcs/$1
+	hg clone ssh://mvcs/$1 --branch $BRANCH
 fi
 }
 
