@@ -14,6 +14,7 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		LAYOUTS_SPEC,
 		XMLRPC_CLIENT_SPEC,
 		XMLRPC_COMMON_SPEC,
+		ORCHID_SPEC,
 		project('martus-jar-verifier').packages.first
 	)
   
