@@ -80,12 +80,13 @@ want you to show you the permissions and file contents of .ssh
 
 14. Once you verify that you can ssh to mvcs then you can go to
 Eclipse and start cloning the Benetech projects.
-    In Eclipse go to View/Project Explorer, then right click Project / New
+    In Eclipse go to View/Project Explorer, then right click Project / New Project
     expand Mercurial
     Clone existing Mercurial Project
     URL = ssh://mvcs/martus/martus-utils
-    Authentication use your user name/password scott gave you for the
-repository
+    Authentication use your user name scott gave you for the repository 
+    		(password field is not needed since it is authenticated using your 
+    		public/private keypair)
     Select Next, and use the "default" branch.
     Do this for all the projects
         ssh://mvcs/martus/martus-amplifier
