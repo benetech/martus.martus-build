@@ -1,0 +1,137 @@
+The Martus(TM) Software License
+
+Copyright 2001-2014, Beneficent Technology, Inc. ("Benetech" or " Licensor"), Palo 
+Alto, California.  This software is expressly subject to the accompanying GNU GPL 
+License (attached in the file GPL.TXT), and these additional terms, all of which 
+constitute the full Martus license, and all of which you should read carefully.   Both the 
+Martus license additions and the accompanying GPL license will apply in all situations 
+where the Martus software is redistributed pursuant to the GPL license terms. Reference 
+below to "the License" means both these terms and the accompanying GPL license.
+
+DISCLAIMER OF WARRANTY.  This copyrighted Martus(TM) Software (the 
+"Software") is licensed and distributed free of any cost, except for reproduction and 
+distribution expenses when distributed on CD.  It may only be used subject to these 
+express terms of use, which modify the accompanying GPL license that governs the 
+copyright license. It is distributed WITHOUT WARRANTY OF ANY KIND, EXPRESS 
+OR IMPLIED,  including warranties of fitness of purpose or merchantability.  It is not 
+intended nor available as a "Consumer Product" under the laws of any state of the U.S. or 
+any other country.  The Licensee and others using the software under the auspices of the 
+Licensee assume all risk of failure and errors in the Software and its functionality, 
+specifically including (without limitation of any other type of malfunction or improper 
+operation) errors in encryption and security functionality.  All software is inherently 
+subject to errors and malfunctions when in field use, especially when the source code is 
+Open Source and subject to modification by anyone using it. This software may have 
+been modified by third parties, over which Licensor has no control. The Licensee and 
+others using it assume the risk of lack of support and the effect of possible third party 
+modifications. This License will automatically and irrevocably terminate for all purposes 
+immediately, without further notice of any kind, upon any assertion of a legal claim for 
+support or warranty by the Licensee, since this License would not be granted if it carried 
+any such obligations. Licensor, however, welcomes reports of apparent errors from users.
+
+EFFECT OF INVALIDITY DETERMINATION ON LICENSE.  Should any provision 
+or condition of these terms or of the GPL license itself be held improper, illegal or 
+unenforceable, all of the other provisions of these terms and the GPL license shall 
+nonetheless remain in full force and effect, but without the improper, illegal or 
+unenforceable provision; provided however that if this Disclaimer of Warranty should be 
+held improper, illegal or unenforceable in whole or in part, then the entire GPL License 
+shall terminate immediately upon any such determination by a court, arbitrator or other 
+tribunal, and the Licensee shall have no further right to use, distribute, modify or possess 
+the Software for any purpose whatsoever, other than for a backup copy kept for purposes 
+of reading out the database of information to some other program or format reasonably 
+necessary to use the data without this program. This is an essential term of these terms 
+and the GPL license without which Licensor would not have granted any right to this 
+software for any purpose.
+
+CRYPTOGRAPHY.  This software package uses strong cryptography, which falls under 
+certain export/import and/or use restrictions in the United States and some other parts of 
+the world. 
+
+PLEASE REMEMBER THAT EXPORT/IMPORT AND/OR USE OF STRONG
+CRYPTOGRAPHY SOFTWARE, PROVIDING CRYPTOGRAPHY HOOKS OR 
+EVEN COMMUNICATING TECHNICAL DETAILS ABOUT CRYPTOGRAPHY 
+SOFTWARE IS ILLEGAL IN SOME PARTS OF THE WORLD. SO, WHEN YOU 
+IMPORT THIS PACKAGE TO YOUR COUNTRY, RE-DISTRIBUTE IT FROM 
+THERE OR EVEN EMAIL TECHNICAL SUGGESTIONS OR EVEN SOURCE 
+PATCHES TO THE AUTHOR OR OTHER PEOPLE, YOU ARE STRONGLY 
+ADVISED TO PAY CLOSE ATTENTION TO ANY EXPORT/IMPORT AND/OR USE 
+LAWS WHICH APPLY TO YOU. THE LICENSOR OF THE MARTUS SOFTWARE 
+IS NOT LIABLE FOR ANY OF YOUR VIOLATIONS OF LOCAL LAWS, SO BE 
+CAREFUL, IT IS YOUR RESPONSIBILITY TO COMPLY WITH SUCH LAWS.
+
+MODIFICATION AND NOTIFICATION.  You are welcome to modify or re-use any 
+portions of the Software within other unrelated applications, subject to the terms of this 
+license, so long as you do NOT use the Benetech name or the Martus trademark in any 
+way in conjunction with such activities.  An application is considered to be "related to 
+Martus" if it uses the Martus name in a user-visible location in the Software or 
+documentation, creates Martus-compatible bulletins, decrypts private Martus-compatible 
+bulletin data, or supports any Martus client or server communications API call.  For 
+applications related to Martus, you must comply with the following user notification 
+requirements if you either modify the Software, or if you choose to operate the Software 
+in a server environment that is not in accordance with the then-current Martus Server 
+Operational Requirements as set forth, from time to time, by Benetech at 
+www.martus.org.  The objective of this requirement is that users should always know if 
+they are using a non-standard version of Martus, and be able to fully determine the non-
+standard aspects of such software or server operation.  
+For all modified Martus client software, you must add the following quoted notification 
+language to a splash screen (or in an equivalent manner in non-GUI environments) that is 
+presented to the user and is clearly visible upon program startup: 
+"This software is not a standard Martus(TM) program, because it has been 
+modified by someone other than Benetech, the copyright owner and original 
+author of the Martus software.  For details of what has been changed, see 
+[*here*]."  
+For non-compliant Martus server environments (server software changes or operational 
+differences from the Martus Server Operational Requirements), you must (a) send a 
+notification message using the Martus communications API that exists for this purpose, 
+with the following quoted notification language, and (b) cause the following quoted 
+notification language to be displayed and clearly visible upon signing on to anyone who 
+logs in to the server.   
+"This service is not a standard Martus(TM) service, because it has been modified 
+by someone other than Benetech, the copyright owner and original author of the 
+Martus software, or is not being operated in accordance with Benetech's server 
+recommendations.  For details of what has been changed, see [*here*]." 
+ 
+The reference to [*here*] in such notifications should be a link to both a summary of the 
+changes in layman's terms and the modified source code, if applicable, documented per 
+the GPL.  If you have proposed improvements to the software you would like to submit 
+to Benetech for possible inclusion in future releases, and are willing to assign the 
+copyright to Benetech, send email to improvements@martus.org.  
+TRADEMARK CONTROL.  Neither the names or marks Martus(TM) nor Benetech may 
+be used to identify any products or services derived from this source code without the 
+prior express written permission from Benetech, except when you include the notice of 
+modification as set forth in the foregoing paragraph.  To apply for such permission, send 
+email to permissions@martus.org describing your request and the changes and/or use 
+proposed in detail.  
+
+USAGES THAT VIOLATE THIS LICENSE.  To apply for permissions to incorporate 
+some of the Software in a product or project in a manner that doesn't comply with the 
+license terms hereof (such as use in a closed-source commercial product), send email to 
+permissions@martus.org describing your request and the changes and/or use proposed in 
+detail.  You may not use or distribute the software in a way that violates any terms of this 
+license until after you have requested and received written permission from Benetech to 
+do so.
+
+Because the Software includes Oracle Java programs, we need to include 
+some special license terms because of the use of this Java technology.  The Martus 
+software continues to be free, but we need to tell you the details of how this works.  
+
+Linking this software statically or dynamically with other modules constitutes a 
+combined work based on the Martus software.  Thus, the terms and conditions of the 
+GNU General Public License cover the whole combination.
+
+As a special exception, the copyright owners of the Martus software give you permission 
+to link our software with the Java(TM) Runtime Environment (JRE) for Java 2 Platform Standard 
+Edition (J2SE TM) v 1.5 or later from Oracle (java.com), regardless of the 
+license terms of this module, and to copy and distribute the resulting combined work under 
+terms of your choice; provided that every copy of the combined work is accompanied by a complete 
+copy of the source code of that combined work (excluding the above-mentioned module).  Use of 
+the source code of the combined work shall continue to be subject to the terms of the GNU 
+General Public License and the terms of this license.  This permission to link does not override 
+the license terms of such modules, which still apply to usage of such module.
+
+Note that people who make modified versions of the Software are not obligated to grant 
+this special exception for their modified versions; it is their choice whether to do so.  
+The GNU General Public License gives permission to release a modified version without 
+this exception; this exception also makes it possible to release a modified version that 
+carries forward this exception.
+
+For more information, check the www.martus.org project website.
