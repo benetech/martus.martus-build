@@ -79,6 +79,10 @@ def build_icu4j_spec(type)
 	return build_spec('com.ibm.icu', 'icu4j', type, '3.4.4')
 end
 
+def build_javarosa_spec(type)
+	return build_spec('javarosa', 'javarosa', type, '1.0')
+end
+
 def build_layouts_spec(type)
 	return build_spec('com.jhlabs', 'layouts', type, '2006-08-10')
 end
@@ -175,6 +179,9 @@ XMLRPC_LICENSE_SPEC = build_xmlrpc_spec('LICENSE.txt', 'license')
 ICU4J_SPEC = build_icu4j_spec('jar')
 ICU4J_SOURCE_SPEC = build_icu4j_spec('sources')
 ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
+JAVAROSA_SPEC = build_javarosa_spec('jar')
+JAVAROSA_SOURCE_SPEC = build_javarosa_spec('sources')
+JAVAROSA_LICENSE_SPEC = build_javarosa_spec('license')
 
 # Client, from public repository
 JORTHO_SPEC = build_jortho_spec('jar')
@@ -353,6 +360,7 @@ def third_party_client_jars
 	jars << artifact(JFREECHART_SPEC)
 	jars << artifact(JCOMMON_SPEC)
 	jars << artifact(ORCHID_SPEC)
+	jars << artifact(JAVAROSA_SPEC)
 	return jars
 end
 
@@ -372,6 +380,7 @@ def third_party_client_licenses
 	licenses << artifact(JFREECHART_LICENSE_SPEC)
 	licenses << artifact(JCOMMON_LICENSE_SPEC)
 	licenses << artifact(ORCHID_LICENSE_SPEC)
+	licenses << artifact(JAVAROSA_LICENSE_SPEC)
 	return licenses
 end
 
@@ -392,6 +401,7 @@ def third_party_client_source
 	sources << artifact(JFREECHART_SOURCE_SPEC)
 	sources << artifact(JCOMMON_SOURCE_SPEC)
 	sources << artifact(ORCHID_SOURCE_SPEC)
+	sources << artifact(JAVAROSA_SOURCE_SPEC)
 	return sources
 end
 
