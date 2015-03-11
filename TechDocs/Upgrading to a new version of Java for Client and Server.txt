@@ -21,12 +21,13 @@ Updated March 11, 2015
 	adjust the version of Java we are using and update the 
 	URLs to the Sun download site.
 
-5. 	Copy the Folders (lib & bin) under the Java SDKs JRE directory to .\binary-martus\Installer\BuildFiles\Java redist\Win32\, 
-	we do not distribute javaws (Java Web Start) directory.
-
-5a. We do not include the following directories (lib\ext), (lib\audio), (lib\applet), (bin\server).
-
-6.  Do a build on the Build machine and make sure the new Java gets put onto the install CD.
+5. 	zip the JRE Folder under the Java SDKs .\binary-martus\Installer\BuildFiles\Java redist\Win32\, 
+	We currently name the zip file jre8uxx.zip where xx is the specific build.
+	You must also update the buildfiles/buildfile-martus-client-nsis-zip.rb
+	  	    jre_zip = _('martus-build', 'BuildFiles', 'JavaRedistributables', 'Win32', 'jre8uxx.zip')
+	  
+6.  Do a build on the Build machine and make sure the new Java gets put onto the install CD,
+	you may have to increase the size of disk space on the build machine if Java increased significantly in size.
 
 7.  Tell Scott to update the Java on the Martus Servers. (If updating the server's Java)
 
