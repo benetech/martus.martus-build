@@ -57,7 +57,8 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 		JFREECHART_SPEC,
 		JCOMMON_SPEC,
 		ORCHID_SPEC,
-		JAVAROSA_SPEC
+		JAVAROSA_SPEC,
+		KXML_SPEC
 	)
 
 	build do
