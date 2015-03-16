@@ -186,7 +186,7 @@ ICU4J_LICENSE_SPEC = build_icu4j_spec('license')
 JAVAROSA_SPEC = build_javarosa_spec('jar')
 JAVAROSA_SOURCE_SPEC = build_javarosa_spec('sources')
 JAVAROSA_LICENSE_SPEC = build_javarosa_spec('license')
-KXML_SPEC = build_kxml_spec('jar)
+KXML_SPEC = build_kxml_spec('jar')
 
 # Client, from public repository
 JORTHO_SPEC = build_jortho_spec('jar')
