@@ -59,9 +59,10 @@ define name, :layout=>create_layout_with_source_as_source(name) do
 	install artifact(ORCHID_SOURCE_SPEC).from(source_file(name, 'common/orchid', "orchid-#{$ORCHID_VERSION}.25f1ae1-src.zip"))
 	install artifact(ORCHID_LICENSE_SPEC).from(license_file(name, 'common/orchid', 'LICENSE'))
 	
-	install artifact(JAVAROSA_SPEC).from(jar_file(name, 'common/JavaRosa', "JavaRosa-International-1.0.jar"))
+	install artifact(JAVAROSA_SPEC).from(jar_file(name, 'common/JavaRosa', "javarosa-libraries.jar"))
 	install artifact(JAVAROSA_SOURCE_SPEC).from(source_file(name, 'common/JavaRosa', "src.zip"))
 	install artifact(JAVAROSA_LICENSE_SPEC).from(license_file(name, 'common/JavaRosa', 'LICENSE'))
+	install artifcat(KXML_SPEC).from(jar_file(name, 'common/JavaRosa', 'kxml2-2.3.0.jar'))
 
 	#client
 	install artifact(LAYOUTS_SPEC).from(jar_file(name, 'client/jhlabs', 'layouts.jar'))
@@ -131,5 +132,6 @@ define name, :layout=>create_layout_with_source_as_source(name) do
     p.include(artifact(JFREECHART_SPEC), :path=>'ThirdParty')
     p.include(artifact(ORCHID_SPEC), :path=>'ThirdParty')
     p.include(artifact(JAVAROSA_SPEC), :path=>'ThirdParty')
+    p.include(artifact(KXML_SPEC), :path=>'ThirdParty')
   end
 end
