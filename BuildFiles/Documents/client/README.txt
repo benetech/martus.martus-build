@@ -1,4 +1,4 @@
-﻿Martus(tm) Desktop Software Version 5.0.2 README.txt
+﻿Martus(tm) Desktop Software Version 5.1 README.txt
 ----------------------------------------------------------------
 
 See https://www.martus.org for information about the Martus software.
@@ -11,7 +11,7 @@ For assistance with Martus, please email martus@benetech.org
 
 System Requirements:
   * Internet connection, if you want to back up data to the Martus servers. To be able to upload to a 
-     Martus Server you need unrestricted web access thru ports 987 or 443. Note: This is only an issue 
+     Martus Server you need unrestricted web access through ports 987 or 443. Note: This is only an issue 
      if operating Martus software from behind a firewall.
   *  Screen resolution of 960x480 or greater
 
@@ -20,14 +20,14 @@ System Requirements:
 
 - Mac
   * Officially supported on Mac OS 10.8 and above, and tested on 10.7.5 and above.
-  * Java Runtime Environment (JRE) version 1.8.0_25 (sometimes called Java8).
+  * Java Runtime Environment (JRE) version 1.8.0_40 (sometimes called Java8).
 
 - Linux 
   * This version of Martus does not fully support Linux (there are several display issues, etc.). 
      For a fully supported version of Martus, download version 4.4 of Martus and refer to the 
      version 4.3 Martus User Guide available in the Docs folder of your Martus directory or at 
-     https://www.martus.org.  If you want to run Martus 5.0.1 on Linux, you need Java Runtime 
-     Environment (JRE) version 1.8.0_25 (sometimes called Java8) and graphic library gtk2 2.18+ 
+     https://www.martus.org.  If you want to run Martus 5.1 on Linux, you need Java Runtime 
+     Environment (JRE) version 1.8.0_40 (sometimes called Java8) and graphic library gtk2 2.18+ 
      (required for supporting JavaFX). 
 
 
@@ -52,6 +52,64 @@ Installing and Running Martus:
 
 
 Martus desktop release information by version and release date:
+
+Version 5.1 		2015-04
+
+This release is available in English, with partial translations in several other languages. 
+Other languages will be available in the future, as language-packs on https://www.martus.org 
+
+Changes in this release:  
+
+- Added line graph showing cumulative records over time
+- Added option to show a map of where image was taken if geo meta-data is available/included 
+- Added display of thumbnails for most image attachments (e.g. jpg, png, bmp, tif)
+- Added the record count next to each folder/view label at the top of the main screen
+- Simple search on main page can now be activated by hitting Enter after typing in your search terms
+- Added ability to use the tab key to progress through record fields when entering data
+- Added ability to save attachments to your desktop from inside a record
+- Now bring up progress dialog when connecting to the server Sync Manager
+- Several look and feel enhancements, including updated/more icons, more screens displayed in JavaFX, and 
+  responsiveness of windows for small resolution screens and non-English languages 
+- Restrict option to change language to initial login screen
+- Upgrade to Java 1.8.0_40
+- Added ability to receive/view records from mobile secureApp prototype that are in XForms prototype
+
+Bug fixes and cleanup, including:
+- Fixed occasional issue when switching data entry templates when editing a record that already had data entered
+- Imported records folder no longer created with each account, is now only created when importing records  
+- Fixed occasional issue on Mac where the user interface would go blank when restoring a Martus account from backup files
+- Fixed behavior of Zawgyi font checkbox when displaying Burmese text while running Martus in a language other than Burmese
+- Consolidated several options under the Account menu
+- Fixed display of certain image attachment file types
+- Fixed window title icons for chart screens
+- Changed option to move records when in "Search Results" view
+- Now show records that are in the Trash in the "All" view
+- Wording changes for clarity, consistency, and missing messages
+- Added more helpful messages to users for various error scenarios
+
+
+Known Issues:
+- Several display issues in right-to-left languages (e.g. Arabic, Farsi) and in other languages (e.g. Burmese) for some 
+   OSs/screen resolutions
+- In right-to-left languages (e.g. Arabic, Farsi), during the account setup wizard, the date format sequence field defaults 
+   to blank, so you must pick a value explicitly before going to the next step in the wizard or you will receive an error
+- Text in the user interface in languages that have not been translated (or where wording has changed from earlier 
+   translations) will be marked with brackets
+- Very first menu click when opening Martus must be repeated for menu to load
+- You are able to open multiple view windows for the same record
+- You are not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
+- Sorting in record lists is case-sensitive (e.g. titles that start with upper-case letters are sorted before any that start 
+   with lower-case letters)
+- In Windows, some dialogs do not show that Martus is still working as they load (which makes the screen look blank 
+   if they take a long time)
+- If you have a newer version of a record that is not on the server (but there are earlier versions on the server), 
+   downloading records in the Sync Manager or automatic downloads (configured under Server Settings) will cause 
+   an error.  You can avoid this by making sure all versions of records are backed up to the server.  If you need assistance, 
+   email martus@benetech.org
+- If you have not selected the "Have Server Default On?" option under Server Settings, you will need to click the "Server 
+   On/Off" button at the top of the main Martus screen twice to turn on your server connection
+
+
 
 Version 5.0.2 		2014-12
 
