@@ -75,7 +75,9 @@ First in Eclipse, point your workspace to an empty directory.
 Next click Help / Install new Software and point to EclipseHG or Mercurial plugin URL this is what I found
 http://hge.javaforge.com/hgeclipse
 
-Then download and install the Mercurial plugin.
+ Now you will need to install the Mercurial Plugin in Eclipse
+    Run Eclipse, Help, MarketPlace, and search for “mercurial eclipse”, current plugin is
+    MercurialEclipse 2.1
 After it installs it will want you to exit and restart Eclipse, before you restart it you will need to create a Mercurial.ini file in two locations.
 
 The first will be in your Home directory ie.
