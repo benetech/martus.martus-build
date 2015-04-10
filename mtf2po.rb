@@ -262,7 +262,7 @@ end
 create_pot_from('en')
 
 # Transifex doesn't need a PO for each language, so don't bother creating them
-#languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'ru', 'th'] 
+#languages = ['ar', 'arm', 'bur', 'es', 'fa', 'fr', 'km', 'ne', 'nl', 'ru', 'sq', 'th'] 
 #languages.each do | language |
 #	convert_po_for(language)
 #end

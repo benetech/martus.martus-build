@@ -59,7 +59,13 @@ Boston, MA 02111-1307, USA.
 			<param name="LANGUAGE" value="ne"/>
 		</antcall>
 		<antcall target="mlp">
+			<param name="LANGUAGE" value="nl"/>
+		</antcall>
+		<antcall target="mlp">
 			<param name="LANGUAGE" value="ru"/>
+		</antcall>
+		<antcall target="mlp">
+			<param name="LANGUAGE" value="sq"/>
 		</antcall>
 		<antcall target="mlp">
 			<param name="LANGUAGE" value="th"/>
