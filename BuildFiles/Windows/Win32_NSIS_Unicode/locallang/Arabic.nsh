@@ -32,10 +32,10 @@
 
 ; shortcuts
 !insertmacro LANG_STRING StartMenuShortcutQuestion_Text " هل تريد تثبيت وصلة سريعة لبرنامج  Martus  في قائمة البداية في ويندوز؟" 
-!insertmacro LANG_STRING DesktopShortcutQuestion_Text "إطار عمل Martus لإدارة المعلومات والتقاط البيانات"
+!insertmacro LANG_STRING DesktopShortcutQuestion_Text " هل تريد تثبيت وصلة سريعة لبرنامج  Martus على سطح مكتبك؟ "
 !insertmacro LANG_STRING LaunchProgramInfo_Text "لقد تم تثبيت وصلة سريعة لبرنامج  Martus   في مجلد البرنامج  .$INSTDIR استخدم هذه الوصلة أو نسخة منها لتشغيل Martus. "
 
-!insertmacro LANG_STRING MartusShortcutDescription_Text "نظام Martus لنشرات حقوق الإنسان"
+!insertmacro LANG_STRING MartusShortcutDescription_Text "إطار عمل Martus لإدارة المعلومات والتقاط البيانات"
 
 !insertmacro LANG_STRING MartusUserGuideShortcut_Text "دليل المستخدم"
 !insertmacro LANG_STRING MartusUserGuideShortcut_Filename "martus_user_guide_ar.pdf"
