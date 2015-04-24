@@ -55,7 +55,7 @@ Martus desktop release information by version and release date:
 
 Version 5.1 		2015-04
 
-This release is available in English, with partial translations in several other languages. 
+This release is available in English, Spanish, Arabic, and French, with partial translations in several other languages. 
 Other languages will be available in the future, as language-packs on https://www.martus.org 
 
 Changes in this release:  
@@ -72,7 +72,7 @@ Changes in this release:
   responsiveness of windows for small resolution screens and non-English languages 
 - Restrict option to change language to initial login screen
 - Upgrade to Java 1.8.0_40
-- Added ability to receive/view records from mobile secureApp prototype that are in XForms prototype
+- Added ability to receive/view records from mobile secureApp prototype that are in XForms format
 
 Bug fixes and cleanup, including:
 - Fixed occasional issue when switching data entry templates when editing a record that already had data entered
@@ -108,6 +108,9 @@ Known Issues:
    email martus@benetech.org
 - If you have not selected the "Have Server Default On?" option under Server Settings, you will need to click the "Server 
    On/Off" button at the top of the main Martus screen twice to turn on your server connection
+- In the Advanced Search screen, grid column fields from records sent by the secureApp prototype will have labels that include 
+  system tag content.
+- If you have deleted a record (so it is in your Trash folder), you will not see it in the Sync Manager.  
 
 
 
