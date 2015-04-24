@@ -35,7 +35,7 @@
 !insertmacro LANG_STRING DesktopShortcutQuestion_Text "¿Necesita un enlace a Martus sobre su escritorio?"
 !insertmacro LANG_STRING LaunchProgramInfo_Text "La instalación va a colocar un enlace a Martus en la carpeta del programa en $INSTDIR. Use este enlace, o una copia de el, para iniciar Martus."
 
-!insertmacro LANG_STRING MartusShortcutDescription_Text "Sistema de Boletines Martus de Derechos Humanos"
+!insertmacro LANG_STRING MartusShortcutDescription_Text "Infraestructura de recogida de datos y gestión de la información de Martus"
 
 !insertmacro LANG_STRING MartusUserGuideShortcut_Text "Manual de usuario"
 !insertmacro LANG_STRING MartusUserGuideShortcut_Filename "martus_user_guide_es.pdf"
