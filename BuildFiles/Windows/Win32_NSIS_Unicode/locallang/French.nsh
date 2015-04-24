@@ -33,7 +33,7 @@
 !insertmacro LANG_STRING DesktopShortcutQuestion_Text "Voulez-vous installer un raccourci Martus sur votre bureau ?"
 !insertmacro LANG_STRING LaunchProgramInfo_Text "Un raccourci Martus a été installé dans le dossier programme $INSTDIR. Utilisez ce raccourci, ou une copie, pour ouvrir Martus. "
 
-!insertmacro LANG_STRING MartusShortcutDescription_Text "Système de Communiqués Martus pour les Droits Humains "
+!insertmacro LANG_STRING MartusShortcutDescription_Text "Cadre applicatif Martus de gestion des informations et de collecte des données"
 
 !insertmacro LANG_STRING MartusUserGuideShortcut_Text "Guide de l'Utilisateur "
 !insertmacro LANG_STRING MartusUserGuideShortcut_Filename "martus_user_guide_fr.pdf"
