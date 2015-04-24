@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "Ngôn ngữ cài đặt"
 !insertmacro LANG_STRING LangDialog_Text "Xin chọn ngôn ngữ cài đặt."
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} đã được cài đặt trên máy tính của bạn.\r\n \r\n Vào trang https://www.martus.org/downloads/ để xem có Gói Ngôn Ngữ Martus nào mới được cập nhật không. \r\n \r\nGói Ngôn Ngữ cho phép bạn cài đặt bất cứ lúc nào các bản dịch và tài liệu mới hoặc cập nhật, tiếp theo sau những lần phổ biến Martus trọn bộ. Gói Ngôn Ngữ có thể chứa bản dịch cập nhật của Giao Diện Người Dùng Martus, Cẩm Nang Sử Dụng, Cẩm Nang Bắt Đầu Nhanh, tập tin XEM TÔI, và trợ giúp của phần mềm.\r\n \r\nBấm nút Kết Thúc để đóng Thuật Sĩ Hỗ Trợ này."
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} đã được cài đặt trên máy tính của bạn.\r\n \r\n Vào trang https://www.martus.org/ để xem có Gói Ngôn Ngữ Martus nào mới được cập nhật không. \r\n \r\nGói Ngôn Ngữ cho phép bạn cài đặt bất cứ lúc nào các bản dịch và tài liệu mới hoặc cập nhật, tiếp theo sau những lần phổ biến Martus trọn bộ. Gói Ngôn Ngữ có thể chứa bản dịch cập nhật của Giao Diện Người Dùng Martus, Cẩm Nang Sử Dụng, Cẩm Nang Bắt Đầu Nhanh, tập tin XEM TÔI, và trợ giúp của phần mềm.\r\n \r\nBấm nút Kết Thúc để đóng Thuật Sĩ Hỗ Trợ này."
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts

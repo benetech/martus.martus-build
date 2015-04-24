@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "زبانِ برنامهء نصب کننده"
 !insertmacro LANG_STRING LangDialog_Text "زبانِ برنامهء نصب کننده را انتخاب کنيد."
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} بر روي كامپيوتر شما نصب شد.\r\n \r\n Visit https://www.martus.org/downloads/ to download Martus Language Packs. \r\n مجموعه يا «بستهء زبان» (Language Pack)اين امکان را برای شما فراهم می کندکه پس از آماده شدن و به بازارآمدنِ هرنسخه جديدتری از Martus، بتوانيد هرزمان که بخواهيد ترجمه های تازه تر و مدارکِ راهنمای جديدتر را نيز نصب کنيد. بسته های زبان، مجموعه های مستقلی که به زبانهای مختلفِ دنيا آماده شده اند، حاویِ آخرين نسخه ترجمهء خودِ برنامهء Martus اند به همراه آخرين نسخه های راهنمای استفاده، راهنمای فوری، فايلِ مشخصات (README)، و راهنمای کمک در داخل خودِ برنامه."
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} بر روي كامپيوتر شما نصب شد.\r\n \r\n Visit https://www.martus.org/ to download Martus Language Packs. \r\n مجموعه يا «بستهء زبان» (Language Pack)اين امکان را برای شما فراهم می کندکه پس از آماده شدن و به بازارآمدنِ هرنسخه جديدتری از Martus، بتوانيد هرزمان که بخواهيد ترجمه های تازه تر و مدارکِ راهنمای جديدتر را نيز نصب کنيد. بسته های زبان، مجموعه های مستقلی که به زبانهای مختلفِ دنيا آماده شده اند، حاویِ آخرين نسخه ترجمهء خودِ برنامهء Martus اند به همراه آخرين نسخه های راهنمای استفاده، راهنمای فوری، فايلِ مشخصات (README)، و راهنمای کمک در داخل خودِ برنامه."
 
 ; shortcuts
 !insertmacro LANG_STRING StartMenuShortcutQuestion_Text "آيا دلتان مي خواهد علامتِ Martus براي کليک کردن در فهرست شروع(Start) نصب گردد؟"

@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "Installer Language"
 !insertmacro LANG_STRING LangDialog_Text "Please select the installer language."
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} has been installed on your computer.\r\n \r\n Visit https://www.martus.org/downloads/ to see if any updated Martus Language Packs are available. \r\n \r\nA Language Pack allows you to install new and updated translations or documentation at any time following a full Martus release. Language Packs can contain updates to the Martus Client User Interface translation, the User Guide, Quick Start Guide, README file, and in-program help.\r\n \r\nClick Finish to close this Wizard"
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} has been installed on your computer.\r\n \r\n Visit https://www.martus.org/ to see if any updated Martus Language Packs are available. \r\n \r\nA Language Pack allows you to install new and updated translations or documentation at any time following a full Martus release. Language Packs can contain updates to the Martus Client User Interface translation, the User Guide, Quick Start Guide, README file, and in-program help.\r\n \r\nClick Finish to close this Wizard"
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts
