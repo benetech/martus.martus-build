@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "安装语言"
 !insertmacro LANG_STRING LangDialog_Text "请选择安装语言。"
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} 已安装在您的电脑上。\r\n \r\n 请访问 https://www.martus.org/downloads/，查看是否有任何更新的 Martus语言包可供选择。 \r\n \r\n语言包让您可在完整的 Martus 版本发布之后随时安装新的和更新的翻译或文档。语言包可含 Martus 客户端用户界面翻译、用户指南、快速入门指南、自述文件和程序内帮助的更新。\r\n \r\n单击“Finish”（完成）关闭此向导"
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} 已安装在您的电脑上。\r\n \r\n 请访问 https://www.martus.org/，查看是否有任何更新的 Martus语言包可供选择。 \r\n \r\n语言包让您可在完整的 Martus 版本发布之后随时安装新的和更新的翻译或文档。语言包可含 Martus 客户端用户界面翻译、用户指南、快速入门指南、自述文件和程序内帮助的更新。\r\n \r\n单击“Finish”（完成）关闭此向导"
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts

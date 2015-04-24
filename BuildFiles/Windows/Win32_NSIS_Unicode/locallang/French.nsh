@@ -25,7 +25,7 @@
 !insertmacro LANG_STRING LangDialog_Title "Langue d'Installation. "
 !insertmacro LANG_STRING LangDialog_Text "Veuillez sélectionner la langue d'installation."
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} a été installé sur votre ordinateur.\r\n \r\n Veuillez vous rendre sur https://www.martus.org/downloads pour télécharger les packs de langues Martus mis à jour. \r\n \r\nUn (Pack Langues) vous permet d'installer à tout moment les nouvelles mises à jour de traductions ou de documentation à la suite d'une nouvelle publication de Martus. Les Packs Langues peuvent contenir les mises à jour de la traduction de l'Interface Utilisateur Client Martus, du Guide de l'Utilisateur, du Guide de Démarrage Rapide, du fichier README (LISEZMOI) et de l'aide incluse dans le programme.\r\n \r\nCliquez sur Fermer pour quitter le programme d'installation"
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} a été installé sur votre ordinateur.\r\n \r\n Veuillez vous rendre sur https://www.martus.org/ pour télécharger les packs de langues Martus mis à jour. \r\n \r\nUn (Pack Langues) vous permet d'installer à tout moment les nouvelles mises à jour de traductions ou de documentation à la suite d'une nouvelle publication de Martus. Les Packs Langues peuvent contenir les mises à jour de la traduction de l'Interface Utilisateur Client Martus, du Guide de l'Utilisateur, du Guide de Démarrage Rapide, du fichier README (LISEZMOI) et de l'aide incluse dans le programme.\r\n \r\nCliquez sur Fermer pour quitter le programme d'installation"
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts

@@ -27,7 +27,7 @@
 !insertmacro LANG_STRING LangDialog_Title "ဘာသာစကား အင္စေတာ္လာ"
 !insertmacro LANG_STRING LangDialog_Text "ေက်းဇူးျပဳၿပီး ဘာသာစကား အင္စေတာ္လာကုိ ေရြးပါ။"
 
-!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ကုိ သင္၏ ကြန္ပ်ဴတာမွာ တပ္ဆင္ထားသည္။\r\n \r\n Martus မြမ္းမံျပင္ဆင္ထားသည့္ ဘာသာစကား အထုပ္ (Language Pack) မ်ား ရွိသလားကုိ ၾကည့္႐ႈရန္ https://www.martus.org/downloads/ ကုိ ဝင္ၾကည့္ပါ။\r\n \r\nဘာသာစကား အထုပ္ (Language Pack) က Martus ဗားရွင္း အျပည့္ကုိ ထုတ္ေဝလုိက္သည့္ ေနာက္မွာ အသစ္ျဖစ္ၾကကာ  မြမ္းမံၿပီး ဘာသာျပန္မႈမ်ား သုိ႔မဟုတ္ စာရြက္စာတမ္းကုိ အခ်ိန္မေရြး တပ္ဆင္ခြင့္ကုိ ေပးပါသည္။ ဘာသာစကား အထုပ္ (Language Packs) ထဲမွာ Martus ေဖာက္သည္ သံုးစြဲသူ အင္တာေဖ့ (Client User Interface) ဘာသာျပန္၊ သံုးစြဲသူ လမ္းၫႊန္၊ အျမန္စတင္ေရးလမ္းၫႊန္၊ ဖတ္ရန္ဖုိင္၊ ႏွင့္ ပရုိဂရမ္တြင္းပါ အကူအညီတုိ႔ ပါဝင္ပါသည္။ \r\n \r\nဤ ဝိဇၨာ Wizard ကုိ ပိတ္ရန္ အဆံုးသတ္ (Finish) ကုိ ႏွိပ္ပါ"
+!insertmacro LANG_STRING FinishDialog_Text "${PRODUCT_NAME} ${PRODUCT_EXTENDED_VERSION} ကုိ သင္၏ ကြန္ပ်ဴတာမွာ တပ္ဆင္ထားသည္။\r\n \r\n Martus မြမ္းမံျပင္ဆင္ထားသည့္ ဘာသာစကား အထုပ္ (Language Pack) မ်ား ရွိသလားကုိ ၾကည့္႐ႈရန္ https://www.martus.org/ ကုိ ဝင္ၾကည့္ပါ။\r\n \r\nဘာသာစကား အထုပ္ (Language Pack) က Martus ဗားရွင္း အျပည့္ကုိ ထုတ္ေဝလုိက္သည့္ ေနာက္မွာ အသစ္ျဖစ္ၾကကာ  မြမ္းမံၿပီး ဘာသာျပန္မႈမ်ား သုိ႔မဟုတ္ စာရြက္စာတမ္းကုိ အခ်ိန္မေရြး တပ္ဆင္ခြင့္ကုိ ေပးပါသည္။ ဘာသာစကား အထုပ္ (Language Packs) ထဲမွာ Martus ေဖာက္သည္ သံုးစြဲသူ အင္တာေဖ့ (Client User Interface) ဘာသာျပန္၊ သံုးစြဲသူ လမ္းၫႊန္၊ အျမန္စတင္ေရးလမ္းၫႊန္၊ ဖတ္ရန္ဖုိင္၊ ႏွင့္ ပရုိဂရမ္တြင္းပါ အကူအညီတုိ႔ ပါဝင္ပါသည္။ \r\n \r\nဤ ဝိဇၨာ Wizard ကုိ ပိတ္ရန္ အဆံုးသတ္ (Finish) ကုိ ႏွိပ္ပါ"
 !insertmacro LANG_STRING FinishDialog2_Text "."
 
 ; shortcuts
