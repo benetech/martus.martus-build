@@ -28,7 +28,8 @@ System Requirements:
      version 4.3 Martus User Guide available in the Docs folder of your Martus directory or at 
      https://www.martus.org.  If you want to run Martus 5.1 on Linux, you need Java Runtime 
      Environment (JRE) version 1.8.0_40 (sometimes called Java8) and graphic library gtk2 2.18+ 
-     (required for supporting JavaFX). 
+     (required for supporting JavaFX).  Some versions of OpenJDK do not include the JavaFX jar, 
+	 so you may need to download and install it for Martus to run.
 
 
 Installing and Running Martus:
@@ -98,6 +99,7 @@ Known Issues:
 - Very first menu click when opening Martus must be repeated for menu to load
 - You are able to open multiple view windows for the same record
 - You are not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
+- When you add or delete a record from a list, it will unsort the list.
 - Sorting in record lists is case-sensitive (e.g. titles that start with upper-case letters are sorted before any that start 
    with lower-case letters)
 - In Windows, some dialogs do not show that Martus is still working as they load (which makes the screen look blank 
@@ -111,7 +113,12 @@ Known Issues:
 - In the Advanced Search screen, grid column fields from records sent by the secureApp prototype will have labels that include 
   system tag content.
 - If you have deleted a record (so it is in your Trash folder), you will not see it in the Sync Manager.  
-
+- If you have deleted a record with more than one version, and re-download from the server, you will only be able to view data 
+  from the final version (Martus will show that there are older versions but you cannot view them).
+- Records are referred to as "Bulletins" (pre-version 5.0 wording)in some screens (e.g. Reports, Charts). 
+- If your computer date/time is off, you may not be able to access Tor or map display for images.
+- It is possible to bring up multiple Sync Manager screens. 
+- If you install in Windows in a non-English language, you will still have to select that language on the initial Martus login screen.
 
 
 Version 5.0.2 		2014-12
@@ -124,30 +131,6 @@ Changes in this release:
 Bug fixes and cleanup, including:
 - Added a graphics setting to avoid Martus crashes on certain versions of Mac OSX with certain 
    hardware/graphics/video drivers.  
-
-Known Issues:
-- Several display issues in right-to-left languages (e.g. Arabic, Farsi) and in other languages (e.g. Burmese) for some 
-   OSs/screen resolutions
-- In right-to-left languages (e.g. Arabic, Farsi), during the account setup wizard, the date format sequence field defaults 
-   to blank, so you must pick a value explicitly before going to the next step in the wizard or you will receive an error
-- Text in the user interface in languages that have not been translated (or where wording has changed from earlier 
-   translations) will be marked with brackets
-- Very first menu click when opening Martus must be repeated for menu to load
-- You are able to open multiple view windows for same record
-- You are not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
-- Imported records folder created with each account, not only when importing records
-- Sorting in record lists is case-sensitive (e.g. titles that start with upper-case letters are sorted before any that start 
-   with lower-case letters)
-- In Windows, some dialogs do not show that Martus is still working as they load (which makes the screen look blank 
-   if they take a long time)
-- If you have a newer version of a record that is not on the server (but there are earlier versions on the server), 
-   downloading records in the Sync Manager or automatic downloads (configured under Server Settings) will cause 
-   an error.  You can avoid this by making sure all versions of records are backed up to the server.  If you need assistance, 
-   email martus@benetech.org
-- If you have not selected the "Have Server Default On?" option under Server Settings, you will need to click the "Server 
-   On/Off" button at the top of the main Martus screen twice to turn on your server connection
-- In some cases on Mac, when restoring a Martus account from backup files, the user interface will go blank when bringing 
-   up the file selection dialog.  If this happens, restart Martus and try again.
 
 
 Version 5.0.1 		2014-12
@@ -164,30 +147,6 @@ Bug fixes and cleanup, including:
 - Improved behavior when creating a copy of a record that had versions
 - Improved behavior when importing template or record files without standard filenames
 - Clarified/simplified instructions in multi-part key backup screens
-
-Known Issues:
-- Several display issues in right-to-left languages (e.g. Arabic, Farsi) and in other languages (e.g. Burmese) for some 
-   OSs/screen resolutions
-- In right-to-left languages (e.g. Arabic, Farsi), during the account setup wizard, the date format sequence field defaults 
-   to blank, so you must pick a value explicitly before going to the next step in the wizard or you will receive an error
-- Text in the user interface in languages that have not been translated (or where wording has changed from earlier 
-   translations) will be marked with brackets
-- Very first menu click when opening Martus must be repeated for menu to load
-- You are able to open multiple view windows for same record
-- You are not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
-- Imported records folder created with each account, not only when importing records
-- Sorting in record lists is case-sensitive (e.g. titles that start with upper-case letters are sorted before any that start 
-   with lower-case letters)
-- In Windows, some dialogs do not show that Martus is still working as they load (which makes the screen look blank 
-   if they take a long time)
-- If you have a newer version of a record that is not on the server (but there are earlier versions on the server), 
-   downloading records in the Sync Manager or automatic downloads (configured under Server Settings) will cause 
-   an error.  You can avoid this by making sure all versions of records are backed up to the server.  If you need assistance, 
-   email martus@benetech.org
-- If you have not selected the "Have Server Default On?" option under Server Settings, you will need to click the "Server 
-   On/Off" button at the top of the main Martus screen twice to turn on your server connection
-- In some cases on Mac, when restoring a Martus account from backup files, the user interface will go blank when bringing 
-   up the file selection dialog.  If this happens, restart Martus and try again.
 
 
 Version 5.0 		2014-11
@@ -220,31 +179,6 @@ Changes in this release:
 - Removing onscreen keyboard as default 
 - Updated most screens to JavaFX
 - Bug fixes
-
-Known Issues:
-- Several display issues in right-to-left languages (e.g. Arabic, Farsi) and in other languages (e.g. Burmese) for some 
-   OSs/screen resolutions
-- In right-to-left languages (e.g. Arabic, Farsi), during the account setup wizard, the date format sequence field defaults 
-   to blank, so you must pick a value explicitly before going to the next step in the wizard or you will receive an error
-- You must change language separately for login screen and main UI
-- Text in the user interface in languages that have not been translated (or where wording has changed from earlier 
-   translations) will be marked with brackets
-- Very first menu click when opening Martus must be repeated for menu to load
-- You are able to open multiple view windows for same record
-- You are not asked to confirm when deleting an item (group of fields) in a multi-item list in a record 
-- Imported records folder created with each account, not only when importing records
-- Sorting in record lists is case-sensitive (e.g. titles that start with upper-case letters are sorted before any that start 
-   with lower-case letters)
-- In Windows, some dialogs do not show that Martus is still working as they load (which makes the screen look blank 
-   if they take a long time)
-- If you have a newer version of a record that is not on the server (but there are earlier versions on the server), 
-   downloading records in the Sync Manager or automatic downloads (configured under Server Settings) will cause 
-   an error.  You can avoid this by making sure all versions of records are backed up to the server.  If you need assistance, 
-   email martus@benetech.org
-- If you have not selected the "Have Server Default On?" option under Server Settings, you will need to click the "Server 
-   On/Off" button at the top of the main Martus screen twice to turn on your server connection
-- Martus may crash with certain behaviors on certain versions of Mac OSX with certain hardware/graphics/video drivers.  
-   If this happens, see the Martus User Guide FAQs for help, or email martus@benetech.org
 
 Features from earlier releases that are not in 5.0:
 - Spellcheck
